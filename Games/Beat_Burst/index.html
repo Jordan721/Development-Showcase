@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beat Burst - Rhythm Game</title>
+    <link rel="stylesheet" href="css/landing.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="../index.html" class="nav-back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+            <span>Game Vault</span>
+        </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+            <div class="grid-overlay"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-badge">RHYTHM GAME</div>
+            <h1 class="hero-title">
+                <span class="title-line">
+                    <span class="word-beat">BEAT</span>
+                    <span class="word-burst">BURST</span>
+                </span>
+            </h1>
+            <p class="hero-subtitle">Transform any song into an electrifying rhythm experience</p>
+
+            <div class="hero-cta">
+                <a href="game.html" class="btn-primary">
+                    <span class="btn-text">Start Playing</span>
+                    <span class="btn-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                    </span>
+                </a>
+                <a href="#try-it" class="btn-secondary">Try the Beat Pad</a>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <canvas id="hero-canvas"></canvas>
+        </div>
+
+        <div class="scroll-indicator">
+            <div class="scroll-line"></div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Features</span>
+                <h2 class="section-title">Everything you need to feel the rhythm</h2>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M9 18V5l12-2v13"/>
+                            <circle cx="6" cy="18" r="3"/>
+                            <circle cx="18" cy="16" r="3"/>
+                        </svg>
+                    </div>
+                    <h3>Any Music</h3>
+                    <p>Upload MP3, WAV, or any audio file. Your library, your game.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <h3>Beat Detection</h3>
+                    <p>AI-powered analysis creates perfect note patterns from your tracks.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
+                        </svg>
+                    </div>
+                    <h3>Real-time Visuals</h3>
+                    <p>Stunning visualizer reacts to every beat and frequency.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                    </div>
+                    <h3>Score System</h3>
+                    <p>Perfect, Great, Good - test your timing and build combos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Beat Pad -->
+    <section class="beat-pad-section" id="try-it">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Interactive</span>
+                <h2 class="section-title">Create your own beat</h2>
+                <p class="section-desc">Click the pads or use your keyboard to make music</p>
+            </div>
+
+            <div class="beat-pad-wrapper">
+                <canvas id="beat-visualizer"></canvas>
+                <div class="beat-pads">
+                    <div class="beat-pad" data-key="Q" data-note="kick">
+                        <span class="pad-key">Q</span>
+                        <span class="pad-name">Kick</span>
+                    </div>
+                    <div class="beat-pad" data-key="W" data-note="snare">
+                        <span class="pad-key">W</span>
+                        <span class="pad-name">Snare</span>
+                    </div>
+                    <div class="beat-pad" data-key="E" data-note="hihat">
+                        <span class="pad-key">E</span>
+                        <span class="pad-name">Hi-Hat</span>
+                    </div>
+                    <div class="beat-pad" data-key="R" data-note="clap">
+                        <span class="pad-key">R</span>
+                        <span class="pad-name">Clap</span>
+                    </div>
+                    <div class="beat-pad" data-key="A" data-note="bass">
+                        <span class="pad-key">A</span>
+                        <span class="pad-name">Bass</span>
+                    </div>
+                    <div class="beat-pad" data-key="S" data-note="synth1">
+                        <span class="pad-key">S</span>
+                        <span class="pad-name">Synth</span>
+                    </div>
+                    <div class="beat-pad" data-key="D" data-note="synth2">
+                        <span class="pad-key">D</span>
+                        <span class="pad-name">Lead</span>
+                    </div>
+                    <div class="beat-pad" data-key="F" data-note="fx">
+                        <span class="pad-key">F</span>
+                        <span class="pad-name">FX</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How to Play -->
+    <section class="how-to-play">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Guide</span>
+                <h2 class="section-title">How to play</h2>
+            </div>
+
+            <div class="steps-wrapper">
+                <div class="step-card">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Upload</h3>
+                        <p>Select any audio file from your device. MP3, WAV, OGG - all supported.</p>
+                    </div>
+                    <div class="step-visual">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="step-connector">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Visualize</h3>
+                        <p>Watch the beat detection analyze your song and create the note map.</p>
+                    </div>
+                    <div class="step-visual">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="step-connector">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Play</h3>
+                        <p>Hit the notes using D, F, J, K keys. Time your hits perfectly!</p>
+                    </div>
+                    <div class="step-visual">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="2" y="6" width="20" height="12" rx="2"/>
+                            <path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Controls & Scoring -->
+    <section class="info-section">
+        <div class="container">
+            <div class="info-grid">
+                <!-- Controls -->
+                <div class="info-card">
+                    <h3>Controls</h3>
+                    <div class="keys-display">
+                        <div class="key-group">
+                            <div class="key-box">D</div>
+                            <div class="key-box">F</div>
+                            <div class="key-box">J</div>
+                            <div class="key-box">K</div>
+                        </div>
+                        <span class="keys-label">Hit notes in each lane</span>
+                    </div>
+                    <div class="keys-display">
+                        <div class="key-group">
+                            <div class="key-box wide">ESC</div>
+                        </div>
+                        <span class="keys-label">Pause game</span>
+                    </div>
+                </div>
+
+                <!-- Scoring -->
+                <div class="info-card">
+                    <h3>Scoring</h3>
+                    <div class="score-list">
+                        <div class="score-item perfect">
+                            <span class="score-name">Perfect</span>
+                            <span class="score-points">+100</span>
+                            <span class="score-window">±50ms</span>
+                        </div>
+                        <div class="score-item great">
+                            <span class="score-name">Great</span>
+                            <span class="score-points">+50</span>
+                            <span class="score-window">±100ms</span>
+                        </div>
+                        <div class="score-item good">
+                            <span class="score-name">Good</span>
+                            <span class="score-points">+25</span>
+                            <span class="score-window">±150ms</span>
+                        </div>
+                        <div class="score-item miss">
+                            <span class="score-name">Miss</span>
+                            <span class="score-points">+0</span>
+                            <span class="score-window">Combo reset</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to feel the beat?</h2>
+                <p>Upload your favorite song and start playing now</p>
+                <a href="game.html" class="btn-primary large">
+                    <span class="btn-text">Launch Game</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-bars">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+    </footer>
+
+    <script src="js/landing.js"></script>
+</body>
+</html>

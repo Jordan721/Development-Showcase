@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beat Burst - Play</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="game-page">
+    <!-- Upload Screen -->
+    <div id="upload-screen" class="screen active">
+        <!-- Background Effects -->
+        <div class="upload-bg">
+            <div class="upload-orb orb-1"></div>
+            <div class="upload-orb orb-2"></div>
+            <div class="upload-grid"></div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="upload-nav">
+            <a href="index.html" class="nav-back-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                <span>Back</span>
+            </a>
+        </nav>
+
+        <div class="upload-content">
+            <!-- Header -->
+            <div class="upload-header">
+                <span class="upload-badge">STEP 1</span>
+                <h1 class="upload-title">Choose Your Track</h1>
+                <p class="upload-subtitle">Upload any audio file to transform it into a rhythm game</p>
+            </div>
+
+            <!-- Upload Zone -->
+            <div class="upload-card">
+                <div class="upload-zone" id="upload-zone">
+                    <div class="upload-zone-content">
+                        <div class="upload-icon-wrapper">
+                            <div class="upload-icon-bg"></div>
+                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                        </div>
+                        <div class="upload-text-group">
+                            <p class="upload-text">Drop your audio file here</p>
+                            <p class="upload-subtext">or click to browse</p>
+                        </div>
+                        <div class="upload-formats">
+                            <span class="format-tag">MP3</span>
+                            <span class="format-tag">WAV</span>
+                            <span class="format-tag">OGG</span>
+                            <span class="format-tag">FLAC</span>
+                        </div>
+                    </div>
+                    <input type="file" id="audio-input" accept="audio/*" hidden>
+                </div>
+
+                <!-- File Info (shown when file selected) -->
+                <div class="file-info-card" id="file-info">
+                    <div class="file-info-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M9 18V5l12-2v13"/>
+                            <circle cx="6" cy="18" r="3"/>
+                            <circle cx="18" cy="16" r="3"/>
+                        </svg>
+                    </div>
+                    <div class="file-info-details">
+                        <span class="file-name" id="file-name">filename.mp3</span>
+                        <span class="file-ready">Ready to analyze</span>
+                    </div>
+                    <button class="clear-file-btn" id="clear-file">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Analyze Button -->
+            <button class="analyze-btn" id="analyze-button" disabled>
+                <span class="analyze-btn-text">Analyze Track</span>
+                <span class="analyze-btn-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </span>
+            </button>
+
+            <!-- Sample Tracks Section -->
+            <div class="sample-tracks-section">
+                <div class="sample-tracks-header">
+                    <span class="sample-badge">OR TRY</span>
+                    <h3 class="sample-title">Sample Tracks</h3>
+                </div>
+                <div class="sample-tracks-grid" id="sample-tracks">
+                    <button class="sample-track" data-track="My_picks/1-10. Space Junk Road.mp3" data-title="Space Junk Road" data-artist="Nintendo" data-album="Super Mario Galaxy">
+                        <div class="sample-track-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="sample-track-info">
+                            <span class="sample-track-title">Space Junk Road</span>
+                            <span class="sample-track-meta">Super Mario Galaxy</span>
+                        </div>
+                    </button>
+                    <button class="sample-track" data-track="My_picks/4-07. Battle (Purple Streamer).mp3" data-title="Battle (Purple Streamer)" data-artist="Nintendo" data-album="Paper Mario: TOK">
+                        <div class="sample-track-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="sample-track-info">
+                            <span class="sample-track-title">Battle (Purple Streamer)</span>
+                            <span class="sample-track-meta">Paper Mario: TOK</span>
+                        </div>
+                    </button>
+                    <button class="sample-track" data-track="My_picks/45 Never Let Up!.mp3" data-title="Never Let Up!" data-artist="Nintendo" data-album="Mario & Luigi: Dream Team">
+                        <div class="sample-track-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="sample-track-info">
+                            <span class="sample-track-title">Never Let Up!</span>
+                            <span class="sample-track-meta">Mario & Luigi: Dream Team</span>
+                        </div>
+                    </button>
+                    <button class="sample-track" data-track="My_picks/6-03 God-Shattering Star (Rain).mp3" data-title="God-Shattering Star (Rain)" data-artist="Nintendo" data-album="Fire Emblem: 3H">
+                        <div class="sample-track-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="sample-track-info">
+                            <span class="sample-track-title">God-Shattering Star</span>
+                            <span class="sample-track-meta">Fire Emblem: 3H</span>
+                        </div>
+                    </button>
+                    <button class="sample-track" data-track="My_picks/6-20. Staff Roll.mp3" data-title="Staff Roll" data-artist="Nintendo" data-album="Paper Mario: TOK">
+                        <div class="sample-track-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="sample-track-info">
+                            <span class="sample-track-title">Staff Roll</span>
+                            <span class="sample-track-meta">Paper Mario: TOK</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tips -->
+            <div class="upload-tips">
+                <div class="tip">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 16v-4M12 8h.01"/>
+                    </svg>
+                    <span>Songs with clear beats work best for rhythm games</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visualizer Screen -->
+    <div id="visualizer-screen" class="screen">
+        <!-- Background Effects -->
+        <div class="visualizer-bg">
+            <div class="visualizer-orb orb-1"></div>
+            <div class="visualizer-orb orb-2"></div>
+            <div class="visualizer-grid"></div>
+        </div>
+
+        <!-- Header -->
+        <div class="visualizer-header">
+            <button class="vis-back-btn" id="back-to-upload">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                <span>New Track</span>
+            </button>
+            <h2 class="vis-track-title" id="track-title">Track Name</h2>
+            <div class="visualizer-controls">
+                <button class="vis-control-btn" id="play-pause-btn">
+                    <span class="play-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                    </span>
+                    <span class="pause-icon" style="display:none;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <rect x="6" y="4" width="4" height="16" rx="1"/>
+                            <rect x="14" y="4" width="4" height="16" rx="1"/>
+                        </svg>
+                    </span>
+                </button>
+                <button class="vis-control-btn secondary" id="restart-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M1 4v6h6"/>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Canvas Container -->
+        <div class="visualizer-canvas-wrapper">
+            <canvas id="visualizer-canvas"></canvas>
+            <div class="beat-indicator" id="beat-indicator"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="visualizer-footer">
+            <div class="vis-progress-container">
+                <div class="vis-progress-bar" id="progress-bar"></div>
+                <span class="vis-time-display" id="time-display">0:00 / 0:00</span>
+            </div>
+
+            <div class="vis-mode-switch">
+                <button class="vis-mode-btn active" id="visualize-mode">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="12" width="4" height="8" rx="1"/>
+                        <rect x="10" y="8" width="4" height="12" rx="1"/>
+                        <rect x="17" y="4" width="4" height="16" rx="1"/>
+                    </svg>
+                    <span>Visualize</span>
+                </button>
+                <button class="vis-mode-btn" id="play-mode">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                    </svg>
+                    <span>Play Game</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+        <!-- Game Background -->
+        <div class="game-bg">
+            <div class="game-orb orb-left"></div>
+            <div class="game-orb orb-right"></div>
+        </div>
+
+        <!-- Top HUD -->
+        <div class="game-hud">
+            <div class="hud-left">
+                <button class="hud-btn" id="pause-btn" title="Pause (Esc)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="6" y="4" width="4" height="16" rx="1"/>
+                        <rect x="14" y="4" width="4" height="16" rx="1"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="hud-center">
+                <div class="stat-box combo-box">
+                    <span class="stat-value combo-value" id="combo-value">0</span>
+                    <span class="stat-label">COMBO</span>
+                </div>
+            </div>
+
+            <div class="hud-right">
+                <div class="stat-box">
+                    <span class="stat-label">SCORE</span>
+                    <span class="stat-value" id="score-value">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">ACC</span>
+                    <span class="stat-value" id="accuracy-value">100%</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Now Playing Card -->
+        <div class="now-playing-card" id="now-playing">
+            <div class="now-playing-indicator">
+                <span class="playing-bars">
+                    <span></span><span></span><span></span>
+                </span>
+                <span class="playing-label">NOW PLAYING</span>
+            </div>
+            <div class="now-playing-info">
+                <span class="np-title" id="np-title">Track Name</span>
+                <span class="np-details">
+                    <span class="np-artist" id="np-artist">Artist</span>
+                    <span class="np-separator">•</span>
+                    <span class="np-album" id="np-album">Album</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Pause Overlay -->
+        <div class="pause-overlay" id="pause-overlay">
+            <div class="pause-modal">
+                <div class="pause-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="6" y="4" width="4" height="16" rx="1"/>
+                        <rect x="14" y="4" width="4" height="16" rx="1"/>
+                    </svg>
+                </div>
+                <h2 class="pause-title">PAUSED</h2>
+                <p class="pause-hint">Press ESC to resume</p>
+                <div class="pause-actions">
+                    <button class="pause-btn-action primary" id="resume-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                        <span>Resume</span>
+                    </button>
+                    <button class="pause-btn-action" id="pause-restart-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M1 4v6h6"/>
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                        </svg>
+                        <span>Restart</span>
+                    </button>
+                    <button class="pause-btn-action" id="pause-quit-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                            <polyline points="16 17 21 12 16 7"/>
+                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        </svg>
+                        <span>Quit</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="game-area">
+            <canvas id="game-canvas"></canvas>
+
+            <!-- Lane Container -->
+            <div class="lane-container">
+                <div class="lane" data-key="d">
+                    <div class="lane-glow"></div>
+                    <div class="hit-zone"></div>
+                    <div class="key-cap">D</div>
+                </div>
+                <div class="lane" data-key="f">
+                    <div class="lane-glow"></div>
+                    <div class="hit-zone"></div>
+                    <div class="key-cap">F</div>
+                </div>
+                <div class="lane" data-key="j">
+                    <div class="lane-glow"></div>
+                    <div class="hit-zone"></div>
+                    <div class="key-cap">J</div>
+                </div>
+                <div class="lane" data-key="k">
+                    <div class="lane-glow"></div>
+                    <div class="hit-zone"></div>
+                    <div class="key-cap">K</div>
+                </div>
+            </div>
+
+            <!-- Hit Feedback -->
+            <div class="hit-feedback" id="hit-feedback"></div>
+        </div>
+
+        <!-- Bottom Controls -->
+        <div class="game-controls">
+            <button class="game-ctrl-btn" id="back-to-visualizer">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                <span>Exit</span>
+            </button>
+            <button class="game-ctrl-btn" id="restart-game">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 4v6h6"/>
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                </svg>
+                <span>Restart</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="screen">
+        <div class="results-container">
+            <h1 class="results-title">Track Complete!</h1>
+
+            <div class="results-stats">
+                <div class="stat-card">
+                    <span class="stat-value" id="final-score">0</span>
+                    <span class="stat-label">Final Score</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="max-combo">0</span>
+                    <span class="stat-label">Max Combo</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value" id="final-accuracy">0%</span>
+                    <span class="stat-label">Accuracy</span>
+                </div>
+            </div>
+
+            <div class="hit-breakdown">
+                <div class="hit-stat perfect">
+                    <span class="hit-label">Perfect</span>
+                    <span class="hit-count" id="perfect-count">0</span>
+                </div>
+                <div class="hit-stat great">
+                    <span class="hit-label">Great</span>
+                    <span class="hit-count" id="great-count">0</span>
+                </div>
+                <div class="hit-stat good">
+                    <span class="hit-label">Good</span>
+                    <span class="hit-count" id="good-count">0</span>
+                </div>
+                <div class="hit-stat miss">
+                    <span class="hit-label">Miss</span>
+                    <span class="hit-count" id="miss-count">0</span>
+                </div>
+            </div>
+
+            <div class="results-actions">
+                <button class="result-btn" id="play-again">Play Again</button>
+                <button class="result-btn secondary" id="new-track">New Track</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loader">
+            <div class="loader-ring"></div>
+            <span class="loader-text">Analyzing beats...</span>
+        </div>
+    </div>
+
+    <script src="js/audio.js"></script>
+    <script src="js/visualizer.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
