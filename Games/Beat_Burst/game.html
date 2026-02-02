@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,11 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/game.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body class="game-page">
     <!-- Upload Screen -->
     <div id="upload-screen" class="screen active">
@@ -23,7 +27,7 @@
         <nav class="upload-nav">
             <a href="index.html" class="nav-back-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
                 <span>Back</span>
             </a>
@@ -43,10 +47,11 @@
                     <div class="upload-zone-content">
                         <div class="upload-icon-wrapper">
                             <div class="upload-icon-bg"></div>
-                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                <polyline points="17 8 12 3 7 8"/>
-                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="17 8 12 3 7 8" />
+                                <line x1="12" y1="3" x2="12" y2="15" />
                             </svg>
                         </div>
                         <div class="upload-text-group">
@@ -66,10 +71,11 @@
                 <!-- File Info (shown when file selected) -->
                 <div class="file-info-card" id="file-info">
                     <div class="file-info-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M9 18V5l12-2v13"/>
-                            <circle cx="6" cy="18" r="3"/>
-                            <circle cx="18" cy="16" r="3"/>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M9 18V5l12-2v13" />
+                            <circle cx="6" cy="18" r="3" />
+                            <circle cx="18" cy="16" r="3" />
                         </svg>
                     </div>
                     <div class="file-info-details">
@@ -77,9 +83,10 @@
                         <span class="file-ready">Ready to analyze</span>
                     </div>
                     <button class="clear-file-btn" id="clear-file">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="6" x2="6" y2="18"/>
-                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
                         </svg>
                     </button>
                 </div>
@@ -90,7 +97,7 @@
                 <span class="analyze-btn-text">Analyze Track</span>
                 <span class="analyze-btn-icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                        <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                 </span>
             </button>
@@ -102,11 +109,13 @@
                     <h3 class="sample-title">Sample Tracks</h3>
                 </div>
                 <div class="sample-tracks-grid" id="sample-tracks">
-                    <button class="sample-track" data-track="My_Picks/1-10. Space Junk Road.mp3" data-title="Space Junk Road" data-artist="Nintendo" data-album="Super Mario Galaxy">
+                    <button class="sample-track" data-track="My_Picks/1-10. Space Junk Road.mp3"
+                        data-title="Space Junk Road" data-artist="Nintendo" data-album="Super Mario Galaxy">
                         <div class="sample-track-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" />
                             </svg>
                         </div>
                         <div class="sample-track-info">
@@ -114,11 +123,13 @@
                             <span class="sample-track-meta">Super Mario Galaxy</span>
                         </div>
                     </button>
-                    <button class="sample-track" data-track="My_Picks/4-07. Battle (Purple Streamer).mp3" data-title="Battle (Purple Streamer)" data-artist="Nintendo" data-album="Paper Mario: TOK">
+                    <button class="sample-track" data-track="My_Picks/4-07. Battle (Purple Streamer).mp3"
+                        data-title="Battle (Purple Streamer)" data-artist="Nintendo" data-album="Paper Mario: TOK">
                         <div class="sample-track-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" />
                             </svg>
                         </div>
                         <div class="sample-track-info">
@@ -126,11 +137,13 @@
                             <span class="sample-track-meta">Paper Mario: TOK</span>
                         </div>
                     </button>
-                    <button class="sample-track" data-track="My_Picks/45 Never Let Up!.mp3" data-title="Never Let Up!" data-artist="Nintendo" data-album="Mario & Luigi: Dream Team">
+                    <button class="sample-track" data-track="My_Picks/45 Never Let Up!.mp3" data-title="Never Let Up!"
+                        data-artist="Nintendo" data-album="Mario & Luigi: Dream Team">
                         <div class="sample-track-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" />
                             </svg>
                         </div>
                         <div class="sample-track-info">
@@ -138,11 +151,13 @@
                             <span class="sample-track-meta">Mario & Luigi: Dream Team</span>
                         </div>
                     </button>
-                    <button class="sample-track" data-track="My_Picks/6-03 God-Shattering Star (Rain).mp3" data-title="God-Shattering Star (Rain)" data-artist="Nintendo" data-album="Fire Emblem: 3H">
+                    <button class="sample-track" data-track="My_Picks/6-03 God-Shattering Star (Rain).mp3"
+                        data-title="God-Shattering Star (Rain)" data-artist="Nintendo" data-album="Fire Emblem: 3H">
                         <div class="sample-track-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" />
                             </svg>
                         </div>
                         <div class="sample-track-info">
@@ -150,11 +165,13 @@
                             <span class="sample-track-meta">Fire Emblem: 3H</span>
                         </div>
                     </button>
-                    <button class="sample-track" data-track="My_Picks/6-20. Staff Roll.mp3" data-title="Staff Roll" data-artist="Nintendo" data-album="Paper Mario: TOK">
+                    <button class="sample-track" data-track="My_Picks/6-20. Staff Roll.mp3" data-title="Staff Roll"
+                        data-artist="Nintendo" data-album="Paper Mario: TOK">
                         <div class="sample-track-icon">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"/>
-                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" />
                             </svg>
                         </div>
                         <div class="sample-track-info">
@@ -169,8 +186,8 @@
             <div class="upload-tips">
                 <div class="tip">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M12 16v-4M12 8h.01"/>
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 16v-4M12 8h.01" />
                     </svg>
                     <span>Songs with clear beats work best for rhythm games</span>
                 </div>
@@ -191,7 +208,7 @@
         <div class="visualizer-header">
             <button class="vis-back-btn" id="back-to-upload">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
                 <span>New Track</span>
             </button>
@@ -200,20 +217,20 @@
                 <button class="vis-control-btn" id="play-pause-btn">
                     <span class="play-icon">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
+                            <polygon points="5 3 19 12 5 21 5 3" />
                         </svg>
                     </span>
                     <span class="pause-icon" style="display:none;">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <rect x="6" y="4" width="4" height="16" rx="1"/>
-                            <rect x="14" y="4" width="4" height="16" rx="1"/>
+                            <rect x="6" y="4" width="4" height="16" rx="1" />
+                            <rect x="14" y="4" width="4" height="16" rx="1" />
                         </svg>
                     </span>
                 </button>
                 <button class="vis-control-btn secondary" id="restart-btn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M1 4v6h6"/>
-                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                        <path d="M1 4v6h6" />
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
                     </svg>
                 </button>
             </div>
@@ -235,16 +252,16 @@
             <div class="vis-mode-switch">
                 <button class="vis-mode-btn active" id="visualize-mode">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="12" width="4" height="8" rx="1"/>
-                        <rect x="10" y="8" width="4" height="12" rx="1"/>
-                        <rect x="17" y="4" width="4" height="16" rx="1"/>
+                        <rect x="3" y="12" width="4" height="8" rx="1" />
+                        <rect x="10" y="8" width="4" height="12" rx="1" />
+                        <rect x="17" y="4" width="4" height="16" rx="1" />
                     </svg>
                     <span>Visualize</span>
                 </button>
                 <button class="vis-mode-btn" id="play-mode">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+                        <circle cx="12" cy="12" r="10" />
+                        <polygon points="10 8 16 12 10 16 10 8" fill="currentColor" />
                     </svg>
                     <span>Play Game</span>
                 </button>
@@ -265,8 +282,8 @@
             <div class="hud-left">
                 <button class="hud-btn" id="pause-btn" title="Pause (Esc)">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <rect x="6" y="4" width="4" height="16" rx="1"/>
-                        <rect x="14" y="4" width="4" height="16" rx="1"/>
+                        <rect x="6" y="4" width="4" height="16" rx="1" />
+                        <rect x="14" y="4" width="4" height="16" rx="1" />
                     </svg>
                 </button>
             </div>
@@ -313,8 +330,8 @@
             <div class="pause-modal">
                 <div class="pause-icon">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-                        <rect x="6" y="4" width="4" height="16" rx="1"/>
-                        <rect x="14" y="4" width="4" height="16" rx="1"/>
+                        <rect x="6" y="4" width="4" height="16" rx="1" />
+                        <rect x="14" y="4" width="4" height="16" rx="1" />
                     </svg>
                 </div>
                 <h2 class="pause-title">PAUSED</h2>
@@ -322,22 +339,24 @@
                 <div class="pause-actions">
                     <button class="pause-btn-action primary" id="resume-btn">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
+                            <polygon points="5 3 19 12 5 21 5 3" />
                         </svg>
                         <span>Resume</span>
                     </button>
                     <button class="pause-btn-action" id="pause-restart-btn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M1 4v6h6"/>
-                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M1 4v6h6" />
+                            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
                         </svg>
                         <span>Restart</span>
                     </button>
                     <button class="pause-btn-action" id="pause-quit-btn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                            <polyline points="16 17 21 12 16 7"/>
-                            <line x1="21" y1="12" x2="9" y2="12"/>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" y1="12" x2="9" y2="12" />
                         </svg>
                         <span>Quit</span>
                     </button>
@@ -381,14 +400,14 @@
         <div class="game-controls">
             <button class="game-ctrl-btn" id="back-to-visualizer">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
                 </svg>
                 <span>Exit</span>
             </button>
             <button class="game-ctrl-btn" id="restart-game">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M1 4v6h6"/>
-                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                    <path d="M1 4v6h6" />
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
                 </svg>
                 <span>Restart</span>
             </button>
@@ -454,4 +473,5 @@
     <script src="js/game.js"></script>
     <script src="js/main.js"></script>
 </body>
+
 </html>

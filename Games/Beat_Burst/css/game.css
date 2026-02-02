@@ -1289,9 +1289,7 @@
     display: none;
 }
 
-/* ==================== */
 /* Results Screen */
-/* ==================== */
 
 #results-screen {
     background:
@@ -1416,9 +1414,7 @@
     color: var(--primary);
 }
 
-/* ==================== */
 /* Note Styles */
-/* ==================== */
 
 .note {
     position: absolute;
@@ -1435,9 +1431,7 @@
 .note.lane-2 { background: linear-gradient(135deg, #ffee00, #ffff44); color: #ffee00; }
 .note.lane-3 { background: linear-gradient(135deg, #00f0ff, #44ffff); color: #00f0ff; }
 
-/* ==================== */
 /* Responsive */
-/* ==================== */
 
 @media (max-width: 768px) {
     .lane {
