@@ -155,7 +155,7 @@ Development-Showcase/
 ├── 🎨 styles.css              # All the beautiful styles
 ├── ⚡ script.js               # JavaScript magic
 ├── 🌟 favicon.svg             # Constellation network favicon
-├── 📁 Games/                  # Game vault with web remakes
+├── 📁 Game_Vault/             # Game vault with web remakes
 │   ├── index.html             # Arcade-themed game hub
 │   ├── The_Unfair_Game_Web_Ed/# Survival horror puzzle game
 │   ├── THW/                   # The Hard Hallway platformer (+ favicon)
