@@ -146,14 +146,17 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ========================================
-// Background Canvas Animation
+// Background Canvas Animation - Retro Grid
 // ========================================
 
 const canvas = document.getElementById('bgCanvas');
 const ctx = canvas.getContext('2d');
 
-let particles = [];
-let mouse = { x: null, y: null };
+let gridOffset = 0;
+const gridSpeed = 0.5;
+const horizonY = 0.35; // Where the horizon sits (percentage from top)
+let animationPaused = localStorage.getItem('animationPaused') === 'true';
+let animationFrameId = null;
 
 function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -163,111 +166,209 @@ function resizeCanvas() {
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
-// Track mouse position
-document.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-});
+// Retro Grid Animation
+function drawRetroGrid() {
+    const width = canvas.width;
+    const height = canvas.height;
+    const horizon = height * horizonY;
 
-// Particle class
-class Particle {
-    constructor() {
-        this.reset();
-    }
+    // Clear with dark background
+    ctx.fillStyle = '#050508';
+    ctx.fillRect(0, 0, width, height);
 
-    reset() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 2 + 0.5;
-        this.speedX = (Math.random() - 0.5) * 0.5;
-        this.speedY = (Math.random() - 0.5) * 0.5;
-        this.opacity = Math.random() * 0.5 + 0.2;
-        this.color = this.getRandomColor();
-    }
+    // Draw gradient sky/background
+    const skyGradient = ctx.createLinearGradient(0, 0, 0, horizon);
+    skyGradient.addColorStop(0, '#0a0a12');
+    skyGradient.addColorStop(0.5, '#1a0a2e');
+    skyGradient.addColorStop(1, '#2d1b4e');
+    ctx.fillStyle = skyGradient;
+    ctx.fillRect(0, 0, width, horizon);
 
-    getRandomColor() {
-        const colors = ['#e94560', '#00d4ff', '#a855f7', '#4ade80'];
-        return colors[Math.floor(Math.random() * colors.length)];
-    }
+    // Draw sun/moon
+    const sunX = width / 2;
+    const sunY = horizon - 20;
+    const sunRadius = Math.min(width, height) * 0.08;
 
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
+    // Sun glow
+    const sunGlow = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, sunRadius * 3);
+    sunGlow.addColorStop(0, 'rgba(233, 69, 96, 0.4)');
+    sunGlow.addColorStop(0.5, 'rgba(168, 85, 247, 0.2)');
+    sunGlow.addColorStop(1, 'rgba(168, 85, 247, 0)');
+    ctx.fillStyle = sunGlow;
+    ctx.fillRect(0, 0, width, horizon + sunRadius);
 
-        // Mouse interaction
-        if (mouse.x && mouse.y) {
-            const dx = mouse.x - this.x;
-            const dy = mouse.y - this.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+    // Sun body with horizontal lines
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, sunRadius, 0, Math.PI * 2);
+    ctx.clip();
 
-            if (distance < 100) {
-                const force = (100 - distance) / 100;
-                this.x -= dx * force * 0.02;
-                this.y -= dy * force * 0.02;
-            }
+    const sunBodyGradient = ctx.createLinearGradient(sunX, sunY - sunRadius, sunX, sunY + sunRadius);
+    sunBodyGradient.addColorStop(0, '#ff6b9d');
+    sunBodyGradient.addColorStop(0.5, '#e94560');
+    sunBodyGradient.addColorStop(1, '#c73e54');
+    ctx.fillStyle = sunBodyGradient;
+    ctx.fill();
+
+    // Sun horizontal lines
+    ctx.strokeStyle = '#050508';
+    ctx.lineWidth = 3;
+    for (let i = 0; i < 8; i++) {
+        const lineY = sunY - sunRadius + (i + 1) * (sunRadius * 2 / 9);
+        const lineWidth = Math.sqrt(sunRadius * sunRadius - Math.pow(lineY - sunY, 2)) * 2;
+        if (lineWidth > 0) {
+            ctx.beginPath();
+            ctx.moveTo(sunX - lineWidth / 2, lineY);
+            ctx.lineTo(sunX + lineWidth / 2, lineY);
+            ctx.stroke();
         }
-
-        // Wrap around screen
-        if (this.x < 0) this.x = canvas.width;
-        if (this.x > canvas.width) this.x = 0;
-        if (this.y < 0) this.y = canvas.height;
-        if (this.y > canvas.height) this.y = 0;
     }
+    ctx.restore();
 
-    draw() {
+    // Draw the grid floor
+    ctx.save();
+
+    // Floor gradient
+    const floorGradient = ctx.createLinearGradient(0, horizon, 0, height);
+    floorGradient.addColorStop(0, '#1a0a2e');
+    floorGradient.addColorStop(1, '#050508');
+    ctx.fillStyle = floorGradient;
+    ctx.fillRect(0, horizon, width, height - horizon);
+
+    // Perspective grid settings
+    const verticalLines = 40;
+    const horizontalLines = 30;
+    const vanishingPointX = width / 2;
+    const vanishingPointY = horizon;
+
+    // Draw vertical grid lines (perspective)
+    ctx.strokeStyle = '#e94560';
+    ctx.lineWidth = 1;
+
+    for (let i = -verticalLines / 2; i <= verticalLines / 2; i++) {
+        const spread = (i / (verticalLines / 2));
+        const bottomX = vanishingPointX + spread * width * 1.5;
+
+        // Calculate opacity based on distance from center
+        const opacity = 0.6 - Math.abs(spread) * 0.4;
+        ctx.strokeStyle = `rgba(233, 69, 96, ${Math.max(0.1, opacity)})`;
+
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.globalAlpha = this.opacity;
-        ctx.fill();
-        ctx.globalAlpha = 1;
+        ctx.moveTo(vanishingPointX, vanishingPointY);
+        ctx.lineTo(bottomX, height);
+        ctx.stroke();
     }
-}
 
-// Initialize particles
-function initParticles() {
-    particles = [];
-    const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
-    for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
-    }
-}
+    // Draw horizontal grid lines (with animation)
+    const baseSpacing = 20;
+    const perspectiveScale = 2.5;
 
-initParticles();
-window.addEventListener('resize', initParticles);
+    for (let i = 0; i < horizontalLines; i++) {
+        // Calculate y position with perspective and animation offset
+        const progress = (i + gridOffset) / horizontalLines;
+        const perspectiveY = horizon + Math.pow(progress, perspectiveScale) * (height - horizon);
 
-// Draw connections between nearby particles
-function drawConnections() {
-    for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
+        if (perspectiveY > horizon && perspectiveY < height) {
+            // Opacity fades near horizon
+            const opacity = Math.pow(progress, 0.5) * 0.8;
+            ctx.strokeStyle = `rgba(0, 212, 255, ${opacity})`;
+            ctx.lineWidth = 1 + progress * 2;
 
-            if (distance < 120) {
-                ctx.beginPath();
-                ctx.strokeStyle = `rgba(233, 69, 96, ${0.1 * (1 - distance / 120)})`;
-                ctx.lineWidth = 0.5;
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.stroke();
-            }
+            // Calculate line width at this depth
+            const lineHalfWidth = (perspectiveY - horizon) * 2;
+
+            ctx.beginPath();
+            ctx.moveTo(vanishingPointX - lineHalfWidth, perspectiveY);
+            ctx.lineTo(vanishingPointX + lineHalfWidth, perspectiveY);
+            ctx.stroke();
         }
     }
+
+    // Add glow effect on horizon
+    const horizonGlow = ctx.createLinearGradient(0, horizon - 30, 0, horizon + 30);
+    horizonGlow.addColorStop(0, 'rgba(168, 85, 247, 0)');
+    horizonGlow.addColorStop(0.5, 'rgba(168, 85, 247, 0.3)');
+    horizonGlow.addColorStop(1, 'rgba(168, 85, 247, 0)');
+    ctx.fillStyle = horizonGlow;
+    ctx.fillRect(0, horizon - 30, width, 60);
+
+    ctx.restore();
+
+    // Add some floating stars in the sky
+    drawStars();
+}
+
+// Stars array for the sky
+let stars = [];
+
+function initStars() {
+    stars = [];
+    const starCount = Math.floor((canvas.width * canvas.height * horizonY) / 8000);
+    for (let i = 0; i < starCount; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height * horizonY,
+            size: Math.random() * 1.5 + 0.5,
+            twinkle: Math.random() * Math.PI * 2,
+            twinkleSpeed: Math.random() * 0.05 + 0.02
+        });
+    }
+}
+
+initStars();
+window.addEventListener('resize', initStars);
+
+function drawStars() {
+    stars.forEach(star => {
+        star.twinkle += star.twinkleSpeed;
+        const opacity = 0.3 + Math.sin(star.twinkle) * 0.3;
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+        ctx.fill();
+    });
 }
 
 // Animation loop
 function animate() {
-    ctx.fillStyle = 'rgba(5, 5, 8, 0.1)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    if (animationPaused) {
+        // Draw one static frame when paused
+        drawRetroGrid();
+        return;
+    }
 
-    particles.forEach(particle => {
-        particle.update();
-        particle.draw();
+    // Update grid offset for scrolling effect
+    gridOffset += gridSpeed * 0.02;
+    if (gridOffset >= 1) gridOffset = 0;
+
+    drawRetroGrid();
+    animationFrameId = requestAnimationFrame(animate);
+}
+
+// Animation Toggle Button
+const animToggle = document.getElementById('animToggle');
+const animIcon = document.getElementById('animIcon');
+
+if (animToggle) {
+    // Set initial state
+    if (animationPaused) {
+        animToggle.classList.add('paused');
+        animIcon.className = 'fas fa-play';
+    }
+
+    animToggle.addEventListener('click', () => {
+        animationPaused = !animationPaused;
+        localStorage.setItem('animationPaused', animationPaused);
+        animToggle.classList.toggle('paused', animationPaused);
+        animIcon.className = animationPaused ? 'fas fa-play' : 'fas fa-pause';
+        sfx.play('toggle');
+
+        if (!animationPaused) {
+            // Resume animation
+            animate();
+        }
     });
-
-    drawConnections();
-    requestAnimationFrame(animate);
 }
 
 animate();
