@@ -1139,6 +1139,23 @@ body {
     color: var(--purple-accent);
 }
 
+.goal-card-link {
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+    border: 2px solid var(--orange-primary);
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.05) 0%, rgba(107, 92, 231, 0.05) 100%);
+}
+
+.goal-card-link:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-strong), 0 0 20px rgba(255, 107, 53, 0.2);
+}
+
+.goal-card-link .recommendation {
+    color: var(--orange-primary);
+}
+
 /* Tips Section */
 .tips-grid {
     display: grid;

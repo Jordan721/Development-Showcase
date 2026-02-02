@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Making - Learn Web Development</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <!-- Decorative Background -->
+    <div class="page-bg"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="../index.html" class="nav-brand">
+            <span class="bagel-icon">🥯</span>
+            <span>Bagely Bytes</span>
+        </a>
+        <div class="nav-menu">
+            <a href="#playground">Playground</a>
+            <a href="#files">File Structure</a>
+            <a href="#hosting">Hosting</a>
+            <a href="#challenges">Challenges</a>
+            <a href="../index.html" class="nav-cta">Back to Languages</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-globe"></i>
+                Web Development Basics
+            </div>
+            <h1>Build Your First <span class="highlight">Website</span></h1>
+            <p>Learn how websites work through interactive examples. Understand HTML structure, why files stay separate,
+                and where to host your creations - all hands-on!</p>
+            <div class="hero-buttons">
+                <a href="#playground" class="btn-primary">
+                    Try the Playground <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="#files" class="btn-secondary">
+                    <i class="fas fa-folder-tree"></i> Why Separate Files?
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="number">3</span>
+                    <span class="label">Core Files</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="number">5+</span>
+                    <span class="label">Free Hosts</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="number">100%</span>
+                    <span class="label">Interactive</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="code-window">
+                <div class="code-window-header">
+                    <span class="window-dot red"></span>
+                    <span class="window-dot yellow"></span>
+                    <span class="window-dot green"></span>
+                    <span class="window-title">index.html</span>
+                </div>
+                <div class="code-window-body">
+                    <div class="code-line">
+                        <span class="line-number">1</span>
+                        <span class="code-tag">&lt;!DOCTYPE html&gt;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">2</span>
+                        <span class="code-tag">&lt;html&gt;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">3</span>
+                        &nbsp;&nbsp;<span class="code-tag">&lt;head&gt;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">4</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-tag">&lt;title&gt;</span><span class="code-string">My
+                            Site</span><span class="code-tag">&lt;/title&gt;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">5</span>
+                        &nbsp;&nbsp;<span class="code-tag">&lt;/head&gt;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">6</span>
+                        &nbsp;&nbsp;<span class="code-tag">&lt;body&gt;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">7</span>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-tag">&lt;h1&gt;</span><span class="code-string">Hello
+                            World!</span><span class="code-tag">&lt;/h1&gt;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">8</span>
+                        &nbsp;&nbsp;<span class="code-tag">&lt;/body&gt;</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">9</span>
+                        <span class="code-tag">&lt;/html&gt;</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- What is a Website Section -->
+    <section class="section section-white">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-lightbulb"></i> The Basics</span>
+            <h2>What is a Website, Really?</h2>
+            <p>It's simpler than you think</p>
+        </div>
+        <div class="basics-grid">
+            <div class="basic-card">
+                <div class="basic-icon"><i class="fas fa-file-code"></i></div>
+                <h4>Just Files</h4>
+                <p>A website is just a collection of text files that browsers know how to read and display</p>
+            </div>
+            <div class="basic-card">
+                <div class="basic-icon"><i class="fas fa-server"></i></div>
+                <h4>Stored Somewhere</h4>
+                <p>These files live on a server (someone else's computer) that's always connected to the internet</p>
+            </div>
+            <div class="basic-card">
+                <div class="basic-icon"><i class="fas fa-link"></i></div>
+                <h4>Found by URL</h4>
+                <p>When you type a URL, your browser asks that server for the files and displays them</p>
+            </div>
+            <div class="basic-card">
+                <div class="basic-icon"><i class="fas fa-home"></i></div>
+                <h4>index.html = Home</h4>
+                <p>Every website starts with index.html - it's like the front door that opens first</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Playground Section -->
+    <section id="playground" class="section">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-cube"></i> Playground</span>
+            <h2>Interactive Div Playground</h2>
+            <p>Play with HTML elements - resize them, change layouts, see the code update live!</p>
+        </div>
+
+        <div class="playground-container">
+            <!-- Controls -->
+            <div class="playground-controls">
+                <button class="control-btn" id="addDiv">
+                    <i class="fas fa-plus"></i> Add Box
+                </button>
+                <button class="control-btn" id="clearAll">
+                    <i class="fas fa-trash"></i> Clear All
+                </button>
+                <div class="layout-switcher">
+                    <span>Layout:</span>
+                    <button class="layout-btn active" data-layout="normal">Normal</button>
+                    <button class="layout-btn" data-layout="flex">Flexbox</button>
+                    <button class="layout-btn" data-layout="grid">Grid</button>
+                </div>
+                <div class="color-picker-wrap">
+                    <span>Color:</span>
+                    <input type="color" id="boxColor" value="#6366f1">
+                </div>
+            </div>
+
+            <!-- Playground Area -->
+            <div class="playground-wrapper">
+                <div class="playground-area" id="playgroundArea">
+                    <div class="playground-box" style="width: 150px; height: 100px; background: #6366f1;">
+                        <span class="box-size">150 x 100</span>
+                        <button class="box-remove"><i class="fas fa-times"></i></button>
+                        <div class="resize-handle"></div>
+                    </div>
+                    <div class="playground-box" style="width: 100px; height: 150px; background: #8b5cf6;">
+                        <span class="box-size">100 x 150</span>
+                        <button class="box-remove"><i class="fas fa-times"></i></button>
+                        <div class="resize-handle"></div>
+                    </div>
+                </div>
+
+                <!-- Live Code Output -->
+                <div class="code-output">
+                    <div class="code-output-header">
+                        <span><i class="fas fa-code"></i> Generated Code</span>
+                        <button class="copy-btn" id="copyCode"><i class="fas fa-copy"></i> Copy</button>
+                    </div>
+                    <pre class="code-output-body" id="generatedCode"></pre>
+                </div>
+            </div>
+
+            <!-- Layout Explanation -->
+            <div class="layout-explanation" id="layoutExplanation">
+                <div class="explanation-content">
+                    <h4><i class="fas fa-info-circle"></i> Normal Flow</h4>
+                    <p>Elements stack based on their display type. Block elements (like divs) stack vertically. This is
+                        the default behavior.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- File Structure Section -->
+    <section id="files" class="section section-white">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-folder-tree"></i> Organization</span>
+            <h2>The Three Musketeers of Web Dev</h2>
+            <p>Why we keep HTML, CSS, and JavaScript in separate files</p>
+        </div>
+
+        <div class="files-demo">
+            <!-- File Cards -->
+            <div class="file-cards">
+                <div class="file-card html-card">
+                    <div class="file-icon"><i class="fab fa-html5"></i></div>
+                    <h3>index.html</h3>
+                    <span class="file-role">The Skeleton</span>
+                    <p>Defines the structure and content. What elements exist and in what order.</p>
+                    <div class="file-analogy">
+                        <i class="fas fa-bone"></i> Like the bones of a body
+                    </div>
+                </div>
+                <div class="file-card css-card">
+                    <div class="file-icon"><i class="fab fa-css3-alt"></i></div>
+                    <h3>styles.css</h3>
+                    <span class="file-role">The Skin & Clothes</span>
+                    <p>Controls appearance - colors, sizes, fonts, spacing, animations.</p>
+                    <div class="file-analogy">
+                        <i class="fas fa-palette"></i> Like paint and decoration
+                    </div>
+                </div>
+                <div class="file-card js-card">
+                    <div class="file-icon"><i class="fab fa-js"></i></div>
+                    <h3>script.js</h3>
+                    <span class="file-role">The Brain</span>
+                    <p>Adds interactivity - button clicks, form validation, dynamic updates.</p>
+                    <div class="file-analogy">
+                        <i class="fas fa-brain"></i> Like the nervous system
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Demo -->
+            <div class="toggle-demo">
+                <h4>See It In Action</h4>
+                <p>Toggle each file to see what happens:</p>
+                <div class="toggle-controls">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="toggleHTML" checked>
+                        <span class="toggle-switch"></span>
+                        HTML
+                    </label>
+                    <label class="toggle-label">
+                        <input type="checkbox" id="toggleCSS" checked>
+                        <span class="toggle-switch"></span>
+                        CSS
+                    </label>
+                    <label class="toggle-label">
+                        <input type="checkbox" id="toggleJS" checked>
+                        <span class="toggle-switch"></span>
+                        JavaScript
+                    </label>
+                </div>
+                <div class="demo-preview" id="demoPreview">
+                    <div class="demo-card">
+                        <h3>Welcome!</h3>
+                        <p>This is a sample card component.</p>
+                        <button class="demo-btn" id="demoBtn">Click Me</button>
+                        <span class="demo-counter" id="demoCounter">Clicks: 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Why Separate? -->
+            <div class="why-separate">
+                <h4><i class="fas fa-question-circle"></i> Why Keep Them Separate?</h4>
+                <div class="reasons-grid">
+                    <div class="reason">
+                        <i class="fas fa-users"></i>
+                        <h5>Team Work</h5>
+                        <p>Designers work on CSS while developers work on JS - no conflicts!</p>
+                    </div>
+                    <div class="reason">
+                        <i class="fas fa-recycle"></i>
+                        <h5>Reusability</h5>
+                        <p>One CSS file can style hundreds of HTML pages</p>
+                    </div>
+                    <div class="reason">
+                        <i class="fas fa-bug"></i>
+                        <h5>Easy Debugging</h5>
+                        <p>Style broken? Check CSS. Button not working? Check JS.</p>
+                    </div>
+                    <div class="reason">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <h5>Performance</h5>
+                        <p>Browsers cache CSS/JS files - faster page loads!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How Connection Works Section -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-network-wired"></i> The Journey</span>
+            <h2>How Your Browser Gets a Website</h2>
+            <p>From typing a URL to seeing the page</p>
+        </div>
+
+        <div class="connection-flow">
+            <div class="flow-step">
+                <div class="flow-icon"><i class="fas fa-keyboard"></i></div>
+                <div class="flow-content">
+                    <h4>1. You Type a URL</h4>
+                    <p>example.com</p>
+                </div>
+            </div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-step">
+                <div class="flow-icon"><i class="fas fa-search"></i></div>
+                <div class="flow-content">
+                    <h4>2. DNS Lookup</h4>
+                    <p>Finds the server's address</p>
+                </div>
+            </div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-step">
+                <div class="flow-icon"><i class="fas fa-server"></i></div>
+                <div class="flow-content">
+                    <h4>3. Server Responds</h4>
+                    <p>Sends index.html first</p>
+                </div>
+            </div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-step">
+                <div class="flow-icon"><i class="fas fa-download"></i></div>
+                <div class="flow-content">
+                    <h4>4. Load Resources</h4>
+                    <p>CSS, JS, images follow</p>
+                </div>
+            </div>
+            <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="flow-step">
+                <div class="flow-icon"><i class="fas fa-paint-brush"></i></div>
+                <div class="flow-content">
+                    <h4>5. Render Page</h4>
+                    <p>Browser paints the result</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="index-importance">
+            <div class="index-card">
+                <h4><i class="fas fa-star"></i> Why "index.html"?</h4>
+                <p>It's a convention! When you visit <code>example.com</code>, servers automatically look for
+                    <code>index.html</code> in that folder. It's like the "main entrance" of your website. You could
+                    name it anything, but index.html is the universal standard.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hosting Options Section -->
+    <section id="hosting" class="section section-white">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-cloud-upload-alt"></i> Hosting</span>
+            <h2>Where to Put Your Website</h2>
+            <p>Free options to get your site online</p>
+        </div>
+
+        <div class="hosting-grid">
+            <!-- GitHub Pages -->
+            <div class="hosting-card">
+                <div class="hosting-header">
+                    <i class="fab fa-github"></i>
+                    <h3>GitHub Pages</h3>
+                    <span class="hosting-price">Free</span>
+                </div>
+                <div class="hosting-body">
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h5><i class="fas fa-check"></i> Pros</h5>
+                            <ul>
+                                <li>Completely free forever</li>
+                                <li>Great for portfolios</li>
+                                <li>Custom domain support</li>
+                                <li>Git version control</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h5><i class="fas fa-times"></i> Cons</h5>
+                            <ul>
+                                <li>Static sites only</li>
+                                <li>1GB storage limit</li>
+                                <li>100GB bandwidth/month</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="best-for">
+                        <i class="fas fa-bullseye"></i> Best for: Portfolios, documentation, blogs
+                    </div>
+                    <a href="https://pages.github.com/" target="_blank" class="hosting-link">
+                        <i class="fas fa-external-link-alt"></i> Visit GitHub Pages
+                    </a>
+                </div>
+            </div>
+
+            <!-- Netlify -->
+            <div class="hosting-card featured">
+                <div class="hosting-badge">Recommended</div>
+                <div class="hosting-header">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Netlify</h3>
+                    <span class="hosting-price">Free Tier</span>
+                </div>
+                <div class="hosting-body">
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h5><i class="fas fa-check"></i> Pros</h5>
+                            <ul>
+                                <li>Auto-deploy from Git</li>
+                                <li>Built-in forms & functions</li>
+                                <li>Fast global CDN</li>
+                                <li>Easy setup</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h5><i class="fas fa-times"></i> Cons</h5>
+                            <ul>
+                                <li>100GB bandwidth on free</li>
+                                <li>Build time limits</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="best-for">
+                        <i class="fas fa-bullseye"></i> Best for: Modern websites, JAMstack
+                    </div>
+                    <a href="https://www.netlify.com/" target="_blank" class="hosting-link">
+                        <i class="fas fa-external-link-alt"></i> Visit Netlify
+                    </a>
+                </div>
+            </div>
+
+            <!-- Vercel -->
+            <div class="hosting-card">
+                <div class="hosting-header">
+                    <i class="fas fa-triangle"></i>
+                    <h3>Vercel</h3>
+                    <span class="hosting-price">Free Tier</span>
+                </div>
+                <div class="hosting-body">
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h5><i class="fas fa-check"></i> Pros</h5>
+                            <ul>
+                                <li>Perfect for React/Next.js</li>
+                                <li>Instant deployments</li>
+                                <li>Preview deployments</li>
+                                <li>Serverless functions</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h5><i class="fas fa-times"></i> Cons</h5>
+                            <ul>
+                                <li>Framework-focused</li>
+                                <li>Commercial limits</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="best-for">
+                        <i class="fas fa-bullseye"></i> Best for: React, Next.js apps
+                    </div>
+                    <a href="https://vercel.com/" target="_blank" class="hosting-link">
+                        <i class="fas fa-external-link-alt"></i> Visit Vercel
+                    </a>
+                </div>
+            </div>
+
+            <!-- Render -->
+            <div class="hosting-card">
+                <div class="hosting-header">
+                    <i class="fas fa-cube"></i>
+                    <h3>Render</h3>
+                    <span class="hosting-price">Free Tier</span>
+                </div>
+                <div class="hosting-body">
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h5><i class="fas fa-check"></i> Pros</h5>
+                            <ul>
+                                <li>Static + backend support</li>
+                                <li>Databases available</li>
+                                <li>Simple dashboard</li>
+                                <li>Auto HTTPS</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h5><i class="fas fa-times"></i> Cons</h5>
+                            <ul>
+                                <li>Free tier sleeps</li>
+                                <li>Cold start delays</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="best-for">
+                        <i class="fas fa-bullseye"></i> Best for: Full-stack beginners
+                    </div>
+                    <a href="https://render.com/" target="_blank" class="hosting-link">
+                        <i class="fas fa-external-link-alt"></i> Visit Render
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cloudflare Pages -->
+            <div class="hosting-card">
+                <div class="hosting-header">
+                    <i class="fas fa-cloud"></i>
+                    <h3>Cloudflare Pages</h3>
+                    <span class="hosting-price">Free</span>
+                </div>
+                <div class="hosting-body">
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h5><i class="fas fa-check"></i> Pros</h5>
+                            <ul>
+                                <li>Unlimited bandwidth</li>
+                                <li>Super fast CDN</li>
+                                <li>500 builds/month</li>
+                                <li>Workers integration</li>
+                            </ul>
+                        </div>
+                        <div class="cons">
+                            <h5><i class="fas fa-times"></i> Cons</h5>
+                            <ul>
+                                <li>Fewer features than others</li>
+                                <li>Newer platform</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="best-for">
+                        <i class="fas fa-bullseye"></i> Best for: High-traffic static sites
+                    </div>
+                    <a href="https://pages.cloudflare.com/" target="_blank" class="hosting-link">
+                        <i class="fas fa-external-link-alt"></i> Visit Cloudflare Pages
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Comparison Table -->
+        <div class="hosting-comparison">
+            <h4>Quick Comparison</h4>
+            <div class="comparison-table-wrap">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Platform</th>
+                            <th>Setup Difficulty</th>
+                            <th>Free Bandwidth</th>
+                            <th>Backend Support</th>
+                            <th>Best For</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i class="fab fa-github"></i> GitHub Pages</td>
+                            <td><span class="difficulty easy">Easy</span></td>
+                            <td>100GB/mo</td>
+                            <td><i class="fas fa-times text-red"></i></td>
+                            <td>Portfolios</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-bolt"></i> Netlify</td>
+                            <td><span class="difficulty easy">Easy</span></td>
+                            <td>100GB/mo</td>
+                            <td><i class="fas fa-check text-green"></i> Functions</td>
+                            <td>Modern Sites</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-triangle"></i> Vercel</td>
+                            <td><span class="difficulty easy">Easy</span></td>
+                            <td>100GB/mo</td>
+                            <td><i class="fas fa-check text-green"></i> Serverless</td>
+                            <td>React Apps</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-cube"></i> Render</td>
+                            <td><span class="difficulty medium">Medium</span></td>
+                            <td>100GB/mo</td>
+                            <td><i class="fas fa-check text-green"></i> Full</td>
+                            <td>Full-Stack</td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-cloud"></i> Cloudflare</td>
+                            <td><span class="difficulty easy">Easy</span></td>
+                            <td>Unlimited</td>
+                            <td><i class="fas fa-check text-green"></i> Workers</td>
+                            <td>High Traffic</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Challenges Section -->
+    <section id="challenges" class="section">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-trophy"></i> Practice</span>
+            <h2>Mini Challenges</h2>
+            <p>Test your understanding with these quick exercises</p>
+        </div>
+
+        <div class="challenges-container">
+            <!-- Challenge 1: Size It -->
+            <div class="challenge-card" data-challenge="1">
+                <div class="challenge-header">
+                    <span class="challenge-number">1</span>
+                    <h3>Size It</h3>
+                    <span class="challenge-difficulty easy">Easy</span>
+                </div>
+                <div class="challenge-body">
+                    <p>Create a box that is exactly <strong>200px wide</strong> and <strong>100px tall</strong>.</p>
+                    <div class="challenge-workspace">
+                        <div class="challenge-preview" id="challenge1Preview">
+                            <div class="target-outline" style="width: 200px; height: 100px;"></div>
+                            <div class="user-box" id="challenge1Box"></div>
+                        </div>
+                        <div class="challenge-controls">
+                            <label>
+                                Width: <input type="number" id="c1Width" value="100" min="10" max="400"> px
+                            </label>
+                            <label>
+                                Height: <input type="number" id="c1Height" value="100" min="10" max="400"> px
+                            </label>
+                        </div>
+                    </div>
+                    <div class="challenge-actions">
+                        <button class="check-btn" data-challenge="1">
+                            <i class="fas fa-check"></i> Check Answer
+                        </button>
+                        <button class="hint-btn" data-challenge="1">
+                            <i class="fas fa-lightbulb"></i> Hint
+                        </button>
+                    </div>
+                    <div class="challenge-feedback" id="feedback1"></div>
+                    <div class="challenge-hint" id="hint1">
+                        <i class="fas fa-lightbulb"></i> Look at the dotted outline - that's your target size!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 2: Stack 'Em -->
+            <div class="challenge-card" data-challenge="2">
+                <div class="challenge-header">
+                    <span class="challenge-number">2</span>
+                    <h3>Stack 'Em</h3>
+                    <span class="challenge-difficulty medium">Medium</span>
+                </div>
+                <div class="challenge-body">
+                    <p>Use <strong>Flexbox</strong> to arrange these 3 boxes <strong>vertically (column)</strong>.</p>
+                    <div class="challenge-workspace">
+                        <div class="challenge-preview stack-preview" id="challenge2Preview">
+                            <div class="stack-box">1</div>
+                            <div class="stack-box">2</div>
+                            <div class="stack-box">3</div>
+                        </div>
+                        <div class="challenge-controls">
+                            <label>
+                                display:
+                                <select id="c2Display">
+                                    <option value="block">block</option>
+                                    <option value="flex">flex</option>
+                                    <option value="grid">grid</option>
+                                </select>
+                            </label>
+                            <label>
+                                flex-direction:
+                                <select id="c2Direction" disabled>
+                                    <option value="row">row</option>
+                                    <option value="column">column</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="challenge-actions">
+                        <button class="check-btn" data-challenge="2">
+                            <i class="fas fa-check"></i> Check Answer
+                        </button>
+                        <button class="hint-btn" data-challenge="2">
+                            <i class="fas fa-lightbulb"></i> Hint
+                        </button>
+                    </div>
+                    <div class="challenge-feedback" id="feedback2"></div>
+                    <div class="challenge-hint" id="hint2">
+                        <i class="fas fa-lightbulb"></i> First set display to "flex", then choose the right direction!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenge 3: Grid Master -->
+            <div class="challenge-card" data-challenge="3">
+                <div class="challenge-header">
+                    <span class="challenge-number">3</span>
+                    <h3>Grid Master</h3>
+                    <span class="challenge-difficulty hard">Hard</span>
+                </div>
+                <div class="challenge-body">
+                    <p>Create a <strong>2x2 grid</strong> layout using CSS Grid.</p>
+                    <div class="challenge-workspace">
+                        <div class="challenge-preview grid-preview" id="challenge3Preview">
+                            <div class="grid-box">A</div>
+                            <div class="grid-box">B</div>
+                            <div class="grid-box">C</div>
+                            <div class="grid-box">D</div>
+                        </div>
+                        <div class="challenge-controls">
+                            <label>
+                                display:
+                                <select id="c3Display">
+                                    <option value="block">block</option>
+                                    <option value="flex">flex</option>
+                                    <option value="grid">grid</option>
+                                </select>
+                            </label>
+                            <label>
+                                grid-template-columns:
+                                <select id="c3Columns" disabled>
+                                    <option value="1fr">1fr</option>
+                                    <option value="1fr 1fr">1fr 1fr</option>
+                                    <option value="1fr 1fr 1fr">1fr 1fr 1fr</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="challenge-actions">
+                        <button class="check-btn" data-challenge="3">
+                            <i class="fas fa-check"></i> Check Answer
+                        </button>
+                        <button class="hint-btn" data-challenge="3">
+                            <i class="fas fa-lightbulb"></i> Hint
+                        </button>
+                    </div>
+                    <div class="challenge-feedback" id="feedback3"></div>
+                    <div class="challenge-hint" id="hint3">
+                        <i class="fas fa-lightbulb"></i> Set display to "grid", then define 2 columns with "1fr 1fr"!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completion Message -->
+        <div class="completion-message" id="completionMessage">
+            <div class="completion-content">
+                <i class="fas fa-trophy"></i>
+                <h3>Amazing Work!</h3>
+                <p>You've completed all the challenges! You now understand the basics of HTML element sizing, Flexbox,
+                    and CSS Grid.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="section section-white">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-book"></i> Learn More</span>
+            <h2>Next Steps</h2>
+            <p>Keep learning with these free resources</p>
+        </div>
+
+        <div class="resources-grid">
+            <a href="https://developer.mozilla.org/en-US/docs/Learn" target="_blank" class="resource-card">
+                <i class="fas fa-graduation-cap"></i>
+                <h4>MDN Web Docs</h4>
+                <p>The gold standard for web documentation</p>
+            </a>
+            <a href="https://www.freecodecamp.org/" target="_blank" class="resource-card">
+                <i class="fas fa-campground"></i>
+                <h4>freeCodeCamp</h4>
+                <p>Free interactive coding lessons</p>
+            </a>
+            <a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/" target="_blank" class="resource-card">
+                <i class="fas fa-arrows-alt"></i>
+                <h4>Flexbox Guide</h4>
+                <p>Complete visual guide to Flexbox</p>
+            </a>
+            <a href="https://css-tricks.com/snippets/css/complete-guide-grid/" target="_blank" class="resource-card">
+                <i class="fas fa-th"></i>
+                <h4>CSS Grid Guide</h4>
+                <p>Complete visual guide to CSS Grid</p>
+            </a>
+        </div>
+
+        <div class="tools-section">
+            <h4>Essential Free Tools</h4>
+            <div class="tools-grid">
+                <div class="tool-item">
+                    <i class="fas fa-code"></i>
+                    <span>VS Code</span>
+                    <small>Code editor</small>
+                </div>
+                <div class="tool-item">
+                    <i class="fab fa-chrome"></i>
+                    <span>DevTools</span>
+                    <small>Built into browsers</small>
+                </div>
+                <div class="tool-item">
+                    <i class="fab fa-git-alt"></i>
+                    <span>Git</span>
+                    <small>Version control</small>
+                </div>
+                <div class="tool-item">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
+                    <small>Code hosting</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-brand">
+            <span>🥯</span> Bagely Bytes
+        </div>
+        <p>Learn. Code. Create.</p>
+        <a href="../index.html" class="footer-link">
+            <i class="fas fa-arrow-left"></i> Back to Programming Languages
+        </a>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -24,6 +24,7 @@
 | 🌙 **Dark/Light Mode** | Easy on the eyes, day or night |
 | 💻 **Code Examples** | Real syntax-highlighted examples for each language |
 | 📱 **Fully Responsive** | Looks great on desktop, tablet, and mobile |
+| 🏗️ **Website Making Guide** | Interactive tutorial on building websites from scratch |
 
 ---
 
@@ -48,6 +49,36 @@ Click any language card to see:
 
 ---
 
+## 🏗️ Website Making - Interactive Tutorial
+
+A hands-on guide to understanding how websites work! Located in the `Website_Making/` folder.
+
+### Features:
+
+| Feature | Description |
+|---------|-------------|
+| 🎮 **Interactive Div Playground** | Add, remove, resize boxes and see code generate live |
+| 🔄 **Layout Switcher** | Toggle between Normal, Flexbox, and Grid layouts |
+| 📝 **Live Code Export** | Copy generated HTML/CSS as you build |
+| 📁 **File Structure Demo** | Toggle HTML/CSS/JS on/off to see their effects |
+| 🌐 **Hosting Comparison** | Compare GitHub Pages, Netlify, Vercel, Render & Cloudflare |
+| 🏆 **Mini Challenges** | 3 interactive exercises with validation |
+
+### Challenges Included:
+1. **Size It** - Create a box with exact dimensions (200x100px)
+2. **Stack 'Em** - Arrange boxes vertically using Flexbox
+3. **Grid Master** - Build a 2x2 grid layout
+
+### Topics Covered:
+- What is a website (files, servers, URLs)
+- Why index.html is special
+- The 3 core files: HTML (skeleton), CSS (clothes), JS (brain)
+- Why we keep files separate
+- How browsers fetch and render pages
+- Free hosting options with pros/cons
+
+---
+
 ## 🛠️ Tech Stack
 
 ```
@@ -64,10 +95,15 @@ Click any language card to see:
 
 ```
 Bagely_Bytes_Programming/
-├── 📄 Bagely_Bytes.html   # Main HTML file
-├── 🎨 styles.css          # All styles & animations
-├── ⚡ script.js           # JavaScript functionality
-└── 📖 README.md           # You are here!
+├── 📄 index.html          # Main programming languages page
+├── 🎨 styles.css          # Main styles & animations
+├── ⚡ script.js           # Main JavaScript functionality
+├── 🥯 favicon.svg         # Bagel favicon
+├── 📖 README.md           # You are here!
+└── 📁 Website_Making/     # Interactive web dev tutorial
+    ├── 📄 index.html      # Website making guide
+    ├── 🎨 styles.css      # Tutorial styles
+    └── ⚡ script.js       # Interactive playground & challenges
 ```
 
 ---
@@ -75,8 +111,8 @@ Bagely_Bytes_Programming/
 ## 🚀 Getting Started
 
 1. **Clone or download** this repository
-2. **Open** `Bagely_Bytes.html` in your browser
-3. **Explore** programming languages!
+2. **Open** `index.html` in your browser to explore programming languages
+3. **Or open** `Website_Making/index.html` to try the interactive web dev tutorial!
 
 ```bash
 # Or serve it locally
