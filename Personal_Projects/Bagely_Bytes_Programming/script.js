@@ -1,8 +1,6 @@
 // Bagely Bytes Programming - Main JavaScript
 
-// ==========================================
-// LANGUAGE DATA
-// ==========================================
+// Language Data
 const languageData = {
     python: {
         name: 'Python',
@@ -582,17 +580,13 @@ const languageData = {
     }
 };
 
-// ==========================================
-// DOM ELEMENTS
-// ==========================================
+// DOM Elements
 const langCards = document.querySelectorAll('.lang-card');
 const detailPanel = document.getElementById('langDetailPanel');
 const panelContent = document.getElementById('panelContent');
 const closePanel = document.getElementById('closePanel');
 
-// ==========================================
-// LANGUAGE CARD EVENT LISTENERS
-// ==========================================
+// Language Card Event Listeners
 langCards.forEach(card => {
     card.addEventListener('click', () => {
         const lang = card.dataset.lang;
@@ -607,9 +601,7 @@ closePanel.addEventListener('click', () => {
     langCards.forEach(c => c.classList.remove('active'));
 });
 
-// ==========================================
-// SHOW LANGUAGE DETAIL FUNCTION
-// ==========================================
+// Show Language Detail Function
 function showLanguageDetail(langKey) {
     const lang = languageData[langKey];
     if (!lang) return;
@@ -707,9 +699,7 @@ function showLanguageDetail(langKey) {
     window.currentLang = langKey;
 }
 
-// ==========================================
-// COPY CODE FUNCTION
-// ==========================================
+// Copy Code Function
 function copyCode() {
     const code = document.getElementById('codeBody').innerText;
     navigator.clipboard.writeText(code).then(() => {
@@ -721,9 +711,7 @@ function copyCode() {
     });
 }
 
-// ==========================================
-// THEME TOGGLE FUNCTIONALITY
-// ==========================================
+// Theme Toggle
 const themeToggle = document.getElementById('themeToggle');
 const html = document.documentElement;
 
@@ -745,9 +733,7 @@ themeToggle.addEventListener('click', () => {
     localStorage.setItem('bagely-theme', newTheme);
 });
 
-// ==========================================
-// NAVBAR SCROLL EFFECT
-// ==========================================
+// Navbar Scroll Effect
 const navbar = document.querySelector('.navbar');
 
 window.addEventListener('scroll', () => {
@@ -758,9 +744,7 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// ==========================================
-// INTERSECTION OBSERVER FOR ANIMATIONS
-// ==========================================
+// Intersection Observer for Animations
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -781,9 +765,7 @@ document.querySelectorAll('.section-header, .lang-card, .tip-card, .goal-card, .
     animateOnScroll.observe(el);
 });
 
-// ==========================================
-// SMOOTH SCROLL FOR NAVIGATION LINKS
-// ==========================================
+// Smooth Scroll for Navigation Links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
         // Skip the about link - it has its own handler
@@ -800,9 +782,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// ==========================================
-// ABOUT MODAL FUNCTIONALITY
-// ==========================================
+// About Modal
 const aboutLink = document.getElementById('aboutLink');
 const aboutModal = document.getElementById('aboutModal');
 const modalClose = document.getElementById('modalClose');
