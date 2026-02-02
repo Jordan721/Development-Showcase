@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366f1"/>
+      <stop offset="100%" style="stop-color:#4f46e5"/>
+    </linearGradient>
+    <linearGradient id="noteGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#c084fc"/>
+      <stop offset="100%" style="stop-color:#a855f7"/>
+    </linearGradient>
+    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#06b6d4"/>
+      <stop offset="100%" style="stop-color:#10b981"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="30" fill="url(#bgGrad)"/>
+
+  <!-- Outer glow ring -->
+  <circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+
+  <!-- Sound waves (left side) -->
+  <path d="M14 26 Q10 32 14 38" fill="none" stroke="url(#waveGrad)" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+  <path d="M10 22 Q4 32 10 42" fill="none" stroke="url(#waveGrad)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- Sound waves (right side) -->
+  <path d="M50 26 Q54 32 50 38" fill="none" stroke="url(#waveGrad)" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+  <path d="M54 22 Q60 32 54 42" fill="none" stroke="url(#waveGrad)" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- Musical note - beam -->
+  <rect x="26" y="16" width="16" height="4" rx="2" fill="url(#noteGrad)"/>
+
+  <!-- Musical note - stems -->
+  <rect x="26" y="16" width="3" height="26" fill="url(#noteGrad)"/>
+  <rect x="39" y="16" width="3" height="20" fill="url(#noteGrad)"/>
+
+  <!-- Musical note - heads -->
+  <ellipse cx="23" cy="44" rx="6" ry="5" fill="url(#noteGrad)" transform="rotate(-20 23 44)"/>
+  <ellipse cx="36" cy="38" rx="6" ry="5" fill="url(#noteGrad)" transform="rotate(-20 36 38)"/>
+
+  <!-- Highlight on note heads -->
+  <ellipse cx="21" cy="43" rx="2" ry="1.5" fill="rgba(255,255,255,0.3)" transform="rotate(-20 21 43)"/>
+  <ellipse cx="34" cy="37" rx="2" ry="1.5" fill="rgba(255,255,255,0.3)" transform="rotate(-20 34 37)"/>
+
+  <!-- Beat burst dots -->
+  <circle cx="48" cy="18" r="2" fill="#f43f5e"/>
+  <circle cx="52" cy="24" r="1.5" fill="#10b981"/>
+  <circle cx="16" cy="50" r="2" fill="#f59e0b"/>
+  <circle cx="12" cy="44" r="1.5" fill="#06b6d4"/>
+</svg>

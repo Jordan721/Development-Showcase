@@ -116,14 +116,22 @@ class BeatBurstApp {
         // Store metadata
         this.trackMetadata = { title, artist, album };
 
-        this.showLoading(true, 'Loading sample track...');
+        this.showLoading(true, `Loading "${title}"...`);
 
         try {
             // Fetch the sample track
             const response = await fetch(trackPath);
-            if (!response.ok) throw new Error('Failed to load track');
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
 
             const blob = await response.blob();
+
+            // Verify we got audio data
+            if (blob.size === 0) {
+                throw new Error('Empty file');
+            }
+
             const file = new File([blob], `${title}.mp3`, { type: 'audio/mpeg' });
 
             this.currentFile = file;
@@ -144,7 +152,13 @@ class BeatBurstApp {
         } catch (error) {
             console.error('Error loading sample track:', error);
             this.showLoading(false);
-            alert('Error loading sample track. Please try uploading your own file.');
+
+            // Show helpful error message
+            const is404 = error.message.includes('404');
+            const errorMsg = is404
+                ? `"${title}" not found on server. Sample tracks may need to be uploaded. Please use your own audio file instead.`
+                : `Could not load "${title}". Please try uploading your own file.`;
+            alert(errorMsg);
         }
     }
 

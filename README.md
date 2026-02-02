@@ -45,6 +45,7 @@ A collection of games I originally made years ago, remade for the web:
 - 👻 The Unfair Game - Survival horror puzzle game with invisible danger zones and jump scares
 - 🏃 The Hard Hallway (THW) - Brutal 2D action platformer inspired by "I Wanna Be The Guy"
 - 💀 The Idea Space - SMT-inspired demon compendium with fusion calculator, global search, timeline, party builder & retro terminal aesthetic
+- 🎵 Beat Burst - Rhythm game with beat detection, music visualizer, sample tracks from Nintendo games & Now Playing display
 - 📦 Origins section with downloadable legacy versions (original FPS Creator builds)
 
 #### 📚 **Academic Projects**
@@ -159,6 +160,7 @@ Development-Showcase/
 │   ├── The_Unfair_Game_Web_Ed/# Survival horror puzzle game
 │   ├── THW/                   # The Hard Hallway platformer (+ favicon)
 │   ├── Idea_Space/            # SMT demon compendium (+ favicon + README)
+│   ├── Beat_Burst/            # Rhythm game with visualizer (+ favicon + README)
 │   ├── previews/              # Game preview GIFs
 │   └── Zips/                  # Legacy downloadable versions
 ├── 📁 Academic_Projects/      # School & coursework projects
@@ -196,6 +198,7 @@ Each project now has its own unique, themed SVG favicon:
 | 👻 The Unfair Game | Ghost/skull horror icon |
 | 🏃 The Hard Hallway | Neon hallway with spikes & player figure |
 | 💀 The Idea Space | SMT pentagram summoning circle |
+| 🎵 Beat Burst | Musical note with sound waves |
 | 🛡️ ThreatAware | Shield with target/crosshair |
 | 🥯 Bagel Byte Academy | Bagel with binary code |
 | 🎮 Console Chronicles | Game controller with SQL text |
@@ -230,6 +233,7 @@ I'm always excited to connect with fellow developers, potential collaborators, o
 - 🏃 The Hard Hallway (THW) is inspired by notoriously difficult games like "I Wanna Be The Guy"
 - 📦 The Origins section displays random nostalgic quotes about the games' history
 - 💀 The Idea Space has a full 17×17 race fusion chart and 20 iconic SMT demons with lore
+- 🎵 Beat Burst includes 5 sample tracks from Nintendo games and shows Now Playing info during gameplay
 - ⏱️ The scroll progress bar at the top tracks your exact position on the page
 - 🎯 Every animation delay is carefully timed for the smoothest experience
 - 📱 The scroll indicator changes from a mouse to a phone on mobile devices
@@ -266,6 +270,6 @@ This project is open source and available for educational purposes. Feel free to
 
 [![Star This Repo](https://img.shields.io/github/stars/Jordan721/Development-Showcase?style=social)](https://github.com/Jordan721/Development-Showcase)
 
-*Last Updated: January 2026* 🗓️
+*Last Updated: February 2026* 🗓️
 
 </div>
