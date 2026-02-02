@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Making - Learn Game Development</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <!-- Decorative Background -->
+    <div class="page-bg"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="../index.html" class="nav-brand">
+            <span class="bagel-icon">🥯</span>
+            <span>Bagely Bytes</span>
+        </a>
+        <div class="nav-menu">
+            <a href="#engines">Game Engines</a>
+            <a href="#concepts">Concepts</a>
+            <a href="#languages">Languages</a>
+            <a href="#nocode">No-Code</a>
+            <a href="../index.html" class="nav-cta">Back to Languages</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-gamepad"></i>
+                Game Development Basics
+            </div>
+            <h1>Build Your First <span class="highlight">Game</span></h1>
+            <p>Learn how games work from the inside out. Understand game loops, engines, and the tools that bring your ideas to life - from 2D platformers to 3D adventures!</p>
+            <div class="hero-buttons">
+                <a href="#engines" class="btn-primary">
+                    Explore Engines <i class="fas fa-arrow-right"></i>
+                </a>
+                <a href="#concepts" class="btn-secondary">
+                    <i class="fas fa-cogs"></i> Core Concepts
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="number">5+</span>
+                    <span class="label">Game Engines</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="number">4</span>
+                    <span class="label">Languages</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="number">100%</span>
+                    <span class="label">Interactive</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="game-preview">
+                <div class="game-screen">
+                    <div class="game-player" id="heroPlayer"></div>
+                    <div class="game-platform"></div>
+                    <div class="game-platform platform-2"></div>
+                    <div class="game-coin coin-1"></div>
+                    <div class="game-coin coin-2"></div>
+                    <div class="game-coin coin-3"></div>
+                </div>
+                <div class="game-controls">
+                    <span><i class="fas fa-arrow-left"></i><i class="fas fa-arrow-right"></i> Move</span>
+                    <span><i class="fas fa-arrow-up"></i> Jump</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- What is a Game Section -->
+    <section class="section section-white">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-lightbulb"></i> The Basics</span>
+            <h2>What Makes a Game?</h2>
+            <p>Every game, from Pong to AAA titles, shares these core components</p>
+        </div>
+        <div class="basics-grid">
+            <div class="basic-card">
+                <div class="basic-icon"><i class="fas fa-sync-alt"></i></div>
+                <h4>The Game Loop</h4>
+                <p>A continuous cycle: get input, update game state, render graphics. Runs 30-60+ times per second!</p>
+            </div>
+            <div class="basic-card">
+                <div class="basic-icon"><i class="fas fa-image"></i></div>
+                <h4>Graphics & Sprites</h4>
+                <p>Visual elements - characters, backgrounds, effects. Can be 2D sprites or 3D models.</p>
+            </div>
+            <div class="basic-card">
+                <div class="basic-icon"><i class="fas fa-running"></i></div>
+                <h4>Physics & Movement</h4>
+                <p>Gravity, velocity, acceleration. Makes objects move and feel realistic (or intentionally unrealistic!).</p>
+            </div>
+            <div class="basic-card">
+                <div class="basic-icon"><i class="fas fa-crosshairs"></i></div>
+                <h4>Collision Detection</h4>
+                <p>Knowing when objects touch - player hits enemy, bullet hits wall, character lands on platform.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Game Loop Demo -->
+    <section id="concepts" class="section">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-cogs"></i> Core Concepts</span>
+            <h2>See How Games Work</h2>
+            <p>Interactive demos to understand game mechanics</p>
+        </div>
+
+        <div class="concept-demos">
+            <!-- Game Loop Visualizer -->
+            <div class="concept-card">
+                <h3><i class="fas fa-sync-alt"></i> The Game Loop</h3>
+                <p>Watch the three phases that run every frame:</p>
+                <div class="game-loop-demo">
+                    <div class="loop-phase" id="phaseInput">
+                        <div class="phase-icon"><i class="fas fa-keyboard"></i></div>
+                        <div class="phase-name">Input</div>
+                        <div class="phase-desc">Read keyboard, mouse, controller</div>
+                    </div>
+                    <div class="loop-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="loop-phase" id="phaseUpdate">
+                        <div class="phase-icon"><i class="fas fa-calculator"></i></div>
+                        <div class="phase-name">Update</div>
+                        <div class="phase-desc">Move objects, check collisions</div>
+                    </div>
+                    <div class="loop-arrow"><i class="fas fa-arrow-right"></i></div>
+                    <div class="loop-phase" id="phaseRender">
+                        <div class="phase-icon"><i class="fas fa-tv"></i></div>
+                        <div class="phase-name">Render</div>
+                        <div class="phase-desc">Draw everything to screen</div>
+                    </div>
+                    <div class="loop-arrow loop-back"><i class="fas fa-arrow-down"></i></div>
+                </div>
+                <div class="loop-controls">
+                    <button class="loop-btn" id="startLoop"><i class="fas fa-play"></i> Start Loop</button>
+                    <button class="loop-btn" id="stopLoop"><i class="fas fa-pause"></i> Pause</button>
+                    <span class="fps-counter">FPS: <span id="fpsCount">0</span></span>
+                </div>
+            </div>
+
+            <!-- Collision Demo -->
+            <div class="concept-card">
+                <h3><i class="fas fa-crosshairs"></i> Collision Detection</h3>
+                <p>Drag the box to see collision in action:</p>
+                <div class="collision-demo" id="collisionDemo">
+                    <div class="collision-box draggable" id="collisionBox">
+                        <span>Drag me!</span>
+                    </div>
+                    <div class="collision-target" id="collisionTarget">
+                        <span>Target</span>
+                    </div>
+                    <div class="collision-status" id="collisionStatus">
+                        <i class="fas fa-times-circle"></i> No Collision
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sprite Animation Demo -->
+            <div class="concept-card">
+                <h3><i class="fas fa-film"></i> Sprite Animation</h3>
+                <p>Click to see how sprite sheets create animation:</p>
+                <div class="sprite-demo">
+                    <div class="sprite-display">
+                        <div class="sprite-character" id="spriteCharacter"></div>
+                    </div>
+                    <div class="sprite-sheet-preview">
+                        <div class="sprite-frame" data-frame="0">1</div>
+                        <div class="sprite-frame" data-frame="1">2</div>
+                        <div class="sprite-frame" data-frame="2">3</div>
+                        <div class="sprite-frame" data-frame="3">4</div>
+                    </div>
+                    <div class="sprite-controls">
+                        <button class="sprite-btn" id="playSprite"><i class="fas fa-play"></i> Animate</button>
+                        <button class="sprite-btn" id="stopSprite"><i class="fas fa-stop"></i> Stop</button>
+                        <label>
+                            Speed: <input type="range" id="spriteSpeed" min="50" max="500" value="200">
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Engines Section -->
+    <section id="engines" class="section section-white">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-tools"></i> Game Engines</span>
+            <h2>Choose Your Engine</h2>
+            <p>The tools that power game development</p>
+        </div>
+
+        <div class="engines-grid">
+            <!-- Unity -->
+            <div class="engine-card">
+                <div class="engine-header unity">
+                    <i class="fab fa-unity"></i>
+                    <h3>Unity</h3>
+                    <span class="engine-lang">C#</span>
+                </div>
+                <div class="engine-body">
+                    <p>The most popular engine for indie and mobile games. Huge community and asset store.</p>
+                    <div class="engine-features">
+                        <span><i class="fas fa-check"></i> 2D & 3D</span>
+                        <span><i class="fas fa-check"></i> Cross-platform</span>
+                        <span><i class="fas fa-check"></i> Free tier</span>
+                        <span><i class="fas fa-check"></i> Massive community</span>
+                    </div>
+                    <div class="engine-games">
+                        <strong>Made with Unity:</strong> Hollow Knight, Cuphead, Among Us, Pokemon Go
+                    </div>
+                    <div class="engine-difficulty">
+                        <span class="diff-label">Learning Curve:</span>
+                        <div class="diff-bar"><div class="diff-fill" style="width: 60%"></div></div>
+                        <span class="diff-text">Medium</span>
+                    </div>
+                    <a href="https://unity.com/" target="_blank" class="engine-link">
+                        <i class="fas fa-external-link-alt"></i> Visit Unity
+                    </a>
+                </div>
+            </div>
+
+            <!-- Unreal Engine -->
+            <div class="engine-card">
+                <div class="engine-header unreal">
+                    <i class="fas fa-cube"></i>
+                    <h3>Unreal Engine</h3>
+                    <span class="engine-lang">C++ / Blueprints</span>
+                </div>
+                <div class="engine-body">
+                    <p>Industry standard for AAA games. Stunning graphics and powerful tools.</p>
+                    <div class="engine-features">
+                        <span><i class="fas fa-check"></i> Best-in-class graphics</span>
+                        <span><i class="fas fa-check"></i> Visual scripting</span>
+                        <span><i class="fas fa-check"></i> Free until $1M</span>
+                        <span><i class="fas fa-check"></i> Film-quality</span>
+                    </div>
+                    <div class="engine-games">
+                        <strong>Made with Unreal:</strong> Fortnite, Rocket League, Final Fantasy VII Remake
+                    </div>
+                    <div class="engine-difficulty">
+                        <span class="diff-label">Learning Curve:</span>
+                        <div class="diff-bar"><div class="diff-fill" style="width: 85%"></div></div>
+                        <span class="diff-text">Steep</span>
+                    </div>
+                    <a href="https://www.unrealengine.com/" target="_blank" class="engine-link">
+                        <i class="fas fa-external-link-alt"></i> Visit Unreal
+                    </a>
+                </div>
+            </div>
+
+            <!-- Godot -->
+            <div class="engine-card featured">
+                <div class="engine-badge">Recommended for Beginners</div>
+                <div class="engine-header godot">
+                    <i class="fas fa-robot"></i>
+                    <h3>Godot</h3>
+                    <span class="engine-lang">GDScript / C#</span>
+                </div>
+                <div class="engine-body">
+                    <p>100% free and open source. Lightweight, beginner-friendly, and growing fast!</p>
+                    <div class="engine-features">
+                        <span><i class="fas fa-check"></i> Completely free</span>
+                        <span><i class="fas fa-check"></i> Open source</span>
+                        <span><i class="fas fa-check"></i> Easy to learn</span>
+                        <span><i class="fas fa-check"></i> Great for 2D</span>
+                    </div>
+                    <div class="engine-games">
+                        <strong>Made with Godot:</strong> Dome Keeper, Cassette Beasts, Brotato
+                    </div>
+                    <div class="engine-difficulty">
+                        <span class="diff-label">Learning Curve:</span>
+                        <div class="diff-bar"><div class="diff-fill" style="width: 35%"></div></div>
+                        <span class="diff-text">Easy</span>
+                    </div>
+                    <a href="https://godotengine.org/" target="_blank" class="engine-link">
+                        <i class="fas fa-external-link-alt"></i> Visit Godot
+                    </a>
+                </div>
+            </div>
+
+            <!-- GameMaker -->
+            <div class="engine-card">
+                <div class="engine-header gamemaker">
+                    <i class="fas fa-pencil-ruler"></i>
+                    <h3>GameMaker</h3>
+                    <span class="engine-lang">GML</span>
+                </div>
+                <div class="engine-body">
+                    <p>Perfect for 2D games. Drag-and-drop plus code. Many indie hits made here!</p>
+                    <div class="engine-features">
+                        <span><i class="fas fa-check"></i> Best for 2D</span>
+                        <span><i class="fas fa-check"></i> Drag-and-drop</span>
+                        <span><i class="fas fa-check"></i> Free version</span>
+                        <span><i class="fas fa-check"></i> Fast prototyping</span>
+                    </div>
+                    <div class="engine-games">
+                        <strong>Made with GameMaker:</strong> Undertale, Hotline Miami, Hyper Light Drifter
+                    </div>
+                    <div class="engine-difficulty">
+                        <span class="diff-label">Learning Curve:</span>
+                        <div class="diff-bar"><div class="diff-fill" style="width: 40%"></div></div>
+                        <span class="diff-text">Easy-Medium</span>
+                    </div>
+                    <a href="https://gamemaker.io/" target="_blank" class="engine-link">
+                        <i class="fas fa-external-link-alt"></i> Visit GameMaker
+                    </a>
+                </div>
+            </div>
+
+            <!-- Phaser -->
+            <div class="engine-card">
+                <div class="engine-header phaser">
+                    <i class="fab fa-js"></i>
+                    <h3>Phaser</h3>
+                    <span class="engine-lang">JavaScript</span>
+                </div>
+                <div class="engine-body">
+                    <p>Make browser games with JavaScript. Great if you already know web development!</p>
+                    <div class="engine-features">
+                        <span><i class="fas fa-check"></i> Runs in browser</span>
+                        <span><i class="fas fa-check"></i> 100% free</span>
+                        <span><i class="fas fa-check"></i> Web dev skills</span>
+                        <span><i class="fas fa-check"></i> Quick to publish</span>
+                    </div>
+                    <div class="engine-games">
+                        <strong>Great for:</strong> Browser games, game jams, HTML5 mobile games
+                    </div>
+                    <div class="engine-difficulty">
+                        <span class="diff-label">Learning Curve:</span>
+                        <div class="diff-bar"><div class="diff-fill" style="width: 50%"></div></div>
+                        <span class="diff-text">Medium</span>
+                    </div>
+                    <a href="https://phaser.io/" target="_blank" class="engine-link">
+                        <i class="fas fa-external-link-alt"></i> Visit Phaser
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Comparison -->
+        <div class="engines-comparison">
+            <h4>Quick Comparison</h4>
+            <div class="comparison-table-wrap">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Engine</th>
+                            <th>Best For</th>
+                            <th>Language</th>
+                            <th>Price</th>
+                            <th>Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i class="fab fa-unity"></i> Unity</td>
+                            <td>Mobile, Indie, VR</td>
+                            <td>C#</td>
+                            <td>Free / $</td>
+                            <td><span class="difficulty medium">Medium</span></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-cube"></i> Unreal</td>
+                            <td>AAA, Realistic 3D</td>
+                            <td>C++ / Blueprints</td>
+                            <td>Free*</td>
+                            <td><span class="difficulty hard">Hard</span></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-robot"></i> Godot</td>
+                            <td>2D, Learning, Indie</td>
+                            <td>GDScript / C#</td>
+                            <td>Free</td>
+                            <td><span class="difficulty easy">Easy</span></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-pencil-ruler"></i> GameMaker</td>
+                            <td>2D Games</td>
+                            <td>GML</td>
+                            <td>Free / $</td>
+                            <td><span class="difficulty easy">Easy</span></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fab fa-js"></i> Phaser</td>
+                            <td>Browser Games</td>
+                            <td>JavaScript</td>
+                            <td>Free</td>
+                            <td><span class="difficulty medium">Medium</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Languages for Games Section -->
+    <section id="languages" class="section">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-code"></i> Languages</span>
+            <h2>Programming Languages for Games</h2>
+            <p>Which language should you learn?</p>
+        </div>
+
+        <div class="languages-grid">
+            <div class="lang-card">
+                <div class="lang-icon csharp"><i class="fas fa-hashtag"></i></div>
+                <h3>C#</h3>
+                <p>The language of Unity. Also works with Godot. Great balance of power and ease of use.</p>
+                <div class="lang-uses">
+                    <span>Unity</span>
+                    <span>Godot</span>
+                    <span>MonoGame</span>
+                </div>
+                <div class="lang-verdict">
+                    <i class="fas fa-star"></i> Best for most beginners
+                </div>
+            </div>
+
+            <div class="lang-card">
+                <div class="lang-icon cpp"><i class="fas fa-microchip"></i></div>
+                <h3>C++</h3>
+                <p>Maximum performance and control. Used in AAA games and engine development. Steep learning curve.</p>
+                <div class="lang-uses">
+                    <span>Unreal</span>
+                    <span>Custom Engines</span>
+                    <span>AAA Studios</span>
+                </div>
+                <div class="lang-verdict">
+                    <i class="fas fa-mountain"></i> For serious game programmers
+                </div>
+            </div>
+
+            <div class="lang-card">
+                <div class="lang-icon gdscript"><i class="fas fa-scroll"></i></div>
+                <h3>GDScript</h3>
+                <p>Godot's custom language. Python-like syntax, very beginner friendly. Only works in Godot.</p>
+                <div class="lang-uses">
+                    <span>Godot</span>
+                </div>
+                <div class="lang-verdict">
+                    <i class="fas fa-seedling"></i> Easiest to learn
+                </div>
+            </div>
+
+            <div class="lang-card">
+                <div class="lang-icon javascript"><i class="fab fa-js"></i></div>
+                <h3>JavaScript</h3>
+                <p>Make browser games instantly playable. Use existing web skills for game development.</p>
+                <div class="lang-uses">
+                    <span>Phaser</span>
+                    <span>PixiJS</span>
+                    <span>Three.js</span>
+                </div>
+                <div class="lang-verdict">
+                    <i class="fas fa-globe"></i> Great for web developers
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- No-Code Game Makers Section -->
+    <section id="nocode" class="section section-white">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-magic"></i> No-Code Option</span>
+            <h2>Don't Want to Code?</h2>
+            <p>Make games without writing a single line of code</p>
+        </div>
+
+        <div class="nocode-intro">
+            <p>You don't need to be a programmer to make games! These tools let you create through visual interfaces, drag-and-drop, and logic blocks.</p>
+        </div>
+
+        <div class="nocode-grid">
+            <!-- Scratch -->
+            <div class="nocode-card">
+                <div class="nocode-header">
+                    <i class="fas fa-puzzle-piece"></i>
+                    <h3>Scratch</h3>
+                </div>
+                <div class="nocode-body">
+                    <p>Block-based coding for beginners. Perfect for learning game logic. Made by MIT.</p>
+                    <div class="nocode-features">
+                        <span><i class="fas fa-check"></i> 100% free</span>
+                        <span><i class="fas fa-check"></i> Visual blocks</span>
+                        <span><i class="fas fa-check"></i> Great for kids</span>
+                    </div>
+                    <div class="nocode-best">Best for: Learning, kids, first games</div>
+                    <a href="https://scratch.mit.edu/" target="_blank" class="nocode-link">
+                        <i class="fas fa-external-link-alt"></i> Visit Scratch
+                    </a>
+                </div>
+            </div>
+
+            <!-- RPG Maker -->
+            <div class="nocode-card">
+                <div class="nocode-header">
+                    <i class="fas fa-dragon"></i>
+                    <h3>RPG Maker</h3>
+                </div>
+                <div class="nocode-body">
+                    <p>Specialized for RPG games. Built-in assets, maps, and battle systems.</p>
+                    <div class="nocode-features">
+                        <span><i class="fas fa-check"></i> RPG-focused</span>
+                        <span><i class="fas fa-check"></i> Tons of assets</span>
+                        <span><i class="fas fa-check"></i> Sell your games</span>
+                    </div>
+                    <div class="nocode-best">Best for: JRPGs, story-driven games</div>
+                    <a href="https://www.rpgmakerweb.com/" target="_blank" class="nocode-link">
+                        <i class="fas fa-external-link-alt"></i> Visit RPG Maker
+                    </a>
+                </div>
+            </div>
+
+            <!-- Construct -->
+            <div class="nocode-card">
+                <div class="nocode-header">
+                    <i class="fas fa-layer-group"></i>
+                    <h3>Construct</h3>
+                </div>
+                <div class="nocode-body">
+                    <p>Event-based visual programming. Export to web, mobile, and desktop. No install needed!</p>
+                    <div class="nocode-features">
+                        <span><i class="fas fa-check"></i> Browser-based</span>
+                        <span><i class="fas fa-check"></i> Event sheets</span>
+                        <span><i class="fas fa-check"></i> Multi-platform</span>
+                    </div>
+                    <div class="nocode-best">Best for: 2D games, browser games</div>
+                    <a href="https://www.construct.net/" target="_blank" class="nocode-link">
+                        <i class="fas fa-external-link-alt"></i> Visit Construct
+                    </a>
+                </div>
+            </div>
+
+            <!-- GDevelop -->
+            <div class="nocode-card">
+                <div class="nocode-header">
+                    <i class="fas fa-shapes"></i>
+                    <h3>GDevelop</h3>
+                </div>
+                <div class="nocode-body">
+                    <p>Free, open-source no-code engine. Event-based like Construct but completely free!</p>
+                    <div class="nocode-features">
+                        <span><i class="fas fa-check"></i> 100% free</span>
+                        <span><i class="fas fa-check"></i> Open source</span>
+                        <span><i class="fas fa-check"></i> Active community</span>
+                    </div>
+                    <div class="nocode-best">Best for: Free 2D game making</div>
+                    <a href="https://gdevelop.io/" target="_blank" class="nocode-link">
+                        <i class="fas fa-external-link-alt"></i> Visit GDevelop
+                    </a>
+                </div>
+            </div>
+
+            <!-- Roblox Studio -->
+            <div class="nocode-card">
+                <div class="nocode-header">
+                    <i class="fas fa-cubes"></i>
+                    <h3>Roblox Studio</h3>
+                </div>
+                <div class="nocode-body">
+                    <p>Make games on Roblox platform. Huge player base. Can earn money from games!</p>
+                    <div class="nocode-features">
+                        <span><i class="fas fa-check"></i> Free to use</span>
+                        <span><i class="fas fa-check"></i> Built-in players</span>
+                        <span><i class="fas fa-check"></i> Earn Robux</span>
+                    </div>
+                    <div class="nocode-best">Best for: Multiplayer, young creators</div>
+                    <a href="https://create.roblox.com/" target="_blank" class="nocode-link">
+                        <i class="fas fa-external-link-alt"></i> Visit Roblox Studio
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Code vs No-Code -->
+        <div class="code-vs-nocode">
+            <h4>Code vs No-Code: Which Path?</h4>
+            <div class="comparison-boxes">
+                <div class="compare-box code-box">
+                    <h5><i class="fas fa-code"></i> Learn to Code If...</h5>
+                    <ul>
+                        <li>You want full creative control</li>
+                        <li>You're interested in game programming careers</li>
+                        <li>You want to make complex, unique mechanics</li>
+                        <li>You enjoy problem-solving</li>
+                        <li>You want to work at a game studio</li>
+                    </ul>
+                </div>
+                <div class="compare-box nocode-box">
+                    <h5><i class="fas fa-magic"></i> Use No-Code If...</h5>
+                    <ul>
+                        <li>You want to make games quickly</li>
+                        <li>You're more interested in design than programming</li>
+                        <li>You're young or just starting out</li>
+                        <li>You want to prototype ideas fast</li>
+                        <li>Coding feels intimidating right now</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mini Game Challenge -->
+    <section class="section">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-trophy"></i> Try It</span>
+            <h2>Mini Game Challenge</h2>
+            <p>Experience basic game mechanics hands-on!</p>
+        </div>
+
+        <div class="mini-game-container">
+            <div class="mini-game" id="miniGame">
+                <div class="game-hud">
+                    <span class="game-score">Score: <span id="gameScore">0</span></span>
+                    <span class="game-time">Time: <span id="gameTime">30</span>s</span>
+                </div>
+                <div class="game-area" id="gameArea">
+                    <div class="game-player-mini" id="gamePlayer"></div>
+                    <div class="game-instructions" id="gameInstructions">
+                        <p>Use <strong>Arrow Keys</strong> or <strong>WASD</strong> to move</p>
+                        <p>Collect the coins before time runs out!</p>
+                        <button class="start-game-btn" id="startGameBtn">
+                            <i class="fas fa-play"></i> Start Game
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="game-result" id="gameResult">
+                <h3>Game Over!</h3>
+                <p>Your score: <span id="finalScore">0</span></p>
+                <button class="start-game-btn" id="restartBtn">
+                    <i class="fas fa-redo"></i> Play Again
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section class="section section-white">
+        <div class="section-header">
+            <span class="section-label"><i class="fas fa-book"></i> Learn More</span>
+            <h2>Next Steps</h2>
+            <p>Free resources to continue your game dev journey</p>
+        </div>
+
+        <div class="resources-grid">
+            <a href="https://www.youtube.com/c/Brackeys" target="_blank" class="resource-card">
+                <i class="fab fa-youtube"></i>
+                <h4>Brackeys (Unity)</h4>
+                <p>Best Unity tutorials on YouTube</p>
+            </a>
+            <a href="https://www.youtube.com/c/GDQuest" target="_blank" class="resource-card">
+                <i class="fab fa-youtube"></i>
+                <h4>GDQuest (Godot)</h4>
+                <p>Professional Godot tutorials</p>
+            </a>
+            <a href="https://itch.io/" target="_blank" class="resource-card">
+                <i class="fas fa-store"></i>
+                <h4>itch.io</h4>
+                <p>Publish and play indie games</p>
+            </a>
+            <a href="https://opengameart.org/" target="_blank" class="resource-card">
+                <i class="fas fa-palette"></i>
+                <h4>OpenGameArt</h4>
+                <p>Free game assets and sprites</p>
+            </a>
+        </div>
+
+        <div class="tools-section">
+            <h4>Essential Free Tools</h4>
+            <div class="tools-grid">
+                <div class="tool-item">
+                    <i class="fas fa-paint-brush"></i>
+                    <span>Aseprite / Piskel</span>
+                    <small>Pixel art</small>
+                </div>
+                <div class="tool-item">
+                    <i class="fas fa-cube"></i>
+                    <span>Blender</span>
+                    <small>3D modeling</small>
+                </div>
+                <div class="tool-item">
+                    <i class="fas fa-music"></i>
+                    <span>LMMS / Audacity</span>
+                    <small>Audio & music</small>
+                </div>
+                <div class="tool-item">
+                    <i class="fas fa-map"></i>
+                    <span>Tiled</span>
+                    <small>Level design</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Vault Showcase -->
+    <section class="section">
+        <div class="showcase-section">
+            <h4><i class="fas fa-gamepad"></i> Check Out My Games!</h4>
+            <p>Want to see what you can build? Check out the games I've made in my Game Vault!</p>
+            <div class="showcase-links">
+                <a href="https://jordan721.github.io/Development-Showcase/Game_Vault/index.html" target="_blank" class="showcase-link">
+                    <i class="fas fa-play"></i> Play My Games
+                </a>
+                <a href="https://github.com/Jordan721/Development-Showcase/tree/main/Game_Vault" target="_blank" class="showcase-link">
+                    <i class="fab fa-github"></i> View Source Code
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-brand">
+            <span>🥯</span> Bagely Bytes
+        </div>
+        <p>Learn. Code. Create.</p>
+        <a href="../index.html" class="footer-link">
+            <i class="fas fa-arrow-left"></i> Back to Programming Languages
+        </a>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -25,6 +25,7 @@
 | 💻 **Code Examples** | Real syntax-highlighted examples for each language |
 | 📱 **Fully Responsive** | Looks great on desktop, tablet, and mobile |
 | 🏗️ **Website Making Guide** | Interactive tutorial on building websites from scratch |
+| 🎮 **Game Making Guide** | Learn game development with interactive demos |
 
 ---
 
@@ -79,6 +80,37 @@ A hands-on guide to understanding how websites work! Located in the `Website_Mak
 
 ---
 
+## 🎮 Game Making - Interactive Tutorial
+
+A hands-on guide to understanding game development! Located in the `Game_Making/` folder.
+
+### Features:
+
+| Feature | Description |
+|---------|-------------|
+| 🔄 **Game Loop Visualizer** | Watch Input → Update → Render cycle in action |
+| 💥 **Collision Detection Demo** | Drag boxes to see collision detection working |
+| 🎬 **Sprite Animation Demo** | See how sprite sheets create character animation |
+| 🕹️ **Playable Mini Game** | Collect coins with arrow keys/WASD |
+| 🛠️ **5+ Game Engines** | Unity, Unreal, Godot, GameMaker, Phaser compared |
+| 🚫 **No-Code Options** | Scratch, RPG Maker, Construct, GDevelop, Roblox Studio |
+
+### Interactive Demos:
+1. **Game Loop** - Start/stop the loop, see FPS counter
+2. **Collision Detection** - Drag a box into the target
+3. **Sprite Animation** - Play/stop animation with speed control
+4. **Mini Game** - 30-second coin collection challenge
+
+### Topics Covered:
+- Core game concepts (game loop, sprites, physics, collision)
+- Game engine comparison with difficulty ratings
+- Programming languages for games (C#, C++, GDScript, JavaScript)
+- Code vs no-code development paths
+- Free resources and tools for game dev
+- Links to real game examples (Game Vault showcase)
+
+---
+
 ## 🛠️ Tech Stack
 
 ```
@@ -100,10 +132,14 @@ Bagely_Bytes_Programming/
 ├── ⚡ script.js           # Main JavaScript functionality
 ├── 🥯 favicon.svg         # Bagel favicon
 ├── 📖 README.md           # You are here!
-└── 📁 Website_Making/     # Interactive web dev tutorial
-    ├── 📄 index.html      # Website making guide
+├── 📁 Website_Making/     # Interactive web dev tutorial
+│   ├── 📄 index.html      # Website making guide
+│   ├── 🎨 styles.css      # Tutorial styles
+│   └── ⚡ script.js       # Interactive playground & challenges
+└── 📁 Game_Making/        # Interactive game dev tutorial
+    ├── 📄 index.html      # Game making guide
     ├── 🎨 styles.css      # Tutorial styles
-    └── ⚡ script.js       # Interactive playground & challenges
+    └── ⚡ script.js       # Game loop, collision & mini game
 ```
 
 ---
@@ -113,6 +149,7 @@ Bagely_Bytes_Programming/
 1. **Clone or download** this repository
 2. **Open** `index.html` in your browser to explore programming languages
 3. **Or open** `Website_Making/index.html` to try the interactive web dev tutorial!
+4. **Or open** `Game_Making/index.html` to explore game development!
 
 ```bash
 # Or serve it locally
