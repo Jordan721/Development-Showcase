@@ -1,249 +1,251 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Meet our Social Com's moderators - Dedicated to keeping our community safe">
 	<title>Moderators - Social Com's</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Orbitron:700" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-	<link rel="stylesheet" href="Stylesheets/enhanced-navbar.css">
-	<link rel="stylesheet" href="Stylesheets/Mod.css">
+
+	<!-- Fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+		rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+	<!-- Styles -->
+	<link rel="stylesheet" href="Stylesheets/main.css">
+	<link rel="stylesheet" href="Stylesheets/pages.css">
 	<link rel="icon" type="image/svg+xml" href="speech-bubble.svg">
-	<script src="JS_Files/navbar.js" defer></script>
 </head>
 
 <body>
 	<!-- Navigation -->
-	<nav class="navbar">
+	<nav class="navbar" id="navbar">
 		<div class="nav-container">
-			<div class="nav-logo">
-				<i class="fas fa-comments"></i>
+			<a href="index.html" class="nav-brand">
+				<div class="nav-brand-icon">
+					<i class="fas fa-comments"></i>
+				</div>
 				<span>Social Com's</span>
-			</div>
-			<div class="hamburger" id="hamburger">
-				<i class="fas fa-bars"></i>
-			</div>
-			<ul class="nav-menu" id="nav-menu">
-				<li><a class="nav-link" href="index.html"><i class="fas fa-home"></i> Home</a></li>
-				<li><a class="nav-link" href="Account.html"><i class="fas fa-user"></i> Account</a></li>
-				<li><a class="nav-link" href="Feed.html"><i class="fas fa-newspaper"></i> Feed</a></li>
-				<li><a class="nav-link" href="Messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
-				<li><a class="nav-link active" href="Mod.html"><i class="fas fa-shield-alt"></i> Moderators</a></li>
+			</a>
+
+			<ul class="nav-menu" id="navMenu">
+				<li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+				<li><a href="Account.html" class="nav-link"><i class="fas fa-user"></i> Account</a></li>
+				<li><a href="Feed.html" class="nav-link"><i class="fas fa-newspaper"></i> Feed</a></li>
+				<li><a href="Messages.html" class="nav-link"><i class="fas fa-envelope"></i> Messages</a></li>
+				<li><a href="Mod.html" class="nav-link active"><i class="fas fa-shield-alt"></i> Moderators</a></li>
 				<li class="nav-divider"></li>
-				<li><a class="nav-link" href="https://xd.adobe.com/view/6e99b10d-df17-41ca-67e6-7951044d61a5-18a8/" target="_blank"><i class="fas fa-drafting-compass"></i> Wireframes</a></li>
-				<li><a class="nav-link" href="../../index.html"><i class="fas fa-arrow-left"></i> Showcase</a></li>
+				<li><a href="app-mockup.html" class="nav-link"><i class="fas fa-mobile-alt"></i> App</a></li>
+				<li><a href="https://xd.adobe.com/view/6e99b10d-df17-41ca-67e6-7951044d61a5-18a8/" target="_blank"
+						class="nav-link"><i class="fas fa-drafting-compass"></i> Wireframes</a></li>
+				<li><a href="../../index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Showcase</a></li>
 			</ul>
+
+			<button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+				<i class="fas fa-bars"></i>
+			</button>
 		</div>
 	</nav>
 
-	<!-- Header -->
+	<!-- Page Header -->
 	<header class="page-header">
-		<div class="header-overlay"></div>
-		<div class="header-content">
+		<div class="page-icon">
 			<i class="fas fa-user-shield"></i>
-			<h1>Our Moderators</h1>
-			<p>Meet the team keeping Social Com's safe and welcoming</p>
 		</div>
+		<h1 class="page-title">Our Moderators</h1>
+		<p class="page-subtitle">Meet the team keeping Social Com's safe and welcoming</p>
 	</header>
 
 	<!-- Main Content -->
-	<main class="container">
-		<section class="intro-section">
-			<h2>Dedicated to Your Safety</h2>
-			<p>Our moderator team works around the clock to ensure Social Com's remains a positive, respectful, and secure environment for all users. They enforce our community guidelines and are here to help whenever you need support.</p>
-		</section>
+	<main class="section">
+		<div class="container">
+			<!-- Intro Section -->
+			<section class="intro-section reveal">
+				<h2>Dedicated to Your Safety</h2>
+				<p>Our moderator team works around the clock to ensure Social Com's remains a positive, respectful, and
+					secure environment for all users. They enforce our community guidelines and are here to help
+					whenever you need support.</p>
+			</section>
 
-		<!-- Moderators Grid -->
-		<section class="moderators-grid">
-			<article class="mod-card">
-				<div class="mod-badge">
-					<i class="fas fa-shield-alt"></i>
-				</div>
-				<div class="mod-avatar">
-					<i class="fas fa-user-circle"></i>
-				</div>
-				<div class="mod-info">
-					<h3>Jerry Anderson</h3>
-					<span class="mod-role">Lead Moderator</span>
-					<p class="mod-bio">5+ years experience in community management. Specializes in conflict resolution and user support.</p>
-					<div class="mod-stats">
-						<div class="stat">
-							<i class="fas fa-check-circle"></i>
-							<span>2.5K+ Cases</span>
-						</div>
-						<div class="stat">
-							<i class="fas fa-star"></i>
-							<span>4.9 Rating</span>
+			<!-- Moderators Grid -->
+			<section class="moderators-grid">
+				<article class="mod-card reveal">
+					<div class="mod-badge">
+						<i class="fas fa-shield-alt"></i>
+					</div>
+					<div class="mod-avatar">
+						<i class="fas fa-user"></i>
+					</div>
+					<div class="mod-info">
+						<h3>Jerry Anderson</h3>
+						<span class="mod-role">Lead Moderator</span>
+						<p class="mod-bio">5+ years experience in community management. Specializes in conflict
+							resolution and user support.</p>
+						<div class="mod-stats">
+							<div class="stat">
+								<i class="fas fa-check-circle"></i>
+								<span>2.5K+ Cases</span>
+							</div>
+							<div class="stat">
+								<i class="fas fa-star"></i>
+								<span>4.9 Rating</span>
+							</div>
 						</div>
 					</div>
-				</div>
-			</article>
+				</article>
 
-			<article class="mod-card">
-				<div class="mod-badge">
-					<i class="fas fa-shield-alt"></i>
-				</div>
-				<div class="mod-avatar">
-					<i class="fas fa-user-circle"></i>
-				</div>
-				<div class="mod-info">
-					<h3>Terry Williams</h3>
-					<span class="mod-role">Senior Moderator</span>
-					<p class="mod-bio">Expert in content moderation and privacy protection. Passionate about user safety and data security.</p>
-					<div class="mod-stats">
-						<div class="stat">
-							<i class="fas fa-check-circle"></i>
-							<span>1.8K+ Cases</span>
-						</div>
-						<div class="stat">
-							<i class="fas fa-star"></i>
-							<span>4.8 Rating</span>
+				<article class="mod-card reveal">
+					<div class="mod-badge">
+						<i class="fas fa-shield-alt"></i>
+					</div>
+					<div class="mod-avatar">
+						<i class="fas fa-user"></i>
+					</div>
+					<div class="mod-info">
+						<h3>Terry Williams</h3>
+						<span class="mod-role">Senior Moderator</span>
+						<p class="mod-bio">Expert in content moderation and privacy protection. Passionate about user
+							safety and data security.</p>
+						<div class="mod-stats">
+							<div class="stat">
+								<i class="fas fa-check-circle"></i>
+								<span>1.8K+ Cases</span>
+							</div>
+							<div class="stat">
+								<i class="fas fa-star"></i>
+								<span>4.8 Rating</span>
+							</div>
 						</div>
 					</div>
-				</div>
-			</article>
+				</article>
 
-			<article class="mod-card">
-				<div class="mod-badge">
-					<i class="fas fa-shield-alt"></i>
-				</div>
-				<div class="mod-avatar">
-					<i class="fas fa-user-circle"></i>
-				</div>
-				<div class="mod-info">
-					<h3>Kim Patterson</h3>
-					<span class="mod-role">Community Moderator</span>
-					<p class="mod-bio">Focuses on fostering positive community interactions and organizing community events.</p>
-					<div class="mod-stats">
-						<div class="stat">
-							<i class="fas fa-check-circle"></i>
-							<span>1.2K+ Cases</span>
-						</div>
-						<div class="stat">
-							<i class="fas fa-star"></i>
-							<span>4.9 Rating</span>
+				<article class="mod-card reveal">
+					<div class="mod-badge">
+						<i class="fas fa-shield-alt"></i>
+					</div>
+					<div class="mod-avatar">
+						<i class="fas fa-user"></i>
+					</div>
+					<div class="mod-info">
+						<h3>Kim Patterson</h3>
+						<span class="mod-role">Community Moderator</span>
+						<p class="mod-bio">Focuses on fostering positive community interactions and organizing community
+							events.</p>
+						<div class="mod-stats">
+							<div class="stat">
+								<i class="fas fa-check-circle"></i>
+								<span>1.2K+ Cases</span>
+							</div>
+							<div class="stat">
+								<i class="fas fa-star"></i>
+								<span>4.9 Rating</span>
+							</div>
 						</div>
 					</div>
-				</div>
-			</article>
+				</article>
 
-			<article class="mod-card">
-				<div class="mod-badge">
-					<i class="fas fa-shield-alt"></i>
-				</div>
-				<div class="mod-avatar">
-					<i class="fas fa-user-circle"></i>
-				</div>
-				<div class="mod-info">
-					<h3>Sarah Martinez</h3>
-					<span class="mod-role">Support Moderator</span>
-					<p class="mod-bio">Specializes in user assistance and technical support. Available 24/7 for urgent matters.</p>
-					<div class="mod-stats">
-						<div class="stat">
-							<i class="fas fa-check-circle"></i>
-							<span>2.1K+ Cases</span>
-						</div>
-						<div class="stat">
-							<i class="fas fa-star"></i>
-							<span>5.0 Rating</span>
+				<article class="mod-card reveal">
+					<div class="mod-badge">
+						<i class="fas fa-shield-alt"></i>
+					</div>
+					<div class="mod-avatar">
+						<i class="fas fa-user"></i>
+					</div>
+					<div class="mod-info">
+						<h3>Sarah Martinez</h3>
+						<span class="mod-role">Support Moderator</span>
+						<p class="mod-bio">Specializes in user assistance and technical support. Available 24/7 for
+							urgent matters.</p>
+						<div class="mod-stats">
+							<div class="stat">
+								<i class="fas fa-check-circle"></i>
+								<span>2.1K+ Cases</span>
+							</div>
+							<div class="stat">
+								<i class="fas fa-star"></i>
+								<span>5.0 Rating</span>
+							</div>
 						</div>
 					</div>
-				</div>
-			</article>
-		</section>
+				</article>
+			</section>
 
-		<!-- Contact Section -->
-		<section class="contact-section">
-			<div class="contact-card">
-				<h2><i class="fas fa-envelope"></i> Need Help?</h2>
-				<p>Our moderators are here to assist you. If you need to report content or have questions about our community guidelines, reach out to us.</p>
-				<div class="contact-methods">
-					<button class="contact-btn">
-						<i class="fas fa-flag"></i> Report Content
-					</button>
-					<button class="contact-btn">
-						<i class="fas fa-question-circle"></i> Contact Support
-					</button>
-					<button class="contact-btn">
-						<i class="fas fa-book"></i> View Guidelines
-					</button>
+			<!-- Contact Section -->
+			<section class="contact-section reveal">
+				<div class="contact-card">
+					<h2><i class="fas fa-envelope"></i> Need Help?</h2>
+					<p>Our moderators are here to assist you. If you need to report content or have questions about our
+						community guidelines, reach out to us.</p>
+					<div class="contact-methods">
+						<button class="contact-btn">
+							<i class="fas fa-flag"></i> Report Content
+						</button>
+						<button class="contact-btn">
+							<i class="fas fa-question-circle"></i> Contact Support
+						</button>
+						<button class="contact-btn">
+							<i class="fas fa-book"></i> View Guidelines
+						</button>
+					</div>
 				</div>
-			</div>
-		</section>
+			</section>
 
-		<!-- Stats Section -->
-		<section class="stats-section">
-			<h2>Moderation Impact</h2>
-			<div class="stats-grid">
-				<div class="stat-card">
-					<i class="fas fa-shield-check"></i>
-					<h3 class="stat-number">15K+</h3>
-					<p>Cases Resolved</p>
+			<!-- Stats Section -->
+			<section class="mod-stats-section reveal">
+				<h2>Moderation Impact</h2>
+				<div class="stats-grid">
+					<div class="stat-card">
+						<div class="stat-icon">
+							<i class="fas fa-shield-alt"></i>
+						</div>
+						<div class="stat-number">15K+</div>
+						<div class="stat-label">Cases Resolved</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-icon">
+							<i class="fas fa-clock"></i>
+						</div>
+						<div class="stat-number">&lt;2hrs</div>
+						<div class="stat-label">Avg Response Time</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-icon">
+							<i class="fas fa-users"></i>
+						</div>
+						<div class="stat-number">98%</div>
+						<div class="stat-label">User Satisfaction</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-icon">
+							<i class="fas fa-calendar-check"></i>
+						</div>
+						<div class="stat-number">24/7</div>
+						<div class="stat-label">Coverage</div>
+					</div>
 				</div>
-				<div class="stat-card">
-					<i class="fas fa-clock"></i>
-					<h3 class="stat-number">&lt;2hrs</h3>
-					<p>Avg Response Time</p>
-				</div>
-				<div class="stat-card">
-					<i class="fas fa-users"></i>
-					<h3 class="stat-number">98%</h3>
-					<p>User Satisfaction</p>
-				</div>
-				<div class="stat-card">
-					<i class="fas fa-calendar-check"></i>
-					<h3 class="stat-number">24/7</h3>
-					<p>Coverage</p>
-				</div>
-			</div>
-		</section>
+			</section>
+		</div>
 	</main>
 
 	<!-- Footer -->
 	<footer class="footer">
-		<div class="container">
+		<div class="footer-bottom" style="border: none; padding-top: 0;">
 			<p>&copy; 2024 Social Com's. All rights reserved.</p>
+			<div class="social-links">
+				<a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+				<a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+				<a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+				<a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+			</div>
 		</div>
 	</footer>
 
-	<script>
-		// Mobile menu toggle
-		const hamburger = document.getElementById('hamburger');
-		const navMenu = document.getElementById('nav-menu');
-
-		hamburger.addEventListener('click', () => {
-			navMenu.classList.toggle('active');
-			hamburger.classList.toggle('active');
-		});
-
-		// Close menu when clicking on a link
-		document.querySelectorAll('.nav-link').forEach(link => {
-			link.addEventListener('click', () => {
-				navMenu.classList.remove('active');
-				hamburger.classList.remove('active');
-			});
-		});
-
-		// Backup hamburger menu toggle (in case navbar.js doesn't load)
-		setTimeout(() => {
-			const hamburger = document.getElementById('hamburger');
-			const navMenu = document.getElementById('nav-menu');
-
-			if (hamburger && navMenu && !hamburger.dataset.initialized) {
-				console.log('Adding backup hamburger listener');
-				hamburger.addEventListener('click', function(e) {
-					e.preventDefault();
-					e.stopPropagation();
-					navMenu.classList.toggle('active');
-					hamburger.classList.toggle('active');
-					document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
-				});
-				hamburger.dataset.initialized = 'true';
-			}
-		}, 100);
-	</script>
+	<!-- Scripts -->
+	<script src="JS_Files/main.js"></script>
 </body>
 
 </html>

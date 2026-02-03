@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Social Com's Mobile App - Privacy-focused social networking in your pocket">
+    <title>Mobile App - Social Com's</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="Stylesheets/main.css">
+    <link rel="stylesheet" href="Stylesheets/pages.css">
+    <link rel="icon" type="image/svg+xml" href="speech-bubble.svg">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <div class="nav-brand-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <span>Social Com's</span>
+            </a>
+
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="Account.html" class="nav-link"><i class="fas fa-user"></i> Account</a></li>
+                <li><a href="Feed.html" class="nav-link"><i class="fas fa-newspaper"></i> Feed</a></li>
+                <li><a href="Messages.html" class="nav-link"><i class="fas fa-envelope"></i> Messages</a></li>
+                <li><a href="Mod.html" class="nav-link"><i class="fas fa-shield-alt"></i> Moderators</a></li>
+                <li class="nav-divider"></li>
+                <li><a href="app-mockup.html" class="nav-link active"><i class="fas fa-mobile-alt"></i> App</a></li>
+                <li><a href="https://xd.adobe.com/view/6e99b10d-df17-41ca-67e6-7951044d61a5-18a8/" target="_blank"
+                        class="nav-link"><i class="fas fa-drafting-compass"></i> Wireframes</a></li>
+                <li><a href="../../index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Showcase</a></li>
+            </ul>
+
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" style="min-height: auto; padding: 10rem 1.5rem 6rem;">
+        <div class="hero-bg">
+            <div class="hero-grid"></div>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-mobile-alt"></i>
+                <span>Mobile App Mockup</span>
+            </div>
+
+            <h1 class="hero-title">
+                <span class="gradient-text">Social Com's</span><br>
+                Mobile Experience
+            </h1>
+
+            <p class="hero-subtitle">
+                Take privacy-first social networking everywhere. Native performance, secure messaging, and full
+                functionality in your pocket.
+            </p>
+
+            <div class="hero-actions">
+                <a href="#" class="app-btn">
+                    <i class="fab fa-apple"></i>
+                    <div class="app-btn-text">
+                        <small>Download on the</small>
+                        <strong>App Store</strong>
+                    </div>
+                </a>
+                <a href="#" class="app-btn">
+                    <i class="fab fa-google-play"></i>
+                    <div class="app-btn-text">
+                        <small>Get it on</small>
+                        <strong>Google Play</strong>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Phone Mockups Section -->
+    <section class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">
+                    <i class="fas fa-mobile-screen-button"></i>
+                    App Screens
+                </span>
+                <h2 class="section-title">Experience the App</h2>
+                <p class="section-subtitle">Explore different screens and features of the Social Com's mobile app</p>
+            </div>
+
+            <div class="app-phones">
+                <!-- Phone 1 - Feed -->
+                <div class="phone-mockup reveal">
+                    <div class="phone-frame">
+                        <div class="phone-screen">
+                            <div class="phone-app">
+                                <div class="phone-header">
+                                    <h4>Feed</h4>
+                                    <small>Your personalized timeline</small>
+                                </div>
+
+                                <div class="phone-nav">
+                                    <div class="phone-nav-item active">
+                                        <i class="fas fa-home"></i>
+                                        <span>Home</span>
+                                    </div>
+                                    <div class="phone-nav-item">
+                                        <i class="fas fa-search"></i>
+                                        <span>Search</span>
+                                    </div>
+                                    <div class="phone-nav-item">
+                                        <i class="fas fa-plus-square"></i>
+                                        <span>Post</span>
+                                    </div>
+                                    <div class="phone-nav-item">
+                                        <i class="fas fa-comment"></i>
+                                        <span>Chat</span>
+                                    </div>
+                                </div>
+
+                                <div class="phone-content">
+                                    <div class="phone-post">
+                                        <div class="phone-post-header">
+                                            <div class="phone-avatar">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="phone-user-info">
+                                                <h5>Sarah Johnson</h5>
+                                                <small>2 hours ago</small>
+                                            </div>
+                                        </div>
+                                        <p class="phone-post-text">Finally a social platform that respects privacy! This
+                                            is exactly what we needed.</p>
+                                        <div class="phone-post-actions">
+                                            <span><i class="fas fa-heart"></i> 42</span>
+                                            <span><i class="fas fa-comment"></i> 8</span>
+                                            <span><i class="fas fa-share"></i> 3</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="phone-post">
+                                        <div class="phone-post-header">
+                                            <div class="phone-avatar" style="background: var(--gradient-accent);">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="phone-user-info">
+                                                <h5>Mike Chen</h5>
+                                                <small>5 hours ago</small>
+                                            </div>
+                                        </div>
+                                        <p class="phone-post-text">Love the theme customization!</p>
+                                        <div class="phone-post-actions">
+                                            <span><i class="fas fa-heart"></i> 28</span>
+                                            <span><i class="fas fa-comment"></i> 5</span>
+                                            <span><i class="fas fa-share"></i> 2</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="phone-bottom-bar">
+                                    <div class="phone-tab active"><i class="fas fa-home"></i></div>
+                                    <div class="phone-tab"><i class="fas fa-bell"></i></div>
+                                    <div class="phone-tab"><i class="fas fa-envelope"></i></div>
+                                    <div class="phone-tab"><i class="fas fa-user"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phone 2 - Messages -->
+                <div class="phone-mockup phone-mockup-large reveal">
+                    <div class="phone-frame">
+                        <div class="phone-screen">
+                            <div class="phone-app">
+                                <div class="phone-header"
+                                    style="background: linear-gradient(180deg, rgba(236, 72, 153, 0.2) 0%, transparent 100%);">
+                                    <h4>Messages</h4>
+                                    <small>End-to-end encrypted</small>
+                                </div>
+
+                                <div class="phone-content" style="padding: 0.5rem;">
+                                    <div
+                                        style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 0.5rem;">
+                                        <div class="phone-avatar" style="width: 36px; height: 36px;"><i
+                                                class="fas fa-user" style="font-size: 0.875rem;"></i></div>
+                                        <div style="flex: 1;">
+                                            <h5 style="font-size: 0.8125rem;">Sarah Johnson</h5>
+                                            <small style="color: var(--neutral-500); font-size: 0.6875rem;">That sounds
+                                                great! Let me...</small>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <small style="color: var(--neutral-500); font-size: 0.625rem;">2m
+                                                ago</small>
+                                            <div
+                                                style="width: 16px; height: 16px; background: var(--gradient-primary); border-radius: 50%; font-size: 0.5rem; display: flex; align-items: center; justify-content: center; margin-left: auto; margin-top: 0.25rem;">
+                                                2</div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 0.5rem;">
+                                        <div class="phone-avatar"
+                                            style="width: 36px; height: 36px; background: var(--gradient-ocean);"><i
+                                                class="fas fa-user" style="font-size: 0.875rem;"></i></div>
+                                        <div style="flex: 1;">
+                                            <h5 style="font-size: 0.8125rem;">Mike Chen</h5>
+                                            <small style="color: var(--neutral-500); font-size: 0.6875rem;">Thanks for
+                                                sharing!</small>
+                                        </div>
+                                        <small style="color: var(--neutral-500); font-size: 0.625rem;">1h ago</small>
+                                    </div>
+                                    <div
+                                        style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: 12px; margin-bottom: 0.5rem;">
+                                        <div class="phone-avatar"
+                                            style="width: 36px; height: 36px; background: var(--gradient-forest);"><i
+                                                class="fas fa-user" style="font-size: 0.875rem;"></i></div>
+                                        <div style="flex: 1;">
+                                            <h5 style="font-size: 0.8125rem;">Alex Rivera</h5>
+                                            <small style="color: var(--neutral-500); font-size: 0.6875rem;">See you at
+                                                the meetup!</small>
+                                        </div>
+                                        <small style="color: var(--neutral-500); font-size: 0.625rem;">3h ago</small>
+                                    </div>
+                                    <div
+                                        style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: 12px;">
+                                        <div class="phone-avatar"
+                                            style="width: 36px; height: 36px; background: var(--gradient-sunset);"><i
+                                                class="fas fa-user" style="font-size: 0.875rem;"></i></div>
+                                        <div style="flex: 1;">
+                                            <h5 style="font-size: 0.8125rem;">Jordan Smith</h5>
+                                            <small style="color: var(--neutral-500); font-size: 0.6875rem;">The update
+                                                looks amazing!</small>
+                                        </div>
+                                        <small style="color: var(--neutral-500); font-size: 0.625rem;">1d ago</small>
+                                    </div>
+                                </div>
+
+                                <div class="phone-bottom-bar">
+                                    <div class="phone-tab"><i class="fas fa-home"></i></div>
+                                    <div class="phone-tab"><i class="fas fa-bell"></i></div>
+                                    <div class="phone-tab active"><i class="fas fa-envelope"></i></div>
+                                    <div class="phone-tab"><i class="fas fa-user"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phone 3 - Profile -->
+                <div class="phone-mockup reveal">
+                    <div class="phone-frame">
+                        <div class="phone-screen">
+                            <div class="phone-app">
+                                <div class="phone-header"
+                                    style="background: linear-gradient(180deg, rgba(6, 182, 212, 0.2) 0%, transparent 100%);">
+                                    <h4>Profile</h4>
+                                    <small>Your account</small>
+                                </div>
+
+                                <div class="phone-content" style="text-align: center; padding-top: 1rem;">
+                                    <div
+                                        style="width: 60px; height: 60px; background: var(--gradient-primary); border-radius: 50%; margin: 0 auto 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <h5 style="font-size: 1rem; margin-bottom: 0.125rem;">John Doe</h5>
+                                    <small style="color: var(--neutral-500); font-size: 0.75rem;">@johndoe</small>
+
+                                    <div
+                                        style="display: flex; justify-content: center; gap: 1.5rem; margin: 1rem 0; padding: 0.75rem 0; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06);">
+                                        <div style="text-align: center;">
+                                            <div style="font-weight: 600; font-size: 0.875rem;">128</div>
+                                            <small style="color: var(--neutral-500); font-size: 0.625rem;">Posts</small>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <div style="font-weight: 600; font-size: 0.875rem;">1.2K</div>
+                                            <small
+                                                style="color: var(--neutral-500); font-size: 0.625rem;">Friends</small>
+                                        </div>
+                                        <div style="text-align: center;">
+                                            <div style="font-weight: 600; font-size: 0.875rem;">89</div>
+                                            <small
+                                                style="color: var(--neutral-500); font-size: 0.625rem;">Groups</small>
+                                        </div>
+                                    </div>
+
+                                    <div style="text-align: left; padding: 0 0.5rem;">
+                                        <div
+                                            style="display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem; border-radius: 8px; margin-bottom: 0.375rem; background: rgba(255,255,255,0.03);">
+                                            <i class="fas fa-cog" style="color: var(--neutral-400); width: 16px;"></i>
+                                            <span style="font-size: 0.75rem;">Settings</span>
+                                        </div>
+                                        <div
+                                            style="display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem; border-radius: 8px; margin-bottom: 0.375rem; background: rgba(255,255,255,0.03);">
+                                            <i class="fas fa-shield-alt"
+                                                style="color: var(--neutral-400); width: 16px;"></i>
+                                            <span style="font-size: 0.75rem;">Privacy</span>
+                                        </div>
+                                        <div
+                                            style="display: flex; align-items: center; gap: 0.5rem; padding: 0.625rem; border-radius: 8px; background: rgba(255,255,255,0.03);">
+                                            <i class="fas fa-palette"
+                                                style="color: var(--neutral-400); width: 16px;"></i>
+                                            <span style="font-size: 0.75rem;">Theme</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="phone-bottom-bar">
+                                    <div class="phone-tab"><i class="fas fa-home"></i></div>
+                                    <div class="phone-tab"><i class="fas fa-bell"></i></div>
+                                    <div class="phone-tab"><i class="fas fa-envelope"></i></div>
+                                    <div class="phone-tab active"><i class="fas fa-user"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section section-gradient">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">
+                    <i class="fas fa-star"></i>
+                    Features
+                </span>
+                <h2 class="section-title">App Features</h2>
+                <p class="section-subtitle">Everything you love about Social Com's, optimized for mobile</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3 class="feature-title">Push Notifications</h3>
+                    <p class="feature-desc">Stay updated with real-time notifications for messages, likes, and mentions.
+                    </p>
+                </div>
+
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <i class="fas fa-fingerprint"></i>
+                    </div>
+                    <h3 class="feature-title">Biometric Login</h3>
+                    <p class="feature-desc">Quick and secure access with Face ID or fingerprint authentication.</p>
+                </div>
+
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <h3 class="feature-title">Dark Mode</h3>
+                    <p class="feature-desc">Easy on the eyes with automatic dark mode that syncs with your device
+                        settings.</p>
+                </div>
+
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <i class="fas fa-wifi-slash"></i>
+                    </div>
+                    <h3 class="feature-title">Offline Mode</h3>
+                    <p class="feature-desc">Draft messages offline and they'll send automatically when you're back
+                        online.</p>
+                </div>
+
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h3 class="feature-title">Stories & Media</h3>
+                    <p class="feature-desc">Share photos, videos, and stories with your friends and followers.</p>
+                </div>
+
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3 class="feature-title">End-to-End Encryption</h3>
+                    <p class="feature-desc">All your conversations are encrypted. Only you and your contacts can read
+                        them.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Screens Preview -->
+    <section class="section section-dark">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">
+                    <i class="fas fa-images"></i>
+                    Screens
+                </span>
+                <h2 class="section-title">More App Screens</h2>
+                <p class="section-subtitle">Explore the complete mobile experience</p>
+            </div>
+
+            <div class="screens-grid">
+                <div class="screen-card reveal">
+                    <div class="screen-preview">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h4>Home Feed</h4>
+                    <p>Your personalized timeline with posts from friends</p>
+                </div>
+
+                <div class="screen-card reveal">
+                    <div class="screen-preview">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h4>Discover</h4>
+                    <p>Find new friends, trending topics, and communities</p>
+                </div>
+
+                <div class="screen-card reveal">
+                    <div class="screen-preview">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <h4>Chat</h4>
+                    <p>Private encrypted conversations with individuals and groups</p>
+                </div>
+
+                <div class="screen-card reveal">
+                    <div class="screen-preview">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h4>Notifications</h4>
+                    <p>Stay updated with activity on your posts and mentions</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section section-gradient">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">
+                    <i class="fas fa-download"></i>
+                    Get the App
+                </span>
+                <h2 class="section-title">Ready to Get Started?</h2>
+                <p class="section-subtitle">Download Social Com's for your device and join the privacy revolution.</p>
+
+                <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                    <a href="#" class="app-btn">
+                        <i class="fab fa-apple"></i>
+                        <div class="app-btn-text">
+                            <small>Download on the</small>
+                            <strong>App Store</strong>
+                        </div>
+                    </a>
+                    <a href="#" class="app-btn">
+                        <i class="fab fa-google-play"></i>
+                        <div class="app-btn-text">
+                            <small>Get it on</small>
+                            <strong>Google Play</strong>
+                        </div>
+                    </a>
+                </div>
+
+                <p style="color: var(--neutral-500); margin-top: 2rem; font-size: 0.875rem;">
+                    <i class="fas fa-info-circle"></i> This is a mockup demonstration. The app is not actually available
+                    for download.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-bottom" style="border: none; padding-top: 0;">
+            <p>&copy; 2024 Social Com's. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="JS_Files/main.js"></script>
+</body>
+
+</html>

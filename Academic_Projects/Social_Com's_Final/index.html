@@ -1,304 +1,497 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<title>Social Com's - Privacy-Focused Social Media</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta name="description" content="Social Com's - A modern, privacy-focused social media platform">
-	<link rel="stylesheet" href="Stylesheets/Social_Com's_index_main.css">
-	<link rel="stylesheet" href="Stylesheets/Sigin.css">
-	<link href="https://fonts.googleapis.com/css?family=Orbitron:700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-	<link rel="stylesheet" href="Stylesheets/enhanced-navbar.css">
-	<link rel="icon" type="image/svg+xml" href="speech-bubble.svg">
-	<script src="JS_Files/navbar.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Social Com's - A modern, privacy-focused social media platform that puts you in control of your data.">
+    <title>Social Com's - Privacy-Focused Social Media</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="Stylesheets/main.css">
+    <link rel="icon" type="image/svg+xml" href="speech-bubble.svg">
 </head>
 
 <body>
-	<!-- Navigation -->
-	<nav class="navbar">
-		<div class="nav-container">
-			<div class="nav-logo">
-				<i class="fas fa-comments"></i>
-				<span>Social Com's</span>
-			</div>
-			<div class="hamburger" id="hamburger">
-				<i class="fas fa-bars"></i>
-			</div>
-			<ul class="nav-menu" id="nav-menu">
-				<li><a class="nav-link active" href="index.html"><i class="fas fa-home"></i> Home</a></li>
-				<li><a class="nav-link" href="Account.html"><i class="fas fa-user"></i> Account</a></li>
-				<li><a class="nav-link" href="Feed.html"><i class="fas fa-newspaper"></i> Feed</a></li>
-				<li><a class="nav-link" href="Messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
-				<li><a class="nav-link" href="Mod.html"><i class="fas fa-shield-alt"></i> Moderators</a></li>
-				<li class="nav-divider"></li>
-				<li><a class="nav-link" href="https://xd.adobe.com/view/6e99b10d-df17-41ca-67e6-7951044d61a5-18a8/" target="_blank"><i class="fas fa-drafting-compass"></i> Wireframes</a></li>
-				<li><a class="nav-link" href="../../index.html"><i class="fas fa-arrow-left"></i> Showcase</a></li>
-			</ul>
-		</div>
-	</nav>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <div class="nav-brand-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <span>Social Com's</span>
+            </a>
 
-	<!-- Hero Section -->
-	<header class="hero">
-		<div class="hero-overlay"></div>
-		<div class="hero-content">
-			<h1 class="fade-in">Welcome to Social Com's</h1>
-			<p class="hero-subtitle fade-in-delay">The Future of Privacy-Focused Social Networking</p>
-			<div style="display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center;">
-				<button class="cta-button pulse" onclick="document.getElementById('id01').style.display='block'">
-					<i class="fas fa-sign-in-alt"></i> Get Started
-				</button>
-				<button class="cta-button-secondary glow" onclick="document.getElementById('projectModal').style.display='block'">
-					<i class="fas fa-info-circle"></i> About Project
-				</button>
-			</div>
-		</div>
-		<div class="scroll-indicator">
-			<i class="fas fa-chevron-down"></i>
-		</div>
-	</header>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="Account.html" class="nav-link"><i class="fas fa-user"></i> Account</a></li>
+                <li><a href="Feed.html" class="nav-link"><i class="fas fa-newspaper"></i> Feed</a></li>
+                <li><a href="Messages.html" class="nav-link"><i class="fas fa-envelope"></i> Messages</a></li>
+                <li><a href="Mod.html" class="nav-link"><i class="fas fa-shield-alt"></i> Moderators</a></li>
+                <li class="nav-divider"></li>
+                <li><a href="app-mockup.html" class="nav-link"><i class="fas fa-mobile-alt"></i> App</a></li>
+                <li><a href="https://xd.adobe.com/view/6e99b10d-df17-41ca-67e6-7951044d61a5-18a8/" target="_blank"
+                        class="nav-link"><i class="fas fa-drafting-compass"></i> Wireframes</a></li>
+                <li><a href="../../index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Showcase</a></li>
+            </ul>
 
-	<!-- Features Section -->
-	<section class="features">
-		<div class="container">
-			<h2 class="section-title">Why Choose Social Com's?</h2>
-			<div class="features-grid">
-				<div class="feature-card">
-					<div class="feature-icon">
-						<i class="fas fa-lock"></i>
-					</div>
-					<h3>Privacy First</h3>
-					<p>Your data belongs to you. We never sell or share your information with third parties.</p>
-				</div>
-				<div class="feature-card">
-					<div class="feature-icon">
-						<i class="fas fa-bolt"></i>
-					</div>
-					<h3>Lightning Fast</h3>
-					<p>Experience seamless browsing with our optimized platform built for speed.</p>
-				</div>
-				<div class="feature-card">
-					<div class="feature-icon">
-						<i class="fas fa-users"></i>
-					</div>
-					<h3>Community Driven</h3>
-					<p>Connect with like-minded individuals in a safe and moderated environment.</p>
-				</div>
-			</div>
-		</div>
-	</section>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
 
-	<!-- About Section -->
-	<section class="about">
-		<div class="container">
-			<div class="about-content">
-				<div class="about-text">
-					<h2 class="section-title">About Social Com's</h2>
-					<p>Social Com's is a revolutionary social media platform designed to prioritize user privacy and authentic connections. Founded by Jeff Davis in 2018 in response to major data privacy scandals, our mission is to create a trustworthy alternative to traditional social networks.</p>
-					<p>Based in Downtown Brooklyn, we're committed to transparency, ethical data practices, and building a community where users feel safe and valued.</p>
-					<div class="stats">
-						<div class="stat-item">
-							<span class="stat-number" data-target="10000">0</span>
-							<span class="stat-label">Active Users</span>
-						</div>
-						<div class="stat-item">
-							<span class="stat-number" data-target="99">0</span>
-							<span class="stat-label">Privacy Score</span>
-						</div>
-						<div class="stat-item">
-							<span class="stat-number" data-target="24">0</span>
-							<span class="stat-label">Support Hours</span>
-						</div>
-					</div>
-				</div>
-				<div class="about-image">
-					<img src="Pics/Social%20Com's%20Logo.png" alt="Social Com's Logo" class="logo-showcase">
-				</div>
-			</div>
-		</div>
-	</section>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <div class="hero-grid"></div>
+        </div>
 
-	<!-- Call to Action -->
-	<section class="cta-section">
-		<div class="container">
-			<h2>Ready to Join the Revolution?</h2>
-			<p>Create your account today and experience social media the way it should be.</p>
-			<button class="cta-button-secondary" onclick="document.getElementById('id01').style.display='block'">
-				<i class="fas fa-rocket"></i> Sign In Now
-			</button>
-		</div>
-	</section>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span>Privacy First Platform</span>
+            </div>
 
-	<!-- Login Modal -->
-	<div id="id01" class="modal">
-		<form class="modal-content animate" action="/action_page.php">
-			<div class="modal-header">
-				<span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-				<h2><i class="fas fa-user-circle"></i> Welcome Back</h2>
-			</div>
+            <h1 class="hero-title">
+                <span class="gradient-text">Connect Without</span><br>
+                Compromising Privacy
+            </h1>
 
-			<div class="modal-body">
-				<div class="input-group">
-					<label for="uname"><i class="fas fa-user"></i> Username</label>
-					<input type="text" placeholder="Enter your username" name="uname" id="uname" required>
-				</div>
+            <p class="hero-subtitle">
+                Experience social media the way it should be. Your data belongs to you, not advertisers.
+            </p>
 
-				<div class="input-group">
-					<label for="psw"><i class="fas fa-lock"></i> Password</label>
-					<input type="password" placeholder="Enter your password" name="psw" id="psw" required>
-				</div>
+            <div class="hero-actions">
+                <button class="btn btn-primary btn-lg" id="openLoginBtn">
+                    <i class="fas fa-rocket"></i>
+                    Get Started Free
+                </button>
+                <button class="btn btn-secondary btn-lg" id="openAboutBtn">
+                    <i class="fas fa-play-circle"></i>
+                    Learn More
+                </button>
+            </div>
+        </div>
 
-				<div class="remember-me">
-					<label>
-						<input type="checkbox" checked="checked" name="remember">
-						<span>Remember me</span>
-					</label>
-				</div>
+        <div class="hero-scroll">
+            <span>Scroll to explore</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
 
-				<a href="Account.html" class="btn-login">
-					<button type="submit" class="login-btn">
-						<i class="fas fa-sign-in-alt"></i> Login
-					</button>
-				</a>
-			</div>
+    <!-- Features Section -->
+    <section class="section section-dark" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">
+                    <i class="fas fa-sparkles"></i>
+                    Features
+                </span>
+                <h2 class="section-title">Why Choose Social Com's?</h2>
+                <p class="section-subtitle">We've reimagined social media with your privacy and experience at the
+                    forefront.</p>
+            </div>
 
-			<div class="modal-footer">
-				<button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-				<span class="psw">Forgot <a href="#">password?</a></span>
-			</div>
-		</form>
-	</div>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h3 class="feature-title">End-to-End Encryption</h3>
+                    <p class="feature-desc">Your conversations stay between you and your friends. Not even we can read
+                        your messages.</p>
+                </div>
 
-	<!-- Project Information Modal -->
-	<div id="projectModal" class="modal">
-		<div class="modal-content animate">
-			<div class="modal-header">
-				<span onclick="document.getElementById('projectModal').style.display='none'" class="close" title="Close Modal">&times;</span>
-				<h2><i class="fas fa-info-circle"></i> About This Project</h2>
-			</div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3 class="feature-title">Lightning Fast</h3>
+                    <p class="feature-desc">Experience seamless browsing with our optimized platform built for speed and
+                        efficiency.</p>
+                </div>
 
-			<div class="modal-body">
-				<p>What started as a class project has evolved into something much cooler! I created this social media mockup to explore what privacy-first networking could look like, wrapped in sleek, modern design.</p>
-				<br>
-				<p>Think of this as the "2.0" version - I've completely rebuilt it with modern web techniques and fresh ideas. Curious about where it all began? Check out the wireframes to peek at the original beta concept. It's like seeing the blueprint before the mansion was built!</p>
-				<br>
-				<p>From responsive layouts that look great on any device to smooth interactions and multiple pages (account settings, feeds, moderator tools), this project showcases what happens when you combine creativity with code.</p>
-			</div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="feature-title">Community Driven</h3>
+                    <p class="feature-desc">Connect with like-minded individuals in a safe and respectfully moderated
+                        environment.</p>
+                </div>
 
-			<div class="modal-footer">
-				<button type="button" onclick="document.getElementById('projectModal').style.display='none'" class="cancelbtn">Close</button>
-			</div>
-		</div>
-	</div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <i class="fas fa-eye-slash"></i>
+                    </div>
+                    <h3 class="feature-title">No Tracking</h3>
+                    <p class="feature-desc">We don't track your behavior or sell your data. Your privacy is
+                        non-negotiable.</p>
+                </div>
 
-	<!-- Footer -->
-	<footer class="footer">
-		<div class="container">
-			<p>&copy; 2024 Social Com's. All rights reserved. | Privacy-focused social networking.</p>
-			<div class="social-links">
-				<a href="#"><i class="fab fa-twitter"></i></a>
-				<a href="#"><i class="fab fa-facebook"></i></a>
-				<a href="#"><i class="fab fa-instagram"></i></a>
-				<a href="#"><i class="fab fa-linkedin"></i></a>
-			</div>
-		</div>
-	</footer>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3 class="feature-title">Fully Customizable</h3>
+                    <p class="feature-desc">Make Social Com's yours with themes, layouts, and personalization options.
+                    </p>
+                </div>
 
-	<script>
-		// Mobile menu toggle
-		const hamburger = document.getElementById('hamburger');
-		const navMenu = document.getElementById('nav-menu');
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <h3 class="feature-title">Open Source</h3>
+                    <p class="feature-desc">Transparency you can verify. Our code is open for security audits and
+                        contributions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-		hamburger.addEventListener('click', () => {
-			navMenu.classList.toggle('active');
-			hamburger.classList.toggle('active');
-		});
+    <!-- Stats Section -->
+    <section class="section section-gradient">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card reveal">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" data-target="10000">0</div>
+                    <div class="stat-label">Active Users</div>
+                </div>
 
-		// Close menu when clicking on a link
-		document.querySelectorAll('.nav-link').forEach(link => {
-			link.addEventListener('click', () => {
-				navMenu.classList.remove('active');
-				hamburger.classList.remove('active');
-			});
-		});
+                <div class="stat-card reveal">
+                    <div class="stat-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="stat-number" data-target="99">0</div>
+                    <div class="stat-label">Privacy Score</div>
+                </div>
 
-		// Modal functionality
-		var modal = document.getElementById('id01');
-		var projectModal = document.getElementById('projectModal');
-		window.onclick = function(event) {
-			if (event.target == modal) {
-				modal.style.display = "none";
-			}
-			if (event.target == projectModal) {
-				projectModal.style.display = "none";
-			}
-		}
+                <div class="stat-card reveal">
+                    <div class="stat-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support Available</div>
+                </div>
 
-		// Animated counter for stats
-		const animateCounter = (element) => {
-			const target = parseInt(element.getAttribute('data-target'));
-			const increment = target / 100;
-			let current = 0;
+                <div class="stat-card reveal">
+                    <div class="stat-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="stat-number" data-target="50">0</div>
+                    <div class="stat-label">Countries Reached</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-			const updateCounter = () => {
-				current += increment;
-				if (current < target) {
-					element.textContent = Math.ceil(current);
-					setTimeout(updateCounter, 20);
-				} else {
-					element.textContent = target + (element.parentElement.querySelector('.stat-label').textContent.includes('Hours') ? '/7' : '+');
-				}
-			};
-			updateCounter();
-		};
+    <!-- App Mockup Section -->
+    <section class="section section-dark" id="app">
+        <div class="container">
+            <div class="app-showcase">
+                <div class="app-content reveal">
+                    <span class="section-badge">
+                        <i class="fas fa-mobile-alt"></i>
+                        Mobile App
+                    </span>
+                    <h2>Social Com's in<br><span class="gradient-text">Your Pocket</span></h2>
+                    <p>Take the privacy-first experience everywhere you go. Our mobile app delivers the full Social
+                        Com's experience with native performance.</p>
 
-		// Intersection Observer for animations
-		const observerOptions = {
-			threshold: 0.5,
-			rootMargin: '0px'
-		};
+                    <div class="app-features">
+                        <div class="app-feature">
+                            <div class="app-feature-icon">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <span>Real-time notifications</span>
+                        </div>
+                        <div class="app-feature">
+                            <div class="app-feature-icon">
+                                <i class="fas fa-fingerprint"></i>
+                            </div>
+                            <span>Biometric authentication</span>
+                        </div>
+                        <div class="app-feature">
+                            <div class="app-feature-icon">
+                                <i class="fas fa-moon"></i>
+                            </div>
+                            <span>Dark mode support</span>
+                        </div>
+                        <div class="app-feature">
+                            <div class="app-feature-icon">
+                                <i class="fas fa-message"></i>
+                            </div>
+                            <span>Offline message drafts</span>
+                        </div>
+                    </div>
 
-		const observer = new IntersectionObserver((entries) => {
-			entries.forEach(entry => {
-				if (entry.isIntersecting) {
-					const counters = entry.target.querySelectorAll('.stat-number');
-					counters.forEach(counter => {
-						if (counter.textContent === '0') {
-							animateCounter(counter);
-						}
-					});
-				}
-			});
-		}, observerOptions);
+                    <div class="app-buttons">
+                        <a href="app-mockup.html" class="app-btn">
+                            <i class="fab fa-apple"></i>
+                            <div class="app-btn-text">
+                                <small>Download on the</small>
+                                <strong>App Store</strong>
+                            </div>
+                        </a>
+                        <a href="app-mockup.html" class="app-btn">
+                            <i class="fab fa-google-play"></i>
+                            <div class="app-btn-text">
+                                <small>Get it on</small>
+                                <strong>Google Play</strong>
+                            </div>
+                        </a>
+                    </div>
+                </div>
 
-		const statsSection = document.querySelector('.stats');
-		if (statsSection) observer.observe(statsSection);
+                <div class="phone-mockup reveal">
+                    <div class="phone-frame">
+                        <div class="phone-screen">
+                            <div class="phone-app">
+                                <div class="phone-header">
+                                    <h4>Social Com's</h4>
+                                    <small>Your secure social network</small>
+                                </div>
 
-		// Smooth scroll for scroll indicator
-		document.querySelector('.scroll-indicator')?.addEventListener('click', () => {
-			document.querySelector('.features').scrollIntoView({ behavior: 'smooth' });
-		});
+                                <div class="phone-nav">
+                                    <div class="phone-nav-item active">
+                                        <i class="fas fa-home"></i>
+                                        <span>Home</span>
+                                    </div>
+                                    <div class="phone-nav-item">
+                                        <i class="fas fa-search"></i>
+                                        <span>Search</span>
+                                    </div>
+                                    <div class="phone-nav-item">
+                                        <i class="fas fa-plus-square"></i>
+                                        <span>Post</span>
+                                    </div>
+                                    <div class="phone-nav-item">
+                                        <i class="fas fa-comment"></i>
+                                        <span>Chat</span>
+                                    </div>
+                                </div>
 
-		// Backup hamburger menu toggle (in case navbar.js doesn't load)
-		setTimeout(() => {
-			const hamburger = document.getElementById('hamburger');
-			const navMenu = document.getElementById('nav-menu');
+                                <div class="phone-content">
+                                    <div class="phone-post">
+                                        <div class="phone-post-header">
+                                            <div class="phone-avatar">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="phone-user-info">
+                                                <h5>Sarah Johnson</h5>
+                                                <small>2 hours ago</small>
+                                            </div>
+                                        </div>
+                                        <p class="phone-post-text">Finally a social platform that respects privacy! This
+                                            is exactly what we needed.</p>
+                                        <div class="phone-post-actions">
+                                            <span><i class="fas fa-heart"></i> 42</span>
+                                            <span><i class="fas fa-comment"></i> 8</span>
+                                            <span><i class="fas fa-share"></i> 3</span>
+                                        </div>
+                                    </div>
 
-			if (hamburger && navMenu && !hamburger.dataset.initialized) {
-				console.log('Adding backup hamburger listener');
-				hamburger.addEventListener('click', function(e) {
-					e.preventDefault();
-					e.stopPropagation();
-					navMenu.classList.toggle('active');
-					hamburger.classList.toggle('active');
-					document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
-				});
-				hamburger.dataset.initialized = 'true';
-			}
-		}, 100);
-	</script>
+                                    <div class="phone-post">
+                                        <div class="phone-post-header">
+                                            <div class="phone-avatar">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="phone-user-info">
+                                                <h5>Mike Chen</h5>
+                                                <small>5 hours ago</small>
+                                            </div>
+                                        </div>
+                                        <p class="phone-post-text">Love the theme customization! Made it match my style
+                                            perfectly.</p>
+                                        <div class="phone-post-actions">
+                                            <span><i class="fas fa-heart"></i> 28</span>
+                                            <span><i class="fas fa-comment"></i> 5</span>
+                                            <span><i class="fas fa-share"></i> 2</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="phone-bottom-bar">
+                                    <div class="phone-tab active"><i class="fas fa-home"></i></div>
+                                    <div class="phone-tab"><i class="fas fa-bell"></i></div>
+                                    <div class="phone-tab"><i class="fas fa-envelope"></i></div>
+                                    <div class="phone-tab"><i class="fas fa-user"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="section section-gradient">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">
+                    <i class="fas fa-rocket"></i>
+                    Get Started
+                </span>
+                <h2 class="section-title">Ready to Join the Revolution?</h2>
+                <p class="section-subtitle">Create your account today and experience social media the way it should be.
+                </p>
+                <div style="margin-top: 2rem;">
+                    <button class="btn btn-primary btn-lg" id="openLoginBtn2">
+                        <i class="fas fa-user-plus"></i>
+                        Create Free Account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="nav-brand">
+                    <div class="nav-brand-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <span>Social Com's</span>
+                </a>
+                <p>A privacy-focused social media platform that puts you in control of your data and connections.</p>
+            </div>
+
+            <div class="footer-links">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="Feed.html">Feed</a></li>
+                    <li><a href="Messages.html">Messages</a></li>
+                    <li><a href="Account.html">Account</a></li>
+                    <li><a href="app-mockup.html">Mobile App</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="Mod.html">Moderators</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                    <li><a href="#">Security</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2024 Social Com's. All rights reserved. Privacy-focused social networking.</p>
+            <div class="social-links">
+                <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-circle"></i> Welcome Back</h2>
+                <button class="modal-close" id="closeLoginBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label" for="username">
+                            <i class="fas fa-user"></i> Username
+                        </label>
+                        <input type="text" class="form-input" id="username" placeholder="Enter your username" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <input type="password" class="form-input" id="password" placeholder="Enter your password"
+                            required>
+                    </div>
+
+                    <label class="form-checkbox">
+                        <input type="checkbox" checked>
+                        <span>Remember me</span>
+                    </label>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="cancelLoginBtn">Cancel</button>
+                <a href="Account.html" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal-overlay" id="aboutModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-info-circle"></i> About This Project</h2>
+                <button class="modal-close" id="closeAboutBtn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <p style="margin-bottom: 1rem; color: var(--neutral-300); line-height: 1.7;">
+                    What started as a class project has evolved into something much cooler! I created this social media
+                    mockup to explore what privacy-first networking could look like, wrapped in sleek, modern design.
+                </p>
+                <p style="margin-bottom: 1rem; color: var(--neutral-300); line-height: 1.7;">
+                    Think of this as the "2.0" version - I've completely rebuilt it with modern web techniques and fresh
+                    ideas. Check out the wireframes to peek at the original beta concept!
+                </p>
+                <p style="color: var(--neutral-300); line-height: 1.7;">
+                    From responsive layouts to smooth interactions and multiple pages, this project showcases what
+                    happens when you combine creativity with code.
+                </p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeAboutBtn2">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="JS_Files/main.js"></script>
 </body>
 
 </html>

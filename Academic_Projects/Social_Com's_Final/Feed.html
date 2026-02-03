@@ -1,248 +1,326 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<title>Feed - Social Com's</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="Stylesheets/Feed.css">
-	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Orbitron:700" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-	<link rel="stylesheet" href="Stylesheets/enhanced-navbar.css">
-	<link rel="icon" type="image/svg+xml" href="speech-bubble.svg">
-	<script src="JS_Files/navbar.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Your Social Com's feed - Stay connected with what matters">
+    <title>Feed - Social Com's</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="Stylesheets/main.css">
+    <link rel="stylesheet" href="Stylesheets/pages.css">
+    <link rel="icon" type="image/svg+xml" href="speech-bubble.svg">
 </head>
 
 <body>
-	<!-- Navigation -->
-	<nav class="navbar">
-		<div class="nav-container">
-			<div class="nav-logo">
-				<i class="fas fa-comments"></i>
-				<span>Social Com's</span>
-			</div>
-			<div class="hamburger" id="hamburger">
-				<i class="fas fa-bars"></i>
-			</div>
-			<ul class="nav-menu" id="nav-menu">
-				<li><a class="nav-link" href="index.html"><i class="fas fa-home"></i> Home</a></li>
-				<li><a class="nav-link" href="Account.html"><i class="fas fa-user"></i> Account</a></li>
-				<li><a class="nav-link active" href="Feed.html"><i class="fas fa-newspaper"></i> Feed</a></li>
-				<li><a class="nav-link" href="Messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
-				<li><a class="nav-link" href="Mod.html"><i class="fas fa-shield-alt"></i> Moderators</a></li>
-				<li class="nav-divider"></li>
-				<li><a class="nav-link" href="https://xd.adobe.com/view/6e99b10d-df17-41ca-67e6-7951044d61a5-18a8/" target="_blank"><i class="fas fa-drafting-compass"></i> Wireframes</a></li>
-				<li><a class="nav-link" href="../../index.html"><i class="fas fa-arrow-left"></i> Showcase</a></li>
-			</ul>
-		</div>
-	</nav>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <div class="nav-brand-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <span>Social Com's</span>
+            </a>
 
-	<!-- Header -->
-	<header class="page-header">
-		<div class="header-overlay"></div>
-		<div class="header-content">
-			<i class="fas fa-stream"></i>
-			<h1>Your Feed</h1>
-			<p>Stay connected with what matters to you</p>
-			<div class="search-bar-container">
-				<i class="fas fa-search"></i>
-				<input type="text" id="feedSearch" placeholder="Search posts, hashtags, or users...">
-			</div>
-		</div>
-	</header>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="Account.html" class="nav-link"><i class="fas fa-user"></i> Account</a></li>
+                <li><a href="Feed.html" class="nav-link active"><i class="fas fa-newspaper"></i> Feed</a></li>
+                <li><a href="Messages.html" class="nav-link"><i class="fas fa-envelope"></i> Messages</a></li>
+                <li><a href="Mod.html" class="nav-link"><i class="fas fa-shield-alt"></i> Moderators</a></li>
+                <li class="nav-divider"></li>
+                <li><a href="app-mockup.html" class="nav-link"><i class="fas fa-mobile-alt"></i> App</a></li>
+                <li><a href="https://xd.adobe.com/view/6e99b10d-df17-41ca-67e6-7951044d61a5-18a8/" target="_blank"
+                        class="nav-link"><i class="fas fa-drafting-compass"></i> Wireframes</a></li>
+                <li><a href="../../index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Showcase</a></li>
+            </ul>
 
-	<!-- Main Content -->
-	<main class="container">
-		<div class="feed-layout">
-			<!-- Create Post Section -->
-			<section class="create-post-card">
-				<h3><i class="fas fa-pen"></i> Create a Post</h3>
-				<textarea placeholder="What's on your mind?" rows="3"></textarea>
-				<div class="post-actions">
-					<div class="post-options">
-						<button class="option-btn"><i class="fas fa-image"></i> Photo</button>
-						<button class="option-btn"><i class="fas fa-video"></i> Video</button>
-						<button class="option-btn"><i class="fas fa-smile"></i> Feeling</button>
-					</div>
-					<button class="post-btn"><i class="fas fa-paper-plane"></i> Post</button>
-				</div>
-			</section>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
 
-			<!-- Sample Feed Posts -->
-			<article class="post-card">
-				<div class="post-header">
-					<div class="user-info">
-						<div class="avatar">
-							<i class="fas fa-user-circle"></i>
-						</div>
-						<div>
-							<h4>Sarah Johnson</h4>
-							<span class="post-time">2 hours ago</span>
-						</div>
-					</div>
-					<button class="options-btn"><i class="fas fa-ellipsis-h"></i></button>
-				</div>
-				<div class="post-content">
-					<p>Excited to be part of this amazing privacy-focused social network! Finally, a platform that respects user data. 🎉</p>
-					<img src="Pics/Website_and_App.png" alt="Social Com's" class="post-image">
-				</div>
-				<div class="post-stats">
-					<span><i class="fas fa-heart"></i> 42 likes</span>
-					<span><i class="fas fa-comment"></i> 8 comments</span>
-					<span><i class="fas fa-share"></i> 3 shares</span>
-				</div>
-				<div class="post-actions-bar">
-					<button class="action-btn"><i class="fas fa-heart"></i> Like</button>
-					<button class="action-btn"><i class="fas fa-comment"></i> Comment</button>
-					<button class="action-btn"><i class="fas fa-share"></i> Share</button>
-				</div>
-			</article>
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="page-icon">
+            <i class="fas fa-stream"></i>
+        </div>
+        <h1 class="page-title">Your Feed</h1>
+        <p class="page-subtitle">Stay connected with what matters to you</p>
 
-			<article class="post-card">
-				<div class="post-header">
-					<div class="user-info">
-						<div class="avatar">
-							<i class="fas fa-user-circle"></i>
-						</div>
-						<div>
-							<h4>Mike Chen</h4>
-							<span class="post-time">5 hours ago</span>
-						</div>
-					</div>
-					<button class="options-btn"><i class="fas fa-ellipsis-h"></i></button>
-				</div>
-				<div class="post-content">
-					<p>Just discovered the theme customization feature! This platform keeps getting better. 🚀💜</p>
-				</div>
-				<div class="post-stats">
-					<span><i class="fas fa-heart"></i> 28 likes</span>
-					<span><i class="fas fa-comment"></i> 5 comments</span>
-					<span><i class="fas fa-share"></i> 2 shares</span>
-				</div>
-				<div class="post-actions-bar">
-					<button class="action-btn"><i class="fas fa-heart"></i> Like</button>
-					<button class="action-btn"><i class="fas fa-comment"></i> Comment</button>
-					<button class="action-btn"><i class="fas fa-share"></i> Share</button>
-				</div>
-			</article>
+        <!-- Search Bar -->
+        <div class="search-bar" style="max-width: 500px; margin: 1.5rem auto 0;">
+            <i class="fas fa-search"></i>
+            <input type="text" id="feedSearch" placeholder="Search posts, hashtags, or users...">
+        </div>
+    </header>
 
-			<article class="post-card">
-				<div class="post-header">
-					<div class="user-info">
-						<div class="avatar">
-							<i class="fas fa-user-circle"></i>
-						</div>
-						<div>
-							<h4>Alex Rivera</h4>
-							<span class="post-time">1 day ago</span>
-						</div>
-					</div>
-					<button class="options-btn"><i class="fas fa-ellipsis-h"></i></button>
-				</div>
-				<div class="post-content">
-					<p>Love how Social Com's puts privacy first. No more worrying about data breaches! 🔒✨</p>
-					<img src="Pics/Social%20Com's%20Logo.png" alt="Logo" class="post-image">
-				</div>
-				<div class="post-stats">
-					<span><i class="fas fa-heart"></i> 156 likes</span>
-					<span><i class="fas fa-comment"></i> 23 comments</span>
-					<span><i class="fas fa-share"></i> 12 shares</span>
-				</div>
-				<div class="post-actions-bar">
-					<button class="action-btn"><i class="fas fa-heart"></i> Like</button>
-					<button class="action-btn"><i class="fas fa-comment"></i> Comment</button>
-					<button class="action-btn"><i class="fas fa-share"></i> Share</button>
-				</div>
-			</article>
-		</div>
+    <!-- Main Content -->
+    <main class="section" style="padding-top: 2rem;">
+        <div class="container">
+            <div class="feed-layout">
+                <!-- Main Feed -->
+                <div class="feed-main">
+                    <!-- Create Post -->
+                    <div class="create-post">
+                        <div class="create-post-header">
+                            <div class="post-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h3>Create a Post</h3>
+                        </div>
+                        <textarea placeholder="What's on your mind?" rows="3"></textarea>
+                        <div class="create-post-actions">
+                            <div class="post-options">
+                                <button class="option-btn"><i class="fas fa-image"></i> Photo</button>
+                                <button class="option-btn"><i class="fas fa-video"></i> Video</button>
+                                <button class="option-btn"><i class="fas fa-smile"></i> Feeling</button>
+                            </div>
+                            <button class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Post
+                            </button>
+                        </div>
+                    </div>
 
-		<!-- Sidebar -->
-		<aside class="sidebar">
-			<div class="sidebar-card">
-				<h3><i class="fas fa-fire"></i> Trending Topics</h3>
-				<div class="trending-list">
-					<div class="trending-item">
-						<span class="trend-tag">#Privacy</span>
-						<span class="trend-count">2.5K posts</span>
-					</div>
-					<div class="trending-item">
-						<span class="trend-tag">#SocialComs</span>
-						<span class="trend-count">1.8K posts</span>
-					</div>
-					<div class="trending-item">
-						<span class="trend-tag">#DataProtection</span>
-						<span class="trend-count">1.2K posts</span>
-					</div>
-					<div class="trending-item">
-						<span class="trend-tag">#Community</span>
-						<span class="trend-count">980 posts</span>
-					</div>
-				</div>
-			</div>
+                    <!-- Post 1 -->
+                    <article class="post-card">
+                        <div class="post-header">
+                            <div class="post-user">
+                                <div class="post-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="post-user-info">
+                                    <h4>Sarah Johnson</h4>
+                                    <span class="post-time">2 hours ago</span>
+                                </div>
+                            </div>
+                            <button class="post-options-btn"><i class="fas fa-ellipsis-h"></i></button>
+                        </div>
+                        <div class="post-content">
+                            <p>Excited to be part of this amazing privacy-focused social network! Finally, a platform
+                                that respects user data and puts community first.</p>
+                            <img src="Pics/Website_and_App.png" alt="Social Com's Preview" class="post-image">
+                        </div>
+                        <div class="post-stats">
+                            <span><i class="fas fa-heart"></i> 42 likes</span>
+                            <span><i class="fas fa-comment"></i> 8 comments</span>
+                            <span><i class="fas fa-share"></i> 3 shares</span>
+                        </div>
+                        <div class="post-actions-bar">
+                            <button class="action-btn"><i class="far fa-heart"></i> Like</button>
+                            <button class="action-btn"><i class="far fa-comment"></i> Comment</button>
+                            <button class="action-btn"><i class="fas fa-share"></i> Share</button>
+                        </div>
+                    </article>
 
-			<div class="sidebar-card">
-				<h3><i class="fas fa-user-friends"></i> Suggested Connections</h3>
-				<div class="suggestions-list">
-					<div class="suggestion-item">
-						<i class="fas fa-user-circle"></i>
-						<div>
-							<h4>Jordan Smith</h4>
-							<span>12 mutual friends</span>
-						</div>
-						<button class="connect-btn">Connect</button>
-					</div>
-					<div class="suggestion-item">
-						<i class="fas fa-user-circle"></i>
-						<div>
-							<h4>Taylor Brown</h4>
-							<span>8 mutual friends</span>
-						</div>
-						<button class="connect-btn">Connect</button>
-					</div>
-				</div>
-			</div>
-		</aside>
-	</main>
+                    <!-- Post 2 -->
+                    <article class="post-card">
+                        <div class="post-header">
+                            <div class="post-user">
+                                <div class="post-avatar" style="background: var(--gradient-accent);">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="post-user-info">
+                                    <h4>Mike Chen</h4>
+                                    <span class="post-time">5 hours ago</span>
+                                </div>
+                            </div>
+                            <button class="post-options-btn"><i class="fas fa-ellipsis-h"></i></button>
+                        </div>
+                        <div class="post-content">
+                            <p>Just discovered the theme customization feature! This platform keeps getting better. Love
+                                how I can personalize everything to match my style.</p>
+                        </div>
+                        <div class="post-stats">
+                            <span><i class="fas fa-heart"></i> 28 likes</span>
+                            <span><i class="fas fa-comment"></i> 5 comments</span>
+                            <span><i class="fas fa-share"></i> 2 shares</span>
+                        </div>
+                        <div class="post-actions-bar">
+                            <button class="action-btn"><i class="far fa-heart"></i> Like</button>
+                            <button class="action-btn"><i class="far fa-comment"></i> Comment</button>
+                            <button class="action-btn"><i class="fas fa-share"></i> Share</button>
+                        </div>
+                    </article>
 
-	<!-- Footer -->
-	<footer class="footer">
-		<div class="container">
-			<p>&copy; 2024 Social Com's. All rights reserved.</p>
-		</div>
-	</footer>
+                    <!-- Post 3 -->
+                    <article class="post-card">
+                        <div class="post-header">
+                            <div class="post-user">
+                                <div class="post-avatar" style="background: var(--gradient-ocean);">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="post-user-info">
+                                    <h4>Alex Rivera</h4>
+                                    <span class="post-time">1 day ago</span>
+                                </div>
+                            </div>
+                            <button class="post-options-btn"><i class="fas fa-ellipsis-h"></i></button>
+                        </div>
+                        <div class="post-content">
+                            <p>Love how Social Com's puts privacy first. No more worrying about data breaches or my
+                                information being sold to advertisers. This is the future of social media!</p>
+                            <img src="Pics/Social%20Com's%20Logo.png" alt="Logo" class="post-image">
+                        </div>
+                        <div class="post-stats">
+                            <span><i class="fas fa-heart"></i> 156 likes</span>
+                            <span><i class="fas fa-comment"></i> 23 comments</span>
+                            <span><i class="fas fa-share"></i> 12 shares</span>
+                        </div>
+                        <div class="post-actions-bar">
+                            <button class="action-btn liked"><i class="fas fa-heart"></i> Liked</button>
+                            <button class="action-btn"><i class="far fa-comment"></i> Comment</button>
+                            <button class="action-btn"><i class="fas fa-share"></i> Share</button>
+                        </div>
+                    </article>
 
-	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-	<script type="text/javascript" src="JS_Files/Feed.js"></script>
-	<script>
-		// Backup hamburger menu toggle (in case navbar.js doesn't load)
-		setTimeout(() => {
-			const hamburger = document.getElementById('hamburger');
-			const navMenu = document.getElementById('nav-menu');
+                    <!-- Post 4 -->
+                    <article class="post-card">
+                        <div class="post-header">
+                            <div class="post-user">
+                                <div class="post-avatar" style="background: var(--gradient-forest);">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="post-user-info">
+                                    <h4>Jordan Smith</h4>
+                                    <span class="post-time">2 days ago</span>
+                                </div>
+                            </div>
+                            <button class="post-options-btn"><i class="fas fa-ellipsis-h"></i></button>
+                        </div>
+                        <div class="post-content">
+                            <p>The messaging feature with end-to-end encryption is exactly what I was looking for.
+                                Finally feel safe having private conversations online. Highly recommend checking out the
+                                mobile app too!</p>
+                        </div>
+                        <div class="post-stats">
+                            <span><i class="fas fa-heart"></i> 89 likes</span>
+                            <span><i class="fas fa-comment"></i> 15 comments</span>
+                            <span><i class="fas fa-share"></i> 7 shares</span>
+                        </div>
+                        <div class="post-actions-bar">
+                            <button class="action-btn"><i class="far fa-heart"></i> Like</button>
+                            <button class="action-btn"><i class="far fa-comment"></i> Comment</button>
+                            <button class="action-btn"><i class="fas fa-share"></i> Share</button>
+                        </div>
+                    </article>
+                </div>
 
-			if (hamburger && navMenu && !hamburger.dataset.initialized) {
-				console.log('Adding backup hamburger listener');
-				hamburger.addEventListener('click', function(e) {
-					e.preventDefault();
-					e.stopPropagation();
-					navMenu.classList.toggle('active');
-					hamburger.classList.toggle('active');
-					document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
-				});
+                <!-- Sidebar -->
+                <aside class="feed-sidebar">
+                    <!-- Trending -->
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-fire"></i> Trending Topics</h3>
+                        <div class="trending-list">
+                            <div class="trending-item">
+                                <span class="trend-tag">#Privacy</span>
+                                <span class="trend-count">2.5K posts</span>
+                            </div>
+                            <div class="trending-item">
+                                <span class="trend-tag">#SocialComs</span>
+                                <span class="trend-count">1.8K posts</span>
+                            </div>
+                            <div class="trending-item">
+                                <span class="trend-tag">#DataProtection</span>
+                                <span class="trend-count">1.2K posts</span>
+                            </div>
+                            <div class="trending-item">
+                                <span class="trend-tag">#Community</span>
+                                <span class="trend-count">980 posts</span>
+                            </div>
+                            <div class="trending-item">
+                                <span class="trend-tag">#TechForGood</span>
+                                <span class="trend-count">756 posts</span>
+                            </div>
+                        </div>
+                    </div>
 
-				// Close menu when clicking on a link
-				document.querySelectorAll('.nav-link').forEach(link => {
-					link.addEventListener('click', () => {
-						navMenu.classList.remove('active');
-						hamburger.classList.remove('active');
-						document.body.style.overflow = '';
-					});
-				});
+                    <!-- Suggested Connections -->
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-user-plus"></i> Suggested Connections</h3>
+                        <div class="suggestions-list">
+                            <div class="suggestion-item">
+                                <div class="suggestion-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="suggestion-info">
+                                    <h4>Taylor Brown</h4>
+                                    <span>12 mutual friends</span>
+                                </div>
+                                <button class="connect-btn">Connect</button>
+                            </div>
+                            <div class="suggestion-item">
+                                <div class="suggestion-avatar" style="background: var(--gradient-ocean);">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="suggestion-info">
+                                    <h4>Casey Wilson</h4>
+                                    <span>8 mutual friends</span>
+                                </div>
+                                <button class="connect-btn">Connect</button>
+                            </div>
+                            <div class="suggestion-item">
+                                <div class="suggestion-avatar" style="background: var(--gradient-forest);">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="suggestion-info">
+                                    <h4>Morgan Lee</h4>
+                                    <span>5 mutual friends</span>
+                                </div>
+                                <button class="connect-btn">Connect</button>
+                            </div>
+                        </div>
+                    </div>
 
-				hamburger.dataset.initialized = 'true';
-			}
-		}, 100);
-	</script>
+                    <!-- Quick Links -->
+                    <div class="sidebar-card">
+                        <h3><i class="fas fa-link"></i> Quick Links</h3>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <a href="Messages.html" class="nav-link"
+                                style="padding: 0.75rem 1rem; border-radius: var(--radius-lg);">
+                                <i class="fas fa-envelope"></i> Messages
+                            </a>
+                            <a href="Account.html" class="nav-link"
+                                style="padding: 0.75rem 1rem; border-radius: var(--radius-lg);">
+                                <i class="fas fa-cog"></i> Settings
+                            </a>
+                            <a href="Mod.html" class="nav-link"
+                                style="padding: 0.75rem 1rem; border-radius: var(--radius-lg);">
+                                <i class="fas fa-shield-alt"></i> Help & Support
+                            </a>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-bottom" style="border: none; padding-top: 0;">
+            <p>&copy; 2024 Social Com's. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="JS_Files/main.js"></script>
 </body>
 
 </html>

@@ -1,273 +1,369 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<title>Account Settings - Social Com's</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="Stylesheets/Account.css">
-	<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Orbitron:700" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-	<link rel="stylesheet" href="Stylesheets/enhanced-navbar.css">
-	<link rel="icon" type="image/svg+xml" href="speech-bubble.svg">
-	<script src="JS_Files/navbar.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Manage your Social Com's account settings and preferences">
+    <title>Account Settings - Social Com's</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="Stylesheets/main.css">
+    <link rel="stylesheet" href="Stylesheets/pages.css">
+    <link rel="icon" type="image/svg+xml" href="speech-bubble.svg">
 </head>
 
 <body>
-	<!-- Navigation -->
-	<nav class="navbar">
-		<div class="nav-container">
-			<div class="nav-logo">
-				<i class="fas fa-comments"></i>
-				<span>Social Com's</span>
-			</div>
-			<div class="hamburger" id="hamburger">
-				<i class="fas fa-bars"></i>
-			</div>
-			<ul class="nav-menu" id="nav-menu">
-				<li><a class="nav-link" href="index.html"><i class="fas fa-home"></i> Home</a></li>
-				<li><a class="nav-link active" href="Account.html"><i class="fas fa-user"></i> Account</a></li>
-				<li><a class="nav-link" href="Feed.html"><i class="fas fa-newspaper"></i> Feed</a></li>
-				<li><a class="nav-link" href="Messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
-				<li><a class="nav-link" href="Mod.html"><i class="fas fa-shield-alt"></i> Moderators</a></li>
-				<li class="nav-divider"></li>
-				<li><a class="nav-link" href="https://xd.adobe.com/view/6e99b10d-df17-41ca-67e6-7951044d61a5-18a8/" target="_blank"><i class="fas fa-drafting-compass"></i> Wireframes</a></li>
-				<li><a class="nav-link" href="../../index.html"><i class="fas fa-arrow-left"></i> Showcase</a></li>
-			</ul>
-		</div>
-	</nav>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <div class="nav-brand-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <span>Social Com's</span>
+            </a>
 
-	<!-- Header -->
-	<header class="page-header">
-		<div class="header-overlay"></div>
-		<div class="header-content">
-			<i class="fas fa-user-circle"></i>
-			<h1>Account Settings</h1>
-			<p>Customize your Social Com's experience</p>
-		</div>
-	</header>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="Account.html" class="nav-link active"><i class="fas fa-user"></i> Account</a></li>
+                <li><a href="Feed.html" class="nav-link"><i class="fas fa-newspaper"></i> Feed</a></li>
+                <li><a href="Messages.html" class="nav-link"><i class="fas fa-envelope"></i> Messages</a></li>
+                <li><a href="Mod.html" class="nav-link"><i class="fas fa-shield-alt"></i> Moderators</a></li>
+                <li class="nav-divider"></li>
+                <li><a href="app-mockup.html" class="nav-link"><i class="fas fa-mobile-alt"></i> App</a></li>
+                <li><a href="https://xd.adobe.com/view/6e99b10d-df17-41ca-67e6-7951044d61a5-18a8/" target="_blank"
+                        class="nav-link"><i class="fas fa-drafting-compass"></i> Wireframes</a></li>
+                <li><a href="../../index.html" class="nav-link"><i class="fas fa-arrow-left"></i> Showcase</a></li>
+            </ul>
 
-	<!-- Main Content -->
-	<main class="container">
-		<!-- Profile Section -->
-		<section class="settings-section">
-			<div class="section-header">
-				<i class="fas fa-user-edit"></i>
-				<h2>Profile Settings</h2>
-			</div>
-			<div class="settings-card">
-				<div class="profile-preview">
-					<div class="avatar-container">
-						<i class="fas fa-user-circle"></i>
-					</div>
-					<div class="profile-info">
-						<h3>Welcome, User!</h3>
-						<p class="user-email">user@socialcoms.com</p>
-						<span class="badge">Premium Member</span>
-					</div>
-				</div>
-			</div>
-		</section>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
 
-		<!-- Theme Customization -->
-		<section class="settings-section">
-			<div class="section-header">
-				<i class="fas fa-palette"></i>
-				<h2>Theme Customization</h2>
-			</div>
-			<div class="settings-card">
-				<div class="theme-controls">
-					<div class="control-group">
-						<label for="bgColor">
-							<i class="fas fa-fill-drip"></i>
-							<span>Background Color</span>
-						</label>
-						<div class="color-picker-wrapper">
-							<input type="color" id="bgColor" value="#667eea">
-							<span class="color-value" id="bgColorValue">#667eea</span>
-						</div>
-					</div>
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="page-icon">
+            <i class="fas fa-user-cog"></i>
+        </div>
+        <h1 class="page-title">Account Settings</h1>
+        <p class="page-subtitle">Customize your Social Com's experience</p>
+    </header>
 
-					<div class="control-group">
-						<label for="textColor">
-							<i class="fas fa-font"></i>
-							<span>Text Color</span>
-						</label>
-						<div class="color-picker-wrapper">
-							<input type="color" id="textColor" value="#1e293b">
-							<span class="color-value" id="textColorValue">#1e293b</span>
-						</div>
-					</div>
+    <!-- Main Content -->
+    <main class="section">
+        <div class="container">
+            <div class="account-layout">
+                <!-- Profile Sidebar -->
+                <aside class="profile-sidebar">
+                    <div class="profile-card">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h2 class="profile-name">Welcome, User!</h2>
+                        <p class="profile-email">user@socialcoms.com</p>
+                        <span class="profile-badge">
+                            <i class="fas fa-crown"></i>
+                            Premium Member
+                        </span>
 
-					<div class="control-group">
-						<label for="accentColor">
-							<i class="fas fa-star"></i>
-							<span>Accent Color</span>
-						</label>
-						<div class="color-picker-wrapper">
-							<input type="color" id="accentColor" value="#6366f1">
-							<span class="color-value" id="accentColorValue">#6366f1</span>
-						</div>
-					</div>
-				</div>
+                        <div class="profile-stats">
+                            <div class="profile-stat">
+                                <div class="profile-stat-value">128</div>
+                                <div class="profile-stat-label">Posts</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="profile-stat-value">1.2K</div>
+                                <div class="profile-stat-label">Friends</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="profile-stat-value">89</div>
+                                <div class="profile-stat-label">Groups</div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
 
-				<div class="preset-themes">
-					<h4>Quick Themes</h4>
-					<div class="theme-presets">
-						<button class="preset-btn" data-bg="#667eea" data-text="#1e293b" data-accent="#6366f1">
-							<div class="preset-colors">
-								<span style="background: #667eea"></span>
-								<span style="background: #1e293b"></span>
-								<span style="background: #6366f1"></span>
-							</div>
-							<span>Purple Dream</span>
-						</button>
-						<button class="preset-btn" data-bg="#f093fb" data-text="#1e293b" data-accent="#f5576c">
-							<div class="preset-colors">
-								<span style="background: #f093fb"></span>
-								<span style="background: #1e293b"></span>
-								<span style="background: #f5576c"></span>
-							</div>
-							<span>Pink Sunset</span>
-						</button>
-						<button class="preset-btn" data-bg="#4facfe" data-text="#1e293b" data-accent="#00f2fe">
-							<div class="preset-colors">
-								<span style="background: #4facfe"></span>
-								<span style="background: #1e293b"></span>
-								<span style="background: #00f2fe"></span>
-							</div>
-							<span>Ocean Blue</span>
-						</button>
-						<button class="preset-btn" data-bg="#43e97b" data-text="#1e293b" data-accent="#38f9d7">
-							<div class="preset-colors">
-								<span style="background: #43e97b"></span>
-								<span style="background: #1e293b"></span>
-								<span style="background: #38f9d7"></span>
-							</div>
-							<span>Fresh Mint</span>
-						</button>
-					</div>
-				</div>
+                <!-- Settings Content -->
+                <div class="settings-content">
+                    <!-- Theme Customization -->
+                    <section class="settings-section">
+                        <div class="settings-header">
+                            <div class="settings-header-icon">
+                                <i class="fas fa-palette"></i>
+                            </div>
+                            <h2>Theme Customization</h2>
+                        </div>
+                        <div class="settings-body">
+                            <div class="theme-controls">
+                                <div class="control-group">
+                                    <label for="bgColor">
+                                        <i class="fas fa-fill-drip"></i>
+                                        <span>Background Color</span>
+                                    </label>
+                                    <div class="color-picker-wrapper">
+                                        <input type="color" id="bgColor" value="#667eea">
+                                        <span class="color-value" id="bgColorValue">#667eea</span>
+                                    </div>
+                                </div>
 
-				<button class="reset-btn" id="resetTheme">
-					<i class="fas fa-undo"></i> Reset to Default
-				</button>
-			</div>
-		</section>
+                                <div class="control-group">
+                                    <label for="textColor">
+                                        <i class="fas fa-font"></i>
+                                        <span>Text Color</span>
+                                    </label>
+                                    <div class="color-picker-wrapper">
+                                        <input type="color" id="textColor" value="#1e293b">
+                                        <span class="color-value" id="textColorValue">#1e293b</span>
+                                    </div>
+                                </div>
 
-		<!-- Preferences Section -->
-		<section class="settings-section">
-			<div class="section-header">
-				<i class="fas fa-cog"></i>
-				<h2>Preferences</h2>
-			</div>
-			<div class="settings-card">
-				<div class="preference-item">
-					<div class="preference-info">
-						<i class="fas fa-bell"></i>
-						<div>
-							<h4>Push Notifications</h4>
-							<p>Receive notifications about new messages and updates</p>
-						</div>
-					</div>
-					<label class="toggle-switch">
-						<input type="checkbox" checked>
-						<span class="slider"></span>
-					</label>
-				</div>
+                                <div class="control-group">
+                                    <label for="accentColor">
+                                        <i class="fas fa-star"></i>
+                                        <span>Accent Color</span>
+                                    </label>
+                                    <div class="color-picker-wrapper">
+                                        <input type="color" id="accentColor" value="#6366f1">
+                                        <span class="color-value" id="accentColorValue">#6366f1</span>
+                                    </div>
+                                </div>
+                            </div>
 
-				<div class="preference-item">
-					<div class="preference-info">
-						<i class="fas fa-envelope"></i>
-						<div>
-							<h4>Email Updates</h4>
-							<p>Get weekly digest of your activity</p>
-						</div>
-					</div>
-					<label class="toggle-switch">
-						<input type="checkbox">
-						<span class="slider"></span>
-					</label>
-				</div>
+                            <div class="preset-themes">
+                                <h4>Quick Themes</h4>
+                                <div class="theme-presets">
+                                    <button class="preset-btn" data-bg="#667eea" data-text="#1e293b"
+                                        data-accent="#6366f1">
+                                        <div class="preset-colors">
+                                            <span style="background: #667eea"></span>
+                                            <span style="background: #1e293b"></span>
+                                            <span style="background: #6366f1"></span>
+                                        </div>
+                                        <span>Purple Dream</span>
+                                    </button>
+                                    <button class="preset-btn" data-bg="#f093fb" data-text="#1e293b"
+                                        data-accent="#f5576c">
+                                        <div class="preset-colors">
+                                            <span style="background: #f093fb"></span>
+                                            <span style="background: #1e293b"></span>
+                                            <span style="background: #f5576c"></span>
+                                        </div>
+                                        <span>Pink Sunset</span>
+                                    </button>
+                                    <button class="preset-btn" data-bg="#4facfe" data-text="#1e293b"
+                                        data-accent="#00f2fe">
+                                        <div class="preset-colors">
+                                            <span style="background: #4facfe"></span>
+                                            <span style="background: #1e293b"></span>
+                                            <span style="background: #00f2fe"></span>
+                                        </div>
+                                        <span>Ocean Blue</span>
+                                    </button>
+                                    <button class="preset-btn" data-bg="#43e97b" data-text="#1e293b"
+                                        data-accent="#38f9d7">
+                                        <div class="preset-colors">
+                                            <span style="background: #43e97b"></span>
+                                            <span style="background: #1e293b"></span>
+                                            <span style="background: #38f9d7"></span>
+                                        </div>
+                                        <span>Fresh Mint</span>
+                                    </button>
+                                </div>
+                            </div>
 
-				<div class="preference-item">
-					<div class="preference-info">
-						<i class="fas fa-moon"></i>
-						<div>
-							<h4>Dark Mode</h4>
-							<p>Enable dark theme for comfortable viewing</p>
-						</div>
-					</div>
-					<label class="toggle-switch">
-						<input type="checkbox" id="darkModeToggle">
-						<span class="slider"></span>
-					</label>
-				</div>
-			</div>
-		</section>
+                            <button class="reset-btn" id="resetTheme">
+                                <i class="fas fa-undo"></i> Reset to Default
+                            </button>
+                        </div>
+                    </section>
 
-		<!-- Event Planner Section -->
-		<section class="settings-section">
-			<div class="section-header">
-				<i class="fas fa-calendar-alt"></i>
-				<h2>Event Planner</h2>
-			</div>
-			<div class="settings-card">
-				<p class="section-description">
-					Create and manage events effortlessly. Upload event documents, images, and schedule details.
-				</p>
-				<div class="file-upload-area" id="fileUploadArea">
-					<i class="fas fa-cloud-upload-alt"></i>
-					<h4>Drag & Drop Files Here</h4>
-					<p>or click to browse</p>
-					<input type="file" id="eventFileInput" multiple hidden>
-				</div>
-				<div id="fileList" class="file-list"></div>
-			</div>
-		</section>
-	</main>
+                    <!-- Preferences -->
+                    <section class="settings-section">
+                        <div class="settings-header">
+                            <div class="settings-header-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <h2>Preferences</h2>
+                        </div>
+                        <div class="settings-body">
+                            <div class="preference-item">
+                                <div class="preference-info">
+                                    <i class="fas fa-bell"></i>
+                                    <div>
+                                        <h4>Push Notifications</h4>
+                                        <p>Receive notifications about new messages and updates</p>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
 
-	<!-- Footer -->
-	<footer class="footer">
-		<div class="container">
-			<p>&copy; 2024 Social Com's. All rights reserved.</p>
-		</div>
-	</footer>
+                            <div class="preference-item">
+                                <div class="preference-info">
+                                    <i class="fas fa-envelope"></i>
+                                    <div>
+                                        <h4>Email Updates</h4>
+                                        <p>Get weekly digest of your activity</p>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
 
-	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
-	<script src="JS_Files/color.js"></script>
-	<script src="JS_Files/text.js"></script>
-	<script src="JS_Files/account.js"></script>
-	<script>
-		// Backup hamburger menu toggle (in case navbar.js doesn't load)
-		setTimeout(() => {
-			const hamburger = document.getElementById('hamburger');
-			const navMenu = document.getElementById('nav-menu');
+                            <div class="preference-item">
+                                <div class="preference-info">
+                                    <i class="fas fa-moon"></i>
+                                    <div>
+                                        <h4>Dark Mode</h4>
+                                        <p>Enable dark theme for comfortable viewing</p>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="darkModeToggle" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
 
-			if (hamburger && navMenu && !hamburger.dataset.initialized) {
-				console.log('Adding backup hamburger listener');
-				hamburger.addEventListener('click', function(e) {
-					e.preventDefault();
-					e.stopPropagation();
-					navMenu.classList.toggle('active');
-					hamburger.classList.toggle('active');
-					document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
-				});
+                            <div class="preference-item">
+                                <div class="preference-info">
+                                    <i class="fas fa-lock"></i>
+                                    <div>
+                                        <h4>Two-Factor Authentication</h4>
+                                        <p>Add an extra layer of security to your account</p>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
 
-				// Close menu when clicking on a link
-				document.querySelectorAll('.nav-link').forEach(link => {
-					link.addEventListener('click', () => {
-						navMenu.classList.remove('active');
-						hamburger.classList.remove('active');
-						document.body.style.overflow = '';
-					});
-				});
+                            <div class="preference-item">
+                                <div class="preference-info">
+                                    <i class="fas fa-user-shield"></i>
+                                    <div>
+                                        <h4>Private Profile</h4>
+                                        <p>Only approved followers can see your posts</p>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </section>
 
-				hamburger.dataset.initialized = 'true';
-			}
-		}, 100);
-	</script>
+                    <!-- Event Planner -->
+                    <section class="settings-section">
+                        <div class="settings-header">
+                            <div class="settings-header-icon">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <h2>Event Planner</h2>
+                        </div>
+                        <div class="settings-body">
+                            <p style="color: var(--neutral-400); margin-bottom: 1.5rem;">
+                                Create and manage events effortlessly. Upload event documents, images, and schedule
+                                details.
+                            </p>
+                            <div class="file-upload-area" id="fileUploadArea">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <h4>Drag & Drop Files Here</h4>
+                                <p>or click to browse</p>
+                                <input type="file" id="eventFileInput" multiple hidden>
+                            </div>
+                            <div id="fileList" class="file-list"></div>
+                        </div>
+                    </section>
+
+                    <!-- Privacy & Security -->
+                    <section class="settings-section">
+                        <div class="settings-header">
+                            <div class="settings-header-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h2>Privacy & Security</h2>
+                        </div>
+                        <div class="settings-body">
+                            <div class="preference-item">
+                                <div class="preference-info">
+                                    <i class="fas fa-eye-slash"></i>
+                                    <div>
+                                        <h4>Hide Online Status</h4>
+                                        <p>Others won't see when you're online</p>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="preference-item">
+                                <div class="preference-info">
+                                    <i class="fas fa-ban"></i>
+                                    <div>
+                                        <h4>Block Data Sharing</h4>
+                                        <p>Prevent third-party data access (always on)</p>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked disabled>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="preference-item">
+                                <div class="preference-info">
+                                    <i class="fas fa-history"></i>
+                                    <div>
+                                        <h4>Activity Log</h4>
+                                        <p>Track your account activity for security</p>
+                                    </div>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-bottom" style="border: none; padding-top: 0;">
+            <p>&copy; 2024 Social Com's. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-link" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="JS_Files/main.js"></script>
 </body>
 
 </html>
