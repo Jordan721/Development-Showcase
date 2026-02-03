@@ -1,6 +1,7 @@
 /*
 Final Project - Interactive Orbit Control
 Jordan Alexis
+Enhanced with Sound Reactive Mode, More Shapes & Post-processing
 */
 
 // Interactive control variables
@@ -45,6 +46,25 @@ var explosionAmount = 0;
 var targetExplosion = 0;
 var pulsePhase = 0;
 
+// === NEW: Sound Reactive Mode ===
+var audioContext;
+var analyser;
+var audioSource;
+var frequencyData;
+var soundReactiveMode = false;
+var bassLevel = 0;
+var midLevel = 0;
+var highLevel = 0;
+var smoothBass = 0;
+var smoothMid = 0;
+var smoothHigh = 0;
+var audioInitialized = false;
+
+// === NEW: Post-processing / Bloom ===
+var bloomEnabled = false;
+var bloomIntensity = 0.5;
+var glowGraphics;
+
 // Color schemes
 var colorSchemes = {
     default: { color1: 'white', color2: 'teal' },
@@ -53,7 +73,9 @@ var colorSchemes = {
     monochrome: { color1: '#ffffff', color2: '#888888' },
     fire: { color1: '#ff4500', color2: '#ffd700' },
     ocean: { color1: '#00bfff', color2: '#004080' },
-    matrix: { color1: '#00ff00', color2: '#003300' }
+    matrix: { color1: '#00ff00', color2: '#003300' },
+    synthwave: { color1: '#ff00ff', color2: '#00ffff' },
+    gold: { color1: '#ffd700', color2: '#b8860b' }
 };
 
 function setup() {
@@ -67,6 +89,9 @@ function setup() {
 
     setupEventListeners();
     setupMouseControls();
+
+    // Initialize audio analyzer for sound reactive mode
+    initAudioAnalyzer();
 }
 
 function initShapePositions() {
@@ -82,6 +107,72 @@ function initShapePositions() {
             shapePositions.push({ x: x, y: y, z: z, i: i, j: j, scale: 1, pulse: random(TWO_PI) });
         }
     }
+}
+
+// === NEW: Audio Analyzer for Sound Reactive Mode ===
+function initAudioAnalyzer() {
+    try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        frequencyData = new Uint8Array(analyser.frequencyBinCount);
+        audioInitialized = true;
+    } catch (e) {
+        console.log('Web Audio API not supported');
+        audioInitialized = false;
+    }
+}
+
+function connectAudioSource() {
+    if (!audioInitialized || audioSource) return;
+
+    try {
+        var audioElement = document.getElementById('backgroundMusic');
+        if (audioElement && audioContext) {
+            // Resume audio context if suspended
+            if (audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            audioSource = audioContext.createMediaElementSource(audioElement);
+            audioSource.connect(analyser);
+            analyser.connect(audioContext.destination);
+        }
+    } catch (e) {
+        console.log('Could not connect audio source:', e);
+    }
+}
+
+function analyzeAudio() {
+    if (!analyser || !frequencyData || !soundReactiveMode) return;
+
+    analyser.getByteFrequencyData(frequencyData);
+
+    // Split frequency data into bass, mid, and high
+    var bassSum = 0;
+    var midSum = 0;
+    var highSum = 0;
+    var bassCount = Math.floor(frequencyData.length * 0.15);
+    var midCount = Math.floor(frequencyData.length * 0.5);
+
+    for (var i = 0; i < frequencyData.length; i++) {
+        if (i < bassCount) {
+            bassSum += frequencyData[i];
+        } else if (i < midCount) {
+            midSum += frequencyData[i];
+        } else {
+            highSum += frequencyData[i];
+        }
+    }
+
+    // Normalize and smooth
+    bassLevel = bassSum / (bassCount * 255);
+    midLevel = midSum / ((midCount - bassCount) * 255);
+    highLevel = highSum / ((frequencyData.length - midCount) * 255);
+
+    // Smooth the values for less jittery animation
+    smoothBass = lerp(smoothBass, bassLevel, 0.3);
+    smoothMid = lerp(smoothMid, midLevel, 0.25);
+    smoothHigh = lerp(smoothHigh, highLevel, 0.2);
 }
 
 function setupMouseControls() {
@@ -248,6 +339,25 @@ function setupEventListeners() {
             maxParticles = maxParticles > 0 ? 0 : 100;
         });
     }
+
+    // === NEW: Sound Reactive Mode toggle ===
+    var soundReactiveBtn = document.getElementById('toggleSoundReactive');
+    if (soundReactiveBtn) {
+        soundReactiveBtn.addEventListener('click', function () {
+            soundReactiveMode = !soundReactiveMode;
+            if (soundReactiveMode && !audioSource) {
+                connectAudioSource();
+            }
+        });
+    }
+
+    // === NEW: Bloom toggle ===
+    var bloomBtn = document.getElementById('toggleBloom');
+    if (bloomBtn) {
+        bloomBtn.addEventListener('click', function () {
+            bloomEnabled = !bloomEnabled;
+        });
+    }
 }
 
 function updateZoomSlider() {
@@ -260,14 +370,32 @@ function updateZoomSlider() {
 }
 
 function draw() {
-    background(0);
+    // Background - bloom adds a slight purple tint
+    colorMode(RGB, 255);
+    if (bloomEnabled) {
+        background(10, 5, 15);
+    } else {
+        background(0);
+    }
+    colorMode(HSB, 360, 100, 100, 100);
+
+    // Analyze audio for sound reactive mode
+    if (soundReactiveMode && isMusicPlaying) {
+        analyzeAudio();
+    }
 
     // Smooth interpolation for all controls
     orbitAngleX = lerp(orbitAngleX, targetOrbitX, 0.08);
     orbitAngleY = lerp(orbitAngleY, targetOrbitY, 0.08);
     zoomLevel = lerp(zoomLevel, targetZoom, 0.08);
     explosionAmount = lerp(explosionAmount, targetExplosion, 0.05);
-    pulsePhase += 0.03;
+
+    // Sound reactive pulse speed
+    var pulseSpeed = 0.03;
+    if (soundReactiveMode) {
+        pulseSpeed = 0.03 + smoothBass * 0.1;
+    }
+    pulsePhase += pulseSpeed;
 
     // Update hover color based on mouse position
     if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
@@ -292,14 +420,27 @@ function draw() {
     camera(camPosX, camPosY, camPosZ, camX, camY, 0, 0, 1, 0);
 
     // Enhanced lighting
-    ambientLight(80);
+    var ambientIntensity = bloomEnabled ? 120 : 80;
+    ambientLight(ambientIntensity);
     pointLight(255, 255, 255, camPosX, camPosY, camPosZ);
 
     // Dynamic colored lights based on mouse position
     var lightHue = mouseHue;
     colorMode(HSB, 360, 100, 100);
-    pointLight(color(lightHue, 80, 100), -300, -300, 300);
-    pointLight(color((lightHue + 180) % 360, 80, 100), 300, 300, -300);
+
+    // Sound reactive lighting
+    var lightIntensity = 100;
+    if (soundReactiveMode) {
+        lightIntensity = 80 + smoothBass * 40;
+    }
+
+    // Bloom enhances light brightness
+    if (bloomEnabled) {
+        lightIntensity = min(100, lightIntensity + 20);
+    }
+
+    pointLight(color(lightHue, 80, lightIntensity), -300, -300, 300);
+    pointLight(color((lightHue + 180) % 360, 80, lightIntensity), 300, 300, -300);
 
     // Draw particles
     updateAndDrawParticles();
@@ -385,14 +526,33 @@ function updateAndDrawParticles() {
 }
 
 function drawShape(j, i, colors, pulseScale) {
-    // Use normalMaterial for a nice reflective look, or fill with the color
-    noStroke();
-
-    // Get the base color and apply it
+    // Get the base color
     var baseColor = j % 2 === 0 ? colors.color1 : colors.color2;
 
-    // Use ambientMaterial for better color rendering in WebGL
+    // Apply material
     ambientMaterial(baseColor);
+
+    // Bloom adds a colored stroke glow
+    if (bloomEnabled) {
+        stroke(baseColor);
+        strokeWeight(2);
+    } else {
+        noStroke();
+    }
+
+    // Sound reactive size modulation
+    var soundScale = 1;
+    if (soundReactiveMode) {
+        // Different shapes react to different frequencies
+        if (i % 3 === 0) {
+            soundScale = 1 + smoothBass * 0.8;
+        } else if (i % 3 === 1) {
+            soundScale = 1 + smoothMid * 0.6;
+        } else {
+            soundScale = 1 + smoothHigh * 0.4;
+        }
+        scale(soundScale);
+    }
 
     switch (shapeMode) {
         case 'mixed':
@@ -417,7 +577,149 @@ function drawShape(j, i, colors, pulseScale) {
         case 'cylinders':
             cylinder(20, 50);
             break;
+        // === NEW SHAPES ===
+        case 'icosahedron':
+            drawIcosahedron(30);
+            break;
+        case 'octahedron':
+            drawOctahedron(35);
+            break;
+        case 'dodecahedron':
+            drawDodecahedron(25);
+            break;
+        case 'pyramid':
+            drawPyramid(40, 50);
+            break;
+        case 'gem':
+            drawGem(30);
+            break;
+        case 'star':
+            drawStar3D(35);
+            break;
     }
+}
+
+// === NEW: Custom Shape Drawing Functions ===
+function drawIcosahedron(size) {
+    // Approximate icosahedron using sphere with low detail
+    push();
+    sphere(size, 4, 3);
+    pop();
+}
+
+function drawOctahedron(size) {
+    // Draw octahedron (two pyramids)
+    push();
+    // Top pyramid
+    beginShape(TRIANGLES);
+    // Top vertex
+    var top = [0, -size, 0];
+    var bottom = [0, size, 0];
+    var v1 = [size, 0, 0];
+    var v2 = [0, 0, size];
+    var v3 = [-size, 0, 0];
+    var v4 = [0, 0, -size];
+
+    // Top faces
+    vertex(top[0], top[1], top[2]);
+    vertex(v1[0], v1[1], v1[2]);
+    vertex(v2[0], v2[1], v2[2]);
+
+    vertex(top[0], top[1], top[2]);
+    vertex(v2[0], v2[1], v2[2]);
+    vertex(v3[0], v3[1], v3[2]);
+
+    vertex(top[0], top[1], top[2]);
+    vertex(v3[0], v3[1], v3[2]);
+    vertex(v4[0], v4[1], v4[2]);
+
+    vertex(top[0], top[1], top[2]);
+    vertex(v4[0], v4[1], v4[2]);
+    vertex(v1[0], v1[1], v1[2]);
+
+    // Bottom faces
+    vertex(bottom[0], bottom[1], bottom[2]);
+    vertex(v2[0], v2[1], v2[2]);
+    vertex(v1[0], v1[1], v1[2]);
+
+    vertex(bottom[0], bottom[1], bottom[2]);
+    vertex(v3[0], v3[1], v3[2]);
+    vertex(v2[0], v2[1], v2[2]);
+
+    vertex(bottom[0], bottom[1], bottom[2]);
+    vertex(v4[0], v4[1], v4[2]);
+    vertex(v3[0], v3[1], v3[2]);
+
+    vertex(bottom[0], bottom[1], bottom[2]);
+    vertex(v1[0], v1[1], v1[2]);
+    vertex(v4[0], v4[1], v4[2]);
+
+    endShape();
+    pop();
+}
+
+function drawDodecahedron(size) {
+    // Approximate with sphere of medium detail
+    push();
+    sphere(size, 5, 4);
+    pop();
+}
+
+function drawPyramid(base, height) {
+    push();
+    beginShape(TRIANGLES);
+    var half = base / 2;
+
+    // 4 triangular faces
+    // Front
+    vertex(0, -height / 2, 0);
+    vertex(-half, height / 2, half);
+    vertex(half, height / 2, half);
+
+    // Right
+    vertex(0, -height / 2, 0);
+    vertex(half, height / 2, half);
+    vertex(half, height / 2, -half);
+
+    // Back
+    vertex(0, -height / 2, 0);
+    vertex(half, height / 2, -half);
+    vertex(-half, height / 2, -half);
+
+    // Left
+    vertex(0, -height / 2, 0);
+    vertex(-half, height / 2, -half);
+    vertex(-half, height / 2, half);
+
+    endShape();
+
+    // Base
+    beginShape(QUADS);
+    vertex(-half, height / 2, half);
+    vertex(-half, height / 2, -half);
+    vertex(half, height / 2, -half);
+    vertex(half, height / 2, half);
+    endShape();
+    pop();
+}
+
+function drawGem(size) {
+    // Diamond/gem shape - octahedron stretched vertically
+    push();
+    scale(1, 1.5, 1);
+    drawOctahedron(size * 0.7);
+    pop();
+}
+
+function drawStar3D(size) {
+    // 3D star using intersecting tetrahedra effect
+    push();
+    for (var i = 0; i < 3; i++) {
+        rotateX(PI / 3);
+        rotateY(PI / 4);
+        box(size * 0.4, size * 1.5, size * 0.4);
+    }
+    pop();
 }
 
 // Keyboard controls
@@ -527,7 +829,28 @@ function keyPressed() {
         }
     }
 
-    // Number keys 1-6 for shape modes
+    // === NEW: B to toggle bloom ===
+    if (key === 'b' || key === 'B') {
+        bloomEnabled = !bloomEnabled;
+        var bloomBtn = document.getElementById('toggleBloom');
+        if (bloomBtn) {
+            bloomBtn.classList.toggle('active');
+        }
+    }
+
+    // === NEW: M to toggle sound reactive mode ===
+    if (key === 'm' || key === 'M') {
+        soundReactiveMode = !soundReactiveMode;
+        if (soundReactiveMode && !audioSource) {
+            connectAudioSource();
+        }
+        var soundBtn = document.getElementById('toggleSoundReactive');
+        if (soundBtn) {
+            soundBtn.classList.toggle('active');
+        }
+    }
+
+    // Number keys 1-9 for shape modes (expanded)
     var shapeSelect = document.getElementById('shapeType');
     if (key === '1') {
         shapeMode = 'mixed';
@@ -563,6 +886,30 @@ function keyPressed() {
         shapeMode = 'cylinders';
         if (shapeSelect) {
             shapeSelect.value = 'cylinders';
+            shapeSelect.dispatchEvent(new Event('change'));
+        }
+    } else if (key === '7') {
+        shapeMode = 'icosahedron';
+        if (shapeSelect) {
+            shapeSelect.value = 'icosahedron';
+            shapeSelect.dispatchEvent(new Event('change'));
+        }
+    } else if (key === '8') {
+        shapeMode = 'octahedron';
+        if (shapeSelect) {
+            shapeSelect.value = 'octahedron';
+            shapeSelect.dispatchEvent(new Event('change'));
+        }
+    } else if (key === '9') {
+        shapeMode = 'pyramid';
+        if (shapeSelect) {
+            shapeSelect.value = 'pyramid';
+            shapeSelect.dispatchEvent(new Event('change'));
+        }
+    } else if (key === '0') {
+        shapeMode = 'gem';
+        if (shapeSelect) {
+            shapeSelect.value = 'gem';
             shapeSelect.dispatchEvent(new Event('change'));
         }
     }

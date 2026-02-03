@@ -45,6 +45,18 @@
         <div class="toolbar-divider"></div>
 
         <div class="toolbar-section">
+            <span class="toolbar-label">Effects</span>
+            <button id="toggleSoundReactive" class="toolbar-btn" title="Sound Reactive Mode (M)">
+                <i class="fas fa-wave-square"></i>
+            </button>
+            <button id="toggleBloom" class="toolbar-btn" title="Bloom/Glow Effect (B)">
+                <i class="fas fa-sun"></i>
+            </button>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <div class="toolbar-section">
             <span class="toolbar-label">Style</span>
             <button id="randomColors" class="toolbar-btn" title="Random Colors">
                 <i class="fas fa-palette"></i>
@@ -61,10 +73,12 @@
                     <button data-value="fire" class="dropdown-item">Fire</button>
                     <button data-value="ocean" class="dropdown-item">Ocean</button>
                     <button data-value="matrix" class="dropdown-item">Matrix</button>
+                    <button data-value="synthwave" class="dropdown-item">Synthwave</button>
+                    <button data-value="gold" class="dropdown-item">Gold</button>
                 </div>
             </div>
             <div class="toolbar-dropdown">
-                <button class="toolbar-btn dropdown-trigger" title="Shape Mode (1-6)">
+                <button class="toolbar-btn dropdown-trigger" title="Shape Mode (1-0)">
                     <i class="fas fa-shapes"></i>
                 </button>
                 <div class="dropdown-menu" id="shapeDropdown">
@@ -74,6 +88,11 @@
                     <button data-value="spheres" class="dropdown-item">Spheres</button>
                     <button data-value="torus" class="dropdown-item">Torus</button>
                     <button data-value="cylinders" class="dropdown-item">Cylinders</button>
+                    <button data-value="icosahedron" class="dropdown-item">Icosahedron</button>
+                    <button data-value="octahedron" class="dropdown-item">Octahedron</button>
+                    <button data-value="pyramid" class="dropdown-item">Pyramids</button>
+                    <button data-value="gem" class="dropdown-item">Gems</button>
+                    <button data-value="star" class="dropdown-item">Stars</button>
                 </div>
             </div>
         </div>
@@ -136,10 +155,12 @@
                 <div class="help-item"><kbd>X</kbd> Explode</div>
                 <div class="help-item"><kbd>P</kbd> Particles</div>
                 <div class="help-item"><kbd>C</kbd> Colors</div>
+                <div class="help-item"><kbd>B</kbd> Bloom/Glow</div>
+                <div class="help-item"><kbd>M</kbd> Sound Reactive</div>
             </div>
             <div class="help-group">
                 <span class="help-group-title">Shapes</span>
-                <div class="help-item"><kbd>1</kbd>-<kbd>6</kbd> Shape modes</div>
+                <div class="help-item"><kbd>1</kbd>-<kbd>0</kbd> Shape modes</div>
                 <div class="help-item"><kbd>+</kbd><kbd>-</kbd> Speed</div>
             </div>
         </div>
@@ -156,6 +177,11 @@
         <option value="spheres">Spheres Only</option>
         <option value="torus">Torus Only</option>
         <option value="cylinders">Cylinders Only</option>
+        <option value="icosahedron">Icosahedron</option>
+        <option value="octahedron">Octahedron</option>
+        <option value="pyramid">Pyramids</option>
+        <option value="gem">Gems</option>
+        <option value="star">Stars</option>
     </select>
     <select id="colorScheme" style="display:none;">
         <option value="default">White & Teal</option>
@@ -165,6 +191,8 @@
         <option value="fire">Fire</option>
         <option value="ocean">Ocean</option>
         <option value="matrix">Matrix</option>
+        <option value="synthwave">Synthwave</option>
+        <option value="gold">Gold</option>
     </select>
 
     <!-- Canvas Container -->
@@ -194,8 +222,11 @@
                     <li>WASD keyboard controls for precise camera movement</li>
                     <li>Particle effects that float through the scene</li>
                     <li>Explode/collapse animation for the shape formation</li>
-                    <li>7 color schemes and 6 shape types to choose from</li>
+                    <li>9 color schemes and 11 shape types to choose from</li>
                     <li>Pulsing animations and dynamic lighting effects</li>
+                    <li><strong>Sound Reactive Mode</strong> - Shapes pulse to the music beat</li>
+                    <li><strong>Bloom/Glow Effect</strong> - Enhanced lighting and glow</li>
+                    <li><strong>New Shapes</strong> - Icosahedron, Octahedron, Pyramids, Gems, Stars</li>
                 </ul>
 
                 <h3><i class="fas fa-cog"></i> Technical Details</h3>

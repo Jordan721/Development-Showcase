@@ -154,6 +154,38 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // === Sound Reactive button state ===
+    const soundReactiveBtn = document.getElementById('toggleSoundReactive');
+    if (soundReactiveBtn) {
+        soundReactiveBtn.addEventListener('click', function() {
+            this.classList.toggle('active');
+            const icon = this.querySelector('i');
+            if (this.classList.contains('active')) {
+                icon.classList.remove('fa-wave-square');
+                icon.classList.add('fa-music');
+            } else {
+                icon.classList.remove('fa-music');
+                icon.classList.add('fa-wave-square');
+            }
+        });
+    }
+
+    // === Bloom button state ===
+    const bloomBtn = document.getElementById('toggleBloom');
+    if (bloomBtn) {
+        bloomBtn.addEventListener('click', function() {
+            this.classList.toggle('active');
+            const icon = this.querySelector('i');
+            if (this.classList.contains('active')) {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-star');
+            } else {
+                icon.classList.remove('fa-star');
+                icon.classList.add('fa-sun');
+            }
+        });
+    }
+
     // ===== Modal =====
     if (modalClose) {
         modalClose.addEventListener('click', function() {
