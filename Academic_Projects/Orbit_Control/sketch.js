@@ -602,124 +602,59 @@ function drawShape(j, i, colors, pulseScale) {
 // === NEW: Custom Shape Drawing Functions ===
 function drawIcosahedron(size) {
     // Approximate icosahedron using sphere with low detail
-    push();
     sphere(size, 4, 3);
-    pop();
 }
 
 function drawOctahedron(size) {
-    // Draw octahedron (two pyramids)
+    // Octahedron = two cones tip-to-tip
     push();
-    // Top pyramid
-    beginShape(TRIANGLES);
-    // Top vertex
-    var top = [0, -size, 0];
-    var bottom = [0, size, 0];
-    var v1 = [size, 0, 0];
-    var v2 = [0, 0, size];
-    var v3 = [-size, 0, 0];
-    var v4 = [0, 0, -size];
+    // Top cone pointing up
+    translate(0, -size/2, 0);
+    rotateX(PI);
+    cone(size * 0.7, size);
+    pop();
 
-    // Top faces
-    vertex(top[0], top[1], top[2]);
-    vertex(v1[0], v1[1], v1[2]);
-    vertex(v2[0], v2[1], v2[2]);
-
-    vertex(top[0], top[1], top[2]);
-    vertex(v2[0], v2[1], v2[2]);
-    vertex(v3[0], v3[1], v3[2]);
-
-    vertex(top[0], top[1], top[2]);
-    vertex(v3[0], v3[1], v3[2]);
-    vertex(v4[0], v4[1], v4[2]);
-
-    vertex(top[0], top[1], top[2]);
-    vertex(v4[0], v4[1], v4[2]);
-    vertex(v1[0], v1[1], v1[2]);
-
-    // Bottom faces
-    vertex(bottom[0], bottom[1], bottom[2]);
-    vertex(v2[0], v2[1], v2[2]);
-    vertex(v1[0], v1[1], v1[2]);
-
-    vertex(bottom[0], bottom[1], bottom[2]);
-    vertex(v3[0], v3[1], v3[2]);
-    vertex(v2[0], v2[1], v2[2]);
-
-    vertex(bottom[0], bottom[1], bottom[2]);
-    vertex(v4[0], v4[1], v4[2]);
-    vertex(v3[0], v3[1], v3[2]);
-
-    vertex(bottom[0], bottom[1], bottom[2]);
-    vertex(v1[0], v1[1], v1[2]);
-    vertex(v4[0], v4[1], v4[2]);
-
-    endShape();
+    push();
+    // Bottom cone pointing down
+    translate(0, size/2, 0);
+    cone(size * 0.7, size);
     pop();
 }
 
 function drawDodecahedron(size) {
     // Approximate with sphere of medium detail
-    push();
     sphere(size, 5, 4);
-    pop();
 }
 
 function drawPyramid(base, height) {
+    // Use cone with 4 sides for pyramid look
     push();
-    beginShape(TRIANGLES);
-    var half = base / 2;
-
-    // 4 triangular faces
-    // Front
-    vertex(0, -height / 2, 0);
-    vertex(-half, height / 2, half);
-    vertex(half, height / 2, half);
-
-    // Right
-    vertex(0, -height / 2, 0);
-    vertex(half, height / 2, half);
-    vertex(half, height / 2, -half);
-
-    // Back
-    vertex(0, -height / 2, 0);
-    vertex(half, height / 2, -half);
-    vertex(-half, height / 2, -half);
-
-    // Left
-    vertex(0, -height / 2, 0);
-    vertex(-half, height / 2, -half);
-    vertex(-half, height / 2, half);
-
-    endShape();
-
-    // Base
-    beginShape(QUADS);
-    vertex(-half, height / 2, half);
-    vertex(-half, height / 2, -half);
-    vertex(half, height / 2, -half);
-    vertex(half, height / 2, half);
-    endShape();
+    rotateX(PI);
+    cone(base/2, height, 4);
     pop();
 }
 
 function drawGem(size) {
-    // Diamond/gem shape - octahedron stretched vertically
+    // Diamond/gem shape - two cones, top one taller
     push();
-    scale(1, 1.5, 1);
-    drawOctahedron(size * 0.7);
+    // Top part (longer)
+    translate(0, -size * 0.3, 0);
+    rotateX(PI);
+    cone(size * 0.5, size * 0.8, 6);
+    pop();
+
+    push();
+    // Bottom part (shorter point)
+    translate(0, size * 0.4, 0);
+    cone(size * 0.5, size * 0.5, 6);
     pop();
 }
 
 function drawStar3D(size) {
-    // 3D star using intersecting tetrahedra effect
-    push();
-    for (var i = 0; i < 3; i++) {
-        rotateX(PI / 3);
-        rotateY(PI / 4);
-        box(size * 0.4, size * 1.5, size * 0.4);
-    }
-    pop();
+    // 3D star using three intersecting boxes
+    box(size * 1.2, size * 0.3, size * 0.3);
+    box(size * 0.3, size * 1.2, size * 0.3);
+    box(size * 0.3, size * 0.3, size * 1.2);
 }
 
 // Keyboard controls

@@ -84,9 +84,6 @@ body {
     flex-direction: column;
     gap: 4px;
     transition: transform 0.3s ease, opacity 0.3s ease;
-    max-height: calc(100vh - 120px);
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 
 /* Custom scrollbar for toolbar */
@@ -243,6 +240,7 @@ body {
     position: absolute;
     left: 46px;
     top: 0;
+    z-index: 2000;
     background: rgba(15, 15, 26, 0.95);
     backdrop-filter: blur(20px);
     border-radius: 10px;
@@ -637,7 +635,6 @@ canvas:active {
     .floating-toolbar {
         left: 10px;
         padding: 10px 6px;
-        max-height: calc(100vh - 100px);
     }
 
     .toolbar-btn {
@@ -683,7 +680,6 @@ canvas:active {
         bottom: auto;
         transform: none;
         flex-direction: column;
-        max-height: calc(100vh - 100px);
         max-width: none;
     }
 
