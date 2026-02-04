@@ -4,452 +4,562 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Mode Toggle Showcase</title>
+    <title>Dark Mode Implementation Guide</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
-    <!-- Floating Decorative Elements -->
-    <div class="floating-shapes">
-        <div class="shape shape-1"></div>
-        <div class="shape shape-2"></div>
-        <div class="shape shape-3"></div>
-        <div class="shape shape-4"></div>
-    </div>
-
-    <!-- Navigation Bar -->
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-content">
-            <a href="../../index.html" class="nav-back">← Back to Showcase</a>
-            <button class="about-btn" id="about-btn">About This Project</button>
+            <a href="../../index.html" class="nav-back">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+                Back to Showcase
+            </a>
+            <div class="nav-title">
+                <span class="code-tag">&lt;/&gt;</span>
+                Dark Mode Technical Guide
+            </div>
+            <button class="theme-toggle-nav" id="nav-toggle" aria-label="Toggle theme">
+                <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <circle cx="12" cy="12" r="5" />
+                    <path
+                        d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+                </svg>
+                <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+            </button>
         </div>
     </nav>
 
-    <!-- About Modal -->
-    <div class="modal" id="about-modal">
-        <div class="modal-content">
-            <button class="modal-close" id="modal-close">&times;</button>
-            <h2>About This Project</h2>
-            <div class="about-text">
-                <p>This is an <strong>enhanced mockup demonstration</strong> of the dark mode feature I developed during
-                    my internship with <strong>Unadat</strong>, a financial wellness portal, during the pandemic. The
-                    mockup recreates and expands upon the functionality and design patterns implemented for the actual
-                    Unadat portal, with additional interactive features to showcase advanced UX capabilities.</p>
-
-                <h3>The Experience:</h3>
-                <p>Despite working remotely throughout the entire internship, I collaborated closely with the CEO and
-                    creator of Unadat to lead the development of a comprehensive dark mode feature. I optimized mobile
-                    UX, enhanced accessibility, and improved user comfort across devices.</p>
-
-                <p>Through user research and A/B testing, I validated design decisions that resulted in measurable
-                    improvements in user satisfaction and engagement. Working with design and development teams, I
-                    refined the interface, streamlined navigation, and ensured visual consistency while implementing
-                    responsive design principles and performance optimizations to improve load times on mobile
-                    platforms.</p>
-
-                <h3>Key Contributions:</h3>
-                <ul>
-                    <li>Led dark mode development with customizable color schemes for accessibility</li>
-                    <li>Conducted user research and A/B testing to validate design decisions</li>
-                    <li>Optimized mobile UX with responsive design and performance improvements</li>
-                    <li>Collaborated with cross-functional teams on feature specifications and sprint planning</li>
-                    <li>Implemented smooth theme transitions and persistent user preferences</li>
-                </ul>
-
-                <h3>Enhanced Features in This Demo:</h3>
-                <p>This showcase goes beyond the original implementation with advanced interactive features:</p>
-                <ul>
-                    <li><strong>Animated Transitions:</strong> Ripple and wave effects that emanate from toggle points
-                        for visual feedback</li>
-                    <li><strong>Live Code Editor:</strong> Real-time CSS variable display with syntax highlighting
-                        showing changes as they happen</li>
-                    <li><strong>Before/After Comparison:</strong> Interactive slider to compare light and dark modes
-                        side-by-side (desktop and mobile)</li>
-                    <li><strong>Gamification System:</strong> 8 unlockable achievements with notification banners and
-                        progress tracking</li>
-                    <li><strong>Stats Dashboard:</strong> Real-time counters for theme toggles, color changes, and
-                        achievements</li>
-                    <li><strong>Theme Sharing:</strong> Generate unique URLs to share custom color schemes with others
-                    </li>
-                    <li><strong>Theme History:</strong> Visual timeline of up to 12 previous themes with one-click
-                        restoration</li>
-                    <li><strong>Auto-Scheduling:</strong> Time-based automatic switching between light and dark modes
-                    </li>
-                    <li><strong>Advanced Interactions:</strong> Double-click background to toggle, keyboard shortcuts
-                        (Ctrl/Cmd+Shift+D)</li>
-                    <li><strong>Persistent Storage:</strong> All preferences, stats, and history saved locally for
-                        seamless experience</li>
-                </ul>
-
-                <h3>Technologies Used:</h3>
-                <p>Pure HTML, CSS (CSS Custom Properties with advanced animations), and Vanilla JavaScript (ES6+) - no
-                    frameworks required! Features include:</p>
-                <ul>
-                    <li>CSS Grid & Flexbox for responsive layouts</li>
-                    <li>CSS Custom Properties for dynamic theming</li>
-                    <li>LocalStorage API for data persistence</li>
-                    <li>URL Search Params for theme sharing</li>
-                    <li>Touch events for mobile slider support</li>
-                    <li>Keyframe animations and transitions</li>
-                </ul>
-
-                <h3>Design Principles:</h3>
-                <ul>
-                    <li><strong>Progressive Enhancement:</strong> Core functionality works without JavaScript</li>
-                    <li><strong>Mobile-First:</strong> Fully responsive with touch-optimized interactions</li>
-                    <li><strong>Accessibility:</strong> Keyboard navigation, semantic HTML, ARIA labels</li>
-                    <li><strong>Performance:</strong> Optimized animations, debounced events, efficient DOM updates</li>
-                    <li><strong>User Experience:</strong> Immediate feedback, smooth transitions, intuitive controls
-                    </li>
-                </ul>
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Interactive Technical Demo</div>
+            <h1>Building Dark Mode</h1>
+            <p class="hero-subtitle">Watch the code change in real-time as you toggle themes. Learn the technical
+                implementation behind modern dark mode systems.</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-value">3</span>
+                    <span class="stat-label">Methods</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="lines-changed">0</span>
+                    <span class="stat-label">Lines Changed</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="toggle-count">0</span>
+                    <span class="stat-label">Toggles</span>
+                </div>
             </div>
         </div>
-    </div>
+        <div class="hero-visual">
+            <div class="code-window floating">
+                <div class="window-header">
+                    <span class="dot red"></span>
+                    <span class="dot yellow"></span>
+                    <span class="dot green"></span>
+                    <span class="filename">theme.css</span>
+                </div>
+                <pre class="window-code"><code><span class="line"><span class="selector">:root</span> {</span>
+<span class="line">  <span class="property">--bg</span>: <span class="value" id="hero-bg">#ffffff</span>;</span>
+<span class="line">  <span class="property">--text</span>: <span class="value" id="hero-text">#1a1a2e</span>;</span>
+<span class="line">}</span></code></pre>
+            </div>
+        </div>
+    </header>
 
-    <div class="container">
-        <header>
-            <h1>Dark Mode Toggle Methods</h1>
-            <p class="subtitle">Explore different ways to implement dark/light mode with customizable colors</p>
-        </header>
+    <main class="container">
+        <!-- Method 1: CSS Variables -->
+        <section class="method-section" id="css-variables">
+            <div class="method-header">
+                <div class="method-number">01</div>
+                <div class="method-info">
+                    <h2>CSS Custom Properties</h2>
+                    <p>The modern approach using CSS variables that cascade through the DOM</p>
+                </div>
+                <div class="method-toggle">
+                    <button class="toggle-btn" id="method1-toggle">
+                        <span class="toggle-track">
+                            <span class="toggle-thumb"></span>
+                        </span>
+                        <span class="toggle-label">Toggle Theme</span>
+                    </button>
+                </div>
+            </div>
 
-        <!-- Color Customization Panel -->
-        <section class="color-panel">
-            <h2>Customize Theme Colors</h2>
-            <div class="color-controls">
-                <div class="color-group">
-                    <h3>Light Mode</h3>
-                    <div class="color-inputs">
-                        <div class="color-input">
-                            <label for="light-bg">Background</label>
-                            <input type="color" id="light-bg" value="#ffffff">
+            <div class="split-view">
+                <div class="code-panel">
+                    <div class="code-tabs">
+                        <button class="tab active" data-tab="css1">CSS</button>
+                        <button class="tab" data-tab="js1">JavaScript</button>
+                    </div>
+                    <div class="code-content">
+                        <div class="code-block active" id="css1">
+                            <div class="code-header">
+                                <span class="filename">variables.css</span>
+                                <span class="code-badge">Live</span>
+                            </div>
+                            <pre class="code"><code><span class="comment">/* Define theme variables */</span>
+<span class="selector">:root</span> {
+  <span class="property">--background</span>: <span class="value animated" id="m1-bg">#ffffff</span>;
+  <span class="property">--foreground</span>: <span class="value animated" id="m1-fg">#1a1a2e</span>;
+  <span class="property">--primary</span>: <span class="value animated" id="m1-primary">#6366f1</span>;
+  <span class="property">--card</span>: <span class="value animated" id="m1-card">#f8fafc</span>;
+  <span class="property">--border</span>: <span class="value animated" id="m1-border">#e2e8f0</span>;
+}
+
+<span class="comment">/* Dark mode override */</span>
+<span class="selector">[data-theme="dark"]</span> {
+  <span class="property">--background</span>: <span class="value">#0f0f1a</span>;
+  <span class="property">--foreground</span>: <span class="value">#f1f5f9</span>;
+  <span class="property">--primary</span>: <span class="value">#818cf8</span>;
+  <span class="property">--card</span>: <span class="value">#1e1e2e</span>;
+  <span class="property">--border</span>: <span class="value">#2e2e3e</span>;
+}
+
+<span class="comment">/* Apply variables */</span>
+<span class="selector">body</span> {
+  <span class="property">background</span>: <span class="function">var</span>(<span class="value">--background</span>);
+  <span class="property">color</span>: <span class="function">var</span>(<span class="value">--foreground</span>);
+}</code></pre>
                         </div>
-                        <div class="color-input">
-                            <label for="light-text">Text</label>
-                            <input type="color" id="light-text" value="#1a1a1a">
-                        </div>
-                        <div class="color-input">
-                            <label for="light-accent">Accent</label>
-                            <input type="color" id="light-accent" value="#3b82f6">
+                        <div class="code-block" id="js1">
+                            <div class="code-header">
+                                <span class="filename">theme.js</span>
+                                <span class="code-badge">Live</span>
+                            </div>
+                            <pre class="code"><code><span class="comment">// Toggle theme attribute</span>
+<span class="keyword">function</span> <span class="function">toggleTheme</span>() {
+  <span class="keyword">const</span> html = <span class="variable">document</span>.<span class="property">documentElement</span>;
+  <span class="keyword">const</span> current = html.<span class="function">getAttribute</span>(<span class="string">'data-theme'</span>);
+
+  <span class="keyword">const</span> next = current === <span class="string">'dark'</span>
+    ? <span class="string">'light'</span>
+    : <span class="string">'dark'</span>;
+
+  html.<span class="function">setAttribute</span>(<span class="string">'data-theme'</span>, next);
+
+  <span class="comment">// Persist preference</span>
+  <span class="variable">localStorage</span>.<span class="function">setItem</span>(<span class="string">'theme'</span>, next);
+}
+
+<span class="comment">// Current state:</span>
+<span class="variable">document</span>.<span class="property">documentElement</span>
+  .<span class="function">getAttribute</span>(<span class="string">'data-theme'</span>)
+<span class="comment">// Returns: <span class="highlight" id="m1-state">"light"</span></span></code></pre>
                         </div>
                     </div>
                 </div>
-                <div class="color-group">
-                    <h3>Dark Mode</h3>
-                    <div class="color-inputs">
-                        <div class="color-input">
-                            <label for="dark-bg">Background</label>
-                            <input type="color" id="dark-bg" value="#1a1a1a">
+                <div class="preview-panel" id="preview1">
+                    <div class="preview-header">
+                        <span>Live Preview</span>
+                        <span class="preview-indicator"></span>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-card">
+                            <h3>Card Component</h3>
+                            <p>This card responds to CSS variable changes in real-time.</p>
+                            <button class="preview-button">Action</button>
                         </div>
-                        <div class="color-input">
-                            <label for="dark-text">Text</label>
-                            <input type="color" id="dark-text" value="#f5f5f5">
-                        </div>
-                        <div class="color-input">
-                            <label for="dark-accent">Accent</label>
-                            <input type="color" id="dark-accent" value="#60a5fa">
+                        <div class="preview-text">
+                            <p>Text automatically adapts to the theme using <code>var(--foreground)</code></p>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="method-explanation">
+                <h4>How it works:</h4>
+                <ol>
+                    <li><span class="step">1</span> Define color tokens as CSS custom properties on <code>:root</code>
+                    </li>
+                    <li><span class="step">2</span> Override values using attribute selectors like
+                        <code>[data-theme="dark"]</code></li>
+                    <li><span class="step">3</span> Toggle the attribute with JavaScript to instantly cascade changes
+                    </li>
+                </ol>
+            </div>
         </section>
 
-        <!-- Toggle Methods -->
-        <section class="toggles-section">
-            <h2>Toggle Methods</h2>
-
-            <!-- Method 1: Button Toggle -->
-            <div class="toggle-method">
-                <div class="method-header">
-                    <h3>1. Button Toggle <span class="method-badge">Popular</span></h3>
-                    <p>Simple button that switches between modes</p>
+        <!-- Method 2: Class Toggle -->
+        <section class="method-section" id="class-toggle">
+            <div class="method-header">
+                <div class="method-number">02</div>
+                <div class="method-info">
+                    <h2>Class Toggle Method</h2>
+                    <p>Traditional approach using class names to switch between themes</p>
                 </div>
-                <button class="toggle-btn" id="btn-toggle">
-                    <span class="toggle-icon">🌙</span>
-                    <span class="toggle-text">Dark Mode</span>
-                </button>
+                <div class="method-toggle">
+                    <button class="toggle-btn" id="method2-toggle">
+                        <span class="toggle-track">
+                            <span class="toggle-thumb"></span>
+                        </span>
+                        <span class="toggle-label">Toggle Theme</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- Method 2: Switch Toggle -->
-            <div class="toggle-method">
-                <div class="method-header">
-                    <h3>2. Switch Toggle <span class="method-badge badge-modern">Modern</span></h3>
-                    <p>iOS-style switch with smooth animation</p>
-                </div>
-                <label class="switch">
-                    <input type="checkbox" id="switch-toggle">
-                    <span class="slider">
-                        <span class="slider-icon light">☀️</span>
-                        <span class="slider-icon dark">🌙</span>
-                    </span>
-                </label>
-            </div>
+            <div class="split-view">
+                <div class="code-panel">
+                    <div class="code-tabs">
+                        <button class="tab active" data-tab="css2">CSS</button>
+                        <button class="tab" data-tab="js2">JavaScript</button>
+                        <button class="tab" data-tab="html2">HTML</button>
+                    </div>
+                    <div class="code-content">
+                        <div class="code-block active" id="css2">
+                            <div class="code-header">
+                                <span class="filename">theme.css</span>
+                                <span class="code-badge">Live</span>
+                            </div>
+                            <pre class="code"><code><span class="comment">/* Light theme (default) */</span>
+<span class="selector">body</span> {
+  <span class="property">background-color</span>: <span class="value">#ffffff</span>;
+  <span class="property">color</span>: <span class="value">#1a1a2e</span>;
+}
 
-            <!-- Method 3: Checkbox Toggle -->
-            <div class="toggle-method">
-                <div class="method-header">
-                    <h3>3. Checkbox Toggle</h3>
-                    <p>Traditional checkbox with custom styling</p>
-                </div>
-                <label class="checkbox-toggle">
-                    <input type="checkbox" id="checkbox-toggle">
-                    <span class="checkmark"></span>
-                    <span class="label-text">Enable Dark Mode</span>
-                </label>
-            </div>
+<span class="comment">/* Dark theme class */</span>
+<span class="selector">body.dark-mode</span> {
+  <span class="property">background-color</span>: <span class="value">#0f0f1a</span>;
+  <span class="property">color</span>: <span class="value">#f1f5f9</span>;
+}
 
-            <!-- Method 4: Icon Toggle -->
-            <div class="toggle-method">
-                <div class="method-header">
-                    <h3>4. Icon Toggle</h3>
-                    <p>Click the icon to toggle with rotation animation</p>
-                </div>
-                <button class="icon-toggle" id="icon-toggle">
-                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
-                </button>
-            </div>
+<span class="selector">.card</span> {
+  <span class="property">background</span>: <span class="value">#f8fafc</span>;
+  <span class="property">border</span>: <span class="value">1px solid #e2e8f0</span>;
+}
 
-            <!-- Method 5: Dropdown Toggle -->
-            <div class="toggle-method">
-                <div class="method-header">
-                    <h3>5. Dropdown Toggle</h3>
-                    <p>Select from a dropdown menu</p>
-                </div>
-                <select class="dropdown-toggle" id="dropdown-toggle">
-                    <option value="light">Light Mode</option>
-                    <option value="dark">Dark Mode</option>
-                    <option value="auto">Auto (System)</option>
-                </select>
-            </div>
-
-            <!-- Method 6: Radio Toggle -->
-            <div class="toggle-method">
-                <div class="method-header">
-                    <h3>6. Radio Toggle</h3>
-                    <p>Radio buttons with visual cards</p>
-                </div>
-                <div class="radio-group">
-                    <label class="radio-card">
-                        <input type="radio" name="theme" value="light" id="radio-light">
-                        <div class="radio-content">
-                            <span class="radio-icon">☀️</span>
-                            <span class="radio-label">Light</span>
+<span class="selector">body.dark-mode .card</span> {
+  <span class="property">background</span>: <span class="value">#1e1e2e</span>;
+  <span class="property">border-color</span>: <span class="value">#2e2e3e</span>;
+}</code></pre>
                         </div>
-                    </label>
-                    <label class="radio-card">
-                        <input type="radio" name="theme" value="dark" id="radio-dark">
-                        <div class="radio-content">
-                            <span class="radio-icon">🌙</span>
-                            <span class="radio-label">Dark</span>
+                        <div class="code-block" id="js2">
+                            <div class="code-header">
+                                <span class="filename">toggle.js</span>
+                                <span class="code-badge">Live</span>
+                            </div>
+                            <pre class="code"><code><span class="comment">// Toggle dark mode class</span>
+<span class="keyword">const</span> body = <span class="variable">document</span>.<span class="property">body</span>;
+
+<span class="keyword">function</span> <span class="function">toggleDarkMode</span>() {
+  body.<span class="property">classList</span>.<span class="function">toggle</span>(<span class="string">'dark-mode'</span>);
+
+  <span class="keyword">const</span> isDark = body.<span class="property">classList</span>
+    .<span class="function">contains</span>(<span class="string">'dark-mode'</span>);
+
+  <span class="variable">localStorage</span>.<span class="function">setItem</span>(
+    <span class="string">'darkMode'</span>,
+    isDark
+  );
+}
+
+<span class="comment">// Current class list:</span>
+body.<span class="property">classList</span>.<span class="function">toString</span>()
+<span class="comment">// Returns: <span class="highlight" id="m2-classes">""</span></span></code></pre>
                         </div>
-                    </label>
+                        <div class="code-block" id="html2">
+                            <div class="code-header">
+                                <span class="filename">index.html</span>
+                                <span class="code-badge">Live</span>
+                            </div>
+                            <pre
+                                class="code"><code><span class="tag">&lt;body</span> <span class="attribute">class</span>=<span class="string" id="m2-body-class">""</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="attribute">class</span>=<span class="string">"card"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;h3&gt;</span>Card Title<span class="tag">&lt;/h3&gt;</span>
+    <span class="tag">&lt;p&gt;</span>Content here<span class="tag">&lt;/p&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+
+<span class="comment">&lt;!-- DOM Inspector --&gt;</span>
+<span class="comment">&lt;!-- body element: --&gt;</span>
+<span class="tag">&lt;body</span> <span class="attribute">class</span>=<span class="string highlight" id="m2-inspector">""</span><span class="tag">&gt;</span></code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="preview-panel" id="preview2">
+                    <div class="preview-header">
+                        <span>Live Preview</span>
+                        <span class="preview-indicator"></span>
+                    </div>
+                    <div class="preview-content">
+                        <div class="preview-card">
+                            <h3>User Profile</h3>
+                            <p>The <code>.dark-mode</code> class cascades to all child elements.</p>
+                            <div class="preview-avatar"></div>
+                        </div>
+                        <div class="preview-input-group">
+                            <input type="text" placeholder="Email address" class="preview-input">
+                            <button class="preview-button">Subscribe</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="method-explanation">
+                <h4>How it works:</h4>
+                <ol>
+                    <li><span class="step">1</span> Define default light theme styles on base selectors</li>
+                    <li><span class="step">2</span> Create <code>.dark-mode</code> class with override styles</li>
+                    <li><span class="step">3</span> Use <code>classList.toggle()</code> to add/remove the class</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Method 3: System Preference -->
+        <section class="method-section" id="system-preference">
+            <div class="method-header">
+                <div class="method-number">03</div>
+                <div class="method-info">
+                    <h2>System Preference Detection</h2>
+                    <p>Automatically match the user's OS theme preference using media queries</p>
+                </div>
+                <div class="method-toggle">
+                    <div class="system-indicator" id="system-indicator">
+                        <span class="indicator-dot"></span>
+                        <span id="system-pref-text">Detecting...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="split-view">
+                <div class="code-panel">
+                    <div class="code-tabs">
+                        <button class="tab active" data-tab="css3">CSS</button>
+                        <button class="tab" data-tab="js3">JavaScript</button>
+                    </div>
+                    <div class="code-content">
+                        <div class="code-block active" id="css3">
+                            <div class="code-header">
+                                <span class="filename">auto-theme.css</span>
+                                <span class="code-badge system">System</span>
+                            </div>
+                            <pre
+                                class="code"><code><span class="comment">/* Default light theme */</span>
+<span class="selector">:root</span> {
+  <span class="property">--bg</span>: <span class="value">#ffffff</span>;
+  <span class="property">--text</span>: <span class="value">#1a1a2e</span>;
+}
+
+<span class="comment">/* Auto-detect dark preference */</span>
+<span class="at-rule">@media</span> (<span class="media">prefers-color-scheme: dark</span>) {
+  <span class="selector">:root</span> {
+    <span class="property">--bg</span>: <span class="value">#0f0f1a</span>;
+    <span class="property">--text</span>: <span class="value">#f1f5f9</span>;
+  }
+}
+
+<span class="comment">/* Media query status: */</span>
+<span class="comment">/* <span class="highlight" id="m3-media-status">prefers-color-scheme: light</span> */</span></code></pre>
+                        </div>
+                        <div class="code-block" id="js3">
+                            <div class="code-header">
+                                <span class="filename">detect.js</span>
+                                <span class="code-badge system">System</span>
+                            </div>
+                            <pre class="code"><code><span class="comment">// Check system preference</span>
+<span class="keyword">const</span> query = <span class="variable">window</span>.<span class="function">matchMedia</span>(
+  <span class="string">'(prefers-color-scheme: dark)'</span>
+);
+
+<span class="keyword">const</span> isDark = query.<span class="property">matches</span>;
+<span class="comment">// Currently: <span class="highlight" id="m3-matches">false</span></span>
+
+<span class="comment">// Listen for changes</span>
+query.<span class="function">addEventListener</span>(<span class="string">'change'</span>, (e) => {
+  <span class="variable">console</span>.<span class="function">log</span>(
+    <span class="string">'Theme changed:'</span>,
+    e.<span class="property">matches</span> ? <span class="string">'dark'</span> : <span class="string">'light'</span>
+  );
+});
+
+<span class="comment">// Query object:</span>
+{
+  <span class="property">media</span>: <span class="string">"(prefers-color-scheme: dark)"</span>,
+  <span class="property">matches</span>: <span class="highlight" id="m3-query-matches">false</span>
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="preview-panel" id="preview3">
+                    <div class="preview-header">
+                        <span>System Detection</span>
+                        <span class="preview-indicator system"></span>
+                    </div>
+                    <div class="preview-content">
+                        <div class="system-display">
+                            <div class="os-icon" id="os-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" />
+                                    <path d="M8 21h8M12 17v4" />
+                                </svg>
+                            </div>
+                            <div class="system-info">
+                                <span class="system-label">Your OS Preference</span>
+                                <span class="system-value" id="os-preference">Light Mode</span>
+                            </div>
+                        </div>
+                        <div class="tip-box">
+                            <span class="tip-icon">i</span>
+                            <p>Change your system theme settings to see this update automatically!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="method-explanation">
+                <h4>How it works:</h4>
+                <ol>
+                    <li><span class="step">1</span> CSS media query <code>prefers-color-scheme</code> detects OS setting
+                    </li>
+                    <li><span class="step">2</span> JavaScript <code>matchMedia()</code> provides programmatic access
+                    </li>
+                    <li><span class="step">3</span> Event listener responds to real-time OS theme changes</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- Live DOM Inspector -->
+        <section class="inspector-section">
+            <div class="inspector-header">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                    </svg>
+                    Live DOM Inspector
+                </h2>
+                <p>Real-time view of the document's current state</p>
+            </div>
+            <div class="inspector-content">
+                <div class="inspector-row">
+                    <span class="inspector-label">document.documentElement</span>
+                    <code class="inspector-value" id="inspector-html">&lt;html data-theme="light"&gt;</code>
+                </div>
+                <div class="inspector-row">
+                    <span class="inspector-label">document.body.classList</span>
+                    <code class="inspector-value" id="inspector-body">DOMTokenList []</code>
+                </div>
+                <div class="inspector-row">
+                    <span class="inspector-label">getComputedStyle --background</span>
+                    <code class="inspector-value" id="inspector-bg">#ffffff</code>
+                </div>
+                <div class="inspector-row">
+                    <span class="inspector-label">getComputedStyle --foreground</span>
+                    <code class="inspector-value" id="inspector-fg">#1a1a2e</code>
+                </div>
+                <div class="inspector-row">
+                    <span class="inspector-label">localStorage.theme</span>
+                    <code class="inspector-value" id="inspector-storage">"light"</code>
                 </div>
             </div>
         </section>
 
-        <!-- Sample Content -->
-        <section class="sample-content">
-            <h2>Sample Content</h2>
-            <div class="content-grid">
-                <article class="content-card">
-                    <h3>Typography Example</h3>
-                    <p>This is a paragraph of text showing how the theme affects readability. Notice how the colors
-                        change based on the selected mode.</p>
-                    <p><strong>Bold text</strong> and <em>italic text</em> also adapt to the theme.</p>
-                </article>
-
-                <article class="content-card">
-                    <h3>Interactive Elements</h3>
-                    <button class="sample-button primary">Primary Button</button>
-                    <button class="sample-button secondary">Secondary Button</button>
-                    <input type="text" class="sample-input" placeholder="Input field example">
-                </article>
-
-                <article class="content-card">
-                    <h3>Lists & Links</h3>
-                    <ul>
-                        <li><a href="#" class="sample-link">Example link 1</a></li>
-                        <li><a href="#" class="sample-link">Example link 2</a></li>
-                        <li><a href="#" class="sample-link">Example link 3</a></li>
-                    </ul>
-                </article>
-
-                <article class="content-card highlight">
-                    <h3>Highlighted Card</h3>
-                    <p>This card has an accent background to show how accent colors work in different modes.</p>
-                </article>
-            </div>
-        </section>
-
-        <!-- Info Panel -->
-        <section class="info-panel">
-            <h2>Current Theme Information</h2>
-            <div class="info-grid">
-                <div class="info-item">
-                    <span class="info-label">Active Mode:</span>
-                    <span class="info-value" id="current-mode">Light</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Background Color:</span>
-                    <span class="info-value" id="current-bg">#ffffff</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Text Color:</span>
-                    <span class="info-value" id="current-text">#1a1a1a</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">Accent Color:</span>
-                    <span class="info-value" id="current-accent">#3b82f6</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Before/After Comparison Slider -->
+        <!-- Implementation Comparison -->
         <section class="comparison-section">
-            <h2>Compare Light & Dark Mode</h2>
-            <p class="subtitle">Drag the slider to compare both themes side-by-side</p>
-            <div class="comparison-container" id="comparison-container">
-                <div class="comparison-side light-side">
-                    <div class="comparison-content">
-                        <h3>Light Mode</h3>
-                        <div class="comparison-sample">
-                            <p>Clean and bright interface perfect for daytime use</p>
-                        </div>
-                    </div>
+            <h2>Implementation Comparison</h2>
+            <div class="comparison-table">
+                <div class="comparison-header">
+                    <div class="col">Feature</div>
+                    <div class="col">CSS Variables</div>
+                    <div class="col">Class Toggle</div>
+                    <div class="col">System Pref</div>
                 </div>
-                <div class="comparison-side dark-side" id="dark-side">
-                    <div class="comparison-content">
-                        <h3>Dark Mode</h3>
-                        <div class="comparison-sample">
-                            <p>Eye-friendly design ideal for low-light environments</p>
-                        </div>
-                    </div>
+                <div class="comparison-row">
+                    <div class="col feature">Browser Support</div>
+                    <div class="col"><span class="check partial">95%+</span></div>
+                    <div class="col"><span class="check full">99%+</span></div>
+                    <div class="col"><span class="check partial">93%+</span></div>
                 </div>
-                <div class="comparison-slider" id="comparison-slider"></div>
-            </div>
-        </section>
-
-        <!-- Live Code Editor -->
-        <section class="code-editor-section">
-            <h2>Live CSS Code</h2>
-            <p class="subtitle">See the CSS variables update in real-time as you customize colors</p>
-            <div class="code-display" id="code-display">
-                <div class="code-line">
-                    <span class="line-number">1</span>
-                    <span><span class="code-keyword">body</span>.<span class="code-property">dark-mode</span> {</span>
+                <div class="comparison-row">
+                    <div class="col feature">Performance</div>
+                    <div class="col"><span class="rating">Excellent</span></div>
+                    <div class="col"><span class="rating">Good</span></div>
+                    <div class="col"><span class="rating">Excellent</span></div>
                 </div>
-                <div class="code-line">
-                    <span class="line-number">2</span>
-                    <span> <span class="code-property">--bg</span>: <span class="code-value"
-                            id="code-bg">#ffffff</span>;</span>
+                <div class="comparison-row">
+                    <div class="col feature">Dynamic Updates</div>
+                    <div class="col"><span class="check full">Yes</span></div>
+                    <div class="col"><span class="check full">Yes</span></div>
+                    <div class="col"><span class="check auto">Auto</span></div>
                 </div>
-                <div class="code-line">
-                    <span class="line-number">3</span>
-                    <span> <span class="code-property">--text</span>: <span class="code-value"
-                            id="code-text">#1a1a1a</span>;</span>
+                <div class="comparison-row">
+                    <div class="col feature">User Control</div>
+                    <div class="col"><span class="check full">Manual</span></div>
+                    <div class="col"><span class="check full">Manual</span></div>
+                    <div class="col"><span class="check auto">OS Only</span></div>
                 </div>
-                <div class="code-line">
-                    <span class="line-number">4</span>
-                    <span> <span class="code-property">--accent</span>: <span class="code-value"
-                            id="code-accent">#3b82f6</span>;</span>
-                </div>
-                <div class="code-line">
-                    <span class="line-number">5</span>
-                    <span>}</span>
+                <div class="comparison-row">
+                    <div class="col feature">Specificity Issues</div>
+                    <div class="col"><span class="check full">None</span></div>
+                    <div class="col"><span class="check partial">Some</span></div>
+                    <div class="col"><span class="check full">None</span></div>
                 </div>
             </div>
         </section>
 
-        <!-- Achievements & Gamification -->
-        <section class="achievements-section">
-            <h2>Achievements</h2>
-            <p class="subtitle">Unlock badges by exploring different features</p>
+        <!-- About Section -->
+        <section class="about-section">
+            <div class="about-content">
+                <h2>About This Project</h2>
+                <p class="about-intro">This technical demonstration showcases the dark mode feature I developed during my internship with <strong>Unadat</strong>, a financial wellness portal. Working remotely throughout the pandemic, I collaborated closely with the CEO to lead the development of a comprehensive theming system.</p>
 
-            <div class="stats-section">
-                <div class="stat-card">
-                    <span class="stat-value" id="toggle-count">0</span>
-                    <span class="stat-label">Theme Toggles</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-value" id="color-changes">0</span>
-                    <span class="stat-label">Color Changes</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-value" id="achievements-unlocked">0</span>
-                    <span class="stat-label">Achievements</span>
-                </div>
-            </div>
+                <div class="about-grid">
+                    <div class="about-card">
+                        <h3>The Experience</h3>
+                        <p>Through user research and A/B testing, I validated design decisions that resulted in measurable improvements in user satisfaction and engagement. I worked with design and development teams to refine the interface, streamline navigation, and ensure visual consistency while implementing responsive design principles.</p>
+                    </div>
 
-            <div class="achievements-grid" id="achievements-grid">
-                <!-- Achievements will be populated by JavaScript -->
-            </div>
+                    <div class="about-card">
+                        <h3>Key Contributions</h3>
+                        <ul>
+                            <li>Led dark mode development with customizable color schemes</li>
+                            <li>Conducted user research and A/B testing to validate decisions</li>
+                            <li>Optimized mobile UX with responsive design improvements</li>
+                            <li>Implemented smooth theme transitions and persistent preferences</li>
+                            <li>Collaborated on feature specifications and sprint planning</li>
+                        </ul>
+                    </div>
 
-            <div class="share-section">
-                <h3>Share Your Custom Theme</h3>
-                <p>Create a unique URL to share your custom color scheme with others</p>
-                <div class="share-controls">
-                    <input type="text" class="share-url" id="share-url" readonly
-                        placeholder="Click 'Generate Link' to create shareable URL">
-                    <button class="share-btn" id="generate-link-btn">Generate Link</button>
-                    <button class="copy-btn" id="copy-link-btn">Copy</button>
-                    <span class="copy-success" id="copy-success" style="display: none;">Copied!</span>
+                    <div class="about-card">
+                        <h3>Design Principles</h3>
+                        <ul>
+                            <li><strong>Progressive Enhancement:</strong> Core functionality works without JS</li>
+                            <li><strong>Mobile-First:</strong> Fully responsive with touch-optimized controls</li>
+                            <li><strong>Accessibility:</strong> Keyboard navigation and ARIA labels</li>
+                            <li><strong>Performance:</strong> Optimized animations and efficient DOM updates</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
 
-            <div class="history-section">
-                <h3>Theme History</h3>
-                <p>Click on a previous theme to restore it</p>
-                <div class="history-grid" id="history-grid">
-                    <!-- Theme history will be populated by JavaScript -->
+                <div class="tech-stack">
+                    <span class="tech-tag">CSS Custom Properties</span>
+                    <span class="tech-tag">JavaScript ES6+</span>
+                    <span class="tech-tag">LocalStorage API</span>
+                    <span class="tech-tag">Media Queries</span>
+                    <span class="tech-tag">DOM Manipulation</span>
+                    <span class="tech-tag">CSS Grid & Flexbox</span>
+                    <span class="tech-tag">Keyframe Animations</span>
                 </div>
             </div>
         </section>
+    </main>
 
-        <!-- Advanced Interactions -->
-        <section class="info-panel">
-            <h2>Advanced Features</h2>
-            <div class="schedule-section">
-                <h3>Auto Theme Switching</h3>
-                <p>Automatically switch between light and dark mode based on time of day</p>
-                <div class="schedule-controls">
-                    <div class="time-input-group">
-                        <label for="light-start-time">Light Mode Starts:</label>
-                        <input type="time" class="time-input" id="light-start-time" value="07:00">
-                    </div>
-                    <div class="time-input-group">
-                        <label for="dark-start-time">Dark Mode Starts:</label>
-                        <input type="time" class="time-input" id="dark-start-time" value="19:00">
-                    </div>
-                </div>
-                <div class="schedule-toggle">
-                    <label class="checkbox-toggle">
-                        <input type="checkbox" id="auto-schedule-toggle">
-                        <span class="checkmark"></span>
-                        <span class="label-text">Enable Auto-Switching</span>
-                    </label>
-                </div>
-                <span class="schedule-status" id="schedule-status" style="display: none;">Auto-switching enabled</span>
-            </div>
-            <div
-                style="margin-top: 30px; padding: 20px; background: var(--card-bg); border-radius: 8px; border: 2px solid var(--border);">
-                <h3 style="margin-bottom: 10px;">Keyboard Shortcuts & Hidden Features</h3>
-                <ul style="list-style: none; padding: 0;">
-                    <li style="padding: 8px 0;">⌨️ <strong>Ctrl/Cmd + Shift + D</strong> - Toggle dark mode</li>
-                    <li style="padding: 8px 0;">🖱️ <strong>Double-click background</strong> - Quick toggle theme</li>
-                </ul>
-            </div>
-        </section>
-    </div>
+    <footer class="footer">
+        <p>Built with vanilla HTML, CSS & JavaScript</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
