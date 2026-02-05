@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithm Arena</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="background-effects">
+        <div class="grid-overlay"></div>
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+
+    <header>
+        <a href="../../index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Showcase</span>
+        </a>
+        <div class="logo">
+            <i class="fas fa-trophy"></i>
+            <span>Algorithm Arena</span>
+        </div>
+        <nav>
+            <button class="nav-btn active" data-section="sorting">
+                <i class="fas fa-sort"></i> Sorting
+            </button>
+            <button class="nav-btn" data-section="searching">
+                <i class="fas fa-search"></i> Searching
+            </button>
+            <button class="nav-btn" data-section="learn">
+                <i class="fas fa-book"></i> Learn
+            </button>
+            <button class="nav-btn" data-section="analytics">
+                <i class="fas fa-chart-bar"></i> Analytics
+            </button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Sorting Section -->
+        <section id="sorting" class="section active">
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label>Algorithm</label>
+                    <select id="sort-algorithm">
+                        <option value="bubble">Bubble Sort</option>
+                        <option value="selection">Selection Sort</option>
+                        <option value="insertion">Insertion Sort</option>
+                        <option value="merge">Merge Sort</option>
+                        <option value="quick">Quick Sort</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Array Size: <span id="size-value">30</span></label>
+                    <input type="range" id="array-size" min="10" max="100" value="30">
+                </div>
+                <div class="control-group">
+                    <label>Speed: <span id="speed-value">50</span>ms</label>
+                    <input type="range" id="speed" min="1" max="200" value="50">
+                </div>
+                <div class="button-group">
+                    <button id="generate-btn" class="btn btn-secondary">
+                        <i class="fas fa-random"></i> Generate
+                    </button>
+                    <button id="sort-btn" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Sort
+                    </button>
+                    <button id="stop-btn" class="btn btn-danger" disabled>
+                        <i class="fas fa-stop"></i> Stop
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Comparisons: <strong id="comparisons">0</strong></span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-arrows-alt-v"></i>
+                    <span>Swaps: <strong id="swaps">0</strong></span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-clock"></i>
+                    <span>Time: <strong id="time">0.00</strong>s</span>
+                </div>
+            </div>
+
+            <div class="visualizer-container">
+                <div id="sorting-visualizer" class="visualizer"></div>
+            </div>
+
+            <div class="info-panel" id="sort-info">
+                <h3><i class="fas fa-info-circle"></i> Bubble Sort</h3>
+                <p>Repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong
+                    order.</p>
+                <div class="complexity">
+                    <span><strong>Time:</strong> O(n²)</span>
+                    <span><strong>Space:</strong> O(1)</span>
+                    <span><strong>Stable:</strong> Yes</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Searching Section -->
+        <section id="searching" class="section">
+            <div class="controls-panel">
+                <div class="control-group">
+                    <label>Algorithm</label>
+                    <select id="search-algorithm">
+                        <option value="linear">Linear Search</option>
+                        <option value="binary">Binary Search</option>
+                        <option value="jump">Jump Search</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Array Size: <span id="search-size-value">20</span></label>
+                    <input type="range" id="search-array-size" min="10" max="50" value="20">
+                </div>
+                <div class="control-group">
+                    <label>Target Value</label>
+                    <input type="number" id="search-target" value="42" min="1" max="100">
+                </div>
+                <div class="control-group">
+                    <label>Speed: <span id="search-speed-value">200</span>ms</label>
+                    <input type="range" id="search-speed" min="50" max="500" value="200">
+                </div>
+                <div class="button-group">
+                    <button id="search-generate-btn" class="btn btn-secondary">
+                        <i class="fas fa-random"></i> Generate
+                    </button>
+                    <button id="search-btn" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat">
+                    <i class="fas fa-eye"></i>
+                    <span>Steps: <strong id="search-steps">0</strong></span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-bullseye"></i>
+                    <span>Target: <strong id="target-display">42</strong></span>
+                </div>
+                <div class="stat">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Found at: <strong id="found-index">-</strong></span>
+                </div>
+            </div>
+
+            <div class="visualizer-container">
+                <div id="searching-visualizer" class="visualizer search-visualizer"></div>
+            </div>
+
+            <div class="info-panel" id="search-info">
+                <h3><i class="fas fa-info-circle"></i> Linear Search</h3>
+                <p>Sequentially checks each element of the list until a match is found or the whole list has been
+                    searched.</p>
+                <div class="complexity">
+                    <span><strong>Time:</strong> O(n)</span>
+                    <span><strong>Space:</strong> O(1)</span>
+                    <span><strong>Sorted Required:</strong> No</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learn Section -->
+        <section id="learn" class="section">
+            <div class="learn-container">
+                <div class="learn-card">
+                    <div class="card-icon sorting-icon">
+                        <i class="fas fa-sort-amount-down"></i>
+                    </div>
+                    <h3>Sorting Algorithms</h3>
+                    <div class="algorithm-list">
+                        <div class="algo-item" data-algo="bubble">
+                            <h4>Bubble Sort</h4>
+                            <p>Simple comparison-based sorting. Repeatedly swaps adjacent elements if they're in wrong
+                                order.</p>
+                            <div class="algo-stats">
+                                <span class="badge time">O(n²)</span>
+                                <span class="badge easy">Easy</span>
+                            </div>
+                        </div>
+                        <div class="algo-item" data-algo="selection">
+                            <h4>Selection Sort</h4>
+                            <p>Finds the minimum element and places it at the beginning. Repeats for remaining elements.
+                            </p>
+                            <div class="algo-stats">
+                                <span class="badge time">O(n²)</span>
+                                <span class="badge easy">Easy</span>
+                            </div>
+                        </div>
+                        <div class="algo-item" data-algo="insertion">
+                            <h4>Insertion Sort</h4>
+                            <p>Builds sorted array one item at a time by inserting each element into its correct
+                                position.</p>
+                            <div class="algo-stats">
+                                <span class="badge time">O(n²)</span>
+                                <span class="badge easy">Easy</span>
+                            </div>
+                        </div>
+                        <div class="algo-item" data-algo="merge">
+                            <h4>Merge Sort</h4>
+                            <p>Divide and conquer algorithm. Divides array in half, sorts each half, then merges them.
+                            </p>
+                            <div class="algo-stats">
+                                <span class="badge time-good">O(n log n)</span>
+                                <span class="badge medium">Medium</span>
+                            </div>
+                        </div>
+                        <div class="algo-item" data-algo="quick">
+                            <h4>Quick Sort</h4>
+                            <p>Picks a pivot element and partitions array around it. Highly efficient in practice.</p>
+                            <div class="algo-stats">
+                                <span class="badge time-good">O(n log n)</span>
+                                <span class="badge medium">Medium</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="learn-card">
+                    <div class="card-icon search-icon">
+                        <i class="fas fa-search-location"></i>
+                    </div>
+                    <h3>Search Algorithms</h3>
+                    <div class="algorithm-list">
+                        <div class="algo-item" data-algo="linear">
+                            <h4>Linear Search</h4>
+                            <p>Checks every element one by one until target is found. Works on unsorted arrays.</p>
+                            <div class="algo-stats">
+                                <span class="badge time">O(n)</span>
+                                <span class="badge easy">Easy</span>
+                            </div>
+                        </div>
+                        <div class="algo-item" data-algo="binary">
+                            <h4>Binary Search</h4>
+                            <p>Divides search interval in half repeatedly. Requires sorted array. Very efficient.</p>
+                            <div class="algo-stats">
+                                <span class="badge time-good">O(log n)</span>
+                                <span class="badge medium">Medium</span>
+                            </div>
+                        </div>
+                        <div class="algo-item" data-algo="jump">
+                            <h4>Jump Search</h4>
+                            <p>Jumps ahead by fixed steps, then does linear search. Balance between linear and binary.
+                            </p>
+                            <div class="algo-stats">
+                                <span class="badge time-mid">O(√n)</span>
+                                <span class="badge medium">Medium</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="learn-card full-width">
+                    <div class="card-icon compare-icon">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                    <h3>Complexity Comparison</h3>
+                    <div class="comparison-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Algorithm</th>
+                                    <th>Best</th>
+                                    <th>Average</th>
+                                    <th>Worst</th>
+                                    <th>Space</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Bubble Sort</td>
+                                    <td class="good">O(n)</td>
+                                    <td class="bad">O(n²)</td>
+                                    <td class="bad">O(n²)</td>
+                                    <td class="good">O(1)</td>
+                                </tr>
+                                <tr>
+                                    <td>Selection Sort</td>
+                                    <td class="bad">O(n²)</td>
+                                    <td class="bad">O(n²)</td>
+                                    <td class="bad">O(n²)</td>
+                                    <td class="good">O(1)</td>
+                                </tr>
+                                <tr>
+                                    <td>Insertion Sort</td>
+                                    <td class="good">O(n)</td>
+                                    <td class="bad">O(n²)</td>
+                                    <td class="bad">O(n²)</td>
+                                    <td class="good">O(1)</td>
+                                </tr>
+                                <tr>
+                                    <td>Merge Sort</td>
+                                    <td class="great">O(n log n)</td>
+                                    <td class="great">O(n log n)</td>
+                                    <td class="great">O(n log n)</td>
+                                    <td class="bad">O(n)</td>
+                                </tr>
+                                <tr>
+                                    <td>Quick Sort</td>
+                                    <td class="great">O(n log n)</td>
+                                    <td class="great">O(n log n)</td>
+                                    <td class="bad">O(n²)</td>
+                                    <td class="mid">O(log n)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics" class="section">
+            <div class="analytics-header">
+                <h2><i class="fas fa-chart-line"></i> Performance Analytics</h2>
+                <p>Track and compare algorithm performance across your sessions</p>
+            </div>
+
+            <!-- Summary Stats Cards -->
+            <div class="analytics-summary">
+                <div class="summary-card">
+                    <div class="summary-icon runs-icon">
+                        <i class="fas fa-play-circle"></i>
+                    </div>
+                    <div class="summary-content">
+                        <span class="summary-value" id="total-runs">0</span>
+                        <span class="summary-label">Total Runs</span>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon algo-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="summary-content">
+                        <span class="summary-value" id="favorite-algo">-</span>
+                        <span class="summary-label">Most Used</span>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon fast-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="summary-content">
+                        <span class="summary-value" id="fastest-algo">-</span>
+                        <span class="summary-label">Fastest Avg</span>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-icon efficient-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="summary-content">
+                        <span class="summary-value" id="efficient-algo">-</span>
+                        <span class="summary-label">Fewest Ops</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3><i class="fas fa-clock"></i> Average Time by Algorithm</h3>
+                    <div class="chart-container">
+                        <canvas id="time-chart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3><i class="fas fa-exchange-alt"></i> Average Operations</h3>
+                    <div class="chart-container">
+                        <canvas id="operations-chart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card full-width">
+                    <h3><i class="fas fa-history"></i> Performance Over Time</h3>
+                    <div class="chart-container-wide">
+                        <canvas id="history-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Run History Table -->
+            <div class="history-section">
+                <div class="history-header">
+                    <h3><i class="fas fa-list"></i> Run History</h3>
+                    <button id="clear-history-btn" class="btn btn-secondary btn-sm">
+                        <i class="fas fa-trash"></i> Clear History
+                    </button>
+                </div>
+                <div class="history-table-container">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Algorithm</th>
+                                <th>Type</th>
+                                <th>Size</th>
+                                <th>Comparisons</th>
+                                <th>Swaps/Steps</th>
+                                <th>Time</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-tbody">
+                            <tr class="empty-row">
+                                <td colspan="7">No runs recorded yet. Start sorting or searching!</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

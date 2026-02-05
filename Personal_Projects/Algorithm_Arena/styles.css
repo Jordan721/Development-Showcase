@@ -1,0 +1,1094 @@
+/* ============================================================
+   ALGORITHM ARENA - STYLES
+   A visual algorithm learning tool
+   ============================================================ */
+
+/* ============================================================
+   RESET & BASE STYLES
+   ============================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============================================================
+   CSS CUSTOM PROPERTIES (VARIABLES)
+   Centralized color and style management
+   ============================================================ */
+:root {
+    /* Background Colors */
+    --bg-primary: #0a0a0f;
+    --bg-secondary: #12121a;
+    --bg-card: #1a1a24;
+    --bg-elevated: #22222e;
+
+    /* Accent Colors */
+    --accent-primary: #6366f1;
+    /* Indigo */
+    --accent-secondary: #8b5cf6;
+    /* Purple */
+    --accent-tertiary: #ec4899;
+    /* Pink */
+
+    /* Text Colors */
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+
+    /* Status Colors */
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+
+    /* Sorting Bar States */
+    --bar-default: #6366f1;
+    --bar-comparing: #f59e0b;
+    /* Yellow - comparing elements */
+    --bar-swapping: #ef4444;
+    /* Red - swapping elements */
+    --bar-sorted: #10b981;
+    /* Green - element in final position */
+    --bar-pivot: #ec4899;
+    /* Pink - pivot element (quicksort) */
+
+    /* Search Cell States */
+    --search-default: #6366f1;
+    --search-checking: #f59e0b;
+    /* Yellow - currently checking */
+    --search-found: #10b981;
+    /* Green - target found */
+    --search-eliminated: #374151;
+    /* Gray - eliminated from search */
+
+    /* Misc */
+    --border-color: #2a2a3a;
+    --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   BODY & GLOBAL STYLES
+   ============================================================ */
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* ============================================================
+   ANIMATED BACKGROUND EFFECTS
+   Creates the grid pattern and floating glow orbs
+   ============================================================ */
+.background-effects {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+}
+
+/* Subtle grid pattern overlay */
+.grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+}
+
+/* Floating glow orbs - base styles */
+.glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.15;
+}
+
+/* Top-right purple glow */
+.glow-1 {
+    background: var(--accent-primary);
+    top: -200px;
+    right: -200px;
+    animation: float 20s ease-in-out infinite;
+}
+
+/* Bottom-left pink glow */
+.glow-2 {
+    background: var(--accent-tertiary);
+    bottom: -200px;
+    left: -200px;
+    animation: float 25s ease-in-out infinite reverse;
+}
+
+/* Floating animation for glow orbs */
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(50px, 50px);
+    }
+}
+
+/* ============================================================
+   HEADER & NAVIGATION
+   Sticky header with logo and nav buttons
+   ============================================================ */
+header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(18, 18, 26, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    min-height: 70px;
+}
+
+/* Back to Showcase link */
+.back-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    position: absolute;
+    left: 2rem;
+}
+
+.back-link:hover {
+    color: var(--text-primary);
+    background: var(--bg-card);
+}
+
+.back-link i {
+    font-size: 0.85rem;
+}
+
+/* Logo with gradient text */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.logo i {
+    color: var(--accent-primary);
+    font-size: 1.75rem;
+}
+
+.logo span {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-tertiary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Navigation container */
+nav {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Navigation buttons */
+.nav-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-secondary);
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-btn:hover {
+    color: var(--text-primary);
+    background: var(--bg-card);
+}
+
+.nav-btn.active {
+    background: var(--accent-primary);
+    color: white;
+    border-color: var(--accent-primary);
+}
+
+/* ============================================================
+   MAIN CONTENT & SECTIONS
+   ============================================================ */
+main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Section visibility toggle */
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Fade in animation for section transitions */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================================
+   CONTROLS PANEL
+   Contains algorithm selection, sliders, and action buttons
+   ============================================================ */
+.controls-panel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+}
+
+/* Individual control groups (label + input) */
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.control-group label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Select dropdowns and number inputs */
+.control-group select,
+.control-group input[type="number"] {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    min-width: 160px;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.control-group select:hover,
+.control-group input[type="number"]:hover {
+    border-color: var(--accent-primary);
+}
+
+.control-group select:focus,
+.control-group input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Range sliders (size and speed controls) */
+.control-group input[type="range"] {
+    width: 160px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--bg-elevated);
+    appearance: none;
+    cursor: pointer;
+}
+
+/* Range slider thumb */
+.control-group input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--accent-primary);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.control-group input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* Button group container - aligns to right */
+.button-group {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-end;
+    margin-left: auto;
+}
+
+/* ============================================================
+   BUTTONS
+   Primary, secondary, and danger button styles
+   ============================================================ */
+.btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+/* Primary action button (Sort, Search) */
+.btn-primary {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #5558e3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+/* Secondary button (Generate) */
+.btn-secondary {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-card);
+    border-color: var(--accent-primary);
+}
+
+/* Danger button (Stop) */
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: #dc2626;
+}
+
+/* Disabled state for all buttons */
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ============================================================
+   STATS BAR
+   Displays comparisons, swaps, and time counters
+   ============================================================ */
+.stats-bar {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem 1.5rem;
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+}
+
+.stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.stat i {
+    color: var(--accent-primary);
+}
+
+.stat strong {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+}
+
+/* ============================================================
+   SORTING VISUALIZER
+   Container and bars for sorting animation
+   ============================================================ */
+.visualizer-container {
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    min-height: 400px;
+}
+
+.visualizer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 2px;
+    height: 350px;
+    width: 100%;
+}
+
+/* Individual bar element */
+.bar {
+    background: var(--bar-default);
+    border-radius: 4px 4px 0 0;
+    transition: height 0.1s ease, background 0.15s ease;
+    position: relative;
+}
+
+/* Bar state: comparing two elements */
+.bar.comparing {
+    background: var(--bar-comparing);
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+}
+
+/* Bar state: swapping elements */
+.bar.swapping {
+    background: var(--bar-swapping);
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+}
+
+/* Bar state: element in final sorted position */
+.bar.sorted {
+    background: var(--bar-sorted);
+}
+
+/* Bar state: pivot element in quicksort */
+.bar.pivot {
+    background: var(--bar-pivot);
+    box-shadow: 0 0 15px rgba(236, 72, 153, 0.5);
+}
+
+/* ============================================================
+   SEARCH VISUALIZER
+   Cell-based display for search algorithms
+   ============================================================ */
+.search-visualizer {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    height: auto;
+    min-height: 200px;
+    padding: 2rem;
+}
+
+/* Individual search cell */
+.search-cell {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--search-default);
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Index label below value */
+.search-cell .index {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.6);
+    position: absolute;
+    bottom: 4px;
+}
+
+/* Cell state: currently being checked */
+.search-cell.checking {
+    background: var(--search-checking);
+    transform: scale(1.15);
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
+}
+
+/* Cell state: target value found */
+.search-cell.found {
+    background: var(--search-found);
+    transform: scale(1.2);
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+}
+
+/* Cell state: eliminated from search (binary search) */
+.search-cell.eliminated {
+    background: var(--search-eliminated);
+    opacity: 0.5;
+}
+
+/* Cell state: within current search range */
+.search-cell.in-range {
+    border: 2px solid var(--accent-tertiary);
+}
+
+/* ============================================================
+   INFO PANEL
+   Displays algorithm description and complexity info
+   ============================================================ */
+.info-panel {
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 1.25rem 1.5rem;
+}
+
+.info-panel h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--accent-primary);
+}
+
+.info-panel p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* Complexity badges row */
+.complexity {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.complexity span {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.complexity strong {
+    color: var(--text-primary);
+}
+
+/* ============================================================
+   LEARN SECTION
+   Educational cards with algorithm explanations
+   ============================================================ */
+.learn-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Algorithm category card */
+.learn-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+}
+
+/* Full-width card (comparison table) */
+.learn-card.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Card icon styling */
+.card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Icon gradients for each category */
+.sorting-icon {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+}
+
+.search-icon {
+    background: linear-gradient(135deg, var(--accent-secondary), var(--accent-tertiary));
+}
+
+.compare-icon {
+    background: linear-gradient(135deg, var(--success), #059669);
+}
+
+.learn-card h3 {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+/* List of algorithms within a card */
+.algorithm-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Individual algorithm item - clickable */
+.algo-item {
+    background: var(--bg-elevated);
+    border-radius: 10px;
+    padding: 1rem;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.algo-item:hover {
+    border-color: var(--accent-primary);
+    transform: translateX(5px);
+}
+
+.algo-item h4 {
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.algo-item p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+/* Stats badges below algorithm description */
+.algo-stats {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* ============================================================
+   BADGES
+   Small labels for complexity and difficulty
+   ============================================================ */
+.badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Time complexity badges */
+.badge.time {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--danger);
+}
+
+.badge.time-mid {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--warning);
+}
+
+.badge.time-good {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--success);
+}
+
+/* Difficulty badges */
+.badge.easy {
+    background: rgba(99, 102, 241, 0.2);
+    color: var(--accent-primary);
+}
+
+.badge.medium {
+    background: rgba(139, 92, 246, 0.2);
+    color: var(--accent-secondary);
+}
+
+/* ============================================================
+   COMPARISON TABLE
+   Side-by-side algorithm complexity comparison
+   ============================================================ */
+.comparison-table {
+    overflow-x: auto;
+}
+
+.comparison-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 0.875rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.comparison-table th {
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.comparison-table td {
+    color: var(--text-primary);
+}
+
+.comparison-table tr:hover {
+    background: var(--bg-elevated);
+}
+
+/* Complexity color coding */
+.comparison-table .good {
+    color: var(--success);
+}
+
+.comparison-table .great {
+    color: #34d399;
+}
+
+.comparison-table .mid {
+    color: var(--warning);
+}
+
+.comparison-table .bad {
+    color: var(--danger);
+}
+
+/* ============================================================
+   ANALYTICS SECTION
+   Performance tracking dashboard
+   ============================================================ */
+
+/* Analytics header */
+.analytics-header {
+    margin-bottom: 2rem;
+}
+
+.analytics-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.analytics-header h2 i {
+    color: var(--accent-primary);
+}
+
+.analytics-header p {
+    color: var(--text-secondary);
+}
+
+/* Summary Cards Row */
+.analytics-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.summary-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-primary);
+}
+
+.summary-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: white;
+}
+
+.runs-icon {
+    background: linear-gradient(135deg, var(--accent-primary), #4f46e5);
+}
+
+.algo-icon {
+    background: linear-gradient(135deg, var(--accent-secondary), #7c3aed);
+}
+
+.fast-icon {
+    background: linear-gradient(135deg, var(--warning), #d97706);
+}
+
+.efficient-icon {
+    background: linear-gradient(135deg, var(--success), #059669);
+}
+
+.summary-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.summary-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+/* Charts Grid */
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.chart-card {
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+}
+
+.chart-card.full-width {
+    grid-column: 1 / -1;
+}
+
+.chart-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+.chart-card h3 i {
+    color: var(--accent-primary);
+}
+
+.chart-container {
+    height: 250px;
+    position: relative;
+}
+
+.chart-container-wide {
+    height: 300px;
+    position: relative;
+}
+
+/* History Section */
+.history-section {
+    background: var(--bg-card);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.history-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: var(--text-primary);
+}
+
+.history-header h3 i {
+    color: var(--accent-primary);
+}
+
+.btn-sm {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+}
+
+.history-table-container {
+    overflow-x: auto;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.history-table th,
+.history-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    white-space: nowrap;
+}
+
+.history-table th {
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.history-table td {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.history-table tbody tr:hover {
+    background: var(--bg-elevated);
+}
+
+.history-table .empty-row td {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 2rem;
+}
+
+/* Algorithm type badges in table */
+.history-table .type-badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.type-badge.sorting {
+    background: rgba(99, 102, 241, 0.2);
+    color: var(--accent-primary);
+}
+
+.type-badge.searching {
+    background: rgba(236, 72, 153, 0.2);
+    color: var(--accent-tertiary);
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   Mobile and tablet adjustments
+   ============================================================ */
+@media (max-width: 768px) {
+
+    /* Stack header vertically */
+    header {
+        flex-direction: column;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        min-height: auto;
+    }
+
+    .back-link {
+        position: static;
+        align-self: flex-start;
+    }
+
+    .back-link span {
+        display: none;
+    }
+
+    .logo {
+        position: static;
+        transform: none;
+    }
+
+    nav {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Stack controls vertically */
+    .controls-panel {
+        flex-direction: column;
+    }
+
+    .button-group {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Wrap stats */
+    .stats-bar {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* Single column learn cards */
+    .learn-container {
+        grid-template-columns: 1fr;
+    }
+
+    /* Shorter visualizer */
+    .visualizer {
+        height: 250px;
+    }
+
+    /* Analytics responsive */
+    .charts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .analytics-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .history-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+}
