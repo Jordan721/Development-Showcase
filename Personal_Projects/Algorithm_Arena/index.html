@@ -34,6 +34,9 @@
             <button class="nav-btn" data-section="searching">
                 <i class="fas fa-search"></i> Searching
             </button>
+            <button class="nav-btn" data-section="race">
+                <i class="fas fa-flag-checkered"></i> Race
+            </button>
             <button class="nav-btn" data-section="learn">
                 <i class="fas fa-book"></i> Learn
             </button>
@@ -55,15 +58,28 @@
                         <option value="insertion">Insertion Sort</option>
                         <option value="merge">Merge Sort</option>
                         <option value="quick">Quick Sort</option>
+                        <option value="heap">Heap Sort</option>
+                        <option value="shell">Shell Sort</option>
+                        <option value="counting">Counting Sort</option>
                     </select>
                 </div>
                 <div class="control-group">
                     <label>Array Size: <span id="size-value">30</span></label>
-                    <input type="range" id="array-size" min="10" max="100" value="30">
+                    <input type="range" id="array-size" min="10" max="200" value="30">
                 </div>
                 <div class="control-group">
                     <label>Speed: <span id="speed-value">50</span>ms</label>
                     <input type="range" id="speed" min="1" max="200" value="50">
+                </div>
+                <div class="step-mode-group">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="step-mode-toggle">
+                        <span class="toggle-switch"></span>
+                        <span>Step Mode</span>
+                    </label>
+                    <button id="next-step-btn" class="btn btn-primary btn-sm" disabled>
+                        <i class="fas fa-step-forward"></i> Next Step
+                    </button>
                 </div>
                 <div class="button-group">
                     <button id="generate-btn" class="btn btn-secondary">
@@ -75,6 +91,26 @@
                     <button id="stop-btn" class="btn btn-danger" disabled>
                         <i class="fas fa-stop"></i> Stop
                     </button>
+                </div>
+            </div>
+
+            <div class="step-explanation hidden" id="step-explanation">
+                <i class="fas fa-info-circle"></i>
+                <span id="step-text">Click "Sort" to begin, then use "Next Step" to advance.</span>
+            </div>
+
+            <div class="custom-input-row">
+                <div class="custom-input-group">
+                    <label for="sort-custom-input">
+                        <i class="fas fa-keyboard"></i> Custom Array (comma-separated)
+                    </label>
+                    <div class="custom-input-wrapper">
+                        <input type="text" id="sort-custom-input" placeholder="e.g. 34, 7, 23, 12, 45, 1, 89, 56"
+                            class="custom-input">
+                        <button id="sort-use-custom-btn" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-check"></i> Use
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -118,6 +154,7 @@
                         <option value="linear">Linear Search</option>
                         <option value="binary">Binary Search</option>
                         <option value="jump">Jump Search</option>
+                        <option value="exponential">Exponential Search</option>
                     </select>
                 </div>
                 <div class="control-group">
@@ -139,6 +176,22 @@
                     <button id="search-btn" class="btn btn-primary">
                         <i class="fas fa-search"></i> Search
                     </button>
+                </div>
+            </div>
+
+            <div class="custom-input-row">
+                <div class="custom-input-group">
+                    <label for="search-custom-input">
+                        <i class="fas fa-keyboard"></i> Custom Array (comma-separated, sorted for
+                        binary/jump/exponential)
+                    </label>
+                    <div class="custom-input-wrapper">
+                        <input type="text" id="search-custom-input"
+                            placeholder="e.g. 2, 5, 8, 12, 16, 23, 38, 42, 56, 77" class="custom-input">
+                        <button id="search-use-custom-btn" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-check"></i> Use
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -169,6 +222,98 @@
                     <span><strong>Time:</strong> O(n)</span>
                     <span><strong>Space:</strong> O(1)</span>
                     <span><strong>Sorted Required:</strong> No</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Race Mode Section -->
+        <section id="race" class="section">
+            <div class="race-header">
+                <h2><i class="fas fa-flag-checkered"></i> Algorithm Race</h2>
+                <p>Pick two sorting algorithms. Same data, same speed. Who wins?</p>
+            </div>
+
+            <div class="race-controls">
+                <div class="race-picker">
+                    <div class="control-group">
+                        <label><i class="fas fa-trophy" style="color: #f59e0b;"></i> Challenger 1</label>
+                        <select id="race-algo-1">
+                            <option value="bubble">Bubble Sort</option>
+                            <option value="selection">Selection Sort</option>
+                            <option value="insertion">Insertion Sort</option>
+                            <option value="merge" selected>Merge Sort</option>
+                            <option value="quick">Quick Sort</option>
+                            <option value="heap">Heap Sort</option>
+                            <option value="shell">Shell Sort</option>
+                            <option value="counting">Counting Sort</option>
+                        </select>
+                    </div>
+                    <div class="race-vs">VS</div>
+                    <div class="control-group">
+                        <label><i class="fas fa-trophy" style="color: #ec4899;"></i> Challenger 2</label>
+                        <select id="race-algo-2">
+                            <option value="bubble" selected>Bubble Sort</option>
+                            <option value="selection">Selection Sort</option>
+                            <option value="insertion">Insertion Sort</option>
+                            <option value="merge">Merge Sort</option>
+                            <option value="quick">Quick Sort</option>
+                            <option value="heap">Heap Sort</option>
+                            <option value="shell">Shell Sort</option>
+                            <option value="counting">Counting Sort</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="race-settings">
+                    <div class="control-group">
+                        <label>Array Size: <span id="race-size-value">30</span></label>
+                        <input type="range" id="race-size" min="10" max="100" value="30">
+                    </div>
+                    <div class="control-group">
+                        <label>Speed: <span id="race-speed-value">20</span>ms</label>
+                        <input type="range" id="race-speed" min="1" max="100" value="20">
+                    </div>
+                    <div class="button-group">
+                        <button id="race-btn" class="btn btn-primary">
+                            <i class="fas fa-flag-checkered"></i> Race!
+                        </button>
+                        <button id="race-stop-btn" class="btn btn-danger" disabled>
+                            <i class="fas fa-stop"></i> Stop
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="race-winner hidden" id="race-winner">
+                <i class="fas fa-crown"></i>
+                <span id="race-winner-text">Winner!</span>
+            </div>
+
+            <div class="race-arena">
+                <div class="race-lane">
+                    <div class="race-lane-header">
+                        <h3 id="race-name-1">Merge Sort</h3>
+                        <div class="race-lane-stats">
+                            <span>Comparisons: <strong id="race-comps-1">0</strong></span>
+                            <span>Swaps: <strong id="race-swaps-1">0</strong></span>
+                            <span>Time: <strong id="race-time-1">0.00</strong>s</span>
+                        </div>
+                    </div>
+                    <div class="visualizer-container race-visualizer-container">
+                        <div id="race-visualizer-1" class="visualizer"></div>
+                    </div>
+                </div>
+                <div class="race-lane">
+                    <div class="race-lane-header">
+                        <h3 id="race-name-2">Bubble Sort</h3>
+                        <div class="race-lane-stats">
+                            <span>Comparisons: <strong id="race-comps-2">0</strong></span>
+                            <span>Swaps: <strong id="race-swaps-2">0</strong></span>
+                            <span>Time: <strong id="race-time-2">0.00</strong>s</span>
+                        </div>
+                    </div>
+                    <div class="visualizer-container race-visualizer-container">
+                        <div id="race-visualizer-2" class="visualizer"></div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -226,6 +371,33 @@
                                 <span class="badge medium">Medium</span>
                             </div>
                         </div>
+                        <div class="algo-item" data-algo="heap">
+                            <h4>Heap Sort</h4>
+                            <p>Builds a max heap from the array, then repeatedly extracts the maximum element to build
+                                the sorted result.</p>
+                            <div class="algo-stats">
+                                <span class="badge time-good">O(n log n)</span>
+                                <span class="badge medium">Medium</span>
+                            </div>
+                        </div>
+                        <div class="algo-item" data-algo="shell">
+                            <h4>Shell Sort</h4>
+                            <p>Generalization of insertion sort that compares elements far apart, then progressively
+                                reduces the gap.</p>
+                            <div class="algo-stats">
+                                <span class="badge time-mid">O(n log n)</span>
+                                <span class="badge medium">Medium</span>
+                            </div>
+                        </div>
+                        <div class="algo-item" data-algo="counting">
+                            <h4>Counting Sort</h4>
+                            <p>Non-comparison sort that counts occurrences of each value, then reconstructs the sorted
+                                output.</p>
+                            <div class="algo-stats">
+                                <span class="badge time-good">O(n + k)</span>
+                                <span class="badge medium">Medium</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -257,6 +429,15 @@
                             </p>
                             <div class="algo-stats">
                                 <span class="badge time-mid">O(√n)</span>
+                                <span class="badge medium">Medium</span>
+                            </div>
+                        </div>
+                        <div class="algo-item" data-algo="exponential">
+                            <h4>Exponential Search</h4>
+                            <p>Finds a range where the target might be by doubling the index, then performs binary
+                                search in that range.</p>
+                            <div class="algo-stats">
+                                <span class="badge time-good">O(log n)</span>
                                 <span class="badge medium">Medium</span>
                             </div>
                         </div>
@@ -314,6 +495,34 @@
                                     <td class="great">O(n log n)</td>
                                     <td class="bad">O(n²)</td>
                                     <td class="mid">O(log n)</td>
+                                </tr>
+                                <tr>
+                                    <td>Heap Sort</td>
+                                    <td class="great">O(n log n)</td>
+                                    <td class="great">O(n log n)</td>
+                                    <td class="great">O(n log n)</td>
+                                    <td class="good">O(1)</td>
+                                </tr>
+                                <tr>
+                                    <td>Shell Sort</td>
+                                    <td class="great">O(n log n)</td>
+                                    <td class="mid">O(n^1.25)</td>
+                                    <td class="bad">O(n²)</td>
+                                    <td class="good">O(1)</td>
+                                </tr>
+                                <tr>
+                                    <td>Counting Sort</td>
+                                    <td class="great">O(n + k)</td>
+                                    <td class="great">O(n + k)</td>
+                                    <td class="great">O(n + k)</td>
+                                    <td class="mid">O(k)</td>
+                                </tr>
+                                <tr>
+                                    <td>Exponential Search</td>
+                                    <td class="good">O(1)</td>
+                                    <td class="great">O(log n)</td>
+                                    <td class="great">O(log n)</td>
+                                    <td class="good">O(1)</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -395,9 +604,17 @@
             <div class="history-section">
                 <div class="history-header">
                     <h3><i class="fas fa-list"></i> Run History</h3>
-                    <button id="clear-history-btn" class="btn btn-secondary btn-sm">
-                        <i class="fas fa-trash"></i> Clear History
-                    </button>
+                    <div class="history-actions">
+                        <button id="export-csv-btn" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-file-csv"></i> Export CSV
+                        </button>
+                        <button id="export-json-btn" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-file-code"></i> Export JSON
+                        </button>
+                        <button id="clear-history-btn" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-trash"></i> Clear History
+                        </button>
+                    </div>
                 </div>
                 <div class="history-table-container">
                     <table class="history-table">
