@@ -70,6 +70,8 @@ Independent projects showcasing creative problem-solving:
 - 🥯 Bagel Byte Academy - 3D computer exploration lab with hardware, networking & coding fundamentals
 - 💻 Bagely Bytes Programming - Learn Python, JavaScript, Java, C++ and more with interactive examples
 - 🛡️ **ThreatAware** - Cybersecurity education platform with AI threat detection, identity theft protection & incident response guides
+- 🏆 **Algorithm Arena** - Interactive algorithm visualization tool with race mode, step-by-step execution & custom input
+- 🎨 **Animation Explorer** - Interactive playground for exploring 12 animation techniques (CSS, Canvas, SVG, Spring Physics) with live code preview & editable controls
 
 ---
 
@@ -177,12 +179,19 @@ Development-Showcase/
 │   ├── Console_Chronicles/    # SQL tutorial (+ favicon)
 │   ├── Bagel_Byte_Academy/    # 3D computer exploration lab (+ favicon)
 │   ├── Bagely_Bytes_Programming/ # Programming language tutorials
-│   └── Threat_Aware/          # 🛡️ Cybersecurity education platform (+ favicon)
-│       ├── index.html         # 6 modules + quizzes
-│       ├── styles.css         # ~3200 lines of styling
-│       ├── app.js             # ~1360 lines of interactivity
-│       ├── favicon.svg        # Shield with target icon
-│       └── README.md          # Detailed documentation
+│   ├── Threat_Aware/          # 🛡️ Cybersecurity education platform (+ favicon)
+│   │   ├── index.html         # 6 modules + quizzes
+│   │   ├── styles.css         # ~3200 lines of styling
+│   │   ├── app.js             # ~1360 lines of interactivity
+│   │   ├── favicon.svg        # Shield with target icon
+│   │   └── README.md          # Detailed documentation
+│   ├── Algorithm_Arena/       # 🏆 Algorithm visualization tool (+ favicon)
+│   └── Animation_In_HTML/     # 🎨 Interactive animation explorer (+ favicon)
+│       ├── index.html         # 12 animation technique cards
+│       ├── styles.css         # Colorful bold responsive theme
+│       ├── script.js          # Animation logic & live code preview
+│       ├── favicon.svg        # Orbital dots on gradient
+│       └── README.md          # Project documentation
 └── 📄 README.md               # You are here! 👋
 ```
 
@@ -209,6 +218,8 @@ Each project now has its own unique, themed SVG favicon:
 | 🪐 Orbit Control | Planet with orbit rings |
 | 🎲 Dimensional Playground | 3D cube with VR gradient |
 | 💬 Social Com's | Speech bubble with privacy shield |
+| 🏆 Algorithm Arena | Trophy with algorithm graph |
+| 🎨 Animation Explorer | Orbital dots on gradient |
 
 ---
 
@@ -243,6 +254,8 @@ I'm always excited to connect with fellow developers, potential collaborators, o
 - 🎴 Project cards cascade in one-by-one when a folder opens
 - 🖼️ All project sub-pages now have custom SVG favicons
 - 🏷️ Every project card has Desktop/Mobile platform badges so you know what works where
+- 🏆 Algorithm Arena lets you race sorting algorithms head-to-head and step through them one operation at a time
+- 🎨 Animation Explorer covers 12 techniques — from CSS transitions to spring physics — with sliders that update both the animation and the code in real time
 
 ---
 
