@@ -23,11 +23,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Code Toggle Buttons ──
   $$('.code-toggle-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
       const panel = $('#' + btn.dataset.target);
       if (!panel) return;
-      const isOpen = panel.classList.toggle('open');
-      btn.textContent = isOpen ? 'Hide Code' : 'Show Code';
+      const willOpen = !panel.classList.contains('open');
+
+      // Close all other panels first
+      $$('.code-panel.open').forEach(p => {
+        if (p !== panel) {
+          p.classList.remove('open');
+          const otherBtn = p.parentElement.querySelector('.code-toggle-btn');
+          if (otherBtn) otherBtn.textContent = 'Show Code';
+        }
+      });
+
+      panel.classList.toggle('open', willOpen);
+      btn.textContent = willOpen ? 'Hide Code' : 'Show Code';
     });
   });
 
@@ -1070,6 +1082,405 @@ container.addEventListener('mousemove', (e) => {
   updateCode('parallax');
 
   // ============================================================
+  //  13. TYPING EFFECT
+  // ============================================================
+  const typingEl = $('#typing-el');
+  const typingCursor = $('#typing-cursor');
+  let typingTimeout = null;
+
+  defaultValues.typing = {
+    'ctrl-typing-speed': '80',
+    'ctrl-typing-text': 'Hello, World!',
+    'ctrl-typing-color': '#f97316'
+  };
+
+  function startTyping() {
+    if (!typingEl) return;
+    if (typingTimeout) clearTimeout(typingTimeout);
+    const text = $('#ctrl-typing-text').value;
+    const speed = parseInt($('#ctrl-typing-speed').value);
+    const color = $('#ctrl-typing-color').value;
+    typingEl.style.color = color;
+    typingEl.textContent = '';
+    let i = 0;
+
+    function typeChar() {
+      if (i < text.length) {
+        typingEl.textContent += text[i];
+        i++;
+        typingTimeout = setTimeout(typeChar, speed);
+      }
+    }
+    typeChar();
+  }
+
+  if ($('#preview-typing')) {
+    $('#preview-typing').addEventListener('click', startTyping);
+  }
+
+  bindControl('#ctrl-typing-speed', '#val-typing-speed', 'ms', () => updateCode('typing'));
+  bindControl('#ctrl-typing-text', null, '', () => { startTyping(); updateCode('typing'); });
+  bindControl('#ctrl-typing-color', null, '', () => {
+    if (typingEl) typingEl.style.color = $('#ctrl-typing-color').value;
+    updateCode('typing');
+  });
+
+  codeGenerators.typing = () => {
+    const speed = $('#ctrl-typing-speed').value;
+    const text = $('#ctrl-typing-text').value;
+    const color = $('#ctrl-typing-color').value;
+    return `/* CSS */
+.typing-cursor {
+  animation: blink 0.6s step-end infinite;
+  color: #fff;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* JavaScript */
+const text = '${text}';
+const speed = ${speed}; // ms per character
+let i = 0;
+
+function typeChar() {
+  if (i < text.length) {
+    el.textContent += text[i];
+    el.style.color = '${color}';
+    i++;
+    setTimeout(typeChar, speed);
+  }
+}
+typeChar();`;
+  };
+
+  // Init typing on load
+  setTimeout(startTyping, 500);
+  updateCode('typing');
+
+  // ============================================================
+  //  14. 3D FLIP CARD
+  // ============================================================
+  const flipInner = $('#flip-inner');
+  const flipFront = $('#flip-front');
+  const flipBack = $('#flip-back');
+
+  defaultValues.flip = {
+    'ctrl-flip-duration': '0.6',
+    'ctrl-flip-axis': 'Y',
+    'ctrl-flip-color': '#6366f1'
+  };
+
+  function updateFlip() {
+    const dur = $('#ctrl-flip-duration').value;
+    const axis = $('#ctrl-flip-axis').value;
+    const color = $('#ctrl-flip-color').value;
+
+    if (flipInner) {
+      flipInner.style.transitionDuration = dur + 's';
+      flipInner.className = 'flip-inner flip-' + axis.toLowerCase();
+    }
+    if (flipFront) {
+      flipFront.style.background = `linear-gradient(135deg, ${color}, ${shiftColor(color, -40)})`;
+    }
+    if (flipBack) {
+      // Ensure backface for the chosen axis
+      flipBack.style.transform = axis === 'Y' ? 'rotateY(180deg)' : 'rotateX(180deg)';
+    }
+    updateCode('flip');
+  }
+
+  bindControl('#ctrl-flip-duration', '#val-flip-duration', 's', updateFlip);
+  bindControl('#ctrl-flip-axis', null, '', updateFlip);
+  bindControl('#ctrl-flip-color', null, '', updateFlip);
+
+  codeGenerators.flip = () => {
+    const dur = $('#ctrl-flip-duration').value;
+    const axis = $('#ctrl-flip-axis').value;
+    const color = $('#ctrl-flip-color').value;
+    return `.flip-container {
+  perspective: 600px;
+  width: 140px;
+  height: 100px;
+}
+
+.flip-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform ${dur}s ease;
+}
+
+.flip-container:hover .flip-inner {
+  transform: rotate${axis}(180deg);
+}
+
+.flip-front, .flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 14px;
+}
+
+.flip-front {
+  background: linear-gradient(135deg, ${color}, ${shiftColor(color, -40)});
+}
+
+.flip-back {
+  background: linear-gradient(135deg, #ec4899, #d946ef);
+  transform: rotate${axis}(180deg);
+}`;
+  };
+  updateCode('flip');
+
+  // ============================================================
+  //  15. GRADIENT ANIMATION
+  // ============================================================
+  const gradientEl = $('#gradient-el');
+  let gradientStyleTag = document.createElement('style');
+  document.head.appendChild(gradientStyleTag);
+
+  defaultValues.gradient = {
+    'ctrl-grad-speed': '4',
+    'ctrl-grad-angle': '135',
+    'ctrl-grad-color1': '#ec4899',
+    'ctrl-grad-color2': '#8b5cf6'
+  };
+
+  function updateGradient() {
+    const speed = $('#ctrl-grad-speed').value;
+    const angle = $('#ctrl-grad-angle').value;
+    const c1 = $('#ctrl-grad-color1').value;
+    const c2 = $('#ctrl-grad-color2').value;
+
+    if (gradientEl) {
+      gradientEl.style.background = `linear-gradient(${angle}deg, ${c1}, ${c2}, #06b6d4, ${c1})`;
+      gradientEl.style.backgroundSize = '300% 300%';
+      gradientEl.style.animationDuration = speed + 's';
+    }
+
+    gradientStyleTag.textContent = `
+      .gradient-box {
+        animation: gradientShift ${speed}s ease infinite !important;
+      }
+    `;
+    updateCode('gradient');
+  }
+
+  bindControl('#ctrl-grad-speed', '#val-grad-speed', 's', updateGradient);
+  bindControl('#ctrl-grad-angle', '#val-grad-angle', 'deg', updateGradient);
+  bindControl('#ctrl-grad-color1', null, '', updateGradient);
+  bindControl('#ctrl-grad-color2', null, '', updateGradient);
+
+  codeGenerators.gradient = () => {
+    const speed = $('#ctrl-grad-speed').value;
+    const angle = $('#ctrl-grad-angle').value;
+    const c1 = $('#ctrl-grad-color1').value;
+    const c2 = $('#ctrl-grad-color2').value;
+    return `.gradient-box {
+  width: 160px;
+  height: 120px;
+  border-radius: 18px;
+  background: linear-gradient(
+    ${angle}deg,
+    ${c1},
+    ${c2},
+    #06b6d4,
+    ${c1}
+  );
+  background-size: 300% 300%;
+  animation: gradientShift ${speed}s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}`;
+  };
+  updateCode('gradient');
+
+  // ============================================================
+  //  16. ELASTIC COLLISION
+  // ============================================================
+  const collCanvas = $('#collision-canvas');
+  let collCtx;
+  let balls = [];
+
+  defaultValues.collision = {
+    'ctrl-coll-count': '5',
+    'ctrl-coll-gravity': '0.2',
+    'ctrl-coll-bounce': '0.9'
+  };
+
+  function createBalls() {
+    if (!collCanvas) return;
+    const count = parseInt($('#ctrl-coll-count').value);
+    balls = [];
+    const colors = ['#eab308', '#ef4444', '#22c55e', '#3b82f6', '#a855f7', '#ec4899', '#f97316', '#06b6d4'];
+    for (let i = 0; i < count; i++) {
+      const r = 10 + Math.random() * 15;
+      balls.push({
+        x: r + Math.random() * (collCanvas.width - r * 2),
+        y: r + Math.random() * (collCanvas.height / 2),
+        vx: (Math.random() - 0.5) * 4,
+        vy: (Math.random() - 0.5) * 2,
+        r: r,
+        m: r * r, // mass proportional to area
+        color: colors[i % colors.length]
+      });
+    }
+  }
+
+  function initCollision() {
+    if (!collCanvas) return;
+    collCtx = collCanvas.getContext('2d');
+    resizeCanvas(collCanvas);
+    createBalls();
+
+    function drawCollision() {
+      const gravity = parseFloat($('#ctrl-coll-gravity').value);
+      const bounce = parseFloat($('#ctrl-coll-bounce').value);
+      const w = collCanvas.width;
+      const h = collCanvas.height;
+
+      collCtx.fillStyle = 'rgba(18, 18, 31, 0.3)';
+      collCtx.fillRect(0, 0, w, h);
+
+      balls.forEach(b => {
+        b.vy += gravity;
+        b.x += b.vx;
+        b.y += b.vy;
+
+        // Wall collision
+        if (b.x - b.r < 0) { b.x = b.r; b.vx = Math.abs(b.vx) * bounce; }
+        if (b.x + b.r > w) { b.x = w - b.r; b.vx = -Math.abs(b.vx) * bounce; }
+        if (b.y - b.r < 0) { b.y = b.r; b.vy = Math.abs(b.vy) * bounce; }
+        if (b.y + b.r > h) { b.y = h - b.r; b.vy = -Math.abs(b.vy) * bounce; }
+      });
+
+      // Ball-to-ball collision
+      for (let i = 0; i < balls.length; i++) {
+        for (let j = i + 1; j < balls.length; j++) {
+          const a = balls[i], b = balls[j];
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const minDist = a.r + b.r;
+
+          if (dist < minDist && dist > 0) {
+            // Separate overlapping balls
+            const overlap = (minDist - dist) / 2;
+            const nx = dx / dist;
+            const ny = dy / dist;
+            a.x -= overlap * nx;
+            a.y -= overlap * ny;
+            b.x += overlap * nx;
+            b.y += overlap * ny;
+
+            // Elastic collision response
+            const dvx = a.vx - b.vx;
+            const dvy = a.vy - b.vy;
+            const dot = dvx * nx + dvy * ny;
+            const totalMass = a.m + b.m;
+
+            a.vx -= (2 * b.m / totalMass) * dot * nx * bounce;
+            a.vy -= (2 * b.m / totalMass) * dot * ny * bounce;
+            b.vx += (2 * a.m / totalMass) * dot * nx * bounce;
+            b.vy += (2 * a.m / totalMass) * dot * ny * bounce;
+          }
+        }
+      }
+
+      // Draw balls
+      balls.forEach(b => {
+        collCtx.beginPath();
+        collCtx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        collCtx.fillStyle = b.color;
+        collCtx.fill();
+
+        // Highlight
+        collCtx.beginPath();
+        collCtx.arc(b.x - b.r * 0.3, b.y - b.r * 0.3, b.r * 0.3, 0, Math.PI * 2);
+        collCtx.fillStyle = 'rgba(255,255,255,0.3)';
+        collCtx.fill();
+      });
+
+      requestAnimationFrame(drawCollision);
+    }
+    drawCollision();
+  }
+
+  // Click to add a ball
+  if (collCanvas) {
+    collCanvas.addEventListener('click', (e) => {
+      const rect = collCanvas.getBoundingClientRect();
+      const colors = ['#eab308', '#ef4444', '#22c55e', '#3b82f6', '#a855f7', '#ec4899'];
+      const r = 10 + Math.random() * 15;
+      balls.push({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+        vx: (Math.random() - 0.5) * 6,
+        vy: -Math.random() * 4,
+        r: r,
+        m: r * r,
+        color: colors[Math.floor(Math.random() * colors.length)]
+      });
+    });
+  }
+
+  bindControl('#ctrl-coll-count', '#val-coll-count', '', () => { createBalls(); updateCode('collision'); });
+  bindControl('#ctrl-coll-gravity', '#val-coll-gravity', '', () => updateCode('collision'));
+  bindControl('#ctrl-coll-bounce', '#val-coll-bounce', '', () => updateCode('collision'));
+
+  codeGenerators.collision = () => {
+    const count = $('#ctrl-coll-count').value;
+    const gravity = $('#ctrl-coll-gravity').value;
+    const bounce = $('#ctrl-coll-bounce').value;
+    return `const balls = [];
+for (let i = 0; i < ${count}; i++) {
+  const r = 10 + Math.random() * 15;
+  balls.push({
+    x: Math.random() * w,
+    y: Math.random() * h / 2,
+    vx: (Math.random() - 0.5) * 4,
+    vy: 0,
+    r, m: r * r
+  });
+}
+
+function simulate() {
+  balls.forEach(b => {
+    b.vy += ${gravity}; // gravity
+    b.x += b.vx;
+    b.y += b.vy;
+
+    // Wall bounce
+    if (b.y + b.r > h) {
+      b.y = h - b.r;
+      b.vy *= -${bounce}; // restitution
+    }
+  });
+
+  // Ball-to-ball elastic collision
+  for (let i = 0; i < balls.length; i++)
+    for (let j = i+1; j < balls.length; j++) {
+      const dx = balls[j].x - balls[i].x;
+      const dy = balls[j].y - balls[i].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < balls[i].r + balls[j].r) {
+        // Resolve overlap + transfer momentum
+      }
+    }
+  requestAnimationFrame(simulate);
+}`;
+  };
+  updateCode('collision');
+
+  // ============================================================
   //  APPLY CUSTOM CODE (from textarea)
   // ============================================================
   function applyCustomCode(cardName) {
@@ -1078,7 +1489,7 @@ container.addEventListener('mousemove', (e) => {
     const code = textarea.value;
 
     // For CSS-based cards, inject a style tag
-    const cssBased = ['transitions', 'keyframes', 'transforms', 'hover', 'cssvars', 'scroll', 'morph'];
+    const cssBased = ['transitions', 'keyframes', 'transforms', 'hover', 'cssvars', 'scroll', 'morph', 'typing', 'flip', 'gradient'];
     if (cssBased.includes(cardName)) {
       let tag = $(`#custom-style-${cardName}`);
       if (!tag) {
@@ -1092,7 +1503,7 @@ container.addEventListener('mousemove', (e) => {
     }
 
     // For JS-based cards, try to eval (sandboxed via Function)
-    const jsBased = ['raf', 'waapi', 'particles', 'spring', 'parallax'];
+    const jsBased = ['raf', 'waapi', 'particles', 'spring', 'parallax', 'collision'];
     if (jsBased.includes(cardName)) {
       try {
         new Function(code)();
@@ -1115,6 +1526,7 @@ container.addEventListener('mousemove', (e) => {
   window.addEventListener('resize', () => {
     resizeCanvas(rafCanvas);
     resizeCanvas(partCanvas);
+    resizeCanvas(collCanvas);
   });
 
   // ============================================================
@@ -1123,7 +1535,91 @@ container.addEventListener('mousemove', (e) => {
   initRAF();
   initParticles();
   initSpring();
+  initCollision();
   updateCode('raf');
   updateCode('particles');
+  updateCode('collision');
+
+  // ============================================================
+  //  HACKER STATS SIDE PANEL
+  // ============================================================
+  function initHackerPanel() {
+    const toggle = $('#hacker-toggle');
+    const panel = $('#hacker-panel');
+    if (!toggle || !panel) return;
+
+    // Toggle panel open/close
+    toggle.addEventListener('click', () => {
+      panel.classList.toggle('open');
+      toggle.classList.toggle('active');
+      // Populate stats on first open
+      if (panel.classList.contains('open') && !panel.dataset.loaded) {
+        panel.dataset.loaded = '1';
+        populateStats();
+      }
+    });
+
+    function populateStats() {
+      const totalEl = $('#stat-total');
+      const cssEl = $('#stat-css');
+      const jsEl = $('#stat-js');
+      const svgEl = $('#stat-svg');
+      const panelsEl = $('#stat-panels');
+      const controlsEl = $('#stat-controls');
+      const barFill = $('#stat-bar-fill');
+      const statusEl = $('#stat-status');
+
+      // Count cards by section
+      const allCards = $$('.card').length;
+      const headings = document.querySelectorAll('h2.section-heading');
+      let cssCount = 0, jsCount = 0, svgCount = 0;
+
+      headings.forEach(heading => {
+        const text = heading.textContent.trim();
+        const grid = heading.nextElementSibling;
+        if (!grid) return;
+        const count = grid.querySelectorAll('.card').length;
+        if (text.includes('CSS')) cssCount += count;
+        else if (text.includes('JavaScript')) jsCount += count;
+        else if (text.includes('SVG')) svgCount += count;
+      });
+
+      // Count code panels and controls
+      const panelCount = $$('.code-panel').length;
+      const controlCount = $$('.controls input, .controls select').length;
+
+      // Animate counting up
+      function countUp(el, target, duration) {
+        if (!el || target === 0) { if (el) el.textContent = '0'; return; }
+        let start = 0;
+        const step = Math.max(1, Math.floor(duration / target));
+        const timer = setInterval(() => {
+          start++;
+          el.textContent = start;
+          if (start >= target) {
+            clearInterval(timer);
+            el.textContent = target;
+          }
+        }, step);
+      }
+
+      setTimeout(() => {
+        countUp(totalEl, allCards, 800);
+        countUp(cssEl, cssCount, 600);
+        countUp(jsEl, jsCount, 600);
+        countUp(svgEl, svgCount, 600);
+        countUp(panelsEl, panelCount, 500);
+        countUp(controlsEl, controlCount, 700);
+        if (barFill) barFill.style.width = '100%';
+        if (statusEl) {
+          setTimeout(() => {
+            statusEl.textContent = '> all systems operational_';
+          }, 900);
+        }
+      }, 200);
+    }
+  }
+
+  initHackerPanel();
 
 });

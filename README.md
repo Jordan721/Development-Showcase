@@ -186,7 +186,7 @@ Development-Showcase/
 │   │   ├── favicon.svg        # Shield with target icon
 │   │   └── README.md          # Detailed documentation
 │   ├── Algorithm_Arena/       # 🏆 Algorithm visualization tool (+ favicon)
-│   └── Animation_In_HTML/     # 🎨 Interactive animation explorer (+ favicon)
+│   └── AnimateLab/            # 🎨 Interactive animation explorer (+ favicon)
 │       ├── index.html         # 12 animation technique cards
 │       ├── styles.css         # Colorful bold responsive theme
 │       ├── script.js          # Animation logic & live code preview

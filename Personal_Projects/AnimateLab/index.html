@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animation Explorer</title>
+    <title>AnimateLab</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -13,9 +13,61 @@
 
     <header class="header">
         <a href="../../index.html" class="back-link">&#8592; Back to Showcase</a>
-        <h1>Animation Explorer</h1>
+        <h1 class="animated-title">
+            <span class="title-letter">A</span><span class="title-letter">n</span><span
+                class="title-letter">i</span><span class="title-letter">m</span><span class="title-letter">a</span><span
+                class="title-letter">t</span><span class="title-letter">e</span><span
+                class="title-letter title-accent">L</span><span class="title-letter title-accent">a</span><span
+                class="title-letter title-accent">b</span>
+        </h1>
         <p>Click, hover, drag & tweak — discover how animations work</p>
     </header>
+
+    <button class="hacker-toggle" id="hacker-toggle" aria-label="Toggle stats panel">&lt;/&gt;</button>
+    <aside class="hacker-panel" id="hacker-panel">
+        <div class="hacker-header">
+            <span class="hacker-title">SYSTEM MONITOR</span>
+            <span class="hacker-blink"></span>
+        </div>
+        <div class="hacker-divider"></div>
+        <div class="stat-block">
+            <span class="stat-prefix">[SYS]</span>
+            <span class="stat-label">ANIMATIONS_LOADED</span>
+            <span class="stat-value stat-big" id="stat-total">0</span>
+        </div>
+        <div class="hacker-divider"></div>
+        <div class="stat-block">
+            <span class="stat-prefix">[CSS]</span>
+            <span class="stat-label">css_techniques</span>
+            <span class="stat-value" id="stat-css">0</span>
+        </div>
+        <div class="stat-block">
+            <span class="stat-prefix">[JS]</span>
+            <span class="stat-label">js_techniques</span>
+            <span class="stat-value" id="stat-js">0</span>
+        </div>
+        <div class="stat-block">
+            <span class="stat-prefix">[SVG]</span>
+            <span class="stat-label">svg_techniques</span>
+            <span class="stat-value" id="stat-svg">0</span>
+        </div>
+        <div class="hacker-divider"></div>
+        <div class="stat-block">
+            <span class="stat-prefix">[MEM]</span>
+            <span class="stat-label">code_panels</span>
+            <span class="stat-value" id="stat-panels">0</span>
+        </div>
+        <div class="stat-block">
+            <span class="stat-prefix">[CTL]</span>
+            <span class="stat-label">controls</span>
+            <span class="stat-value" id="stat-controls">0</span>
+        </div>
+        <div class="hacker-divider"></div>
+        <div class="stat-bar">
+            <div class="stat-bar-fill" id="stat-bar-fill"></div>
+        </div>
+        <div class="stat-status" id="stat-status">&gt; all systems operational_</div>
+    </aside>
 
     <!-- ====== CSS FUNDAMENTALS ====== -->
     <h2 class="section-heading">
@@ -188,6 +240,98 @@
                 <textarea id="code-textarea-hover" spellcheck="false"></textarea>
             </div>
         </div>
+
+        <!-- 5. Typing Effect -->
+        <div class="card" data-theme="orange" id="card-typing">
+            <div class="card-title-bar">
+                <span>Typing Effect</span>
+                <span class="interaction-hint">Click to replay</span>
+            </div>
+            <div class="preview-area" id="preview-typing">
+                <div class="typing-preview">
+                    <span class="typing-cursor-line">&gt; </span>
+                    <span class="typing-text" id="typing-el"></span>
+                    <span class="typing-cursor" id="typing-cursor">|</span>
+                </div>
+            </div>
+            <div class="controls-panel">
+                <div class="control-row">
+                    <label>Speed</label>
+                    <input type="range" id="ctrl-typing-speed" min="20" max="200" step="10" value="80">
+                    <span class="value-display" id="val-typing-speed">80ms</span>
+                </div>
+                <div class="control-row">
+                    <label>Text</label>
+                    <select id="ctrl-typing-text">
+                        <option value="Hello, World!">Hello, World!</option>
+                        <option value="AnimateLab is awesome.">AnimateLab</option>
+                        <option value="console.log('magic');">console.log</option>
+                        <option value="The quick brown fox jumps.">Pangram</option>
+                    </select>
+                </div>
+                <div class="control-row">
+                    <label>Color</label>
+                    <input type="color" id="ctrl-typing-color" value="#f97316">
+                </div>
+            </div>
+            <button class="code-toggle-btn" data-target="code-typing">Show Code</button>
+            <div class="code-panel" id="code-typing">
+                <div class="code-panel-header">
+                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">CSS + JS</span>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn btn-apply" data-card="typing">Apply</button>
+                        <button class="btn btn-reset" data-card="typing">Reset</button>
+                    </div>
+                </div>
+                <textarea id="code-textarea-typing" spellcheck="false"></textarea>
+            </div>
+        </div>
+
+        <!-- 6. Flip Cards -->
+        <div class="card" data-theme="indigo" id="card-flip">
+            <div class="card-title-bar">
+                <span>3D Flip Card</span>
+                <span class="interaction-hint">Hover to flip</span>
+            </div>
+            <div class="preview-area" id="preview-flip">
+                <div class="flip-container" id="flip-container">
+                    <div class="flip-inner" id="flip-inner">
+                        <div class="flip-front" id="flip-front">Front</div>
+                        <div class="flip-back" id="flip-back">Back!</div>
+                    </div>
+                </div>
+            </div>
+            <div class="controls-panel">
+                <div class="control-row">
+                    <label>Duration</label>
+                    <input type="range" id="ctrl-flip-duration" min="0.2" max="2" step="0.1" value="0.6">
+                    <span class="value-display" id="val-flip-duration">0.6s</span>
+                </div>
+                <div class="control-row">
+                    <label>Axis</label>
+                    <select id="ctrl-flip-axis">
+                        <option value="Y">Horizontal (Y)</option>
+                        <option value="X">Vertical (X)</option>
+                    </select>
+                </div>
+                <div class="control-row">
+                    <label>Color</label>
+                    <input type="color" id="ctrl-flip-color" value="#6366f1">
+                </div>
+            </div>
+            <button class="code-toggle-btn" data-target="code-flip">Show Code</button>
+            <div class="code-panel" id="code-flip">
+                <div class="code-panel-header">
+                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">CSS</span>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn btn-apply" data-card="flip">Apply</button>
+                        <button class="btn btn-reset" data-card="flip">Reset</button>
+                    </div>
+                </div>
+                <textarea id="code-textarea-flip" spellcheck="false"></textarea>
+            </div>
+        </div>
+
     </div>
 
     <!-- ====== ADVANCED CSS ====== -->
@@ -287,6 +431,49 @@
                 <textarea id="code-textarea-scroll" spellcheck="false"></textarea>
             </div>
         </div>
+
+        <!-- Gradient Animation -->
+        <div class="card" data-theme="pink" id="card-gradient">
+            <div class="card-title-bar">
+                <span>Gradient Animation</span>
+                <span class="interaction-hint">Auto-plays</span>
+            </div>
+            <div class="preview-area" id="preview-gradient">
+                <div class="gradient-box" id="gradient-el"></div>
+            </div>
+            <div class="controls-panel">
+                <div class="control-row">
+                    <label>Speed</label>
+                    <input type="range" id="ctrl-grad-speed" min="1" max="12" step="0.5" value="4">
+                    <span class="value-display" id="val-grad-speed">4s</span>
+                </div>
+                <div class="control-row">
+                    <label>Angle</label>
+                    <input type="range" id="ctrl-grad-angle" min="0" max="360" step="15" value="135">
+                    <span class="value-display" id="val-grad-angle">135deg</span>
+                </div>
+                <div class="control-row">
+                    <label>Color 1</label>
+                    <input type="color" id="ctrl-grad-color1" value="#ec4899">
+                </div>
+                <div class="control-row">
+                    <label>Color 2</label>
+                    <input type="color" id="ctrl-grad-color2" value="#8b5cf6">
+                </div>
+            </div>
+            <button class="code-toggle-btn" data-target="code-gradient">Show Code</button>
+            <div class="code-panel" id="code-gradient">
+                <div class="code-panel-header">
+                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">CSS</span>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn btn-apply" data-card="gradient">Apply</button>
+                        <button class="btn btn-reset" data-card="gradient">Reset</button>
+                    </div>
+                </div>
+                <textarea id="code-textarea-gradient" spellcheck="false"></textarea>
+            </div>
+        </div>
+
     </div>
 
     <!-- ====== JAVASCRIPT & CANVAS ====== -->
@@ -463,6 +650,46 @@
                 <textarea id="code-textarea-spring" spellcheck="false"></textarea>
             </div>
         </div>
+
+        <!-- Elastic Collision -->
+        <div class="card" data-theme="yellow" id="card-collision">
+            <div class="card-title-bar">
+                <span>Elastic Collision</span>
+                <span class="interaction-hint">Click to add balls</span>
+            </div>
+            <div class="preview-area" id="preview-collision">
+                <canvas id="collision-canvas"></canvas>
+            </div>
+            <div class="controls-panel">
+                <div class="control-row">
+                    <label>Balls</label>
+                    <input type="range" id="ctrl-coll-count" min="2" max="20" step="1" value="5">
+                    <span class="value-display" id="val-coll-count">5</span>
+                </div>
+                <div class="control-row">
+                    <label>Gravity</label>
+                    <input type="range" id="ctrl-coll-gravity" min="0" max="1" step="0.05" value="0.2">
+                    <span class="value-display" id="val-coll-gravity">0.2</span>
+                </div>
+                <div class="control-row">
+                    <label>Bounce</label>
+                    <input type="range" id="ctrl-coll-bounce" min="0.3" max="1" step="0.05" value="0.9">
+                    <span class="value-display" id="val-coll-bounce">0.9</span>
+                </div>
+            </div>
+            <button class="code-toggle-btn" data-target="code-collision">Show Code</button>
+            <div class="code-panel" id="code-collision">
+                <div class="code-panel-header">
+                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">JavaScript</span>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn btn-apply" data-card="collision">Apply</button>
+                        <button class="btn btn-reset" data-card="collision">Reset</button>
+                    </div>
+                </div>
+                <textarea id="code-textarea-collision" spellcheck="false"></textarea>
+            </div>
+        </div>
+
     </div>
 
     <!-- ====== SVG & ADVANCED ====== -->
@@ -556,7 +783,7 @@
     </div>
 
     <footer style="text-align:center; padding:40px 20px; color:#4a4a6a; font-size:0.85rem; font-weight:600;">
-        Animation Explorer &mdash; Tweak, experiment, learn
+        AnimateLab &mdash; Tweak, experiment, learn
     </footer>
 
     <script src="script.js"></script>
