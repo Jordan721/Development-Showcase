@@ -1,8 +1,108 @@
 /* ========================================
-   Animation Explorer - Main Script
+   AnimateLab - Main Script
    ======================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
+
+  // ============================================================
+  //  HEADER CANVAS - Flowing Gradient Waves
+  // ============================================================
+  function initHeaderCanvas() {
+    const canvas = document.querySelector('#header-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let t = 0;
+
+    function resize() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Wave layers - each has its own frequency, amplitude, speed, and color
+    const waves = [{
+        freq: 0.003,
+        amp: 0.35,
+        speed: 0.008,
+        yOff: 0.55,
+        color: [139, 92, 246]
+      },
+      {
+        freq: 0.005,
+        amp: 0.25,
+        speed: 0.012,
+        yOff: 0.50,
+        color: [167, 139, 250]
+      },
+      {
+        freq: 0.004,
+        amp: 0.30,
+        speed: 0.006,
+        yOff: 0.60,
+        color: [124, 58, 237]
+      },
+      {
+        freq: 0.006,
+        amp: 0.20,
+        speed: 0.015,
+        yOff: 0.45,
+        color: [196, 181, 253]
+      },
+    ];
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const w = canvas.width;
+      const h = canvas.height;
+
+      waves.forEach(wave => {
+        ctx.beginPath();
+        ctx.moveTo(0, h);
+
+        for (let x = 0; x <= w; x += 2) {
+          const baseY = h * wave.yOff;
+          const y = baseY +
+            Math.sin(x * wave.freq + t * wave.speed) * h * wave.amp * 0.5 +
+            Math.sin(x * wave.freq * 1.8 + t * wave.speed * 0.7) * h * wave.amp * 0.25;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+
+        ctx.lineTo(w, h);
+        ctx.lineTo(0, h);
+        ctx.closePath();
+
+        const [r, g, b] = wave.color;
+        const grad = ctx.createLinearGradient(0, h * 0.3, 0, h);
+        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0.06)`);
+        grad.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, 0.03)`);
+        grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+        ctx.fillStyle = grad;
+        ctx.fill();
+
+        // Thin stroke on top edge
+        ctx.beginPath();
+        for (let x = 0; x <= w; x += 2) {
+          const baseY = h * wave.yOff;
+          const y = baseY +
+            Math.sin(x * wave.freq + t * wave.speed) * h * wave.amp * 0.5 +
+            Math.sin(x * wave.freq * 1.8 + t * wave.speed * 0.7) * h * wave.amp * 0.25;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.12)`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      });
+
+      t++;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
+
+  initHeaderCanvas();
 
   // ── Utility helpers ──
   const $ = (sel) => document.querySelector(sel);
@@ -74,7 +174,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!defs) return;
     for (const [id, val] of Object.entries(defs)) {
       const el = $('#' + id);
-      if (el) { el.value = val; el.dispatchEvent(new Event('input')); }
+      if (el) {
+        el.value = val;
+        el.dispatchEvent(new Event('input'));
+      }
     }
   }
 
@@ -566,10 +669,19 @@ draw();`;
     const ease = $('#ctrl-waapi-easing').value;
     const iter = parseInt($('#ctrl-waapi-iterations').value);
 
-    waapiEl.animate([
-      { transform: 'scale(1) rotate(0deg)', borderRadius: '16px' },
-      { transform: 'scale(1.4) rotate(180deg)', borderRadius: '50%', offset: 0.5 },
-      { transform: 'scale(1) rotate(360deg)', borderRadius: '16px' }
+    waapiEl.animate([{
+        transform: 'scale(1) rotate(0deg)',
+        borderRadius: '16px'
+      },
+      {
+        transform: 'scale(1.4) rotate(180deg)',
+        borderRadius: '50%',
+        offset: 0.5
+      },
+      {
+        transform: 'scale(1) rotate(360deg)',
+        borderRadius: '16px'
+      }
     ], {
       duration: dur,
       easing: ease,
@@ -703,7 +815,8 @@ draw();`;
         const angle = Math.random() * Math.PI * 2;
         const speed = Math.random() * 3 + 1;
         particles.push({
-          x: mx, y: my,
+          x: mx,
+          y: my,
           vx: Math.cos(angle) * speed,
           vy: Math.sin(angle) * speed,
           s: Math.random() * 1.2 + 0.5,
@@ -713,7 +826,10 @@ draw();`;
     });
   }
 
-  bindControl('#ctrl-part-count', '#val-part-count', '', (v) => { createParticles(); updateCode('particles'); });
+  bindControl('#ctrl-part-count', '#val-part-count', '', (v) => {
+    createParticles();
+    updateCode('particles');
+  });
   bindControl('#ctrl-part-speed', '#val-part-speed', 'x', () => updateCode('particles'));
   bindControl('#ctrl-part-size', '#val-part-size', 'px', () => updateCode('particles'));
   bindControl('#ctrl-part-color', null, '', () => updateCode('particles'));
@@ -755,7 +871,15 @@ function draw() {
   //  10. SPRING PHYSICS
   // ============================================================
   const springBall = $('#spring-ball');
-  let springState = { x: 0, y: 0, vx: 0, vy: 0, dragging: false, targetX: 0, targetY: 0 };
+  let springState = {
+    x: 0,
+    y: 0,
+    vx: 0,
+    vy: 0,
+    dragging: false,
+    targetX: 0,
+    targetY: 0
+  };
   let springAnim;
 
   defaultValues.spring = {
@@ -775,7 +899,8 @@ function draw() {
     springBall.style.left = springState.x + 'px';
     springBall.style.top = springState.y + 'px';
 
-    let dragOffsetX = 0, dragOffsetY = 0;
+    let dragOffsetX = 0,
+      dragOffsetY = 0;
 
     springBall.addEventListener('mousedown', (e) => {
       springState.dragging = true;
@@ -814,8 +939,12 @@ function draw() {
       springState.y = touch.clientY - previewRect.top - dragOffsetY;
     });
 
-    document.addEventListener('mouseup', () => { springState.dragging = false; });
-    document.addEventListener('touchend', () => { springState.dragging = false; });
+    document.addEventListener('mouseup', () => {
+      springState.dragging = false;
+    });
+    document.addEventListener('touchend', () => {
+      springState.dragging = false;
+    });
 
     function simulateSpring() {
       if (!springState.dragging) {
@@ -944,7 +1073,10 @@ function simulate() {
   setMorphShape(0);
 
   bindControl('#ctrl-morph-speed', '#val-morph-speed', 's', updateMorph);
-  bindControl('#ctrl-morph-shape', null, '', (v) => { setMorphShape(parseInt(v)); updateCode('morph'); });
+  bindControl('#ctrl-morph-shape', null, '', (v) => {
+    setMorphShape(parseInt(v));
+    updateCode('morph');
+  });
   bindControl('#ctrl-morph-color', null, '', updateMorph);
 
   codeGenerators.morph = () => {
@@ -1050,8 +1182,14 @@ function simulate() {
   createParallaxLayers();
 
   bindControl('#ctrl-parallax-depth', '#val-parallax-depth', 'x', () => updateCode('parallax'));
-  bindControl('#ctrl-parallax-layers', '#val-parallax-layers', '', () => { createParallaxLayers(); updateCode('parallax'); });
-  bindControl('#ctrl-parallax-color', null, '', () => { createParallaxLayers(); updateCode('parallax'); });
+  bindControl('#ctrl-parallax-layers', '#val-parallax-layers', '', () => {
+    createParallaxLayers();
+    updateCode('parallax');
+  });
+  bindControl('#ctrl-parallax-color', null, '', () => {
+    createParallaxLayers();
+    updateCode('parallax');
+  });
 
   codeGenerators.parallax = () => {
     const depth = $('#ctrl-parallax-depth').value;
@@ -1119,7 +1257,10 @@ container.addEventListener('mousemove', (e) => {
   }
 
   bindControl('#ctrl-typing-speed', '#val-typing-speed', 'ms', () => updateCode('typing'));
-  bindControl('#ctrl-typing-text', null, '', () => { startTyping(); updateCode('typing'); });
+  bindControl('#ctrl-typing-text', null, '', () => {
+    startTyping();
+    updateCode('typing');
+  });
   bindControl('#ctrl-typing-color', null, '', () => {
     if (typingEl) typingEl.style.color = $('#ctrl-typing-color').value;
     updateCode('typing');
@@ -1356,16 +1497,29 @@ typeChar();`;
         b.y += b.vy;
 
         // Wall collision
-        if (b.x - b.r < 0) { b.x = b.r; b.vx = Math.abs(b.vx) * bounce; }
-        if (b.x + b.r > w) { b.x = w - b.r; b.vx = -Math.abs(b.vx) * bounce; }
-        if (b.y - b.r < 0) { b.y = b.r; b.vy = Math.abs(b.vy) * bounce; }
-        if (b.y + b.r > h) { b.y = h - b.r; b.vy = -Math.abs(b.vy) * bounce; }
+        if (b.x - b.r < 0) {
+          b.x = b.r;
+          b.vx = Math.abs(b.vx) * bounce;
+        }
+        if (b.x + b.r > w) {
+          b.x = w - b.r;
+          b.vx = -Math.abs(b.vx) * bounce;
+        }
+        if (b.y - b.r < 0) {
+          b.y = b.r;
+          b.vy = Math.abs(b.vy) * bounce;
+        }
+        if (b.y + b.r > h) {
+          b.y = h - b.r;
+          b.vy = -Math.abs(b.vy) * bounce;
+        }
       });
 
       // Ball-to-ball collision
       for (let i = 0; i < balls.length; i++) {
         for (let j = i + 1; j < balls.length; j++) {
-          const a = balls[i], b = balls[j];
+          const a = balls[i],
+            b = balls[j];
           const dx = b.x - a.x;
           const dy = b.y - a.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
@@ -1432,7 +1586,10 @@ typeChar();`;
     });
   }
 
-  bindControl('#ctrl-coll-count', '#val-coll-count', '', () => { createBalls(); updateCode('collision'); });
+  bindControl('#ctrl-coll-count', '#val-coll-count', '', () => {
+    createBalls();
+    updateCode('collision');
+  });
   bindControl('#ctrl-coll-gravity', '#val-coll-gravity', '', () => updateCode('collision'));
   bindControl('#ctrl-coll-bounce', '#val-coll-bounce', '', () => updateCode('collision'));
 
@@ -1541,11 +1698,11 @@ function simulate() {
   updateCode('collision');
 
   // ============================================================
-  //  HACKER STATS SIDE PANEL
+  //  STATS SIDE PANEL
   // ============================================================
-  function initHackerPanel() {
-    const toggle = $('#hacker-toggle');
-    const panel = $('#hacker-panel');
+  function initStatsPanel() {
+    const toggle = $('#stats-toggle');
+    const panel = $('#stats-panel');
     if (!toggle || !panel) return;
 
     // Toggle panel open/close
@@ -1569,16 +1726,21 @@ function simulate() {
       const barFill = $('#stat-bar-fill');
       const statusEl = $('#stat-status');
 
-      // Count cards by section
-      const allCards = $$('.card').length;
-      const headings = document.querySelectorAll('h2.section-heading');
-      let cssCount = 0, jsCount = 0, svgCount = 0;
+      // Count sections by category
+      const allCards = $$('.anim-section').length;
+      const headings = document.querySelectorAll('h2.category-heading');
+      let cssCount = 0,
+        jsCount = 0,
+        svgCount = 0;
 
       headings.forEach(heading => {
         const text = heading.textContent.trim();
-        const grid = heading.nextElementSibling;
-        if (!grid) return;
-        const count = grid.querySelectorAll('.card').length;
+        let count = 0;
+        let sibling = heading.nextElementSibling;
+        while (sibling && !sibling.matches('h2.category-heading')) {
+          if (sibling.matches('.anim-section')) count++;
+          sibling = sibling.nextElementSibling;
+        }
         if (text.includes('CSS')) cssCount += count;
         else if (text.includes('JavaScript')) jsCount += count;
         else if (text.includes('SVG')) svgCount += count;
@@ -1586,11 +1748,14 @@ function simulate() {
 
       // Count code panels and controls
       const panelCount = $$('.code-panel').length;
-      const controlCount = $$('.controls input, .controls select').length;
+      const controlCount = $$('.controls-panel input, .controls-panel select').length;
 
       // Animate counting up
       function countUp(el, target, duration) {
-        if (!el || target === 0) { if (el) el.textContent = '0'; return; }
+        if (!el || target === 0) {
+          if (el) el.textContent = '0';
+          return;
+        }
         let start = 0;
         const step = Math.max(1, Math.floor(duration / target));
         const timer = setInterval(() => {
@@ -1620,6 +1785,6 @@ function simulate() {
     }
   }
 
-  initHackerPanel();
+  initStatsPanel();
 
 });

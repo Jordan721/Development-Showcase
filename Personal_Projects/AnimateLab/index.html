@@ -12,7 +12,8 @@
 <body>
 
     <header class="header">
-        <a href="../../index.html" class="back-link">&#8592; Back to Showcase</a>
+        <canvas id="header-canvas"></canvas>
+        <a href="../../index.html" class="back-link">&#8592; To Showcase</a>
         <h1 class="animated-title">
             <span class="title-letter">A</span><span class="title-letter">n</span><span
                 class="title-letter">i</span><span class="title-letter">m</span><span class="title-letter">a</span><span
@@ -23,768 +24,840 @@
         <p>Click, hover, drag & tweak — discover how animations work</p>
     </header>
 
-    <button class="hacker-toggle" id="hacker-toggle" aria-label="Toggle stats panel">&lt;/&gt;</button>
-    <aside class="hacker-panel" id="hacker-panel">
-        <div class="hacker-header">
-            <span class="hacker-title">SYSTEM MONITOR</span>
-            <span class="hacker-blink"></span>
+    <button class="stats-toggle" id="stats-toggle" aria-label="Toggle stats panel">Stats</button>
+    <aside class="stats-panel" id="stats-panel">
+        <div class="stats-header">
+            <span class="stats-title">Lab Stats</span>
+            <span class="stats-dot"></span>
         </div>
-        <div class="hacker-divider"></div>
+        <div class="stats-divider"></div>
         <div class="stat-block">
-            <span class="stat-prefix">[SYS]</span>
-            <span class="stat-label">ANIMATIONS_LOADED</span>
+            <span class="stat-label">Animations</span>
             <span class="stat-value stat-big" id="stat-total">0</span>
         </div>
-        <div class="hacker-divider"></div>
+        <div class="stats-divider"></div>
         <div class="stat-block">
-            <span class="stat-prefix">[CSS]</span>
-            <span class="stat-label">css_techniques</span>
+            <span class="stat-tag">CSS</span>
+            <span class="stat-label">techniques</span>
             <span class="stat-value" id="stat-css">0</span>
         </div>
         <div class="stat-block">
-            <span class="stat-prefix">[JS]</span>
-            <span class="stat-label">js_techniques</span>
+            <span class="stat-tag">JS</span>
+            <span class="stat-label">techniques</span>
             <span class="stat-value" id="stat-js">0</span>
         </div>
         <div class="stat-block">
-            <span class="stat-prefix">[SVG]</span>
-            <span class="stat-label">svg_techniques</span>
+            <span class="stat-tag">SVG</span>
+            <span class="stat-label">techniques</span>
             <span class="stat-value" id="stat-svg">0</span>
         </div>
-        <div class="hacker-divider"></div>
+        <div class="stats-divider"></div>
         <div class="stat-block">
-            <span class="stat-prefix">[MEM]</span>
-            <span class="stat-label">code_panels</span>
+            <span class="stat-label">Code panels</span>
             <span class="stat-value" id="stat-panels">0</span>
         </div>
         <div class="stat-block">
-            <span class="stat-prefix">[CTL]</span>
-            <span class="stat-label">controls</span>
+            <span class="stat-label">Controls</span>
             <span class="stat-value" id="stat-controls">0</span>
         </div>
-        <div class="hacker-divider"></div>
+        <div class="stats-divider"></div>
         <div class="stat-bar">
             <div class="stat-bar-fill" id="stat-bar-fill"></div>
         </div>
-        <div class="stat-status" id="stat-status">&gt; all systems operational_</div>
+        <div class="stat-status" id="stat-status">Ready</div>
     </aside>
 
-    <!-- ====== CSS FUNDAMENTALS ====== -->
-    <h2 class="section-heading">
-        <span class="dot" style="background: #ec4899;"></span>
-        CSS Fundamentals
-    </h2>
-    <div class="card-grid">
+    <main class="main-content">
+
+        <!-- ====== CSS FUNDAMENTALS ====== -->
+        <h2 class="category-heading">CSS Fundamentals</h2>
 
         <!-- 1. CSS Transitions -->
-        <div class="card" data-theme="pink" id="card-transitions">
-            <div class="card-title-bar">
-                <span>CSS Transitions</span>
+        <section class="anim-section" id="card-transitions">
+            <div class="section-label">
+                <span class="section-name">CSS Transitions</span>
                 <span class="interaction-hint">Hover to preview</span>
             </div>
-            <div class="preview-area" id="preview-transitions">
-                <div class="transition-box active" id="transition-el"></div>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-transitions">
+                        <div class="transition-box active" id="transition-el"></div>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Duration</label>
+                            <input type="range" id="ctrl-trans-duration" min="0.1" max="3" step="0.1" value="0.5">
+                            <span class="value-display" id="val-trans-duration">0.5s</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Easing</label>
+                            <select id="ctrl-trans-easing">
+                                <option value="ease">ease</option>
+                                <option value="linear">linear</option>
+                                <option value="ease-in">ease-in</option>
+                                <option value="ease-out">ease-out</option>
+                                <option value="ease-in-out">ease-in-out</option>
+                                <option value="cubic-bezier(0.68, -0.55, 0.27, 1.55)">spring</option>
+                            </select>
+                        </div>
+                        <div class="control-row">
+                            <label>Scale</label>
+                            <input type="range" id="ctrl-trans-scale" min="1" max="2" step="0.1" value="1.3">
+                            <span class="value-display" id="val-trans-scale">1.3</span>
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-transitions">Show Code</button>
+                </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Duration</label>
-                    <input type="range" id="ctrl-trans-duration" min="0.1" max="3" step="0.1" value="0.5">
-                    <span class="value-display" id="val-trans-duration">0.5s</span>
-                </div>
-                <div class="control-row">
-                    <label>Easing</label>
-                    <select id="ctrl-trans-easing">
-                        <option value="ease">ease</option>
-                        <option value="linear">linear</option>
-                        <option value="ease-in">ease-in</option>
-                        <option value="ease-out">ease-out</option>
-                        <option value="ease-in-out">ease-in-out</option>
-                        <option value="cubic-bezier(0.68, -0.55, 0.27, 1.55)">spring</option>
-                    </select>
-                </div>
-                <div class="control-row">
-                    <label>Scale</label>
-                    <input type="range" id="ctrl-trans-scale" min="1" max="2" step="0.1" value="1.3">
-                    <span class="value-display" id="val-trans-scale">1.3</span>
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-transitions">Show Code</button>
             <div class="code-panel" id="code-transitions">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">CSS</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">CSS</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="transitions">Apply</button>
                         <button class="btn btn-reset" data-card="transitions">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-transitions" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
         <!-- 2. Keyframe Animations -->
-        <div class="card" data-theme="purple" id="card-keyframes">
-            <div class="card-title-bar">
-                <span>Keyframe Animations</span>
+        <section class="anim-section" id="card-keyframes">
+            <div class="section-label">
+                <span class="section-name">Keyframe Animations</span>
                 <span class="interaction-hint">Click to play</span>
             </div>
-            <div class="preview-area" id="preview-keyframes">
-                <div class="keyframe-box" id="keyframe-el"></div>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-keyframes">
+                        <div class="keyframe-box" id="keyframe-el"></div>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Duration</label>
+                            <input type="range" id="ctrl-kf-duration" min="0.2" max="4" step="0.1" value="1">
+                            <span class="value-display" id="val-kf-duration">1s</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Iterations</label>
+                            <input type="range" id="ctrl-kf-iterations" min="1" max="10" step="1" value="3">
+                            <span class="value-display" id="val-kf-iterations">3</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Direction</label>
+                            <select id="ctrl-kf-direction">
+                                <option value="normal">normal</option>
+                                <option value="reverse">reverse</option>
+                                <option value="alternate">alternate</option>
+                                <option value="alternate-reverse">alternate-reverse</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-keyframes">Show Code</button>
+                </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Duration</label>
-                    <input type="range" id="ctrl-kf-duration" min="0.2" max="4" step="0.1" value="1">
-                    <span class="value-display" id="val-kf-duration">1s</span>
-                </div>
-                <div class="control-row">
-                    <label>Iterations</label>
-                    <input type="range" id="ctrl-kf-iterations" min="1" max="10" step="1" value="3">
-                    <span class="value-display" id="val-kf-iterations">3</span>
-                </div>
-                <div class="control-row">
-                    <label>Direction</label>
-                    <select id="ctrl-kf-direction">
-                        <option value="normal">normal</option>
-                        <option value="reverse">reverse</option>
-                        <option value="alternate">alternate</option>
-                        <option value="alternate-reverse">alternate-reverse</option>
-                    </select>
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-keyframes">Show Code</button>
             <div class="code-panel" id="code-keyframes">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">CSS</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">CSS</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="keyframes">Apply</button>
                         <button class="btn btn-reset" data-card="keyframes">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-keyframes" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
         <!-- 3. CSS Transforms -->
-        <div class="card" data-theme="blue" id="card-transforms">
-            <div class="card-title-bar">
-                <span>CSS Transforms</span>
+        <section class="anim-section" id="card-transforms">
+            <div class="section-label">
+                <span class="section-name">CSS Transforms</span>
                 <span class="interaction-hint">Hover to preview</span>
             </div>
-            <div class="preview-area" id="preview-transforms">
-                <div class="transform-box" id="transform-el"></div>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-transforms">
+                        <div class="transform-box" id="transform-el"></div>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Rotate</label>
+                            <input type="range" id="ctrl-tf-rotate" min="0" max="360" step="5" value="45">
+                            <span class="value-display" id="val-tf-rotate">45deg</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Scale</label>
+                            <input type="range" id="ctrl-tf-scale" min="0.2" max="2.5" step="0.1" value="1.2">
+                            <span class="value-display" id="val-tf-scale">1.2</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Skew</label>
+                            <input type="range" id="ctrl-tf-skew" min="-45" max="45" step="5" value="0">
+                            <span class="value-display" id="val-tf-skew">0deg</span>
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-transforms">Show Code</button>
+                </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Rotate</label>
-                    <input type="range" id="ctrl-tf-rotate" min="0" max="360" step="5" value="45">
-                    <span class="value-display" id="val-tf-rotate">45deg</span>
-                </div>
-                <div class="control-row">
-                    <label>Scale</label>
-                    <input type="range" id="ctrl-tf-scale" min="0.2" max="2.5" step="0.1" value="1.2">
-                    <span class="value-display" id="val-tf-scale">1.2</span>
-                </div>
-                <div class="control-row">
-                    <label>Skew</label>
-                    <input type="range" id="ctrl-tf-skew" min="-45" max="45" step="5" value="0">
-                    <span class="value-display" id="val-tf-skew">0deg</span>
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-transforms">Show Code</button>
             <div class="code-panel" id="code-transforms">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">CSS</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">CSS</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="transforms">Apply</button>
                         <button class="btn btn-reset" data-card="transforms">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-transforms" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
         <!-- 4. Hover Effects -->
-        <div class="card" data-theme="cyan" id="card-hover">
-            <div class="card-title-bar">
-                <span>Hover Effects</span>
+        <section class="anim-section" id="card-hover">
+            <div class="section-label">
+                <span class="section-name">Hover Effects</span>
                 <span class="interaction-hint">Hover to preview</span>
             </div>
-            <div class="preview-area" id="preview-hover">
-                <div class="hover-demo-box" id="hover-el">Hover Me</div>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-hover">
+                        <div class="hover-demo-box" id="hover-el">Hover Me</div>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Glow</label>
+                            <input type="range" id="ctrl-hover-glow" min="0" max="50" step="2" value="20">
+                            <span class="value-display" id="val-hover-glow">20px</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Lift</label>
+                            <input type="range" id="ctrl-hover-lift" min="0" max="30" step="1" value="10">
+                            <span class="value-display" id="val-hover-lift">10px</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Color</label>
+                            <input type="color" id="ctrl-hover-color" value="#06b6d4">
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-hover">Show Code</button>
+                </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Glow</label>
-                    <input type="range" id="ctrl-hover-glow" min="0" max="50" step="2" value="20">
-                    <span class="value-display" id="val-hover-glow">20px</span>
-                </div>
-                <div class="control-row">
-                    <label>Lift</label>
-                    <input type="range" id="ctrl-hover-lift" min="0" max="30" step="1" value="10">
-                    <span class="value-display" id="val-hover-lift">10px</span>
-                </div>
-                <div class="control-row">
-                    <label>Color</label>
-                    <input type="color" id="ctrl-hover-color" value="#06b6d4">
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-hover">Show Code</button>
             <div class="code-panel" id="code-hover">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">CSS</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">CSS</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="hover">Apply</button>
                         <button class="btn btn-reset" data-card="hover">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-hover" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
         <!-- 5. Typing Effect -->
-        <div class="card" data-theme="orange" id="card-typing">
-            <div class="card-title-bar">
-                <span>Typing Effect</span>
+        <section class="anim-section" id="card-typing">
+            <div class="section-label">
+                <span class="section-name">Typing Effect</span>
                 <span class="interaction-hint">Click to replay</span>
             </div>
-            <div class="preview-area" id="preview-typing">
-                <div class="typing-preview">
-                    <span class="typing-cursor-line">&gt; </span>
-                    <span class="typing-text" id="typing-el"></span>
-                    <span class="typing-cursor" id="typing-cursor">|</span>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-typing">
+                        <div class="typing-preview">
+                            <span class="typing-cursor-line">&gt; </span>
+                            <span class="typing-text" id="typing-el"></span>
+                            <span class="typing-cursor" id="typing-cursor">|</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Speed</label>
+                            <input type="range" id="ctrl-typing-speed" min="20" max="200" step="10" value="80">
+                            <span class="value-display" id="val-typing-speed">80ms</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Text</label>
+                            <select id="ctrl-typing-text">
+                                <option value="Hello, World!">Hello, World!</option>
+                                <option value="AnimateLab is awesome.">AnimateLab</option>
+                                <option value="console.log('magic');">console.log</option>
+                                <option value="The quick brown fox jumps.">Pangram</option>
+                            </select>
+                        </div>
+                        <div class="control-row">
+                            <label>Color</label>
+                            <input type="color" id="ctrl-typing-color" value="#f97316">
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-typing">Show Code</button>
                 </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Speed</label>
-                    <input type="range" id="ctrl-typing-speed" min="20" max="200" step="10" value="80">
-                    <span class="value-display" id="val-typing-speed">80ms</span>
-                </div>
-                <div class="control-row">
-                    <label>Text</label>
-                    <select id="ctrl-typing-text">
-                        <option value="Hello, World!">Hello, World!</option>
-                        <option value="AnimateLab is awesome.">AnimateLab</option>
-                        <option value="console.log('magic');">console.log</option>
-                        <option value="The quick brown fox jumps.">Pangram</option>
-                    </select>
-                </div>
-                <div class="control-row">
-                    <label>Color</label>
-                    <input type="color" id="ctrl-typing-color" value="#f97316">
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-typing">Show Code</button>
             <div class="code-panel" id="code-typing">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">CSS + JS</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">CSS + JS</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="typing">Apply</button>
                         <button class="btn btn-reset" data-card="typing">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-typing" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
-        <!-- 6. Flip Cards -->
-        <div class="card" data-theme="indigo" id="card-flip">
-            <div class="card-title-bar">
-                <span>3D Flip Card</span>
+        <!-- 6. 3D Flip Card -->
+        <section class="anim-section" id="card-flip">
+            <div class="section-label">
+                <span class="section-name">3D Flip Card</span>
                 <span class="interaction-hint">Hover to flip</span>
             </div>
-            <div class="preview-area" id="preview-flip">
-                <div class="flip-container" id="flip-container">
-                    <div class="flip-inner" id="flip-inner">
-                        <div class="flip-front" id="flip-front">Front</div>
-                        <div class="flip-back" id="flip-back">Back!</div>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-flip">
+                        <div class="flip-container" id="flip-container">
+                            <div class="flip-inner" id="flip-inner">
+                                <div class="flip-front" id="flip-front">Front</div>
+                                <div class="flip-back" id="flip-back">Back!</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Duration</label>
+                            <input type="range" id="ctrl-flip-duration" min="0.2" max="2" step="0.1" value="0.6">
+                            <span class="value-display" id="val-flip-duration">0.6s</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Axis</label>
+                            <select id="ctrl-flip-axis">
+                                <option value="Y">Horizontal (Y)</option>
+                                <option value="X">Vertical (X)</option>
+                            </select>
+                        </div>
+                        <div class="control-row">
+                            <label>Color</label>
+                            <input type="color" id="ctrl-flip-color" value="#6366f1">
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-flip">Show Code</button>
+                </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Duration</label>
-                    <input type="range" id="ctrl-flip-duration" min="0.2" max="2" step="0.1" value="0.6">
-                    <span class="value-display" id="val-flip-duration">0.6s</span>
-                </div>
-                <div class="control-row">
-                    <label>Axis</label>
-                    <select id="ctrl-flip-axis">
-                        <option value="Y">Horizontal (Y)</option>
-                        <option value="X">Vertical (X)</option>
-                    </select>
-                </div>
-                <div class="control-row">
-                    <label>Color</label>
-                    <input type="color" id="ctrl-flip-color" value="#6366f1">
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-flip">Show Code</button>
             <div class="code-panel" id="code-flip">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">CSS</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">CSS</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="flip">Apply</button>
                         <button class="btn btn-reset" data-card="flip">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-flip" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
-    </div>
+        <!-- ====== ADVANCED CSS ====== -->
+        <h2 class="category-heading">Advanced CSS</h2>
 
-    <!-- ====== ADVANCED CSS ====== -->
-    <h2 class="section-heading">
-        <span class="dot" style="background: #22c55e;"></span>
-        Advanced CSS
-    </h2>
-    <div class="card-grid">
-
-        <!-- 5. CSS Variables Animation -->
-        <div class="card" data-theme="green" id="card-cssvars">
-            <div class="card-title-bar">
-                <span>CSS Variables Animation</span>
+        <!-- 7. CSS Variables Animation -->
+        <section class="anim-section" id="card-cssvars">
+            <div class="section-label">
+                <span class="section-name">CSS Variables Animation</span>
                 <span class="interaction-hint">Auto-plays</span>
             </div>
-            <div class="preview-area" id="preview-cssvars">
-                <div class="css-var-preview">
-                    <div class="css-var-ring" id="cssvar-ring"></div>
-                    <div class="css-var-dot" id="cssvar-dot"></div>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-cssvars">
+                        <div class="css-var-preview">
+                            <div class="css-var-ring" id="cssvar-ring"></div>
+                            <div class="css-var-dot" id="cssvar-dot"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Hue</label>
+                            <input type="range" id="ctrl-cssvar-hue" min="0" max="360" step="5" value="140">
+                            <span class="value-display" id="val-cssvar-hue">140</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Speed</label>
+                            <input type="range" id="ctrl-cssvar-speed" min="0.5" max="5" step="0.25" value="2">
+                            <span class="value-display" id="val-cssvar-speed">2s</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Size</label>
+                            <input type="range" id="ctrl-cssvar-size" min="60" max="160" step="10" value="120">
+                            <span class="value-display" id="val-cssvar-size">120px</span>
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-cssvars">Show Code</button>
                 </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Hue</label>
-                    <input type="range" id="ctrl-cssvar-hue" min="0" max="360" step="5" value="140">
-                    <span class="value-display" id="val-cssvar-hue">140</span>
-                </div>
-                <div class="control-row">
-                    <label>Speed</label>
-                    <input type="range" id="ctrl-cssvar-speed" min="0.5" max="5" step="0.25" value="2">
-                    <span class="value-display" id="val-cssvar-speed">2s</span>
-                </div>
-                <div class="control-row">
-                    <label>Size</label>
-                    <input type="range" id="ctrl-cssvar-size" min="60" max="160" step="10" value="120">
-                    <span class="value-display" id="val-cssvar-size">120px</span>
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-cssvars">Show Code</button>
             <div class="code-panel" id="code-cssvars">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">CSS</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">CSS</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="cssvars">Apply</button>
                         <button class="btn btn-reset" data-card="cssvars">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-cssvars" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
-        <!-- 6. Scroll-Driven Animation -->
-        <div class="card" data-theme="yellow" id="card-scroll">
-            <div class="card-title-bar">
-                <span>Scroll-Driven Animation</span>
+        <!-- 8. Scroll-Driven Animation -->
+        <section class="anim-section" id="card-scroll">
+            <div class="section-label">
+                <span class="section-name">Scroll-Driven Animation</span>
                 <span class="interaction-hint">Scroll inside</span>
             </div>
-            <div class="preview-area" id="preview-scroll">
-                <div class="scroll-progress-bar" id="scroll-progress"></div>
-                <div class="scroll-container" id="scroll-container">
-                    <div class="scroll-reveal-item">Scroll down to reveal items</div>
-                    <div class="scroll-reveal-item">CSS scroll-driven animations</div>
-                    <div class="scroll-reveal-item">Trigger on viewport entry</div>
-                    <div class="scroll-reveal-item">No JavaScript required</div>
-                    <div class="scroll-reveal-item">Progress-based timing</div>
-                    <div class="scroll-reveal-item">Smooth reveal effects</div>
-                    <div class="scroll-reveal-item">Linked to scroll position</div>
-                    <div class="scroll-reveal-item">Keep scrolling!</div>
-                    <div class="scroll-reveal-item">Almost there...</div>
-                    <div class="scroll-reveal-item">You made it!</div>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-scroll">
+                        <div class="scroll-progress-bar" id="scroll-progress"></div>
+                        <div class="scroll-container" id="scroll-container">
+                            <div class="scroll-reveal-item">Scroll down to reveal items</div>
+                            <div class="scroll-reveal-item">CSS scroll-driven animations</div>
+                            <div class="scroll-reveal-item">Trigger on viewport entry</div>
+                            <div class="scroll-reveal-item">No JavaScript required</div>
+                            <div class="scroll-reveal-item">Progress-based timing</div>
+                            <div class="scroll-reveal-item">Smooth reveal effects</div>
+                            <div class="scroll-reveal-item">Linked to scroll position</div>
+                            <div class="scroll-reveal-item">Keep scrolling!</div>
+                            <div class="scroll-reveal-item">Almost there...</div>
+                            <div class="scroll-reveal-item">You made it!</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Easing</label>
+                            <select id="ctrl-scroll-easing">
+                                <option value="ease">ease</option>
+                                <option value="linear">linear</option>
+                                <option value="ease-in-out">ease-in-out</option>
+                            </select>
+                        </div>
+                        <div class="control-row">
+                            <label>Offset</label>
+                            <input type="range" id="ctrl-scroll-offset" min="0" max="100" step="10" value="30">
+                            <span class="value-display" id="val-scroll-offset">30%</span>
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-scroll">Show Code</button>
                 </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Easing</label>
-                    <select id="ctrl-scroll-easing">
-                        <option value="ease">ease</option>
-                        <option value="linear">linear</option>
-                        <option value="ease-in-out">ease-in-out</option>
-                    </select>
-                </div>
-                <div class="control-row">
-                    <label>Offset</label>
-                    <input type="range" id="ctrl-scroll-offset" min="0" max="100" step="10" value="30">
-                    <span class="value-display" id="val-scroll-offset">30%</span>
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-scroll">Show Code</button>
             <div class="code-panel" id="code-scroll">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">CSS + JS</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">CSS + JS</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="scroll">Apply</button>
                         <button class="btn btn-reset" data-card="scroll">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-scroll" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
-        <!-- Gradient Animation -->
-        <div class="card" data-theme="pink" id="card-gradient">
-            <div class="card-title-bar">
-                <span>Gradient Animation</span>
+        <!-- 9. Gradient Animation -->
+        <section class="anim-section" id="card-gradient">
+            <div class="section-label">
+                <span class="section-name">Gradient Animation</span>
                 <span class="interaction-hint">Auto-plays</span>
             </div>
-            <div class="preview-area" id="preview-gradient">
-                <div class="gradient-box" id="gradient-el"></div>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-gradient">
+                        <div class="gradient-box" id="gradient-el"></div>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Speed</label>
+                            <input type="range" id="ctrl-grad-speed" min="1" max="12" step="0.5" value="4">
+                            <span class="value-display" id="val-grad-speed">4s</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Angle</label>
+                            <input type="range" id="ctrl-grad-angle" min="0" max="360" step="15" value="135">
+                            <span class="value-display" id="val-grad-angle">135deg</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Color 1</label>
+                            <input type="color" id="ctrl-grad-color1" value="#ec4899">
+                        </div>
+                        <div class="control-row">
+                            <label>Color 2</label>
+                            <input type="color" id="ctrl-grad-color2" value="#8b5cf6">
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-gradient">Show Code</button>
+                </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Speed</label>
-                    <input type="range" id="ctrl-grad-speed" min="1" max="12" step="0.5" value="4">
-                    <span class="value-display" id="val-grad-speed">4s</span>
-                </div>
-                <div class="control-row">
-                    <label>Angle</label>
-                    <input type="range" id="ctrl-grad-angle" min="0" max="360" step="15" value="135">
-                    <span class="value-display" id="val-grad-angle">135deg</span>
-                </div>
-                <div class="control-row">
-                    <label>Color 1</label>
-                    <input type="color" id="ctrl-grad-color1" value="#ec4899">
-                </div>
-                <div class="control-row">
-                    <label>Color 2</label>
-                    <input type="color" id="ctrl-grad-color2" value="#8b5cf6">
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-gradient">Show Code</button>
             <div class="code-panel" id="code-gradient">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">CSS</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">CSS</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="gradient">Apply</button>
                         <button class="btn btn-reset" data-card="gradient">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-gradient" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
-    </div>
+        <!-- ====== JAVASCRIPT & CANVAS ====== -->
+        <h2 class="category-heading">JavaScript &amp; Canvas</h2>
 
-    <!-- ====== JAVASCRIPT & CANVAS ====== -->
-    <h2 class="section-heading">
-        <span class="dot" style="background: #f97316;"></span>
-        JavaScript &amp; Canvas
-    </h2>
-    <div class="card-grid">
-
-        <!-- 7. requestAnimationFrame -->
-        <div class="card" data-theme="orange" id="card-raf">
-            <div class="card-title-bar">
-                <span>requestAnimationFrame</span>
+        <!-- 10. requestAnimationFrame -->
+        <section class="anim-section" id="card-raf">
+            <div class="section-label">
+                <span class="section-name">requestAnimationFrame</span>
                 <span class="interaction-hint">Auto-plays</span>
             </div>
-            <div class="preview-area" id="preview-raf">
-                <canvas id="raf-canvas"></canvas>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-raf">
+                        <canvas id="raf-canvas"></canvas>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Speed</label>
+                            <input type="range" id="ctrl-raf-speed" min="0.5" max="5" step="0.25" value="2">
+                            <span class="value-display" id="val-raf-speed">2x</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Radius</label>
+                            <input type="range" id="ctrl-raf-radius" min="20" max="90" step="5" value="60">
+                            <span class="value-display" id="val-raf-radius">60px</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Trail</label>
+                            <input type="range" id="ctrl-raf-trail" min="0" max="0.9" step="0.05" value="0.15">
+                            <span class="value-display" id="val-raf-trail">0.15</span>
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-raf">Show Code</button>
+                </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Speed</label>
-                    <input type="range" id="ctrl-raf-speed" min="0.5" max="5" step="0.25" value="2">
-                    <span class="value-display" id="val-raf-speed">2x</span>
-                </div>
-                <div class="control-row">
-                    <label>Radius</label>
-                    <input type="range" id="ctrl-raf-radius" min="20" max="90" step="5" value="60">
-                    <span class="value-display" id="val-raf-radius">60px</span>
-                </div>
-                <div class="control-row">
-                    <label>Trail</label>
-                    <input type="range" id="ctrl-raf-trail" min="0" max="0.9" step="0.05" value="0.15">
-                    <span class="value-display" id="val-raf-trail">0.15</span>
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-raf">Show Code</button>
             <div class="code-panel" id="code-raf">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">JavaScript</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">JavaScript</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="raf">Apply</button>
                         <button class="btn btn-reset" data-card="raf">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-raf" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
-        <!-- 8. Web Animations API -->
-        <div class="card" data-theme="red" id="card-waapi">
-            <div class="card-title-bar">
-                <span>Web Animations API</span>
+        <!-- 11. Web Animations API -->
+        <section class="anim-section" id="card-waapi">
+            <div class="section-label">
+                <span class="section-name">Web Animations API</span>
                 <span class="interaction-hint">Click to play</span>
             </div>
-            <div class="preview-area" id="preview-waapi">
-                <div class="preview-box" id="waapi-el" style="background: linear-gradient(135deg, #ef4444, #dc2626);">
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-waapi">
+                        <div class="preview-box" id="waapi-el"
+                            style="background: linear-gradient(135deg, #a78bfa, #7c3aed);"></div>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Duration</label>
+                            <input type="range" id="ctrl-waapi-duration" min="200" max="3000" step="100" value="1000">
+                            <span class="value-display" id="val-waapi-duration">1000ms</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Easing</label>
+                            <select id="ctrl-waapi-easing">
+                                <option value="ease">ease</option>
+                                <option value="linear">linear</option>
+                                <option value="ease-in-out">ease-in-out</option>
+                                <option value="cubic-bezier(0.68, -0.55, 0.27, 1.55)">spring</option>
+                            </select>
+                        </div>
+                        <div class="control-row">
+                            <label>Iterations</label>
+                            <input type="range" id="ctrl-waapi-iterations" min="1" max="10" step="1" value="2">
+                            <span class="value-display" id="val-waapi-iterations">2</span>
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-waapi">Show Code</button>
                 </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Duration</label>
-                    <input type="range" id="ctrl-waapi-duration" min="200" max="3000" step="100" value="1000">
-                    <span class="value-display" id="val-waapi-duration">1000ms</span>
-                </div>
-                <div class="control-row">
-                    <label>Easing</label>
-                    <select id="ctrl-waapi-easing">
-                        <option value="ease">ease</option>
-                        <option value="linear">linear</option>
-                        <option value="ease-in-out">ease-in-out</option>
-                        <option value="cubic-bezier(0.68, -0.55, 0.27, 1.55)">spring</option>
-                    </select>
-                </div>
-                <div class="control-row">
-                    <label>Iterations</label>
-                    <input type="range" id="ctrl-waapi-iterations" min="1" max="10" step="1" value="2">
-                    <span class="value-display" id="val-waapi-iterations">2</span>
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-waapi">Show Code</button>
             <div class="code-panel" id="code-waapi">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">JavaScript</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">JavaScript</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="waapi">Apply</button>
                         <button class="btn btn-reset" data-card="waapi">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-waapi" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
-        <!-- 9. Canvas Particles -->
-        <div class="card" data-theme="teal" id="card-particles">
-            <div class="card-title-bar">
-                <span>Canvas Particles</span>
+        <!-- 12. Canvas Particles -->
+        <section class="anim-section" id="card-particles">
+            <div class="section-label">
+                <span class="section-name">Canvas Particles</span>
                 <span class="interaction-hint">Auto-plays, click to burst</span>
             </div>
-            <div class="preview-area" id="preview-particles">
-                <canvas id="particles-canvas"></canvas>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-particles">
+                        <canvas id="particles-canvas"></canvas>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Count</label>
+                            <input type="range" id="ctrl-part-count" min="10" max="200" step="10" value="60">
+                            <span class="value-display" id="val-part-count">60</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Speed</label>
+                            <input type="range" id="ctrl-part-speed" min="0.5" max="5" step="0.25" value="1.5">
+                            <span class="value-display" id="val-part-speed">1.5x</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Size</label>
+                            <input type="range" id="ctrl-part-size" min="1" max="8" step="0.5" value="3">
+                            <span class="value-display" id="val-part-size">3px</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Color</label>
+                            <input type="color" id="ctrl-part-color" value="#2dd4bf">
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-particles">Show Code</button>
+                </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Count</label>
-                    <input type="range" id="ctrl-part-count" min="10" max="200" step="10" value="60">
-                    <span class="value-display" id="val-part-count">60</span>
-                </div>
-                <div class="control-row">
-                    <label>Speed</label>
-                    <input type="range" id="ctrl-part-speed" min="0.5" max="5" step="0.25" value="1.5">
-                    <span class="value-display" id="val-part-speed">1.5x</span>
-                </div>
-                <div class="control-row">
-                    <label>Size</label>
-                    <input type="range" id="ctrl-part-size" min="1" max="8" step="0.5" value="3">
-                    <span class="value-display" id="val-part-size">3px</span>
-                </div>
-                <div class="control-row">
-                    <label>Color</label>
-                    <input type="color" id="ctrl-part-color" value="#2dd4bf">
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-particles">Show Code</button>
             <div class="code-panel" id="code-particles">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">JavaScript</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">JavaScript</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="particles">Apply</button>
                         <button class="btn btn-reset" data-card="particles">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-particles" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
-        <!-- 10. Spring Physics -->
-        <div class="card" data-theme="rose" id="card-spring">
-            <div class="card-title-bar">
-                <span>Spring Physics</span>
+        <!-- 13. Spring Physics -->
+        <section class="anim-section" id="card-spring">
+            <div class="section-label">
+                <span class="section-name">Spring Physics</span>
                 <span class="interaction-hint">Drag the ball</span>
             </div>
-            <div class="preview-area" id="preview-spring">
-                <div class="spring-preview">
-                    <div class="spring-anchor"></div>
-                    <div class="spring-ball" id="spring-ball"></div>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-spring">
+                        <div class="spring-preview">
+                            <div class="spring-anchor"></div>
+                            <div class="spring-ball" id="spring-ball"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Stiffness</label>
+                            <input type="range" id="ctrl-spring-stiff" min="50" max="500" step="25" value="200">
+                            <span class="value-display" id="val-spring-stiff">200</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Damping</label>
+                            <input type="range" id="ctrl-spring-damp" min="1" max="30" step="1" value="10">
+                            <span class="value-display" id="val-spring-damp">10</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Mass</label>
+                            <input type="range" id="ctrl-spring-mass" min="0.5" max="5" step="0.5" value="1">
+                            <span class="value-display" id="val-spring-mass">1</span>
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-spring">Show Code</button>
                 </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Stiffness</label>
-                    <input type="range" id="ctrl-spring-stiff" min="50" max="500" step="25" value="200">
-                    <span class="value-display" id="val-spring-stiff">200</span>
-                </div>
-                <div class="control-row">
-                    <label>Damping</label>
-                    <input type="range" id="ctrl-spring-damp" min="1" max="30" step="1" value="10">
-                    <span class="value-display" id="val-spring-damp">10</span>
-                </div>
-                <div class="control-row">
-                    <label>Mass</label>
-                    <input type="range" id="ctrl-spring-mass" min="0.5" max="5" step="0.5" value="1">
-                    <span class="value-display" id="val-spring-mass">1</span>
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-spring">Show Code</button>
             <div class="code-panel" id="code-spring">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">JavaScript</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">JavaScript</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="spring">Apply</button>
                         <button class="btn btn-reset" data-card="spring">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-spring" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
-        <!-- Elastic Collision -->
-        <div class="card" data-theme="yellow" id="card-collision">
-            <div class="card-title-bar">
-                <span>Elastic Collision</span>
+        <!-- 14. Elastic Collision -->
+        <section class="anim-section" id="card-collision">
+            <div class="section-label">
+                <span class="section-name">Elastic Collision</span>
                 <span class="interaction-hint">Click to add balls</span>
             </div>
-            <div class="preview-area" id="preview-collision">
-                <canvas id="collision-canvas"></canvas>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-collision">
+                        <canvas id="collision-canvas"></canvas>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Balls</label>
+                            <input type="range" id="ctrl-coll-count" min="2" max="20" step="1" value="5">
+                            <span class="value-display" id="val-coll-count">5</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Gravity</label>
+                            <input type="range" id="ctrl-coll-gravity" min="0" max="1" step="0.05" value="0.2">
+                            <span class="value-display" id="val-coll-gravity">0.2</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Bounce</label>
+                            <input type="range" id="ctrl-coll-bounce" min="0.3" max="1" step="0.05" value="0.9">
+                            <span class="value-display" id="val-coll-bounce">0.9</span>
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-collision">Show Code</button>
+                </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Balls</label>
-                    <input type="range" id="ctrl-coll-count" min="2" max="20" step="1" value="5">
-                    <span class="value-display" id="val-coll-count">5</span>
-                </div>
-                <div class="control-row">
-                    <label>Gravity</label>
-                    <input type="range" id="ctrl-coll-gravity" min="0" max="1" step="0.05" value="0.2">
-                    <span class="value-display" id="val-coll-gravity">0.2</span>
-                </div>
-                <div class="control-row">
-                    <label>Bounce</label>
-                    <input type="range" id="ctrl-coll-bounce" min="0.3" max="1" step="0.05" value="0.9">
-                    <span class="value-display" id="val-coll-bounce">0.9</span>
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-collision">Show Code</button>
             <div class="code-panel" id="code-collision">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">JavaScript</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">JavaScript</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="collision">Apply</button>
                         <button class="btn btn-reset" data-card="collision">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-collision" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
-    </div>
+        <!-- ====== SVG & ADVANCED ====== -->
+        <h2 class="category-heading">SVG &amp; Advanced</h2>
 
-    <!-- ====== SVG & ADVANCED ====== -->
-    <h2 class="section-heading">
-        <span class="dot" style="background: #6366f1;"></span>
-        SVG &amp; Advanced
-    </h2>
-    <div class="card-grid">
-
-        <!-- 11. SVG Morphing -->
-        <div class="card" data-theme="indigo" id="card-morph">
-            <div class="card-title-bar">
-                <span>SVG Morphing</span>
+        <!-- 15. SVG Morphing -->
+        <section class="anim-section" id="card-morph">
+            <div class="section-label">
+                <span class="section-name">SVG Morphing</span>
                 <span class="interaction-hint">Click to morph</span>
             </div>
-            <div class="preview-area" id="preview-morph">
-                <svg class="morph-svg" viewBox="0 0 200 200" id="morph-svg">
-                    <path id="morph-path" fill="#818cf8" />
-                </svg>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-morph">
+                        <svg class="morph-svg" viewBox="0 0 200 200" id="morph-svg">
+                            <path id="morph-path" fill="#a78bfa" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Speed</label>
+                            <input type="range" id="ctrl-morph-speed" min="0.2" max="2" step="0.1" value="0.6">
+                            <span class="value-display" id="val-morph-speed">0.6s</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Shape</label>
+                            <select id="ctrl-morph-shape">
+                                <option value="0">Circle</option>
+                                <option value="1">Star</option>
+                                <option value="2">Square</option>
+                                <option value="3">Heart</option>
+                            </select>
+                        </div>
+                        <div class="control-row">
+                            <label>Color</label>
+                            <input type="color" id="ctrl-morph-color" value="#a78bfa">
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-morph">Show Code</button>
+                </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Speed</label>
-                    <input type="range" id="ctrl-morph-speed" min="0.2" max="2" step="0.1" value="0.6">
-                    <span class="value-display" id="val-morph-speed">0.6s</span>
-                </div>
-                <div class="control-row">
-                    <label>Shape</label>
-                    <select id="ctrl-morph-shape">
-                        <option value="0">Circle</option>
-                        <option value="1">Star</option>
-                        <option value="2">Square</option>
-                        <option value="3">Heart</option>
-                    </select>
-                </div>
-                <div class="control-row">
-                    <label>Color</label>
-                    <input type="color" id="ctrl-morph-color" value="#818cf8">
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-morph">Show Code</button>
             <div class="code-panel" id="code-morph">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">SVG + CSS</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">SVG + CSS</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="morph">Apply</button>
                         <button class="btn btn-reset" data-card="morph">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-morph" spellcheck="false"></textarea>
             </div>
-        </div>
+        </section>
 
-        <!-- 12. Parallax Layers -->
-        <div class="card" data-theme="lime" id="card-parallax">
-            <div class="card-title-bar">
-                <span>Parallax Layers</span>
+        <!-- 16. Parallax Layers -->
+        <section class="anim-section" id="card-parallax">
+            <div class="section-label">
+                <span class="section-name">Parallax Layers</span>
                 <span class="interaction-hint">Move mouse over</span>
             </div>
-            <div class="preview-area" id="preview-parallax">
-                <div class="parallax-container" id="parallax-container"></div>
+            <div class="section-content">
+                <div class="preview-col">
+                    <div class="preview-area" id="preview-parallax">
+                        <div class="parallax-container" id="parallax-container"></div>
+                    </div>
+                </div>
+                <div class="controls-col">
+                    <div class="controls-panel">
+                        <div class="control-row">
+                            <label>Depth</label>
+                            <input type="range" id="ctrl-parallax-depth" min="5" max="50" step="5" value="20">
+                            <span class="value-display" id="val-parallax-depth">20x</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Layers</label>
+                            <input type="range" id="ctrl-parallax-layers" min="3" max="12" step="1" value="6">
+                            <span class="value-display" id="val-parallax-layers">6</span>
+                        </div>
+                        <div class="control-row">
+                            <label>Color</label>
+                            <input type="color" id="ctrl-parallax-color" value="#a3e635">
+                        </div>
+                    </div>
+                    <button class="code-toggle-btn" data-target="code-parallax">Show Code</button>
+                </div>
             </div>
-            <div class="controls-panel">
-                <div class="control-row">
-                    <label>Depth</label>
-                    <input type="range" id="ctrl-parallax-depth" min="5" max="50" step="5" value="20">
-                    <span class="value-display" id="val-parallax-depth">20x</span>
-                </div>
-                <div class="control-row">
-                    <label>Layers</label>
-                    <input type="range" id="ctrl-parallax-layers" min="3" max="12" step="1" value="6">
-                    <span class="value-display" id="val-parallax-layers">6</span>
-                </div>
-                <div class="control-row">
-                    <label>Color</label>
-                    <input type="color" id="ctrl-parallax-color" value="#a3e635">
-                </div>
-            </div>
-            <button class="code-toggle-btn" data-target="code-parallax">Show Code</button>
             <div class="code-panel" id="code-parallax">
                 <div class="code-panel-header">
-                    <span style="color:#a0a0c0; font-size:0.75rem; font-weight:700;">JavaScript</span>
-                    <div style="display:flex; gap:8px;">
+                    <span class="code-lang">JavaScript</span>
+                    <div class="code-actions">
                         <button class="btn btn-apply" data-card="parallax">Apply</button>
                         <button class="btn btn-reset" data-card="parallax">Reset</button>
                     </div>
                 </div>
                 <textarea id="code-textarea-parallax" spellcheck="false"></textarea>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <footer style="text-align:center; padding:40px 20px; color:#4a4a6a; font-size:0.85rem; font-weight:600;">
-        AnimateLab &mdash; Tweak, experiment, learn
-    </footer>
+    </main>
+
+    <footer>AnimateLab &mdash; Tweak, experiment, learn</footer>
 
     <script src="script.js"></script>
 </body>
