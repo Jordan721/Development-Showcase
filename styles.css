@@ -968,7 +968,7 @@ body {
 }
 
 .category-section.active .category-content {
-    max-height: 2000px;
+    max-height: 5000px;
     padding: var(--spacing-lg) 0 0 0;
     overflow: visible;
     transition: max-height 0.4s ease, padding 0.4s ease, overflow 0s;
