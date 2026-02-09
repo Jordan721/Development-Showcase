@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Art Portfolio - Alexis</title>
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="../index.html" class="nav-logo">Showcase</a>
+            <div class="nav-links">
+                <a href="../index.html">Home</a>
+                <a href="#mma100">MMA 100</a>
+                <a href="#mma235">MMA 235</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <p class="hero-subtitle">A Collection of My Work</p>
+            <h1>Art & Design Portfolio</h1>
+            <p class="hero-description">Showcasing projects from my Foundation of Digital Design and Visual Communication Design courses.</p>
+            <a href="#mma100" class="hero-btn">View My Work</a>
+        </div>
+    </header>
+
+    <!-- MMA 100 Section -->
+    <section id="mma100" class="course-section">
+        <div class="section-header">
+            <span class="section-tag">MMA 100</span>
+            <h2>Foundation of Digital Design</h2>
+            <p class="section-description">Exploring the fundamentals of digital art and design through meaningful projects.</p>
+        </div>
+
+        <div class="projects-grid">
+            <!-- Art History Project -->
+            <div class="project-card">
+                <div class="card-image-wrapper">
+                    <img src="Pics/Alexis-%20Art%20History%20Montage.jpg" alt="Art History Montage on Norman Rockwell" loading="lazy">
+                    <div class="card-overlay">
+                        <button class="view-btn" onclick="openLightbox(this.closest('.project-card').querySelector('img'))">View Full Size</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3>Art History Montage</h3>
+                    <span class="card-tag">Norman Rockwell</span>
+                    <p>An Art History project capturing the essence of Norman Rockwell's influence on depicting the "American Dream." I chose Rockwell because of his incredible ability to inspire generations of artists to capture everyday American life.</p>
+                </div>
+            </div>
+
+            <!-- Human Rights Poster -->
+            <div class="project-card">
+                <div class="card-image-wrapper">
+                    <img src="Pics/Alexis-Human%20Rights%20Poster%20Draft.jpg" alt="Human Rights Poster on Gun Violence" loading="lazy">
+                    <div class="card-overlay">
+                        <button class="view-btn" onclick="openLightbox(this.closest('.project-card').querySelector('img'))">View Full Size</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h3>Human Rights Poster</h3>
+                    <span class="card-tag">Article 3 - Right to Life</span>
+                    <p>A poster based on Human Rights Article 3: "Everyone has the right to life, liberty and security of person." I chose to focus on gun violence because of the epidemic that has been affecting the nation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MMA 235 Section -->
+    <section id="mma235" class="course-section alt-bg">
+        <div class="section-header">
+            <span class="section-tag">MMA 235</span>
+            <h2>Visual Communication Design</h2>
+            <p class="section-description">A multi-part branding project from style tiles to a complete Brand Standards Guide.</p>
+        </div>
+
+        <!-- Style Tiles -->
+        <div class="project-subsection">
+            <h3 class="subsection-title">Style Tiles</h3>
+            <p class="subsection-description">The first step in the branding process &mdash; creating visual direction for two fictional companies.</p>
+
+            <div class="gallery-group">
+                <h4 class="gallery-label">Watt's Gaming</h4>
+                <p class="gallery-note">A company that remakes classic games for a newer generation.</p>
+                <div class="gallery-row">
+                    <div class="gallery-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="Pics/Styletiles/Alexis-Watts%20Gaming-1%20of%203-1.jpg" alt="Watt's Gaming Style Tile 1" loading="lazy">
+                        <span class="gallery-item-label">Tile 1</span>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="Pics/Styletiles/Alexis-Watts%20Gaming-2%20of%203-1.jpg" alt="Watt's Gaming Style Tile 2" loading="lazy">
+                        <span class="gallery-item-label">Tile 2</span>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="Pics/Styletiles/Alexis-Watts%20Gaming-3%20of%203-1.jpg" alt="Watt's Gaming Style Tile 3" loading="lazy">
+                        <span class="gallery-item-label">Tile 3</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-group">
+                <h4 class="gallery-label">Graham Crk-Ers</h4>
+                <p class="gallery-note">A restaurant creating healthy foods for those who love to eat guilt-free.</p>
+                <div class="gallery-row">
+                    <div class="gallery-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="Pics/Styletiles/Alexis-Graham%20Crak-Ers%201%20of%203-1.jpg" alt="Graham Crk-Ers Style Tile 1" loading="lazy">
+                        <span class="gallery-item-label">Tile 1</span>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="Pics/Styletiles/Aleixs-Graham%20Crak-Ers%202%20of%203-1.jpg" alt="Graham Crk-Ers Style Tile 2" loading="lazy">
+                        <span class="gallery-item-label">Tile 2</span>
+                    </div>
+                    <div class="gallery-item" onclick="openLightbox(this.querySelector('img'))">
+                        <img src="Pics/Styletiles/Alexis-Graham%20Crak-Ers%203%20of%203-1.jpg" alt="Graham Crk-Ers Style Tile 3" loading="lazy">
+                        <span class="gallery-item-label">Tile 3</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formstorming -->
+        <div class="project-subsection">
+            <h3 class="subsection-title">Formstorming</h3>
+            <p class="subsection-description">The second step &mdash; developing logos and typography from the chosen style directions.</p>
+            <div class="gallery-row gallery-row-2">
+                <div class="gallery-item" onclick="openLightbox(this.querySelector('img'))">
+                    <img src="Pics/Alexis-typeface-formstorming%20for%20Watts%20and%20Graham%202%20true-1.jpg" alt="Formstorming Idea 1" loading="lazy">
+                    <span class="gallery-item-label">Concept 1</span>
+                </div>
+                <div class="gallery-item" onclick="openLightbox(this.querySelector('img'))">
+                    <img src="Pics/Alexis-typeface-formstorming%20for%20Watts%20and%20Graham%202%20true%20Watts%20color-2.jpg" alt="Formstorming Idea 2" loading="lazy">
+                    <span class="gallery-item-label">Concept 2</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Brand Standards Guide -->
+        <div class="project-subsection">
+            <h3 class="subsection-title">Brand Standards Guide</h3>
+            <p class="subsection-description">The culmination of the project &mdash; a complete professional Brand Standards Guide for Watt's Gaming.</p>
+
+            <div class="bsg-viewer">
+                <div class="bsg-display">
+                    <img id="bsg-image" src="Pics/BSG_Folder/Watt's%20Gaming%20Brand%20Guide%20font%20outline-01.jpg" alt="Brand Standards Guide Page 1">
+                    <div class="bsg-page-indicator">
+                        <span id="bsg-current">1</span> / <span id="bsg-total">16</span>
+                    </div>
+                </div>
+                <div class="bsg-controls">
+                    <button class="bsg-btn" id="bsg-prev" aria-label="Previous page">&larr; Prev</button>
+                    <button class="bsg-btn" id="bsg-next" aria-label="Next page">Next &rarr;</button>
+                </div>
+                <div class="bsg-thumbnails" id="bsg-thumbnails"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; Alexis &mdash; Art & Design Portfolio</p>
+        <a href="../index.html" class="footer-link">Back to Showcase</a>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">&times;</button>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <!-- Back to top -->
+    <button class="back-to-top" id="backToTop" title="Back to top">&uarr;</button>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
