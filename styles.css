@@ -832,7 +832,7 @@ body {
 /* ===== ANIMATION TOGGLE BUTTON ===== */
 .animation-toggle {
     position: fixed;
-    top: 2rem;
+    top: 5rem;
     right: 2rem;
     width: 50px;
     height: 50px;
@@ -892,16 +892,18 @@ body {
 
 @media (max-width: 768px) {
     .animation-toggle {
-        top: 1rem;
-        right: 1rem;
+        top: auto;
+        bottom: 5.5rem;
+        right: auto;
+        left: 1rem;
         width: 45px;
         height: 45px;
         font-size: 1.1rem;
     }
 
     .animation-toggle .tooltip {
-        right: calc(100% + 8px);
-        left: auto;
+        left: calc(100% + 8px);
+        right: auto;
         top: 50%;
         bottom: auto;
         transform: translateY(-50%);
@@ -913,19 +915,21 @@ body {
         width: 40px;
         height: 40px;
         font-size: 1rem;
+        bottom: 5rem;
     }
 
     .animation-toggle .tooltip {
         font-size: 0.75rem;
         padding: 4px 8px;
-        right: calc(100% + 6px);
+        left: calc(100% + 6px);
+        right: auto;
     }
 }
 
 /* ===== THEME TOGGLE BUTTON ===== */
 .theme-toggle {
     position: fixed;
-    top: 2rem;
+    top: 5rem;
     right: 6rem;
     width: 50px;
     height: 50px;
@@ -1192,29 +1196,33 @@ body {
 
 @media (max-width: 768px) {
     .theme-toggle {
-        top: 1rem;
-        right: 4.5rem;
+        top: auto;
+        bottom: 1.5rem;
+        right: auto;
+        left: 1rem;
         width: 45px;
         height: 45px;
         font-size: 1.1rem;
     }
 
     .theme-toggle .tooltip {
-        right: calc(100% + 8px);
+        left: calc(100% + 8px);
+        right: auto;
     }
 
     .theme-panel {
-        right: 1rem;
         left: 1rem;
+        right: 1rem;
         width: auto;
-        top: 4.5rem;
+        top: auto;
+        bottom: 5rem;
     }
 }
 
 @media (max-width: 640px) {
     .theme-toggle {
-        top: 1rem;
-        right: 4rem;
+        bottom: 1.25rem;
+        left: 1rem;
         width: 40px;
         height: 40px;
         font-size: 1rem;
