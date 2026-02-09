@@ -339,6 +339,97 @@ body {
     }
 }
 
+/* ===== ABOUT SECTION ===== */
+.about-section {
+    padding: 6rem 0;
+}
+
+.about-content {
+    max-width: 720px;
+    margin-top: 1.5rem;
+}
+
+.about-content p {
+    color: var(--color-gray-light);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+}
+
+.about-content p strong {
+    color: var(--color-light);
+    font-weight: 600;
+}
+
+.about-cta {
+    margin-top: 2rem;
+}
+
+.about-portfolio-link {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 3px solid var(--color-primary);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    transition: all var(--transition-base);
+}
+
+.about-portfolio-link:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.18);
+    border-left-color: var(--color-primary);
+    transform: translateX(4px);
+}
+
+.about-portfolio-link > i:first-child {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.about-portfolio-link .cta-title {
+    display: block;
+    color: var(--color-white);
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+}
+
+.about-portfolio-link .cta-desc {
+    display: block;
+    color: var(--color-gray-light);
+    font-size: 0.85rem;
+}
+
+.about-portfolio-link .cta-arrow {
+    margin-left: auto;
+    color: var(--color-gray);
+    font-size: 1rem;
+    flex-shrink: 0;
+    transition: all var(--transition-base);
+}
+
+.about-portfolio-link:hover .cta-arrow {
+    color: var(--color-primary);
+    transform: translateX(4px);
+}
+
+@media (max-width: 640px) {
+    .about-portfolio-link {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .about-portfolio-link .cta-arrow {
+        display: none;
+    }
+}
+
 /* ===== MAIN CONTENT ===== */
 .main-content {
     position: relative;
@@ -347,7 +438,6 @@ body {
 /* ===== PROJECT SECTIONS ===== */
 .project-section {
     padding: 6rem 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .section-container {
@@ -731,7 +821,6 @@ body {
 .site-footer {
     padding: 4rem 2rem;
     text-align: center;
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
     position: relative;
 }
 

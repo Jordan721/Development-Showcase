@@ -368,7 +368,7 @@ navLinkElements.forEach(link => {
 const scrollProgress = document.getElementById('scrollProgress');
 
 // Sections for active nav tracking
-const sections = document.querySelectorAll('.hero, .project-section');
+const sections = document.querySelectorAll('.hero, .about-section, .project-section');
 
 window.addEventListener('scroll', () => {
     // Sticky nav background
@@ -387,7 +387,7 @@ window.addEventListener('scroll', () => {
     // Active nav link
     let current = 'home';
     sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
+        const sectionTop = section.getBoundingClientRect().top + window.scrollY - 100;
         if (scrollTop >= sectionTop) {
             current = section.getAttribute('id');
         }
