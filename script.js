@@ -533,3 +533,82 @@ document.getElementById('refreshCommits').addEventListener('click', fetchCommits
 
 // Load commits on page load
 window.addEventListener('load', fetchCommits);
+
+// ===== TECH FILTER =====
+(function initTechFilter() {
+    const filterChips = document.getElementById('filterChips');
+    const filterClear = document.getElementById('filterClear');
+    if (!filterChips) return;
+
+    // Gather all unique techs from project cards
+    const allCards = document.querySelectorAll('.project-card');
+    const techSet = new Set();
+    allCards.forEach(card => {
+        card.querySelectorAll('.card-tech span').forEach(span => {
+            techSet.add(span.textContent.trim());
+        });
+    });
+
+    // Sort and create chips
+    [...techSet].sort().forEach(tech => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-chip';
+        btn.dataset.tech = tech;
+        btn.textContent = tech;
+        filterChips.appendChild(btn);
+    });
+
+    // Filter logic
+    function applyFilter(tech) {
+        const isAll = tech === 'all';
+
+        // Update chip active states
+        filterChips.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.classList.toggle('active', chip.dataset.tech === tech);
+        });
+
+        // Show/hide clear button
+        filterClear.classList.toggle('hidden', isAll);
+
+        // Filter cards
+        allCards.forEach(card => {
+            if (isAll) {
+                card.classList.remove('filter-hidden');
+                return;
+            }
+            const cardTechs = [...card.querySelectorAll('.card-tech span')].map(s => s.textContent.trim());
+            card.classList.toggle('filter-hidden', !cardTechs.includes(tech));
+        });
+
+        // Hide sections that have no visible cards
+        document.querySelectorAll('.project-section').forEach(section => {
+            const grid = section.querySelector('.card-grid');
+            if (!grid) return;
+            const visibleCards = grid.querySelectorAll('.project-card:not(.filter-hidden)');
+            section.classList.toggle('filter-empty', visibleCards.length === 0);
+
+            // Update count badge
+            const countBadge = section.querySelector('.section-count');
+            if (countBadge) {
+                const totalCards = grid.querySelectorAll('.project-card').length;
+                if (isAll) {
+                    countBadge.textContent = totalCards;
+                } else {
+                    countBadge.textContent = visibleCards.length + '/' + totalCards;
+                }
+            }
+        });
+    }
+
+    // Chip click handler
+    filterChips.addEventListener('click', (e) => {
+        const chip = e.target.closest('.filter-chip');
+        if (!chip) return;
+        applyFilter(chip.dataset.tech);
+    });
+
+    // Clear button
+    filterClear.addEventListener('click', () => {
+        applyFilter('all');
+    });
+})();

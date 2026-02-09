@@ -386,7 +386,7 @@ body {
     transform: translateX(4px);
 }
 
-.about-portfolio-link > i:first-child {
+.about-portfolio-link>i:first-child {
     font-size: 1.5rem;
     color: var(--color-primary);
     flex-shrink: 0;
@@ -433,6 +433,117 @@ body {
 /* ===== MAIN CONTENT ===== */
 .main-content {
     position: relative;
+}
+
+/* ===== TECH FILTER ===== */
+.tech-filter {
+    padding: 2rem 0;
+}
+
+.filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-label {
+    color: var(--color-gray-light);
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.filter-label i {
+    color: var(--color-primary);
+    font-size: 0.75rem;
+}
+
+.filter-chips {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.filter-chip {
+    padding: 0.35rem 0.85rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--color-gray-light);
+    font-size: 0.75rem;
+    font-weight: 500;
+    font-family: var(--font-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.filter-chip:hover {
+    border-color: var(--color-primary);
+    color: var(--color-light);
+}
+
+.filter-chip.active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-dark);
+    font-weight: 600;
+}
+
+.filter-clear {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 20px;
+    background: transparent;
+    color: var(--color-error);
+    font-size: 0.75rem;
+    font-family: var(--font-primary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.filter-clear:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.filter-clear.hidden {
+    display: none;
+}
+
+/* Filter match/hide states */
+.project-card.filter-hidden {
+    display: none;
+}
+
+.project-section.filter-empty {
+    display: none;
+}
+
+/* ===== SECTION COUNT BADGE ===== */
+.section-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    min-width: 1.6rem;
+    height: 1.6rem;
+    padding: 0 0.4rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--count-color, var(--color-primary));
+    color: var(--count-color, var(--color-primary));
+    vertical-align: middle;
+    margin-left: 0.5rem;
 }
 
 /* ===== PROJECT SECTIONS ===== */
@@ -1406,6 +1517,14 @@ body {
     .commit-header {
         flex-direction: column;
         gap: 0.5rem;
+    }
+
+    .filter-bar {
+        gap: 0.75rem;
+    }
+
+    .filter-label {
+        width: 100%;
     }
 }
 

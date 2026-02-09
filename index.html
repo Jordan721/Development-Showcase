@@ -5,6 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jordan Alexis | Development Showcase</title>
+    <meta name="description" content="A central hub connecting you to projects by Jordan Alexis — personal experiments, academic coursework, professional work, and web games all in one place.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Jordan Alexis | Development Showcase">
+    <meta property="og:description" content="A central hub connecting you to projects by Jordan Alexis — personal experiments, academic coursework, professional work, and web games all in one place.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jordan721.github.io/Development-Showcase/">
+    <meta property="og:image" content="https://jordan721.github.io/Development-Showcase/favicon.svg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Jordan Alexis | Development Showcase">
+    <meta name="twitter:description" content="A central hub connecting you to projects by Jordan Alexis — personal experiments, academic coursework, professional work, and web games all in one place.">
+    <meta name="twitter:image" content="https://jordan721.github.io/Development-Showcase/favicon.svg">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -22,6 +36,14 @@
 </head>
 
 <body>
+    <noscript>
+        <div style="background:#1a1a2e;color:#e0e0e0;text-align:center;padding:3rem 2rem;font-family:sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+            <h1 style="font-size:2rem;margin-bottom:1rem;color:#a855f7;">Jordan Alexis | Development Showcase</h1>
+            <p style="max-width:500px;line-height:1.6;margin-bottom:1.5rem;">This site requires JavaScript for the animated background, project filtering, and GitHub activity feed. Please enable JavaScript in your browser to get the full experience.</p>
+            <a href="https://jordan721.github.io/Jordan_Alexis/" style="color:#a855f7;text-decoration:underline;">Visit my portfolio instead</a>
+        </div>
+    </noscript>
+
     <!-- Scroll Progress Bar -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -142,10 +164,23 @@
             </div>
         </section>
 
+        <!-- Tech Filter -->
+        <div class="tech-filter" id="techFilter">
+            <div class="section-container">
+                <div class="filter-bar">
+                    <span class="filter-label"><i class="fas fa-filter"></i> Filter by tech:</span>
+                    <div class="filter-chips" id="filterChips">
+                        <button class="filter-chip active" data-tech="all">All</button>
+                    </div>
+                    <button class="filter-clear hidden" id="filterClear"><i class="fas fa-times"></i> Clear</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Personal Projects -->
         <section class="project-section" id="personal">
             <div class="section-container">
-                <h2 class="section-heading" style="--accent: #f59e0b">Personal Projects</h2>
+                <h2 class="section-heading" style="--accent: #f59e0b">Personal Projects <span class="section-count" style="--count-color: #f59e0b">7</span></h2>
                 <p class="section-desc">Independent projects and personal work</p>
                 <div class="card-grid">
 
@@ -271,7 +306,7 @@
         <!-- Professional Projects -->
         <section class="project-section" id="professional">
             <div class="section-container">
-                <h2 class="section-heading" style="--accent: #60a5fa">Professional Projects</h2>
+                <h2 class="section-heading" style="--accent: #60a5fa">Professional Projects <span class="section-count" style="--count-color: #60a5fa">5</span></h2>
                 <p class="section-desc">Websites and projects from internships, bootcamps, and professional experience
                 </p>
                 <div class="card-grid">
@@ -355,7 +390,7 @@
         <!-- Academic Projects -->
         <section class="project-section" id="academic">
             <div class="section-container">
-                <h2 class="section-heading" style="--accent: #d4a574">Academic Projects</h2>
+                <h2 class="section-heading" style="--accent: #d4a574">Academic Projects <span class="section-count" style="--count-color: #d4a574">5</span></h2>
                 <p class="section-desc">Coursework and class assignments</p>
                 <div class="card-grid">
 
@@ -442,7 +477,7 @@
         <!-- Game Vault -->
         <section class="project-section" id="games">
             <div class="section-container">
-                <h2 class="section-heading" style="--accent: #22c55e">Game Vault</h2>
+                <h2 class="section-heading" style="--accent: #22c55e">Game Vault <span class="section-count" style="--count-color: #22c55e">1</span></h2>
                 <p class="section-desc">Games, mockups, and interactive ideas - Remade and reimagined for the web</p>
                 <div class="card-grid">
 
