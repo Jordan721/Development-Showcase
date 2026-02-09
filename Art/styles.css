@@ -320,6 +320,32 @@ body {
     line-height: 1.7;
 }
 
+.card-link {
+    display: inline-block;
+    margin-top: 1rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #e8a87c;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color 0.3s;
+}
+
+.card-link:hover {
+    color: #d4956a;
+}
+
+.inline-link {
+    color: #e8a87c;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.inline-link:hover {
+    color: #d4956a;
+}
+
 /* ===== Project Subsections (MMA 235) ===== */
 .project-subsection {
     margin-bottom: 5rem;
