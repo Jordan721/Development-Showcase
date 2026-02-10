@@ -28,7 +28,9 @@ The site uses a **Minimal Catalog** design — clean typography, generous whites
 - **Platform Badges** — Every project card shows Desktop and/or Mobile compatibility
 - **Tech Stack Badges** — Each card lists the technologies used
 - **Live GitHub Activity** — Fetches recent commits from this repository via the GitHub API
-- **Fully Responsive** — Cards stack on mobile, nav collapses to hamburger, everything adapts
+- **Back to Top** — Floating button on mobile for quick navigation
+- **Portfolio Link** — Direct link to the live site from the hero section
+- **Fully Responsive** — Cards stack on mobile, nav collapses to hamburger, toggle buttons move to bottom-left
 
 ---
 
@@ -76,6 +78,16 @@ Games, mockups, and interactive ideas remade for the web:
 |---------|------|----------|
 | Game Vault (hub) | HTML, CSS, JS, Canvas | Desktop |
 
+### Art & Design
+Digital art, design projects, and creative work — past and future:
+
+| Project | Tech | Platform |
+|---------|------|----------|
+| Art & Design Portfolio | HTML, CSS, JS, Graphic Design | Desktop, Mobile |
+| Art History Montage | HTML, CSS, JS | Desktop, Mobile |
+| Human Rights Poster | HTML, CSS, JS | Desktop, Mobile |
+| Watt's Gaming Brand Guide | HTML, CSS, JS, InDesign | Desktop, Mobile |
+
 ---
 
 ## Built With
@@ -114,7 +126,7 @@ Development-Showcase/
 ├── index.html                 # Main landing page
 ├── styles.css                 # All styles
 ├── script.js                  # Constellation animation, nav, theme, commits
-├── favicon.svg                # Site icon
+├── favicon.svg                # Site icon (JA initials)
 ├── Academic_Projects/
 │   ├── RunLikeAG.U.R.L/
 │   ├── Social_Com's_Final/
@@ -142,6 +154,15 @@ Development-Showcase/
 │   ├── The_Unfair_Game_Web_Ed/
 │   ├── THW/
 │   └── TypeboundDungeon/
+├── Art/
+│   ├── index.html
+│   ├── art-history.html
+│   ├── art-history.css
+│   ├── human-rights.html
+│   ├── human-rights.css
+│   ├── brand-guide.html
+│   ├── brand-guide.css
+│   └── Pics/
 └── README.md
 ```
 
