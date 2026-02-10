@@ -374,6 +374,93 @@
                     name it anything, but index.html is the universal standard.</p>
             </div>
         </div>
+
+        <!-- 404 Explained -->
+        <div class="error-404-section">
+            <div class="section-header">
+                <span class="section-label"><i class="fas fa-exclamation-triangle"></i> Error Codes</span>
+                <h2>What is a 404 Error?</h2>
+                <p>Why websites sometimes say "page not found"</p>
+            </div>
+
+            <div class="error-flow">
+                <div class="error-flow-step">
+                    <div class="flow-icon"><i class="fas fa-user"></i></div>
+                    <div class="flow-content">
+                        <h4>You request a page</h4>
+                        <p><code>example.com/about.html</code></p>
+                    </div>
+                </div>
+                <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="error-flow-step">
+                    <div class="flow-icon"><i class="fas fa-server"></i></div>
+                    <div class="flow-content">
+                        <h4>Server looks for it</h4>
+                        <p>Searches the folder for <code>about.html</code></p>
+                    </div>
+                </div>
+                <div class="flow-arrow"><i class="fas fa-arrow-right"></i></div>
+                <div class="error-flow-step error-step">
+                    <div class="flow-icon"><i class="fas fa-file-circle-xmark"></i></div>
+                    <div class="flow-content">
+                        <h4>File not found!</h4>
+                        <p>Server sends back a <strong>404</strong> status code</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="error-cards-grid">
+                <div class="index-card">
+                    <h4><i class="fas fa-question-circle"></i> Why Does This Happen?</h4>
+                    <p>Remember — a website is just files on a server. When you visit a URL, you're asking for a
+                        specific file. If that file doesn't exist (typo in the URL, page was deleted, or link is
+                        outdated), the server has nothing to send back. Instead of crashing, it sends a
+                        <strong>404 status code</strong> — the internet's way of saying "I looked, but it's not
+                        here."</p>
+                </div>
+                <div class="index-card">
+                    <h4><i class="fas fa-hashtag"></i> Why "404" Specifically?</h4>
+                    <p>HTTP status codes are how servers talk to browsers. They're grouped by category:
+                        <strong>2xx</strong> means success (200 = OK!), <strong>3xx</strong> means redirect
+                        (page moved), <strong>4xx</strong> means client error (you asked for something wrong), and
+                        <strong>5xx</strong> means server error (the server broke). 404 falls in the "client error"
+                        group — the URL you typed doesn't match any file on the server.</p>
+                </div>
+            </div>
+
+            <div class="status-codes-mini">
+                <h4>Common HTTP Status Codes</h4>
+                <div class="status-grid">
+                    <div class="status-item success">
+                        <span class="status-code">200</span>
+                        <span class="status-label">OK — Page loaded successfully</span>
+                    </div>
+                    <div class="status-item redirect">
+                        <span class="status-code">301</span>
+                        <span class="status-label">Moved — Page has a new URL</span>
+                    </div>
+                    <div class="status-item client-error">
+                        <span class="status-code">403</span>
+                        <span class="status-label">Forbidden — You don't have permission</span>
+                    </div>
+                    <div class="status-item client-error">
+                        <span class="status-code">404</span>
+                        <span class="status-label">Not Found — File doesn't exist</span>
+                    </div>
+                    <div class="status-item server-error">
+                        <span class="status-code">500</span>
+                        <span class="status-label">Server Error — Something broke on their end</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="index-card">
+                <h4><i class="fas fa-lightbulb"></i> Fun Fact</h4>
+                <p>Many websites create custom 404 pages to be helpful (or funny). Instead of a boring error, they
+                    show a creative page with a link back to the homepage. It's good practice — if someone lands on
+                    a broken link, give them a way to find what they're looking for!</p>
+            </div>
+        </div>
     </section>
 
     <!-- Hosting Options Section -->
