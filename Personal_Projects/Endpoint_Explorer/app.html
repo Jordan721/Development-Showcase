@@ -10,229 +10,294 @@
 </head>
 
 <body>
+    <div class="bg-grid"></div>
+
     <header>
-        <a href="index.html" class="back-btn" title="Back to Landing Page">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M19 12H5" />
-                <path d="M12 19l-7-7 7-7" />
-            </svg>
-        </a>
-        <div class="logo">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M4 11a9 9 0 0 1 9-9" />
-                <path d="M4 4a16 16 0 0 1 16 16" />
-                <circle cx="5" cy="19" r="2" />
-            </svg>
-            <h1>Endpoint Explorer</h1>
+        <div class="header-left">
+            <a href="index.html" class="back-btn" title="Back to Landing Page">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 12H5" />
+                    <path d="M12 19l-7-7 7-7" />
+                </svg>
+            </a>
+            <div class="logo">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 11a9 9 0 0 1 9-9" />
+                    <path d="M4 4a16 16 0 0 1 16 16" />
+                    <circle cx="5" cy="19" r="2" />
+                </svg>
+                <h1>Endpoint Explorer</h1>
+            </div>
         </div>
-        <p class="subtitle">API Playground</p>
+        <div class="header-right">
+            <span class="status-pill">
+                <span class="status-dot"></span>
+                Ready
+            </span>
+        </div>
     </header>
 
     <main>
-        <section class="request-panel">
-            <div class="url-bar">
-                <select id="method-select">
-                    <option value="GET">GET</option>
-                    <option value="POST">POST</option>
-                    <option value="PUT">PUT</option>
-                    <option value="PATCH">PATCH</option>
-                    <option value="DELETE">DELETE</option>
-                    <option value="HEAD">HEAD</option>
-                    <option value="OPTIONS">OPTIONS</option>
-                </select>
-                <input type="text" id="url-input" placeholder="Enter request URL..." spellcheck="false">
-                <button id="send-btn">Send</button>
-            </div>
+        <div class="workspace">
+            <div class="panel request-panel">
+                <div class="panel-header">
+                    <span class="panel-title">Request</span>
+                </div>
 
-            <div class="tabs" id="request-tabs">
-                <button class="tab active" data-tab="params">Params</button>
-                <button class="tab" data-tab="headers">Headers</button>
-                <button class="tab" data-tab="body">Body</button>
-                <button class="tab" data-tab="auth">Auth</button>
-            </div>
+                <div class="url-bar">
+                    <select id="method-select">
+                        <option value="GET">GET</option>
+                        <option value="POST">POST</option>
+                        <option value="PUT">PUT</option>
+                        <option value="PATCH">PATCH</option>
+                        <option value="DELETE">DELETE</option>
+                        <option value="HEAD">HEAD</option>
+                        <option value="OPTIONS">OPTIONS</option>
+                    </select>
+                    <input type="text" id="url-input" placeholder="Enter request URL..." spellcheck="false">
+                    <button id="send-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13" />
+                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                        Send
+                    </button>
+                </div>
 
-            <div class="tab-content" id="tab-params" style="display: block;">
-                <div class="kv-section">
-                    <div class="kv-header">
-                        <span>Query Parameters</span>
-                        <button class="add-row-btn" data-target="params">+ Add</button>
-                    </div>
-                    <div class="kv-list" id="params-list">
-                        <div class="kv-row">
-                            <input type="checkbox" checked>
-                            <input type="text" placeholder="Key" class="kv-key">
-                            <input type="text" placeholder="Value" class="kv-value">
-                            <button class="remove-row-btn" title="Remove">&times;</button>
+                <div class="tabs" id="request-tabs">
+                    <button class="tab active" data-tab="params">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                        Params
+                    </button>
+                    <button class="tab" data-tab="headers">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                            <path d="M2 17l10 5 10-5" />
+                        </svg>
+                        Headers
+                    </button>
+                    <button class="tab" data-tab="body">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                        </svg>
+                        Body
+                    </button>
+                    <button class="tab" data-tab="auth">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        Auth
+                    </button>
+                </div>
+
+                <div class="tab-body">
+                    <div class="tab-content" id="tab-params" style="display: block;">
+                        <div class="kv-section">
+                            <div class="kv-header">
+                                <span>Query Parameters</span>
+                                <button class="add-row-btn" data-target="params">+ Add</button>
+                            </div>
+                            <div class="kv-list" id="params-list">
+                                <div class="kv-row">
+                                    <input type="checkbox" checked>
+                                    <input type="text" placeholder="Key" class="kv-key">
+                                    <input type="text" placeholder="Value" class="kv-value">
+                                    <button class="remove-row-btn" title="Remove">&times;</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="tab-content" id="tab-headers" style="display: none;">
-                <div class="kv-section">
-                    <div class="kv-header">
-                        <span>Request Headers</span>
-                        <button class="add-row-btn" data-target="headers">+ Add</button>
-                    </div>
-                    <div class="kv-list" id="headers-list">
-                        <div class="kv-row">
-                            <input type="checkbox" checked>
-                            <input type="text" placeholder="Key" class="kv-key" value="Content-Type">
-                            <input type="text" placeholder="Value" class="kv-value" value="application/json">
-                            <button class="remove-row-btn" title="Remove">&times;</button>
+                    <div class="tab-content" id="tab-headers" style="display: none;">
+                        <div class="kv-section">
+                            <div class="kv-header">
+                                <span>Request Headers</span>
+                                <button class="add-row-btn" data-target="headers">+ Add</button>
+                            </div>
+                            <div class="kv-list" id="headers-list">
+                                <div class="kv-row">
+                                    <input type="checkbox" checked>
+                                    <input type="text" placeholder="Key" class="kv-key" value="Content-Type">
+                                    <input type="text" placeholder="Value" class="kv-value" value="application/json">
+                                    <button class="remove-row-btn" title="Remove">&times;</button>
+                                </div>
+                                <div class="kv-row">
+                                    <input type="checkbox" checked>
+                                    <input type="text" placeholder="Key" class="kv-key" value="Accept">
+                                    <input type="text" placeholder="Value" class="kv-value" value="application/json">
+                                    <button class="remove-row-btn" title="Remove">&times;</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="kv-row">
-                            <input type="checkbox" checked>
-                            <input type="text" placeholder="Key" class="kv-key" value="Accept">
-                            <input type="text" placeholder="Value" class="kv-value" value="application/json">
-                            <button class="remove-row-btn" title="Remove">&times;</button>
-                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="tab-content" id="tab-body" style="display: none;">
-                <div class="body-type-bar">
-                    <label><input type="radio" name="body-type" value="none" checked> None</label>
-                    <label><input type="radio" name="body-type" value="json"> JSON</label>
-                    <label><input type="radio" name="body-type" value="text"> Text</label>
-                    <label><input type="radio" name="body-type" value="form"> Form Data</label>
-                </div>
-                <div id="body-editor-wrap" class="hidden">
-                    <textarea id="body-editor" placeholder='{ "key": "value" }' spellcheck="false"></textarea>
-                </div>
-                <div id="body-form-wrap" class="hidden">
-                    <div class="kv-section">
-                        <div class="kv-header">
-                            <span>Form Fields</span>
-                            <button class="add-row-btn" data-target="form">+ Add</button>
+                    <div class="tab-content" id="tab-body" style="display: none;">
+                        <div class="body-type-bar">
+                            <label><input type="radio" name="body-type" value="none" checked> None</label>
+                            <label><input type="radio" name="body-type" value="json"> JSON</label>
+                            <label><input type="radio" name="body-type" value="text"> Text</label>
+                            <label><input type="radio" name="body-type" value="form"> Form Data</label>
                         </div>
-                        <div class="kv-list" id="form-list">
-                            <div class="kv-row">
-                                <input type="checkbox" checked>
-                                <input type="text" placeholder="Key" class="kv-key">
-                                <input type="text" placeholder="Value" class="kv-value">
-                                <button class="remove-row-btn" title="Remove">&times;</button>
+                        <div id="body-editor-wrap" class="hidden">
+                            <textarea id="body-editor" placeholder='{ "key": "value" }' spellcheck="false"></textarea>
+                        </div>
+                        <div id="body-form-wrap" class="hidden">
+                            <div class="kv-section">
+                                <div class="kv-header">
+                                    <span>Form Fields</span>
+                                    <button class="add-row-btn" data-target="form">+ Add</button>
+                                </div>
+                                <div class="kv-list" id="form-list">
+                                    <div class="kv-row">
+                                        <input type="checkbox" checked>
+                                        <input type="text" placeholder="Key" class="kv-key">
+                                        <input type="text" placeholder="Value" class="kv-value">
+                                        <button class="remove-row-btn" title="Remove">&times;</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="tab-auth" style="display: none;">
+                        <div class="auth-section">
+                            <label for="auth-type">Authorization Type</label>
+                            <select id="auth-type">
+                                <option value="none">No Auth</option>
+                                <option value="bearer">Bearer Token</option>
+                                <option value="basic">Basic Auth</option>
+                                <option value="apikey">API Key</option>
+                            </select>
+
+                            <div id="auth-bearer" class="auth-fields hidden">
+                                <label>Token</label>
+                                <input type="text" id="bearer-token" placeholder="Enter bearer token..."
+                                    spellcheck="false">
+                            </div>
+
+                            <div id="auth-basic" class="auth-fields hidden">
+                                <label>Username</label>
+                                <input type="text" id="basic-user" placeholder="Username">
+                                <label>Password</label>
+                                <input type="password" id="basic-pass" placeholder="Password">
+                            </div>
+
+                            <div id="auth-apikey" class="auth-fields hidden">
+                                <label>Header Name</label>
+                                <input type="text" id="apikey-name" placeholder="X-API-Key" value="X-API-Key">
+                                <label>API Key</label>
+                                <input type="text" id="apikey-value" placeholder="Enter API key..." spellcheck="false">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="tab-content" id="tab-auth" style="display: none;">
-                <div class="auth-section">
-                    <label for="auth-type">Authorization Type</label>
-                    <select id="auth-type">
-                        <option value="none">No Auth</option>
-                        <option value="bearer">Bearer Token</option>
-                        <option value="basic">Basic Auth</option>
-                        <option value="apikey">API Key</option>
-                    </select>
+            <div class="panel response-panel">
+                <div class="panel-header">
+                    <span class="panel-title">Response</span>
+                    <div class="response-meta" id="response-meta"></div>
+                </div>
 
-                    <div id="auth-bearer" class="auth-fields hidden">
-                        <label>Token</label>
-                        <input type="text" id="bearer-token" placeholder="Enter bearer token..." spellcheck="false">
-                    </div>
-
-                    <div id="auth-basic" class="auth-fields hidden">
-                        <label>Username</label>
-                        <input type="text" id="basic-user" placeholder="Username">
-                        <label>Password</label>
-                        <input type="password" id="basic-pass" placeholder="Password">
-                    </div>
-
-                    <div id="auth-apikey" class="auth-fields hidden">
-                        <label>Header Name</label>
-                        <input type="text" id="apikey-name" placeholder="X-API-Key" value="X-API-Key">
-                        <label>API Key</label>
-                        <input type="text" id="apikey-value" placeholder="Enter API key..." spellcheck="false">
+                <div class="response-bar">
+                    <div class="response-tabs" id="response-tabs">
+                        <button class="tab active" data-tab="resp-body">Body</button>
+                        <button class="tab" data-tab="resp-headers">Headers</button>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <section class="response-panel">
-            <div class="response-bar">
-                <div class="response-tabs" id="response-tabs">
-                    <button class="tab active" data-tab="resp-body">Body</button>
-                    <button class="tab" data-tab="resp-headers">Headers</button>
-                </div>
-                <div class="response-meta" id="response-meta"></div>
-            </div>
-
-            <div class="response-content" id="resp-body" style="display: block;">
-                <div id="response-placeholder" class="placeholder-msg">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 11a9 9 0 0 1 9-9" />
-                        <path d="M4 4a16 16 0 0 1 16 16" />
-                        <circle cx="5" cy="19" r="2" />
-                    </svg>
-                    <p>Enter a URL and hit <strong>Send</strong> to get started</p>
-                    <div class="examples">
-                        <span class="examples-label">Try an example:</span>
-                        <div class="example-chips">
-                            <button class="example-chip" data-method="GET"
-                                data-url="https://jsonplaceholder.typicode.com/posts/1">
-                                <span class="chip-method get">GET</span> Fake Post
-                            </button>
-                            <button class="example-chip" data-method="GET"
-                                data-url="https://api.github.com/users/octocat">
-                                <span class="chip-method get">GET</span> GitHub User
-                            </button>
-                            <button class="example-chip" data-method="GET"
-                                data-url="https://dog.ceo/api/breeds/image/random">
-                                <span class="chip-method get">GET</span> Random Dog
-                            </button>
-                            <button class="example-chip" data-method="POST"
-                                data-url="https://jsonplaceholder.typicode.com/posts"
-                                data-body='{"title":"Hello World","body":"Testing from Endpoint Explorer","userId":1}'>
-                                <span class="chip-method post">POST</span> Create Post
-                            </button>
-                            <button class="example-chip" data-method="GET" data-url="https://catfact.ninja/fact">
-                                <span class="chip-method get">GET</span> Cat Fact
-                            </button>
-                            <button class="example-chip" data-method="GET"
-                                data-url="https://official-joke-api.appspot.com/random_joke">
-                                <span class="chip-method get">GET</span> Random Joke
-                            </button>
+                <div class="response-content" id="resp-body" style="display: block;">
+                    <div id="response-placeholder" class="placeholder-msg">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 11a9 9 0 0 1 9-9" />
+                            <path d="M4 4a16 16 0 0 1 16 16" />
+                            <circle cx="5" cy="19" r="2" />
+                        </svg>
+                        <p>Enter a URL and hit <strong>Send</strong> to get started</p>
+                        <div class="examples">
+                            <span class="examples-label">Try an example:</span>
+                            <div class="example-chips">
+                                <button class="example-chip" data-method="GET"
+                                    data-url="https://jsonplaceholder.typicode.com/posts/1">
+                                    <span class="chip-method get">GET</span> Fake Post
+                                </button>
+                                <button class="example-chip" data-method="GET"
+                                    data-url="https://api.github.com/users/octocat">
+                                    <span class="chip-method get">GET</span> GitHub User
+                                </button>
+                                <button class="example-chip" data-method="GET"
+                                    data-url="https://dog.ceo/api/breeds/image/random">
+                                    <span class="chip-method get">GET</span> Random Dog
+                                </button>
+                                <button class="example-chip" data-method="POST"
+                                    data-url="https://jsonplaceholder.typicode.com/posts"
+                                    data-body='{"title":"Hello World","body":"Testing from Endpoint Explorer","userId":1}'>
+                                    <span class="chip-method post">POST</span> Create Post
+                                </button>
+                                <button class="example-chip" data-method="GET"
+                                    data-url="https://catfact.ninja/fact">
+                                    <span class="chip-method get">GET</span> Cat Fact
+                                </button>
+                                <button class="example-chip" data-method="GET"
+                                    data-url="https://official-joke-api.appspot.com/random_joke">
+                                    <span class="chip-method get">GET</span> Random Joke
+                                </button>
+                            </div>
                         </div>
                     </div>
+                    <div id="response-loading" class="placeholder-msg hidden">
+                        <div class="spinner"></div>
+                        <p>Sending request...</p>
+                    </div>
+                    <pre id="response-body" class="hidden"><code></code></pre>
                 </div>
-                <div id="response-loading" class="placeholder-msg hidden">
-                    <div class="spinner"></div>
-                    <p>Sending request...</p>
-                </div>
-                <pre id="response-body" class="hidden"><code></code></pre>
-            </div>
 
-            <div class="response-content" id="resp-headers" style="display: none;">
-                <div id="resp-headers-placeholder" class="placeholder-msg">
-                    <p>No response headers yet</p>
+                <div class="response-content" id="resp-headers" style="display: none;">
+                    <div id="resp-headers-placeholder" class="placeholder-msg">
+                        <p>No response headers yet</p>
+                    </div>
+                    <table id="response-headers-table" class="hidden">
+                        <thead>
+                            <tr>
+                                <th>Header</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
-                <table id="response-headers-table" class="hidden">
-                    <thead>
-                        <tr>
-                            <th>Header</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
             </div>
-        </section>
+        </div>
 
-        <section class="history-panel">
+        <aside class="panel history-panel">
             <div class="history-header">
-                <h2>History</h2>
+                <h2>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="12 8 12 12 14 14" />
+                        <circle cx="12" cy="12" r="10" />
+                    </svg>
+                    History
+                </h2>
                 <button id="clear-history-btn" title="Clear history">&times;</button>
             </div>
             <ul id="history-list">
                 <li class="history-empty">No requests yet</li>
             </ul>
-        </section>
+        </aside>
     </main>
 
     <script src="app.js"></script>
