@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>One Heck Of A Sandwich - Kiosk</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <!-- Animated Background -->
-    <div class="kiosk-background">
+    <div class="kiosk-background" aria-hidden="true">
         <div class="floating-emoji">🥪</div>
         <div class="floating-emoji">🍔</div>
         <div class="floating-emoji">🌯</div>
@@ -19,386 +24,501 @@
     </div>
 
     <!-- Kiosk Frame -->
-    <div class="kiosk-frame">
+    <div class="kiosk-frame" role="main">
         <!-- Top Bar -->
-        <div class="kiosk-header">
+        <header class="kiosk-header">
             <div class="logo-section">
-                <span class="logo-emoji">🥵</span>
-                <span class="logo-text">ONE HECK OF A SANDWICH</span>
-                <span class="logo-emoji">🫂</span>
+                <span class="logo-emoji" aria-hidden="true">🥪</span>
+                <span class="logo-text">One Heck Of A Sandwich</span>
             </div>
-            <div class="time-display" id="current-time"></div>
-        </div>
+            <div class="time-display" id="current-time" aria-label="Current time"></div>
+        </header>
 
         <div class="container">
-        <!-- Main Menu Screen -->
-        <div id="main-menu" class="screen active">
-            <div class="welcome-animation">
-                <div class="pulse-circle"></div>
-                <h1 class="title animate-slide-down">🫂 Welcome to One Heck Of A Sandwich 🥵</h1>
-                <p class="kiosk-subtitle animate-fade-in">Touch anywhere to get started!</p>
-            </div>
-            <div class="menu-buttons">
-                <button class="btn btn-primary kiosk-btn" onclick="startNewOrder()">
-                    <span class="btn-icon">🌚</span>
-                    <span class="btn-text">START NEW ORDER</span>
-                </button>
-                <button class="btn btn-success kiosk-btn" onclick="window.location.href='tutorial.html'">
-                    <span class="btn-icon">🎓</span>
-                    <span class="btn-text">LEARN HOW I BUILT THIS</span>
-                </button>
-                <button class="btn btn-secondary kiosk-btn" onclick="goBackToMainSite()">
-                    <span class="btn-icon">🏠</span>
-                    <span class="btn-text">BACK TO SHOWCASE</span>
-                </button>
-                <button class="btn btn-danger kiosk-btn" onclick="exitApp()">
-                    <span class="btn-icon">🙋🏾‍♂️</span>
-                    <span class="btn-text">EXIT</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Order Menu Screen -->
-        <div id="order-menu" class="screen">
-            <h2 class="subtitle">🐦‍🔥 What Would You Like? 🐦‍🔥</h2>
-            <div class="kiosk-grid">
-                <button class="kiosk-card kiosk-card-sandwich" onclick="showBuildSandwich()">
-                    <div class="card-icon">🥪</div>
-                    <div class="card-title">BUILD A SANDWICH</div>
-                    <div class="card-desc">Customize your own</div>
-                </button>
-                <button class="kiosk-card kiosk-card-signature" onclick="showSignatureSandwiches()">
-                    <div class="card-icon">📜</div>
-                    <div class="card-title">SIGNATURE SANDWICH</div>
-                    <div class="card-desc">Try our classics</div>
-                </button>
-                <button class="kiosk-card kiosk-card-drink" onclick="showAddDrink()">
-                    <div class="card-icon">🍹</div>
-                    <div class="card-title">ADD A DRINK</div>
-                    <div class="card-desc">Stay refreshed</div>
-                </button>
-                <button class="kiosk-card kiosk-card-chips" onclick="showAddChips()">
-                    <div class="card-icon">🥔</div>
-                    <div class="card-title">ADD CHIPS</div>
-                    <div class="card-desc">Crunchy sides</div>
-                </button>
-            </div>
-
-            <!-- Current Order Summary Sidebar -->
-            <div class="order-sidebar">
-                <div class="sidebar-header">
-                    <h3>YOUR ORDER</h3>
+            <!-- Main Menu Screen -->
+            <div id="main-menu" class="screen active" role="region" aria-label="Main menu">
+                <div class="welcome-animation">
+                    <div class="pulse-circle" aria-hidden="true"></div>
+                    <h1 class="title animate-slide-down">Welcome to One Heck Of A Sandwich</h1>
+                    <p class="kiosk-subtitle animate-fade-in">Tap below to get started</p>
                 </div>
-                <div id="order-items" class="sidebar-items"></div>
-                <div id="order-total" class="sidebar-total"></div>
-                <div class="sidebar-actions">
-                    <button class="btn btn-success btn-full" onclick="showCheckout()">
-                        <span class="btn-icon">✅</span>
-                        <span class="btn-text">CHECKOUT</span>
+                <nav class="menu-buttons" aria-label="Main navigation">
+                    <button class="btn btn-primary kiosk-btn" onclick="startNewOrder()" aria-label="Start a new order">
+                        <span class="btn-icon" aria-hidden="true">🥪</span>
+                        <span class="btn-text">Start New Order</span>
                     </button>
-                    <button class="btn btn-danger btn-full" onclick="cancelOrder()">
-                        <span class="btn-icon">🪦</span>
-                        <span class="btn-text">CANCEL ORDER</span>
+                    <button class="btn btn-info kiosk-btn" onclick="showOrderHistory()" aria-label="View order history">
+                        <span class="btn-icon" aria-hidden="true">📋</span>
+                        <span class="btn-text">Order History</span>
+                    </button>
+                    <button class="btn btn-success kiosk-btn" onclick="window.location.href='tutorial.html'" aria-label="Learn how this was built">
+                        <span class="btn-icon" aria-hidden="true">🎓</span>
+                        <span class="btn-text">Learn How I Built This</span>
+                    </button>
+                    <button class="btn btn-secondary kiosk-btn" onclick="goBackToMainSite()" aria-label="Go back to showcase">
+                        <span class="btn-icon" aria-hidden="true">🏠</span>
+                        <span class="btn-text">Back to Showcase</span>
+                    </button>
+                    <button class="btn btn-danger kiosk-btn" onclick="exitApp()" aria-label="Exit application">
+                        <span class="btn-icon" aria-hidden="true">👋</span>
+                        <span class="btn-text">Exit</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Order Menu Screen -->
+            <div id="order-menu" class="screen" role="region" aria-label="Order menu">
+                <h2 class="subtitle">What would you like?</h2>
+                <div class="kiosk-grid" role="list" aria-label="Menu categories">
+                    <button class="kiosk-card" onclick="showBuildSandwich()" role="listitem" aria-label="Build a custom sandwich">
+                        <div class="card-icon" aria-hidden="true">🥪</div>
+                        <div class="card-title">Build a Sandwich</div>
+                        <div class="card-desc">Customize your own</div>
+                    </button>
+                    <button class="kiosk-card" onclick="showSignatureSandwiches()" role="listitem" aria-label="Choose a signature sandwich">
+                        <div class="card-icon" aria-hidden="true">📜</div>
+                        <div class="card-title">Signature Sandwich</div>
+                        <div class="card-desc">Try our classics</div>
+                    </button>
+                    <button class="kiosk-card" onclick="showComboMeals()" role="listitem" aria-label="View combo meal deals">
+                        <div class="card-icon" aria-hidden="true">🍱</div>
+                        <div class="card-title">Combo Meals</div>
+                        <div class="card-desc">Save with a bundle</div>
+                    </button>
+                    <button class="kiosk-card" onclick="showAddDrink()" role="listitem" aria-label="Add a drink">
+                        <div class="card-icon" aria-hidden="true">🍹</div>
+                        <div class="card-title">Add a Drink</div>
+                        <div class="card-desc">Stay refreshed</div>
+                    </button>
+                    <button class="kiosk-card" onclick="showAddChips()" role="listitem" aria-label="Add chips">
+                        <div class="card-icon" aria-hidden="true">🥔</div>
+                        <div class="card-title">Add Chips</div>
+                        <div class="card-desc">Crunchy sides</div>
                     </button>
                 </div>
+
+                <!-- Current Order Summary Sidebar -->
+                <aside class="order-sidebar" aria-label="Your current order">
+                    <div class="sidebar-header">
+                        <h3>Your Order</h3>
+                    </div>
+                    <div id="order-items" class="sidebar-items" role="list" aria-label="Order items"></div>
+                    <div id="order-total" class="sidebar-total" aria-live="polite"></div>
+                    <div class="sidebar-actions">
+                        <button class="btn btn-success btn-full" onclick="showCheckout()" aria-label="Proceed to checkout">
+                            <span class="btn-icon" aria-hidden="true">✅</span>
+                            <span class="btn-text">Checkout</span>
+                        </button>
+                        <button class="btn btn-danger btn-full" onclick="cancelOrder()" aria-label="Cancel this order">
+                            <span class="btn-icon" aria-hidden="true">✕</span>
+                            <span class="btn-text">Cancel Order</span>
+                        </button>
+                    </div>
+                </aside>
             </div>
-        </div>
 
-        <!-- Build Sandwich Screen -->
-        <div id="build-sandwich" class="screen">
-            <h2 class="subtitle">🏗️ Build Your Heckin Sandwich 😋</h2>
+            <!-- Build Sandwich Screen -->
+            <div id="build-sandwich" class="screen" role="region" aria-label="Build your sandwich">
+                <h2 class="subtitle">Build Your Sandwich</h2>
 
-            <div class="form-group">
-                <label class="kiosk-label">STEP 1: Choose Your Size</label>
-                <div class="button-group-kiosk">
-                    <button class="btn-option-kiosk" data-value="4" onclick="selectSize('4')">
-                        <div class="option-emoji">📏</div>
-                        <div class="option-text">4"</div>
-                        <div class="option-price">$5.50</div>
+                <div class="form-group">
+                    <label class="kiosk-label" id="size-label">Step 1: Choose Your Size</label>
+                    <div class="button-group-kiosk" role="radiogroup" aria-labelledby="size-label">
+                        <button class="btn-option-kiosk" data-value="4" onclick="selectSize('4')" role="radio" aria-checked="false" aria-label="4 inch sandwich, $5.50">
+                            <div class="option-emoji" aria-hidden="true">📏</div>
+                            <div class="option-text">4"</div>
+                            <div class="option-price">$5.50</div>
+                        </button>
+                        <button class="btn-option-kiosk" data-value="8" onclick="selectSize('8')" role="radio" aria-checked="false" aria-label="8 inch sandwich, $7.00">
+                            <div class="option-emoji" aria-hidden="true">📏</div>
+                            <div class="option-text">8"</div>
+                            <div class="option-price">$7.00</div>
+                        </button>
+                        <button class="btn-option-kiosk" data-value="12" onclick="selectSize('12')" role="radio" aria-checked="false" aria-label="12 inch sandwich, $8.50">
+                            <div class="option-emoji" aria-hidden="true">📏</div>
+                            <div class="option-text">12"</div>
+                            <div class="option-price">$8.50</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="kiosk-label" id="bread-label">Step 2: Choose Your Bread</label>
+                    <div class="button-group-kiosk" role="radiogroup" aria-labelledby="bread-label">
+                        <button class="btn-option-kiosk" data-value="WHITE" onclick="selectBread('WHITE')" role="radio" aria-checked="false">
+                            <div class="option-emoji" aria-hidden="true">🍞</div>
+                            <div class="option-text">White</div>
+                        </button>
+                        <button class="btn-option-kiosk" data-value="WHEAT" onclick="selectBread('WHEAT')" role="radio" aria-checked="false">
+                            <div class="option-emoji" aria-hidden="true">🌾</div>
+                            <div class="option-text">Wheat</div>
+                        </button>
+                        <button class="btn-option-kiosk" data-value="RYE" onclick="selectBread('RYE')" role="radio" aria-checked="false">
+                            <div class="option-emoji" aria-hidden="true">🥖</div>
+                            <div class="option-text">Rye</div>
+                        </button>
+                        <button class="btn-option-kiosk" data-value="WRAP" onclick="selectBread('WRAP')" role="radio" aria-checked="false">
+                            <div class="option-emoji" aria-hidden="true">🌯</div>
+                            <div class="option-text">Wrap</div>
+                        </button>
+                        <button class="btn-option-kiosk" data-value="ITALIAN" onclick="selectBread('ITALIAN')" role="radio" aria-checked="false">
+                            <div class="option-emoji" aria-hidden="true">💚🤍❤️</div>
+                            <div class="option-text">Italian H&C</div>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="kiosk-label">Step 3: Toasted?</label>
+                    <button class="toasted-toggle" id="toasted-btn" onclick="toggleToasted()" role="switch" aria-checked="false" aria-label="Toggle toasted">
+                        <span class="toggle-icon" id="toasted-icon" aria-hidden="true">🔥</span>
+                        <span class="toggle-text" id="toasted-text">Tap to Toast</span>
                     </button>
-                    <button class="btn-option-kiosk" data-value="8" onclick="selectSize('8')">
-                        <div class="option-emoji">📏</div>
-                        <div class="option-text">8"</div>
-                        <div class="option-price">$7.00</div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-large" onclick="showToppingsSelection()">
+                        <span class="btn-text">Continue to Toppings</span>
                     </button>
-                    <button class="btn-option-kiosk" data-value="12" onclick="selectSize('12')">
-                        <div class="option-emoji">📏</div>
-                        <div class="option-text">12"</div>
-                        <div class="option-price">$8.50</div>
+                    <button class="btn btn-secondary btn-large" onclick="backToOrderMenu()">
+                        <span class="btn-text">Back</span>
                     </button>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="kiosk-label">STEP 2: Choose Your Bread</label>
-                <div class="button-group-kiosk">
-                    <button class="btn-option-kiosk" data-value="WHITE" onclick="selectBread('WHITE')">
-                        <div class="option-emoji">🍞</div>
-                        <div class="option-text">White</div>
+            <!-- Toppings Selection Screen -->
+            <div id="toppings-selection" class="screen" role="region" aria-label="Select toppings">
+                <h2 class="subtitle">Add Toppings</h2>
+
+                <div class="toppings-section">
+                    <h3>🥩 Meats (Premium)</h3>
+                    <div id="meats-list" class="toppings-grid" role="group" aria-label="Meat toppings"></div>
+                </div>
+
+                <div class="toppings-section">
+                    <h3>🧀 Cheese (Premium)</h3>
+                    <div id="cheese-list" class="toppings-grid" role="group" aria-label="Cheese toppings"></div>
+                </div>
+
+                <div class="toppings-section">
+                    <h3>🥬 Regular Toppings</h3>
+                    <div id="regular-list" class="toppings-grid" role="group" aria-label="Regular toppings"></div>
+                </div>
+
+                <div class="toppings-section">
+                    <h3>🥗 Sauces</h3>
+                    <div id="sauce-list" class="toppings-grid" role="group" aria-label="Sauce options"></div>
+                </div>
+
+                <div class="surcharge-info" aria-live="polite">
+                    <p id="surcharge-message"></p>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-success btn-large" onclick="finishSandwich()">
+                        <span class="btn-icon" aria-hidden="true">✅</span>
+                        <span class="btn-text">Add to Order</span>
                     </button>
-                    <button class="btn-option-kiosk" data-value="WHEAT" onclick="selectBread('WHEAT')">
-                        <div class="option-emoji">🌾</div>
-                        <div class="option-text">Wheat</div>
-                    </button>
-                    <button class="btn-option-kiosk" data-value="RYE" onclick="selectBread('RYE')">
-                        <div class="option-emoji">🥖</div>
-                        <div class="option-text">Rye</div>
-                    </button>
-                    <button class="btn-option-kiosk" data-value="WRAP" onclick="selectBread('WRAP')">
-                        <div class="option-emoji">🌯</div>
-                        <div class="option-text">Wrap</div>
-                    </button>
-                    <button class="btn-option-kiosk" data-value="ITALIAN" onclick="selectBread('ITALIAN')">
-                        <div class="option-emoji">💚🤍❤️</div>
-                        <div class="option-text">Italian H&C</div>
+                    <button class="btn btn-secondary btn-large" onclick="backToBuildSandwich()">
+                        <span class="btn-text">Back</span>
                     </button>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="kiosk-label">STEP 3: Toasted?</label>
-                <button class="toasted-toggle" id="toasted-btn" onclick="toggleToasted()">
-                    <span class="toggle-icon" id="toasted-icon">🔥</span>
-                    <span class="toggle-text" id="toasted-text">TAP TO TOAST</span>
-                </button>
-            </div>
-
-            <div class="action-buttons">
-                <button class="btn btn-primary btn-large" onclick="showToppingsSelection()">
-                    <span class="btn-text">CONTINUE TO TOPPINGS →</span>
-                </button>
+            <!-- Signature Sandwiches Screen -->
+            <div id="signature-sandwiches" class="screen" role="region" aria-label="Signature sandwiches">
+                <h2 class="subtitle">Signature Sandwiches</h2>
+                <div class="signature-cards-kiosk" role="list">
+                    <div class="signature-card-kiosk" onclick="addSignatureSandwich('BLT')" role="listitem" tabindex="0" aria-label="BLT O Heck, $10.50">
+                        <div class="sig-icon" aria-hidden="true">🥓</div>
+                        <h3 class="sig-title">BLT O Heck</h3>
+                        <p class="sig-desc">Classic bacon, lettuce, and tomato on toasted white bread</p>
+                        <div class="sig-price">$10.50</div>
+                    </div>
+                    <div class="signature-card-kiosk" onclick="addSignatureSandwich('PHILLY')" role="listitem" tabindex="0" aria-label="Heck O Alot Of Philly Cheese Steak, $14.00">
+                        <div class="sig-icon" aria-hidden="true">🧀</div>
+                        <h3 class="sig-title">Heck O Alot Of Philly Cheese Steak</h3>
+                        <p class="sig-desc">Loaded with steak, peppers, onions, and provolone</p>
+                        <div class="sig-price">$14.00</div>
+                    </div>
+                    <div class="signature-card-kiosk" onclick="addSignatureSandwich('ITALIAN')" role="listitem" tabindex="0" aria-label="Heckin Italian, $12.00">
+                        <div class="sig-icon" aria-hidden="true">🍅</div>
+                        <h3 class="sig-title">Heckin Italian</h3>
+                        <p class="sig-desc">Salami, ham, provolone on Italian herb & cheese bread</p>
+                        <div class="sig-price">$12.00</div>
+                    </div>
+                    <div class="signature-card-kiosk" onclick="addSignatureSandwich('CHICKEN')" role="listitem" tabindex="0" aria-label="The Cluckin Chicken, $10.00">
+                        <div class="sig-icon" aria-hidden="true">🍗</div>
+                        <h3 class="sig-title">The Cluckin Chicken</h3>
+                        <p class="sig-desc">Grilled chicken with your choice of toppings</p>
+                        <div class="sig-price">$10.00</div>
+                    </div>
+                </div>
                 <button class="btn btn-secondary btn-large" onclick="backToOrderMenu()">
-                    <span class="btn-text">← BACK</span>
+                    <span class="btn-text">Back</span>
                 </button>
             </div>
-        </div>
 
-        <!-- Toppings Selection Screen -->
-        <div id="toppings-selection" class="screen">
-            <h2 class="subtitle">Add Toppings</h2>
-
-            <div class="toppings-section">
-                <h3>🥩 Meats (Premium)</h3>
-                <div id="meats-list" class="toppings-grid"></div>
-            </div>
-
-            <div class="toppings-section">
-                <h3>🧀 Cheese (Premium)</h3>
-                <div id="cheese-list" class="toppings-grid"></div>
-            </div>
-
-            <div class="toppings-section">
-                <h3>🥬 Regular Toppings</h3>
-                <div id="regular-list" class="toppings-grid"></div>
-            </div>
-
-            <div class="toppings-section">
-                <h3>🥗 Sauces</h3>
-                <div id="sauce-list" class="toppings-grid"></div>
-            </div>
-
-            <div class="surcharge-info animate-bounce">
-                <p id="surcharge-message"></p>
-            </div>
-
-            <div class="action-buttons">
-                <button class="btn btn-success btn-large pulse-btn" onclick="finishSandwich()">
-                    <span class="btn-icon">✅</span>
-                    <span class="btn-text">ADD TO ORDER</span>
+            <!-- Combo Meals Screen -->
+            <div id="combo-meals" class="screen" role="region" aria-label="Combo meal deals">
+                <h2 class="subtitle">Combo Meals</h2>
+                <p class="combo-savings-banner">Save when you bundle!</p>
+                <div class="signature-cards-kiosk" role="list">
+                    <div class="signature-card-kiosk" onclick="addCombo('CLASSIC')" role="listitem" tabindex="0" aria-label="Classic Combo, $12.00 - save $1.50">
+                        <div class="sig-icon" aria-hidden="true">🥪</div>
+                        <h3 class="sig-title">Classic Combo</h3>
+                        <p class="sig-desc">BLT O Heck + Medium Drink + Chips</p>
+                        <div class="sig-price">$12.00</div>
+                        <div class="combo-badge">Save $1.50</div>
+                    </div>
+                    <div class="signature-card-kiosk" onclick="addCombo('PHILLY')" role="listitem" tabindex="0" aria-label="Philly Combo, $15.50 - save $2.00">
+                        <div class="sig-icon" aria-hidden="true">🧀</div>
+                        <h3 class="sig-title">Philly Combo</h3>
+                        <p class="sig-desc">Philly Cheese Steak + Large Drink + Chips</p>
+                        <div class="sig-price">$15.50</div>
+                        <div class="combo-badge">Save $2.00</div>
+                    </div>
+                    <div class="signature-card-kiosk" onclick="addCombo('CHICKEN')" role="listitem" tabindex="0" aria-label="Chicken Combo, $11.50 - save $1.50">
+                        <div class="sig-icon" aria-hidden="true">🍗</div>
+                        <h3 class="sig-title">Chicken Combo</h3>
+                        <p class="sig-desc">The Cluckin Chicken + Medium Drink + Chips</p>
+                        <div class="sig-price">$11.50</div>
+                        <div class="combo-badge">Save $1.50</div>
+                    </div>
+                    <div class="signature-card-kiosk" onclick="addCombo('ITALIAN')" role="listitem" tabindex="0" aria-label="Italian Combo, $13.50 - save $1.50">
+                        <div class="sig-icon" aria-hidden="true">🍅</div>
+                        <h3 class="sig-title">Italian Combo</h3>
+                        <p class="sig-desc">Heckin Italian + Medium Drink + Chips</p>
+                        <div class="sig-price">$13.50</div>
+                        <div class="combo-badge">Save $1.50</div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary btn-large" onclick="backToOrderMenu()">
+                    <span class="btn-text">Back</span>
                 </button>
-                <button class="btn btn-secondary btn-large" onclick="backToBuildSandwich()">
-                    <span class="btn-text">← BACK</span>
-                </button>
             </div>
-        </div>
 
-        <!-- Signature Sandwiches Screen -->
-        <div id="signature-sandwiches" class="screen">
-            <h2 class="subtitle">Choose a Signature Sandwich</h2>
-            <div class="signature-cards-kiosk">
-                <div class="signature-card-kiosk" onclick="addSignatureSandwich('BLT')">
-                    <div class="sig-icon">🥓</div>
-                    <h3 class="sig-title">BLT O Heck</h3>
-                    <p class="sig-desc">Classic bacon, lettuce, and tomato on toasted white bread</p>
-                    <div class="sig-price">$10.50</div>
-                </div>
-                <div class="signature-card-kiosk" onclick="addSignatureSandwich('PHILLY')">
-                    <div class="sig-icon">🧀</div>
-                    <h3 class="sig-title">Heck O Alot Of Philly Cheese Steak</h3>
-                    <p class="sig-desc">Loaded with steak, peppers, onions, and provolone</p>
-                    <div class="sig-price">$14.00</div>
-                </div>
-                <div class="signature-card-kiosk" onclick="addSignatureSandwich('ITALIAN')">
-                    <div class="sig-icon">🍅</div>
-                    <h3 class="sig-title">Heckin Italian</h3>
-                    <p class="sig-desc">Salami, ham, provolone on Italian herb & cheese bread</p>
-                    <div class="sig-price">$12.00</div>
-                </div>
-                <div class="signature-card-kiosk" onclick="addSignatureSandwich('CHICKEN')">
-                    <div class="sig-icon">🍗</div>
-                    <h3 class="sig-title">The Cluckin Chicken</h3>
-                    <p class="sig-desc">Grilled chicken with your choice of toppings</p>
-                    <div class="sig-price">$10.00</div>
-                </div>
-            </div>
-            <button class="btn btn-secondary btn-large" onclick="backToOrderMenu()">
-                <span class="btn-text">← BACK</span>
-            </button>
-        </div>
+            <!-- Add Drink Screen -->
+            <div id="add-drink" class="screen" role="region" aria-label="Add a drink">
+                <h2 class="subtitle">Add a Drink</h2>
 
-        <!-- Add Drink Screen -->
-        <div id="add-drink" class="screen">
-            <h2 class="subtitle">🍾 Add a Drink 🍾</h2>
+                <div class="form-group">
+                    <label class="kiosk-label" id="drink-size-label">Choose Drink Size</label>
+                    <div class="button-group-kiosk" role="radiogroup" aria-labelledby="drink-size-label">
+                        <button class="btn-option-kiosk" data-value="SMALL" onclick="selectDrinkSize('SMALL')" role="radio" aria-checked="false" aria-label="Small drink, $2.00">
+                            <div class="option-emoji" aria-hidden="true">🥤</div>
+                            <div class="option-text">Small</div>
+                            <div class="option-price">$2.00</div>
+                        </button>
+                        <button class="btn-option-kiosk" data-value="MEDIUM" onclick="selectDrinkSize('MEDIUM')" role="radio" aria-checked="false" aria-label="Medium drink, $2.50">
+                            <div class="option-emoji" aria-hidden="true">🧃</div>
+                            <div class="option-text">Medium</div>
+                            <div class="option-price">$2.50</div>
+                        </button>
+                        <button class="btn-option-kiosk" data-value="LARGE" onclick="selectDrinkSize('LARGE')" role="radio" aria-checked="false" aria-label="Large drink, $3.00">
+                            <div class="option-emoji" aria-hidden="true">🧋</div>
+                            <div class="option-text">Large</div>
+                            <div class="option-price">$3.00</div>
+                        </button>
+                    </div>
+                </div>
 
-            <div class="form-group">
-                <label class="kiosk-label">Choose Drink Size:</label>
-                <div class="button-group-kiosk">
-                    <button class="btn-option-kiosk" data-value="SMALL" onclick="selectDrinkSize('SMALL')">
-                        <div class="option-emoji">🥤</div>
-                        <div class="option-text">Small</div>
-                        <div class="option-price">$2.00</div>
+                <div class="form-group">
+                    <label class="kiosk-label" for="drink-flavor">Enter Drink Flavor or Type</label>
+                    <input type="text" id="drink-flavor" class="kiosk-input" placeholder="e.g., Coke, Sprite, Lemonade" aria-required="true">
+                </div>
+
+                <div class="form-group">
+                    <label class="kiosk-label" for="drink-qty">Quantity</label>
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty('drink-qty', -1)" aria-label="Decrease drink quantity">−</button>
+                        <input type="number" id="drink-qty" class="qty-input" value="1" min="1" max="10" aria-label="Drink quantity">
+                        <button class="qty-btn" onclick="changeQty('drink-qty', 1)" aria-label="Increase drink quantity">+</button>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-success btn-large" onclick="addDrink()">
+                        <span class="btn-icon" aria-hidden="true">✅</span>
+                        <span class="btn-text">Add to Order</span>
                     </button>
-                    <button class="btn-option-kiosk" data-value="MEDIUM" onclick="selectDrinkSize('MEDIUM')">
-                        <div class="option-emoji">🧃</div>
-                        <div class="option-text">Medium</div>
-                        <div class="option-price">$2.50</div>
-                    </button>
-                    <button class="btn-option-kiosk" data-value="LARGE" onclick="selectDrinkSize('LARGE')">
-                        <div class="option-emoji">🧋</div>
-                        <div class="option-text">Large</div>
-                        <div class="option-price">$3.00</div>
+                    <button class="btn btn-secondary btn-large" onclick="backToOrderMenu()">
+                        <span class="btn-text">Back</span>
                     </button>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="kiosk-label">Enter Drink Flavor or Type:</label>
-                <input type="text" id="drink-flavor" class="kiosk-input" placeholder="e.g., Coke, Sprite, Lemonade">
-            </div>
+            <!-- Add Chips Screen -->
+            <div id="add-chips" class="screen" role="region" aria-label="Add chips">
+                <h2 class="subtitle">Add Chips</h2>
 
-            <div class="action-buttons">
-                <button class="btn btn-success btn-large" onclick="addDrink()">
-                    <span class="btn-icon">✅</span>
-                    <span class="btn-text">ADD TO ORDER</span>
-                </button>
-                <button class="btn btn-secondary btn-large" onclick="backToOrderMenu()">
-                    <span class="btn-text">← BACK</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Add Chips Screen -->
-        <div id="add-chips" class="screen">
-            <h2 class="subtitle">🛢️🥔 Add Chips 🥔🛢️</h2>
-
-            <div class="form-group">
-                <label class="kiosk-label">Enter Chips Flavor or Type:</label>
-                <input type="text" id="chips-flavor" class="kiosk-input" placeholder="e.g., BBQ, Sour Cream, Salt & Vinegar">
-            </div>
-
-            <div class="chips-price-display">$1.50</div>
-
-            <div class="action-buttons">
-                <button class="btn btn-success btn-large" onclick="addChips()">
-                    <span class="btn-icon">✅</span>
-                    <span class="btn-text">ADD TO ORDER</span>
-                </button>
-                <button class="btn btn-secondary btn-large" onclick="backToOrderMenu()">
-                    <span class="btn-text">← BACK</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Checkout Screen -->
-        <div id="checkout" class="screen">
-            <h2 class="subtitle">Review Your Order</h2>
-            <div id="receipt" class="receipt-kiosk"></div>
-            <div class="checkout-buttons">
-                <button class="btn btn-success btn-xl pulse-btn" onclick="confirmOrder()">
-                    <span class="btn-icon">✅</span>
-                    <span class="btn-text">CONFIRM ORDER</span>
-                </button>
-                <button class="btn btn-secondary btn-large" onclick="backToOrderMenu()">
-                    <span class="btn-text">← BACK TO ORDER</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- About This Project Screen -->
-        <div id="about-project" class="screen">
-            <h2 class="subtitle">📚 About This Project</h2>
-            <div class="about-content">
-                <div class="about-card">
-                    <div class="about-icon">🎓</div>
-                    <h3 class="about-title">Year Up United App Dev Bootcamp</h3>
-                    <p class="about-text">
-                        This project was originally created as part of my <strong>Year Up United Application Development Bootcamp</strong>
-                        capstone project. The assignment was to build a Java application that users could interact with through
-                        a command-line interface.
-                    </p>
+                <div class="form-group">
+                    <label class="kiosk-label" for="chips-flavor">Enter Chips Flavor or Type</label>
+                    <input type="text" id="chips-flavor" class="kiosk-input" placeholder="e.g., BBQ, Sour Cream, Salt & Vinegar" aria-required="true">
                 </div>
 
-                <div class="about-card">
-                    <div class="about-icon">💡</div>
-                    <h3 class="about-title">My Creative Twist</h3>
-                    <p class="about-text">
-                        I decided to take it a step further and convert the entire Java application into an interactive
-                        web-based kiosk experience! This showcases my ability to adapt and transform projects across
-                        different technologies and platforms.
-                    </p>
+                <div class="chips-price-display" aria-label="Price: $1.50 each">$1.50 each</div>
+
+                <div class="form-group">
+                    <label class="kiosk-label" for="chips-qty">Quantity</label>
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="changeQty('chips-qty', -1)" aria-label="Decrease chips quantity">−</button>
+                        <input type="number" id="chips-qty" class="qty-input" value="1" min="1" max="10" aria-label="Chips quantity">
+                        <button class="qty-btn" onclick="changeQty('chips-qty', 1)" aria-label="Increase chips quantity">+</button>
+                    </div>
                 </div>
 
-                <div class="about-card">
-                    <div class="about-icon">⚙️</div>
-                    <h3 class="about-title">Technologies Used</h3>
-                    <p class="about-text">
-                        <strong>Original:</strong> Java, Object-Oriented Programming, File I/O<br>
-                        <strong>Web Version:</strong> HTML5, CSS3, JavaScript, Animations, Responsive Design
-                    </p>
-                </div>
-
-                <div class="about-links">
-                    <a href="https://github.com/Year-Up-United-SPR-2025/Capstones/tree/main/One_Heck_Of_A_Sandwich_Cap_2"
-                       target="_blank"
-                       class="github-link">
-                        <span class="link-icon">📁</span>
-                        <span class="link-text">VIEW ORIGINAL JAVA FILES ON GITHUB</span>
-                    </a>
-                </div>
-
-                <div class="about-signature">
-                    <p>Built with ❤️ as part of my software development journey</p>
+                <div class="action-buttons">
+                    <button class="btn btn-success btn-large" onclick="addChips()">
+                        <span class="btn-icon" aria-hidden="true">✅</span>
+                        <span class="btn-text">Add to Order</span>
+                    </button>
+                    <button class="btn btn-secondary btn-large" onclick="backToOrderMenu()">
+                        <span class="btn-text">Back</span>
+                    </button>
                 </div>
             </div>
 
-            <div class="action-buttons">
-                <button class="btn btn-primary btn-large" onclick="returnToMain()">
-                    <span class="btn-text">← BACK TO MAIN MENU</span>
-                </button>
+            <!-- Checkout Screen -->
+            <div id="checkout" class="screen" role="region" aria-label="Checkout">
+                <h2 class="subtitle">Review Your Order</h2>
+                <div id="receipt" class="receipt-kiosk"></div>
+                <div class="checkout-buttons">
+                    <button class="btn btn-success btn-xl" onclick="confirmOrder()" aria-label="Confirm and place order">
+                        <span class="btn-icon" aria-hidden="true">✅</span>
+                        <span class="btn-text">Confirm Order</span>
+                    </button>
+                    <button class="btn btn-secondary btn-large" onclick="printReceipt()" aria-label="Print receipt">
+                        <span class="btn-icon" aria-hidden="true">🖨️</span>
+                        <span class="btn-text">Print Receipt</span>
+                    </button>
+                    <button class="btn btn-secondary btn-large" onclick="backToOrderMenu()">
+                        <span class="btn-text">Back to Order</span>
+                    </button>
+                </div>
             </div>
-        </div>
 
-        <!-- Thank You Screen -->
-        <div id="thank-you" class="screen">
-            <div class="celebration">
-                <div class="confetti">🎊</div>
-                <div class="confetti">🎉</div>
-                <div class="confetti">🥳</div>
-                <div class="confetti">✨</div>
+            <!-- Order History Screen -->
+            <div id="order-history" class="screen" role="region" aria-label="Order history">
+                <h2 class="subtitle">Order History</h2>
+                <div id="history-list" class="history-list"></div>
+                <div class="action-buttons">
+                    <button class="btn btn-danger btn-large" onclick="clearHistory()" aria-label="Clear all order history">
+                        <span class="btn-text">Clear History</span>
+                    </button>
+                    <button class="btn btn-secondary btn-large" onclick="returnToMain()">
+                        <span class="btn-text">Back to Main Menu</span>
+                    </button>
+                </div>
             </div>
-            <h1 class="title animate-bounce">🎊 Order Confirmed! 🎊</h1>
-            <div class="thank-you-animation">
-                <p class="thank-you-message">Thank you for using</p>
-                <p class="thank-you-big">One Heck Of A Sandwich!</p>
-                <p class="thank-you-message">Have one Heck of a Day Now 😈</p>
+
+            <!-- About This Project Screen -->
+            <div id="about-project" class="screen" role="region" aria-label="About this project">
+                <h2 class="subtitle">About This Project</h2>
+                <div class="about-content">
+                    <div class="about-card">
+                        <div class="about-icon" aria-hidden="true">🎓</div>
+                        <h3 class="about-title">Year Up United App Dev Bootcamp</h3>
+                        <p class="about-text">
+                            This project was originally created as part of my <strong>Year Up United Application
+                                Development Bootcamp</strong>
+                            capstone project. The assignment was to build a Java application that users could interact
+                            with through a command-line interface.
+                        </p>
+                    </div>
+
+                    <div class="about-card">
+                        <div class="about-icon" aria-hidden="true">💡</div>
+                        <h3 class="about-title">My Creative Twist</h3>
+                        <p class="about-text">
+                            I decided to take it a step further and convert the entire Java application into an
+                            interactive web-based kiosk experience! This showcases my ability to adapt and transform
+                            projects across different technologies and platforms.
+                        </p>
+                    </div>
+
+                    <div class="about-card">
+                        <div class="about-icon" aria-hidden="true">⚙️</div>
+                        <h3 class="about-title">Technologies Used</h3>
+                        <p class="about-text">
+                            <strong>Original:</strong> Java, Object-Oriented Programming, File I/O<br>
+                            <strong>Web Version:</strong> HTML5, CSS3, JavaScript, Animations, Responsive Design
+                        </p>
+                    </div>
+
+                    <div class="about-links">
+                        <a href="https://github.com/Year-Up-United-SPR-2025/Capstones/tree/main/One_Heck_Of_A_Sandwich_Cap_2"
+                            target="_blank" class="github-link" rel="noopener noreferrer">
+                            <span class="link-icon" aria-hidden="true">📁</span>
+                            <span class="link-text">View Original Java Files on GitHub</span>
+                        </a>
+                    </div>
+
+                    <div class="about-signature">
+                        <p>Built with ❤️ as part of my software development journey</p>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-large" onclick="returnToMain()">
+                        <span class="btn-text">Back to Main Menu</span>
+                    </button>
+                </div>
             </div>
-            <button class="btn btn-primary btn-large" onclick="returnToMain()">
-                <span class="btn-text">RETURN TO MAIN MENU</span>
-            </button>
+
+            <!-- Thank You Screen -->
+            <div id="thank-you" class="screen" role="region" aria-label="Order confirmed">
+                <div class="celebration" aria-hidden="true">
+                    <div class="confetti">🎊</div>
+                    <div class="confetti">🎉</div>
+                    <div class="confetti">🥳</div>
+                    <div class="confetti">✨</div>
+                </div>
+                <h1 class="title">Order Confirmed!</h1>
+                <p class="order-number-display" id="order-number-display" aria-live="polite"></p>
+
+                <!-- Animated Order Tracker -->
+                <div class="order-tracker" aria-label="Order progress">
+                    <div class="tracker-step completed" id="tracker-received">
+                        <div class="tracker-dot"></div>
+                        <div class="tracker-label">Received</div>
+                    </div>
+                    <div class="tracker-line" id="tracker-line-1"></div>
+                    <div class="tracker-step" id="tracker-preparing">
+                        <div class="tracker-dot"></div>
+                        <div class="tracker-label">Preparing</div>
+                    </div>
+                    <div class="tracker-line" id="tracker-line-2"></div>
+                    <div class="tracker-step" id="tracker-making">
+                        <div class="tracker-dot"></div>
+                        <div class="tracker-label">Making</div>
+                    </div>
+                    <div class="tracker-line" id="tracker-line-3"></div>
+                    <div class="tracker-step" id="tracker-ready">
+                        <div class="tracker-dot"></div>
+                        <div class="tracker-label">Ready!</div>
+                    </div>
+                </div>
+
+                <div class="thank-you-animation">
+                    <p class="thank-you-message">Thank you for using</p>
+                    <p class="thank-you-big">One Heck Of A Sandwich!</p>
+                    <p class="thank-you-message">Have a great day!</p>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-secondary btn-large" onclick="printReceipt()" aria-label="Print your receipt">
+                        <span class="btn-icon" aria-hidden="true">🖨️</span>
+                        <span class="btn-text">Print Receipt</span>
+                    </button>
+                    <button class="btn btn-primary btn-large" onclick="returnToMain()">
+                        <span class="btn-text">Return to Main Menu</span>
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
     </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>
