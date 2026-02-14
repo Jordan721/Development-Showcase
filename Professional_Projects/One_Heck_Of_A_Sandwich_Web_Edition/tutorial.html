@@ -1,84 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>One Heck Of A Sandwich - Journey from Java to Web</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="tutorial-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <!-- Progress Bar -->
     <div class="progress-container">
         <div class="progress-bar" id="progress-bar"></div>
-        <div class="progress-text" id="progress-text">0% Complete</div>
     </div>
 
     <!-- Hero Section -->
     <section id="hero" class="section active">
         <div class="hero-content">
-            <div class="hero-emoji">🥪</div>
-            <h1 class="hero-title animate-slide-down">One Heck Of A Sandwich</h1>
-            <h2 class="hero-subtitle animate-fade-in">From Command Line to Kiosk</h2>
+            <span class="label">Tutorial</span>
+            <h1 class="hero-title">From Command Line<br>to Kiosk</h1>
             <p class="hero-description">
-                Follow my journey of transforming a Java CLI application into an interactive web experience.
-                Learn how I adapted code, redesigned the interface, and brought it to life!
+                Follow my journey of transforming a Java CLI application
+                into an interactive web experience.
             </p>
-            <button class="btn-start pulse-btn" onclick="startJourney()">
-                <span class="btn-icon">🚀</span>
-                <span class="btn-text">START THE JOURNEY</span>
+            <button class="btn btn-primary" onclick="startJourney()">
+                Start the Journey
             </button>
-        </div>
-        <div class="floating-emojis">
-            <div class="floating-emoji">☕</div>
-            <div class="floating-emoji">💻</div>
-            <div class="floating-emoji">🎨</div>
-            <div class="floating-emoji">⚡</div>
         </div>
     </section>
 
     <!-- Step 1: The Original Challenge -->
     <section id="step-1" class="section">
-        <div class="step-header">
-            <span class="step-number">STEP 1</span>
-            <h2 class="step-title">The Original Challenge</h2>
-        </div>
-        <div class="content-grid">
-            <div class="info-card">
-                <div class="card-icon">🎓</div>
-                <h3>Year Up United App Dev Bootcamp</h3>
-                <p>This project was originally created as part of my <strong>Year Up United Application Development Bootcamp</strong> capstone project. The assignment was to build a Java application that users could interact with through a command-line interface.</p>
-                <p>I decided to take it a step further and convert the entire Java application into an interactive web-based kiosk experience! This showcases my ability to adapt and transform projects across different technologies and platforms.</p>
-                <div class="tech-badges">
-                    <span class="badge">Java</span>
-                    <span class="badge">OOP</span>
-                    <span class="badge">File I/O</span>
-                    <span class="badge">CLI</span>
-                </div>
-                <div class="tech-badges" style="margin-top: 10px;">
-                    <span class="badge" style="background: #4CAF50;">HTML5</span>
-                    <span class="badge" style="background: #4CAF50;">CSS3</span>
-                    <span class="badge" style="background: #4CAF50;">JavaScript</span>
-                    <span class="badge" style="background: #4CAF50;">Animations</span>
-                </div>
-                <div style="margin-top: 20px;">
+        <div class="section-inner">
+            <span class="label">Step 1</span>
+            <h2 class="section-title">The Original Challenge</h2>
+
+            <div class="content-grid">
+                <div class="card">
+                    <h3>Year Up United Bootcamp</h3>
+                    <p>This project was originally created as part of my <strong>Year Up United Application Development
+                            Bootcamp</strong> capstone. The assignment: build a Java application users interact with
+                        through a command-line interface.</p>
+                    <p>I took it further and converted the entire Java application into an interactive
+                        web-based kiosk experience.</p>
+                    <div class="tech-badges">
+                        <span class="badge">Java</span>
+                        <span class="badge">OOP</span>
+                        <span class="badge">File I/O</span>
+                        <span class="badge">CLI</span>
+                    </div>
+                    <div class="tech-badges">
+                        <span class="badge accent">HTML5</span>
+                        <span class="badge accent">CSS3</span>
+                        <span class="badge accent">JavaScript</span>
+                        <span class="badge accent">Animations</span>
+                    </div>
                     <a href="https://github.com/Year-Up-United-SPR-2025/Capstones/tree/main/One_Heck_Of_A_Sandwich_Cap_2"
-                       target="_blank"
-                       class="github-link-animated">
-                        <span class="github-icon-animated">📁</span>
-                        <span>VIEW ORIGINAL JAVA FILES ON GITHUB</span>
+                        target="_blank" class="github-link">
+                        View Original Java Files on GitHub
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" stroke-width="1.5"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
                     </a>
                 </div>
-                <p class="signature-text">Built with ❤️ as part of my software development journey</p>
-            </div>
-            <div class="terminal-preview">
-                <div class="terminal-header">
-                    <div class="terminal-dots">
-                        <span></span><span></span><span></span>
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-dots">
+                            <span></span><span></span><span></span>
+                        </div>
+                        <div class="terminal-title">Terminal</div>
                     </div>
-                    <div class="terminal-title">Terminal</div>
-                </div>
-                <div class="terminal-content">
-                    <pre><code>$ java DeliApp
+                    <div class="terminal-content">
+                        <pre><code>$ java DeliApp
 Welcome to One Heck Of A Sandwich!
 
 What would you like to do?
@@ -94,28 +92,35 @@ What would you like?
 4) Checkout
 
 > _</code></pre>
+                    </div>
                 </div>
             </div>
+
+            <div class="nav-row">
+                <button class="btn btn-primary" onclick="nextStep(2)">
+                    Next: The Big Idea
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
         </div>
-        <button class="btn-next" onclick="nextStep(2)">
-            <span class="btn-text">NEXT: The Big Idea →</span>
-        </button>
     </section>
 
     <!-- Step 2: The Vision -->
     <section id="step-2" class="section">
-        <div class="step-header">
-            <span class="step-number">STEP 2</span>
-            <h2 class="step-title">The Big Idea</h2>
-        </div>
-        <div class="vision-content">
-            <div class="thought-bubble">
-                <div class="bubble-icon">💡</div>
-                <p class="bubble-text">"What if I could turn this into a real kiosk interface like at Subway or Wawa?"</p>
-            </div>
+        <div class="section-inner">
+            <span class="label">Step 2</span>
+            <h2 class="section-title">The Big Idea</h2>
+
+            <blockquote class="quote">
+                "What if I could turn this into a real kiosk interface like at Subway or Wawa?"
+            </blockquote>
+
             <div class="comparison-preview">
                 <div class="before-after">
-                    <div class="before">
+                    <div class="side">
                         <h4>Before: CLI</h4>
                         <div class="preview-box cli-preview">
                             <p>&gt; Enter sandwich size (4, 8, 12):</p>
@@ -123,8 +128,13 @@ What would you like?
                             <p>&gt; Choose bread type...</p>
                         </div>
                     </div>
-                    <div class="arrow">→</div>
-                    <div class="after">
+                    <div class="arrow-divider">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </div>
+                    <div class="side">
                         <h4>After: Web Kiosk</h4>
                         <div class="preview-box kiosk-preview">
                             <div class="mini-buttons">
@@ -136,49 +146,60 @@ What would you like?
                     </div>
                 </div>
             </div>
+
             <div class="goals-grid">
                 <div class="goal-card">
-                    <span class="goal-icon">🎨</span>
                     <h4>Visual Design</h4>
-                    <p>Replace text prompts with colorful, touchable buttons</p>
+                    <p>Replace text prompts with clean, touchable buttons</p>
                 </div>
                 <div class="goal-card">
-                    <span class="goal-icon">⚡</span>
                     <h4>Instant Feedback</h4>
                     <p>Show order updates in real-time as users build</p>
                 </div>
                 <div class="goal-card">
-                    <span class="goal-icon">✨</span>
                     <h4>Animations</h4>
                     <p>Add life with smooth transitions and effects</p>
                 </div>
             </div>
+
+            <div class="nav-row">
+                <button class="btn btn-secondary" onclick="nextStep(1)">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M13 8H3M3 8L7 4M3 8L7 12" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Back
+                </button>
+                <button class="btn btn-primary" onclick="nextStep(3)">
+                    Next: Code Comparison
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
         </div>
-        <button class="btn-next" onclick="nextStep(3)">
-            <span class="btn-text">NEXT: Code Comparison →</span>
-        </button>
     </section>
 
     <!-- Step 3: Code Comparison -->
     <section id="step-3" class="section">
-        <div class="step-header">
-            <span class="step-number">STEP 3</span>
-            <h2 class="step-title">From Java to JavaScript</h2>
-        </div>
-        <div class="comparison-tabs">
-            <button class="tab-btn active" onclick="showComparison('order')">Creating an Order</button>
-            <button class="tab-btn" onclick="showComparison('sandwich')">Building a Sandwich</button>
-            <button class="tab-btn" onclick="showComparison('checkout')">Checkout Process</button>
-        </div>
+        <div class="section-inner">
+            <span class="label">Step 3</span>
+            <h2 class="section-title">From Java to JavaScript</h2>
 
-        <!-- Order Comparison -->
-        <div id="comparison-order" class="comparison-container active">
-            <div class="code-side java-side">
-                <div class="code-header">
-                    <span class="lang-icon">☕</span>
-                    <span class="lang-name">Java</span>
-                </div>
-                <pre><code class="language-java">public class Order {
+            <div class="comparison-tabs">
+                <button class="tab-btn active" onclick="showComparison('order')">Creating an Order</button>
+                <button class="tab-btn" onclick="showComparison('sandwich')">Building a Sandwich</button>
+                <button class="tab-btn" onclick="showComparison('checkout')">Checkout Process</button>
+            </div>
+
+            <!-- Order Comparison -->
+            <div id="comparison-order" class="comparison-container active">
+                <div class="code-side">
+                    <div class="code-header">
+                        <span class="lang-label java">Java</span>
+                    </div>
+                    <pre><code>public class Order {
     private ArrayList&lt;Product&gt; products;
 
     public Order() {
@@ -199,14 +220,12 @@ What would you like?
         return total;
     }
 }</code></pre>
-            </div>
-
-            <div class="code-side web-side">
-                <div class="code-header">
-                    <span class="lang-icon">🌐</span>
-                    <span class="lang-name">JavaScript</span>
                 </div>
-                <pre><code class="language-javascript">class Order {
+                <div class="code-side">
+                    <div class="code-header">
+                        <span class="lang-label js">JavaScript</span>
+                    </div>
+                    <pre><code>class Order {
     constructor() {
         this.products = [];
     }
@@ -228,17 +247,16 @@ What would you like?
             .innerHTML = this.renderItems();
     }
 }</code></pre>
-            </div>
-        </div>
-
-        <!-- Sandwich Comparison -->
-        <div id="comparison-sandwich" class="comparison-container">
-            <div class="code-side java-side">
-                <div class="code-header">
-                    <span class="lang-icon">☕</span>
-                    <span class="lang-name">Java</span>
                 </div>
-                <pre><code class="language-java">public class Sandwich extends Product {
+            </div>
+
+            <!-- Sandwich Comparison -->
+            <div id="comparison-sandwich" class="comparison-container">
+                <div class="code-side">
+                    <div class="code-header">
+                        <span class="lang-label java">Java</span>
+                    </div>
+                    <pre><code>public class Sandwich extends Product {
     private int size;
     private String breadType;
     private boolean toasted;
@@ -257,14 +275,12 @@ What would you like?
             + t.getName());
     }
 }</code></pre>
-            </div>
-
-            <div class="code-side web-side">
-                <div class="code-header">
-                    <span class="lang-icon">🌐</span>
-                    <span class="lang-name">JavaScript</span>
                 </div>
-                <pre><code class="language-javascript">class Sandwich extends Product {
+                <div class="code-side">
+                    <div class="code-header">
+                        <span class="lang-label js">JavaScript</span>
+                    </div>
+                    <pre><code>class Sandwich extends Product {
     constructor(size, bread) {
         super();
         this.size = size;
@@ -283,17 +299,16 @@ What would you like?
         elem.classList.add('selected');
     }
 }</code></pre>
-            </div>
-        </div>
-
-        <!-- Checkout Comparison -->
-        <div id="comparison-checkout" class="comparison-container">
-            <div class="code-side java-side">
-                <div class="code-header">
-                    <span class="lang-icon">☕</span>
-                    <span class="lang-name">Java</span>
                 </div>
-                <pre><code class="language-java">public void checkout() {
+            </div>
+
+            <!-- Checkout Comparison -->
+            <div id="comparison-checkout" class="comparison-container">
+                <div class="code-side">
+                    <div class="code-header">
+                        <span class="lang-label java">Java</span>
+                    </div>
+                    <pre><code>public void checkout() {
     System.out.println("=== RECEIPT ===");
 
     for (Product p : products) {
@@ -309,14 +324,12 @@ What would you like?
 
     saveToFile();
 }</code></pre>
-            </div>
-
-            <div class="code-side web-side">
-                <div class="code-header">
-                    <span class="lang-icon">🌐</span>
-                    <span class="lang-name">JavaScript</span>
                 </div>
-                <pre><code class="language-javascript">function checkout() {
+                <div class="code-side">
+                    <div class="code-header">
+                        <span class="lang-label js">JavaScript</span>
+                    </div>
+                    <pre><code>function checkout() {
     const receipt = document.createElement('div');
     receipt.className = 'receipt-kiosk';
 
@@ -335,150 +348,163 @@ What would you like?
 
     showScreen('checkout');
 }</code></pre>
-            </div>
-        </div>
-
-        <div class="key-takeaways">
-            <h3>🔑 Key Differences</h3>
-            <div class="takeaway-grid">
-                <div class="takeaway">
-                    <strong>Input/Output:</strong> CLI uses Scanner & System.out → Web uses DOM manipulation
-                </div>
-                <div class="takeaway">
-                    <strong>User Feedback:</strong> Text confirmations → Visual animations & transitions
-                </div>
-                <div class="takeaway">
-                    <strong>State Management:</strong> Simple variables → Real-time UI updates
                 </div>
             </div>
-        </div>
 
-        <button class="btn-next" onclick="nextStep(4)">
-            <span class="btn-text">NEXT: Ready to Play →</span>
-        </button>
+            <div class="takeaways">
+                <h3>Key Differences</h3>
+                <div class="takeaway-grid">
+                    <div class="takeaway">
+                        <strong>Input/Output</strong>
+                        <span>CLI uses Scanner & System.out &rarr; Web uses DOM manipulation</span>
+                    </div>
+                    <div class="takeaway">
+                        <strong>User Feedback</strong>
+                        <span>Text confirmations &rarr; Visual animations & transitions</span>
+                    </div>
+                    <div class="takeaway">
+                        <strong>State Management</strong>
+                        <span>Simple variables &rarr; Real-time UI updates</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-row">
+                <button class="btn btn-secondary" onclick="nextStep(2)">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M13 8H3M3 8L7 4M3 8L7 12" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Back
+                </button>
+                <button class="btn btn-primary" onclick="nextStep(4)">
+                    Next: Challenge
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.5"
+                            stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+        </div>
     </section>
 
     <!-- Step 4: Game Unlock -->
     <section id="step-4" class="section">
-        <div class="step-header">
-            <span class="step-number">BONUS ROUND</span>
-            <h2 class="step-title">You've Unlocked the Challenge!</h2>
-        </div>
-        <div class="unlock-content">
-            <div class="achievement-badge pulse-animation">
-                <div class="badge-icon">🏆</div>
-                <div class="badge-title">Tutorial Complete!</div>
-                <div class="badge-subtitle">Ready to test your skills?</div>
-            </div>
-            <div class="game-preview">
-                <h3>🎮 Sandwich Chef Challenge</h3>
-                <p>Customers will arrive with orders. Build their sandwiches quickly and accurately to score points!</p>
-                <div class="game-rules">
-                    <div class="rule">⚡ Speed matters - faster = more points</div>
-                    <div class="rule">✅ Accuracy counts - wrong ingredients lose points</div>
-                    <div class="rule">🎯 Complete 5 orders to win</div>
+        <div class="section-inner centered">
+            <span class="label">Bonus</span>
+            <h2 class="section-title">Tutorial Complete</h2>
+            <p class="section-subtitle">Ready to test your skills?</p>
+
+            <div class="card game-card">
+                <h3>Sandwich Chef Challenge</h3>
+                <p>Customers arrive with orders. Build their sandwiches quickly and accurately to score points.</p>
+                <div class="rules">
+                    <div class="rule">Speed matters &mdash; faster = more points</div>
+                    <div class="rule">Accuracy counts &mdash; wrong ingredients lose points</div>
+                    <div class="rule">Complete 5 orders to win</div>
                 </div>
             </div>
-            <button class="btn-play pulse-btn" onclick="startGame()">
-                <span class="btn-icon">🎮</span>
-                <span class="btn-text">START CHALLENGE</span>
-            </button>
-            <button class="btn-secondary" onclick="skipToKiosk()">
-                <span class="btn-text">Skip to Full Kiosk →</span>
-            </button>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="startGame()">Start Challenge</button>
+                <button class="btn btn-secondary" onclick="skipToKiosk()">Skip to Full Kiosk</button>
+            </div>
         </div>
     </section>
 
     <!-- Game Section -->
     <section id="game" class="section">
-        <div class="game-container">
-            <div class="game-header">
-                <div class="score-display">
-                    <span class="score-label">SCORE:</span>
-                    <span class="score-value" id="score">0</span>
-                </div>
-                <div class="timer-display">
-                    <span class="timer-icon">⏱️</span>
-                    <span class="timer-value" id="timer">60</span>
-                </div>
-                <div class="orders-display">
-                    <span class="orders-label">ORDERS:</span>
-                    <span class="orders-value" id="orders-completed">0</span>
-                    <span class="orders-total">/5</span>
-                </div>
-            </div>
-
-            <div class="game-area">
-                <div class="customer-order-panel">
-                    <div class="customer-avatar" id="customer-avatar">🧑</div>
-                    <div class="speech-bubble">
-                        <p id="customer-request">Click Start to begin!</p>
+        <div class="section-inner">
+            <div class="game-container">
+                <div class="game-header">
+                    <div class="game-stat">
+                        <span class="game-stat-label">Score</span>
+                        <span class="game-stat-value" id="score">0</span>
                     </div>
-                    <div class="order-requirements" id="order-requirements"></div>
+                    <div class="game-stat">
+                        <span class="game-stat-label">Time</span>
+                        <span class="game-stat-value" id="timer">60</span>
+                    </div>
+                    <div class="game-stat">
+                        <span class="game-stat-label">Orders</span>
+                        <span class="game-stat-value"><span id="orders-completed">0</span>/5</span>
+                    </div>
                 </div>
 
-                <div class="build-panel">
-                    <h3>Build the Sandwich</h3>
-                    <div class="quick-build-area">
-                        <div class="build-group">
-                            <label>Size:</label>
-                            <div class="quick-options" id="game-sizes"></div>
+                <div class="game-area">
+                    <div class="customer-panel">
+                        <div class="customer-avatar" id="customer-avatar">?</div>
+                        <div class="speech-bubble">
+                            <p id="customer-request">Click Start to begin!</p>
                         </div>
-                        <div class="build-group">
-                            <label>Bread:</label>
-                            <div class="quick-options" id="game-breads"></div>
-                        </div>
-                        <div class="build-group">
-                            <label>Meat:</label>
-                            <div class="quick-options" id="game-meats"></div>
-                        </div>
-                        <div class="build-group">
-                            <label>Cheese:</label>
-                            <div class="quick-options" id="game-cheeses"></div>
-                        </div>
-                        <div class="build-group">
-                            <label>Toasted:</label>
-                            <div class="quick-options">
-                                <button class="quick-btn" data-value="yes" onclick="selectGameOption('toasted', 'yes')">Yes</button>
-                                <button class="quick-btn" data-value="no" onclick="selectGameOption('toasted', 'no')">No</button>
+                        <div class="order-requirements" id="order-requirements"></div>
+                    </div>
+
+                    <div class="build-panel">
+                        <h3>Build the Sandwich</h3>
+                        <div class="build-groups">
+                            <div class="build-group">
+                                <label>Size</label>
+                                <div class="quick-options" id="game-sizes"></div>
+                            </div>
+                            <div class="build-group">
+                                <label>Bread</label>
+                                <div class="quick-options" id="game-breads"></div>
+                            </div>
+                            <div class="build-group">
+                                <label>Meat</label>
+                                <div class="quick-options" id="game-meats"></div>
+                            </div>
+                            <div class="build-group">
+                                <label>Cheese</label>
+                                <div class="quick-options" id="game-cheeses"></div>
+                            </div>
+                            <div class="build-group">
+                                <label>Toasted</label>
+                                <div class="quick-options">
+                                    <button class="quick-btn" data-value="yes"
+                                        onclick="selectGameOption('toasted', 'yes')">Yes</button>
+                                    <button class="quick-btn" data-value="no"
+                                        onclick="selectGameOption('toasted', 'no')">No</button>
+                                </div>
                             </div>
                         </div>
+                        <button class="btn btn-primary btn-full" id="submit-order-btn" onclick="submitGameOrder()"
+                            disabled>
+                            Submit Order
+                        </button>
                     </div>
-                    <button class="btn-submit-order" id="submit-order-btn" onclick="submitGameOrder()" disabled>
-                        <span class="btn-text">SUBMIT ORDER</span>
+                </div>
+
+                <div class="game-controls">
+                    <button class="btn btn-primary" id="start-game-btn" onclick="startGameRound()">
+                        Start Game
                     </button>
                 </div>
-            </div>
-
-            <div class="game-controls">
-                <button class="btn-start-game pulse-btn" id="start-game-btn" onclick="startGameRound()">
-                    <span class="btn-text">START GAME</span>
-                </button>
             </div>
         </div>
     </section>
 
     <!-- Game Over / Victory -->
     <section id="game-over" class="section">
-        <div class="result-content">
-            <div class="result-icon" id="result-icon">🏆</div>
-            <h2 class="result-title" id="result-title">Great Job!</h2>
-            <div class="final-score">
-                <span class="score-label">Final Score:</span>
-                <span class="score-big" id="final-score">0</span>
-            </div>
-            <div class="result-message" id="result-message"></div>
-            <div class="result-buttons">
-                <button class="btn-primary" onclick="playAgain()">
-                    <span class="btn-text">PLAY AGAIN</span>
-                </button>
-                <button class="btn-success pulse-btn" onclick="goToKiosk()">
-                    <span class="btn-text">TRY THE FULL KIOSK →</span>
-                </button>
+        <div class="section-inner centered">
+            <div class="result-card">
+                <div class="result-icon" id="result-icon">&#127942;</div>
+                <h2 class="result-title" id="result-title">Great Job!</h2>
+                <div class="result-score">
+                    <span class="result-score-label">Final Score</span>
+                    <span class="result-score-value" id="final-score">0</span>
+                </div>
+                <p class="result-message" id="result-message"></p>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="playAgain()">Play Again</button>
+                    <button class="btn btn-primary" onclick="goToKiosk()">Try the Full Kiosk</button>
+                </div>
             </div>
         </div>
     </section>
 
     <script src="tutorial-script.js"></script>
 </body>
+
 </html>
