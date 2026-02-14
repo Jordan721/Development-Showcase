@@ -538,11 +538,14 @@ window.addEventListener('load', fetchCommits);
 (function initTechFilter() {
     const filterChips = document.getElementById('filterChips');
     const filterClear = document.getElementById('filterClear');
+    const noResults = document.getElementById('filterNoResults');
     if (!filterChips) return;
 
-    // Gather all unique techs from project cards
     const allCards = document.querySelectorAll('.project-card');
     const techSet = new Set();
+    const activeTechs = new Set();
+
+    // Gather all unique techs from project cards
     allCards.forEach(card => {
         card.querySelectorAll('.card-tech span').forEach(span => {
             techSet.add(span.textContent.trim());
@@ -558,26 +561,40 @@ window.addEventListener('load', fetchCommits);
         filterChips.appendChild(btn);
     });
 
-    // Filter logic
-    function applyFilter(tech) {
-        const isAll = tech === 'all';
+    function applyFilter() {
+        const isAll = activeTechs.size === 0;
 
         // Update chip active states
         filterChips.querySelectorAll('.filter-chip').forEach(chip => {
-            chip.classList.toggle('active', chip.dataset.tech === tech);
+            if (chip.dataset.tech === 'all') {
+                chip.classList.toggle('active', isAll);
+            } else {
+                chip.classList.toggle('active', activeTechs.has(chip.dataset.tech));
+            }
         });
 
         // Show/hide clear button
         filterClear.classList.toggle('hidden', isAll);
 
-        // Filter cards
+        // Filter cards with smooth transitions
+        let totalVisible = 0;
         allCards.forEach(card => {
-            if (isAll) {
-                card.classList.remove('filter-hidden');
-                return;
-            }
             const cardTechs = [...card.querySelectorAll('.card-tech span')].map(s => s.textContent.trim());
-            card.classList.toggle('filter-hidden', !cardTechs.includes(tech));
+            const shouldShow = isAll || [...activeTechs].every(t => cardTechs.includes(t));
+
+            if (shouldShow) {
+                if (card.classList.contains('filter-hidden')) {
+                    card.classList.remove('filter-hidden');
+                    card.classList.add('filter-visible');
+                    card.addEventListener('animationend', () => {
+                        card.classList.remove('filter-visible');
+                    }, { once: true });
+                }
+                totalVisible++;
+            } else {
+                card.classList.remove('filter-visible');
+                card.classList.add('filter-hidden');
+            }
         });
 
         // Hide sections that have no visible cards
@@ -587,28 +604,42 @@ window.addEventListener('load', fetchCommits);
             const visibleCards = grid.querySelectorAll('.project-card:not(.filter-hidden)');
             section.classList.toggle('filter-empty', visibleCards.length === 0);
 
-            // Update count badge
             const countBadge = section.querySelector('.section-count');
             if (countBadge) {
                 const totalCards = grid.querySelectorAll('.project-card').length;
-                if (isAll) {
-                    countBadge.textContent = totalCards;
-                } else {
-                    countBadge.textContent = visibleCards.length + '/' + totalCards;
-                }
+                countBadge.textContent = isAll ? totalCards : visibleCards.length + '/' + totalCards;
             }
         });
+
+        // No results state
+        if (noResults) {
+            noResults.classList.toggle('visible', totalVisible === 0 && !isAll);
+        }
     }
 
-    // Chip click handler
+    // Chip click handler — multi-select
     filterChips.addEventListener('click', (e) => {
         const chip = e.target.closest('.filter-chip');
         if (!chip) return;
-        applyFilter(chip.dataset.tech);
+
+        const tech = chip.dataset.tech;
+
+        if (tech === 'all') {
+            activeTechs.clear();
+        } else {
+            if (activeTechs.has(tech)) {
+                activeTechs.delete(tech);
+            } else {
+                activeTechs.add(tech);
+            }
+        }
+
+        applyFilter();
     });
 
     // Clear button
     filterClear.addEventListener('click', () => {
-        applyFilter('all');
+        activeTechs.clear();
+        applyFilter();
     });
 })();

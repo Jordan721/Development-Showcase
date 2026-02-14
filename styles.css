@@ -520,12 +520,72 @@ body {
 }
 
 /* Filter match/hide states */
+.project-card {
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
 .project-card.filter-hidden {
-    display: none;
+    opacity: 0;
+    transform: scale(0.92);
+    pointer-events: none;
+    position: absolute;
+    visibility: hidden;
+}
+
+.project-card.filter-visible {
+    animation: filterIn 0.35s ease forwards;
+}
+
+@keyframes filterIn {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .project-section.filter-empty {
     display: none;
+}
+
+/* Multi-select active chip indicator */
+.filter-chip.active {
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.35);
+}
+
+/* No results state */
+.filter-no-results {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--color-gray-light);
+    display: none;
+}
+
+.filter-no-results.visible {
+    display: block;
+}
+
+.filter-no-results i {
+    font-size: 2.5rem;
+    color: var(--color-primary);
+    opacity: 0.5;
+    margin-bottom: 1rem;
+}
+
+.filter-no-results h3 {
+    font-size: 1.25rem;
+    color: var(--color-light);
+    margin-bottom: 0.5rem;
+}
+
+.filter-no-results p {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 /* ===== SECTION COUNT BADGE ===== */

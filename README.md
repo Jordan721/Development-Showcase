@@ -25,6 +25,9 @@ The site uses a **Minimal Catalog** design — clean typography, generous whites
 - **Sticky Navigation** — Frosted glass nav bar that highlights the current section as you scroll, with a hamburger menu on mobile
 - **Theme Color Picker** — 8 preset colors + a custom hue slider. The entire site adapts — constellation particles, gradients, nav highlights, and more. Saved to localStorage
 - **Animation Toggle** — Pause/play the constellation particle background. Preference persists across sessions
+- **Multi-Select Tech Filter** — Filter projects by technology using chip buttons. Select multiple techs to narrow results with AND logic — only projects matching all selected techs are shown
+- **Smooth Filter Transitions** — Cards animate in and out with fade + scale transitions when filtering, instead of appearing/disappearing instantly
+- **No Results State** — Friendly message with guidance when no projects match the selected filter combination
 - **Platform Badges** — Every project card shows Desktop and/or Mobile compatibility
 - **Tech Stack Badges** — Each card lists the technologies used
 - **Live GitHub Activity** — Fetches recent commits from this repository via the GitHub API
