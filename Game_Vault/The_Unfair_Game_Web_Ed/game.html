@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Unfair Game</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <a href="../index.html" class="back-to-vault">
+        <span class="back-icon">←</span>
+        <span class="back-text">GAME VAULT</span>
+    </a>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+
+        <div id="ui">
+            <div class="health-container">
+                <span class="health-icon">❤️</span>
+                <div class="health-bar">
+                    <div class="health-fill" id="healthFill"></div>
+                </div>
+                <span id="healthText">100</span>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span>🏆</span>
+                    <span id="score">0</span>
+                </div>
+                <div class="stat">
+                    <span>⭐</span>
+                    <span>Level <span id="level">1</span></span>
+                </div>
+            </div>
+        </div>
+
+        <div id="damageFlash"></div>
+        <div id="healFlash"></div>
+        <div id="blackoutOverlay"></div>
+        <div id="reverseIndicator">CONTROLS REVERSED!</div>
+        <div id="levelIndicator">Find the exit! Beware of invisible danger zones...</div>
+
+        <div id="overlay">
+            <div class="title">THE UNFAIR GAME</div>
+            <div class="subtitle">Nothing is as it seems...</div>
+            <button class="menu-btn" id="playBtn">PLAY</button>
+            <div class="instructions">
+                <h3>HOW TO SURVIVE</h3>
+                <p><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> to move</p>
+                <p><span class="key">SHIFT</span> to sprint</p>
+                <p><span class="key">SPACE</span> to jump</p>
+                <p>Reach the <span style="color: #4ade80;">glowing exit</span> to advance</p>
+                <p class="warning-text">⚠️ Invisible danger zones will drain your HP!</p>
+                <p class="warning-text" style="color: #ff4444;">⚠️ After level 3, SOMETHING will hunt you...</p>
+                <p class="warning-text" style="color: #ff8800;">⚠️ Not everything is what it seems...</p>
+                <p class="hint-text">Trust nothing. Question everything. Suffer.</p>
+            </div>
+        </div>
+
+        <div id="levelComplete" class="hidden">
+            <div class="level-title">LEVEL COMPLETE!</div>
+            <div class="level-score">+<span id="levelBonus">100</span> points</div>
+            <button class="menu-btn" id="nextLevelBtn">NEXT LEVEL</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

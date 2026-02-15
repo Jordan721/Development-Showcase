@@ -6,154 +6,250 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THW - The Hard Hallway</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="landing.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
-    <a href="../index.html" class="back-to-vault">
-        <span class="back-icon"><i class="fas fa-arrow-left"></i></span>
-        <span class="back-text">GAME VAULT</span>
-    </a>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="../index.html" class="nav-back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            <span>Game Vault</span>
+        </a>
+    </nav>
 
-    <div id="gameContainer">
-        <canvas id="gameCanvas"></canvas>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <canvas id="hero-canvas"></canvas>
+            <div class="scanlines"></div>
+        </div>
 
-        <!-- HUD -->
-        <div id="hud">
-            <div id="health">
-                <span class="heart active"><i class="fas fa-heart"></i></span>
-                <span class="heart active"><i class="fas fa-heart"></i></span>
-                <span class="heart active"><i class="fas fa-heart"></i></span>
+        <div class="hero-content">
+            <div class="hero-badge">BRUTAL PLATFORMER</div>
+            <h1 class="hero-title">
+                <span class="title-line">THE HARD</span>
+                <span class="title-line accent">HALLWAY</span>
+            </h1>
+            <p class="hero-subtitle">You Will Die. A Lot. The hallway fights back with chaos, betrayal, and lies.</p>
+
+            <div class="hero-cta">
+                <a href="game.html" class="btn-primary">
+                    <span class="btn-text">Enter The Hallway</span>
+                    <span class="btn-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </span>
+                </a>
+                <a href="#features" class="btn-secondary">See What Awaits</a>
             </div>
-            <div id="stats">
-                <div id="deathCounter">DEATHS: <span id="deaths">0</span></div>
-                <div id="levelDisplay">LEVEL <span id="currentLevel">1</span>-<span id="currentRoom">1</span></div>
+
+            <div class="death-counter">
+                <span class="skull">&#9760;</span>
+                <span class="counter-text">Players have died <span id="deathTicker">0</span> times</span>
             </div>
         </div>
 
-        <!-- Title Screen -->
-        <div id="titleScreen" class="overlay active">
-            <div class="title-content">
-                <h1 class="game-title">THE HARD HALLWAY</h1>
-                <p class="subtitle">You Will Die. A Lot.</p>
-                <div class="menu-options">
-                    <button id="startBtn" class="menu-btn">
-                        <i class="fas fa-play"></i> START GAME
-                    </button>
-                    <button id="controlsBtn" class="menu-btn">
-                        <i class="fas fa-gamepad"></i> CONTROLS
-                    </button>
-                </div>
-                <div class="death-stats">
-                    <p>Total Deaths: <span id="totalDeaths">0</span></p>
-                </div>
-            </div>
+        <div class="scroll-indicator">
+            <div class="scroll-line"></div>
+            <span>Scroll if you dare</span>
         </div>
+    </section>
 
-        <!-- Controls Screen -->
-        <div id="controlsScreen" class="overlay">
-            <div class="controls-content">
-                <h2>CONTROLS</h2>
-                <div class="control-grid">
-                    <div class="control-item">
-                        <span class="keys">WASD / Arrows</span>
-                        <span class="action">Move</span>
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">What Awaits You</span>
+                <h2 class="section-title">Everything is designed to kill you</h2>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon pixel-icon">
+                        <span>&#9876;</span>
                     </div>
-                    <div class="control-item">
-                        <span class="keys">Z / Space</span>
-                        <span class="action">Jump</span>
-                    </div>
-                    <div class="control-item">
-                        <span class="keys">X / Shift</span>
-                        <span class="action">Shoot</span>
-                    </div>
-                    <div class="control-item">
-                        <span class="keys">C</span>
-                        <span class="action">Dash</span>
-                    </div>
-                    <div class="control-item">
-                        <span class="keys">P / Esc</span>
-                        <span class="action">Pause</span>
-                    </div>
+                    <h3>Precision Platforming</h3>
+                    <p>Pixel-perfect jumps, dash through danger, and shoot your way past deadly hallways.</p>
                 </div>
-                <p class="warning-text">Trust Nothing. Everything Wants You Dead.</p>
-                <button id="backToTitleBtn" class="menu-btn">
-                    <i class="fas fa-arrow-left"></i> BACK
-                </button>
-            </div>
-        </div>
 
-        <!-- Pause Menu -->
-        <div id="pauseMenu" class="overlay">
-            <div class="pause-content">
-                <h2>PAUSED</h2>
-                <div class="menu-options">
-                    <button id="resumeBtn" class="menu-btn">
-                        <i class="fas fa-play"></i> RESUME
-                    </button>
-                    <button id="restartLevelBtn" class="menu-btn">
-                        <i class="fas fa-redo"></i> RESTART LEVEL
-                    </button>
-                    <button id="quitBtn" class="menu-btn">
-                        <i class="fas fa-door-open"></i> QUIT TO TITLE
-                    </button>
+                <div class="feature-card">
+                    <div class="feature-icon pixel-icon skull">
+                        <span>&#9760;</span>
+                    </div>
+                    <h3>Boss That Cheats</h3>
+                    <p>The boss fakes its own death, steals your HP, and comes back angrier than before.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon pixel-icon chaos">
+                        <span>&#9889;</span>
+                    </div>
+                    <h3>Chaos System</h3>
+                    <p>Random events flip your screen, reverse gravity, mirror controls, or turn off the lights.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon pixel-icon trap">
+                        <span>&#9888;</span>
+                    </div>
+                    <h3>Nothing Is Safe</h3>
+                    <p>Fake checkpoints, bullets that betray you, and health pickups that hurt. Trust nothing.</p>
                 </div>
             </div>
         </div>
+    </section>
 
-        <!-- Death Screen -->
-        <div id="deathScreen" class="overlay">
-            <div class="death-content">
-                <h2 class="death-text">YOU DIED</h2>
-                <p class="death-message"></p>
+    <!-- Danger Preview -->
+    <section class="danger-preview">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Chaos Events</span>
+                <h2 class="section-title">The hallway fights dirty</h2>
+                <p class="section-desc">Random chaos events will ruin your carefully planned run</p>
             </div>
-        </div>
 
-        <!-- Level Complete Screen -->
-        <div id="levelCompleteScreen" class="overlay">
-            <div class="complete-content">
-                <h2 class="complete-text">LEVEL COMPLETE!</h2>
-                <div class="level-stats">
-                    <p>Time: <span id="levelTime">0:00</span></p>
-                    <p>Deaths: <span id="levelDeaths">0</span></p>
+            <div class="chaos-grid">
+                <div class="chaos-card" data-chaos="gravity">
+                    <div class="chaos-icon">&#8597;</div>
+                    <h4>Gravity Reversed</h4>
+                    <p>Up is down. Good luck.</p>
                 </div>
-                <p class="continue-text">Press any key to continue...</p>
-            </div>
-        </div>
-
-        <!-- Boss Warning -->
-        <div id="bossWarning" class="overlay">
-            <div class="boss-content">
-                <h2 class="boss-text">WARNING</h2>
-                <p class="boss-name"></p>
-            </div>
-        </div>
-
-        <!-- Victory Screen -->
-        <div id="victoryScreen" class="overlay">
-            <div class="victory-content">
-                <h2 class="victory-text">YOU SURVIVED</h2>
-                <p class="victory-subtitle">The Hallway Has Been Conquered</p>
-                <div class="final-stats">
-                    <p>Total Deaths: <span id="finalDeaths">0</span></p>
-                    <p>Total Time: <span id="finalTime">0:00</span></p>
+                <div class="chaos-card" data-chaos="mirror">
+                    <div class="chaos-icon">&#8646;</div>
+                    <h4>Controls Mirrored</h4>
+                    <p>Left is right. Right is left.</p>
                 </div>
-                <p class="victory-message">But the hallway never forgets...</p>
-                <button id="playAgainBtn" class="menu-btn">
-                    <i class="fas fa-redo"></i> PLAY AGAIN
-                </button>
+                <div class="chaos-card" data-chaos="lights">
+                    <div class="chaos-icon">&#9679;</div>
+                    <h4>Lights Out</h4>
+                    <p>You can only see a tiny circle around you.</p>
+                </div>
+                <div class="chaos-card" data-chaos="flip">
+                    <div class="chaos-icon">&#8693;</div>
+                    <h4>Screen Flip</h4>
+                    <p>The entire screen flips upside down.</p>
+                </div>
+                <div class="chaos-card" data-chaos="quake">
+                    <div class="chaos-icon">&#12336;</div>
+                    <h4>Earthquake</h4>
+                    <p>The screen won't stop shaking.</p>
+                </div>
+                <div class="chaos-card" data-chaos="invisible">
+                    <div class="chaos-icon">&#9676;</div>
+                    <h4>Invisible Player</h4>
+                    <p>You vanish. Where are you?</p>
+                </div>
             </div>
         </div>
+    </section>
 
-        <!-- Scanlines overlay -->
-        <div id="scanlines"></div>
-    </div>
+    <!-- Controls -->
+    <section class="info-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Guide</span>
+                <h2 class="section-title">How to (try to) survive</h2>
+            </div>
 
-    <script src="sprites.js"></script>
-    <script src="levels.js"></script>
-    <script src="game.js"></script>
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>Controls</h3>
+                    <div class="keys-display">
+                        <div class="key-group">
+                            <div class="key-box">W</div>
+                            <div class="key-box">A</div>
+                            <div class="key-box">S</div>
+                            <div class="key-box">D</div>
+                        </div>
+                        <span class="keys-label">Move</span>
+                    </div>
+                    <div class="keys-display">
+                        <div class="key-group">
+                            <div class="key-box">Z</div>
+                            <div class="key-box wide">SPACE</div>
+                        </div>
+                        <span class="keys-label">Jump</span>
+                    </div>
+                    <div class="keys-display">
+                        <div class="key-group">
+                            <div class="key-box">X</div>
+                            <div class="key-box wide">SHIFT</div>
+                        </div>
+                        <span class="keys-label">Shoot</span>
+                    </div>
+                    <div class="keys-display">
+                        <div class="key-group">
+                            <div class="key-box">C</div>
+                        </div>
+                        <span class="keys-label">Dash</span>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Survival Tips</h3>
+                    <div class="tips-list">
+                        <div class="tip-item">
+                            <span class="tip-icon bad">&#10060;</span>
+                            <span>Don't trust checkpoints that glow purple</span>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-icon bad">&#10060;</span>
+                            <span>Don't trust health pickups that glow purple</span>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-icon bad">&#10060;</span>
+                            <span>Your own bullets might betray you</span>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-icon bad">&#10060;</span>
+                            <span>The boss will fake its death</span>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-icon good">&#10004;</span>
+                            <span>Dash has i-frames. Use them.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Think you can survive?</h2>
+                <p>The hallway never forgets. It never forgives.</p>
+                <a href="game.html" class="btn-primary large">
+                    <span class="btn-text">Enter The Hallway</span>
+                    <span class="btn-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-pixels">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+        </div>
+    </footer>
+
+    <script src="landing.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THW - The Hard Hallway</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <a href="../index.html" class="back-to-vault">
+        <span class="back-icon"><i class="fas fa-arrow-left"></i></span>
+        <span class="back-text">GAME VAULT</span>
+    </a>
+
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- HUD -->
+        <div id="hud">
+            <div id="health">
+                <span class="heart active"><i class="fas fa-heart"></i></span>
+                <span class="heart active"><i class="fas fa-heart"></i></span>
+                <span class="heart active"><i class="fas fa-heart"></i></span>
+            </div>
+            <div id="stats">
+                <div id="deathCounter">DEATHS: <span id="deaths">0</span></div>
+                <div id="levelDisplay">LEVEL <span id="currentLevel">1</span>-<span id="currentRoom">1</span></div>
+            </div>
+        </div>
+
+        <!-- Title Screen -->
+        <div id="titleScreen" class="overlay active">
+            <div class="title-content">
+                <h1 class="game-title">THE HARD HALLWAY</h1>
+                <p class="subtitle">You Will Die. A Lot.</p>
+                <div class="menu-options">
+                    <button id="startBtn" class="menu-btn">
+                        <i class="fas fa-play"></i> START GAME
+                    </button>
+                    <button id="controlsBtn" class="menu-btn">
+                        <i class="fas fa-gamepad"></i> CONTROLS
+                    </button>
+                </div>
+                <div class="death-stats">
+                    <p>Total Deaths: <span id="totalDeaths">0</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Screen -->
+        <div id="controlsScreen" class="overlay">
+            <div class="controls-content">
+                <h2>CONTROLS</h2>
+                <div class="control-grid">
+                    <div class="control-item">
+                        <span class="keys">WASD / Arrows</span>
+                        <span class="action">Move</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="keys">Z / Space</span>
+                        <span class="action">Jump</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="keys">X / Shift</span>
+                        <span class="action">Shoot</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="keys">C</span>
+                        <span class="action">Dash</span>
+                    </div>
+                    <div class="control-item">
+                        <span class="keys">P / Esc</span>
+                        <span class="action">Pause</span>
+                    </div>
+                </div>
+                <p class="warning-text">Trust Nothing. Everything Wants You Dead.</p>
+                <button id="backToTitleBtn" class="menu-btn">
+                    <i class="fas fa-arrow-left"></i> BACK
+                </button>
+            </div>
+        </div>
+
+        <!-- Pause Menu -->
+        <div id="pauseMenu" class="overlay">
+            <div class="pause-content">
+                <h2>PAUSED</h2>
+                <div class="menu-options">
+                    <button id="resumeBtn" class="menu-btn">
+                        <i class="fas fa-play"></i> RESUME
+                    </button>
+                    <button id="restartLevelBtn" class="menu-btn">
+                        <i class="fas fa-redo"></i> RESTART LEVEL
+                    </button>
+                    <button id="quitBtn" class="menu-btn">
+                        <i class="fas fa-door-open"></i> QUIT TO TITLE
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Death Screen -->
+        <div id="deathScreen" class="overlay">
+            <div class="death-content">
+                <h2 class="death-text">YOU DIED</h2>
+                <p class="death-message"></p>
+            </div>
+        </div>
+
+        <!-- Level Complete Screen -->
+        <div id="levelCompleteScreen" class="overlay">
+            <div class="complete-content">
+                <h2 class="complete-text">LEVEL COMPLETE!</h2>
+                <div class="level-stats">
+                    <p>Time: <span id="levelTime">0:00</span></p>
+                    <p>Deaths: <span id="levelDeaths">0</span></p>
+                </div>
+                <p class="continue-text">Press any key to continue...</p>
+            </div>
+        </div>
+
+        <!-- Boss Warning -->
+        <div id="bossWarning" class="overlay">
+            <div class="boss-content">
+                <h2 class="boss-text">WARNING</h2>
+                <p class="boss-name"></p>
+            </div>
+        </div>
+
+        <!-- Victory Screen -->
+        <div id="victoryScreen" class="overlay">
+            <div class="victory-content">
+                <h2 class="victory-text">YOU SURVIVED</h2>
+                <p class="victory-subtitle">The Hallway Has Been Conquered</p>
+                <div class="final-stats">
+                    <p>Total Deaths: <span id="finalDeaths">0</span></p>
+                    <p>Total Time: <span id="finalTime">0:00</span></p>
+                </div>
+                <p class="victory-message">But the hallway never forgets...</p>
+                <button id="playAgainBtn" class="menu-btn">
+                    <i class="fas fa-redo"></i> PLAY AGAIN
+                </button>
+            </div>
+        </div>
+
+        <!-- Scanlines overlay -->
+        <div id="scanlines"></div>
+    </div>
+
+    <script src="sprites.js"></script>
+    <script src="levels.js"></script>
+    <script src="game.js"></script>
+</body>
+
+</html>
