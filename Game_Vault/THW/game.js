@@ -52,7 +52,10 @@ const game = {
     roomHeight: 0,
 
     // Camera
-    camera: { x: 0, y: 0 },
+    camera: {
+        x: 0,
+        y: 0
+    },
 
     // Statistics
     deaths: 0,
@@ -73,12 +76,21 @@ const game = {
     items: [],
 
     // Active effects
-    screenShake: { active: false, intensity: 0, duration: 0 },
-    screenFlash: { active: false, color: '#fff', duration: 0 },
+    screenShake: {
+        active: false,
+        intensity: 0,
+        duration: 0
+    },
+    screenFlash: {
+        active: false,
+        color: '#fff',
+        duration: 0
+    },
     lightsOut: false,
     gravityFlipped: false,
     controlsMirrored: false,
     speedMultiplier: 1,
+    playerInvisible: false,
 
     // Boss
     boss: null,
@@ -93,6 +105,14 @@ const game = {
     // Fake victory tracking
     fakeVictoryActive: false,
     fakeVictoryTimer: 0,
+
+    // Chaos system
+    chaosTimer: 0,
+    chaosInterval: 600, // ~10 seconds at 60fps
+    activeChaosEvent: null,
+    chaosEventTimer: 0,
+    chaosMessage: null,
+    chaosMessageTimer: 0,
 
     // Audio context
     audioCtx: null,
@@ -123,14 +143,20 @@ class Player {
         this.dashDirection = 1;
 
         this.shootCooldown = 0;
-        this.aimDirection = { x: 1, y: 0 };
+        this.aimDirection = {
+            x: 1,
+            y: 0
+        };
 
         this.facingRight = true;
         this.animFrame = 0;
         this.animTimer = 0;
         this.state = 'idle'; // idle, run, jump, dash
 
-        this.lastCheckpoint = { x: x, y: y };
+        this.lastCheckpoint = {
+            x: x,
+            y: y
+        };
     }
 
     update(input) {
@@ -222,7 +248,10 @@ class Player {
 
         // Update aim direction
         if (input.left || input.right || input.up || input.down) {
-            this.aimDirection = { x: 0, y: 0 };
+            this.aimDirection = {
+                x: 0,
+                y: 0
+            };
             if (input.left) this.aimDirection.x = -1;
             if (input.right) this.aimDirection.x = 1;
             if (input.up) this.aimDirection.y = -1;
@@ -349,7 +378,10 @@ class Player {
                     const tileX = tx * CONFIG.TILE_SIZE;
                     const tileY = ty * CONFIG.TILE_SIZE;
                     if (this.checkTileCollision(tileX, tileY)) {
-                        this.lastCheckpoint = { x: tileX, y: tileY - this.height + CONFIG.TILE_SIZE };
+                        this.lastCheckpoint = {
+                            x: tileX,
+                            y: tileY - this.height + CONFIG.TILE_SIZE
+                        };
                         // Visual feedback
                         tile.activated = true;
                     }
@@ -373,9 +405,9 @@ class Player {
 
     checkTileCollision(tileX, tileY) {
         return this.x < tileX + CONFIG.TILE_SIZE &&
-               this.x + this.width > tileX &&
-               this.y < tileY + CONFIG.TILE_SIZE &&
-               this.y + this.height > tileY;
+            this.x + this.width > tileX &&
+            this.y < tileY + CONFIG.TILE_SIZE &&
+            this.y + this.height > tileY;
     }
 
     shoot(input) {
@@ -630,9 +662,9 @@ class Enemy {
 
     checkPlayerCollision() {
         return game.player.x < this.x + this.width &&
-               game.player.x + game.player.width > this.x &&
-               game.player.y < this.y + this.height &&
-               game.player.y + game.player.height > this.y;
+            game.player.x + game.player.width > this.x &&
+            game.player.y < this.y + this.height &&
+            game.player.y + game.player.height > this.y;
     }
 
     takeDamage(amount) {
@@ -708,10 +740,34 @@ class Boss {
 
         this.baseY = this.y;
         this.floatOffset = 0;
+
+        // Fake death mechanic
+        this.fakeDeathTriggered = false;
+        this.fakedDeath = false;
+        this.fakeDeathTimer = 0;
     }
 
     update() {
         if (this.dead) return;
+
+        // Handle fake death state
+        if (this.fakedDeath) {
+            this.fakeDeathTimer--;
+            if (this.fakeDeathTimer <= 0) {
+                // SURPRISE! Boss comes back stronger
+                this.fakedDeath = false;
+                this.hp = Math.ceil(this.maxHp * 0.5);
+                this.angry = true;
+                game.bossActive = true;
+                game.doorsLocked = true;
+                triggerScreenShake(20, 60);
+                triggerScreenFlash('#e94560', 30);
+                showBossWarning('YOU THOUGHT IT WAS OVER?');
+                playSound('bossDeath');
+                game.projectiles = [];
+            }
+            return;
+        }
 
         // Floating motion
         this.floatOffset += 0.05;
@@ -752,6 +808,8 @@ class Boss {
             game.player.y + game.player.height > this.y) {
             if (!game.player.invincible) {
                 game.player.takeDamage(1);
+                // Boss steals HP from player
+                this.hp = Math.min(this.maxHp, this.hp + 2);
             }
         }
     }
@@ -772,7 +830,12 @@ class Boss {
 
             case 'cross':
                 if (this.patternTimer % Math.floor(data.interval / speedMult) === 0) {
-                    const directions = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+                    const directions = [
+                        [1, 0],
+                        [-1, 0],
+                        [0, 1],
+                        [0, -1]
+                    ];
                     directions.forEach(([dx, dy]) => {
                         this.shootBullet(dx, dy, data.bulletSpeed * speedMult);
                     });
@@ -832,9 +895,41 @@ class Boss {
         triggerScreenShake(3, 5);
         playSound('bossHurt');
 
+        // Fake death at 25% HP - pretend to die then come back
+        if (this.hp <= Math.ceil(this.maxHp * 0.25) && !this.fakeDeathTriggered) {
+            this.fakeDeathTriggered = true;
+            this.triggerFakeDeath();
+            return;
+        }
+
         if (this.hp <= 0) {
             this.die();
         }
+    }
+
+    triggerFakeDeath() {
+        this.fakedDeath = true;
+        this.fakeDeathTimer = 180; // 3 seconds of fake victory
+        game.bossActive = false;
+        game.doorsLocked = false;
+
+        // Same explosion as real death
+        for (let i = 0; i < 50; i++) {
+            game.particles.push({
+                x: this.x + this.width / 2,
+                y: this.y + this.height / 2,
+                vx: (Math.random() - 0.5) * 8,
+                vy: (Math.random() - 0.5) * 8,
+                life: 40 + Math.random() * 40,
+                color: '#ffffff',
+                size: 3 + Math.random() * 3,
+            });
+        }
+
+        triggerScreenShake(15, 60);
+        triggerScreenFlash('#fff', 20);
+        playSound('bossDeath');
+        showBossWarning('DEFEATED!');
     }
 
     die() {
@@ -860,7 +955,7 @@ class Boss {
     }
 
     draw(ctx) {
-        if (this.dead) return;
+        if (this.dead || this.fakedDeath) return;
 
         const drawX = Math.floor(this.x - game.camera.x);
         const drawY = Math.floor(this.y - game.camera.y);
@@ -1079,9 +1174,9 @@ class Sawblade {
 
         // Check collision with player - INSTANT DEATH
         if (game.player && !game.player.invincible && !game.player.dashing) {
-            const dx = (this.x + this.width/2) - (game.player.x + game.player.width/2);
-            const dy = (this.y + this.height/2) - (game.player.y + game.player.height/2);
-            const dist = Math.sqrt(dx*dx + dy*dy);
+            const dx = (this.x + this.width / 2) - (game.player.x + game.player.width / 2);
+            const dy = (this.y + this.height / 2) - (game.player.y + game.player.height / 2);
+            const dist = Math.sqrt(dx * dx + dy * dy);
             if (dist < 14) {
                 game.player.die();
             }
@@ -1091,8 +1186,8 @@ class Sawblade {
     draw(ctx) {
         const drawX = Math.floor(this.x - game.camera.x);
         const drawY = Math.floor(this.y - game.camera.y);
-        const cx = drawX + this.width/2;
-        const cy = drawY + this.height/2;
+        const cx = drawX + this.width / 2;
+        const cy = drawY + this.height / 2;
 
         // Draw rotating sawblade
         ctx.save();
@@ -1182,16 +1277,16 @@ class LaserBeam {
         switch (this.direction) {
             case 'right':
                 return py > this.y - beamWidth && py < this.y + beamWidth &&
-                       px > this.x && px < this.x + this.length;
+                    px > this.x && px < this.x + this.length;
             case 'left':
                 return py > this.y - beamWidth && py < this.y + beamWidth &&
-                       px < this.x && px > this.x - this.length;
+                    px < this.x && px > this.x - this.length;
             case 'down':
                 return px > this.x - beamWidth && px < this.x + beamWidth &&
-                       py > this.y && py < this.y + this.length;
+                    py > this.y && py < this.y + this.length;
             case 'up':
                 return px > this.x - beamWidth && px < this.x + beamWidth &&
-                       py < this.y && py > this.y - this.length;
+                    py < this.y && py > this.y - this.length;
         }
         return false;
     }
@@ -1267,16 +1362,16 @@ class Crusher {
                 let inZone = false;
                 if (this.direction === 'down') {
                     inZone = px > this.x && px < this.x + this.width &&
-                             py > this.y + this.height && py < this.y + this.height + this.triggerDistance;
+                        py > this.y + this.height && py < this.y + this.height + this.triggerDistance;
                 } else if (this.direction === 'up') {
                     inZone = px > this.x && px < this.x + this.width &&
-                             py < this.y && py > this.y - this.triggerDistance;
+                        py < this.y && py > this.y - this.triggerDistance;
                 } else if (this.direction === 'right') {
                     inZone = py > this.y && py < this.y + this.height &&
-                             px > this.x + this.width && px < this.x + this.width + this.triggerDistance;
+                        px > this.x + this.width && px < this.x + this.width + this.triggerDistance;
                 } else if (this.direction === 'left') {
                     inZone = py > this.y && py < this.y + this.height &&
-                             px < this.x && px > this.x - this.triggerDistance;
+                        px < this.x && px > this.x - this.triggerDistance;
                 }
 
                 if (inZone) {
@@ -1452,14 +1547,22 @@ const input = {
 
 function setupInput() {
     const keyMap = {
-        'ArrowLeft': 'left', 'KeyA': 'left',
-        'ArrowRight': 'right', 'KeyD': 'right',
-        'ArrowUp': 'up', 'KeyW': 'up',
-        'ArrowDown': 'down', 'KeyS': 'down',
-        'Space': 'jump', 'KeyZ': 'jump',
-        'ShiftLeft': 'shoot', 'ShiftRight': 'shoot', 'KeyX': 'shoot',
+        'ArrowLeft': 'left',
+        'KeyA': 'left',
+        'ArrowRight': 'right',
+        'KeyD': 'right',
+        'ArrowUp': 'up',
+        'KeyW': 'up',
+        'ArrowDown': 'down',
+        'KeyS': 'down',
+        'Space': 'jump',
+        'KeyZ': 'jump',
+        'ShiftLeft': 'shoot',
+        'ShiftRight': 'shoot',
+        'KeyX': 'shoot',
         'KeyC': 'dash',
-        'KeyP': 'pause', 'Escape': 'pause',
+        'KeyP': 'pause',
+        'Escape': 'pause',
     };
 
     document.addEventListener('keydown', (e) => {
@@ -1490,7 +1593,7 @@ function resetInputPressed() {
 
 // ==================== AUDIO ====================
 function initAudio() {
-    game.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    game.audioCtx = new(window.AudioContext || window.webkitAudioContext)();
 }
 
 function playSound(type) {
@@ -1648,11 +1751,19 @@ function playSound(type) {
 
 // ==================== SCREEN EFFECTS ====================
 function triggerScreenShake(intensity, duration) {
-    game.screenShake = { active: true, intensity, duration };
+    game.screenShake = {
+        active: true,
+        intensity,
+        duration
+    };
 }
 
 function triggerScreenFlash(color, duration) {
-    game.screenFlash = { active: true, color, duration };
+    game.screenFlash = {
+        active: true,
+        color,
+        duration
+    };
 }
 
 function updateScreenEffects() {
@@ -1668,6 +1779,134 @@ function updateScreenEffects() {
         if (game.screenFlash.duration <= 0) {
             game.screenFlash.active = false;
         }
+    }
+}
+
+// ==================== CHAOS SYSTEM ====================
+function updateChaos() {
+    if (!game.running || game.paused) return;
+
+    // Decrease message timer
+    if (game.chaosMessageTimer > 0) game.chaosMessageTimer--;
+
+    // Check for active event expiring
+    if (game.activeChaosEvent) {
+        game.chaosEventTimer--;
+        if (game.chaosEventTimer <= 0) {
+            endChaosEvent();
+        }
+        return;
+    }
+
+    // Trigger new chaos event
+    game.chaosTimer++;
+    if (game.chaosTimer >= game.chaosInterval) {
+        game.chaosTimer = 0;
+        // Randomize next interval (8-15 seconds)
+        game.chaosInterval = 480 + Math.floor(Math.random() * 420);
+        triggerRandomChaos();
+    }
+}
+
+function triggerRandomChaos() {
+    const events = [{
+            name: 'GRAVITY REVERSED',
+            apply: () => {
+                game.gravityFlipped = true;
+            },
+            remove: () => {
+                game.gravityFlipped = false;
+            },
+            duration: 240,
+        },
+        {
+            name: 'CONTROLS MIRRORED',
+            apply: () => {
+                game.controlsMirrored = true;
+            },
+            remove: () => {
+                game.controlsMirrored = false;
+            },
+            duration: 300,
+        },
+        {
+            name: 'LIGHTS OUT',
+            apply: () => {
+                game.lightsOut = true;
+            },
+            remove: () => {
+                game.lightsOut = false;
+            },
+            duration: 240,
+        },
+        {
+            name: 'HYPER SPEED',
+            apply: () => {
+                game.speedMultiplier = 1.8;
+            },
+            remove: () => {
+                game.speedMultiplier = 1;
+            },
+            duration: 300,
+        },
+        {
+            name: 'SLOW MOTION',
+            apply: () => {
+                game.speedMultiplier = 0.4;
+            },
+            remove: () => {
+                game.speedMultiplier = 1;
+            },
+            duration: 240,
+        },
+        {
+            name: 'EARTHQUAKE',
+            apply: () => {
+                triggerScreenShake(4, 300);
+            },
+            remove: () => {
+                game.screenShake.active = false;
+            },
+            duration: 300,
+        },
+        {
+            name: 'SCREEN FLIP',
+            apply: () => {
+                game.canvas.style.transform += ' scaleY(-1)';
+            },
+            remove: () => {
+                game.canvas.style.transform = game.canvas.style.transform.replace(' scaleY(-1)', '');
+            },
+            duration: 360,
+        },
+        {
+            name: 'INVISIBLE PLAYER',
+            apply: () => {
+                game.playerInvisible = true;
+            },
+            remove: () => {
+                game.playerInvisible = false;
+            },
+            duration: 180,
+        },
+    ];
+
+    const event = events[Math.floor(Math.random() * events.length)];
+    game.activeChaosEvent = event;
+    game.chaosEventTimer = event.duration;
+    event.apply();
+
+    game.chaosMessage = event.name;
+    game.chaosMessageTimer = 90;
+
+    triggerScreenFlash('#a855f7', 8);
+    playSound('trap');
+}
+
+function endChaosEvent() {
+    if (game.activeChaosEvent) {
+        game.activeChaosEvent.remove();
+        game.activeChaosEvent = null;
     }
 }
 
@@ -1818,6 +2057,13 @@ function loadRoom(levelIndex, roomIndex) {
     game.controlsMirrored = false;
     game.speedMultiplier = 1;
     game.lightsOut = false;
+    game.playerInvisible = false;
+
+    // Reset chaos
+    endChaosEvent();
+    game.chaosTimer = 300; // Grace period before first chaos event
+    game.chaosMessage = null;
+    game.chaosMessageTimer = 0;
 }
 
 function completeRoom() {
@@ -1919,12 +2165,20 @@ function update() {
         p.y += p.vy * game.speedMultiplier;
         p.life--;
 
+        // BULLET BETRAYAL - player bullets sometimes turn hostile
+        if (p.friendly && !p.dead && p.life < 100 && Math.random() < 0.004) {
+            p.vx *= -1;
+            p.vy *= -1;
+            p.friendly = false;
+            p.life = 120;
+        }
+
         // Check collision with walls
         const tileX = Math.floor(p.x / CONFIG.TILE_SIZE);
         const tileY = Math.floor(p.y / CONFIG.TILE_SIZE);
         if (tileY >= 0 && tileY < game.tiles.length &&
             tileX >= 0 && tileX < game.tiles[0].length) {
-            if (game.tiles[tileY][tileX].solid) {
+            if (game.tiles[tileY]?.[tileX]?.solid) {
                 p.dead = true;
             }
         }
@@ -1977,6 +2231,9 @@ function update() {
 
     // Update screen effects
     updateScreenEffects();
+
+    // Update chaos events
+    updateChaos();
 
     // Reset pressed flags
     resetInputPressed();
@@ -2100,7 +2357,7 @@ function render() {
     });
 
     // Draw player as a simple sprite
-    if (game.player) {
+    if (game.player && !game.playerInvisible) {
         const px = Math.floor(game.player.x - game.camera.x);
         const py = Math.floor(game.player.y - game.camera.y);
 
@@ -2161,6 +2418,18 @@ function render() {
         gradient.addColorStop(1, 'rgba(0, 0, 0, 0.9)');
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, CONFIG.NATIVE_WIDTH, CONFIG.NATIVE_HEIGHT);
+    }
+
+    // Chaos event message
+    if (game.chaosMessage && game.chaosMessageTimer > 0) {
+        const alpha = Math.min(1, game.chaosMessageTimer / 30);
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = '#a855f7';
+        ctx.font = '8px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(game.chaosMessage, CONFIG.NATIVE_WIDTH / 2, 20);
+        ctx.textAlign = 'left';
+        ctx.globalAlpha = 1;
     }
 }
 
