@@ -22,6 +22,8 @@
 | 02 | **The Hard Hallway** | Action / Platformer / Brutal | NIGHTMARE | Desktop |
 | 03 | **The Idea Space** | Database / SMT Tribute / Interactive | EXPLORE | Desktop & Mobile |
 | 04 | **Beat Burst** | Rhythm / Music / Arcade | DYNAMIC | Desktop |
+| 05 | **Typebound Dungeon** | Typing / Dungeon / Roguelike | SCALING | Desktop |
+| 06 | **RuinMaker** | 3D / Physics / Sandbox | SMASH IT | Desktop |
 
 ---
 
@@ -46,6 +48,16 @@ Explore, compare, and discover demons across the Shin Megami Tensei series timel
 *Your music, your game.*
 
 Upload any song and transform it into a rhythm game. Visualize the beats, then play along to your own music.
+
+### ⌨️ Typebound Dungeon
+*Type to survive.*
+
+Explore procedurally generated dungeons, fight monsters with your keyboard, and collect ability cards. The faster you type, the deadlier you are.
+
+### 💥 RuinMaker
+*If it ain't broken, you haven't tried hard enough.*
+
+A physics-based 3D destruction sandbox. Load a shape (or upload your own OBJ), grab a tool, and obliterate everything. Collect powerups from the wreckage and hit score targets in Challenge Mode.
 
 ---
 
@@ -129,7 +141,9 @@ Game_Vault/
 ├── 📁 The_Unfair_Game_Web_Ed/ # Survival horror game
 ├── 📁 THW/                    # The Hard Hallway game
 ├── 📁 Idea_Space/             # SMT demon compendium
-└── 📁 Beat_Burst/             # Rhythm game
+├── 📁 Beat_Burst/             # Rhythm game
+├── 📁 TypeboundDungeon/       # Typing dungeon roguelike
+└── 📁 RuinMaker/              # 3D physics destruction sandbox
 ```
 
 ---
@@ -153,7 +167,7 @@ npx serve .
 
 | Stat | Value |
 |------|-------|
-| 🎮 Games Created | 4 |
+| 🎮 Games Created | 6 |
 | ⌨️ Lines of Code | 5000+ |
 | ⚡ Energy Drinks | 99 |
 | 🐛 Bugs Squashed | 404 |

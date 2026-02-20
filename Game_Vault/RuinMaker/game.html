@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RuinMaker – Destroy Everything</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            font-family: 'Rajdhani', sans-serif;
+            overflow: hidden;
+            color: #fff;
+            user-select: none;
+        }
+
+        /* ─── SIDEBAR ─────────────────────────────────── */
+        #sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 228px;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(4, 8, 18, .97), rgba(8, 4, 18, .97));
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 80, 0, .22);
+            padding: 13px 11px;
+            z-index: 100;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #sidebar h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 900;
+            color: #ff5500;
+            text-shadow: 0 0 22px #ff5500, 0 0 6px #ff9900;
+            text-align: center;
+            padding-bottom: 9px;
+            border-bottom: 1px solid rgba(255, 80, 0, .28);
+            letter-spacing: 3px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid rgba(255, 255, 255, .07);
+            border-radius: 7px;
+            padding: 9px;
+        }
+
+        .panel-title {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2.5px;
+            color: rgba(255, 255, 255, .32);
+            margin-bottom: 7px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 7px 10px;
+            border: 1px solid rgba(255, 255, 255, .11);
+            background: rgba(255, 255, 255, .04);
+            color: #bbb;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 5px;
+            text-align: left;
+            transition: background .15s, border-color .15s, color .15s;
+            margin-bottom: 5px;
+        }
+
+        .btn:last-child {
+            margin-bottom: 0;
+        }
+
+        .btn:hover {
+            background: rgba(255, 80, 0, .16);
+            border-color: rgba(255, 80, 0, .5);
+            color: #ff7733;
+        }
+
+        .btn.active {
+            background: rgba(255, 80, 0, .22);
+            border-color: #ff5500;
+            color: #ff8855;
+            box-shadow: 0 0 9px rgba(255, 80, 0, .35);
+        }
+
+        .btn.util {
+            border-color: rgba(80, 120, 255, .22);
+            color: #99aacc;
+        }
+
+        .btn.util:hover {
+            background: rgba(80, 120, 255, .14);
+            border-color: #6688ff;
+            color: #99bbff;
+        }
+
+        /* shape grid */
+        .shape-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+        }
+
+        .shape-btn {
+            padding: 8px 4px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .shape-icon {
+            font-size: 17px;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        /* tool buttons */
+        .tool-btn {
+            padding-left: 32px;
+            position: relative;
+        }
+
+        .tool-btn::before {
+            content: attr(data-icon);
+            position: absolute;
+            left: 10px;
+            font-size: 14px;
+        }
+
+        /* upload zone */
+        .upload-zone {
+            border: 2px dashed rgba(255, 255, 255, .16);
+            border-radius: 7px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color .2s, color .2s, background .2s;
+            font-size: 12px;
+            color: rgba(255, 255, 255, .38);
+        }
+
+        .upload-zone:hover {
+            border-color: #ff5500;
+            color: #ff7733;
+            background: rgba(255, 80, 0, .06);
+        }
+
+        /* slider */
+        input[type=range] {
+            width: 100%;
+            accent-color: #ff5500;
+            margin-bottom: 4px;
+        }
+
+        .slider-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: rgba(255, 255, 255, .32);
+        }
+
+        ::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 80, 0, .3);
+            border-radius: 2px;
+        }
+
+        /* ─── SCORE ───────────────────────────────────── */
+        #score-hub {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        #score-val {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 28px rgba(255, 130, 0, .9);
+            line-height: 1;
+        }
+
+        #score-lbl {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, .32);
+            margin-top: 2px;
+        }
+
+        /* ─── STATS TOP-RIGHT ─────────────────────────── */
+        #stats-bar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            padding: 13px 17px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            background: linear-gradient(90deg, transparent, rgba(0, 0, 0, .72));
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        .stat {
+            text-align: right;
+        }
+
+        .stat-val {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .stat-lbl {
+            font-size: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, .32);
+        }
+
+        /* ─── INTEGRITY BAR ───────────────────────────── */
+        #integrity-wrap {
+            position: fixed;
+            bottom: 26px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 370px;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        #integrity-lbl {
+            text-align: center;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255, 255, 255, .36);
+            margin-bottom: 5px;
+        }
+
+        #integrity-track {
+            height: 6px;
+            background: rgba(255, 255, 255, .07);
+            border-radius: 3px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        #integrity-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width .22s ease;
+            background: linear-gradient(90deg, #00ff88, #00cc55);
+        }
+
+        /* ─── POWERUP HUD ─────────────────────────────── */
+        #powerup-hud {
+            position: fixed;
+            top: 85px;
+            right: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .pu-chip {
+            background: rgba(0, 0, 0, .78);
+            border: 1px solid;
+            border-radius: 7px;
+            padding: 6px 10px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 12px;
+            font-weight: 700;
+            animation: puIn .2s ease-out;
+        }
+
+        @keyframes puIn { from{opacity:0;transform:translateX(18px)} to{opacity:1;transform:none} }
+
+        /* ─── SCORE POPUP ─────────────────────────────── */
+        .score-pop {
+            position: fixed;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            pointer-events: none;
+            z-index: 200;
+            text-shadow: 0 0 12px currentColor;
+            animation: popFly 1.4s ease-out forwards;
+        }
+
+        @keyframes popFly {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -170%) scale(.45);
+            }
+        }
+
+        /* ─── MISC ────────────────────────────────────── */
+        #flash {
+            position: fixed;
+            inset: 0;
+            background: #fff;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 300;
+            transition: opacity .08s;
+        }
+
+        #hints {
+            position: fixed;
+            bottom: 52px;
+            right: 16px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, .26);
+            text-align: right;
+            pointer-events: none;
+            z-index: 50;
+            line-height: 2;
+        }
+
+        #tool-label {
+            position: fixed;
+            top: 13px;
+            left: 248px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, .32);
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        #tool-label span {
+            color: #ff7733;
+            font-weight: 700;
+        }
+
+        #challenge-banner {
+            position: fixed;
+            top: 76px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, .82);
+            border: 1px solid #ff5500;
+            border-radius: 8px;
+            padding: 7px 22px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            color: #ff7733;
+            pointer-events: none;
+            z-index: 60;
+            display: none;
+            text-shadow: 0 0 10px #ff5500;
+        }
+
+        #tooltip {
+            position: fixed;
+            bottom: 66px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, .78);
+            border: 1px solid rgba(255, 255, 255, .13);
+            border-radius: 6px;
+            padding: 6px 14px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, .6);
+            pointer-events: none;
+            z-index: 60;
+            opacity: 0;
+            transition: opacity .3s;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Overlays -->
+    <div id="flash"></div>
+    <div id="tooltip">Load a shape to start destroying!</div>
+
+    <!-- ─── SIDEBAR ───────────────────────────────────── -->
+    <div id="sidebar">
+        <a href="index.html" class="btn util" style="text-align:center;text-decoration:none;margin-bottom:2px">← Back to
+            Home</a>
+        <h1>☠ RUINMAKER</h1>
+
+        <!-- Preloaded shapes -->
+        <div class="panel">
+            <div class="panel-title">Preloaded Shapes</div>
+            <div class="shape-grid">
+                <button class="btn shape-btn" onclick="loadShape('cube')">
+                    <span class="shape-icon">⬛</span>Cube
+                </button>
+                <button class="btn shape-btn" onclick="loadShape('sphere')">
+                    <span class="shape-icon">⚪</span>Sphere
+                </button>
+                <button class="btn shape-btn" onclick="loadShape('cylinder')">
+                    <span class="shape-icon">🔵</span>Cylinder
+                </button>
+                <button class="btn shape-btn" onclick="loadShape('torus')">
+                    <span class="shape-icon">⭕</span>Torus
+                </button>
+                <button class="btn shape-btn" onclick="loadShape('cone')">
+                    <span class="shape-icon">🔺</span>Cone
+                </button>
+                <button class="btn shape-btn" onclick="loadShape('diamond')">
+                    <span class="shape-icon">💎</span>Diamond
+                </button>
+                <button class="btn shape-btn" onclick="loadShape('icosahedron')">
+                    <span class="shape-icon">🔷</span>Crystal
+                </button>
+                <button class="btn shape-btn" onclick="loadShape('knot')">
+                    <span class="shape-icon">🌀</span>Torus Knot
+                </button>
+            </div>
+        </div>
+
+        <!-- Upload OBJ -->
+        <div class="panel">
+            <div class="panel-title">Upload Your Own .OBJ</div>
+            <div class="upload-zone" id="upload-zone" onclick="document.getElementById('obj-in').click()">
+                <div style="font-size:20px;margin-bottom:4px">📂</div>
+                <div>Click or drag & drop a .obj file</div>
+            </div>
+            <input type="file" id="obj-in" accept=".obj" style="display:none">
+        </div>
+
+        <!-- Tools -->
+        <div class="panel">
+            <div class="panel-title">Destruction Tool</div>
+            <button class="btn tool-btn active" id="tool-hammer" data-icon="🔨" onclick="setTool('hammer')">Hammer
+                Strike</button>
+            <button class="btn tool-btn" id="tool-bomb" data-icon="💣" onclick="setTool('bomb')">Timed Bomb
+                (2.5s)</button>
+            <button class="btn tool-btn" id="tool-wave" data-icon="🌊" onclick="setTool('wave')">Shockwave
+                Burst</button>
+            <button class="btn tool-btn" id="tool-laser" data-icon="⚡" onclick="setTool('laser')">Energy Blast</button>
+        </div>
+
+        <!-- Force -->
+        <div class="panel">
+            <div class="panel-title">Force Level</div>
+            <input type="range" id="force-slider" min="1" max="10" value="5">
+            <div class="slider-row">
+                <span>Gentle</span><span id="force-val">5</span><span>Maximum</span>
+            </div>
+        </div>
+
+        <!-- Challenge -->
+        <div class="panel">
+            <div class="panel-title">Timed Challenge</div>
+            <button class="btn" id="challenge-btn" onclick="startChallenge()">⏱ Start 30s Challenge</button>
+        </div>
+
+        <!-- Utilities -->
+        <button class="btn util" onclick="clearDebris()">🧹 Clear Debris</button>
+        <button class="btn util" onclick="resetAll()" style="border-color:rgba(255,60,60,.25);color:#cc8888">♻ Full
+            Reset</button>
+    </div>
+
+    <!-- Score -->
+    <div id="score-hub">
+        <div id="score-val">0</div>
+        <div id="score-lbl">Score</div>
+    </div>
+
+    <!-- Stats -->
+    <div id="stats-bar">
+        <div class="stat">
+            <div class="stat-val" id="combo-val" style="color:#ffcc00">×1</div>
+            <div class="stat-lbl">Combo</div>
+        </div>
+        <div class="stat">
+            <div class="stat-val" id="hits-val">0</div>
+            <div class="stat-lbl">Hits</div>
+        </div>
+        <div class="stat">
+            <div class="stat-val" id="frags-val">0</div>
+            <div class="stat-lbl">Debris</div>
+        </div>
+    </div>
+
+    <!-- Integrity bar -->
+    <div id="integrity-wrap">
+        <div id="integrity-lbl">Structure Integrity</div>
+        <div id="integrity-track">
+            <div id="integrity-fill" style="width:100%"></div>
+        </div>
+    </div>
+
+    <!-- Active powerups -->
+    <div id="powerup-hud"></div>
+
+    <!-- Tool label -->
+    <div id="tool-label">Tool: <span id="tool-name">Hammer Strike</span></div>
+
+    <!-- Challenge countdown -->
+    <div id="challenge-banner">⏱ TIME LEFT: <span id="challenge-timer">30.0</span>s</div>
+
+    <!-- Controls hint -->
+    <div id="hints">
+        Left Click → Apply Tool<br>
+        Right Drag → Orbit Camera<br>
+        Scroll → Zoom In / Out<br>
+        Click glowing orbs → Collect Powerup
+    </div>
+
+    <!-- Three.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+    <script>
+        /* =====================================================================
+   RUINMAKER  –  3D Physics Destruction Game
+   Self-contained: Three.js rendering + manual physics + fracturing
+===================================================================== */
+
+        // ── GAME STATE ──────────────────────────────────────────────────────
+        let score = 0,
+            combo = 1,
+            totalHits = 0,
+            debrisCount = 0;
+        let comboTimer = 0;
+        let currentTool = 'hammer';
+        let forceLevel = 5;
+        let currentShape = null;
+        let shapeHP = 100,
+            shapeMaxHP = 100;
+        let fragments = [],
+            sparks = [],
+            powerupObjs = [];
+        let activePowerups = {}; // { type: secondsLeft }
+        let challengeActive = false,
+            challengeTime = 0;
+        let bombPending = null; // { mesh, pos, timer }
+        let lastTS = 0;
+        let shakeIntensity = 0,
+            shakeDur = 0,
+            shakeElapsed = 0;
+
+        // ── THREE.JS SCENE ──────────────────────────────────────────────────
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x030608);
+        scene.fog = new THREE.FogExp2(0x030608, 0.024);
+
+        const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 400);
+        const renderer = new THREE.WebGLRenderer({
+            antialias: true
+        });
+        renderer.setSize(innerWidth, innerHeight);
+        renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.25;
+        renderer.domElement.style.cssText = 'position:fixed;top:0;left:0;z-index:1';
+        document.body.appendChild(renderer.domElement);
+
+        // ── CAMERA ORBIT ────────────────────────────────────────────────────
+        let camTheta = 0.8;
+        let camPhi = 1.1;
+        let camRadius = 14;
+        const camTarget = new THREE.Vector3(0, 1.5, 0);
+
+        function refreshCamera() {
+            camera.position.set(
+                camTarget.x + camRadius * Math.sin(camPhi) * Math.sin(camTheta),
+                camTarget.y + camRadius * Math.cos(camPhi),
+                camTarget.z + camRadius * Math.sin(camPhi) * Math.cos(camTheta)
+            );
+            camera.lookAt(camTarget);
+        }
+        refreshCamera();
+
+        // ── LIGHTING ────────────────────────────────────────────────────────
+        scene.add(new THREE.AmbientLight(0x0d1525, 1.4));
+
+        const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
+        sunLight.position.set(9, 16, 9);
+        sunLight.castShadow = true;
+        sunLight.shadow.mapSize.set(2048, 2048);
+        Object.assign(sunLight.shadow.camera, {
+            top: 20,
+            bottom: -20,
+            left: -20,
+            right: 20,
+            near: .1,
+            far: 70
+        });
+        scene.add(sunLight);
+
+        const fireLight = new THREE.PointLight(0xff5500, 5, 32);
+        fireLight.position.set(-8, 8, -8);
+        scene.add(fireLight);
+
+        const coldLight = new THREE.PointLight(0x2255ff, 4, 28);
+        coldLight.position.set(8, 5, 8);
+        scene.add(coldLight);
+
+        // ── FLOOR / GRID ────────────────────────────────────────────────────
+        scene.add(new THREE.GridHelper(60, 60, 0x1a0800, 0x080400));
+
+        const groundMesh = new THREE.Mesh(
+            new THREE.PlaneGeometry(60, 60),
+            new THREE.MeshStandardMaterial({
+                color: 0x08080f,
+                metalness: .65,
+                roughness: .35,
+                transparent: true,
+                opacity: .75
+            })
+        );
+        groundMesh.rotation.x = -Math.PI / 2;
+        groundMesh.receiveShadow = true;
+        scene.add(groundMesh);
+
+        // ── RAYCASTER ───────────────────────────────────────────────────────
+        const raycaster = new THREE.Raycaster();
+        const ndcMouse = new THREE.Vector2();
+
+        // ── COLOUR PALETTE ──────────────────────────────────────────────────
+        const PALETTE = [
+            0x4499ff, 0xff4466, 0x44ffaa, 0xffaa22, 0xaa44ff,
+            0x22ffee, 0xff8833, 0x33ffcc, 0xff3399, 0x99ff33,
+        ];
+
+        function randCol() {
+            return new THREE.Color(PALETTE[Math.floor(Math.random() * PALETTE.length)]);
+        }
+
+        function mkMat(color) {
+            return new THREE.MeshStandardMaterial({
+                color,
+                metalness: .42,
+                roughness: .28,
+                emissive: color.clone().multiplyScalar(.05),
+            });
+        }
+
+        // ── SHAPE LOADING ───────────────────────────────────────────────────
+        function loadShape(type) {
+            removeShape();
+            clearBomb();
+            let geo;
+            switch (type) {
+                case 'cube':
+                    geo = new THREE.BoxGeometry(3, 3, 3, 4, 4, 4);
+                    break;
+                case 'sphere':
+                    geo = new THREE.SphereGeometry(2.2, 40, 40);
+                    break;
+                case 'cylinder':
+                    geo = new THREE.CylinderGeometry(1.4, 1.4, 4, 36);
+                    break;
+                case 'torus':
+                    geo = new THREE.TorusGeometry(2.0, .72, 20, 80);
+                    break;
+                case 'cone':
+                    geo = new THREE.ConeGeometry(2.1, 4.2, 36);
+                    break;
+                case 'diamond':
+                    geo = buildDiamond();
+                    break;
+                case 'icosahedron':
+                    geo = new THREE.IcosahedronGeometry(2.2, 1);
+                    break;
+                case 'knot':
+                    geo = new THREE.TorusKnotGeometry(1.4, .42, 128, 18);
+                    break;
+                default:
+                    geo = new THREE.BoxGeometry(3, 3, 3, 4, 4, 4);
+            }
+            const col = randCol();
+            currentShape = new THREE.Mesh(geo, mkMat(col));
+            currentShape.position.y = 3;
+            currentShape.castShadow = true;
+            currentShape.receiveShadow = true;
+            currentShape.userData.baseColor = col.clone();
+            currentShape.userData.shapeType = type;
+            scene.add(currentShape);
+            shapeHP = shapeMaxHP = 100;
+            refreshIntegrity();
+            popScale(currentShape);
+            hint('Left-click the shape to destroy it  |  Collect glowing orbs for powerups!', 5000);
+        }
+
+        function buildDiamond() {
+            const g = new THREE.OctahedronGeometry(2.2, 0);
+            const p = g.attributes.position;
+            for (let i = 0; i < p.count; i++)
+                if (p.getY(i) < 0) p.setY(i, p.getY(i) * .52);
+            p.needsUpdate = true;
+            g.computeVertexNormals();
+            return g;
+        }
+
+        function popScale(mesh) {
+            mesh.scale.set(.01, .01, .01);
+            const t0 = performance.now();
+            (function tick() {
+                const p = Math.min((performance.now() - t0) / 500, 1);
+                mesh.scale.setScalar(1 - Math.pow(1 - p, 3));
+                if (p < 1) requestAnimationFrame(tick);
+            })();
+        }
+
+        function removeShape() {
+            if (!currentShape) return;
+            scene.remove(currentShape);
+            currentShape.geometry.dispose();
+            currentShape.material.dispose();
+            currentShape = null;
+            shapeHP = shapeMaxHP = 100;
+            refreshIntegrity();
+        }
+
+        // ── OBJ PARSER ──────────────────────────────────────────────────────
+        function parseOBJ(text) {
+            const v = [],
+                f = [];
+            for (const raw of text.split('\n')) {
+                const p = raw.trim().split(/\s+/);
+                if (p[0] === 'v') v.push(+p[1], +p[2], +p[3]);
+                else if (p[0] === 'f') {
+                    const idx = p.slice(1).map(s => parseInt(s) - 1);
+                    for (let i = 1; i < idx.length - 1; i++) f.push(idx[0], idx[i], idx[i + 1]);
+                }
+            }
+            if (!v.length || !f.length) return null;
+            const pos = new Float32Array(f.length * 3);
+            for (let i = 0; i < f.length; i++) {
+                const b = f[i] * 3;
+                pos[i * 3] = v[b] || 0;
+                pos[i * 3 + 1] = v[b + 1] || 0;
+                pos[i * 3 + 2] = v[b + 2] || 0;
+            }
+            const g = new THREE.BufferGeometry();
+            g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            g.computeVertexNormals();
+            return g;
+        }
+
+        function loadOBJGeo(geo) {
+            removeShape();
+            clearBomb();
+            geo.computeBoundingBox();
+            const box = geo.boundingBox,
+                c = new THREE.Vector3(),
+                sz = new THREE.Vector3();
+            box.getCenter(c);
+            box.getSize(sz);
+            const sc = 4.2 / Math.max(sz.x, sz.y, sz.z, .001);
+            geo.translate(-c.x, -c.y, -c.z);
+            geo.scale(sc, sc, sc);
+            const col = randCol();
+            currentShape = new THREE.Mesh(geo, mkMat(col));
+            currentShape.position.y = 3.2;
+            currentShape.castShadow = true;
+            currentShape.userData.baseColor = col.clone();
+            currentShape.userData.shapeType = 'custom';
+            scene.add(currentShape);
+            shapeHP = shapeMaxHP = 100;
+            refreshIntegrity();
+            popScale(currentShape);
+            hint('Custom model loaded! Left-click to destroy it.', 4000);
+        }
+
+        // ── FRAGMENT SYSTEM ─────────────────────────────────────────────────
+        const GRAVITY = -11.5;
+        const FLOOR_Y = 0;
+        const MAX_DEBRIS = 380;
+
+        class Fragment {
+            constructor(mesh, vel, ang, sz) {
+                this.mesh = mesh;
+                this.vel = vel;
+                this.ang = ang;
+                this.sz = sz;
+                this.grounded = false;
+                this.bounces = 0;
+                this.age = 0;
+                this.life = 10 + Math.random() * 7;
+            }
+            update(dt) {
+                this.age += dt;
+                if (!this.grounded) {
+                    this.vel.y += GRAVITY * dt;
+                    this.mesh.position.addScaledVector(this.vel, dt);
+                    const floor = FLOOR_Y + this.sz * .5;
+                    if (this.mesh.position.y < floor) {
+                        this.mesh.position.y = floor;
+                        this.vel.y *= -.27;
+                        this.vel.x *= .7;
+                        this.vel.z *= .7;
+                        this.bounces++;
+                        if (Math.abs(this.vel.y) < .35 || this.bounces > 5) {
+                            this.vel.y = 0;
+                            this.grounded = true;
+                            this.ang.multiplyScalar(.07);
+                        }
+                    }
+                } else {
+                    this.ang.multiplyScalar(.93);
+                }
+                this.mesh.rotation.x += this.ang.x * dt;
+                this.mesh.rotation.y += this.ang.y * dt;
+                this.mesh.rotation.z += this.ang.z * dt;
+                if (this.age > this.life - 2) {
+                    const a = Math.max(0, 1 - (this.age - (this.life - 2)) / 2);
+                    this.mesh.material.opacity = a;
+                    this.mesh.material.transparent = true;
+                }
+                return this.age < this.life;
+            }
+        }
+
+        function spawnFrag(origin, spread, col, tool, big) {
+            if (fragments.length >= MAX_DEBRIS) return;
+            const sz = .12 + Math.random() * spread * .45;
+            const r = Math.random();
+            let geo;
+            if (r < .44) geo = new THREE.BoxGeometry(sz * (.65 + Math.random() * .7), sz * (.65 + Math.random() * .7),
+                sz * (.65 + Math.random() * .7));
+            else if (r < .72) geo = new THREE.TetrahedronGeometry(sz * .78);
+            else geo = new THREE.OctahedronGeometry(sz * .58);
+
+            const hsl = {};
+            col.getHSL(hsl);
+            const fragCol = new THREE.Color().setHSL(
+                hsl.h + (Math.random() - .5) * .1,
+                hsl.s,
+                Math.max(.15, Math.min(.85, hsl.l + (Math.random() - .5) * .3))
+            );
+            const mat = new THREE.MeshStandardMaterial({
+                color: fragCol,
+                metalness: .2 + Math.random() * .5,
+                roughness: .2 + Math.random() * .5,
+                emissive: fragCol.clone().multiplyScalar(.1),
+            });
+
+            const mesh = new THREE.Mesh(geo, mat);
+            const sp = big ? spread * .6 : spread * .25;
+            mesh.position.set(
+                origin.x + (Math.random() - .5) * sp,
+                origin.y + (Math.random() - .5) * sp * .5 + (big ? .6 : 0),
+                origin.z + (Math.random() - .5) * sp
+            );
+            mesh.castShadow = true;
+            scene.add(mesh);
+
+            const fMag = (big ? 9.5 : 4.5) * (forceLevel / 5) * (activePowerups.superforce ? 1.9 : 1);
+            const dir = mesh.position.clone().sub(origin).normalize();
+            dir.y = Math.abs(dir.y) * .5 + .4;
+            dir.normalize();
+
+            let vel;
+            if (tool === 'bomb' || tool === 'wave') {
+                vel = dir.multiplyScalar(fMag * (.5 + Math.random()));
+                vel.y += 1.5 + Math.random() * 4.5;
+            } else {
+                vel = dir.multiplyScalar(fMag * (.3 + Math.random() * .7));
+                vel.y += Math.random() * 3.5 + .8;
+            }
+            const ang = new THREE.Vector3(
+                (Math.random() - .5) * 10, (Math.random() - .5) * 10, (Math.random() - .5) * 10
+            );
+            fragments.push(new Fragment(mesh, vel, ang, sz));
+            debrisCount++;
+            document.getElementById('frags-val').textContent = debrisCount;
+        }
+
+        function clearDebris() {
+            for (const f of fragments) {
+                scene.remove(f.mesh);
+                f.mesh.geometry.dispose();
+                f.mesh.material.dispose();
+            }
+            fragments = [];
+            debrisCount = 0;
+            document.getElementById('frags-val').textContent = 0;
+        }
+
+        // ── SPARK PARTICLES ─────────────────────────────────────────────────
+        class Spark {
+            constructor(pos, vel, col, sz, life) {
+                this.vel = vel.clone();
+                this.life = life;
+                this.age = 0;
+                const g = new THREE.SphereGeometry(sz, 4, 4);
+                const m = new THREE.MeshBasicMaterial({
+                    color: col,
+                    transparent: true
+                });
+                this.mesh = new THREE.Mesh(g, m);
+                this.mesh.position.copy(pos);
+                scene.add(this.mesh);
+            }
+            update(dt) {
+                this.age += dt;
+                this.vel.y += GRAVITY * .42 * dt;
+                this.mesh.position.addScaledVector(this.vel, dt);
+                const a = Math.max(0, 1 - this.age / this.life);
+                this.mesh.material.opacity = a;
+                this.mesh.scale.setScalar(Math.max(.01, a * .9));
+                return this.age < this.life;
+            }
+        }
+
+        const SPARK_COLS = {
+            hammer: [0xff8800, 0xffcc00, 0xff4400, 0xffffff],
+            bomb: [0xff2200, 0xff7700, 0xffff00, 0xff4400],
+            wave: [0x00ccff, 0x4488ff, 0xffffff, 0x88ccff],
+            laser: [0xff00ff, 0xcc44ff, 0xffffff, 0xff88ff],
+        };
+
+        function burstSparks(pos, tool, n) {
+            n = n || 20;
+            const cols = SPARK_COLS[tool] || SPARK_COLS.hammer;
+            for (let i = 0; i < n; i++) {
+                const az = Math.random() * Math.PI * 2;
+                const el = Math.random() * Math.PI;
+                const sp = 2.5 + Math.random() * 5.5;
+                const vel = new THREE.Vector3(
+                    Math.sin(el) * Math.cos(az) * sp,
+                    Math.abs(Math.sin(el) * Math.sin(az) * sp) + 1.5,
+                    Math.cos(el) * sp
+                );
+                sparks.push(new Spark(pos, vel,
+                    cols[Math.floor(Math.random() * cols.length)],
+                    .035 + Math.random() * .08,
+                    .45 + Math.random() * .65
+                ));
+            }
+        }
+
+        // ── POWERUP ORBS ────────────────────────────────────────────────────
+        const PU_DATA = {
+            superforce: {
+                label: 'Super Force',
+                color: '#ff5500',
+                hex: 0xff5500,
+                icon: '💥',
+                dur: 12
+            },
+            multibreak: {
+                label: 'Multi Break',
+                color: '#00ff88',
+                hex: 0x00ff88,
+                icon: '⚡',
+                dur: 14
+            },
+            timeslow: {
+                label: 'Slow Time',
+                color: '#44aaff',
+                hex: 0x44aaff,
+                icon: '⏱',
+                dur: 9
+            },
+            score2x: {
+                label: 'Score ×2',
+                color: '#ffdd00',
+                hex: 0xffdd00,
+                icon: '★',
+                dur: 18
+            },
+        };
+
+        class PowerupOrb {
+            constructor(pos, type) {
+                this.type = type;
+                this.age = 0;
+                this.life = 9;
+                this.vel = new THREE.Vector3((Math.random() - .5) * 5, 4 + Math.random() * 4.5, (Math.random() -
+                    .5) * 5);
+                this.grounded = false;
+                this.collected = false;
+
+                const d = PU_DATA[type];
+                const inner = new THREE.Mesh(
+                    new THREE.SphereGeometry(.32, 18, 18),
+                    new THREE.MeshBasicMaterial({
+                        color: d.hex
+                    })
+                );
+                const glow = new THREE.Mesh(
+                    new THREE.SphereGeometry(.58, 18, 18),
+                    new THREE.MeshBasicMaterial({
+                        color: d.hex,
+                        transparent: true,
+                        opacity: .28,
+                        side: THREE.BackSide
+                    })
+                );
+                inner.add(glow);
+                this.mesh = inner;
+                this.mesh.position.copy(pos);
+                scene.add(this.mesh);
+            }
+            update(dt) {
+                this.age += dt;
+                if (!this.grounded) {
+                    this.vel.y += GRAVITY * dt;
+                    this.mesh.position.addScaledVector(this.vel, dt);
+                    if (this.mesh.position.y < .38) {
+                        this.mesh.position.y = .38;
+                        this.vel.y *= -.42;
+                        this.vel.x *= .65;
+                        this.vel.z *= .65;
+                        if (Math.abs(this.vel.y) < .45) this.grounded = true;
+                    }
+                }
+                this.mesh.rotation.y += dt * 2.4;
+                const pulse = 1 + Math.sin(this.age * 4.8) * .13;
+                this.mesh.children[0].scale.setScalar(pulse);
+                if (this.age > this.life - 2) {
+                    const a = Math.max(0, 1 - (this.age - (this.life - 2)) / 2);
+                    this.mesh.material.opacity = a;
+                    this.mesh.material.transparent = true;
+                }
+                return this.age < this.life && !this.collected;
+            }
+        }
+
+        function spawnPowerups(center) {
+            const types = Object.keys(PU_DATA);
+            let spawned = 0;
+            for (let i = 0; i < 3; i++) {
+                if (Math.random() > .55) continue;
+                const t = types[Math.floor(Math.random() * types.length)];
+                powerupObjs.push(new PowerupOrb(center.clone(), t));
+                spawned++;
+            }
+            // Always spawn at least one
+            if (!spawned) {
+                const t = types[Math.floor(Math.random() * types.length)];
+                const offset = new THREE.Vector3((Math.random() - .5) * 2, 0, (Math.random() - .5) * 2);
+                powerupObjs.push(new PowerupOrb(center.clone().add(offset), t));
+            }
+        }
+
+        function collectPU(pu) {
+            pu.collected = true;
+            scene.remove(pu.mesh);
+            const d = PU_DATA[pu.type];
+            activePowerups[pu.type] = d.dur;
+            refreshPUHUD();
+            popup(d.icon + ' ' + d.label + '!', d.color, innerWidth / 2, innerHeight / 2);
+            addScore(120);
+        }
+
+        function refreshPUHUD() {
+            const el = document.getElementById('powerup-hud');
+            el.innerHTML = '';
+            for (const [t, tl] of Object.entries(activePowerups)) {
+                if (tl <= 0) continue;
+                const d = PU_DATA[t];
+                const ch = document.createElement('div');
+                ch.className = 'pu-chip';
+                ch.style.borderColor = d.color;
+                ch.style.color = d.color;
+                ch.innerHTML =
+                    `<span>${d.icon}</span><span>${d.label}</span><span style="margin-left:auto;font-size:9px">${tl.toFixed(1)}s</span>`;
+                el.appendChild(ch);
+            }
+        }
+
+        // ── FRACTURE CORE ───────────────────────────────────────────────────
+        function applyHit(impactPt, tool) {
+            if (!currentShape) return;
+            const dmg = calcDmg(tool);
+            shapeHP = Math.max(0, shapeHP - dmg);
+            refreshIntegrity();
+            applyDmgVisual(shapeHP / shapeMaxHP);
+            burstSparks(impactPt, tool, tool === 'bomb' ? 35 : tool === 'wave' ? 30 : 20);
+
+            if (shapeHP <= 0) {
+                fullShatter(impactPt, tool);
+            } else {
+                chipOff(impactPt, tool, dmg);
+            }
+
+            const pts = Math.floor(dmg * combo);
+            addScore(pts);
+            combo = Math.min(combo + .5, 8);
+            comboTimer = 3;
+            totalHits++;
+            document.getElementById('hits-val').textContent = totalHits;
+            document.getElementById('combo-val').textContent = '×' + combo.toFixed(1);
+
+            // Score popup near impact point
+            const sc = impactPt.clone().project(camera);
+            popup('+' + pts, '#ffcc44',
+                (sc.x * .5 + .5) * innerWidth,
+                (-sc.y * .5 + .5) * innerHeight - 45
+            );
+        }
+
+        function calcDmg(tool) {
+            const base = {
+                hammer: 22,
+                bomb: 50,
+                wave: 35,
+                laser: 28
+            } [tool] || 22;
+            const puMul = activePowerups.superforce ? 2.2 : 1;
+            return base * (forceLevel / 5) * puMul;
+        }
+
+        function applyDmgVisual(ratio) {
+            if (!currentShape) return;
+            const mat = currentShape.material;
+            if (ratio > .66) mat.emissive.set(0x100400);
+            else if (ratio > .33) {
+                mat.emissive.set(0x3d0800);
+                mat.color.lerp(new THREE.Color(0xff4400), .18);
+            } else {
+                mat.emissive.set(0x7a0000);
+                mat.color.lerp(new THREE.Color(0xff0000), .25);
+            }
+        }
+
+        function chipOff(impactPt, tool, dmg) {
+            const bbox = new THREE.Box3().setFromObject(currentShape);
+            const sz = new THREE.Vector3();
+            bbox.getSize(sz);
+            const sp = Math.min(sz.x, sz.y, sz.z) * .38;
+            const n = Math.floor(3 + dmg / 8 * (activePowerups.multibreak ? 2.6 : 1));
+            const col = currentShape.userData.baseColor || new THREE.Color(0x4499ff);
+            for (let i = 0; i < n; i++) spawnFrag(impactPt, sp, col, tool, false);
+        }
+
+        function fullShatter(impactPt, tool) {
+            if (!currentShape) return;
+            const bbox = new THREE.Box3().setFromObject(currentShape);
+            const center = new THREE.Vector3(),
+                sz = new THREE.Vector3();
+            bbox.getCenter(center);
+            bbox.getSize(sz);
+            const spread = Math.max(sz.x, sz.y, sz.z);
+            const col = currentShape.userData.baseColor || new THREE.Color(0x4499ff);
+            const n = 24 + Math.floor(forceLevel * 4) * (activePowerups.multibreak ? 2 : 1);
+            for (let i = 0; i < n; i++) spawnFrag(center, spread, col, tool, true);
+
+            scene.remove(currentShape);
+            currentShape.geometry.dispose();
+            currentShape.material.dispose();
+            currentShape = null;
+
+            flashScreen(.6);
+            screenShake(20, .6);
+            burstSparks(center, tool, 45);
+            spawnPowerups(center);
+
+            const bonus = Math.floor(650 * combo);
+            addScore(bonus);
+            popup('☠ SHATTERED! +' + bonus, '#ff7733', innerWidth / 2, innerHeight / 2 - 90);
+
+            if (challengeActive) {
+                addScore(350);
+                popup('🎯 BONUS +350', '#ffdd00', innerWidth / 2, innerHeight / 2 + 50);
+                const shapes = ['cube', 'sphere', 'cylinder', 'torus', 'cone', 'diamond', 'icosahedron', 'knot'];
+                setTimeout(() => loadShape(shapes[Math.floor(Math.random() * shapes.length)]), 600);
+            }
+        }
+
+        // ── BOMB TOOL ───────────────────────────────────────────────────────
+        function clearBomb() {
+            if (!bombPending) return;
+            scene.remove(bombPending.mesh);
+            bombPending.mesh.geometry.dispose();
+            bombPending.mesh.material.dispose();
+            bombPending = null;
+        }
+
+        function plantBomb(pos) {
+            clearBomb();
+            const geo = new THREE.SphereGeometry(.28, 16, 16);
+            const mat = new THREE.MeshStandardMaterial({
+                color: 0xff2200,
+                emissive: 0x880000
+            });
+            const mesh = new THREE.Mesh(geo, mat);
+            mesh.position.copy(pos).y += .35;
+            scene.add(mesh);
+            bombPending = {
+                mesh,
+                pos: pos.clone(),
+                timer: 2.5
+            };
+            hint('Bomb planted! Detonates in 2.5 seconds…', 2500);
+        }
+
+        // ── SCORE / HUD ─────────────────────────────────────────────────────
+        function addScore(n) {
+            score += Math.floor(n * (activePowerups.score2x ? 2 : 1));
+            document.getElementById('score-val').textContent = score.toLocaleString();
+        }
+
+        function popup(txt, color, x, y) {
+            const el = document.createElement('div');
+            el.className = 'score-pop';
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            el.style.color = color;
+            el.textContent = txt;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 1450);
+        }
+
+        function flashScreen(v) {
+            const f = document.getElementById('flash');
+            f.style.opacity = v;
+            setTimeout(() => {
+                f.style.opacity = 0;
+            }, 95);
+        }
+
+        function screenShake(mag, dur) {
+            shakeIntensity = mag;
+            shakeDur = dur;
+            shakeElapsed = 0;
+        }
+
+        function refreshIntegrity() {
+            const pct = (shapeHP / shapeMaxHP) * 100;
+            const fill = document.getElementById('integrity-fill');
+            fill.style.width = pct + '%';
+            if (pct > 66) fill.style.background = 'linear-gradient(90deg,#00ff88,#00cc55)';
+            else if (pct > 33) fill.style.background = 'linear-gradient(90deg,#ff8800,#ffcc00)';
+            else fill.style.background = 'linear-gradient(90deg,#ff1100,#ff4400)';
+        }
+
+        let _hintTid;
+
+        function hint(msg, ms) {
+            ms = ms || 3000;
+            const t = document.getElementById('tooltip');
+            t.textContent = msg;
+            t.style.opacity = 1;
+            clearTimeout(_hintTid);
+            _hintTid = setTimeout(() => {
+                t.style.opacity = 0;
+            }, ms);
+        }
+
+        // ── TOOL SELECTION ──────────────────────────────────────────────────
+        function setTool(t) {
+            currentTool = t;
+            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tool-' + t).classList.add('active');
+            const names = {
+                hammer: 'Hammer Strike',
+                bomb: 'Timed Bomb (2.5s)',
+                wave: 'Shockwave Burst',
+                laser: 'Energy Blast'
+            };
+            document.getElementById('tool-name').textContent = names[t];
+            const tips = {
+                hammer: 'Click to deliver a powerful hammer blow!',
+                bomb: 'Click shape to plant a bomb — it explodes in 2.5 seconds!',
+                wave: 'Shockwave radiates massive force outward from the impact point!',
+                laser: 'Energy Blast — concentrated burst over a wide area!',
+            };
+            hint(tips[t], 3500);
+        }
+
+        // ── CHALLENGE MODE ──────────────────────────────────────────────────
+        function startChallenge() {
+            if (challengeActive) return;
+            challengeActive = true;
+            challengeTime = 30;
+            document.getElementById('challenge-banner').style.display = 'block';
+            document.getElementById('challenge-btn').textContent = '⏱ Challenge Running…';
+            if (!currentShape) {
+                const shapes = ['cube', 'sphere', 'cylinder', 'torus', 'cone', 'diamond', 'icosahedron', 'knot'];
+                loadShape(shapes[Math.floor(Math.random() * shapes.length)]);
+            }
+            hint('CHALLENGE: Shatter as many shapes as possible in 30 seconds!', 4500);
+        }
+
+        function endChallenge() {
+            challengeActive = false;
+            document.getElementById('challenge-banner').style.display = 'none';
+            document.getElementById('challenge-btn').textContent = '⏱ Start 30s Challenge';
+            popup('⏱ TIME\'S UP!  Final: ' + score.toLocaleString(), '#ffdd00', innerWidth / 2, innerHeight / 2);
+        }
+
+        // ── MOUSE / INPUT ───────────────────────────────────────────────────
+        let rightDown = false,
+            lastMX = 0,
+            lastMY = 0;
+
+        renderer.domElement.addEventListener('mousedown', e => {
+            if (e.button === 2) {
+                rightDown = true;
+                lastMX = e.clientX;
+                lastMY = e.clientY;
+            } else if (e.button === 0) handleClick(e);
+        });
+
+        renderer.domElement.addEventListener('mousemove', e => {
+            if (!rightDown) return;
+            camTheta -= (e.clientX - lastMX) * .005;
+            camPhi = Math.max(.18, Math.min(Math.PI * .88, camPhi + (e.clientY - lastMY) * .005));
+            lastMX = e.clientX;
+            lastMY = e.clientY;
+            refreshCamera();
+        });
+
+        renderer.domElement.addEventListener('mouseup', () => {
+            rightDown = false;
+        });
+        renderer.domElement.addEventListener('wheel', e => {
+            camRadius = Math.max(4, Math.min(40, camRadius + e.deltaY * .013));
+            refreshCamera();
+        }, {
+            passive: true
+        });
+        renderer.domElement.addEventListener('contextmenu', e => e.preventDefault());
+
+        function handleClick(e) {
+            if (e.clientX < 232) return; // ignore sidebar clicks
+            ndcMouse.set(
+                (e.clientX / innerWidth) * 2 - 1,
+                (e.clientY / innerHeight) * -2 + 1
+            );
+            raycaster.setFromCamera(ndcMouse, camera);
+
+            // Powerup collection (recursive to catch glow child)
+            const puMeshes = powerupObjs.filter(p => !p.collected).map(p => p.mesh);
+            const puHits = raycaster.intersectObjects(puMeshes, true);
+            if (puHits.length) {
+                const hit = puHits[0].object;
+                const pu = powerupObjs.find(p => p.mesh === hit || p.mesh === hit.parent);
+                if (pu) {
+                    collectPU(pu);
+                    return;
+                }
+            }
+
+            // Shape hit
+            if (!currentShape) {
+                hint('Load a shape first!', 2000);
+                return;
+            }
+            const shapeHits = raycaster.intersectObject(currentShape);
+            if (!shapeHits.length) return;
+            const pt = shapeHits[0].point;
+
+            if (currentTool === 'bomb') {
+                plantBomb(pt);
+                return;
+            }
+            applyHit(pt, currentTool);
+        }
+
+        // ── RESET ───────────────────────────────────────────────────────────
+        function resetAll() {
+            removeShape();
+            clearDebris();
+            clearBomb();
+            for (const p of powerupObjs) scene.remove(p.mesh);
+            powerupObjs = [];
+            sparks.forEach(s => scene.remove(s.mesh));
+            sparks = [];
+            score = 0;
+            combo = 1;
+            totalHits = 0;
+            debrisCount = 0;
+            activePowerups = {};
+            document.getElementById('score-val').textContent = '0';
+            document.getElementById('combo-val').textContent = '×1';
+            document.getElementById('hits-val').textContent = '0';
+            document.getElementById('frags-val').textContent = '0';
+            refreshPUHUD();
+            if (challengeActive) endChallenge();
+            hint('Scene reset. Load a shape to begin!', 3000);
+        }
+
+        // ── FILE INPUT / DRAG-DROP ───────────────────────────────────────────
+        document.getElementById('obj-in').addEventListener('change', e => {
+            const f = e.target.files[0];
+            if (!f) return;
+            const r = new FileReader();
+            r.onload = ev => {
+                const geo = parseOBJ(ev.target.result);
+                if (geo) loadOBJGeo(geo);
+                else hint('Could not parse OBJ — ensure it contains v and f lines.', 4000);
+            };
+            r.readAsText(f);
+            e.target.value = '';
+        });
+
+        const uz = document.getElementById('upload-zone');
+        uz.addEventListener('dragover', e => {
+            e.preventDefault();
+            uz.style.borderColor = '#ff5500';
+        });
+        uz.addEventListener('dragleave', () => {
+            uz.style.borderColor = '';
+        });
+        uz.addEventListener('drop', e => {
+            e.preventDefault();
+            uz.style.borderColor = '';
+            const f = e.dataTransfer.files[0];
+            if (f && f.name.toLowerCase().endsWith('.obj')) {
+                const r = new FileReader();
+                r.onload = ev => {
+                    const geo = parseOBJ(ev.target.result);
+                    if (geo) loadOBJGeo(geo);
+                };
+                r.readAsText(f);
+            } else {
+                hint('Please drop a .obj file!', 2500);
+            }
+        });
+
+        document.getElementById('force-slider').addEventListener('input', e => {
+            forceLevel = +e.target.value;
+            document.getElementById('force-val').textContent = forceLevel;
+        });
+
+        // ── MAIN GAME LOOP ───────────────────────────────────────────────────
+        function animate(ts) {
+            requestAnimationFrame(animate);
+            const rawDt = Math.min((ts - lastTS) / 1000, .055);
+            lastTS = ts;
+            const dt = activePowerups.timeslow ? rawDt * .27 : rawDt;
+
+            // Animate ambient lights
+            fireLight.position.set(Math.sin(ts * .0007) * 10, 9, Math.cos(ts * .0007) * 10);
+            coldLight.position.set(Math.cos(ts * .0009) * 10, 6, Math.sin(ts * .0009) * 10);
+
+            // Gently rotate shape
+            if (currentShape) currentShape.rotation.y += rawDt * .24;
+
+            // Combo decay
+            if (comboTimer > 0) {
+                comboTimer -= rawDt;
+                if (comboTimer <= 0) {
+                    combo = 1;
+                    document.getElementById('combo-val').textContent = '×1';
+                }
+            }
+
+            // Active powerup timers
+            let puDirty = false;
+            for (const t of Object.keys(activePowerups)) {
+                activePowerups[t] -= rawDt;
+                if (activePowerups[t] <= 0) {
+                    delete activePowerups[t];
+                    puDirty = true;
+                }
+            }
+            if (puDirty || Object.keys(activePowerups).length) refreshPUHUD();
+
+            // Challenge countdown
+            if (challengeActive) {
+                challengeTime -= rawDt;
+                document.getElementById('challenge-timer').textContent = Math.max(0, challengeTime).toFixed(1);
+                if (challengeTime <= 0) endChallenge();
+            }
+
+            // Bomb fuse
+            if (bombPending) {
+                bombPending.timer -= rawDt;
+                const blink = Math.sin(ts * .02 * (3.5 - Math.min(bombPending.timer, 3))) > 0;
+                bombPending.mesh.material.emissive.setHex(blink ? 0xff0000 : 0x440000);
+                bombPending.mesh.scale.setScalar(1 + Math.sin(ts * .025) * .08);
+                if (bombPending.timer <= 0) {
+                    const pos = bombPending.pos.clone();
+                    clearBomb();
+                    if (currentShape) applyHit(pos, 'bomb');
+                    else {
+                        burstSparks(pos, 'bomb', 40);
+                        flashScreen(.65);
+                        screenShake(22, .7);
+                    }
+                }
+            }
+
+            // Screen shake
+            if (shakeElapsed < shakeDur) {
+                shakeElapsed += rawDt;
+                const mag = shakeIntensity * (1 - shakeElapsed / shakeDur) * .009;
+                camera.position.x += (Math.random() - .5) * mag;
+                camera.position.y += (Math.random() - .5) * mag * .5;
+            }
+
+            // Update fragments
+            fragments = fragments.filter(f => {
+                const alive = f.update(dt);
+                if (!alive) {
+                    scene.remove(f.mesh);
+                    f.mesh.geometry.dispose();
+                    f.mesh.material.dispose();
+                }
+                return alive;
+            });
+
+            // Update sparks
+            sparks = sparks.filter(s => {
+                const alive = s.update(dt);
+                if (!alive) {
+                    scene.remove(s.mesh);
+                    s.mesh.geometry.dispose();
+                    s.mesh.material.dispose();
+                }
+                return alive;
+            });
+
+            // Update powerup orbs
+            powerupObjs = powerupObjs.filter(p => {
+                const alive = p.update(dt);
+                if (!alive) scene.remove(p.mesh);
+                return alive;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        // ── RESIZE ──────────────────────────────────────────────────────────
+        window.addEventListener('resize', () => {
+            camera.aspect = innerWidth / innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(innerWidth, innerHeight);
+        });
+
+        // ── INIT ────────────────────────────────────────────────────────────
+        refreshIntegrity();
+        loadShape('cube');
+        hint('Welcome to RuinMaker! Left-click to destroy  |  Right-drag to orbit  |  Scroll to zoom', 6000);
+        requestAnimationFrame(animate);
+    </script>
+</body>
+
+</html>

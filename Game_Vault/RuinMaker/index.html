@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RuinMaker – 3D Destruction Playground</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap');
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --orange: #ff5500;
+            --orange-glow: rgba(255, 85, 0, .65);
+            --orange-dim: rgba(255, 85, 0, .18);
+            --dark: #050608;
+            --card-bg: rgba(255, 255, 255, .03);
+            --border: rgba(255, 255, 255, .08);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--dark);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ── CANVAS BACKGROUND ─────────────────────────── */
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ── NAV ───────────────────────────────────────── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 40px;
+            background: rgba(5, 6, 8, .7);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(255, 85, 0, .15);
+        }
+
+        .nav-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--orange);
+            text-shadow: 0 0 20px var(--orange-glow);
+            letter-spacing: 3px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, .5);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: color .2s;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .nav-play {
+            background: var(--orange);
+            color: #fff !important;
+            padding: 7px 20px;
+            border-radius: 5px;
+            text-shadow: none !important;
+            transition: background .2s, box-shadow .2s !important;
+        }
+
+        .nav-play:hover {
+            background: #ff7733 !important;
+            box-shadow: 0 0 18px var(--orange-glow);
+        }
+
+        /* ── HERO ──────────────────────────────────────── */
+        #hero {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--orange);
+            border: 1px solid rgba(255, 85, 0, .35);
+            padding: 5px 16px;
+            border-radius: 999px;
+            margin-bottom: 28px;
+            background: var(--orange-dim);
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(52px, 10vw, 110px);
+            font-weight: 900;
+            line-height: .95;
+            letter-spacing: -2px;
+            background: linear-gradient(135deg, #ffffff 30%, #ff7733 70%, #ff3300 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+
+        .hero-sub {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(14px, 2.5vw, 22px);
+            font-weight: 400;
+            color: rgba(255, 255, 255, .35);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 36px;
+        }
+
+        .hero-desc {
+            max-width: 540px;
+            font-size: 17px;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, .5);
+            margin-bottom: 50px;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--orange);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 16px 40px;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background .2s, transform .2s, box-shadow .2s;
+            box-shadow: 0 0 30px var(--orange-glow);
+        }
+
+        .btn-primary:hover {
+            background: #ff7733;
+            transform: translateY(-3px);
+            box-shadow: 0 0 50px var(--orange-glow);
+        }
+
+        .btn-primary .arrow {
+            font-size: 18px;
+            transition: transform .2s;
+        }
+
+        .btn-primary:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            color: rgba(255, 255, 255, .7);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            padding: 16px 36px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, .18);
+            text-decoration: none;
+            transition: border-color .2s, color .2s, background .2s;
+        }
+
+        .btn-secondary:hover {
+            border-color: rgba(255, 255, 255, .5);
+            color: #fff;
+            background: rgba(255, 255, 255, .05);
+        }
+
+        /* scroll cue */
+        .scroll-cue {
+            position: absolute;
+            bottom: 36px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, .25);
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .scroll-cue svg {
+            width: 22px;
+            opacity: .4;
+        }
+
+        @keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(7px)} }
+
+        /* ── DIVIDER ───────────────────────────────────── */
+        .section-divider {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 10%;
+            margin: 10px 0;
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 85, 0, .3));
+        }
+
+        .section-divider::after {
+            background: linear-gradient(270deg, transparent, rgba(255, 85, 0, .3));
+        }
+
+        .section-divider span {
+            margin: 0 20px;
+            font-size: 9px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255, 85, 0, .5);
+        }
+
+        /* ── FEATURES ──────────────────────────────────── */
+        #features {
+            position: relative;
+            z-index: 10;
+            padding: 90px 5% 80px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--orange);
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(26px, 4vw, 42px);
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1px;
+        }
+
+        .section-title span {
+            color: var(--orange);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .feat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 28px 24px;
+            transition: border-color .25s, background .25s, transform .25s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feat-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--orange-dim) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity .3s;
+        }
+
+        .feat-card:hover {
+            border-color: rgba(255, 85, 0, .35);
+            transform: translateY(-4px);
+        }
+
+        .feat-card:hover::before {
+            opacity: 1;
+        }
+
+        .feat-icon {
+            font-size: 32px;
+            margin-bottom: 14px;
+            display: block;
+        }
+
+        .feat-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .feat-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, .45);
+            line-height: 1.65;
+        }
+
+        /* ── TOOLS SHOWCASE ────────────────────────────── */
+        #tools {
+            position: relative;
+            z-index: 10;
+            padding: 80px 5%;
+            background: rgba(255, 85, 0, .025);
+            border-top: 1px solid rgba(255, 85, 0, .1);
+            border-bottom: 1px solid rgba(255, 85, 0, .1);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 22px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            transition: border-color .2s, transform .2s;
+        }
+
+        .tool-card:hover {
+            border-color: rgba(255, 85, 0, .4);
+            transform: scale(1.03);
+        }
+
+        .tool-icon {
+            font-size: 26px;
+        }
+
+        .tool-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--orange);
+            letter-spacing: 1.5px;
+        }
+
+        .tool-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .4);
+            line-height: 1.6;
+        }
+
+        /* ── POWERUPS ──────────────────────────────────── */
+        #powerups {
+            position: relative;
+            z-index: 10;
+            padding: 80px 5%;
+        }
+
+        .powerups-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            justify-content: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .pu-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            min-width: 210px;
+            flex: 1;
+            transition: border-color .2s, transform .2s;
+        }
+
+        .pu-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .pu-dot {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .pu-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 3px;
+        }
+
+        .pu-effect {
+            font-size: 11px;
+            color: rgba(255, 255, 255, .4);
+        }
+
+        /* ── HOW TO PLAY ───────────────────────────────── */
+        #how-to {
+            position: relative;
+            z-index: 10;
+            padding: 80px 5%;
+            background: rgba(0, 0, 0, .3);
+            border-top: 1px solid rgba(255, 255, 255, .05);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .step {
+            text-align: center;
+            padding: 22px 16px;
+        }
+
+        .step-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 42px;
+            font-weight: 900;
+            color: rgba(255, 85, 0, .2);
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .step-label {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, .4);
+            line-height: 1.65;
+        }
+
+        /* ── CTA ───────────────────────────────────────── */
+        #cta {
+            position: relative;
+            z-index: 10;
+            padding: 100px 5%;
+            text-align: center;
+        }
+
+        #cta h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(28px, 5vw, 52px);
+            font-weight: 900;
+            margin-bottom: 18px;
+        }
+
+        #cta p {
+            color: rgba(255, 255, 255, .45);
+            font-size: 16px;
+            max-width: 440px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+
+        /* ── FOOTER ────────────────────────────────────── */
+        footer {
+            position: relative;
+            z-index: 10;
+            border-top: 1px solid rgba(255, 255, 255, .06);
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, .25);
+        }
+
+        .footer-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--orange);
+            text-shadow: 0 0 12px var(--orange-glow);
+            letter-spacing: 3px;
+        }
+
+        /* ── PARTICLES CSS (generated by JS) ───────────── */
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: drift linear infinite;
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: .6;
+            }
+            100% {
+                transform: translateY(-80px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Particle canvas bg -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Nav -->
+    <nav>
+        <a href="#" class="nav-logo">☠ RUINMAKER</a>
+        <ul class="nav-links">
+            <li><a href="../index.html">← Game Vault</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#tools">Tools</a></li>
+            <li><a href="#how-to">How to Play</a></li>
+            <li><a href="game.html" class="nav-play">▶ Play Now</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section id="hero">
+        <div class="hero-tag">☠ 3D Destruction Playground</div>
+        <h1 class="hero-title">RUIN<br>MAKER</h1>
+        <p class="hero-sub">Break. Shatter. Obliterate.</p>
+        <p class="hero-desc">
+            Load a 3D model, pick your weapon, and unleash real-time physics destruction.
+            Collect powerups, chain combos, and leave nothing standing.
+        </p>
+        <div class="hero-btns">
+            <a href="game.html" class="btn-primary">
+                ▶ Play Now <span class="arrow">→</span>
+            </a>
+            <a href="#features" class="btn-secondary">
+                🔍 See Features
+            </a>
+        </div>
+
+        <div class="scroll-cue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7" />
+            </svg>
+            Scroll
+        </div>
+    </section>
+
+    <div class="section-divider"><span>Features</span></div>
+
+    <!-- Features -->
+    <section id="features">
+        <div class="section-header">
+            <div class="section-tag">What you can do</div>
+            <h2 class="section-title">Built for <span>Destruction</span></h2>
+        </div>
+        <div class="features-grid">
+            <div class="feat-card">
+                <span class="feat-icon">💥</span>
+                <div class="feat-title">Physics Fragments</div>
+                <p class="feat-desc">Every hit sends real debris flying with gravity, bounce, and tumbling rotation.</p>
+            </div>
+            <div class="feat-card">
+                <span class="feat-icon">🎯</span>
+                <div class="feat-title">Precision Impact</div>
+                <p class="feat-desc">3D raycasting means your tool hits exactly where your cursor lands on the model.
+                </p>
+            </div>
+            <div class="feat-card">
+                <span class="feat-icon">⭐</span>
+                <div class="feat-title">Combo Multiplier</div>
+                <p class="feat-desc">Chain hits rapidly to build your combo up to ×8 for massive score bonuses.</p>
+            </div>
+            <div class="feat-card">
+                <span class="feat-icon">🌀</span>
+                <div class="feat-title">8 Preloaded Shapes</div>
+                <p class="feat-desc">Cube, Sphere, Cylinder, Torus, Cone, Diamond, Crystal, and Torus Knot — all ready
+                    to destroy.</p>
+            </div>
+            <div class="feat-card">
+                <span class="feat-icon">📂</span>
+                <div class="feat-title">Upload Any .OBJ</div>
+                <p class="feat-desc">Drag and drop your own 3D model — it's auto-scaled, centred, and fully
+                    destructible.</p>
+            </div>
+            <div class="feat-card">
+                <span class="feat-icon">⏱</span>
+                <div class="feat-title">30s Challenge Mode</div>
+                <p class="feat-desc">Race the clock — shatter as many shapes as possible before time runs out.</p>
+            </div>
+            <div class="feat-card">
+                <span class="feat-icon">✨</span>
+                <div class="feat-title">Spark Particles</div>
+                <p class="feat-desc">Every impact erupts in a burst of coloured sparks unique to each tool type.</p>
+            </div>
+            <div class="feat-card">
+                <span class="feat-icon">📊</span>
+                <div class="feat-title">Live Damage Bar</div>
+                <p class="feat-desc">Watch the structure integrity drain — colour shifts orange then red as it cracks
+                    under pressure.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"><span>Tools</span></div>
+
+    <!-- Tools -->
+    <section id="tools">
+        <div class="section-header">
+            <div class="section-tag">4 weapons of mass destruction</div>
+            <h2 class="section-title">Choose Your <span>Weapon</span></h2>
+        </div>
+        <div class="tools-grid">
+            <div class="tool-card">
+                <span class="tool-icon">🔨</span>
+                <div class="tool-name">Hammer Strike</div>
+                <p class="tool-desc">Precise, powerful blow at the exact click point. Great for methodical demolition.
+                </p>
+            </div>
+            <div class="tool-card">
+                <span class="tool-icon">💣</span>
+                <div class="tool-name">Timed Bomb</div>
+                <p class="tool-desc">Plant on the shape — a blinking fuse counts down 2.5 seconds before detonation.</p>
+            </div>
+            <div class="tool-card">
+                <span class="tool-icon">🌊</span>
+                <div class="tool-name">Shockwave Burst</div>
+                <p class="tool-desc">Radial force ripples outward, sending fragments flying in every direction.</p>
+            </div>
+            <div class="tool-card">
+                <span class="tool-icon">⚡</span>
+                <div class="tool-name">Energy Blast</div>
+                <p class="tool-desc">Concentrated area damage — scorched purple sparks and maximum fragmentation.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"><span>Powerups</span></div>
+
+    <!-- Powerups -->
+    <section id="powerups">
+        <div class="section-header">
+            <div class="section-tag">Fall from broken shapes</div>
+            <h2 class="section-title">Collect <span>Powerups</span></h2>
+        </div>
+        <div class="powerups-row">
+            <div class="pu-card" style="border-color:rgba(255,85,0,.3)">
+                <div class="pu-dot" style="background:rgba(255,85,0,.2)">💥</div>
+                <div>
+                    <div class="pu-name" style="color:#ff5500">Super Force</div>
+                    <div class="pu-effect">2× damage output for 12 seconds</div>
+                </div>
+            </div>
+            <div class="pu-card" style="border-color:rgba(0,255,136,.2)">
+                <div class="pu-dot" style="background:rgba(0,255,136,.12)">⚡</div>
+                <div>
+                    <div class="pu-name" style="color:#00ff88">Multi Break</div>
+                    <div class="pu-effect">2.6× more fragments per hit for 14s</div>
+                </div>
+            </div>
+            <div class="pu-card" style="border-color:rgba(68,170,255,.2)">
+                <div class="pu-dot" style="background:rgba(68,170,255,.12)">⏱</div>
+                <div>
+                    <div class="pu-name" style="color:#44aaff">Slow Time</div>
+                    <div class="pu-effect">Matrix slow-motion physics for 9s</div>
+                </div>
+            </div>
+            <div class="pu-card" style="border-color:rgba(255,221,0,.2)">
+                <div class="pu-dot" style="background:rgba(255,221,0,.12)">★</div>
+                <div>
+                    <div class="pu-name" style="color:#ffdd00">Score ×2</div>
+                    <div class="pu-effect">All points doubled for 18 seconds</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"><span>How to Play</span></div>
+
+    <!-- How to play -->
+    <section id="how-to">
+        <div class="section-header">
+            <div class="section-tag">Get started in seconds</div>
+            <h2 class="section-title">How to <span>Play</span></h2>
+        </div>
+        <div class="steps-grid">
+            <div class="step">
+                <div class="step-num">01</div>
+                <div class="step-label">Pick a Shape</div>
+                <p class="step-desc">Choose one of 8 preloaded shapes from the sidebar, or upload your own .obj file.
+                </p>
+            </div>
+            <div class="step">
+                <div class="step-num">02</div>
+                <div class="step-label">Select Your Tool</div>
+                <p class="step-desc">Pick from Hammer, Bomb, Shockwave, or Energy Blast. Adjust force with the slider.
+                </p>
+            </div>
+            <div class="step">
+                <div class="step-num">03</div>
+                <div class="step-label">Left Click to Destroy</div>
+                <p class="step-desc">Click directly on the shape. Each hit chips off debris and drains its integrity
+                    bar.</p>
+            </div>
+            <div class="step">
+                <div class="step-num">04</div>
+                <div class="step-label">Collect Powerups</div>
+                <p class="step-desc">When a shape shatters, glowing orbs fly out. Click them before they disappear!</p>
+            </div>
+            <div class="step">
+                <div class="step-num">05</div>
+                <div class="step-label">Right Drag to Orbit</div>
+                <p class="step-desc">Hold right mouse and drag to rotate the camera around the shape. Scroll to zoom.
+                </p>
+            </div>
+            <div class="step">
+                <div class="step-num">06</div>
+                <div class="step-label">Chain Combos</div>
+                <p class="step-desc">Hit rapidly to build your ×8 combo multiplier. Time out means combo resets!</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider"><span>Ready?</span></div>
+
+    <!-- CTA -->
+    <section id="cta">
+        <h2>Ready to Destroy?</h2>
+        <p>Load a shape, pick your weapon, and leave nothing but rubble.</p>
+        <a href="game.html" class="btn-primary" style="font-size:16px;padding:18px 52px">
+            ▶ Launch RuinMaker <span class="arrow">→</span>
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">☠ RUINMAKER</div>
+        <div>3D Destruction Playground · Physics-based destruction engine</div>
+        <div>Built with Three.js</div>
+    </footer>
+
+    <script>
+        /* ── ANIMATED BACKGROUND ─────────────────────────── */
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeBg() {
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+        }
+        resizeBg();
+        window.addEventListener('resize', resizeBg);
+
+        // Floating grid lines + particle field
+        const dots = Array.from({
+            length: 55
+        }, () => ({
+            x: Math.random() * innerWidth,
+            y: Math.random() * innerHeight,
+            r: .5 + Math.random() * 2,
+            speed: .15 + Math.random() * .35,
+            hue: Math.random() > .6 ? 20 : 220,
+            opacity: .1 + Math.random() * .35,
+        }));
+
+        function drawBg(ts) {
+            requestAnimationFrame(drawBg);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Subtle grid
+            ctx.strokeStyle = 'rgba(255,85,0,.04)';
+            ctx.lineWidth = 1;
+            const gs = 70;
+            for (let x = 0; x < canvas.width; x += gs) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += gs) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+
+            // Rising particles
+            for (const d of dots) {
+                d.y -= d.speed;
+                if (d.y < -10) {
+                    d.y = canvas.height + 10;
+                    d.x = Math.random() * canvas.width;
+                }
+                ctx.beginPath();
+                ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${d.hue},80%,60%,${d.opacity})`;
+                ctx.fill();
+            }
+
+            // Slow diagonal streak
+            const streak = ((ts * .015) % (canvas.width + canvas.height));
+            const grad = ctx.createLinearGradient(streak - 200, 0, streak, 200);
+            grad.addColorStop(0, 'transparent');
+            grad.addColorStop(.5, 'rgba(255,85,0,.04)');
+            grad.addColorStop(1, 'transparent');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        requestAnimationFrame(drawBg);
+
+        /* ── SCROLL FADE-IN ──────────────────────────────── */
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.style.opacity = '1';
+                    e.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, {
+            threshold: .12
+        });
+
+        document.querySelectorAll('.feat-card, .tool-card, .pu-card, .step').forEach(el => {
+            el.style.cssText +=
+                'opacity:0;transform:translateY(28px);transition:opacity .55s ease,transform .55s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>
