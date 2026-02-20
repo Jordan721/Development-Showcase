@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="7" fill="#161b22"/>
+
+  <!-- Left rail -->
+  <rect x="7" y="2" width="3" height="28" rx="1.5" fill="#00d4aa"/>
+
+  <!-- Right rail -->
+  <rect x="22" y="2" width="3" height="28" rx="1.5" fill="#00d4aa"/>
+
+  <!-- Cross ties -->
+  <rect x="4" y="5"    width="24" height="2.5" rx="1" fill="#00d4aa" opacity="0.45"/>
+  <rect x="4" y="11.5" width="24" height="2.5" rx="1" fill="#00d4aa" opacity="0.45"/>
+  <rect x="4" y="18"   width="24" height="2.5" rx="1" fill="#00d4aa" opacity="0.45"/>
+  <rect x="4" y="24.5" width="24" height="2.5" rx="1" fill="#00d4aa" opacity="0.45"/>
+</svg>
