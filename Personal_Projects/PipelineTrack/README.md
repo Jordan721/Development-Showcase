@@ -1,6 +1,8 @@
 # PipelineTrack
 
-A personal job search companion built to take the chaos out of hunting for work in tech. Track every application, see how well your skills match each role, and get pointed toward certifications and courses that close your gaps — all in one place, no account required.
+A personal job search companion built to take the chaos out of hunting for work in tech. Track every application, see how well your skills match each role, polish your resume, and get pointed toward certifications and courses that close your gaps — all in one place, no account required.
+
+> **Note:** PipelineTrack is built specifically for tech industry job searches (software engineering, data analytics, IT, etc.). Support for other industries may be added in the future.
 
 ---
 
@@ -13,6 +15,7 @@ I built PipelineTrack to solve that for myself. I needed one tool that could:
 - Keep tabs on every job I applied to without losing track of the details
 - Tell me honestly how well my current skill set matches a job description
 - Show me exactly what I'm missing and where I can learn it
+- Help me put my best foot forward with a polished resume
 - Work offline, right in my browser, with no sign-up or backend
 
 If you're in a similar spot — searching for your first role or making a pivot in tech — this tool was built with you in mind too.
@@ -36,6 +39,13 @@ Add your skills and tag each one as Beginner, Intermediate, or Expert. Write a s
 ### Learning Hub
 Built on your aggregate skill gaps across every tracked job, the Learning Hub recommends courses and certifications mapped to the skills you need most. Resources span platforms like Coursera, Google, AWS, LinkedIn Learning, Udemy, and more, with estimated time commitments included. Bookmark the ones you plan to pursue and filter to see only your saved picks.
 
+### Resume Hub
+A dedicated workspace for getting your resume and portfolio ready:
+
+- **Resume Parser** — Upload your resume as a PDF, Word (.docx), or plain text file (or paste the text directly). The parser extracts your content and cross-references it against the skills in your profile, highlighting matches and gaps at a glance.
+- **Writing Polish** — Run your resume text through a rule-based writing checker that flags passive voice, filler words, weak phrases, and vague language. Each issue comes with a suggestion and a quality score so you can see improvement over time.
+- **Resources & AI Tools** — A curated collection of tools and platforms to help you build a stronger resume and portfolio, organized by category: resume builders, AI writing assistants, portfolio hosts, and job search platforms.
+
 ---
 
 ## Tech Stack
@@ -46,9 +56,11 @@ Built on your aggregate skill gaps across every tracked job, the Learning Hub re
 | Styling | CSS3 (custom properties, CSS Grid, Flexbox) |
 | Logic | Vanilla JavaScript (ES6+) |
 | Storage | Browser localStorage (no backend, no account) |
+| PDF Parsing | PDF.js v3.11.174 (via CDN) |
+| Word Parsing | Mammoth.js v1.6.0 (via CDN) |
 | Fonts | Inter via Google Fonts |
 
-No frameworks, no build tools, no dependencies to install. Open `index.html` in any modern browser and it works.
+No frameworks, no build tools, no server required. Open `index.html` in any modern browser and it works.
 
 ---
 
@@ -60,6 +72,7 @@ No frameworks, no build tools, no dependencies to install. Open `index.html` in 
 4. Go to **Job Board**, click **+ Add Job**, and paste a real job description
 5. Click any job card to see your fit score and skill breakdown
 6. Check the **Learning Hub** to see what to learn next
+7. Head to **Resume Hub** to upload your resume, check your writing, and explore tools
 
 All data is saved to your browser's localStorage. Nothing is sent anywhere.
 
@@ -71,6 +84,7 @@ All data is saved to your browser's localStorage. Nothing is sent anywhere.
 - Application deadline reminders
 - Notes timeline per job (log each touchpoint)
 - Resume version tagging per application
+- Support for non-tech industry job searches
 
 ---
 

@@ -35,6 +35,9 @@
             <a href="#" class="nav-link" data-view="learning">
                 <span class="nav-icon">◎</span> Learning Hub
             </a>
+            <a href="#" class="nav-link" data-view="resume">
+                <span class="nav-icon">✦</span> Resume Hub
+            </a>
         </nav>
 
         <a href="../../index.html" class="back-link">
@@ -59,6 +62,12 @@
 
         <!-- ── VIEW: DASHBOARD ──────────────────────────────── -->
         <section class="view active" id="view-dashboard">
+            <div class="scope-notice">
+                <span class="scope-notice-icon">ℹ</span>
+                <span>PipelineTrack is currently built for <strong>tech industry roles</strong> — software engineering,
+                    data analytics, IT, and related fields. Skill matching and course recommendations are tailored to
+                    tech. Support for other industries may be added in the future.</span>
+            </div>
             <div class="stat-grid">
                 <div class="stat-card">
                     <div class="stat-label">Total Tracked</div>
@@ -171,6 +180,66 @@
             <div class="learning-grid" id="learning-grid">
                 <!-- cards rendered by JS -->
             </div>
+        </section>
+
+        <!-- ── VIEW: RESUME HUB ──────────────────────────── -->
+        <section class="view" id="view-resume">
+
+            <!-- Resume Parser -->
+            <div class="resume-section">
+                <div class="resume-section-title">Resume Parser</div>
+                <p class="resume-section-desc">Upload your resume file or paste the text below. We'll scan it for tech
+                    skills and let you import them directly into your profile.</p>
+                <div class="resume-parser-layout">
+                    <div class="resume-input-col">
+                        <div class="file-drop-zone" id="resume-drop-zone">
+                            <input type="file" id="resume-file-input" accept=".pdf,.docx,.txt" style="display:none" />
+                            <span class="file-drop-icon" id="file-drop-icon">📄</span>
+                            <div class="file-drop-text" id="file-drop-text">Drop your resume here</div>
+                            <div class="file-drop-hint" id="file-drop-hint">PDF, Word (.docx), or plain text (.txt)
+                            </div>
+                            <button type="button" class="btn-secondary" id="resume-browse-btn"
+                                style="font-size:12px;padding:6px 16px;margin-top:8px">Browse Files</button>
+                        </div>
+                        <div class="resume-divider"><span>or paste text below</span></div>
+                        <textarea class="text-area" id="resume-text" rows="7"
+                            placeholder="Paste your resume text here — skills section, experience, everything…"></textarea>
+                        <button class="btn-primary" id="parse-resume-btn" style="margin-top:10px">Scan for
+                            Skills</button>
+                    </div>
+                    <div class="resume-results-col" id="resume-parse-results">
+                        <div class="parse-placeholder">Upload or paste your resume, then click <strong>Scan for
+                                Skills</strong> to extract tech skills automatically.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Writing Polish -->
+            <div class="resume-section">
+                <div class="resume-section-title">Writing Polish</div>
+                <p class="resume-section-desc">Paste a resume bullet, bio, or cover letter paragraph. We'll flag weak
+                    language, passive voice, and filler words and suggest stronger alternatives.</p>
+                <div class="resume-parser-layout">
+                    <div class="resume-input-col">
+                        <textarea class="text-area" id="polish-text" rows="8"
+                            placeholder="e.g. I was responsible for helping with the development of a web application that was used by customers…"></textarea>
+                        <button class="btn-primary" id="polish-btn" style="margin-top:10px">Check Writing</button>
+                    </div>
+                    <div class="resume-results-col" id="polish-results">
+                        <div class="parse-placeholder">Paste your text and click <strong>Check Writing</strong> to get
+                            suggestions.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources & AI Tools -->
+            <div class="resume-section">
+                <div class="resume-section-title">Resources & AI Tools</div>
+                <p class="resume-section-desc">Curated tools to help you build a stronger resume, sharpen your
+                    portfolio, polish your writing, and research the market.</p>
+                <div id="resources-grid"></div>
+            </div>
+
         </section>
 
     </main>
@@ -297,6 +366,10 @@
     <!-- ── TOAST ──────────────────────────────────────────── -->
     <div class="toast" id="toast"></div>
 
+    <!-- PDF parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- Word .docx parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <script src="app.js"></script>
 </body>
 

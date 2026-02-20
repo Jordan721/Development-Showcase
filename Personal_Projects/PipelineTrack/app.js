@@ -245,6 +245,208 @@ const LEARNING = {
 };
 
 /* ══════════════════════════════════════════════════════════
+   RESOURCES — curated external tools
+   ══════════════════════════════════════════════════════════ */
+const RESOURCES = [{
+    category: 'AI Writing & Review',
+    items: [{
+        name: 'ChatGPT',
+        desc: 'Rewrite bullets, generate cover letters, and prep for interviews',
+        url: 'https://chat.openai.com',
+        tag: 'Free / Pro'
+      },
+      {
+        name: 'Claude',
+        desc: 'Great for resume review, technical writing, and detailed feedback',
+        url: 'https://claude.ai',
+        tag: 'Free / Pro'
+      },
+      {
+        name: 'Grammarly',
+        desc: 'Real-time grammar, clarity, tone, and engagement suggestions',
+        url: 'https://grammarly.com',
+        tag: 'Free / Pro'
+      },
+      {
+        name: 'Hemingway Editor',
+        desc: 'Flags complex sentences, passive voice, and hard-to-read sections',
+        url: 'https://hemingwayapp.com',
+        tag: 'Free'
+      },
+    ]
+  },
+  {
+    category: 'Resume Builders',
+    items: [{
+        name: 'Reactive Resume',
+        desc: 'Free open-source resume builder with clean, ATS-friendly output',
+        url: 'https://rxresu.me',
+        tag: 'Free'
+      },
+      {
+        name: 'Novoresume',
+        desc: 'Tech-focused templates with ATS optimization tips built in',
+        url: 'https://novoresume.com',
+        tag: 'Free / Pro'
+      },
+      {
+        name: 'Canva',
+        desc: 'Drag-and-drop resume templates with lots of design flexibility',
+        url: 'https://www.canva.com/resumes/',
+        tag: 'Free / Pro'
+      },
+      {
+        name: 'Resume.io',
+        desc: 'Professional templates with step-by-step guided editing',
+        url: 'https://resume.io',
+        tag: 'Paid'
+      },
+    ]
+  },
+  {
+    category: 'Portfolio & Online Presence',
+    items: [{
+        name: 'GitHub Pages',
+        desc: 'Host your portfolio for free directly from a GitHub repository',
+        url: 'https://pages.github.com',
+        tag: 'Free'
+      },
+      {
+        name: 'LinkedIn',
+        desc: 'Optimize your profile — most recruiters start their search here',
+        url: 'https://linkedin.com',
+        tag: 'Free'
+      },
+      {
+        name: 'Vercel',
+        desc: 'Deploy web projects instantly with a clean professional URL',
+        url: 'https://vercel.com',
+        tag: 'Free'
+      },
+      {
+        name: 'Polywork',
+        desc: 'Portfolio timeline built specifically for developers and creators',
+        url: 'https://www.polywork.com',
+        tag: 'Free'
+      },
+    ]
+  },
+  {
+    category: 'Job & Salary Research',
+    items: [{
+        name: 'levels.fyi',
+        desc: 'Crowdsourced salary data for tech roles at top companies',
+        url: 'https://www.levels.fyi',
+        tag: 'Free'
+      },
+      {
+        name: 'Glassdoor',
+        desc: 'Company reviews, interview questions, and salary ranges',
+        url: 'https://www.glassdoor.com',
+        tag: 'Free'
+      },
+      {
+        name: 'BuiltIn',
+        desc: 'Tech-focused job board with culture info and company insights',
+        url: 'https://builtin.com',
+        tag: 'Free'
+      },
+      {
+        name: 'Blind',
+        desc: 'Anonymous tech community — comp discussions and company intel',
+        url: 'https://www.teamblind.com',
+        tag: 'Free'
+      },
+    ]
+  },
+];
+
+/* ══════════════════════════════════════════════════════════
+   WRITING RULES — for the Polish checker
+   ══════════════════════════════════════════════════════════ */
+const WRITING_RULES = [{
+    pattern: /\bresponsible for\b/gi,
+    label: 'Weak phrase: "responsible for"',
+    suggestion: 'Start with an action verb instead — e.g. "Led", "Managed", "Owned"',
+    type: 'red'
+  },
+  {
+    pattern: /\bhelped (with|to)\b/gi,
+    label: 'Vague phrase: "helped with/to"',
+    suggestion: 'Be specific — e.g. "Contributed to", "Supported", or a direct action verb',
+    type: 'yellow'
+  },
+  {
+    pattern: /\bworked on\b/gi,
+    label: 'Vague phrase: "worked on"',
+    suggestion: 'Use a stronger verb — e.g. "Developed", "Built", "Implemented"',
+    type: 'yellow'
+  },
+  {
+    pattern: /\bassisted (with|in)\b/gi,
+    label: 'Vague phrase: "assisted with/in"',
+    suggestion: 'Try "Collaborated on", "Contributed to", or a direct action verb',
+    type: 'yellow'
+  },
+  {
+    pattern: /\bwas involved in\b/gi,
+    label: 'Vague phrase: "was involved in"',
+    suggestion: 'Describe your specific role directly',
+    type: 'yellow'
+  },
+  {
+    pattern: /\bparticipated in\b/gi,
+    label: 'Vague phrase: "participated in"',
+    suggestion: 'Try "Contributed to" or "Collaborated on"',
+    type: 'yellow'
+  },
+  {
+    pattern: /\b(was|were|is|are|been|being)\s+\w+ed\b/gi,
+    label: 'Passive voice detected',
+    suggestion: 'Flip to active voice — lead with the action, not what happened to you',
+    type: 'red'
+  },
+  {
+    pattern: /\bvery\b/gi,
+    label: 'Filler word: "very"',
+    suggestion: 'Remove it and use a stronger, more precise word',
+    type: 'yellow'
+  },
+  {
+    pattern: /\breally\b/gi,
+    label: 'Filler word: "really"',
+    suggestion: 'Remove it — be direct and specific',
+    type: 'yellow'
+  },
+  {
+    pattern: /\bjust\b/gi,
+    label: 'Diminishing word: "just"',
+    suggestion: '"Just" downplays your work — remove it',
+    type: 'yellow'
+  },
+  {
+    pattern: /\bbasically\b/gi,
+    label: 'Filler word: "basically"',
+    suggestion: 'State the fact directly without "basically"',
+    type: 'yellow'
+  },
+  {
+    pattern: /\bi (am|was|have been|have)\b/gi,
+    label: 'First-person pronoun: "I"',
+    suggestion: 'Resume bullets shouldn\'t start with "I" — drop it and lead with the verb',
+    type: 'red'
+  },
+];
+
+const STRONG_VERBS = [
+  'developed', 'built', 'designed', 'implemented', 'created', 'led', 'managed',
+  'optimized', 'improved', 'increased', 'reduced', 'launched', 'deployed', 'architected',
+  'engineered', 'automated', 'scaled', 'delivered', 'achieved', 'drove', 'spearheaded',
+  'streamlined', 'established', 'transformed', 'coordinated', 'executed', 'migrated',
+  'integrated', 'refactored', 'debugged', 'documented', 'analyzed', 'researched', 'collaborated',
+];
+
+/* ══════════════════════════════════════════════════════════
    STATE
    ══════════════════════════════════════════════════════════ */
 const STAGES = ['saved', 'applied', 'screening', 'interview', 'offer', 'archived'];
@@ -382,13 +584,15 @@ const VIEW_TITLES = {
   dashboard: 'Dashboard',
   board: 'Job Board',
   profile: 'My Profile',
-  learning: 'Learning Hub'
+  learning: 'Learning Hub',
+  resume: 'Resume Hub',
 };
 const TOPBAR_ACTIONS = {
   dashboard: true,
   board: true,
   profile: false,
-  learning: false
+  learning: false,
+  resume: false,
 };
 
 function navigate(view) {
@@ -413,6 +617,7 @@ function renderView(view) {
   if (view === 'board') renderBoard();
   if (view === 'profile') renderProfile();
   if (view === 'learning') renderLearning();
+  if (view === 'resume') renderResume();
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -857,6 +1062,237 @@ function renderLearning() {
 }
 
 /* ══════════════════════════════════════════════════════════
+   RESUME HUB
+   ══════════════════════════════════════════════════════════ */
+function renderResume() {
+  renderResources();
+}
+
+/* ── File upload helpers ── */
+function setDropZoneState(state, filename) {
+  const zone = document.getElementById('resume-drop-zone');
+  const icon = document.getElementById('file-drop-icon');
+  const text = document.getElementById('file-drop-text');
+  const hint = document.getElementById('file-drop-hint');
+  if (state === 'loading') {
+    zone.className = 'file-drop-zone';
+    icon.textContent = '⏳';
+    text.textContent = `Reading ${filename}…`;
+    hint.textContent = 'Please wait';
+  } else if (state === 'loaded') {
+    zone.className = 'file-drop-zone loaded';
+    icon.textContent = '✓';
+    text.textContent = filename;
+    hint.textContent = 'Text extracted — ready to scan';
+  } else {
+    zone.className = 'file-drop-zone';
+    icon.textContent = '📄';
+    text.textContent = 'Drop your resume here';
+    hint.textContent = 'PDF, Word (.docx), or plain text (.txt)';
+  }
+}
+
+function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = e => resolve(e.target.result);
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
+}
+
+async function readFilePDF(file) {
+  if (typeof pdfjsLib === 'undefined') throw new Error('PDF.js not loaded');
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const buffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({
+    data: buffer
+  }).promise;
+  let text = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    text += content.items.map(item => item.str).join(' ') + '\n';
+  }
+  return text;
+}
+
+async function readFileDOCX(file) {
+  if (typeof mammoth === 'undefined') throw new Error('Mammoth not loaded');
+  const buffer = await file.arrayBuffer();
+  const result = await mammoth.extractRawText({
+    arrayBuffer: buffer
+  });
+  return result.value;
+}
+
+async function handleResumeFile(file) {
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+  setDropZoneState('loading', file.name);
+  try {
+    let text = '';
+    if (ext === 'txt') {
+      text = await readFileAsText(file);
+    } else if (ext === 'pdf') {
+      text = await readFilePDF(file);
+    } else if (ext === 'docx') {
+      text = await readFileDOCX(file);
+    } else {
+      toast('Unsupported file type — use PDF, DOCX, or TXT.', 'error');
+      setDropZoneState('idle');
+      return;
+    }
+    document.getElementById('resume-text').value = text;
+    setDropZoneState('loaded', file.name);
+    toast('File loaded! Click "Scan for Skills" to analyze.', 'success');
+  } catch {
+    toast('Could not read file. Try pasting the text manually.', 'error');
+    setDropZoneState('idle');
+  }
+}
+
+function parseResume() {
+  const text = document.getElementById('resume-text').value;
+  if (!text.trim()) {
+    toast('Paste your resume text first.', 'error');
+    return;
+  }
+
+  const lower = text.toLowerCase();
+  const found = [...KNOWN_SKILLS].filter(skill => lower.includes(skill));
+  const container = document.getElementById('resume-parse-results');
+
+  if (found.length === 0) {
+    container.innerHTML = '<div class="parse-placeholder">No recognized tech skills found. Try including your skills section or more of your experience.</div>';
+    return;
+  }
+
+  const alreadyHave = state.profile.skills.map(s => s.name.toLowerCase());
+  const newSkills = found.filter(s => !alreadyHave.some(a => a.includes(s) || s.includes(a)));
+  const existing = found.filter(s => alreadyHave.some(a => a.includes(s) || s.includes(a)));
+
+  container.innerHTML = `
+    <div style="margin-bottom:10px;font-size:12px;color:var(--text-muted)">
+      Found <strong style="color:var(--text)">${found.length}</strong> skills —
+      <span style="color:var(--green)">${existing.length} already in profile</span>,
+      <span style="color:var(--accent)">${newSkills.length} new</span>
+    </div>
+    ${found.map(skill => {
+      const has = alreadyHave.some(a => a.includes(skill) || skill.includes(a));
+      return `
+        <div class="parsed-skill-row">
+          <label style="display:flex;align-items:center;gap:8px;cursor:${has ? 'default' : 'pointer'}">
+            <input type="checkbox" class="parse-skill-check" data-skill="${skill}"
+              ${!has ? 'checked' : 'disabled'}
+              style="accent-color:var(--accent);width:13px;height:13px;cursor:${has ? 'default' : 'pointer'}" />
+            <span class="parsed-skill-name">${skill}</span>
+          </label>
+          ${has ? '<span class="parsed-already">✓ in profile</span>' : ''}
+        </div>`;
+    }).join('')}
+    <div class="import-bar">
+      <span class="import-count">${newSkills.length} new skill${newSkills.length !== 1 ? 's' : ''} ready to import</span>
+      ${newSkills.length > 0 ? `<button class="btn-primary" id="import-skills-btn" style="font-size:12px;padding:6px 14px">Import Selected</button>` : ''}
+    </div>`;
+
+  const importBtn = document.getElementById('import-skills-btn');
+  if (importBtn) {
+    importBtn.addEventListener('click', () => {
+      const checked = [...container.querySelectorAll('.parse-skill-check:not(:disabled):checked')];
+      if (checked.length === 0) {
+        toast('No new skills selected.', 'error');
+        return;
+      }
+      checked.forEach(cb => {
+        const name = cb.dataset.skill;
+        if (!state.profile.skills.some(s => s.name.toLowerCase() === name)) {
+          state.profile.skills.push({
+            name,
+            level: 'Intermediate'
+          });
+        }
+      });
+      save();
+      reanalyzeAllJobs();
+      toast(`${checked.length} skill${checked.length !== 1 ? 's' : ''} imported to your profile!`, 'success');
+      parseResume();
+    });
+  }
+}
+
+function checkWriting() {
+  const text = document.getElementById('polish-text').value;
+  if (!text.trim()) {
+    toast('Paste some text to check first.', 'error');
+    return;
+  }
+
+  const container = document.getElementById('polish-results');
+  const issues = [];
+
+  WRITING_RULES.forEach(rule => {
+    const matches = text.match(rule.pattern);
+    if (matches) {
+      const unique = [...new Set(matches.map(m => m.toLowerCase()))];
+      issues.push({
+        ...rule,
+        matches: unique
+      });
+    }
+  });
+
+  const lowerText = text.toLowerCase();
+  const usedStrong = STRONG_VERBS.filter(v => lowerText.includes(v));
+  const score = Math.max(0, 100 - (issues.length * 12));
+  const scoreColor = score >= 80 ? 'var(--green)' : score >= 50 ? 'var(--yellow)' : 'var(--red)';
+
+  container.innerHTML = `
+    <div class="polish-score">
+      <span class="polish-score-label">Writing Score</span>
+      <span class="polish-score-val" style="color:${scoreColor}">${score}/100</span>
+      <span style="font-size:12px;color:var(--text-muted);margin-left:auto">${issues.length} issue${issues.length !== 1 ? 's' : ''} found</span>
+    </div>
+    ${issues.length === 0
+      ? `<div class="polish-issue green">
+           <div class="polish-found">Looks clean!</div>
+           <div class="polish-suggestion">No common issues detected. Run it through Grammarly or the Hemingway Editor for deeper analysis.</div>
+         </div>`
+      : issues.map(issue => `
+          <div class="polish-issue ${issue.type}">
+            <div class="polish-found">${issue.label} — <em>"${issue.matches.join('", "')}"</em></div>
+            <div class="polish-suggestion">💡 ${issue.suggestion}</div>
+          </div>`).join('')}
+    <div class="polish-issue ${usedStrong.length > 0 ? 'green' : 'yellow'}" style="margin-top:10px">
+      ${usedStrong.length > 0
+        ? `<div class="polish-found">Strong action verbs detected ✓</div>
+           <div class="polish-suggestion">Good use of: ${usedStrong.join(', ')}</div>`
+        : `<div class="polish-found">No strong action verbs found</div>
+           <div class="polish-suggestion">Consider leading with verbs like: Built, Developed, Led, Optimized, Launched, Automated, Engineered…</div>`}
+    </div>`;
+}
+
+function renderResources() {
+  const grid = document.getElementById('resources-grid');
+  grid.innerHTML = RESOURCES.map(cat => `
+    <div class="resource-category">
+      <div class="resource-category-title">${cat.category}</div>
+      <div class="resource-row">
+        ${cat.items.map(item => `
+          <a class="resource-card" href="${item.url}" target="_blank" rel="noopener">
+            <div class="resource-card-top">
+              <div class="resource-name">${item.name}</div>
+              <span class="resource-tag">${item.tag}</span>
+            </div>
+            <div class="resource-desc">${item.desc}</div>
+            <span class="resource-link">Open ↗</span>
+          </a>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════════════════════════════
    EVENT WIRING
    ══════════════════════════════════════════════════════════ */
 function wireEvents() {
@@ -904,6 +1340,34 @@ function wireEvents() {
 
   // Show bookmarked toggle
   document.getElementById('show-bookmarked').addEventListener('change', () => renderLearning());
+
+  // Resume Hub — parse resume
+  document.getElementById('parse-resume-btn').addEventListener('click', parseResume);
+
+  // Resume Hub — check writing
+  document.getElementById('polish-btn').addEventListener('click', checkWriting);
+
+  // Resume Hub — file upload (browse button)
+  const fileInput = document.getElementById('resume-file-input');
+  document.getElementById('resume-browse-btn').addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) handleResumeFile(fileInput.files[0]);
+    fileInput.value = '';
+  });
+
+  // Resume Hub — drag and drop
+  const dropZone = document.getElementById('resume-drop-zone');
+  dropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    dropZone.classList.add('drag-over');
+  });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) handleResumeFile(file);
+  });
 
   // Detail modal — save notes on change
   document.getElementById('detail-notes').addEventListener('input', () => {
