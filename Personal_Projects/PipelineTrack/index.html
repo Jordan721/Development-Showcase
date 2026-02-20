@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PipelineTrack</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+    <!-- ── SIDEBAR ────────────────────────────────────────── -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <span class="logo-icon">⬡</span>
+            <span class="logo-text">Pipeline<strong>Track</strong></span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-link active" data-view="dashboard">
+                <span class="nav-icon">◈</span> Dashboard
+            </a>
+            <a href="#" class="nav-link" data-view="board">
+                <span class="nav-icon">⊞</span> Job Board
+            </a>
+            <a href="#" class="nav-link" data-view="profile">
+                <span class="nav-icon">◉</span> My Profile
+            </a>
+            <a href="#" class="nav-link" data-view="learning">
+                <span class="nav-icon">◎</span> Learning Hub
+            </a>
+        </nav>
+
+        <a href="../../index.html" class="back-link">
+            ← Back to Showcase
+        </a>
+        <div class="sidebar-footer">
+            <div class="sidebar-tip">
+                <span class="tip-dot"></span>
+                <span id="sidebar-job-count">0 jobs tracked</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ── MAIN CONTENT ───────────────────────────────────── -->
+    <main class="main">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+            <div class="topbar-title" id="topbar-title">Dashboard</div>
+            <button class="btn-primary" id="topbar-action" data-action="add-job">+ Add Job</button>
+        </header>
+
+        <!-- ── VIEW: DASHBOARD ──────────────────────────────── -->
+        <section class="view active" id="view-dashboard">
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Tracked</div>
+                    <div class="stat-value" id="stat-total">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Applied</div>
+                    <div class="stat-value accent" id="stat-applied">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">In Progress</div>
+                    <div class="stat-value yellow" id="stat-progress">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Offers</div>
+                    <div class="stat-value green" id="stat-offers">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avg Fit Score</div>
+                    <div class="stat-value" id="stat-fit">—</div>
+                </div>
+            </div>
+
+            <div class="dash-grid">
+                <div class="dash-card">
+                    <div class="dash-card-header">Top Skill Gaps</div>
+                    <div class="dash-card-body" id="dash-gaps">
+                        <p class="empty-msg">Add jobs with descriptions to see skill gaps.</p>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header">Recent Activity</div>
+                    <div class="dash-card-body" id="dash-recent">
+                        <p class="empty-msg">No jobs tracked yet.</p>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header">Pipeline Overview</div>
+                    <div class="dash-card-body">
+                        <div id="dash-pipeline-bars"></div>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header">Your Top Skills</div>
+                    <div class="dash-card-body" id="dash-skills">
+                        <p class="empty-msg">Add skills in My Profile.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── VIEW: JOB BOARD ──────────────────────────────── -->
+        <section class="view" id="view-board">
+            <div class="board-controls">
+                <label class="toggle-label">
+                    <input type="checkbox" id="show-archived" />
+                    Show Archived
+                </label>
+            </div>
+            <div class="kanban" id="kanban-board">
+                <!-- columns rendered by JS -->
+            </div>
+        </section>
+
+        <!-- ── VIEW: PROFILE ────────────────────────────────── -->
+        <section class="view" id="view-profile">
+            <div class="profile-grid">
+                <div class="profile-card">
+                    <div class="profile-section-title">Your Skills</div>
+                    <p class="profile-hint">These skills are used to calculate your fit score on every job.</p>
+                    <div class="skill-input-row">
+                        <input type="text" id="skill-input" class="text-input" placeholder="e.g. React, Python, SQL…" />
+                        <select id="skill-level" class="select-input">
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate" selected>Intermediate</option>
+                            <option value="Expert">Expert</option>
+                        </select>
+                        <button class="btn-primary" id="add-skill-btn">Add</button>
+                    </div>
+                    <div class="skill-tags" id="skill-tags-container">
+                        <!-- tags rendered by JS -->
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <div class="profile-section-title">Resume Summary</div>
+                    <p class="profile-hint">A brief description of your background (for your reference).</p>
+                    <textarea class="text-area" id="profile-summary" rows="6"
+                        placeholder="e.g. Full-stack developer with 3 years of experience in React and Node.js…"></textarea>
+                    <button class="btn-secondary" id="save-summary-btn">Save Summary</button>
+                </div>
+
+                <div class="profile-card full-width">
+                    <div class="profile-section-title">Skill Coverage</div>
+                    <p class="profile-hint">How often each of your skills appears in your tracked jobs.</p>
+                    <div id="skill-coverage-bars"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── VIEW: LEARNING HUB ───────────────────────────── -->
+        <section class="view" id="view-learning">
+            <div class="learning-filter-row">
+                <span class="learning-subtitle">Recommendations based on skill gaps across all your tracked jobs.</span>
+                <label class="toggle-label">
+                    <input type="checkbox" id="show-bookmarked" />
+                    Bookmarked only
+                </label>
+            </div>
+            <div class="learning-grid" id="learning-grid">
+                <!-- cards rendered by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ── MODAL: ADD / EDIT JOB ──────────────────────────── -->
+    <div class="modal-overlay" id="modal-job" aria-hidden="true">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-job-title">Add New Job</h2>
+                <button class="modal-close" data-close="modal-job">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="job-edit-id" />
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label class="form-label">Role / Title *</label>
+                        <input type="text" class="text-input" id="job-role" placeholder="e.g. Frontend Engineer" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Company *</label>
+                        <input type="text" class="text-input" id="job-company" placeholder="e.g. Acme Corp" />
+                    </div>
+                </div>
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input type="text" class="text-input" id="job-location" placeholder="e.g. Remote / NYC" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Job URL</label>
+                        <input type="url" class="text-input" id="job-url" placeholder="https://…" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Stage</label>
+                    <select class="select-input" id="job-stage">
+                        <option value="saved">Saved</option>
+                        <option value="applied">Applied</option>
+                        <option value="screening">Screening</option>
+                        <option value="interview">Interview</option>
+                        <option value="offer">Offer</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Job Description <span class="label-hint">(paste for fit
+                            analysis)</span></label>
+                    <textarea class="text-area" id="job-description" rows="7"
+                        placeholder="Paste the full job description here…"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Notes</label>
+                    <textarea class="text-area" id="job-notes" rows="3"
+                        placeholder="Referral contact, recruiter name, salary range…"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-ghost" data-close="modal-job">Cancel</button>
+                <button class="btn-primary" id="save-job-btn">Save Job</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── MODAL: JOB DETAIL ──────────────────────────────── -->
+    <div class="modal-overlay" id="modal-detail" aria-hidden="true">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title" id="detail-title">Job Title</h2>
+                    <div class="detail-meta" id="detail-meta">Company · Location</div>
+                </div>
+                <button class="modal-close" data-close="modal-detail">✕</button>
+            </div>
+            <div class="modal-body detail-body">
+
+                <!-- Left: fit analysis -->
+                <div class="detail-left">
+                    <div class="fit-ring-wrapper">
+                        <svg class="fit-ring" viewBox="0 0 120 120">
+                            <circle class="fit-ring-bg" cx="60" cy="60" r="52" />
+                            <circle class="fit-ring-fill" id="fit-ring-fill" cx="60" cy="60" r="52"
+                                stroke-dasharray="326.7" stroke-dashoffset="326.7" />
+                        </svg>
+                        <div class="fit-ring-label">
+                            <div class="fit-ring-pct" id="detail-fit-pct">—</div>
+                            <div class="fit-ring-sub">Fit Score</div>
+                        </div>
+                    </div>
+
+                    <div class="skill-match-section">
+                        <div class="skill-match-title green">Matched Skills</div>
+                        <div class="skill-badge-list" id="detail-matched"></div>
+                    </div>
+                    <div class="skill-match-section">
+                        <div class="skill-match-title red">Skill Gaps</div>
+                        <div class="skill-badge-list" id="detail-missing"></div>
+                    </div>
+                </div>
+
+                <!-- Right: info + notes -->
+                <div class="detail-right">
+                    <div class="detail-info-row">
+                        <span class="stage-badge" id="detail-stage-badge">Saved</span>
+                        <a class="detail-link" id="detail-url" href="#" target="_blank" rel="noopener">View Posting
+                            ↗</a>
+                    </div>
+                    <div class="detail-desc-label">Job Description</div>
+                    <div class="detail-desc" id="detail-desc"></div>
+                    <div class="form-group" style="margin-top:1rem">
+                        <label class="form-label">Notes</label>
+                        <textarea class="text-area" id="detail-notes" rows="4" placeholder="Your notes…"></textarea>
+                    </div>
+                    <div class="detail-actions">
+                        <select class="select-input" id="detail-stage-select"></select>
+                        <button class="btn-secondary" id="detail-edit-btn">Edit</button>
+                        <button class="btn-danger" id="detail-delete-btn">Delete</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ── TOAST ──────────────────────────────────────────── -->
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -51,6 +51,8 @@ Independent projects and personal work:
 | ThreatAware | HTML, CSS, JS | Desktop, Mobile |
 | Algorithm Arena | HTML, CSS, JS, Chart.js | Desktop, Mobile |
 | AnimateLab | HTML, CSS, JS, Canvas, SVG | Desktop, Mobile |
+| Endpoint Explorer | HTML, CSS, JS, Fetch API | Desktop |
+| PipelineTrack | HTML, CSS, JS, localStorage | Desktop |
 
 ### Professional Projects
 Internships, bootcamps, and professional experience:
@@ -149,7 +151,9 @@ Development-Showcase/
 │   ├── Bagely_Bytes_Programming/
 │   ├── Threat_Aware/
 │   ├── Algorithm_Arena/
-│   └── AnimateLab/
+│   ├── AnimateLab/
+│   ├── Endpoint_Explorer/
+│   └── PipelineTrack/
 ├── Game_Vault/
 │   ├── index.html
 │   ├── Beat_Burst/
