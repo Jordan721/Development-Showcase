@@ -517,6 +517,7 @@ textarea {
   margin-bottom: 18px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
 }
 
@@ -601,12 +602,14 @@ textarea {
 
 /* job card */
 .job-card {
+  position: relative;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   padding: 12px;
-  cursor: pointer;
-  transition: border-color .15s, transform .1s;
+  cursor: grab;
+  transition: border-color .15s, transform .1s, opacity .15s;
+  user-select: none;
 }
 
 .job-card:hover {
@@ -614,7 +617,67 @@ textarea {
   transform: translateY(-1px);
 }
 
+.job-card.dragging {
+  opacity: 0.35;
+  cursor: grabbing;
+}
+
+.drag-handle {
+  color: var(--text-muted);
+  margin-right: 5px;
+  font-size: 13px;
+  opacity: 0.5;
+}
+
+.job-card:hover .drag-handle {
+  opacity: 1;
+}
+
+.card-delete-btn {
+  position: absolute;
+  top: 6px;
+  right: 7px;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 13px;
+  line-height: 17px;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .15s;
+  padding: 0;
+  font-weight: 700;
+}
+
+.job-card:hover .card-delete-btn {
+  opacity: 1;
+}
+
+.card-delete-btn:hover {
+  background: #ff2244;
+}
+
+.kanban-col-body.drag-over {
+  background: rgba(0, 212, 170, 0.07);
+  outline: 2px dashed var(--accent);
+  outline-offset: -4px;
+  border-radius: var(--radius-sm);
+}
+
+.board-drag-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
 .job-card-role {
+  display: flex;
+  align-items: center;
+  gap: 2px;
   font-weight: 600;
   font-size: 13px;
   margin-bottom: 2px;

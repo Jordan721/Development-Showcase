@@ -30,6 +30,8 @@ A snapshot of your entire job search at a glance. See how many jobs you've track
 ### Job Board (Kanban)
 A visual pipeline with six stages: **Saved, Applied, Screening, Interview, Offer,** and **Archived**. Each job card shows the role, company, and a color-coded fit score so you can see at a glance which opportunities are the strongest match. Archived jobs can be toggled on or off to keep your board clean. Each job can store a **salary/pay range** and **date posted** alongside the standard details.
 
+**Drag and drop** — grab any card and drag it into a different column to instantly update its stage. The target column highlights as you hover over it. A red **×** button appears on each card when you hover to delete it immediately without opening the detail view.
+
 ### Fit Analysis
 Paste a job description when adding a job and PipelineTrack will cross-reference it against the skills in your profile. You get a percentage score, a list of your matched skills (green), and the skills you're missing (red). The score updates automatically whenever you edit your profile. The job detail view also shows salary and date posted at a glance, with a quick link to [Cash Compass](https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html) to check your financial runway alongside any offer.
 

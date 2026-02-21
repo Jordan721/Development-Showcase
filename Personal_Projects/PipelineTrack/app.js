@@ -738,13 +738,13 @@ function renderBoard() {
   board.innerHTML = visibleStages.map(stage => {
     const jobs = state.jobs.filter(j => j.stage === stage);
     return `
-      <div class="kanban-col">
+      <div class="kanban-col" data-stage="${stage}">
         <div class="col-stripe stripe-${stage}"></div>
         <div class="kanban-col-header">
           ${STAGE_LABELS[stage]}
           <span class="kanban-col-count">${jobs.length}</span>
         </div>
-        <div class="kanban-col-body">
+        <div class="kanban-col-body" data-stage="${stage}">
           ${jobs.length === 0
             ? `<div class="no-jobs-col">No jobs here</div>`
             : jobs.map(j => jobCardHTML(j)).join('')}
@@ -752,8 +752,68 @@ function renderBoard() {
       </div>`;
   }).join('');
 
+  let draggedJobId = null;
+
+  board.querySelectorAll('.card-delete-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const id = btn.dataset.deleteId;
+      const job = state.jobs.find(j => j.id === id);
+      if (!job) return;
+      state.jobs = state.jobs.filter(j => j.id !== id);
+      save();
+      renderBoard();
+      if (state.activeView === 'dashboard') renderDashboard();
+      toast(`"${job.role}" deleted.`, 'success');
+    });
+  });
+
   board.querySelectorAll('.job-card').forEach(card => {
     card.addEventListener('click', () => openJobDetail(card.dataset.jobId));
+
+    card.addEventListener('dragstart', e => {
+      draggedJobId = card.dataset.jobId;
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', draggedJobId);
+    });
+
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      board.querySelectorAll('.kanban-col-body').forEach(b => b.classList.remove('drag-over'));
+    });
+  });
+
+  board.querySelectorAll('.kanban-col-body').forEach(body => {
+    const targetStage = body.dataset.stage;
+
+    body.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    });
+
+    body.addEventListener('dragenter', e => {
+      e.preventDefault();
+      body.classList.add('drag-over');
+    });
+
+    body.addEventListener('dragleave', e => {
+      if (!body.contains(e.relatedTarget)) body.classList.remove('drag-over');
+    });
+
+    body.addEventListener('drop', e => {
+      e.preventDefault();
+      body.classList.remove('drag-over');
+      if (!draggedJobId) return;
+      const job = state.jobs.find(j => j.id === draggedJobId);
+      if (job && job.stage !== targetStage) {
+        job.stage = targetStage;
+        save();
+        renderBoard();
+        toast(`Moved to ${STAGE_LABELS[targetStage]}.`, 'success');
+      }
+      draggedJobId = null;
+    });
   });
 }
 
@@ -761,8 +821,9 @@ function jobCardHTML(job) {
   const cls = fitBadgeClass(job.fitScore);
   const label = fitBadgeLabel(job.fitScore);
   return `
-    <div class="job-card" data-job-id="${job.id}">
-      <div class="job-card-role">${escHtml(job.role)}</div>
+    <div class="job-card" data-job-id="${job.id}" draggable="true">
+      <button class="card-delete-btn" data-delete-id="${job.id}" title="Delete job" draggable="false">&times;</button>
+      <div class="job-card-role"><span class="drag-handle" title="Drag to move stage" draggable="false">&#8942;</span>${escHtml(job.role)}</div>
       <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
       <div class="job-card-footer">
         <span class="job-card-date">${formatDate(job.dateAdded)}</span>
@@ -861,15 +922,15 @@ function openAddJobModal(editId = null) {
 
   document.getElementById('modal-job-title').textContent = job ? 'Edit Job' : 'Add New Job';
   document.getElementById('job-edit-id').value = editId || '';
-  document.getElementById('job-role').value = job?.role || '';
-  document.getElementById('job-company').value = job?.company || '';
-  document.getElementById('job-location').value = job?.location || '';
-  document.getElementById('job-url').value = job?.url || '';
-  document.getElementById('job-salary').value = job?.salary || '';
-  document.getElementById('job-date-posted').value = job?.datePosted || '';
-  document.getElementById('job-stage').value = job?.stage || 'saved';
-  document.getElementById('job-description').value = job?.description || '';
-  document.getElementById('job-notes').value = job?.notes || '';
+  document.getElementById('job-role').value = job ? job.role || '' : '';
+  document.getElementById('job-company').value = job ? job.company || '' : '';
+  document.getElementById('job-location').value = job ? job.location || '' : '';
+  document.getElementById('job-url').value = job ? job.url || '' : '';
+  document.getElementById('job-salary').value = job ? job.salary || '' : '';
+  document.getElementById('job-date-posted').value = job ? job.datePosted || '' : '';
+  document.getElementById('job-stage').value = job ? job.stage || 'saved' : '';
+  document.getElementById('job-description').value = job ? job.description || '' : '';
+  document.getElementById('job-notes').value = job ? job.notes || '' : '';
 
   openModal('modal-job');
 }
