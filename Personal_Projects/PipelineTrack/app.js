@@ -332,6 +332,15 @@ const RESOURCES = [{
     ]
   },
   {
+    category: 'Financial Planning',
+    items: [{
+      name: 'Cash Compass',
+      desc: 'Track your income, expenses, and spending habits while you job search — know your financial runway',
+      url: 'https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html',
+      tag: 'Free'
+    }, ]
+  },
+  {
     category: 'Job & Salary Research',
     items: [{
         name: 'levels.fyi',
@@ -463,6 +472,7 @@ let state = {
   jobs: [],
   profile: {
     skills: [],
+    certifications: [],
     summary: ''
   },
   savedCourses: [],
@@ -488,11 +498,15 @@ function load() {
   try {
     state.profile = JSON.parse(localStorage.getItem('pt_profile')) || {
       skills: [],
+      certifications: [],
       summary: ''
     };
+    // backfill for existing saved data
+    if (!state.profile.certifications) state.profile.certifications = [];
   } catch {
     state.profile = {
       skills: [],
+      certifications: [],
       summary: ''
     };
   }
@@ -772,6 +786,24 @@ function openJobDetail(id) {
   document.getElementById('detail-title').textContent = `${job.role} @ ${job.company}`;
   document.getElementById('detail-meta').textContent = [job.location, formatDate(job.dateAdded)].filter(Boolean).join(' · ');
 
+  // Salary
+  const salaryRow = document.getElementById('detail-salary-row');
+  if (job.salary) {
+    document.getElementById('detail-salary').textContent = job.salary;
+    salaryRow.style.display = '';
+  } else {
+    salaryRow.style.display = 'none';
+  }
+
+  // Date posted
+  const datePostedRow = document.getElementById('detail-date-posted-row');
+  if (job.datePosted) {
+    document.getElementById('detail-date-posted').textContent = formatDate(job.datePosted + 'T12:00:00');
+    datePostedRow.style.display = '';
+  } else {
+    datePostedRow.style.display = 'none';
+  }
+
   // URL link
   const urlEl = document.getElementById('detail-url');
   if (job.url) {
@@ -833,6 +865,8 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-company').value = job?.company || '';
   document.getElementById('job-location').value = job?.location || '';
   document.getElementById('job-url').value = job?.url || '';
+  document.getElementById('job-salary').value = job?.salary || '';
+  document.getElementById('job-date-posted').value = job?.datePosted || '';
   document.getElementById('job-stage').value = job?.stage || 'saved';
   document.getElementById('job-description').value = job?.description || '';
   document.getElementById('job-notes').value = job?.notes || '';
@@ -861,6 +895,8 @@ function saveJob() {
     company,
     location: document.getElementById('job-location').value.trim(),
     url: document.getElementById('job-url').value.trim(),
+    salary: document.getElementById('job-salary').value.trim(),
+    datePosted: document.getElementById('job-date-posted').value,
     stage: document.getElementById('job-stage').value,
     description,
     notes: document.getElementById('job-notes').value.trim(),
@@ -896,8 +932,52 @@ function saveJob() {
    ══════════════════════════════════════════════════════════ */
 function renderProfile() {
   renderSkillTags();
+  renderCertTags();
   document.getElementById('profile-summary').value = state.profile.summary || '';
   renderCoverageBars();
+}
+
+function renderCertTags() {
+  const container = document.getElementById('cert-tags-container');
+  const certs = state.profile.certifications;
+  if (certs.length === 0) {
+    container.innerHTML = '<p class="empty-msg" style="margin-top:8px">No certifications or degrees added yet.</p>';
+    return;
+  }
+  container.innerHTML = certs.map((c, i) => `
+    <span class="skill-tag">
+      ${escHtml(c.name)}
+      <span class="level">${c.type}</span>
+      <span class="skill-tag-remove" data-index="${i}">✕</span>
+    </span>
+  `).join('');
+
+  container.querySelectorAll('.skill-tag-remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.profile.certifications.splice(parseInt(btn.dataset.index), 1);
+      save();
+      renderCertTags();
+    });
+  });
+}
+
+function addCert() {
+  const input = document.getElementById('cert-input');
+  const type = document.getElementById('cert-type').value;
+  const name = input.value.trim();
+  if (!name) return;
+  if (state.profile.certifications.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+    toast('Already added.', 'error');
+    return;
+  }
+  state.profile.certifications.push({
+    name,
+    type
+  });
+  input.value = '';
+  save();
+  renderCertTags();
+  toast(`"${name}" added!`, 'success');
 }
 
 function renderSkillTags() {
@@ -1471,6 +1551,12 @@ function wireEvents() {
   document.getElementById('add-skill-btn').addEventListener('click', addSkill);
   document.getElementById('skill-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') addSkill();
+  });
+
+  // Add certification / degree
+  document.getElementById('add-cert-btn').addEventListener('click', addCert);
+  document.getElementById('cert-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addCert();
   });
 
   // Save summary

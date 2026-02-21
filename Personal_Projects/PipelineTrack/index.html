@@ -160,6 +160,28 @@
                     <button class="btn-secondary" id="save-summary-btn">Save Summary</button>
                 </div>
 
+                <div class="profile-card">
+                    <div class="profile-section-title">Certifications &amp; Degrees</div>
+                    <p class="profile-hint">Track your credentials — certificates, degrees, bootcamps, and licenses.</p>
+                    <div class="skill-input-row">
+                        <input type="text" id="cert-input" class="text-input"
+                            placeholder="e.g. AWS Solutions Architect, B.S. Computer Science…" />
+                        <select id="cert-type" class="select-input">
+                            <option value="Certificate">Certificate</option>
+                            <option value="Associate's">Associate's</option>
+                            <option value="Bachelor's">Bachelor's</option>
+                            <option value="Master's">Master's</option>
+                            <option value="PhD">PhD</option>
+                            <option value="Bootcamp">Bootcamp</option>
+                            <option value="License">License</option>
+                        </select>
+                        <button class="btn-primary" id="add-cert-btn">Add</button>
+                    </div>
+                    <div class="skill-tags" id="cert-tags-container">
+                        <!-- rendered by JS -->
+                    </div>
+                </div>
+
                 <div class="profile-card full-width">
                     <div class="profile-section-title">Skill Coverage</div>
                     <p class="profile-hint">How often each of your skills appears in your tracked jobs.</p>
@@ -280,6 +302,17 @@
                         <input type="url" class="text-input" id="job-url" placeholder="https://…" />
                     </div>
                 </div>
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label class="form-label">Salary / Pay Range</label>
+                        <input type="text" class="text-input" id="job-salary"
+                            placeholder="e.g. $80,000–$100,000 or $45/hr" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date Posted</label>
+                        <input type="date" class="text-input" id="job-date-posted" />
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="form-label">Stage</label>
                     <select class="select-input" id="job-stage">
@@ -352,6 +385,20 @@
                         <span class="stage-badge" id="detail-stage-badge">Saved</span>
                         <a class="detail-link" id="detail-url" href="#" target="_blank" rel="noopener">View Posting
                             ↗</a>
+                    </div>
+                    <div class="detail-meta-row" id="detail-salary-row" style="display:none">
+                        <span class="detail-meta-label">Salary</span>
+                        <span class="detail-meta-value" id="detail-salary"></span>
+                    </div>
+                    <div class="detail-meta-row" id="detail-date-posted-row" style="display:none">
+                        <span class="detail-meta-label">Date Posted</span>
+                        <span class="detail-meta-value" id="detail-date-posted"></span>
+                    </div>
+                    <div class="detail-meta-row">
+                        <span class="detail-meta-label">Budget</span>
+                        <a class="detail-link"
+                            href="https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html"
+                            target="_blank" rel="noopener">Track finances in Cash Compass ↗</a>
                     </div>
                     <div class="detail-desc-label">Job Description</div>
                     <div class="detail-desc" id="detail-desc"></div>
