@@ -690,15 +690,26 @@ function renderDashboard() {
       </div>`;
   }).join('');
 
-  // Top skills
+  // Top skills — green if matched in any tracked job
   const skillsEl = document.getElementById('dash-skills');
   const skills = state.profile.skills;
   if (skills.length === 0) {
     skillsEl.innerHTML = '<p class="empty-msg">Add skills in My Profile.</p>';
   } else {
-    skillsEl.innerHTML = skills.slice(0, 8).map(s =>
-      `<span class="skill-tag" style="margin:3px">${s.name} <span class="level">${s.level}</span></span>`
-    ).join('');
+    const matchedCountMap = {};
+    jobs.forEach(j => (j.matched || []).forEach(ms => {
+      matchedCountMap[ms] = (matchedCountMap[ms] || 0) + 1;
+    }));
+    skillsEl.innerHTML = skills.slice(0, 10).map(s => {
+      const key = s.name.toLowerCase();
+      const matchCount = Object.entries(matchedCountMap).reduce((sum, [ms, c]) =>
+        (ms.includes(key) || key.includes(ms)) ? sum + c : sum, 0);
+      const isMatched = matchCount > 0;
+      return `<span class="skill-tag${isMatched ? ' skill-matched' : ''}" style="margin:3px">
+        ${escHtml(s.name)}
+        <span class="level">${isMatched ? `✓ ${matchCount} job${matchCount !== 1 ? 's' : ''}` : s.level}</span>
+      </span>`;
+    }).join('');
   }
 }
 
@@ -1222,6 +1233,140 @@ function parseResume() {
   }
 }
 
+async function scanPortfolio() {
+  const raw = document.getElementById('portfolio-url').value.trim();
+  if (!raw) {
+    toast('Enter a GitHub or GitHub Pages URL first.', 'error');
+    return;
+  }
+
+  let username = null;
+  let specificRepo = null;
+
+  try {
+    const url = new URL(raw.startsWith('http') ? raw : 'https://' + raw);
+    const host = url.hostname.toLowerCase();
+    const pathParts = url.pathname.split('/').filter(Boolean);
+
+    if (host === 'github.com') {
+      // https://github.com/username  or  https://github.com/username/repo
+      username = pathParts[0] || null;
+      specificRepo = pathParts[1] || null;
+    } else if (host.endsWith('.github.io')) {
+      // https://username.github.io  or  https://username.github.io/reponame/
+      username = host.replace('.github.io', '');
+      specificRepo = pathParts[0] || null;
+    } else {
+      toast('Only GitHub and GitHub Pages URLs are supported (github.com or username.github.io).', 'error');
+      return;
+    }
+  } catch {
+    toast('Invalid URL — paste a full GitHub or portfolio link.', 'error');
+    return;
+  }
+
+  if (!username) {
+    toast('Could not find a GitHub username in that URL.', 'error');
+    return;
+  }
+
+  const resultsEl = document.getElementById('portfolio-results');
+  resultsEl.innerHTML = '<div class="parse-placeholder">Fetching GitHub data…</div>';
+
+  try {
+    const termSet = new Set();
+
+    // Fetch all user repos for languages + topics
+    const reposRes = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}/repos?per_page=50&sort=updated`);
+    if (reposRes.status === 404) {
+      resultsEl.innerHTML = '<div class="parse-placeholder">GitHub user not found. Double-check the URL.</div>';
+      return;
+    }
+    if (!reposRes.ok) throw new Error(`GitHub API ${reposRes.status}`);
+    const repos = await reposRes.json();
+
+    repos.forEach(repo => {
+      if (repo.language) termSet.add(repo.language.toLowerCase());
+      (repo.topics || []).forEach(t => termSet.add(t.toLowerCase()));
+    });
+
+    // If URL pointed at a specific repo, also fetch its full language breakdown
+    if (specificRepo) {
+      const langRes = await fetch(`https://api.github.com/repos/${encodeURIComponent(username)}/${encodeURIComponent(specificRepo)}/languages`);
+      if (langRes.ok) {
+        const langs = await langRes.json();
+        Object.keys(langs).forEach(l => termSet.add(l.toLowerCase()));
+      }
+    }
+
+    const allTerms = [...termSet].join(' ');
+    const found = [...KNOWN_SKILLS].filter(skill => allTerms.includes(skill));
+    const sourceLabel = specificRepo ?
+      `${repos.length} repos + "${specificRepo}" details` :
+      `${repos.length} repos`;
+
+    if (found.length === 0) {
+      resultsEl.innerHTML = `<div class="parse-placeholder">No recognized tech skills found across ${sourceLabel}. Try the resume scanner instead.</div>`;
+      return;
+    }
+
+    const alreadyHave = state.profile.skills.map(s => s.name.toLowerCase());
+    const newSkills = found.filter(s => !alreadyHave.some(a => a.includes(s) || s.includes(a)));
+    const existing = found.filter(s => alreadyHave.some(a => a.includes(s) || s.includes(a)));
+
+    resultsEl.innerHTML = `
+      <div style="margin-bottom:10px;font-size:12px;color:var(--text-muted)">
+        Found <strong style="color:var(--text)">${found.length}</strong> skills from ${sourceLabel} —
+        <span style="color:var(--green)">${existing.length} already in profile</span>,
+        <span style="color:var(--accent)">${newSkills.length} new</span>
+      </div>
+      ${found.map(skill => {
+        const has = alreadyHave.some(a => a.includes(skill) || skill.includes(a));
+        return `
+          <div class="parsed-skill-row">
+            <label style="display:flex;align-items:center;gap:8px;cursor:${has ? 'default' : 'pointer'}">
+              <input type="checkbox" class="portfolio-skill-check" data-skill="${skill}"
+                ${!has ? 'checked' : 'disabled'}
+                style="accent-color:var(--accent);width:13px;height:13px;cursor:${has ? 'default' : 'pointer'}" />
+              <span class="parsed-skill-name">${skill}</span>
+            </label>
+            ${has ? '<span class="parsed-already">✓ in profile</span>' : ''}
+          </div>`;
+      }).join('')}
+      ${newSkills.length > 0 ? `
+        <div class="import-bar">
+          <span class="import-count">${newSkills.length} new skill${newSkills.length !== 1 ? 's' : ''} ready to import</span>
+          <button class="btn-primary" id="import-portfolio-btn" style="font-size:12px;padding:6px 14px">Import Selected</button>
+        </div>` : ''}`;
+
+    const importBtn = document.getElementById('import-portfolio-btn');
+    if (importBtn) {
+      importBtn.addEventListener('click', () => {
+        const checked = [...resultsEl.querySelectorAll('.portfolio-skill-check:not(:disabled):checked')];
+        if (checked.length === 0) {
+          toast('No new skills selected.', 'error');
+          return;
+        }
+        checked.forEach(cb => {
+          const name = cb.dataset.skill;
+          if (!state.profile.skills.some(s => s.name.toLowerCase() === name)) {
+            state.profile.skills.push({
+              name,
+              level: 'Intermediate'
+            });
+          }
+        });
+        save();
+        reanalyzeAllJobs();
+        toast(`${checked.length} skill${checked.length !== 1 ? 's' : ''} imported to your profile!`, 'success');
+        scanPortfolio();
+      });
+    }
+  } catch {
+    resultsEl.innerHTML = '<div class="parse-placeholder">Could not reach GitHub. Check your connection or try again.</div>';
+  }
+}
+
 function checkWriting() {
   const text = document.getElementById('polish-text').value;
   if (!text.trim()) {
@@ -1344,6 +1489,9 @@ function wireEvents() {
   // Resume Hub — parse resume
   document.getElementById('parse-resume-btn').addEventListener('click', parseResume);
 
+  // Resume Hub — portfolio/GitHub scan
+  document.getElementById('scan-portfolio-btn').addEventListener('click', scanPortfolio);
+
   // Resume Hub — check writing
   document.getElementById('polish-btn').addEventListener('click', checkWriting);
 
@@ -1414,6 +1562,7 @@ function wireEvents() {
    ══════════════════════════════════════════════════════════ */
 function init() {
   load();
+  reanalyzeAllJobs();
   wireEvents();
   navigate('dashboard');
 }

@@ -42,7 +42,8 @@ Built on your aggregate skill gaps across every tracked job, the Learning Hub re
 ### Resume Hub
 A dedicated workspace for getting your resume and portfolio ready:
 
-- **Resume Parser** — Upload your resume as a PDF, Word (.docx), or plain text file (or paste the text directly). The parser extracts your content and cross-references it against the skills in your profile, highlighting matches and gaps at a glance.
+- **Resume Parser** — Upload your resume as a PDF, Word (.docx), or plain text file, or paste the text directly. The parser scans the content for recognized tech skills and cross-references them against your profile, showing what you already have and letting you import anything new in one click.
+- **Portfolio / GitHub Scanner** — Paste a GitHub profile URL (`github.com/username`) or a GitHub Pages portfolio URL (`username.github.io/repo`) to scan your public repos for languages and topics. Skills detected across your repositories are shown the same way as the resume parser — matched, new, or already in your profile — and can be imported directly. When a specific repo URL is provided, PipelineTrack also pulls the full language breakdown for that project for more accurate results.
 - **Writing Polish** — Run your resume text through a rule-based writing checker that flags passive voice, filler words, weak phrases, and vague language. Each issue comes with a suggestion and a quality score so you can see improvement over time.
 - **Resources & AI Tools** — A curated collection of tools and platforms to help you build a stronger resume and portfolio, organized by category: resume builders, AI writing assistants, portfolio hosts, and job search platforms.
 
@@ -58,9 +59,10 @@ A dedicated workspace for getting your resume and portfolio ready:
 | Storage | Browser localStorage (no backend, no account) |
 | PDF Parsing | PDF.js v3.11.174 (via CDN) |
 | Word Parsing | Mammoth.js v1.6.0 (via CDN) |
+| Portfolio Scanning | GitHub REST API (public, no auth required) |
 | Fonts | Inter via Google Fonts |
 
-No frameworks, no build tools, no server required. Open `index.html` in any modern browser and it works.
+No frameworks, no build tools, no server required. Open `index.html` in any modern browser and it works. The GitHub portfolio scanner uses the public GitHub API — no token needed for public profiles.
 
 ---
 
@@ -72,7 +74,7 @@ No frameworks, no build tools, no server required. Open `index.html` in any mode
 4. Go to **Job Board**, click **+ Add Job**, and paste a real job description
 5. Click any job card to see your fit score and skill breakdown
 6. Check the **Learning Hub** to see what to learn next
-7. Head to **Resume Hub** to upload your resume, check your writing, and explore tools
+7. Head to **Resume Hub** to upload your resume or scan your GitHub portfolio, check your writing, and explore tools
 
 All data is saved to your browser's localStorage. Nothing is sent anywhere.
 

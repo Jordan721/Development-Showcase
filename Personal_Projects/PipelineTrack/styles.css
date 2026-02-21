@@ -752,6 +752,21 @@ textarea {
   opacity: 1;
 }
 
+.skill-tag.skill-matched {
+  background: rgba(0, 212, 170, .12);
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.skill-tag.skill-matched .level {
+  background: rgba(0, 212, 170, .2);
+  color: var(--green);
+  border-radius: 99px;
+  padding: 1px 6px;
+  opacity: 1;
+  font-weight: 600;
+}
+
 /* coverage bars */
 .coverage-row {
   display: flex;
@@ -1359,6 +1374,20 @@ textarea {
   flex: 1;
   height: 1px;
   background: var(--border);
+}
+
+.portfolio-url-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.portfolio-url-row .text-input {
+  flex: 1;
+}
+
+#portfolio-results {
+  margin-top: 10px;
 }
 
 /* parsed skill rows */
