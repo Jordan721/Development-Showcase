@@ -1299,7 +1299,7 @@ function renderCoverageBars() {
       <div class="coverage-row">
         <div class="coverage-skill">${escHtml(s.name)}</div>
         <div class="coverage-track"><div class="coverage-fill" style="width:${pct}%"></div></div>
-        <div class="coverage-count">${count} / ${jobCount} jobs</div>
+        <div class="coverage-count">${count} jobs</div>
       </div>`;
   }).join('');
 }
