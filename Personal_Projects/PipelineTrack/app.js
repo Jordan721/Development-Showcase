@@ -324,10 +324,10 @@ const RESOURCES = [{
         tag: 'Free'
       },
       {
-        name: 'Polywork',
-        desc: 'Portfolio timeline built specifically for developers and creators',
-        url: 'https://www.polywork.com',
-        tag: 'Free'
+        name: 'Squarespace',
+        desc: 'Build a polished portfolio or personal site with professional templates',
+        url: 'https://www.squarespace.com',
+        tag: 'Paid'
       },
     ]
   },
