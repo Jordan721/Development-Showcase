@@ -28,7 +28,7 @@ If you're in a similar spot — searching for your first role or making a pivot 
 A snapshot of your entire job search at a glance. See how many jobs you've tracked, how many applications are active, how many are in progress, and whether any offers are on the table. The dashboard surfaces your top skill gaps and your top matched skills — skills that appear in your tracked jobs show up green with a job count so you can see at a glance where you're already competitive.
 
 ### Job Board (Kanban)
-A visual pipeline with six stages: **Saved, Applied, Screening, Interview, Offer,** and **Archived**. Each job card shows the role, company, and a color-coded fit score so you can see at a glance which opportunities are the strongest match. Archived jobs can be toggled on or off to keep your board clean. Each job can store a **salary/pay range** and **date posted** alongside the standard details.
+A visual pipeline with six stages: **Saved, Applied, Screening, Interview, Offer,** and **Archived**. Each job card shows the role, company, and a color-coded fit score so you can see at a glance which opportunities are the strongest match. Archived jobs can be toggled on or off to keep your board clean. Each job can store a **salary/pay range**, **date posted**, and **job type** (Full-time, Part-time, Contract, Freelance, Internship, Temporary, or Apprenticeship) — the type shows as a badge in the detail view so you always know what kind of role you're dealing with.
 
 **Drag and drop** — grab any card and drag it into a different column to instantly update its stage. The target column highlights as you hover over it. A red **×** button appears on each card when you hover to delete it immediately without opening the detail view.
 

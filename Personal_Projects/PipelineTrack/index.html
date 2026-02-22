@@ -314,16 +314,31 @@
                         <input type="date" class="text-input" id="job-date-posted" />
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Stage</label>
-                    <select class="select-input" id="job-stage">
-                        <option value="saved">Saved</option>
-                        <option value="applied">Applied</option>
-                        <option value="screening">Screening</option>
-                        <option value="interview">Interview</option>
-                        <option value="offer">Offer</option>
-                        <option value="archived">Archived</option>
-                    </select>
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label class="form-label">Stage</label>
+                        <select class="select-input" id="job-stage">
+                            <option value="saved">Saved</option>
+                            <option value="applied">Applied</option>
+                            <option value="screening">Screening</option>
+                            <option value="interview">Interview</option>
+                            <option value="offer">Offer</option>
+                            <option value="archived">Archived</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Job Type</label>
+                        <select class="select-input" id="job-type">
+                            <option value="">— Select —</option>
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Contract">Contract</option>
+                            <option value="Freelance">Freelance</option>
+                            <option value="Internship">Internship</option>
+                            <option value="Temporary">Temporary</option>
+                            <option value="Apprenticeship">Apprenticeship</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Job Description <span class="label-hint">(paste for fit
@@ -384,6 +399,7 @@
                 <div class="detail-right">
                     <div class="detail-info-row">
                         <span class="stage-badge" id="detail-stage-badge">Saved</span>
+                        <span class="job-type-badge" id="detail-job-type" style="display:none"></span>
                         <a class="detail-link" id="detail-url" href="#" target="_blank" rel="noopener">View Posting
                             ↗</a>
                     </div>
