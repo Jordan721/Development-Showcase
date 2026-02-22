@@ -27,10 +27,19 @@ If you're in a similar spot — searching for your first role or making a pivot 
 ### Dashboard
 A snapshot of your entire job search at a glance. See how many jobs you've tracked, how many applications are active, how many are in progress, and whether any offers are on the table. The dashboard surfaces your top skill gaps and your top matched skills — skills that appear in your tracked jobs show up green with a job count so you can see at a glance where you're already competitive.
 
+The **Job Activity** calendar at the bottom of the dashboard visualizes when you added jobs, with four filter tabs:
+
+- **Week** — a 7-column strip showing every day of the current week (Sun–Sat). Days with jobs display a teal count badge and the role names. Today is highlighted with an accent border.
+- **Month** — a full calendar grid for the current month. Days with jobs get a teal dot and a light tint; today is outlined. Days outside the current month are faded.
+- **Year** — a 4×3 tile grid of all 12 months, each showing a mini bar sized relative to your busiest month and a job count. Months with jobs get a tinted border; the current month is highlighted.
+- **All Time** — a chronological list grouped by month and year, showing date, count, and role and company names for every job ever tracked.
+
 ### Job Board (Kanban)
 A visual pipeline with six stages: **Saved, Applied, Screening, Interview, Offer,** and **Archived**. Each job card shows the role, company, and a color-coded fit score so you can see at a glance which opportunities are the strongest match. Archived jobs can be toggled on or off to keep your board clean. Each job can store a **salary/pay range**, **date posted**, and **job type** (Full-time, Part-time, Contract, Freelance, Internship, Temporary, or Apprenticeship) — the type shows as a badge in the detail view so you always know what kind of role you're dealing with.
 
 **Drag and drop** — grab any card and drag it into a different column to instantly update its stage. The target column highlights as you hover over it. A red **×** button appears on each card when you hover to delete it immediately without opening the detail view.
+
+A **date filter** in the board controls lets you narrow the cards shown to jobs added **This Week**, **This Month**, **This Year**, or **All Time**, so you can focus on recent activity without losing older records.
 
 ### Fit Analysis
 Paste a job description when adding a job and PipelineTrack will cross-reference it against the skills in your profile. You get a percentage score, a list of your matched skills (green), and the skills you're missing (red). The score updates automatically whenever you edit your profile. The job detail view also shows salary and date posted at a glance, with a quick link to [Cash Compass](https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html) to check your financial runway alongside any offer.

@@ -459,6 +459,7 @@ const STRONG_VERBS = [
    STATE
    ══════════════════════════════════════════════════════════ */
 const STAGES = ['saved', 'applied', 'screening', 'interview', 'offer', 'archived'];
+let boardPeriod = 'all';
 const STAGE_LABELS = {
   saved: 'Saved',
   applied: 'Applied',
@@ -725,18 +726,207 @@ function renderDashboard() {
       </span>`;
     }).join('');
   }
+
+  // Activity timeline — default to week view
+  renderActivity('week');
+}
+
+/* ══════════════════════════════════════════════════════════
+   JOB ACTIVITY TIMELINE
+   ══════════════════════════════════════════════════════════ */
+function renderActivity(period = 'week') {
+  const el = document.getElementById('dash-activity');
+  const now = new Date();
+  const jobs = state.jobs;
+  const DAY_ABBR = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'];
+  const MONTH_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+  // Always wire filter buttons first
+  document.querySelectorAll('.activity-filter').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.activity-filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderActivity(btn.dataset.period);
+    };
+  });
+
+  // ── WEEK: 7-day strip calendar ─────────────────────────
+  if (period === 'week') {
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - now.getDay());
+    weekStart.setHours(0, 0, 0, 0);
+
+    const days = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(weekStart);
+      d.setDate(weekStart.getDate() + i);
+      const dayJobs = jobs.filter(j => {
+        const jd = new Date(j.dateAdded);
+        return jd.getFullYear() === d.getFullYear() &&
+               jd.getMonth() === d.getMonth() &&
+               jd.getDate() === d.getDate();
+      });
+      const isToday = d.toDateString() === now.toDateString();
+      return { d, dayJobs, isToday };
+    });
+
+    el.innerHTML = `<div class="cal-week">${days.map(({ d, dayJobs, isToday }) => `
+      <div class="cal-week-day${isToday ? ' today' : ''}${dayJobs.length ? ' has-jobs' : ''}">
+        <div class="cal-week-header">
+          <span class="cal-week-dayname">${DAY_ABBR[d.getDay()]}</span>
+          <span class="cal-week-datenum">${d.getDate()}</span>
+        </div>
+        ${dayJobs.length
+          ? `<div class="cal-week-jobs">
+               <span class="cal-job-count">${dayJobs.length}</span>
+               ${dayJobs.slice(0, 2).map(j => `<div class="cal-job-chip">${escHtml(j.role)}</div>`).join('')}
+               ${dayJobs.length > 2 ? `<div class="cal-job-more">+${dayJobs.length - 2} more</div>` : ''}
+             </div>`
+          : `<div class="cal-week-empty">—</div>`}
+      </div>`).join('')}</div>`;
+    return;
+  }
+
+  // ── MONTH: calendar grid ───────────────────────────────
+  if (period === 'month') {
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const startOffset = firstDay.getDay();
+    const totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
+
+    const jobsByDay = {};
+    jobs.forEach(j => {
+      const d = new Date(j.dateAdded);
+      if (d.getFullYear() === year && d.getMonth() === month) {
+        const key = d.getDate();
+        if (!jobsByDay[key]) jobsByDay[key] = [];
+        jobsByDay[key].push(j);
+      }
+    });
+
+    const cells = Array.from({ length: totalCells }, (_, i) => {
+      const cellDate = new Date(year, month, 1 - startOffset + i);
+      const isCurrent = cellDate.getMonth() === month;
+      const isToday = cellDate.toDateString() === now.toDateString();
+      const cellJobs = isCurrent ? (jobsByDay[cellDate.getDate()] || []) : [];
+      return { cellDate, isCurrent, isToday, cellJobs };
+    });
+
+    el.innerHTML = `
+      <div class="cal-month">
+        <div class="cal-month-title">${MONTH_NAMES[month]} ${year}</div>
+        <div class="cal-month-daynames">
+          ${DAY_ABBR.map(d => `<span>${d}</span>`).join('')}
+        </div>
+        <div class="cal-month-grid">
+          ${cells.map(({ cellDate, isCurrent, isToday, cellJobs }) => `
+            <div class="cal-month-cell${!isCurrent ? ' other-month' : ''}${isToday ? ' today' : ''}${cellJobs.length ? ' has-jobs' : ''}">
+              <span class="cal-cell-num">${cellDate.getDate()}</span>
+              ${cellJobs.length ? `<span class="cal-cell-dot">${cellJobs.length}</span>` : ''}
+            </div>`).join('')}
+        </div>
+      </div>`;
+    return;
+  }
+
+  // ── YEAR: 12-month tile grid ───────────────────────────
+  if (period === 'year') {
+    const year = now.getFullYear();
+    const monthCounts = Array(12).fill(0);
+    jobs.forEach(j => {
+      const d = new Date(j.dateAdded);
+      if (d.getFullYear() === year) monthCounts[d.getMonth()]++;
+    });
+    const maxCount = Math.max(...monthCounts, 1);
+
+    el.innerHTML = `
+      <div class="cal-year">
+        <div class="cal-year-title">${year}</div>
+        <div class="cal-year-grid">
+          ${MONTH_SHORT.map((name, i) => {
+            const count = monthCounts[i];
+            const isCurrent = i === now.getMonth();
+            const pct = Math.round((count / maxCount) * 100);
+            return `
+              <div class="cal-year-month${count > 0 ? ' has-jobs' : ''}${isCurrent ? ' current-month' : ''}">
+                <div class="cal-year-month-name">${name}</div>
+                <div class="cal-year-bar-track">
+                  <div class="cal-year-bar-fill" style="width:${pct}%"></div>
+                </div>
+                <div class="cal-year-count">${count > 0 ? `${count} job${count !== 1 ? 's' : ''}` : '—'}</div>
+              </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    return;
+  }
+
+  // ── ALL TIME: original list view ──────────────────────
+  if (jobs.length === 0) {
+    el.innerHTML = '<p class="empty-msg">No jobs tracked yet.</p>';
+    return;
+  }
+
+  const groups = {};
+  jobs.forEach(j => {
+    const d = new Date(j.dateAdded);
+    const key = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(j);
+  });
+
+  const sorted = Object.entries(groups).sort((a, b) =>
+    new Date(b[1][0].dateAdded) - new Date(a[1][0].dateAdded));
+
+  el.innerHTML = sorted.map(([label, groupJobs]) => {
+    const preview = groupJobs.slice(0, 3).map(j =>
+      `<span class="activity-job-name">${escHtml(j.role)} <span style="color:var(--text-muted)">@ ${escHtml(j.company)}</span></span>`
+    ).join('');
+    const extra = groupJobs.length > 3 ? `<span class="activity-extra">+${groupJobs.length - 3} more</span>` : '';
+    return `
+      <div class="activity-row">
+        <div class="activity-date-col">
+          <span class="activity-date">${label}</span>
+          <span class="activity-count">${groupJobs.length} job${groupJobs.length !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="activity-jobs-col">${preview}${extra}</div>
+      </div>`;
+  }).join('');
 }
 
 /* ══════════════════════════════════════════════════════════
    BOARD (KANBAN)
    ══════════════════════════════════════════════════════════ */
+function boardInPeriod(job) {
+  const d = new Date(job.dateAdded);
+  const now = new Date();
+  if (boardPeriod === 'week') {
+    const start = new Date(now);
+    start.setDate(now.getDate() - now.getDay());
+    start.setHours(0, 0, 0, 0);
+    return d >= start;
+  }
+  if (boardPeriod === 'month') {
+    return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+  }
+  if (boardPeriod === 'year') {
+    return d.getFullYear() === now.getFullYear();
+  }
+  return true;
+}
+
 function renderBoard() {
   const showArchived = document.getElementById('show-archived').checked;
   const visibleStages = showArchived ? STAGES : STAGES.filter(s => s !== 'archived');
   const board = document.getElementById('kanban-board');
+  const periodJobs = state.jobs.filter(boardInPeriod);
 
   board.innerHTML = visibleStages.map(stage => {
-    const jobs = state.jobs.filter(j => j.stage === stage);
+    const jobs = periodJobs.filter(j => j.stage === stage);
     return `
       <div class="kanban-col" data-stage="${stage}">
         <div class="col-stripe stripe-${stage}"></div>
@@ -814,6 +1004,16 @@ function renderBoard() {
       }
       draggedJobId = null;
     });
+  });
+
+  // Wire board period filter buttons
+  document.querySelectorAll('.board-filter').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.board-filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      boardPeriod = btn.dataset.period;
+      renderBoard();
+    };
   });
 }
 
@@ -926,7 +1126,6 @@ function openJobDetail(id) {
    ADD / EDIT JOB
    ══════════════════════════════════════════════════════════ */
 function openAddJobModal(editId = null) {
-  const modal = document.getElementById('modal-job');
   const job = editId ? state.jobs.find(j => j.id === editId) : null;
 
   document.getElementById('modal-job-title').textContent = job ? 'Edit Job' : 'Add New Job';

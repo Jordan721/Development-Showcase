@@ -403,6 +403,317 @@ textarea {
   gap: 14px;
 }
 
+.activity-card {
+  margin-top: 14px;
+}
+
+.activity-filters {
+  display: flex;
+  gap: 4px;
+}
+
+.activity-filter {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.activity-filter.active,
+.activity-filter:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.activity-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.activity-row:last-child {
+  border-bottom: none;
+}
+
+.activity-date-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 130px;
+}
+
+.activity-date {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.activity-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.activity-jobs-col {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.activity-job-name {
+  font-size: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2px 8px;
+  color: var(--text);
+}
+
+.activity-extra {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ── CALENDAR VIEWS ─────────────────────────────────────── */
+
+/* Week strip */
+.cal-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.cal-week-day {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 6px;
+  min-height: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.cal-week-day.today {
+  border-color: var(--accent);
+}
+
+.cal-week-day.has-jobs {
+  background: rgba(0, 212, 170, 0.04);
+}
+
+.cal-week-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.cal-week-dayname {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cal-week-datenum {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.cal-week-day.today .cal-week-datenum {
+  color: var(--accent);
+}
+
+.cal-week-jobs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  width: 100%;
+}
+
+.cal-job-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  background: var(--accent-dim);
+  border-radius: 99px;
+  padding: 1px 8px;
+}
+
+.cal-job-chip {
+  font-size: 10px;
+  color: var(--text-muted);
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cal-job-more {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.cal-week-empty {
+  text-align: center;
+  color: var(--border);
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+/* Month grid */
+.cal-month {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cal-month-title,
+.cal-year-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.cal-month-daynames {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.cal-month-daynames span {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 4px 0;
+}
+
+.cal-month-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.cal-month-cell {
+  aspect-ratio: 1;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 2px;
+}
+
+.cal-month-cell.other-month {
+  opacity: 0.2;
+}
+
+.cal-month-cell.today {
+  border-color: var(--accent);
+}
+
+.cal-month-cell.has-jobs {
+  background: rgba(0, 212, 170, 0.07);
+}
+
+.cal-cell-num {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1;
+}
+
+.cal-month-cell.today .cal-cell-num {
+  color: var(--accent);
+}
+
+.cal-cell-dot {
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 99px;
+  min-width: 16px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+}
+
+/* Year tile grid */
+.cal-year-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.cal-year-month {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cal-year-month.has-jobs {
+  border-color: rgba(0, 212, 170, 0.3);
+}
+
+.cal-year-month.current-month {
+  border-color: var(--accent);
+}
+
+.cal-year-month-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cal-year-bar-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.cal-year-bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 99px;
+}
+
+.cal-year-count {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.cal-year-month.has-jobs .cal-year-count {
+  color: var(--accent);
+}
+
 .dash-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -411,6 +722,9 @@ textarea {
 }
 
 .dash-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 14px 18px;
   border-bottom: 1px solid var(--border);
   font-weight: 600;
@@ -672,6 +986,29 @@ textarea {
   font-size: 12px;
   color: var(--text-muted);
   opacity: 0.7;
+}
+
+.board-period-filters {
+  display: flex;
+  gap: 4px;
+}
+
+.board-filter {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.board-filter.active,
+.board-filter:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .job-card-role {

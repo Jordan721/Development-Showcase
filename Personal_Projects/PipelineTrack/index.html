@@ -117,6 +117,22 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Job Activity Timeline -->
+            <div class="dash-card activity-card">
+                <div class="dash-card-header">
+                    Job Activity
+                    <div class="activity-filters">
+                        <button class="activity-filter active" data-period="week">Week</button>
+                        <button class="activity-filter" data-period="month">Month</button>
+                        <button class="activity-filter" data-period="year">Year</button>
+                        <button class="activity-filter" data-period="all">All Time</button>
+                    </div>
+                </div>
+                <div class="dash-card-body" id="dash-activity">
+                    <p class="empty-msg">No jobs tracked yet.</p>
+                </div>
+            </div>
         </section>
 
         <!-- ── VIEW: JOB BOARD ──────────────────────────────── -->
@@ -126,6 +142,12 @@
                     <input type="checkbox" id="show-archived" />
                     Show Archived
                 </label>
+                <div class="board-period-filters">
+                    <button class="board-filter active" data-period="all">All Time</button>
+                    <button class="board-filter" data-period="year">This Year</button>
+                    <button class="board-filter" data-period="month">This Month</button>
+                    <button class="board-filter" data-period="week">This Week</button>
+                </div>
                 <span class="board-drag-hint">⠿ Drag cards between columns to move stages</span>
             </div>
             <div class="kanban" id="kanban-board">
