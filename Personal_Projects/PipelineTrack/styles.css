@@ -714,6 +714,61 @@ textarea {
   color: var(--accent);
 }
 
+/* Clickable calendar cells */
+.cal-week-day.has-jobs,
+.cal-month-cell.has-jobs,
+.cal-year-month.has-jobs {
+  cursor: pointer;
+}
+
+.cal-week-day.has-jobs:hover,
+.cal-month-cell.has-jobs:hover,
+.cal-year-month.has-jobs:hover {
+  border-color: var(--accent);
+  background: rgba(0, 212, 170, 0.10);
+}
+
+/* Day detail modal job list */
+.day-modal-job {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 8px;
+  margin: 0 -8px;
+  border-bottom: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background .12s;
+}
+
+.day-modal-job:last-child {
+  border-bottom: none;
+}
+
+.day-modal-job:hover {
+  background: var(--card);
+}
+
+.day-modal-job-role {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.day-modal-job-company {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.day-modal-job-badges {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .dash-card {
   background: var(--card);
   border: 1px solid var(--border);

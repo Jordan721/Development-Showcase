@@ -592,6 +592,34 @@ function closeModal(id) {
   document.getElementById(id).setAttribute('aria-hidden', 'true');
 }
 
+function openDayModal(label, ids) {
+  document.getElementById('day-modal-title').textContent = label;
+  const dayJobs = ids.map(id => state.jobs.find(j => j.id === id)).filter(Boolean);
+  const el = document.getElementById('day-modal-jobs');
+  el.innerHTML = dayJobs.map(job => {
+    const cls = fitBadgeClass(job.fitScore);
+    const lbl = fitBadgeLabel(job.fitScore);
+    return `
+      <div class="day-modal-job" data-job-id="${job.id}">
+        <div class="day-modal-job-info">
+          <div class="day-modal-job-role">${escHtml(job.role)}</div>
+          <div class="day-modal-job-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
+        </div>
+        <div class="day-modal-job-badges">
+          <span class="stage-badge stage-${job.stage}">${STAGE_LABELS[job.stage]}</span>
+          <span class="fit-badge ${cls}">${lbl}</span>
+        </div>
+      </div>`;
+  }).join('');
+  el.querySelectorAll('.day-modal-job').forEach(item => {
+    item.addEventListener('click', () => {
+      closeModal('modal-day');
+      openJobDetail(item.dataset.jobId);
+    });
+  });
+  openModal('modal-day');
+}
+
 /* ══════════════════════════════════════════════════════════
    NAVIGATION
    ══════════════════════════════════════════════════════════ */
@@ -734,17 +762,11 @@ function renderDashboard() {
 /* ══════════════════════════════════════════════════════════
    JOB ACTIVITY TIMELINE
    ══════════════════════════════════════════════════════════ */
-function renderActivity(period = 'week') {
-  const el = document.getElementById('dash-activity');
-  const now = new Date();
-  const jobs = state.jobs;
-  const DAY_ABBR = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'];
-  const MONTH_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const ACT_DAY_ABBR = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const ACT_MONTH_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const ACT_MONTH_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-  // Always wire filter buttons first
+function wireActivityFilters() {
   document.querySelectorAll('.activity-filter').forEach(btn => {
     btn.onclick = () => {
       document.querySelectorAll('.activity-filter').forEach(b => b.classList.remove('active'));
@@ -752,6 +774,20 @@ function renderActivity(period = 'week') {
       renderActivity(btn.dataset.period);
     };
   });
+}
+
+function wireCalClicks(el) {
+  el.querySelectorAll('[data-day-jobs]').forEach(cell => {
+    cell.addEventListener('click', () => openDayModal(cell.dataset.dayLabel, JSON.parse(cell.dataset.dayJobs)));
+  });
+}
+
+function renderActivity(period = 'week') {
+  const el = document.getElementById('dash-activity');
+  const now = new Date();
+  const jobs = state.jobs;
+
+  wireActivityFilters();
 
   // ── WEEK: 7-day strip calendar ─────────────────────────
   if (period === 'week') {
@@ -759,33 +795,31 @@ function renderActivity(period = 'week') {
     weekStart.setDate(now.getDate() - now.getDay());
     weekStart.setHours(0, 0, 0, 0);
 
-    const days = Array.from({ length: 7 }, (_, i) => {
+    const weekCells = Array.from({ length: 7 }, (_, i) => {
       const d = new Date(weekStart);
       d.setDate(weekStart.getDate() + i);
       const dayJobs = jobs.filter(j => {
         const jd = new Date(j.dateAdded);
-        return jd.getFullYear() === d.getFullYear() &&
-               jd.getMonth() === d.getMonth() &&
-               jd.getDate() === d.getDate();
+        return jd.getFullYear() === d.getFullYear() && jd.getMonth() === d.getMonth() && jd.getDate() === d.getDate();
       });
       const isToday = d.toDateString() === now.toDateString();
-      return { d, dayJobs, isToday };
-    });
-
-    el.innerHTML = `<div class="cal-week">${days.map(({ d, dayJobs, isToday }) => `
-      <div class="cal-week-day${isToday ? ' today' : ''}${dayJobs.length ? ' has-jobs' : ''}">
-        <div class="cal-week-header">
-          <span class="cal-week-dayname">${DAY_ABBR[d.getDay()]}</span>
-          <span class="cal-week-datenum">${d.getDate()}</span>
-        </div>
-        ${dayJobs.length
-          ? `<div class="cal-week-jobs">
-               <span class="cal-job-count">${dayJobs.length}</span>
-               ${dayJobs.slice(0, 2).map(j => `<div class="cal-job-chip">${escHtml(j.role)}</div>`).join('')}
-               ${dayJobs.length > 2 ? `<div class="cal-job-more">+${dayJobs.length - 2} more</div>` : ''}
-             </div>`
-          : `<div class="cal-week-empty">—</div>`}
-      </div>`).join('')}</div>`;
+      const label = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+      const ids = JSON.stringify(dayJobs.map(j => j.id));
+      const cls = 'cal-week-day' + (isToday ? ' today' : '') + (dayJobs.length ? ' has-jobs' : '');
+      const attrs = dayJobs.length ? ' data-day-jobs=\'' + ids + '\' data-day-label="' + label + '"' : '';
+      const chips = dayJobs.slice(0, 2).map(j => '<div class="cal-job-chip">' + escHtml(j.role) + '</div>').join('');
+      const more = dayJobs.length > 2 ? '<div class="cal-job-more">+' + (dayJobs.length - 2) + ' more</div>' : '';
+      const inner = dayJobs.length
+        ? '<div class="cal-week-jobs"><span class="cal-job-count">' + dayJobs.length + '</span>' + chips + more + '</div>'
+        : '<div class="cal-week-empty">—</div>';
+      return '<div class="' + cls + '"' + attrs + '>'
+        + '<div class="cal-week-header">'
+        + '<span class="cal-week-dayname">' + ACT_DAY_ABBR[d.getDay()] + '</span>'
+        + '<span class="cal-week-datenum">' + d.getDate() + '</span>'
+        + '</div>' + inner + '</div>';
+    }).join('');
+    el.innerHTML = '<div class="cal-week">' + weekCells + '</div>';
+    wireCalClicks(el);
     return;
   }
 
@@ -793,9 +827,8 @@ function renderActivity(period = 'week') {
   if (period === 'month') {
     const year = now.getFullYear();
     const month = now.getMonth();
-    const firstDay = new Date(year, month, 1);
+    const startOffset = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const startOffset = firstDay.getDay();
     const totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
 
     const jobsByDay = {};
@@ -808,60 +841,59 @@ function renderActivity(period = 'week') {
       }
     });
 
-    const cells = Array.from({ length: totalCells }, (_, i) => {
+    const dayCells = Array.from({ length: totalCells }, (_, i) => {
       const cellDate = new Date(year, month, 1 - startOffset + i);
       const isCurrent = cellDate.getMonth() === month;
       const isToday = cellDate.toDateString() === now.toDateString();
       const cellJobs = isCurrent ? (jobsByDay[cellDate.getDate()] || []) : [];
-      return { cellDate, isCurrent, isToday, cellJobs };
-    });
+      const label = cellDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      const ids = JSON.stringify(cellJobs.map(j => j.id));
+      const cls = 'cal-month-cell' + (!isCurrent ? ' other-month' : '') + (isToday ? ' today' : '') + (cellJobs.length ? ' has-jobs' : '');
+      const attrs = cellJobs.length ? ' data-day-jobs=\'' + ids + '\' data-day-label="' + label + '"' : '';
+      const dot = cellJobs.length ? '<span class="cal-cell-dot">' + cellJobs.length + '</span>' : '';
+      return '<div class="' + cls + '"' + attrs + '><span class="cal-cell-num">' + cellDate.getDate() + '</span>' + dot + '</div>';
+    }).join('');
 
-    el.innerHTML = `
-      <div class="cal-month">
-        <div class="cal-month-title">${MONTH_NAMES[month]} ${year}</div>
-        <div class="cal-month-daynames">
-          ${DAY_ABBR.map(d => `<span>${d}</span>`).join('')}
-        </div>
-        <div class="cal-month-grid">
-          ${cells.map(({ cellDate, isCurrent, isToday, cellJobs }) => `
-            <div class="cal-month-cell${!isCurrent ? ' other-month' : ''}${isToday ? ' today' : ''}${cellJobs.length ? ' has-jobs' : ''}">
-              <span class="cal-cell-num">${cellDate.getDate()}</span>
-              ${cellJobs.length ? `<span class="cal-cell-dot">${cellJobs.length}</span>` : ''}
-            </div>`).join('')}
-        </div>
-      </div>`;
+    const dayHeaders = ACT_DAY_ABBR.map(d => '<span>' + d + '</span>').join('');
+    el.innerHTML = '<div class="cal-month">'
+      + '<div class="cal-month-title">' + ACT_MONTH_LONG[month] + ' ' + year + '</div>'
+      + '<div class="cal-month-daynames">' + dayHeaders + '</div>'
+      + '<div class="cal-month-grid">' + dayCells + '</div>'
+      + '</div>';
+    wireCalClicks(el);
     return;
   }
 
   // ── YEAR: 12-month tile grid ───────────────────────────
   if (period === 'year') {
     const year = now.getFullYear();
-    const monthCounts = Array(12).fill(0);
+    const monthJobs = Array.from({ length: 12 }, () => []);
     jobs.forEach(j => {
       const d = new Date(j.dateAdded);
-      if (d.getFullYear() === year) monthCounts[d.getMonth()]++;
+      if (d.getFullYear() === year) monthJobs[d.getMonth()].push(j);
     });
-    const maxCount = Math.max(...monthCounts, 1);
+    const maxCount = Math.max(...monthJobs.map(m => m.length), 1);
 
-    el.innerHTML = `
-      <div class="cal-year">
-        <div class="cal-year-title">${year}</div>
-        <div class="cal-year-grid">
-          ${MONTH_SHORT.map((name, i) => {
-            const count = monthCounts[i];
-            const isCurrent = i === now.getMonth();
-            const pct = Math.round((count / maxCount) * 100);
-            return `
-              <div class="cal-year-month${count > 0 ? ' has-jobs' : ''}${isCurrent ? ' current-month' : ''}">
-                <div class="cal-year-month-name">${name}</div>
-                <div class="cal-year-bar-track">
-                  <div class="cal-year-bar-fill" style="width:${pct}%"></div>
-                </div>
-                <div class="cal-year-count">${count > 0 ? `${count} job${count !== 1 ? 's' : ''}` : '—'}</div>
-              </div>`;
-          }).join('')}
-        </div>
-      </div>`;
+    const yearCells = ACT_MONTH_SHORT.map((name, i) => {
+      const mJobs = monthJobs[i];
+      const count = mJobs.length;
+      const isCurrent = i === now.getMonth();
+      const pct = Math.round((count / maxCount) * 100);
+      const ids = JSON.stringify(mJobs.map(j => j.id));
+      const label = ACT_MONTH_LONG[i] + ' ' + year;
+      const cls = 'cal-year-month' + (count > 0 ? ' has-jobs' : '') + (isCurrent ? ' current-month' : '');
+      const attrs = count > 0 ? ' data-day-jobs=\'' + ids + '\' data-day-label="' + label + '"' : '';
+      const countText = count > 0 ? count + ' job' + (count !== 1 ? 's' : '') : '—';
+      return '<div class="' + cls + '"' + attrs + '>'
+        + '<div class="cal-year-month-name">' + name + '</div>'
+        + '<div class="cal-year-bar-track"><div class="cal-year-bar-fill" style="width:' + pct + '%"></div></div>'
+        + '<div class="cal-year-count">' + countText + '</div>'
+        + '</div>';
+    }).join('');
+
+    el.innerHTML = '<div class="cal-year"><div class="cal-year-title">' + year + '</div>'
+      + '<div class="cal-year-grid">' + yearCells + '</div></div>';
+    wireCalClicks(el);
     return;
   }
 
@@ -879,22 +911,18 @@ function renderActivity(period = 'week') {
     groups[key].push(j);
   });
 
-  const sorted = Object.entries(groups).sort((a, b) =>
-    new Date(b[1][0].dateAdded) - new Date(a[1][0].dateAdded));
+  const sorted = Object.entries(groups).sort((a, b) => new Date(b[1][0].dateAdded) - new Date(a[1][0].dateAdded));
 
   el.innerHTML = sorted.map(([label, groupJobs]) => {
     const preview = groupJobs.slice(0, 3).map(j =>
-      `<span class="activity-job-name">${escHtml(j.role)} <span style="color:var(--text-muted)">@ ${escHtml(j.company)}</span></span>`
+      '<span class="activity-job-name">' + escHtml(j.role) + ' <span style="color:var(--text-muted)">@ ' + escHtml(j.company) + '</span></span>'
     ).join('');
-    const extra = groupJobs.length > 3 ? `<span class="activity-extra">+${groupJobs.length - 3} more</span>` : '';
-    return `
-      <div class="activity-row">
-        <div class="activity-date-col">
-          <span class="activity-date">${label}</span>
-          <span class="activity-count">${groupJobs.length} job${groupJobs.length !== 1 ? 's' : ''}</span>
-        </div>
-        <div class="activity-jobs-col">${preview}${extra}</div>
-      </div>`;
+    const extra = groupJobs.length > 3 ? '<span class="activity-extra">+' + (groupJobs.length - 3) + ' more</span>' : '';
+    return '<div class="activity-row">'
+      + '<div class="activity-date-col"><span class="activity-date">' + label + '</span>'
+      + '<span class="activity-count">' + groupJobs.length + ' job' + (groupJobs.length !== 1 ? 's' : '') + '</span></div>'
+      + '<div class="activity-jobs-col">' + preview + extra + '</div>'
+      + '</div>';
   }).join('');
 }
 

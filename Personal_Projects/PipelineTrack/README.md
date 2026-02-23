@@ -34,6 +34,8 @@ The **Job Activity** calendar at the bottom of the dashboard visualizes when you
 - **Year** — a 4×3 tile grid of all 12 months, each showing a mini bar sized relative to your busiest month and a job count. Months with jobs get a tinted border; the current month is highlighted.
 - **All Time** — a chronological list grouped by month and year, showing date, count, and role and company names for every job ever tracked.
 
+Clicking any day or month tile that has jobs opens a **detail popup** listing every job added in that period — role, company, stage, and fit score. Clicking a job in the popup opens its full detail view.
+
 ### Job Board (Kanban)
 A visual pipeline with six stages: **Saved, Applied, Screening, Interview, Offer,** and **Archived**. Each job card shows the role, company, and a color-coded fit score so you can see at a glance which opportunities are the strongest match. Archived jobs can be toggled on or off to keep your board clean. Each job can store a **salary/pay range**, **date posted**, and **job type** (Full-time, Part-time, Contract, Freelance, Internship, Temporary, or Apprenticeship) — the type shows as a badge in the detail view so you always know what kind of role you're dealing with.
 
