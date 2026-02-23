@@ -592,7 +592,10 @@ function closeModal(id) {
   document.getElementById(id).setAttribute('aria-hidden', 'true');
 }
 
+let dayModalContext = null;
+
 function openDayModal(label, ids) {
+  dayModalContext = { label, ids };
   document.getElementById('day-modal-title').textContent = label;
   const dayJobs = ids.map(id => state.jobs.find(j => j.id === id)).filter(Boolean);
   const el = document.getElementById('day-modal-jobs');
@@ -1146,6 +1149,21 @@ function openJobDetail(id) {
   // Stage select
   const stageSelect = document.getElementById('detail-stage-select');
   stageSelect.innerHTML = STAGES.map(s => `<option value="${s}" ${s===job.stage?'selected':''}>${STAGE_LABELS[s]}</option>`).join('');
+
+  // Back button — only shown when opened from a calendar day click
+  const backBtn = document.getElementById('detail-back-btn');
+  if (dayModalContext) {
+    backBtn.style.display = '';
+    backBtn.onclick = () => {
+      const ctx = dayModalContext;
+      dayModalContext = null;
+      closeModal('modal-detail');
+      openDayModal(ctx.label, ctx.ids);
+    };
+  } else {
+    backBtn.style.display = 'none';
+    backBtn.onclick = null;
+  }
 
   openModal('modal-detail');
 }
@@ -1833,13 +1851,19 @@ function wireEvents() {
 
   // Close modals via [data-close]
   document.querySelectorAll('[data-close]').forEach(btn => {
-    btn.addEventListener('click', () => closeModal(btn.dataset.close));
+    btn.addEventListener('click', () => {
+      if (btn.dataset.close === 'modal-detail') dayModalContext = null;
+      closeModal(btn.dataset.close);
+    });
   });
 
   // Close modal on overlay click
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', e => {
-      if (e.target === overlay) closeModal(overlay.id);
+      if (e.target === overlay) {
+        if (overlay.id === 'modal-detail') dayModalContext = null;
+        closeModal(overlay.id);
+      }
     });
   });
 
