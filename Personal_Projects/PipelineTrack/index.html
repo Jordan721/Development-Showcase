@@ -318,7 +318,7 @@
                 <div class="form-row two-col">
                     <div class="form-group">
                         <label class="form-label">Location</label>
-                        <input type="text" class="text-input" id="job-location" placeholder="e.g. Remote / NYC" />
+                        <input type="text" class="text-input" id="job-location" placeholder="e.g. New York, NY" />
                     </div>
                     <div class="form-group">
                         <label class="form-label">Job URL</label>
@@ -336,7 +336,7 @@
                         <input type="date" class="text-input" id="job-date-posted" />
                     </div>
                 </div>
-                <div class="form-row two-col">
+                <div class="form-row three-col">
                     <div class="form-group">
                         <label class="form-label">Stage</label>
                         <select class="select-input" id="job-stage">
@@ -359,6 +359,15 @@
                             <option value="Internship">Internship</option>
                             <option value="Temporary">Temporary</option>
                             <option value="Apprenticeship">Apprenticeship</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Work Type</label>
+                        <select class="select-input" id="job-work-type">
+                            <option value="">— Select —</option>
+                            <option value="Remote">Remote</option>
+                            <option value="On-site">On-site</option>
+                            <option value="Hybrid">Hybrid</option>
                         </select>
                     </div>
                 </div>
@@ -425,6 +434,7 @@
                     <div class="detail-info-row">
                         <span class="stage-badge" id="detail-stage-badge">Saved</span>
                         <span class="job-type-badge" id="detail-job-type" style="display:none"></span>
+                        <span class="work-type-badge" id="detail-work-type" style="display:none"></span>
                         <a class="detail-link" id="detail-url" href="#" target="_blank" rel="noopener">View Posting
                             ↗</a>
                     </div>

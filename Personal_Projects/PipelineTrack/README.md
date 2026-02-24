@@ -37,7 +37,7 @@ The **Job Activity** calendar at the bottom of the dashboard visualizes when you
 Clicking any day or month tile that has jobs opens a **detail popup** listing every job added in that period — role, company, stage, and fit score. Clicking a job in the popup opens its full detail view.
 
 ### Job Board (Kanban)
-A visual pipeline with six stages: **Saved, Applied, Screening, Interview, Offer,** and **Archived**. Each job card shows the role, company, and a color-coded fit score so you can see at a glance which opportunities are the strongest match. Archived jobs can be toggled on or off to keep your board clean. Each job can store a **salary/pay range**, **date posted**, and **job type** (Full-time, Part-time, Contract, Freelance, Internship, Temporary, or Apprenticeship) — the type shows as a badge in the detail view so you always know what kind of role you're dealing with.
+A visual pipeline with six stages: **Saved, Applied, Screening, Interview, Offer,** and **Archived**. Each job card shows the role, company, and a color-coded fit score so you can see at a glance which opportunities are the strongest match. Archived jobs can be toggled on or off to keep your board clean. Each job can store a **salary/pay range**, **date posted**, **job type** (Full-time, Part-time, Contract, Freelance, Internship, Temporary, or Apprenticeship), and **work type** (Remote, On-site, or Hybrid) — both show as color-coded badges in the detail view so you always know exactly what kind of role and arrangement you're looking at.
 
 **Drag and drop** — grab any card and drag it into a different column to instantly update its stage. The target column highlights as you hover over it. A red **×** button appears on each card when you hover to delete it immediately without opening the detail view.
 
@@ -84,7 +84,7 @@ No frameworks, no build tools, no server required. Open `index.html` in any mode
 1. Clone or download this folder
 2. Open `index.html` in your browser
 3. Go to **My Profile**, add your skills and any certifications or degrees you hold
-4. Go to **Job Board**, click **+ Add Job**, paste a job description, and optionally add salary and date posted
+4. Go to **Job Board**, click **+ Add Job**, paste a job description, and optionally add salary, date posted, job type, and work type (Remote / On-site / Hybrid)
 5. Click any job card to see your fit score and skill breakdown
 6. Check the **Learning Hub** to see what to learn next
 7. Head to **Resume Hub** to upload your resume or scan your GitHub portfolio, check your writing, and explore tools

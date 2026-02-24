@@ -1105,6 +1105,15 @@ function openJobDetail(id) {
     jobTypeBadge.style.display = 'none';
   }
 
+  // Work type badge
+  const workTypeBadge = document.getElementById('detail-work-type');
+  if (job.workType) {
+    workTypeBadge.textContent = job.workType;
+    workTypeBadge.style.display = '';
+  } else {
+    workTypeBadge.style.display = 'none';
+  }
+
   // URL link
   const urlEl = document.getElementById('detail-url');
   if (job.url) {
@@ -1184,6 +1193,7 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-date-posted').value = job ? job.datePosted || '' : '';
   document.getElementById('job-stage').value = job ? job.stage || 'saved' : '';
   document.getElementById('job-type').value = job ? job.jobType || '' : '';
+  document.getElementById('job-work-type').value = job ? job.workType || '' : '';
   document.getElementById('job-description').value = job ? job.description || '' : '';
   document.getElementById('job-notes').value = job ? job.notes || '' : '';
 
@@ -1214,6 +1224,7 @@ function saveJob() {
     salary: document.getElementById('job-salary').value.trim(),
     datePosted: document.getElementById('job-date-posted').value,
     jobType: document.getElementById('job-type').value,
+    workType: document.getElementById('job-work-type').value,
     stage: document.getElementById('job-stage').value,
     description,
     notes: document.getElementById('job-notes').value.trim(),
