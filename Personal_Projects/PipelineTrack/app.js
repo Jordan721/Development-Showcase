@@ -474,7 +474,12 @@ let state = {
   profile: {
     skills: [],
     certifications: [],
-    summary: ''
+    summary: '',
+    links: {
+      linkedin: '',
+      github: '',
+      portfolio: ''
+    }
   },
   savedCourses: [],
   activeView: 'dashboard',
@@ -504,6 +509,11 @@ function load() {
     };
     // backfill for existing saved data
     if (!state.profile.certifications) state.profile.certifications = [];
+    if (!state.profile.links) state.profile.links = {
+      linkedin: '',
+      github: '',
+      portfolio: ''
+    };
   } catch {
     state.profile = {
       skills: [],
@@ -516,6 +526,59 @@ function load() {
   } catch {
     state.savedCourses = [];
   }
+}
+
+/* ══════════════════════════════════════════════════════════
+   EXPORT / IMPORT
+   ══════════════════════════════════════════════════════════ */
+function exportData() {
+  const backup = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    jobs: state.jobs,
+    profile: state.profile,
+    savedCourses: state.savedCourses,
+  };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {
+    type: 'application/json'
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'pipelinetrack-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Backup downloaded.', 'success');
+}
+
+function importData(file) {
+  const statusEl = document.getElementById('import-status');
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data.jobs) || typeof data.profile !== 'object') {
+        statusEl.textContent = '✕ Invalid backup file — make sure you\'re using a PipelineTrack export.';
+        statusEl.className = 'import-status error';
+        return;
+      }
+      state.jobs = data.jobs;
+      state.profile = data.profile;
+      if (!state.profile.certifications) state.profile.certifications = [];
+      state.savedCourses = Array.isArray(data.savedCourses) ? data.savedCourses : [];
+      save();
+      reanalyzeAllJobs();
+      renderView(state.activeView);
+      const count = state.jobs.length;
+      statusEl.textContent = '✓ Imported ' + count + ' job' + (count !== 1 ? 's' : '') + ' — ' + new Date(data.exportedAt || Date.now()).toLocaleDateString();
+      statusEl.className = 'import-status success';
+      toast('Backup imported successfully.', 'success');
+    } catch {
+      statusEl.textContent = '✕ Could not read file. Make sure it\'s a valid .json backup.';
+      statusEl.className = 'import-status error';
+    }
+  };
+  reader.readAsText(file);
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -1295,6 +1358,34 @@ function renderProfile() {
   renderCertTags();
   document.getElementById('profile-summary').value = state.profile.summary || '';
   renderCoverageBars();
+  renderLinks();
+}
+
+function renderLinks() {
+  const links = state.profile.links || {};
+  ['linkedin', 'github', 'portfolio'].forEach(key => {
+    const input = document.getElementById('link-' + key);
+    const openBtn = document.getElementById('link-' + key + '-open');
+    if (!input) return;
+    input.value = links[key] || '';
+    if (links[key]) {
+      openBtn.href = links[key];
+      openBtn.style.display = '';
+    } else {
+      openBtn.style.display = 'none';
+    }
+  });
+}
+
+function saveLinks() {
+  state.profile.links = {
+    linkedin: document.getElementById('link-linkedin').value.trim(),
+    github: document.getElementById('link-github').value.trim(),
+    portfolio: document.getElementById('link-portfolio').value.trim(),
+  };
+  save();
+  renderLinks();
+  toast('Links saved!', 'success');
 }
 
 function renderCertTags() {
@@ -1931,6 +2022,19 @@ function wireEvents() {
     save();
     toast('Summary saved.', 'success');
   });
+
+  // Export / Import
+  document.getElementById('export-btn').addEventListener('click', exportData);
+  document.getElementById('import-btn').addEventListener('click', () => document.getElementById('import-file-input').click());
+  document.getElementById('import-file-input').addEventListener('change', e => {
+    if (e.target.files[0]) {
+      importData(e.target.files[0]);
+      e.target.value = '';
+    }
+  });
+
+  // Your Links
+  document.getElementById('save-links-btn').addEventListener('click', saveLinks);
 
   // Show archived toggle
   document.getElementById('show-archived').addEventListener('change', () => renderBoard());

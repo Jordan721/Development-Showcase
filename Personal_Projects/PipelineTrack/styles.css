@@ -1157,6 +1157,64 @@ textarea {
   margin-bottom: 14px;
 }
 
+.backup-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.import-status {
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.import-status.success {
+  color: var(--accent);
+}
+
+.import-status.error {
+  color: var(--red);
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.links-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.links-input-row .text-input {
+  flex: 1;
+}
+
+.link-open-btn {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 4px 8px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.link-open-btn:hover {
+  background: rgba(0, 212, 170, 0.12);
+}
+
+@media (max-width: 800px) {
+  .links-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .skill-input-row {
   display: flex;
   gap: 8px;
@@ -1669,7 +1727,7 @@ textarea {
   color: #38bdf8;
 }
 
-.form-row.three-col > * {
+.form-row.three-col>* {
   flex: 1;
 }
 

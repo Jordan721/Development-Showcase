@@ -205,6 +205,46 @@
                     </div>
                 </div>
 
+                <div class="profile-card">
+                    <div class="profile-section-title">Data Backup</div>
+                    <p class="profile-hint">Export all your jobs, skills, and settings to a file. Import that file on any other device or browser to restore everything.</p>
+                    <div class="backup-actions">
+                        <button class="btn-primary" id="export-btn">⬇ Export Backup</button>
+                        <button class="btn-ghost" id="import-btn">⬆ Import Backup</button>
+                        <input type="file" id="import-file-input" accept=".json" style="display:none" />
+                    </div>
+                    <div id="import-status"></div>
+                </div>
+
+                <div class="profile-card full-width">
+                    <div class="profile-section-title">Your Links</div>
+                    <p class="profile-hint">Save your professional links for quick reference. Stored locally and never shared.</p>
+                    <div class="links-grid">
+                        <div class="links-field">
+                            <label class="form-label">LinkedIn</label>
+                            <div class="links-input-row">
+                                <input type="url" class="text-input" id="link-linkedin" placeholder="https://linkedin.com/in/yourname" />
+                                <a class="link-open-btn" id="link-linkedin-open" href="#" target="_blank" rel="noopener" style="display:none">Open ↗</a>
+                            </div>
+                        </div>
+                        <div class="links-field">
+                            <label class="form-label">GitHub</label>
+                            <div class="links-input-row">
+                                <input type="url" class="text-input" id="link-github" placeholder="https://github.com/yourusername" />
+                                <a class="link-open-btn" id="link-github-open" href="#" target="_blank" rel="noopener" style="display:none">Open ↗</a>
+                            </div>
+                        </div>
+                        <div class="links-field">
+                            <label class="form-label">Portfolio</label>
+                            <div class="links-input-row">
+                                <input type="url" class="text-input" id="link-portfolio" placeholder="https://yourportfolio.com" />
+                                <a class="link-open-btn" id="link-portfolio-open" href="#" target="_blank" rel="noopener" style="display:none">Open ↗</a>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-secondary" id="save-links-btn" style="margin-top:14px">Save Links</button>
+                </div>
+
                 <div class="profile-card full-width">
                     <div class="profile-section-title">Skill Coverage</div>
                     <p class="profile-hint">How often each of your skills appears in your tracked jobs.</p>

@@ -49,6 +49,12 @@ Paste a job description when adding a job and PipelineTrack will cross-reference
 ### My Profile
 Add your skills and tag each one as Beginner, Intermediate, or Expert. Track your **Certifications & Degrees** separately — certificates, associate's, bachelor's, master's, PhD, bootcamp completions, and licenses — each labeled by credential type. Write a short resume summary for your own reference. A skill coverage chart shows how frequently each of your skills appears across all the jobs you're tracking.
 
+The **Data Backup** card lets you move your data between devices or browsers without an account:
+- **Export Backup** — downloads a `.json` file containing all your jobs, skills, certifications, saved courses, and settings
+- **Import Backup** — upload that file on any other device or browser to restore everything instantly
+
+The **Your Links** card stores your professional URLs locally for quick access — LinkedIn, GitHub, and Portfolio. Each saved link shows an **Open ↗** button that opens it in a new tab.
+
 ### Learning Hub
 Built on your aggregate skill gaps across every tracked job, the Learning Hub recommends courses and certifications mapped to the skills you need most. Resources span platforms like Coursera, Google, AWS, LinkedIn Learning, Udemy, and more, with estimated time commitments included. Bookmark the ones you plan to pursue and filter to see only your saved picks.
 
@@ -95,7 +101,7 @@ All data is saved to your browser's localStorage. Nothing is sent anywhere.
 
 ## Roadmap Ideas
 
-- Export job list to CSV
+- Export job list to CSV (currently exports full backup as JSON; CSV format planned)
 - Application deadline reminders
 - Notes timeline per job (log each touchpoint)
 - Resume version tagging per application
