@@ -595,7 +595,10 @@ function closeModal(id) {
 let dayModalContext = null;
 
 function openDayModal(label, ids) {
-  dayModalContext = { label, ids };
+  dayModalContext = {
+    label,
+    ids
+  };
   document.getElementById('day-modal-title').textContent = label;
   const dayJobs = ids.map(id => state.jobs.find(j => j.id === id)).filter(Boolean);
   const el = document.getElementById('day-modal-jobs');
@@ -798,7 +801,9 @@ function renderActivity(period = 'week') {
     weekStart.setDate(now.getDate() - now.getDay());
     weekStart.setHours(0, 0, 0, 0);
 
-    const weekCells = Array.from({ length: 7 }, (_, i) => {
+    const weekCells = Array.from({
+      length: 7
+    }, (_, i) => {
       const d = new Date(weekStart);
       d.setDate(weekStart.getDate() + i);
       const dayJobs = jobs.filter(j => {
@@ -806,20 +811,24 @@ function renderActivity(period = 'week') {
         return jd.getFullYear() === d.getFullYear() && jd.getMonth() === d.getMonth() && jd.getDate() === d.getDate();
       });
       const isToday = d.toDateString() === now.toDateString();
-      const label = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+      const label = d.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric'
+      });
       const ids = JSON.stringify(dayJobs.map(j => j.id));
       const cls = 'cal-week-day' + (isToday ? ' today' : '') + (dayJobs.length ? ' has-jobs' : '');
       const attrs = dayJobs.length ? ' data-day-jobs=\'' + ids + '\' data-day-label="' + label + '"' : '';
       const chips = dayJobs.slice(0, 2).map(j => '<div class="cal-job-chip">' + escHtml(j.role) + '</div>').join('');
       const more = dayJobs.length > 2 ? '<div class="cal-job-more">+' + (dayJobs.length - 2) + ' more</div>' : '';
-      const inner = dayJobs.length
-        ? '<div class="cal-week-jobs"><span class="cal-job-count">' + dayJobs.length + '</span>' + chips + more + '</div>'
-        : '<div class="cal-week-empty">—</div>';
-      return '<div class="' + cls + '"' + attrs + '>'
-        + '<div class="cal-week-header">'
-        + '<span class="cal-week-dayname">' + ACT_DAY_ABBR[d.getDay()] + '</span>'
-        + '<span class="cal-week-datenum">' + d.getDate() + '</span>'
-        + '</div>' + inner + '</div>';
+      const inner = dayJobs.length ?
+        '<div class="cal-week-jobs"><span class="cal-job-count">' + dayJobs.length + '</span>' + chips + more + '</div>' :
+        '<div class="cal-week-empty">—</div>';
+      return '<div class="' + cls + '"' + attrs + '>' +
+        '<div class="cal-week-header">' +
+        '<span class="cal-week-dayname">' + ACT_DAY_ABBR[d.getDay()] + '</span>' +
+        '<span class="cal-week-datenum">' + d.getDate() + '</span>' +
+        '</div>' + inner + '</div>';
     }).join('');
     el.innerHTML = '<div class="cal-week">' + weekCells + '</div>';
     wireCalClicks(el);
@@ -844,12 +853,19 @@ function renderActivity(period = 'week') {
       }
     });
 
-    const dayCells = Array.from({ length: totalCells }, (_, i) => {
+    const dayCells = Array.from({
+      length: totalCells
+    }, (_, i) => {
       const cellDate = new Date(year, month, 1 - startOffset + i);
       const isCurrent = cellDate.getMonth() === month;
       const isToday = cellDate.toDateString() === now.toDateString();
       const cellJobs = isCurrent ? (jobsByDay[cellDate.getDate()] || []) : [];
-      const label = cellDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      const label = cellDate.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
       const ids = JSON.stringify(cellJobs.map(j => j.id));
       const cls = 'cal-month-cell' + (!isCurrent ? ' other-month' : '') + (isToday ? ' today' : '') + (cellJobs.length ? ' has-jobs' : '');
       const attrs = cellJobs.length ? ' data-day-jobs=\'' + ids + '\' data-day-label="' + label + '"' : '';
@@ -858,11 +874,11 @@ function renderActivity(period = 'week') {
     }).join('');
 
     const dayHeaders = ACT_DAY_ABBR.map(d => '<span>' + d + '</span>').join('');
-    el.innerHTML = '<div class="cal-month">'
-      + '<div class="cal-month-title">' + ACT_MONTH_LONG[month] + ' ' + year + '</div>'
-      + '<div class="cal-month-daynames">' + dayHeaders + '</div>'
-      + '<div class="cal-month-grid">' + dayCells + '</div>'
-      + '</div>';
+    el.innerHTML = '<div class="cal-month">' +
+      '<div class="cal-month-title">' + ACT_MONTH_LONG[month] + ' ' + year + '</div>' +
+      '<div class="cal-month-daynames">' + dayHeaders + '</div>' +
+      '<div class="cal-month-grid">' + dayCells + '</div>' +
+      '</div>';
     wireCalClicks(el);
     return;
   }
@@ -870,7 +886,9 @@ function renderActivity(period = 'week') {
   // ── YEAR: 12-month tile grid ───────────────────────────
   if (period === 'year') {
     const year = now.getFullYear();
-    const monthJobs = Array.from({ length: 12 }, () => []);
+    const monthJobs = Array.from({
+      length: 12
+    }, () => []);
     jobs.forEach(j => {
       const d = new Date(j.dateAdded);
       if (d.getFullYear() === year) monthJobs[d.getMonth()].push(j);
@@ -887,15 +905,15 @@ function renderActivity(period = 'week') {
       const cls = 'cal-year-month' + (count > 0 ? ' has-jobs' : '') + (isCurrent ? ' current-month' : '');
       const attrs = count > 0 ? ' data-day-jobs=\'' + ids + '\' data-day-label="' + label + '"' : '';
       const countText = count > 0 ? count + ' job' + (count !== 1 ? 's' : '') : '—';
-      return '<div class="' + cls + '"' + attrs + '>'
-        + '<div class="cal-year-month-name">' + name + '</div>'
-        + '<div class="cal-year-bar-track"><div class="cal-year-bar-fill" style="width:' + pct + '%"></div></div>'
-        + '<div class="cal-year-count">' + countText + '</div>'
-        + '</div>';
+      return '<div class="' + cls + '"' + attrs + '>' +
+        '<div class="cal-year-month-name">' + name + '</div>' +
+        '<div class="cal-year-bar-track"><div class="cal-year-bar-fill" style="width:' + pct + '%"></div></div>' +
+        '<div class="cal-year-count">' + countText + '</div>' +
+        '</div>';
     }).join('');
 
-    el.innerHTML = '<div class="cal-year"><div class="cal-year-title">' + year + '</div>'
-      + '<div class="cal-year-grid">' + yearCells + '</div></div>';
+    el.innerHTML = '<div class="cal-year"><div class="cal-year-title">' + year + '</div>' +
+      '<div class="cal-year-grid">' + yearCells + '</div></div>';
     wireCalClicks(el);
     return;
   }
@@ -909,7 +927,10 @@ function renderActivity(period = 'week') {
   const groups = {};
   jobs.forEach(j => {
     const d = new Date(j.dateAdded);
-    const key = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const key = d.toLocaleDateString('en-US', {
+      month: 'long',
+      year: 'numeric'
+    });
     if (!groups[key]) groups[key] = [];
     groups[key].push(j);
   });
@@ -921,11 +942,11 @@ function renderActivity(period = 'week') {
       '<span class="activity-job-name">' + escHtml(j.role) + ' <span style="color:var(--text-muted)">@ ' + escHtml(j.company) + '</span></span>'
     ).join('');
     const extra = groupJobs.length > 3 ? '<span class="activity-extra">+' + (groupJobs.length - 3) + ' more</span>' : '';
-    return '<div class="activity-row">'
-      + '<div class="activity-date-col"><span class="activity-date">' + label + '</span>'
-      + '<span class="activity-count">' + groupJobs.length + ' job' + (groupJobs.length !== 1 ? 's' : '') + '</span></div>'
-      + '<div class="activity-jobs-col">' + preview + extra + '</div>'
-      + '</div>';
+    return '<div class="activity-row">' +
+      '<div class="activity-date-col"><span class="activity-date">' + label + '</span>' +
+      '<span class="activity-count">' + groupJobs.length + ' job' + (groupJobs.length !== 1 ? 's' : '') + '</span></div>' +
+      '<div class="activity-jobs-col">' + preview + extra + '</div>' +
+      '</div>';
   }).join('');
 }
 
@@ -1096,6 +1117,15 @@ function openJobDetail(id) {
     datePostedRow.style.display = 'none';
   }
 
+  // Benefits
+  const benefitsRow = document.getElementById('detail-benefits-row');
+  if (job.benefits) {
+    document.getElementById('detail-benefits').textContent = job.benefits;
+    benefitsRow.style.display = '';
+  } else {
+    benefitsRow.style.display = 'none';
+  }
+
   // Job type badge
   const jobTypeBadge = document.getElementById('detail-job-type');
   if (job.jobType) {
@@ -1195,6 +1225,7 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-type').value = job ? job.jobType || '' : '';
   document.getElementById('job-work-type').value = job ? job.workType || '' : '';
   document.getElementById('job-description').value = job ? job.description || '' : '';
+  document.getElementById('job-benefits').value = job ? job.benefits || '' : '';
   document.getElementById('job-notes').value = job ? job.notes || '' : '';
 
   openModal('modal-job');
@@ -1227,6 +1258,7 @@ function saveJob() {
     workType: document.getElementById('job-work-type').value,
     stage: document.getElementById('job-stage').value,
     description,
+    benefits: document.getElementById('job-benefits').value.trim(),
     notes: document.getElementById('job-notes').value.trim(),
     fitScore: score,
     matched,
