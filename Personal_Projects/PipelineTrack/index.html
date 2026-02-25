@@ -379,7 +379,7 @@
                         <input type="date" class="text-input" id="job-date-posted" />
                     </div>
                 </div>
-                <div class="form-row three-col">
+                <div class="form-row four-col">
                     <div class="form-group">
                         <label class="form-label">Stage</label>
                         <select class="select-input" id="job-stage">
@@ -389,6 +389,18 @@
                             <option value="interview">Interview</option>
                             <option value="offer">Offer</option>
                             <option value="archived">Archived</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Seniority</label>
+                        <select class="select-input" id="job-seniority">
+                            <option value="">— Select —</option>
+                            <option value="Internship">Internship</option>
+                            <option value="Junior">Junior</option>
+                            <option value="Mid-Level">Mid-Level</option>
+                            <option value="Senior">Senior</option>
+                            <option value="Lead">Lead</option>
+                            <option value="Staff">Staff</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -481,6 +493,7 @@
                 <div class="detail-right">
                     <div class="detail-info-row">
                         <span class="stage-badge" id="detail-stage-badge">Saved</span>
+                        <span class="seniority-badge" id="detail-seniority" style="display:none"></span>
                         <span class="job-type-badge" id="detail-job-type" style="display:none"></span>
                         <span class="work-type-badge" id="detail-work-type" style="display:none"></span>
                         <a class="detail-link" id="detail-url" href="#" target="_blank" rel="noopener">View Posting

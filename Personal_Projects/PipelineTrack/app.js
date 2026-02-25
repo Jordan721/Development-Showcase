@@ -1189,6 +1189,15 @@ function openJobDetail(id) {
     benefitsRow.style.display = 'none';
   }
 
+  // Seniority badge
+  const seniorityBadge = document.getElementById('detail-seniority');
+  if (job.seniority) {
+    seniorityBadge.textContent = job.seniority;
+    seniorityBadge.style.display = '';
+  } else {
+    seniorityBadge.style.display = 'none';
+  }
+
   // Job type badge
   const jobTypeBadge = document.getElementById('detail-job-type');
   if (job.jobType) {
@@ -1285,6 +1294,7 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-salary').value = job ? job.salary || '' : '';
   document.getElementById('job-date-posted').value = job ? job.datePosted || '' : '';
   document.getElementById('job-stage').value = job ? job.stage || 'saved' : '';
+  document.getElementById('job-seniority').value = job ? job.seniority || '' : '';
   document.getElementById('job-type').value = job ? job.jobType || '' : '';
   document.getElementById('job-work-type').value = job ? job.workType || '' : '';
   document.getElementById('job-description').value = job ? job.description || '' : '';
@@ -1317,6 +1327,7 @@ function saveJob() {
     url: document.getElementById('job-url').value.trim(),
     salary: document.getElementById('job-salary').value.trim(),
     datePosted: document.getElementById('job-date-posted').value,
+    seniority: document.getElementById('job-seniority').value,
     jobType: document.getElementById('job-type').value,
     workType: document.getElementById('job-work-type').value,
     stage: document.getElementById('job-stage').value,

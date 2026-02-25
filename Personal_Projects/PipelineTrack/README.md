@@ -1,72 +1,100 @@
 # PipelineTrack
 
-A personal job search companion built to take the chaos out of hunting for work in tech. Track every application, see how well your skills match each role, polish your resume, and get pointed toward certifications and courses that close your gaps — all in one place, no account required.
+A personal job search companion built to take the chaos out of hunting for work in tech. Track every application, measure your skill fit, polish your resume, and close your gaps — all in one place, no account required.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20Site-%2300bfa5?style=for-the-badge)](https://jordan721.github.io/Development-Showcase/Personal_Projects/PipelineTrack/index.html)
 
-> **Note:** PipelineTrack is built specifically for tech industry job searches (software engineering, data analytics, IT, etc.). Support for other industries may be added in the future.
+> **Note:** PipelineTrack is built for tech industry job searches (software engineering, data analytics, IT, etc.). Support for other industries may be added in the future.
 
 ---
 
 ## Why I Built This
 
-Breaking into tech is overwhelming. Whether you're targeting data analytics, software engineering, IT support, or something in between, you end up juggling dozens of tabs, spreadsheets, and sticky notes just to remember where you applied and what happened next.
+Breaking into tech is overwhelming — dozens of tabs, spreadsheets, and sticky notes just to track where you applied and what happened next.
 
-I built PipelineTrack to solve that for myself. I needed one tool that could:
+I built PipelineTrack to solve that. One tool to:
 
-- Keep tabs on every job I applied to without losing track of the details
-- Tell me honestly how well my current skill set matches a job description
-- Show me exactly what I'm missing and where I can learn it
-- Help me put my best foot forward with a polished resume
-- Work offline, right in my browser, with no sign-up or backend
-
-If you're in a similar spot — searching for your first role or making a pivot in tech — this tool was built with you in mind too.
+- Track every job without losing the details
+- Show honestly how well your skills match a role
+- Surface exactly what you're missing and where to learn it
+- Help you put your best resume forward
+- Work entirely in the browser — no sign-up, no backend
 
 ---
 
 ## Features
 
 ### Dashboard
-A snapshot of your entire job search at a glance. See how many jobs you've tracked, how many applications are active, how many are in progress, and whether any offers are on the table. The dashboard surfaces your top skill gaps and your top matched skills — skills that appear in your tracked jobs show up green with a job count so you can see at a glance where you're already competitive.
+At-a-glance view of your entire job search.
 
-The **Job Activity** calendar at the bottom of the dashboard visualizes when you added jobs, with four filter tabs:
+- Stats for total tracked, applied, in-progress, and offers
+- Top skill gaps and top matched skills across all your jobs
+- **Job Activity calendar** — visualize when you added jobs by Week, Month, Year, or All Time
+- Click any day or month tile to see a popup of every job added in that period
 
-- **Week** — a 7-column strip showing every day of the current week (Sun–Sat). Days with jobs display a teal count badge and the role names. Today is highlighted with an accent border.
-- **Month** — a full calendar grid for the current month. Days with jobs get a teal dot and a light tint; today is outlined. Days outside the current month are faded.
-- **Year** — a 4×3 tile grid of all 12 months, each showing a mini bar sized relative to your busiest month and a job count. Months with jobs get a tinted border; the current month is highlighted.
-- **All Time** — a chronological list grouped by month and year, showing date, count, and role and company names for every job ever tracked.
-
-Clicking any day or month tile that has jobs opens a **detail popup** listing every job added in that period — role, company, stage, and fit score. Clicking a job in the popup opens its full detail view.
+---
 
 ### Job Board (Kanban)
-A visual pipeline with six stages: **Saved, Applied, Screening, Interview, Offer,** and **Archived**. Each job card shows the role, company, and a color-coded fit score so you can see at a glance which opportunities are the strongest match. Archived jobs can be toggled on or off to keep your board clean. Each job can store a **salary/pay range**, **date posted**, **benefits**, **job type** (Full-time, Part-time, Contract, Freelance, Internship, Temporary, or Apprenticeship), and **work type** (Remote, On-site, or Hybrid) — job type and work type show as color-coded badges in the detail view so you always know exactly what kind of role and arrangement you're looking at.
+A visual pipeline with six stages: **Saved → Applied → Screening → Interview → Offer → Archived**
 
-**Drag and drop** — grab any card and drag it into a different column to instantly update its stage. The target column highlights as you hover over it. A red **×** button appears on each card when you hover to delete it immediately without opening the detail view.
+- Color-coded fit score on every card
+- Drag cards between columns to update their stage
+- Hover a card to reveal a quick-delete **×** button
+- Toggle archived jobs on/off to keep the board clean
+- Filter by **This Week / This Month / This Year / All Time**
 
-A **date filter** in the board controls lets you narrow the cards shown to jobs added **This Week**, **This Month**, **This Year**, or **All Time**, so you can focus on recent activity without losing older records.
+Each job stores:
+
+| Field | Options |
+|---|---|
+| Seniority | Internship, Junior, Mid-Level, Senior, Lead, Staff |
+| Job Type | Full-time, Part-time, Contract, Freelance, Internship, Temporary, Apprenticeship |
+| Work Type | Remote, On-site, Hybrid |
+| Other | Salary, Date Posted, Benefits, Notes, Job URL |
+
+Seniority, job type, and work type each appear as color-coded badges in the detail view.
+
+---
 
 ### Fit Analysis
-Paste a job description when adding a job and PipelineTrack will cross-reference it against the skills in your profile. You get a percentage score, a list of your matched skills (green), and the skills you're missing (red). The score updates automatically whenever you edit your profile. The job detail view also shows salary and date posted at a glance, with a quick link to [Cash Compass](https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html) to check your financial runway alongside any offer.
+Paste a job description when adding a job and PipelineTrack scores your match automatically.
+
+- **Fit score** — percentage based on your profile skills vs. the job description
+- **Matched skills** — shown in green
+- **Skill gaps** — shown in red
+- Score recalculates whenever you update your profile
+- Quick link to [Cash Compass](https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html) to check your financial runway alongside any offer
+
+---
 
 ### My Profile
-Add your skills and tag each one as Beginner, Intermediate, or Expert. Track your **Certifications & Degrees** separately — certificates, associate's, bachelor's, master's, PhD, bootcamp completions, and licenses — each labeled by credential type. Write a short resume summary for your own reference. A skill coverage chart shows how frequently each of your skills appears across all the jobs you're tracking.
+Build the foundation for your fit scores and recommendations.
 
-The **Data Backup** card lets you move your data between devices or browsers without an account:
-- **Export Backup** — downloads a `.json` file containing all your jobs, skills, certifications, saved courses, and settings
-- **Import Backup** — upload that file on any other device or browser to restore everything instantly
+- **Skills** — add each skill tagged as Beginner, Intermediate, or Expert
+- **Certifications & Degrees** — track certificates, degrees, bootcamps, and licenses by credential type
+- **Resume Summary** — a short bio for your own reference
+- **Skill Coverage chart** — see how often each of your skills appears across tracked jobs
+- **Data Backup** — export all your data to a `.json` file and import it on any other device or browser
+- **Your Links** — save your LinkedIn, GitHub, and Portfolio URLs locally for quick access
 
-The **Your Links** card stores your professional URLs locally for quick access — LinkedIn, GitHub, and Portfolio. Each saved link shows an **Open ↗** button that opens it in a new tab.
+---
 
 ### Learning Hub
-Built on your aggregate skill gaps across every tracked job, the Learning Hub recommends courses and certifications mapped to the skills you need most. Resources span platforms like Coursera, Google, AWS, LinkedIn Learning, Udemy, and more, with estimated time commitments included. Bookmark the ones you plan to pursue and filter to see only your saved picks.
+Course and certification recommendations built from your skill gaps.
+
+- Pulls from Coursera, Google, AWS, LinkedIn Learning, Udemy, and more
+- Each resource includes an estimated time commitment
+- Bookmark picks and filter to see only your saved resources
+
+---
 
 ### Resume Hub
-A dedicated workspace for getting your resume and portfolio ready:
+A workspace for getting your resume and portfolio in shape.
 
-- **Resume Parser** — Upload your resume as a PDF, Word (.docx), or plain text file, or paste the text directly. The parser scans the content for recognized tech skills and cross-references them against your profile, showing what you already have and letting you import anything new in one click.
-- **Portfolio / GitHub Scanner** — Paste a GitHub profile URL (`github.com/username`) or a GitHub Pages portfolio URL (`username.github.io/repo`) to scan your public repos for languages and topics. Skills detected across your repositories are shown the same way as the resume parser — matched, new, or already in your profile — and can be imported directly. When a specific repo URL is provided, PipelineTrack also pulls the full language breakdown for that project for more accurate results.
-- **Writing Polish** — Run your resume text through a rule-based writing checker that flags passive voice, filler words, weak phrases, and vague language. Each issue comes with a suggestion and a quality score so you can see improvement over time.
-- **Resources & AI Tools** — A curated collection of tools and platforms organized by category: AI writing assistants, resume builders, portfolio hosts, job & salary research, and financial planning. Includes a link to [Cash Compass](https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html) for tracking your budget and financial runway during your search.
+- **Resume Parser** — upload a PDF, Word (.docx), or plain text file, or paste directly. Detected skills are cross-referenced with your profile and can be imported in one click.
+- **GitHub / Portfolio Scanner** — paste a GitHub profile or GitHub Pages URL to scan public repos for languages and topics. Import detected skills the same way.
+- **Writing Polish** — flags passive voice, filler words, weak phrases, and vague language with suggestions and a quality score.
+- **Resources & AI Tools** — curated tools for writing, resume building, portfolio hosting, job research, and financial planning.
 
 ---
 
@@ -75,15 +103,15 @@ A dedicated workspace for getting your resume and portfolio ready:
 | Layer | Details |
 |---|---|
 | Structure | HTML5 |
-| Styling | CSS3 (custom properties, CSS Grid, Flexbox) |
+| Styling | CSS3 (custom properties, Grid, Flexbox) |
 | Logic | Vanilla JavaScript (ES6+) |
-| Storage | Browser localStorage (no backend, no account) |
-| PDF Parsing | PDF.js v3.11.174 (via CDN) |
-| Word Parsing | Mammoth.js v1.6.0 (via CDN) |
-| Portfolio Scanning | GitHub REST API (public, no auth required) |
+| Storage | Browser localStorage |
+| PDF Parsing | PDF.js v3.11.174 (CDN) |
+| Word Parsing | Mammoth.js v1.6.0 (CDN) |
+| Portfolio Scanning | GitHub REST API (public, no auth) |
 | Fonts | Inter via Google Fonts |
 
-No frameworks, no build tools, no server required. Open `index.html` in any modern browser and it works. The GitHub portfolio scanner uses the public GitHub API — no token needed for public profiles.
+No frameworks, no build tools, no server. Open `index.html` in any modern browser and it works.
 
 ---
 
@@ -91,11 +119,11 @@ No frameworks, no build tools, no server required. Open `index.html` in any mode
 
 1. Clone or download this folder
 2. Open `index.html` in your browser
-3. Go to **My Profile**, add your skills and any certifications or degrees you hold
-4. Go to **Job Board**, click **+ Add Job**, paste a job description, and optionally add salary, date posted, job type, and work type (Remote / On-site / Hybrid)
+3. Go to **My Profile** — add your skills and any certifications
+4. Go to **Job Board** → **+ Add Job** — paste a job description and fill in seniority, job type, work type, and other optional fields
 5. Click any job card to see your fit score and skill breakdown
 6. Check the **Learning Hub** to see what to learn next
-7. Head to **Resume Hub** to upload your resume or scan your GitHub portfolio, check your writing, and explore tools
+7. Use **Resume Hub** to parse your resume, scan your GitHub, check your writing, and explore tools
 
 All data is saved to your browser's localStorage. Nothing is sent anywhere.
 
@@ -103,9 +131,9 @@ All data is saved to your browser's localStorage. Nothing is sent anywhere.
 
 ## Roadmap Ideas
 
-- Export job list to CSV (currently exports full backup as JSON; CSV format planned)
+- Export job list to CSV
 - Application deadline reminders
-- Notes timeline per job (log each touchpoint)
+- Notes timeline per job
 - Resume version tagging per application
 - Support for non-tech industry job searches
 
