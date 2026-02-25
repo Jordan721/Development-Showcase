@@ -2,6 +2,8 @@
 
 A personal job search companion built to take the chaos out of hunting for work in tech. Track every application, see how well your skills match each role, polish your resume, and get pointed toward certifications and courses that close your gaps — all in one place, no account required.
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20Site-%2300bfa5?style=for-the-badge)](https://jordan721.github.io/Development-Showcase/Personal_Projects/PipelineTrack/index.html)
+
 > **Note:** PipelineTrack is built specifically for tech industry job searches (software engineering, data analytics, IT, etc.). Support for other industries may be added in the future.
 
 ---
