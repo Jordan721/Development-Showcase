@@ -3,12 +3,28 @@
 A personal job search companion built to take the chaos out of hunting for work in tech. Track every application, measure your skill fit, polish your resume, and close your gaps — all in one place, no account required.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20Site-%2300bfa5?style=for-the-badge)](https://jordan721.github.io/Development-Showcase/Personal_Projects/PipelineTrack/index.html)
+![No Sign-up](https://img.shields.io/badge/No%20Sign--up-Required-4ade80?style=for-the-badge)
+![Works Offline](https://img.shields.io/badge/Works-Offline-60a5fa?style=for-the-badge)
+![100% Private](https://img.shields.io/badge/100%25-Private-a78bfa?style=for-the-badge)
 
 > **Note:** PipelineTrack is built for tech industry job searches (software engineering, data analytics, IT, etc.). Support for other industries may be added in the future.
 
 ---
 
-## Why I Built This
+## ⚡ At a Glance
+
+| Feature | What it does |
+|---|---|
+| 📋 Job Board | Kanban pipeline to track every application by stage |
+| 🎯 Fit Analysis | Scores your skill match against any job description |
+| 🧠 Learning Hub | Course recommendations based on your skill gaps |
+| 📄 Resume Hub | Parse your resume, scan GitHub, and polish your writing |
+| 👤 My Profile | Skills, certifications, resume summary, and saved links |
+| 💾 Data Backup | Export and import your data across devices |
+
+---
+
+## 💡 Why I Built This
 
 Breaking into tech is overwhelming — dozens of tabs, spreadsheets, and sticky notes just to track where you applied and what happened next.
 
@@ -22,9 +38,9 @@ I built PipelineTrack to solve that. One tool to:
 
 ---
 
-## Features
+## 🔧 Features
 
-### Dashboard
+### 📊 Dashboard
 At-a-glance view of your entire job search.
 
 - Stats for total tracked, applied, in-progress, and offers
@@ -34,7 +50,7 @@ At-a-glance view of your entire job search.
 
 ---
 
-### Job Board (Kanban)
+### 📋 Job Board (Kanban)
 A visual pipeline with six stages: **Saved → Applied → Screening → Interview → Offer → Archived**
 
 - Color-coded fit score on every card
@@ -56,7 +72,7 @@ Seniority, job type, and work type each appear as color-coded badges in the deta
 
 ---
 
-### Fit Analysis
+### 🎯 Fit Analysis
 Paste a job description when adding a job and PipelineTrack scores your match automatically.
 
 - **Fit score** — percentage based on your profile skills vs. the job description
@@ -67,7 +83,7 @@ Paste a job description when adding a job and PipelineTrack scores your match au
 
 ---
 
-### My Profile
+### 👤 My Profile
 Build the foundation for your fit scores and recommendations.
 
 - **Skills** — add each skill tagged as Beginner, Intermediate, or Expert
@@ -79,7 +95,7 @@ Build the foundation for your fit scores and recommendations.
 
 ---
 
-### Learning Hub
+### 🧠 Learning Hub
 Course and certification recommendations built from your skill gaps.
 
 - Pulls from Coursera, Google, AWS, LinkedIn Learning, Udemy, and more
@@ -88,7 +104,7 @@ Course and certification recommendations built from your skill gaps.
 
 ---
 
-### Resume Hub
+### 📄 Resume Hub
 A workspace for getting your resume and portfolio in shape.
 
 - **Resume Parser** — upload a PDF, Word (.docx), or plain text file, or paste directly. Detected skills are cross-referenced with your profile and can be imported in one click.
@@ -98,24 +114,22 @@ A workspace for getting your resume and portfolio in shape.
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-| Layer | Details |
-|---|---|
-| Structure | HTML5 |
-| Styling | CSS3 (custom properties, Grid, Flexbox) |
-| Logic | Vanilla JavaScript (ES6+) |
-| Storage | Browser localStorage |
-| PDF Parsing | PDF.js v3.11.174 (CDN) |
-| Word Parsing | Mammoth.js v1.6.0 (CDN) |
-| Portfolio Scanning | GitHub REST API (public, no auth) |
-| Fonts | Inter via Google Fonts |
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
+![localStorage](https://img.shields.io/badge/Storage-localStorage-34d399?style=flat-square)
+![PDF.js](https://img.shields.io/badge/PDF.js-v3.11.174-red?style=flat-square)
+![Mammoth.js](https://img.shields.io/badge/Mammoth.js-v1.6.0-orange?style=flat-square)
+![GitHub API](https://img.shields.io/badge/GitHub-REST%20API-181717?style=flat-square&logo=github&logoColor=white)
+![Google Fonts](https://img.shields.io/badge/Font-Inter-4285F4?style=flat-square&logo=google&logoColor=white)
 
 No frameworks, no build tools, no server. Open `index.html` in any modern browser and it works.
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
 1. Clone or download this folder
 2. Open `index.html` in your browser
@@ -129,7 +143,7 @@ All data is saved to your browser's localStorage. Nothing is sent anywhere.
 
 ---
 
-## Roadmap Ideas
+## 🗺️ Roadmap Ideas
 
 - Export job list to CSV
 - Application deadline reminders
