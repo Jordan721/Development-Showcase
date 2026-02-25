@@ -1189,6 +1189,15 @@ function openJobDetail(id) {
     benefitsRow.style.display = 'none';
   }
 
+  // Department
+  const departmentRow = document.getElementById('detail-department-row');
+  if (job.department) {
+    document.getElementById('detail-department').textContent = job.department;
+    departmentRow.style.display = '';
+  } else {
+    departmentRow.style.display = 'none';
+  }
+
   // Seniority badge
   const seniorityBadge = document.getElementById('detail-seniority');
   if (job.seniority) {
@@ -1289,6 +1298,7 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-edit-id').value = editId || '';
   document.getElementById('job-role').value = job ? job.role || '' : '';
   document.getElementById('job-company').value = job ? job.company || '' : '';
+  document.getElementById('job-department').value = job ? job.department || '' : '';
   document.getElementById('job-location').value = job ? job.location || '' : '';
   document.getElementById('job-url').value = job ? job.url || '' : '';
   document.getElementById('job-salary').value = job ? job.salary || '' : '';
@@ -1323,6 +1333,7 @@ function saveJob() {
   const jobData = {
     role,
     company,
+    department: document.getElementById('job-department').value.trim(),
     location: document.getElementById('job-location').value.trim(),
     url: document.getElementById('job-url').value.trim(),
     salary: document.getElementById('job-salary').value.trim(),

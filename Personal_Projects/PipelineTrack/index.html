@@ -43,7 +43,8 @@
         <a href="../../index.html" class="back-link">
             ← Back to Showcase
         </a>
-        <a href="https://github.com/jordan721/Development-Showcase/blob/main/Personal_Projects/PipelineTrack/README.md" class="back-link" target="_blank" rel="noopener">
+        <a href="https://github.com/jordan721/Development-Showcase/blob/main/Personal_Projects/PipelineTrack/README.md"
+            class="back-link" target="_blank" rel="noopener">
             ☰ Documentation ↗
         </a>
         <div class="sidebar-footer">
@@ -210,7 +211,8 @@
 
                 <div class="profile-card">
                     <div class="profile-section-title">Data Backup</div>
-                    <p class="profile-hint">Export all your jobs, skills, and settings to a file. Import that file on any other device or browser to restore everything.</p>
+                    <p class="profile-hint">Export all your jobs, skills, and settings to a file. Import that file on
+                        any other device or browser to restore everything.</p>
                     <div class="backup-actions">
                         <button class="btn-primary" id="export-btn">⬇ Export Backup</button>
                         <button class="btn-ghost" id="import-btn">⬆ Import Backup</button>
@@ -221,27 +223,34 @@
 
                 <div class="profile-card full-width">
                     <div class="profile-section-title">Your Links</div>
-                    <p class="profile-hint">Save your professional links for quick reference. Stored locally and never shared.</p>
+                    <p class="profile-hint">Save your professional links for quick reference. Stored locally and never
+                        shared.</p>
                     <div class="links-grid">
                         <div class="links-field">
                             <label class="form-label">LinkedIn</label>
                             <div class="links-input-row">
-                                <input type="url" class="text-input" id="link-linkedin" placeholder="https://linkedin.com/in/yourname" />
-                                <a class="link-open-btn" id="link-linkedin-open" href="#" target="_blank" rel="noopener" style="display:none">Open ↗</a>
+                                <input type="url" class="text-input" id="link-linkedin"
+                                    placeholder="https://linkedin.com/in/yourname" />
+                                <a class="link-open-btn" id="link-linkedin-open" href="#" target="_blank" rel="noopener"
+                                    style="display:none">Open ↗</a>
                             </div>
                         </div>
                         <div class="links-field">
                             <label class="form-label">GitHub</label>
                             <div class="links-input-row">
-                                <input type="url" class="text-input" id="link-github" placeholder="https://github.com/yourusername" />
-                                <a class="link-open-btn" id="link-github-open" href="#" target="_blank" rel="noopener" style="display:none">Open ↗</a>
+                                <input type="url" class="text-input" id="link-github"
+                                    placeholder="https://github.com/yourusername" />
+                                <a class="link-open-btn" id="link-github-open" href="#" target="_blank" rel="noopener"
+                                    style="display:none">Open ↗</a>
                             </div>
                         </div>
                         <div class="links-field">
                             <label class="form-label">Portfolio</label>
                             <div class="links-input-row">
-                                <input type="url" class="text-input" id="link-portfolio" placeholder="https://yourportfolio.com" />
-                                <a class="link-open-btn" id="link-portfolio-open" href="#" target="_blank" rel="noopener" style="display:none">Open ↗</a>
+                                <input type="url" class="text-input" id="link-portfolio"
+                                    placeholder="https://yourportfolio.com" />
+                                <a class="link-open-btn" id="link-portfolio-open" href="#" target="_blank"
+                                    rel="noopener" style="display:none">Open ↗</a>
                             </div>
                         </div>
                     </div>
@@ -348,7 +357,7 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" id="job-edit-id" />
-                <div class="form-row two-col">
+                <div class="form-row three-col">
                     <div class="form-group">
                         <label class="form-label">Role / Title *</label>
                         <input type="text" class="text-input" id="job-role" placeholder="e.g. Frontend Engineer" />
@@ -356,6 +365,10 @@
                     <div class="form-group">
                         <label class="form-label">Company *</label>
                         <input type="text" class="text-input" id="job-company" placeholder="e.g. Acme Corp" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Department</label>
+                        <input type="text" class="text-input" id="job-department" placeholder="e.g. Engineering, Data" />
                     </div>
                 </div>
                 <div class="form-row two-col">
@@ -498,6 +511,10 @@
                         <span class="work-type-badge" id="detail-work-type" style="display:none"></span>
                         <a class="detail-link" id="detail-url" href="#" target="_blank" rel="noopener">View Posting
                             ↗</a>
+                    </div>
+                    <div class="detail-meta-row" id="detail-department-row" style="display:none">
+                        <span class="detail-meta-label">Department</span>
+                        <span class="detail-meta-value" id="detail-department"></span>
                     </div>
                     <div class="detail-meta-row" id="detail-salary-row" style="display:none">
                         <span class="detail-meta-label">Salary</span>

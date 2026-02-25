@@ -66,7 +66,7 @@ Each job stores:
 | Seniority | Internship, Junior, Mid-Level, Senior, Lead, Staff |
 | Job Type | Full-time, Part-time, Contract, Freelance, Internship, Temporary, Apprenticeship |
 | Work Type | Remote, On-site, Hybrid |
-| Other | Salary, Date Posted, Benefits, Notes, Job URL |
+| Other | Department, Salary, Date Posted, Benefits, Notes, Job URL |
 
 Seniority, job type, and work type each appear as color-coded badges in the detail view.
 
@@ -134,7 +134,7 @@ No frameworks, no build tools, no server. Open `index.html` in any modern browse
 1. Clone or download this folder
 2. Open `index.html` in your browser
 3. Go to **My Profile** — add your skills and any certifications
-4. Go to **Job Board** → **+ Add Job** — paste a job description and fill in seniority, job type, work type, and other optional fields
+4. Go to **Job Board** → **+ Add Job** — paste a job description and fill in department, seniority, job type, work type, and other optional fields
 5. Click any job card to see your fit score and skill breakdown
 6. Check the **Learning Hub** to see what to learn next
 7. Use **Resume Hub** to parse your resume, scan your GitHub, check your writing, and explore tools
