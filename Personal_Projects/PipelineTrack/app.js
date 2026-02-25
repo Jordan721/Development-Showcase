@@ -1295,6 +1295,7 @@ function openAddJobModal(editId = null) {
   const job = editId ? state.jobs.find(j => j.id === editId) : null;
 
   document.getElementById('modal-job-title').textContent = job ? 'Edit Job' : 'Add New Job';
+  document.getElementById('job-modal-back-btn').style.display = editId ? '' : 'none';
   document.getElementById('job-edit-id').value = editId || '';
   document.getElementById('job-role').value = job ? job.role || '' : '';
   document.getElementById('job-company').value = job ? job.company || '' : '';
@@ -1370,6 +1371,7 @@ function saveJob() {
   closeModal('modal-job');
   toast(editId ? 'Job updated.' : 'Job added!', 'success');
   renderView(state.activeView);
+  if (editId) openJobDetail(editId);
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -2122,6 +2124,13 @@ function wireEvents() {
   document.getElementById('detail-edit-btn').addEventListener('click', () => {
     closeModal('modal-detail');
     openAddJobModal(state.activeJobId);
+  });
+
+  // Job modal — back button (edit mode only)
+  document.getElementById('job-modal-back-btn').addEventListener('click', () => {
+    const editId = document.getElementById('job-edit-id').value;
+    closeModal('modal-job');
+    if (editId) openJobDetail(editId);
   });
 
   // Detail modal — delete button
