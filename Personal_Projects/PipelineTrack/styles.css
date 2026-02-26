@@ -16,6 +16,49 @@
   --radius-sm: 6px;
 }
 
+/* ── LIGHT THEME ───────────────────────────────────────── */
+[data-theme="light"] {
+  --bg: #f6f8fa;
+  --surface: #ffffff;
+  --card: #eef1f4;
+  --border: #d0d7de;
+  --accent: #0099a8;
+  --accent-dim: #cceef2;
+  --green: #1a7f37;
+  --yellow: #9a6700;
+  --red: #d1242f;
+  --text: #1f2328;
+  --text-muted: #57606a;
+}
+
+[data-theme="light"] input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: none;
+  opacity: 0.5;
+}
+
+[data-theme="light"] input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  filter: none;
+  opacity: 1;
+}
+
+/* ── THEME TOGGLE ──────────────────────────────────────── */
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  padding: 4px 9px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+  line-height: 1;
+}
+
+.theme-toggle:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
 /* ── RESET ─────────────────────────────────────────────── */
 *,
 *::before,
@@ -1674,6 +1717,20 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 .detail-meta-value {
   color: var(--text);
   font-weight: 500;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.benefit-chip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 99px;
+  background: rgba(0, 191, 165, .12);
+  color: var(--accent);
+  white-space: nowrap;
 }
 
 .detail-desc-label {

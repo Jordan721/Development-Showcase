@@ -6,6 +6,7 @@ A personal job search companion built to take the chaos out of hunting for work 
 ![No Sign-up](https://img.shields.io/badge/No%20Sign--up-Required-4ade80?style=for-the-badge)
 ![Works Offline](https://img.shields.io/badge/Works-Offline-60a5fa?style=for-the-badge)
 ![100% Private](https://img.shields.io/badge/100%25-Private-a78bfa?style=for-the-badge)
+![Light & Dark Mode](https://img.shields.io/badge/Light%20%26%20Dark-Mode-f59e0b?style=for-the-badge)
 
 > **Note:** PipelineTrack is built for tech industry job searches (software engineering, data analytics, IT, etc.). Support for other industries may be added in the future.
 
@@ -35,6 +36,7 @@ I built PipelineTrack to solve that. One tool to:
 - Surface exactly what you're missing and where to learn it
 - Help you put your best resume forward
 - Work entirely in the browser — no sign-up, no backend
+- Switch between light and dark mode to suit your preference
 
 ---
 
@@ -68,7 +70,9 @@ Each job stores:
 | Work Type | Remote, On-site, Hybrid |
 | Other | Department, Salary, Date Posted, Benefits, Notes, Job URL |
 
-Seniority, job type, and work type each appear as color-coded badges in the detail view.
+Seniority, job type, and work type each appear as color-coded badges in the detail view. Benefits are automatically parsed into labeled chips — health insurance, 401k, PTO, equity, and more — rather than showing raw pasted text.
+
+Clicking **Edit** on a job opens the edit form with a **← Back** button to return to the detail view without losing your place.
 
 ---
 
@@ -139,7 +143,7 @@ No frameworks, no build tools, no server. Open `index.html` in any modern browse
 6. Check the **Learning Hub** to see what to learn next
 7. Use **Resume Hub** to parse your resume, scan your GitHub, check your writing, and explore tools
 
-All data is saved to your browser's localStorage. Nothing is sent anywhere.
+All data is saved to your browser's localStorage. Nothing is sent anywhere. Use the ☀️ / 🌙 button in the top bar to switch between light and dark mode — your preference is remembered.
 
 ---
 

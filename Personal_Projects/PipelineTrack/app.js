@@ -1151,6 +1151,63 @@ function escHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+function parseBenefits(text) {
+  // Keyword map: pattern → short label
+  const MAP = [
+    [/health\s*insurance|medical/i, 'Health Insurance'],
+    [/dental/i, 'Dental'],
+    [/vision/i, 'Vision'],
+    [/401k|retirement|pension/i, '401k / Retirement'],
+    [/equity|stock|rsu|espp/i, 'Equity'],
+    [/bonus/i, 'Bonus'],
+    [/unlimited\s*pto|unlimited\s*vacation/i, 'Unlimited PTO'],
+    [/pto|paid\s*time\s*off|vacation/i, 'PTO'],
+    [/sick\s*(days?|leave)/i, 'Sick Leave'],
+    [/parental\s*leave|maternity|paternity/i, 'Parental Leave'],
+    [/remote|work\s*from\s*home|wfh/i, 'Remote Work'],
+    [/flexible\s*(hours?|schedule)/i, 'Flexible Hours'],
+    [/life\s*insurance/i, 'Life Insurance'],
+    [/disability/i, 'Disability Insurance'],
+    [/hsa|fsa/i, 'HSA / FSA'],
+    [/tuition|education|learning\s*stipend/i, 'Education Stipend'],
+    [/professional\s*development/i, 'Prof. Development'],
+    [/gym|fitness|wellness/i, 'Wellness / Gym'],
+    [/commuter|transit|parking/i, 'Commuter Benefits'],
+    [/relocation/i, 'Relocation'],
+    [/signing\s*bonus/i, 'Signing Bonus'],
+    [/snacks?|lunch|meals?|food/i, 'Free Food'],
+    [/home\s*office\s*stipend|equipment/i, 'Home Office Stipend'],
+    [/mental\s*health/i, 'Mental Health'],
+    [/childcare|dependent\s*care/i, 'Childcare'],
+    [/volunteer|community/i, 'Volunteer Time'],
+  ];
+
+  // Split on common delimiters
+  const parts = text.split(/[,;\n•\-\*]+/).map(s => s.trim()).filter(Boolean);
+
+  const seen = new Set();
+  const results = [];
+
+  for (const part of parts) {
+    let matched = false;
+    for (const [pattern, label] of MAP) {
+      if (pattern.test(part) && !seen.has(label)) {
+        seen.add(label);
+        results.push(label);
+        matched = true;
+        break;
+      }
+    }
+    // If nothing matched but it's short enough, show it as-is
+    if (!matched && part.length <= 40 && !seen.has(part)) {
+      seen.add(part);
+      results.push(part);
+    }
+  }
+
+  return results;
+}
+
 /* ══════════════════════════════════════════════════════════
    JOB DETAIL MODAL
    ══════════════════════════════════════════════════════════ */
@@ -1183,7 +1240,13 @@ function openJobDetail(id) {
   // Benefits
   const benefitsRow = document.getElementById('detail-benefits-row');
   if (job.benefits) {
-    document.getElementById('detail-benefits').textContent = job.benefits;
+    const chips = parseBenefits(job.benefits);
+    const el = document.getElementById('detail-benefits');
+    if (chips.length) {
+      el.innerHTML = chips.map(b => `<span class="benefit-chip">${escHtml(b)}</span>`).join('');
+    } else {
+      el.textContent = job.benefits;
+    }
     benefitsRow.style.display = '';
   } else {
     benefitsRow.style.display = 'none';
@@ -2007,6 +2070,9 @@ function wireEvents() {
   // Topbar action (Add Job)
   document.getElementById('topbar-action').addEventListener('click', () => openAddJobModal());
 
+  // Theme toggle
+  document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+
   // Close modals via [data-close]
   document.querySelectorAll('[data-close]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -2147,7 +2213,22 @@ function wireEvents() {
 /* ══════════════════════════════════════════════════════════
    INIT
    ══════════════════════════════════════════════════════════ */
+function initTheme() {
+  const saved = localStorage.getItem('pt-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('theme-toggle-btn').textContent = saved === 'light' ? '🌙' : '☀️';
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  document.getElementById('theme-toggle-btn').textContent = next === 'light' ? '🌙' : '☀️';
+  localStorage.setItem('pt-theme', next);
+}
+
 function init() {
+  initTheme();
   load();
   reanalyzeAllJobs();
   wireEvents();
