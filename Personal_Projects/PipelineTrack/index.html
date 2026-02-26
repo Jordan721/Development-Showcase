@@ -62,7 +62,8 @@
         <header class="topbar">
             <div class="topbar-title" id="topbar-title">Dashboard</div>
             <div style="display:flex;align-items:center;gap:10px">
-                <button class="theme-toggle" id="theme-toggle-btn" title="Toggle light/dark mode"><span id="theme-icon"></span></button>
+                <button class="theme-toggle" id="theme-toggle-btn" title="Toggle light/dark mode"><span
+                        id="theme-icon"></span></button>
                 <button class="btn-primary" id="topbar-action" data-action="add-job">+ Add Job</button>
             </div>
         </header>
@@ -91,6 +92,10 @@
                 <div class="stat-card">
                     <div class="stat-label">Offers</div>
                     <div class="stat-value green" id="stat-offers">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Declined</div>
+                    <div class="stat-value red" id="stat-declined">0</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Avg Fit Score</div>
@@ -147,8 +152,14 @@
             <div class="board-controls">
                 <label class="toggle-label">
                     <input type="checkbox" id="show-archived" />
-                    Show Archived
+                    Show Archived / Declined
                 </label>
+                <div class="layout-toggle">
+                    <button class="layout-btn" id="layout-btn-columns" data-layout="columns"
+                        title="Column view">⊞</button>
+                    <button class="layout-btn" id="layout-btn-swimlane" data-layout="swimlane"
+                        title="Swimlane view">☰</button>
+                </div>
                 <div class="board-period-filters">
                     <button class="board-filter active" data-period="all">All Time</button>
                     <button class="board-filter" data-period="year">This Year</button>
@@ -219,9 +230,10 @@
                     <div class="backup-actions">
                         <button class="btn-primary" id="export-btn">⬇ Export Backup</button>
                         <button class="btn-ghost" id="import-btn">⬆ Import Backup</button>
+                        <button class="btn-danger" id="clear-all-btn">✕ Clear All Jobs</button>
                         <input type="file" id="import-file-input" accept=".json" style="display:none" />
                     </div>
-                    <div id="import-status"></div>
+                    <div id="backup-status"></div>
                 </div>
 
                 <div class="profile-card full-width">
@@ -374,7 +386,8 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Department</label>
-                        <input type="text" class="text-input" id="job-department" placeholder="e.g. Engineering, Data" />
+                        <input type="text" class="text-input" id="job-department"
+                            placeholder="e.g. Engineering, Data" />
                     </div>
                 </div>
                 <div class="form-row two-col">
@@ -407,6 +420,7 @@
                             <option value="screening">Screening</option>
                             <option value="interview">Interview</option>
                             <option value="offer">Offer</option>
+                            <option value="declined">Declined</option>
                             <option value="archived">Archived</option>
                         </select>
                     </div>

@@ -458,14 +458,16 @@ const STRONG_VERBS = [
 /* ══════════════════════════════════════════════════════════
    STATE
    ══════════════════════════════════════════════════════════ */
-const STAGES = ['saved', 'applied', 'screening', 'interview', 'offer', 'archived'];
+const STAGES = ['saved', 'applied', 'screening', 'interview', 'offer', 'declined', 'archived'];
 let boardPeriod = 'all';
+let boardLayout = localStorage.getItem('pt-board-layout') || 'swimlane';
 const STAGE_LABELS = {
   saved: 'Saved',
   applied: 'Applied',
   screening: 'Screening',
   interview: 'Interview',
   offer: 'Offer',
+  declined: 'Declined',
   archived: 'Archived'
 };
 
@@ -545,21 +547,29 @@ function exportData() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'pipelinetrack-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+  const filename = 'pipelinetrack-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
   toast('Backup downloaded.', 'success');
+  const statusEl = document.getElementById('backup-status');
+  if (statusEl) {
+    statusEl.textContent = '⬇ Exported: ' + filename;
+    statusEl.className = 'import-status success';
+  }
 }
 
 function importData(file) {
-  const statusEl = document.getElementById('import-status');
   const reader = new FileReader();
   reader.onload = e => {
     try {
       const data = JSON.parse(e.target.result);
+      const statusEl = document.getElementById('backup-status');
       if (!Array.isArray(data.jobs) || typeof data.profile !== 'object') {
-        statusEl.textContent = '✕ Invalid backup file — make sure you\'re using a PipelineTrack export.';
-        statusEl.className = 'import-status error';
+        if (statusEl) {
+          statusEl.textContent = '✕ Invalid backup file — make sure you\'re using a PipelineTrack export.';
+          statusEl.className = 'import-status error';
+        }
         return;
       }
       state.jobs = data.jobs;
@@ -569,13 +579,20 @@ function importData(file) {
       save();
       reanalyzeAllJobs();
       renderView(state.activeView);
-      const count = state.jobs.length;
-      statusEl.textContent = '✓ Imported ' + count + ' job' + (count !== 1 ? 's' : '') + ' — ' + new Date(data.exportedAt || Date.now()).toLocaleDateString();
-      statusEl.className = 'import-status success';
+      // Re-query after renderView since it rebuilds the DOM
+      const freshStatusEl = document.getElementById('backup-status');
+      if (freshStatusEl) {
+        const count = state.jobs.length;
+        freshStatusEl.textContent = '⬆ Imported: ' + file.name + ' — ' + count + ' job' + (count !== 1 ? 's' : '');
+        freshStatusEl.className = 'import-status success';
+      }
       toast('Backup imported successfully.', 'success');
     } catch {
-      statusEl.textContent = '✕ Could not read file. Make sure it\'s a valid .json backup.';
-      statusEl.className = 'import-status error';
+      const statusEl = document.getElementById('backup-status');
+      if (statusEl) {
+        statusEl.textContent = '✕ Could not read file. Make sure it\'s a valid .json backup.';
+        statusEl.className = 'import-status error';
+      }
     }
   };
   reader.readAsText(file);
@@ -742,6 +759,7 @@ function renderDashboard() {
   const applied = jobs.filter(j => j.stage === 'applied').length;
   const progress = jobs.filter(j => ['screening', 'interview'].includes(j.stage)).length;
   const offers = jobs.filter(j => j.stage === 'offer').length;
+  const declined = jobs.filter(j => j.stage === 'declined').length;
 
   const scored = jobs.filter(j => j.fitScore !== null && j.fitScore !== undefined);
   const avgFit = scored.length ? Math.round(scored.reduce((a, j) => a + j.fitScore, 0) / scored.length) : null;
@@ -750,6 +768,7 @@ function renderDashboard() {
   document.getElementById('stat-applied').textContent = applied;
   document.getElementById('stat-progress').textContent = progress;
   document.getElementById('stat-offers').textContent = offers;
+  document.getElementById('stat-declined').textContent = declined;
   document.getElementById('stat-fit').textContent = avgFit !== null ? `${avgFit}%` : '—';
   document.getElementById('sidebar-job-count').textContent = `${total} job${total !== 1 ? 's' : ''} tracked`;
 
@@ -1036,27 +1055,57 @@ function boardInPeriod(job) {
 
 function renderBoard() {
   const showArchived = document.getElementById('show-archived').checked;
-  const visibleStages = showArchived ? STAGES : STAGES.filter(s => s !== 'archived');
+  const visibleStages = showArchived ? STAGES : STAGES.filter(s => s !== 'archived' && s !== 'declined');
   const board = document.getElementById('kanban-board');
   const periodJobs = state.jobs.filter(boardInPeriod);
 
-  board.innerHTML = visibleStages.map(stage => {
-    const jobs = periodJobs.filter(j => j.stage === stage);
-    return `
-      <div class="kanban-col" data-stage="${stage}">
-        <div class="col-stripe stripe-${stage}"></div>
-        <div class="kanban-col-header">
-          ${STAGE_LABELS[stage]}
-          <span class="kanban-col-count">${jobs.length}</span>
-        </div>
-        <div class="kanban-col-body" data-stage="${stage}">
-          ${jobs.length === 0
-            ? `<div class="no-jobs-col">No jobs here</div>`
-            : jobs.map(j => jobCardHTML(j)).join('')}
-        </div>
-      </div>`;
-  }).join('');
+  // Apply layout class
+  board.className = `kanban kanban--${boardLayout}`;
 
+  // Update layout toggle buttons
+  document.querySelectorAll('.layout-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.layout === boardLayout);
+  });
+
+  if (boardLayout === 'columns') {
+    board.innerHTML = visibleStages.map(stage => {
+      const jobs = periodJobs.filter(j => j.stage === stage);
+      return `
+        <div class="kanban-col" data-stage="${stage}">
+          <div class="col-stripe stripe-${stage}"></div>
+          <div class="kanban-col-header">
+            ${STAGE_LABELS[stage]}
+            <span class="kanban-col-count">${jobs.length}</span>
+          </div>
+          <div class="kanban-col-body" data-stage="${stage}">
+            ${jobs.length === 0
+              ? `<div class="no-jobs-col">No jobs here</div>`
+              : jobs.map(j => jobCardHTML(j)).join('')}
+          </div>
+        </div>`;
+    }).join('');
+  } else {
+    board.innerHTML = visibleStages.map(stage => {
+      const jobs = periodJobs.filter(j => j.stage === stage);
+      return `
+        <div class="swimlane-row" data-stage="${stage}">
+          <div class="swimlane-label">
+            <div class="col-stripe stripe-${stage}"></div>
+            <div class="swimlane-label-inner">
+              <span class="swimlane-stage-name">${STAGE_LABELS[stage]}</span>
+              <span class="kanban-col-count">${jobs.length}</span>
+            </div>
+          </div>
+          <div class="swimlane-cards" data-stage="${stage}">
+            ${jobs.length === 0
+              ? `<div class="no-jobs-col">No jobs here</div>`
+              : jobs.map(j => jobCardHTML(j)).join('')}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  const dropSelector = boardLayout === 'columns' ? '.kanban-col-body' : '.swimlane-cards';
   let draggedJobId = null;
 
   board.querySelectorAll('.card-delete-btn').forEach(btn => {
@@ -1085,11 +1134,11 @@ function renderBoard() {
 
     card.addEventListener('dragend', () => {
       card.classList.remove('dragging');
-      board.querySelectorAll('.kanban-col-body').forEach(b => b.classList.remove('drag-over'));
+      board.querySelectorAll(dropSelector).forEach(b => b.classList.remove('drag-over'));
     });
   });
 
-  board.querySelectorAll('.kanban-col-body').forEach(body => {
+  board.querySelectorAll(dropSelector).forEach(body => {
     const targetStage = body.dataset.stage;
 
     body.addEventListener('dragover', e => {
@@ -1127,6 +1176,15 @@ function renderBoard() {
       document.querySelectorAll('.board-filter').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       boardPeriod = btn.dataset.period;
+      renderBoard();
+    };
+  });
+
+  // Wire layout toggle buttons
+  document.querySelectorAll('.layout-btn').forEach(btn => {
+    btn.onclick = () => {
+      boardLayout = btn.dataset.layout;
+      localStorage.setItem('pt-board-layout', boardLayout);
       renderBoard();
     };
   });
@@ -2113,9 +2171,16 @@ function wireEvents() {
     toast('Summary saved.', 'success');
   });
 
-  // Export / Import
+  // Export / Import / Clear All
   document.getElementById('export-btn').addEventListener('click', exportData);
   document.getElementById('import-btn').addEventListener('click', () => document.getElementById('import-file-input').click());
+  document.getElementById('clear-all-btn').addEventListener('click', () => {
+    if (!confirm('Clear all tracked jobs? This cannot be undone.')) return;
+    state.jobs = [];
+    save();
+    toast('All jobs cleared.', '');
+    renderView(state.activeView);
+  });
   document.getElementById('import-file-input').addEventListener('change', e => {
     if (e.target.files[0]) {
       importData(e.target.files[0]);

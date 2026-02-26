@@ -45,7 +45,7 @@ I built PipelineTrack to solve that. One tool to:
 ### 📊 Dashboard
 At-a-glance view of your entire job search.
 
-- Stats for total tracked, applied, in-progress, and offers
+- Six stat cards in a 2-row grid: **Total Tracked, Applied, In Progress, Offers, Declined, Avg Fit Score**
 - Top skill gaps and top matched skills across all your jobs
 - **Job Activity calendar** — visualize when you added jobs by Week, Month, Year, or All Time
 - Click any day or month tile to see a popup of every job added in that period
@@ -53,12 +53,14 @@ At-a-glance view of your entire job search.
 ---
 
 ### 📋 Job Board (Kanban)
-A visual pipeline with six stages: **Saved → Applied → Screening → Interview → Offer → Archived**
+A visual pipeline with seven stages: **Saved → Applied → Screening → Interview → Offer → Declined → Archived**
 
+- **Declined** — for roles where the company said no; tracked separately from Archived so you can see your rejection rate in the dashboard
+- **Archived** — for roles you chose to remove from your active view
 - Color-coded fit score on every card
 - Drag cards between columns to update their stage
 - Hover a card to reveal a quick-delete **×** button
-- Toggle archived jobs on/off to keep the board clean
+- Toggle Archived / Declined columns on or off to keep the board clean
 - Filter by **This Week / This Month / This Year / All Time**
 
 Each job stores:
@@ -94,7 +96,8 @@ Build the foundation for your fit scores and recommendations.
 - **Certifications & Degrees** — track certificates, degrees, bootcamps, and licenses by credential type
 - **Resume Summary** — a short bio for your own reference
 - **Skill Coverage chart** — see how often each of your skills appears across tracked jobs
-- **Data Backup** — export all your data to a `.json` file and import it on any other device or browser
+- **Data Backup** — export all your data to a `.json` file and import it on any other device or browser; the filename and a confirmation message appear under the buttons after each action
+- **Clear All Jobs** — wipe all tracked jobs in one click (with confirmation) to start fresh
 - **Your Links** — save your LinkedIn, GitHub, and Portfolio URLs locally for quick access
 
 ---
