@@ -44,19 +44,22 @@
 /* ── THEME TOGGLE ──────────────────────────────────────── */
 .theme-toggle {
   background: none;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text-muted);
-  padding: 4px 9px;
-  font-size: 14px;
+  border: none;
+  padding: 4px;
   cursor: pointer;
-  transition: color .15s, border-color .15s;
-  line-height: 1;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  transition: color .15s, transform .2s;
 }
 
 .theme-toggle:hover {
   color: var(--text);
-  border-color: var(--text-muted);
+  transform: rotate(20deg) scale(1.15);
+}
+
+.theme-toggle svg {
+  display: block;
 }
 
 /* ── RESET ─────────────────────────────────────────────── */
