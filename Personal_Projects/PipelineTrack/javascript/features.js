@@ -310,9 +310,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ── Apply-by + Resume Used fields in Add / Edit Job modal ── */
-  const jobNotesGroup = document.getElementById('job-notes') &&
-    document.getElementById('job-notes').closest('.form-group');
-  if (jobNotesGroup) {
+  /* Placed after the Stage/Seniority/JobType/WorkType row, before the description */
+  const stageRow = document.getElementById('job-stage') &&
+    document.getElementById('job-stage').closest('.form-row');
+  if (stageRow) {
     const row = document.createElement('div');
     row.className = 'form-row two-col';
     row.innerHTML =
@@ -324,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
       '<label class="form-label">Resume Used <span class="label-hint">(version / label)</span></label>' +
       '<input type="text" class="text-input" id="job-resume-version" placeholder="e.g. SWE focus v2" />' +
       '</div>';
-    jobNotesGroup.insertAdjacentElement('afterend', row);
+    stageRow.insertAdjacentElement('afterend', row);
   }
 
   /* ── Deadline + resume version meta rows in Detail modal ── */
