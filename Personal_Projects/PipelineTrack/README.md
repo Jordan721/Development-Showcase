@@ -134,6 +134,21 @@ A workspace for getting your resume and portfolio in shape.
 
 No frameworks, no build tools, no server. Open `index.html` in any modern browser and it works.
 
+**File structure:**
+```
+PipelineTrack/
+├── index.html
+├── css/
+│   ├── base.css        # variables, reset, layout, buttons, forms
+│   ├── dashboard.css   # stat cards, calendar views
+│   ├── board.css       # kanban columns, swimlane, job cards
+│   ├── modals.css      # modals, profile, learning hub, resume hub
+│   └── features.css    # deadline banner, notes timeline
+└── javascript/
+    ├── app.js          # core app logic
+    └── features.js     # deadline reminders, notes timeline, resume tagging
+```
+
 ---
 
 ## 🚀 Getting Started
@@ -153,9 +168,6 @@ All data is saved to your browser's localStorage. Nothing is sent anywhere. Use 
 ## 🗺️ Roadmap Ideas
 
 - Export job list to CSV
-- Application deadline reminders
-- Notes timeline per job
-- Resume version tagging per application
 - Support for non-tech industry job searches
 
 ---

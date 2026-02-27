@@ -1,0 +1,351 @@
+/* ── KANBAN ────────────────────────────────────────────── */
+.board-controls {
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.kanban {
+  display: flex;
+  padding-bottom: 12px;
+}
+
+/* ── COLUMN LAYOUT ─────────────────────────────────────── */
+.kanban--columns {
+  flex-direction: row;
+  gap: 10px;
+  overflow-x: auto;
+  min-height: 60vh;
+  align-items: flex-start;
+}
+
+.kanban--columns .col-stripe {
+  height: 3px;
+  width: 100%;
+  border-radius: 0;
+}
+
+.kanban-col {
+  min-width: 175px;
+  max-width: 220px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.kanban-col-header {
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.kanban-col-body {
+  flex: 1;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  max-height: 65vh;
+}
+
+.kanban-col-body.drag-over {
+  background: rgba(0, 212, 170, 0.07);
+  outline: 2px dashed var(--accent);
+  outline-offset: -4px;
+}
+
+.kanban--columns .job-card {
+  width: auto;
+}
+
+/* ── SWIMLANE LAYOUT ───────────────────────────────────── */
+.kanban--swimlane {
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── LAYOUT TOGGLE ─────────────────────────────────────── */
+.layout-toggle {
+  display: flex;
+  gap: 4px;
+}
+
+.layout-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  padding: 4px 9px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+  line-height: 1;
+}
+
+.layout-btn.active,
+.layout-btn:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── SWIMLANE ROW ──────────────────────────────────────── */
+.swimlane-row {
+  display: flex;
+  align-items: stretch;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  min-height: 110px;
+}
+
+.swimlane-label {
+  width: 130px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-right: 1px solid var(--border);
+  background: var(--card);
+}
+
+.col-stripe {
+  width: 4px;
+  height: 100%;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+
+.swimlane-label-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.swimlane-stage-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+
+.swimlane-cards {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 12px;
+  align-content: flex-start;
+}
+
+.swimlane-cards.drag-over {
+  background: rgba(0, 212, 170, 0.07);
+  outline: 2px dashed var(--accent);
+  outline-offset: -4px;
+}
+
+.kanban-col-count {
+  background: var(--border);
+  color: var(--text-muted);
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 7px;
+  width: fit-content;
+}
+
+/* stage stripe colors */
+.stripe-saved {
+  background: var(--text-muted);
+}
+
+.stripe-applied {
+  background: var(--accent);
+}
+
+.stripe-screening {
+  background: #a78bfa;
+}
+
+.stripe-interview {
+  background: var(--yellow);
+}
+
+.stripe-offer {
+  background: var(--green);
+}
+
+.stripe-declined {
+  background: var(--red);
+}
+
+.stripe-archived {
+  background: var(--border);
+}
+
+/* job card */
+.job-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  cursor: grab;
+  transition: border-color .15s, transform .1s, opacity .15s;
+  user-select: none;
+  width: 200px;
+  flex-shrink: 0;
+}
+
+.job-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.job-card.dragging {
+  opacity: 0.35;
+  cursor: grabbing;
+}
+
+.drag-handle {
+  color: var(--text-muted);
+  margin-right: 5px;
+  font-size: 13px;
+  opacity: 0.5;
+}
+
+.job-card:hover .drag-handle {
+  opacity: 1;
+}
+
+.card-delete-btn {
+  position: absolute;
+  top: 6px;
+  right: 7px;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 13px;
+  line-height: 17px;
+  text-align: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .15s;
+  padding: 0;
+  font-weight: 700;
+}
+
+.job-card:hover .card-delete-btn {
+  opacity: 1;
+}
+
+.card-delete-btn:hover {
+  background: #ff2244;
+}
+
+.board-drag-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+.board-period-filters {
+  display: flex;
+  gap: 4px;
+}
+
+.board-filter {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.board-filter.active,
+.board-filter:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.job-card-role {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.job-card-company {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.job-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.job-card-date {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* fit badge */
+.fit-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.fit-high {
+  background: rgba(63, 185, 80, .18);
+  color: var(--green);
+}
+
+.fit-mid {
+  background: rgba(210, 153, 34, .18);
+  color: var(--yellow);
+}
+
+.fit-low {
+  background: rgba(255, 77, 109, .18);
+  color: var(--red);
+}
+
+.fit-none {
+  background: var(--border);
+  color: var(--text-muted);
+}
+
+.no-jobs-col {
+  color: var(--text-muted);
+  font-size: 12px;
+  text-align: center;
+  padding: 20px 0;
+}
