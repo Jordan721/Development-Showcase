@@ -92,7 +92,7 @@ Paste a job description when adding a job and PipelineTrack scores your match au
 ### 👤 My Profile
 Build the foundation for your fit scores and recommendations.
 
-- **Skills** — add each skill tagged as Beginner, Intermediate, or Expert
+- **Skills** — add skills one at a time or paste a whole block (comma or newline-separated) using the **Bulk** button; each skill is tagged as Beginner, Intermediate, or Expert; click the level badge to cycle it in place without removing the skill; if you have more than 10, the list collapses with a **Show X more** toggle to keep the page tidy; **Clear all** removes every skill at once with a confirmation prompt; duplicates are automatically skipped whether adding one or many
 - **Certifications & Degrees** — track certificates, degrees, bootcamps, and licenses by credential type
 - **Resume Summary** — a short bio for your own reference
 - **Skill Coverage chart** — see how often each of your skills appears across tracked jobs

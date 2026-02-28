@@ -124,6 +124,71 @@
   opacity: .7;
 }
 
+.skill-tag .level-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 10px;
+  color: inherit;
+  opacity: .7;
+  cursor: pointer;
+  transition: opacity .15s;
+  text-decoration: underline dotted;
+}
+
+.skill-tag .level-btn:hover {
+  opacity: 1;
+}
+
+.bulk-skill-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.skill-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  min-height: 22px;
+}
+
+.skill-footer-left {
+  flex: 1;
+}
+
+.skill-expand-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.skill-expand-toggle:hover {
+  text-decoration: underline;
+}
+
+.skill-clear-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color .15s;
+}
+
+.skill-clear-btn:hover {
+  color: var(--red);
+}
+
 .skill-tag-remove {
   font-size: 13px;
   line-height: 1;

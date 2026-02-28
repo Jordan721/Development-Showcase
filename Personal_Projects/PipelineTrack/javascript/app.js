@@ -1576,20 +1576,43 @@ function addCert() {
   toast(`"${name}" added!`, 'success');
 }
 
+const SKILL_SHOW_LIMIT = 10;
+const LEVELS = ['Beginner', 'Intermediate', 'Expert'];
+
 function renderSkillTags() {
   const container = document.getElementById('skill-tags-container');
-  const skills = state.profile.skills;
+  const footer    = document.getElementById('skill-footer');
+  const skills    = state.profile.skills;
+
   if (skills.length === 0) {
     container.innerHTML = '<p class="empty-msg" style="margin-top:8px">No skills added yet.</p>';
+    if (footer) footer.innerHTML = '';
     return;
   }
-  container.innerHTML = skills.map((s, i) => `
+
+  if (typeof window._skillsExpanded === 'undefined') window._skillsExpanded = false;
+  const showAll = window._skillsExpanded || skills.length <= SKILL_SHOW_LIMIT;
+  const visible = showAll ? skills : skills.slice(0, SKILL_SHOW_LIMIT);
+
+  container.innerHTML = visible.map((s, i) => `
     <span class="skill-tag">
       ${escHtml(s.name)}
-      <span class="level">${s.level}</span>
+      <button class="level level-btn" data-index="${i}" title="Click to change level">${s.level}</button>
       <span class="skill-tag-remove" data-index="${i}">✕</span>
     </span>
   `).join('');
+
+  container.querySelectorAll('.level-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.index);
+      const cur = state.profile.skills[idx].level;
+      state.profile.skills[idx].level = LEVELS[(LEVELS.indexOf(cur) + 1) % LEVELS.length];
+      save();
+      reanalyzeAllJobs();
+      renderSkillTags();
+      if (state.activeView === 'dashboard') renderDashboard();
+    });
+  });
 
   container.querySelectorAll('.skill-tag-remove').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1600,6 +1623,36 @@ function renderSkillTags() {
       if (state.activeView === 'dashboard') renderDashboard();
     });
   });
+
+  if (footer) {
+    const hidden = skills.length - SKILL_SHOW_LIMIT;
+    const expandBtn = skills.length > SKILL_SHOW_LIMIT
+      ? `<button class="skill-expand-toggle" id="skill-expand-toggle">${showAll ? 'Show fewer' : `Show ${hidden} more`}</button>`
+      : '';
+    footer.innerHTML = `
+      <div class="skill-footer-left">${expandBtn}</div>
+      <button class="skill-clear-btn" id="clear-skills-btn">Clear all</button>
+    `;
+
+    const toggleBtn = document.getElementById('skill-expand-toggle');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        window._skillsExpanded = !window._skillsExpanded;
+        renderSkillTags();
+      });
+    }
+
+    document.getElementById('clear-skills-btn').addEventListener('click', () => {
+      if (!confirm(`Remove all ${skills.length} skill${skills.length !== 1 ? 's' : ''}?`)) return;
+      state.profile.skills = [];
+      window._skillsExpanded = false;
+      save();
+      reanalyzeAllJobs();
+      renderProfile();
+      if (state.activeView === 'dashboard') renderDashboard();
+      toast('All skills cleared.', 'success');
+    });
+  }
 }
 
 function renderCoverageBars() {
@@ -1648,6 +1701,34 @@ function addSkill() {
   renderProfile();
   if (state.activeView === 'dashboard') renderDashboard();
   toast(`"${name}" added!`, 'success');
+}
+
+function bulkAddSkills() {
+  const textarea = document.getElementById('bulk-skill-input');
+  const level = document.getElementById('skill-level').value;
+  const raw = textarea.value.trim();
+  if (!raw) return;
+
+  const names = raw.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean);
+  let added = 0, skipped = 0;
+  names.forEach(name => {
+    if (state.profile.skills.some(s => s.name.toLowerCase() === name.toLowerCase())) {
+      skipped++;
+    } else {
+      state.profile.skills.push({ name, level });
+      added++;
+    }
+  });
+
+  textarea.value = '';
+  document.getElementById('bulk-skill-area').style.display = 'none';
+  save();
+  reanalyzeAllJobs();
+  renderProfile();
+  if (state.activeView === 'dashboard') renderDashboard();
+  let msg = `${added} skill${added !== 1 ? 's' : ''} added`;
+  if (skipped) msg += `, ${skipped} duplicate${skipped !== 1 ? 's' : ''} skipped`;
+  toast(msg, added > 0 ? 'success' : 'error');
 }
 
 function reanalyzeAllJobs() {
@@ -2157,6 +2238,18 @@ function wireEvents() {
   document.getElementById('skill-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') addSkill();
   });
+
+  document.getElementById('bulk-skill-toggle').addEventListener('click', () => {
+    const area = document.getElementById('bulk-skill-area');
+    const isOpen = area.style.display !== 'none';
+    area.style.display = isOpen ? 'none' : 'block';
+    if (!isOpen) document.getElementById('bulk-skill-input').focus();
+  });
+  document.getElementById('bulk-skill-cancel').addEventListener('click', () => {
+    document.getElementById('bulk-skill-area').style.display = 'none';
+    document.getElementById('bulk-skill-input').value = '';
+  });
+  document.getElementById('bulk-skill-add').addEventListener('click', bulkAddSkills);
 
   // Add certification / degree
   document.getElementById('add-cert-btn').addEventListener('click', addCert);

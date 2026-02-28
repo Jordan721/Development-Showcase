@@ -116,15 +116,25 @@ function renderNotesTimeline(jobId) {
 
   migrateNotes(job);
 
+  const TRUNCATE = 120; /* chars before collapsing */
+
   const entries = job.notesLog;
   const listHtml = entries.length === 0 ?
     '<div class="notes-empty">No entries yet — add one below.</div>' :
     entries.slice().reverse().map((e, ri) => {
       const realIdx = entries.length - 1 - ri;
+      const long = e.text.length > TRUNCATE;
+      const preview = long ? escHtml(e.text.slice(0, TRUNCATE)) + '…' : escHtml(e.text);
+      const full = escHtml(e.text);
+      const textHtml = long ?
+        '<span class="note-preview">' + preview + '</span>' +
+        '<span class="note-full" style="display:none">' + full + '</span>' +
+        '<button class="note-expand-btn" data-expanded="0">show more</button>' :
+        escHtml(e.text);
       return (
         '<div class="note-entry">' +
         '<div class="note-ts">' + fmtTs(e.ts) + '</div>' +
-        '<div class="note-text">' + escHtml(e.text) + '</div>' +
+        '<div class="note-text">' + textHtml + '</div>' +
         '<button class="note-entry-delete" data-idx="' + realIdx + '" title="Remove">✕</button>' +
         '</div>'
       );
@@ -137,6 +147,20 @@ function renderNotesTimeline(jobId) {
     '<input class="note-add-input" id="note-add-input" type="text" placeholder="Add a note…" />' +
     '<button class="btn-secondary note-add-btn" id="note-add-btn">Add</button>' +
     '</div>';
+
+  /* Expand / collapse long entries */
+  wrapper.querySelectorAll('.note-expand-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const entry = btn.closest('.note-text');
+      const preview = entry.querySelector('.note-preview');
+      const full = entry.querySelector('.note-full');
+      const expanded = btn.dataset.expanded === '1';
+      preview.style.display = expanded ? '' : 'none';
+      full.style.display = expanded ? 'none' : '';
+      btn.textContent = expanded ? 'show more' : 'show less';
+      btn.dataset.expanded = expanded ? '0' : '1';
+    });
+  });
 
   /* Delete entry */
   wrapper.querySelectorAll('.note-entry-delete').forEach(btn => {

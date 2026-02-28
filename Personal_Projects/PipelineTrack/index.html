@@ -191,10 +191,20 @@
                             <option value="Expert">Expert</option>
                         </select>
                         <button class="btn-primary" id="add-skill-btn">Add</button>
+                        <button class="btn-secondary" id="bulk-skill-toggle">Bulk</button>
+                    </div>
+                    <div id="bulk-skill-area" style="display:none;margin-top:8px">
+                        <textarea class="text-area" id="bulk-skill-input" rows="3"
+                            placeholder="Paste skills separated by commas or new lines&#10;e.g. React, TypeScript, Node.js, PostgreSQL"></textarea>
+                        <div class="bulk-skill-actions">
+                            <button class="btn-ghost" id="bulk-skill-cancel">Cancel</button>
+                            <button class="btn-primary" id="bulk-skill-add">Add All</button>
+                        </div>
                     </div>
                     <div class="skill-tags" id="skill-tags-container">
                         <!-- tags rendered by JS -->
                     </div>
+                    <div class="skill-footer" id="skill-footer"></div>
                 </div>
 
                 <div class="profile-card">
