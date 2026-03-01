@@ -60,7 +60,7 @@ function updateBoardFilterUI() {
 
 function renderBoard() {
   const showArchived = document.getElementById('show-archived').checked;
-  const visibleStages = showArchived ? STAGES : STAGES.filter(s => s !== 'archived' && s !== 'declined');
+  const visibleStages = showArchived ? STAGES : STAGES.filter(s => s !== 'archived' && s !== 'declined' && s !== 'ghosted');
   const board = document.getElementById('kanban-board');
   const periodJobs = applyBoardFilters(state.jobs.filter(boardInPeriod));
 
@@ -296,7 +296,7 @@ function renderBoardTable(jobs) {
     return '<div style="padding:32px;text-align:center;color:var(--text-muted)">No jobs match your filters.</div>';
   }
   const sortIcon = (key) => boardSortTable === key ? ' ↓' : boardSortTable === key + '-asc' ? ' ↑' : '';
-  const stageOptions = (current) => ['saved', 'applied', 'screening', 'interview', 'offer', 'declined', 'archived']
+  const stageOptions = (current) => STAGES
     .map(s => `<option value="${s}"${s === current ? ' selected' : ''}>${STAGE_LABELS[s]}</option>`).join('');
 
   return `<table class="board-table">

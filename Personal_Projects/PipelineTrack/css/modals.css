@@ -830,6 +830,11 @@
   color: var(--red);
 }
 
+.stage-ghosted {
+  background: rgba(249, 115, 22, .15);
+  color: #f97316;
+}
+
 .stage-archived {
   background: var(--border);
   color: var(--text-muted);

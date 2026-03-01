@@ -173,10 +173,10 @@ function renderAnalyticsOverTime(jobs, granularity) {
   const maxCount = Math.max(...buckets.map(b => b.count), 1);
   el.innerHTML = '<div class="an-timechart">' +
     buckets.map(b => {
-      const h = Math.round((b.count / maxCount) * 100);
+      const h = Math.round((b.count / maxCount) * 155);
       return `<div class="an-timechart-col">
         <div class="an-timechart-count">${b.count || ''}</div>
-        <div class="an-timechart-bar" style="height:${Math.max(h,2)}%" title="${b.label}: ${b.count}"></div>
+        <div class="an-timechart-bar" style="height:${Math.max(h,2)}px" title="${b.label}: ${b.count}"></div>
         <div class="an-timechart-label">${b.label}</div>
       </div>`;
     }).join('') + '</div>';

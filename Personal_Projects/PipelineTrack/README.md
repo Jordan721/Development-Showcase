@@ -16,7 +16,7 @@ A personal job search companion built to take the chaos out of hunting for work 
 
 | Feature | What it does |
 |---|---|
-| 📋 Job Board | Kanban pipeline with columns, swimlane, and table views — search and filter built in |
+| 📋 Job Board | 8-stage kanban pipeline (including Ghosted) with columns, swimlane, and table views — search and filter built in |
 | 🎯 Fit Analysis | Scores your skill match against any job description |
 | 🧠 Learning Hub | Course recommendations based on your skill gaps |
 | 📄 Resume Hub | Parse your resume, scan GitHub, and polish your writing |
@@ -56,14 +56,15 @@ At-a-glance view of your entire job search.
 ---
 
 ### 📋 Job Board
-A visual pipeline with seven stages: **Saved → Applied → Screening → Interview → Offer → Declined → Archived**
+A visual pipeline with eight stages: **Saved → Applied → Screening → Interview → Offer → Declined → Ghosted → Archived**
 
-- **Declined** — for roles where the company said no; tracked separately from Archived so you can see your rejection rate in the dashboard
+- **Declined** — for roles where the company said no; tracked separately so you can see your rejection rate
+- **Ghosted** — for roles where you never heard back; distinct from Declined so you can track non-responses separately
 - **Archived** — for roles you chose to remove from your active view
 - Three layout modes: **Columns** (classic kanban), **Swimlane** (horizontal rows), **Table** (sortable spreadsheet view)
 - Drag cards between columns to update their stage
 - Hover a card to reveal a quick-delete **×** button
-- Toggle Archived / Declined columns on or off to keep the board clean
+- Toggle Archived / Declined / Ghosted columns on or off to keep the board clean
 - Filter by **This Week / This Month / This Year / All Time**
 - **Search bar** — filter by role, company, or location in real time
 - **Filter dropdowns** — narrow by stage, work type, and seniority

@@ -193,6 +193,10 @@
   background: var(--red);
 }
 
+.stripe-ghosted {
+  background: #f97316;
+}
+
 .stripe-archived {
   background: var(--border);
 }

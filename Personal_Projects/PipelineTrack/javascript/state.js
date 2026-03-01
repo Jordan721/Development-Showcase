@@ -3,7 +3,7 @@
 /* ══════════════════════════════════════════════════════════
    STATE
    ══════════════════════════════════════════════════════════ */
-const STAGES = ['saved', 'applied', 'screening', 'interview', 'offer', 'declined', 'archived'];
+const STAGES = ['saved', 'applied', 'screening', 'interview', 'offer', 'declined', 'ghosted', 'archived'];
 let boardPeriod = 'all';
 let boardLayout = localStorage.getItem('pt-board-layout') || 'swimlane';
 let boardSearch = '';
@@ -18,6 +18,7 @@ const STAGE_LABELS = {
   interview: 'Interview',
   offer: 'Offer',
   declined: 'Declined',
+  ghosted: 'Ghosted',
   archived: 'Archived'
 };
 
