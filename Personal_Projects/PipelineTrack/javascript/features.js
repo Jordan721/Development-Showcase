@@ -70,6 +70,9 @@ function renderDeadlineBanner() {
   urgent.sort((a, b) => deadlineDaysLeft(a.deadline) - deadlineDaysLeft(b.deadline));
 
   banner.style.display = '';
+  // Pulse if the most urgent deadline is within 3 days
+  const mostUrgent = deadlineDaysLeft(urgent[0].deadline);
+  banner.className = 'deadline-banner' + (mostUrgent !== null && mostUrgent <= 3 ? ' deadline-banner--urgent' : '');
   banner.innerHTML =
     '<span class="deadline-banner-icon">⏰</span>' +
     '<span><strong>' + urgent.length + ' job' + (urgent.length !== 1 ? 's' : '') + '</strong> with an upcoming deadline: ' +

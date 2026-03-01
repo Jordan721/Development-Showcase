@@ -727,8 +727,15 @@ const TOPBAR_ACTIONS = {
 function navigate(view) {
   state.activeView = view;
 
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById(`view-${view}`).classList.add('active');
+  document.querySelectorAll('.view').forEach(v => {
+    v.classList.remove('active');
+    v.classList.remove('view-enter');
+  });
+
+  const target = document.getElementById(`view-${view}`);
+  target.classList.add('active');
+  void target.offsetWidth; // reflow so animation restarts
+  target.classList.add('view-enter');
 
   document.querySelectorAll('.nav-link').forEach(a => {
     a.classList.toggle('active', a.dataset.view === view);
@@ -764,12 +771,26 @@ function renderDashboard() {
   const scored = jobs.filter(j => j.fitScore !== null && j.fitScore !== undefined);
   const avgFit = scored.length ? Math.round(scored.reduce((a, j) => a + j.fitScore, 0) / scored.length) : null;
 
-  document.getElementById('stat-total').textContent = total;
-  document.getElementById('stat-applied').textContent = applied;
-  document.getElementById('stat-progress').textContent = progress;
-  document.getElementById('stat-offers').textContent = offers;
-  document.getElementById('stat-declined').textContent = declined;
-  document.getElementById('stat-fit').textContent = avgFit !== null ? `${avgFit}%` : '—';
+  // Set stat values; data-count + data-suffix drive the count-up animation
+  const setStatCount = (id, val, suffix) => {
+    suffix = suffix || '';
+    const el = document.getElementById(id);
+    el.dataset.count = val;
+    el.dataset.suffix = suffix;
+    el.textContent = val + suffix; // instant fallback before animation runs
+  };
+  setStatCount('stat-total', total);
+  setStatCount('stat-applied', applied);
+  setStatCount('stat-progress', progress);
+  setStatCount('stat-offers', offers);
+  setStatCount('stat-declined', declined);
+  if (avgFit !== null) {
+    setStatCount('stat-fit', avgFit, '%');
+  } else {
+    const fitEl = document.getElementById('stat-fit');
+    fitEl.textContent = '—';
+    delete fitEl.dataset.count;
+  }
   document.getElementById('sidebar-job-count').textContent = `${total} job${total !== 1 ? 's' : ''} tracked`;
 
   // Gap aggregation
@@ -845,6 +866,9 @@ function renderDashboard() {
 
   // Activity timeline — default to week view
   renderActivity('week');
+
+  if (typeof animateDashboardStats === 'function') animateDashboardStats();
+  if (typeof animateBars === 'function') animateBars('.pipeline-bar-fill');
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -1188,6 +1212,8 @@ function renderBoard() {
       renderBoard();
     };
   });
+
+  if (typeof animateBoardCards === 'function') animateBoardCards();
 }
 
 function jobCardHTML(job) {
@@ -1581,8 +1607,8 @@ const LEVELS = ['Beginner', 'Intermediate', 'Expert'];
 
 function renderSkillTags() {
   const container = document.getElementById('skill-tags-container');
-  const footer    = document.getElementById('skill-footer');
-  const skills    = state.profile.skills;
+  const footer = document.getElementById('skill-footer');
+  const skills = state.profile.skills;
 
   if (skills.length === 0) {
     container.innerHTML = '<p class="empty-msg" style="margin-top:8px">No skills added yet.</p>';
@@ -1626,9 +1652,9 @@ function renderSkillTags() {
 
   if (footer) {
     const hidden = skills.length - SKILL_SHOW_LIMIT;
-    const expandBtn = skills.length > SKILL_SHOW_LIMIT
-      ? `<button class="skill-expand-toggle" id="skill-expand-toggle">${showAll ? 'Show fewer' : `Show ${hidden} more`}</button>`
-      : '';
+    const expandBtn = skills.length > SKILL_SHOW_LIMIT ?
+      `<button class="skill-expand-toggle" id="skill-expand-toggle">${showAll ? 'Show fewer' : `Show ${hidden} more`}</button>` :
+      '';
     footer.innerHTML = `
       <div class="skill-footer-left">${expandBtn}</div>
       <button class="skill-clear-btn" id="clear-skills-btn">Clear all</button>
@@ -1680,6 +1706,8 @@ function renderCoverageBars() {
         <div class="coverage-count">${count} jobs</div>
       </div>`;
   }).join('');
+
+  if (typeof animateBars === 'function') animateBars('.coverage-fill');
 }
 
 function addSkill() {
@@ -1699,6 +1727,7 @@ function addSkill() {
   save();
   reanalyzeAllJobs();
   renderProfile();
+  if (typeof animateNewSkillTags === 'function') animateNewSkillTags(1);
   if (state.activeView === 'dashboard') renderDashboard();
   toast(`"${name}" added!`, 'success');
 }
@@ -1710,12 +1739,16 @@ function bulkAddSkills() {
   if (!raw) return;
 
   const names = raw.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean);
-  let added = 0, skipped = 0;
+  let added = 0,
+    skipped = 0;
   names.forEach(name => {
     if (state.profile.skills.some(s => s.name.toLowerCase() === name.toLowerCase())) {
       skipped++;
     } else {
-      state.profile.skills.push({ name, level });
+      state.profile.skills.push({
+        name,
+        level
+      });
       added++;
     }
   });
@@ -1725,6 +1758,7 @@ function bulkAddSkills() {
   save();
   reanalyzeAllJobs();
   renderProfile();
+  if (added > 0 && typeof animateNewSkillTags === 'function') animateNewSkillTags(added);
   if (state.activeView === 'dashboard') renderDashboard();
   let msg = `${added} skill${added !== 1 ? 's' : ''} added`;
   if (skipped) msg += `, ${skipped} duplicate${skipped !== 1 ? 's' : ''} skipped`;
