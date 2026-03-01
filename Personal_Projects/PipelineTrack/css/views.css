@@ -406,6 +406,61 @@
 }
 
 
+/* Job Activity section (inside Calendar view) */
+.cal-activity-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.cal-activity-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+/* Activity counts row */
+.act-counts {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.act-count-card {
+  flex: 1;
+  min-width: 80px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 10px;
+  text-align: center;
+}
+
+.act-count-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.act-count-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-top: 5px;
+}
+
 /* ════════════════════════════════════════════════════════════
    CONTACTS / NETWORK VIEW
    ════════════════════════════════════════════════════════════ */

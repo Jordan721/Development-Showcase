@@ -45,7 +45,7 @@
                 <span class="nav-icon">✦</span> Resume Hub
             </a>
             <a href="#" class="nav-link" data-view="calendar">
-                <span class="nav-icon">◫</span> Calendar
+                <span class="nav-icon">◫</span> Calendar & Activity
             </a>
             <a href="#" class="nav-link" data-view="contacts">
                 <span class="nav-icon">◎</span> Network
@@ -148,21 +148,6 @@
                 </div>
             </div>
 
-            <!-- Job Activity Timeline -->
-            <div class="dash-card activity-card">
-                <div class="dash-card-header">
-                    Job Activity
-                    <div class="activity-filters">
-                        <button class="activity-filter active" data-period="week">Week</button>
-                        <button class="activity-filter" data-period="month">Month</button>
-                        <button class="activity-filter" data-period="year">Year</button>
-                        <button class="activity-filter" data-period="all">All Time</button>
-                    </div>
-                </div>
-                <div class="dash-card-body" id="dash-activity">
-                    <p class="empty-msg">No jobs tracked yet.</p>
-                </div>
-            </div>
         </section>
 
         <!-- ── VIEW: JOB BOARD ──────────────────────────────── -->
@@ -476,6 +461,10 @@
             <div class="cal-upcoming-strip">
                 <div class="cal-upcoming-title">Upcoming in 7 Days</div>
                 <div id="cal-upcoming-list"></div>
+            </div>
+            <div class="cal-activity-section">
+                <div class="cal-activity-header">Job Activity</div>
+                <div id="cal-activity"></div>
             </div>
         </section>
 

@@ -343,4 +343,38 @@ function renderCalendarView() {
   else if (calMode === 'year') body.innerHTML = buildCalYearGrid(periodStart.getFullYear(), visibleEvents);
   wireCalendarControls();
   renderCalendarUpcoming(allEvents);
+  renderActivity();
+}
+
+/* ══════════════════════════════════════════════════════════
+   JOB ACTIVITY COUNTS
+   ══════════════════════════════════════════════════════════ */
+function renderActivity() {
+  const el = document.getElementById('cal-activity');
+  if (!el) return;
+  const now  = new Date();
+  const jobs = state.jobs;
+
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const startOfWeek = new Date(startOfDay);
+  startOfWeek.setDate(startOfDay.getDate() - startOfDay.getDay());
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  const startOfYear  = new Date(now.getFullYear(), 0, 1);
+
+  const count = (from) => jobs.filter(j => new Date(j.dateAdded) >= from).length;
+
+  const periods = [
+    { label: 'Today',      value: count(startOfDay)  },
+    { label: 'This Week',  value: count(startOfWeek) },
+    { label: 'This Month', value: count(startOfMonth)},
+    { label: 'This Year',  value: count(startOfYear) },
+    { label: 'All Time',   value: jobs.length         },
+  ];
+
+  el.innerHTML = `<div class="act-counts">${
+    periods.map(p => `<div class="act-count-card">
+      <div class="act-count-value">${p.value}</div>
+      <div class="act-count-label">${p.label}</div>
+    </div>`).join('')
+  }</div>`;
 }

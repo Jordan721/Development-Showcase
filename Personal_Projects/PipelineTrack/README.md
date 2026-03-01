@@ -21,7 +21,7 @@ A personal job search companion built to take the chaos out of hunting for work 
 | 🧠 Learning Hub | Course recommendations based on your skill gaps |
 | 📄 Resume Hub | Parse your resume, scan GitHub, and polish your writing |
 | 👤 My Profile | Skills, certifications, resume summary, and saved links |
-| 📅 Calendar | Month/week/year view of job events, deadlines, and follow-up dates |
+| 📅 Calendar & Activity | Month/week/year view of job events, deadlines, and follow-up dates — plus a job activity history |
 | 🤝 Network | Track recruiters, hiring managers, and referrals with follow-up reminders |
 | 📊 Analytics | KPIs, application funnel, response rates, skill gaps, and breakdowns |
 | 🎯 Goals | Set weekly/monthly targets and track live progress against your job board data |
@@ -51,8 +51,7 @@ At-a-glance view of your entire job search.
 
 - Six stat cards in a 2-row grid: **Total Tracked, Applied, In Progress, Offers, Declined, Avg Fit Score**
 - Top skill gaps and top matched skills across all your jobs
-- **Job Activity calendar** — visualize when you added jobs by Week, Month, Year, or All Time
-- Click any day or month tile to see a popup of every job added in that period
+- Recent applications list — click any entry to open the full job detail
 
 ---
 
@@ -128,13 +127,14 @@ A workspace for getting your resume and portfolio in shape.
 
 ---
 
-### 📅 Calendar
-A full calendar that brings together all your job search events in one view.
+### 📅 Calendar & Activity
+A full calendar combined with your job activity history — all in one view.
 
 - Toggle between **Month**, **Week**, and **Year** layouts with prev/next navigation
 - Three event types: **job added** (teal), **application deadline** (red), **contact follow-up** (purple)
 - Filter the calendar to show only one event type at a time
 - **Upcoming strip** below the calendar shows the next 7 days of events at a glance
+- **Job Activity** section below the upcoming strip — at-a-glance counts of jobs added **Today**, **This Week**, **This Month**, **This Year**, and **All Time**
 
 ---
 

@@ -117,7 +117,7 @@ const VIEW_TITLES = {
   profile: 'My Profile',
   learning: 'Learning Hub',
   resume: 'Resume Hub',
-  calendar: 'Calendar',
+  calendar: 'Calendar & Activity',
   contacts: 'Network & Contacts',
   analytics: 'Analytics',
   goals: 'Goals',
