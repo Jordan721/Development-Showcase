@@ -92,10 +92,10 @@ Paste a job description when adding a job and PipelineTrack scores your match au
 ### 👤 My Profile
 Build the foundation for your fit scores and recommendations.
 
-- **Skills** — add skills one at a time or paste a whole block (comma or newline-separated) using the **Bulk** button; each skill is tagged as Beginner, Intermediate, or Expert; click the level badge to cycle it in place without removing the skill; if you have more than 10, the list collapses with a **Show X more** toggle to keep the page tidy; **Clear all** removes every skill at once with a confirmation prompt; duplicates are automatically skipped whether adding one or many
+- **Skills** — add skills one at a time or paste a whole block (comma or newline-separated) using the **Bulk** button; skills are grouped and color-coded by level — green for Expert, teal for Intermediate, gray for Beginner; click the level badge on any tag to cycle it in place; filter to a single level with the **All / Expert / Intermediate / Beginner** pill buttons; if you have more than 10, the list collapses with a **Show X more** toggle; **Clear all** removes everything at once with a confirmation prompt; duplicates are automatically skipped
 - **Certifications & Degrees** — track certificates, degrees, bootcamps, and licenses by credential type
 - **Resume Summary** — a short bio for your own reference
-- **Skill Coverage chart** — see how often each of your skills appears across tracked jobs
+- **Skill Coverage chart** — see how often each of your skills appears across tracked jobs; grouped and color-coded by level with the same **All / Expert / Intermediate / Beginner** filter pills and a **Show X more** collapse when you have many skills
 - **Data Backup** — export all your data to a `.json` file and import it on any other device or browser; the filename and a confirmation message appear under the buttons after each action
 - **Clear All Jobs** — wipe all tracked jobs in one click (with confirmation) to start fresh
 - **Your Links** — save your LinkedIn, GitHub, and Portfolio URLs locally for quick access

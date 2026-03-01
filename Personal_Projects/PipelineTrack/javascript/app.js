@@ -1617,16 +1617,47 @@ function renderSkillTags() {
   }
 
   if (typeof window._skillsExpanded === 'undefined') window._skillsExpanded = false;
-  const showAll = window._skillsExpanded || skills.length <= SKILL_SHOW_LIMIT;
-  const visible = showAll ? skills : skills.slice(0, SKILL_SHOW_LIMIT);
+  if (typeof window._skillFilter === 'undefined') window._skillFilter = 'all';
 
-  container.innerHTML = visible.map((s, i) => `
-    <span class="skill-tag">
+  // Sort Expert → Intermediate → Beginner, preserving original array indices
+  const sorted = ['Expert', 'Intermediate', 'Beginner'].flatMap(lvl =>
+    skills.map((s, i) => ({
+      ...s,
+      realIdx: i
+    })).filter(s => s.level === lvl)
+  );
+
+  // Apply level filter
+  const activeFilter = window._skillFilter;
+  const filtered = activeFilter === 'all' ? sorted : sorted.filter(s => s.level === activeFilter);
+
+  // Sync filter pill active state
+  document.querySelectorAll('.skill-filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === activeFilter);
+  });
+
+  const showAll = window._skillsExpanded || filtered.length <= SKILL_SHOW_LIMIT;
+  const visible = showAll ? filtered : filtered.slice(0, SKILL_SHOW_LIMIT);
+
+  // Build HTML — only show group labels when viewing all levels
+  const showGroups = activeFilter === 'all';
+  let html = '';
+  let lastLevel = null;
+  visible.forEach(s => {
+    if (showGroups && s.level !== lastLevel) {
+      lastLevel = s.level;
+      const groupTotal = filtered.filter(x => x.level === s.level).length;
+      const groupVisible = visible.filter(x => x.level === s.level).length;
+      const note = groupVisible < groupTotal ? ` · ${groupVisible} of ${groupTotal}` : ` · ${groupTotal}`;
+      html += `<span class="skill-group-label" data-group="${s.level}">${s.level}${note}</span>`;
+    }
+    html += `<span class="skill-tag" data-skill="${escHtml(s.name)}" data-level="${s.level}">
       ${escHtml(s.name)}
-      <button class="level level-btn" data-index="${i}" title="Click to change level">${s.level}</button>
-      <span class="skill-tag-remove" data-index="${i}">✕</span>
-    </span>
-  `).join('');
+      <button class="level level-btn" data-index="${s.realIdx}" title="Click to change level">${s.level}</button>
+      <span class="skill-tag-remove" data-index="${s.realIdx}">✕</span>
+    </span>`;
+  });
+  container.innerHTML = html;
 
   container.querySelectorAll('.level-btn').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1651,8 +1682,8 @@ function renderSkillTags() {
   });
 
   if (footer) {
-    const hidden = skills.length - SKILL_SHOW_LIMIT;
-    const expandBtn = skills.length > SKILL_SHOW_LIMIT ?
+    const hidden = filtered.length - SKILL_SHOW_LIMIT;
+    const expandBtn = filtered.length > SKILL_SHOW_LIMIT ?
       `<button class="skill-expand-toggle" id="skill-expand-toggle">${showAll ? 'Show fewer' : `Show ${hidden} more`}</button>` :
       '';
     footer.innerHTML = `
@@ -1681,13 +1712,21 @@ function renderSkillTags() {
   }
 }
 
+const COVERAGE_SHOW_LIMIT = 8;
+
 function renderCoverageBars() {
   const el = document.getElementById('skill-coverage-bars');
+  const footer = document.getElementById('coverage-footer');
   const skills = state.profile.skills;
+
   if (skills.length === 0) {
     el.innerHTML = '<p class="empty-msg">Add skills to see coverage.</p>';
+    if (footer) footer.innerHTML = '';
     return;
   }
+
+  if (typeof window._coverageExpanded === 'undefined') window._coverageExpanded = false;
+  if (typeof window._coverageFilter === 'undefined') window._coverageFilter = 'all';
 
   const jobCount = state.jobs.length;
   const countMap = {};
@@ -1696,16 +1735,56 @@ function renderCoverageBars() {
     if (match) countMap[match.name] = (countMap[match.name] || 0) + 1;
   }));
 
-  el.innerHTML = skills.map(s => {
+  // Sort Expert → Intermediate → Beginner, then apply filter
+  const sorted = ['Expert', 'Intermediate', 'Beginner'].flatMap(lvl =>
+    skills.filter(s => s.level === lvl)
+  );
+  const activeCoverageFilter = window._coverageFilter;
+  const filtered = activeCoverageFilter === 'all' ? sorted : sorted.filter(s => s.level === activeCoverageFilter);
+
+  // Sync filter pill active state
+  document.querySelectorAll('.coverage-filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === activeCoverageFilter);
+  });
+
+  const showAll = window._coverageExpanded || filtered.length <= COVERAGE_SHOW_LIMIT;
+  const visible = showAll ? filtered : filtered.slice(0, COVERAGE_SHOW_LIMIT);
+
+  // Group labels only when showing all levels
+  const showCoverageGroups = activeCoverageFilter === 'all';
+  let html = '';
+  let lastLevel = null;
+  visible.forEach(s => {
+    if (showCoverageGroups && s.level !== lastLevel) {
+      lastLevel = s.level;
+      const groupTotal = filtered.filter(x => x.level === s.level).length;
+      const groupVisible = visible.filter(x => x.level === s.level).length;
+      const note = groupVisible < groupTotal ? ` · ${groupVisible} of ${groupTotal}` : ` · ${groupTotal}`;
+      html += `<div class="coverage-group-label" data-group="${s.level}">${s.level}${note}</div>`;
+    }
     const count = countMap[s.name] || 0;
     const pct = jobCount > 0 ? Math.round((count / jobCount) * 100) : 0;
-    return `
-      <div class="coverage-row">
-        <div class="coverage-skill">${escHtml(s.name)}</div>
-        <div class="coverage-track"><div class="coverage-fill" style="width:${pct}%"></div></div>
-        <div class="coverage-count">${count} jobs</div>
-      </div>`;
-  }).join('');
+    html += `<div class="coverage-row">
+      <div class="coverage-skill">${escHtml(s.name)}</div>
+      <div class="coverage-track"><div class="coverage-fill" style="width:${pct}%"></div></div>
+      <div class="coverage-count">${count} jobs</div>
+    </div>`;
+  });
+  el.innerHTML = html;
+
+  if (footer) {
+    const hidden = filtered.length - COVERAGE_SHOW_LIMIT;
+    footer.innerHTML = filtered.length > COVERAGE_SHOW_LIMIT ?
+      `<button class="skill-expand-toggle" id="coverage-expand-toggle">${showAll ? 'Show fewer' : `Show ${hidden} more`}</button>` :
+      '';
+    const toggleBtn = document.getElementById('coverage-expand-toggle');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        window._coverageExpanded = !window._coverageExpanded;
+        renderCoverageBars();
+      });
+    }
+  }
 
   if (typeof animateBars === 'function') animateBars('.coverage-fill');
 }
@@ -1727,7 +1806,7 @@ function addSkill() {
   save();
   reanalyzeAllJobs();
   renderProfile();
-  if (typeof animateNewSkillTags === 'function') animateNewSkillTags(1);
+  if (typeof animateNewSkillTags === 'function') animateNewSkillTags(1, name);
   if (state.activeView === 'dashboard') renderDashboard();
   toast(`"${name}" added!`, 'success');
 }
@@ -1758,7 +1837,6 @@ function bulkAddSkills() {
   save();
   reanalyzeAllJobs();
   renderProfile();
-  if (added > 0 && typeof animateNewSkillTags === 'function') animateNewSkillTags(added);
   if (state.activeView === 'dashboard') renderDashboard();
   let msg = `${added} skill${added !== 1 ? 's' : ''} added`;
   if (skipped) msg += `, ${skipped} duplicate${skipped !== 1 ? 's' : ''} skipped`;
@@ -2284,6 +2362,24 @@ function wireEvents() {
     document.getElementById('bulk-skill-input').value = '';
   });
   document.getElementById('bulk-skill-add').addEventListener('click', bulkAddSkills);
+
+  // Skill level filter pills
+  document.querySelectorAll('.skill-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window._skillFilter = btn.dataset.filter;
+      window._skillsExpanded = false;
+      renderSkillTags();
+    });
+  });
+
+  // Coverage level filter pills
+  document.querySelectorAll('.coverage-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window._coverageFilter = btn.dataset.filter;
+      window._coverageExpanded = false;
+      renderCoverageBars();
+    });
+  });
 
   // Add certification / degree
   document.getElementById('add-cert-btn').addEventListener('click', addCert);

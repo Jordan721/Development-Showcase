@@ -85,20 +85,22 @@ function animateBars(selector) {
 }
 
 /* ─── SKILL TAG POP-IN ──────────────────────────────────────
-   Animates the last `count` skill tags in the container.
-   Called from addSkill() (count=1) and bulkAddSkills()
-   (count = number of skills just added).
+   Animates the newly-added skill tag.
+   skillName: the exact name used (matches data-skill attribute).
+   Because grouping re-sorts the list, we look up the tag by
+   name rather than assuming it's last in the DOM.
    ──────────────────────────────────────────────────────────── */
-function animateNewSkillTags(count) {
-  count = count || 1;
+function animateNewSkillTags(count, skillName) {
   var container = document.getElementById('skill-tags-container');
   if (!container) return;
 
-  var tags = Array.from(container.querySelectorAll('.skill-tag'));
-  tags.slice(-count).forEach(function (tag, i) {
-    tag.classList.remove('skill-pop');
-    void tag.offsetWidth;
-    tag.style.animationDelay = (i * 55) + 'ms';
-    tag.classList.add('skill-pop');
-  });
+  var target = skillName ?
+    container.querySelector('[data-skill="' + skillName + '"]') :
+    null;
+
+  if (target) {
+    target.classList.remove('skill-pop');
+    void target.offsetWidth;
+    target.classList.add('skill-pop');
+  }
 }

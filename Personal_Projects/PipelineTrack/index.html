@@ -202,6 +202,12 @@
                             <button class="btn-primary" id="bulk-skill-add">Add All</button>
                         </div>
                     </div>
+                    <div class="skill-filter-row">
+                        <button class="skill-filter-btn active" data-filter="all">All</button>
+                        <button class="skill-filter-btn" data-filter="Expert">Expert</button>
+                        <button class="skill-filter-btn" data-filter="Intermediate">Intermediate</button>
+                        <button class="skill-filter-btn" data-filter="Beginner">Beginner</button>
+                    </div>
                     <div class="skill-tags" id="skill-tags-container">
                         <!-- tags rendered by JS -->
                     </div>
@@ -290,7 +296,14 @@
                 <div class="profile-card full-width">
                     <div class="profile-section-title">Skill Coverage</div>
                     <p class="profile-hint">How often each of your skills appears in your tracked jobs.</p>
+                    <div class="skill-filter-row">
+                        <button class="coverage-filter-btn active" data-filter="all">All</button>
+                        <button class="coverage-filter-btn" data-filter="Expert">Expert</button>
+                        <button class="coverage-filter-btn" data-filter="Intermediate">Intermediate</button>
+                        <button class="coverage-filter-btn" data-filter="Beginner">Beginner</button>
+                    </div>
                     <div id="skill-coverage-bars"></div>
+                    <div class="skill-footer" id="coverage-footer"></div>
                 </div>
             </div>
         </section>
