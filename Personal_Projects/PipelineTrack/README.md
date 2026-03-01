@@ -16,11 +16,15 @@ A personal job search companion built to take the chaos out of hunting for work 
 
 | Feature | What it does |
 |---|---|
-| 📋 Job Board | Kanban pipeline to track every application by stage |
+| 📋 Job Board | Kanban pipeline with columns, swimlane, and table views — search and filter built in |
 | 🎯 Fit Analysis | Scores your skill match against any job description |
 | 🧠 Learning Hub | Course recommendations based on your skill gaps |
 | 📄 Resume Hub | Parse your resume, scan GitHub, and polish your writing |
 | 👤 My Profile | Skills, certifications, resume summary, and saved links |
+| 📅 Calendar | Month/week/year view of job events, deadlines, and follow-up dates |
+| 🤝 Network | Track recruiters, hiring managers, and referrals with follow-up reminders |
+| 📊 Analytics | KPIs, application funnel, response rates, skill gaps, and breakdowns |
+| 🎯 Goals | Set weekly/monthly targets and track live progress against your job board data |
 | 💾 Data Backup | Export and import your data across devices |
 
 ---
@@ -52,16 +56,19 @@ At-a-glance view of your entire job search.
 
 ---
 
-### 📋 Job Board (Kanban)
+### 📋 Job Board
 A visual pipeline with seven stages: **Saved → Applied → Screening → Interview → Offer → Declined → Archived**
 
 - **Declined** — for roles where the company said no; tracked separately from Archived so you can see your rejection rate in the dashboard
 - **Archived** — for roles you chose to remove from your active view
-- Color-coded fit score on every card
+- Three layout modes: **Columns** (classic kanban), **Swimlane** (horizontal rows), **Table** (sortable spreadsheet view)
 - Drag cards between columns to update their stage
 - Hover a card to reveal a quick-delete **×** button
 - Toggle Archived / Declined columns on or off to keep the board clean
 - Filter by **This Week / This Month / This Year / All Time**
+- **Search bar** — filter by role, company, or location in real time
+- **Filter dropdowns** — narrow by stage, work type, and seniority
+- **Table sort** — click any column header or use the sort dropdown to sort by role, company, fit score, or date added
 
 Each job stores:
 
@@ -121,6 +128,53 @@ A workspace for getting your resume and portfolio in shape.
 
 ---
 
+### 📅 Calendar
+A full calendar that brings together all your job search events in one view.
+
+- Toggle between **Month**, **Week**, and **Year** layouts with prev/next navigation
+- Three event types: **job added** (teal), **application deadline** (red), **contact follow-up** (purple)
+- Filter the calendar to show only one event type at a time
+- **Upcoming strip** below the calendar shows the next 7 days of events at a glance
+
+---
+
+### 🤝 Network & Contacts
+Track the people in your job search — recruiters, hiring managers, referrals, and connections.
+
+- Add contacts with: name, company, role, type, email, phone, LinkedIn, linked job, last contact date, next follow-up date, and notes
+- **Stat strip** shows total contacts, how many have a follow-up due today or earlier, and a count by type
+- Search by name or company; filter by contact type; sort by name, company, or most recent
+- Overdue follow-ups are highlighted; next follow-up dates appear in the Calendar view
+
+---
+
+### 📊 Analytics
+A data-driven overview of your entire job search.
+
+- **7 KPI cards**: Tracked, Applied, In Progress, Offers, Declined, Avg Fit, Response Rate
+- **Application funnel**: shows conversion rates from Applied → Screening → Interview → Offer
+- **Response rate** bars per stage
+- **Over-time chart**: applications by week (last 8 weeks) or month (last 12 months)
+- **Top companies** by application count
+- **Skill gaps** bar chart across all jobs
+- **Fit score distribution** bucketed into four ranges
+- Work type, job type, and seniority breakdowns
+- Filter all charts by **This Week / This Month / This Year / All Time**
+
+---
+
+### 🎯 Goals
+Set targets and track your progress live using real job board data.
+
+- Create goals for: **Applications**, **Interviews**, **Offers**, or **Responses**
+- Set a **weekly** or **monthly** period
+- Each goal card shows live current count vs. target with a progress bar and status label (Complete / On Track / Behind / Not Started)
+- **Summary strip** with mini progress rings for all active goals
+- Quick-add **preset buttons** when no goals exist yet
+- Filter the goals view by week or month period
+
+---
+
 ## 🛠️ Tech Stack
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
@@ -139,14 +193,27 @@ No frameworks, no build tools, no server. Open `index.html` in any modern browse
 PipelineTrack/
 ├── index.html
 ├── css/
-│   ├── base.css        # variables, reset, layout, buttons, forms
-│   ├── dashboard.css   # stat cards, calendar views
-│   ├── board.css       # kanban columns, swimlane, job cards
-│   ├── modals.css      # modals, profile, learning hub, resume hub
-│   └── features.css    # deadline banner, notes timeline
+│   ├── base.css            # variables, reset, layout, buttons, forms
+│   ├── dashboard.css       # stat cards, activity calendar
+│   ├── board.css           # kanban columns, swimlane, table view, job cards
+│   ├── modals.css          # modals, profile, learning hub, resume hub
+│   ├── features.css        # deadline banner, notes timeline
+│   └── views.css           # calendar, contacts, analytics, goals views
 └── javascript/
-    ├── app.js          # core app logic
-    └── features.js     # deadline reminders, notes timeline, resume tagging
+    ├── data.js             # static data: KNOWN_SKILLS, LEARNING, RESOURCES, WRITING_RULES
+    ├── state.js            # app state, localStorage save/load, export/import
+    ├── utils.js            # shared helpers, fit analysis, navigation
+    ├── views-dashboard.js  # dashboard stats and activity calendar
+    ├── views-board.js      # kanban board, table view, job detail & add/edit modals
+    ├── views-profile.js    # profile, skills, certifications, coverage chart
+    ├── views-resume.js     # learning hub and resume hub
+    ├── views-calendar.js   # calendar view (month/week/year)
+    ├── views-contacts.js   # network & contacts view
+    ├── views-analytics.js  # analytics view (KPIs, funnel, charts)
+    ├── views-goals.js      # goals view (live-counted progress)
+    ├── app.js              # event wiring and app init
+    ├── features.js         # deadline reminders, notes timeline, resume versioning
+    └── animations.js       # UI animations and transitions
 ```
 
 ---
@@ -160,6 +227,9 @@ PipelineTrack/
 5. Click any job card to see your fit score and skill breakdown
 6. Check the **Learning Hub** to see what to learn next
 7. Use **Resume Hub** to parse your resume, scan your GitHub, check your writing, and explore tools
+8. Head to **Network** to track recruiters and contacts — follow-up dates appear in the **Calendar**
+9. Visit **Analytics** for KPIs and charts across your full job search
+10. Use **Goals** to set weekly or monthly targets and watch them update as you track applications
 
 All data is saved to your browser's localStorage. Nothing is sent anywhere. Use the ☀️ / 🌙 button in the top bar to switch between light and dark mode — your preference is remembered.
 

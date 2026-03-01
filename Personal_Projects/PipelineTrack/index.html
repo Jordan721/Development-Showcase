@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="css/modals.css" />
     <link rel="stylesheet" href="css/features.css" />
     <link rel="stylesheet" href="css/animations.css" />
+    <link rel="stylesheet" href="css/views.css" />
 </head>
 
 <body>
@@ -42,6 +43,18 @@
             </a>
             <a href="#" class="nav-link" data-view="resume">
                 <span class="nav-icon">✦</span> Resume Hub
+            </a>
+            <a href="#" class="nav-link" data-view="calendar">
+                <span class="nav-icon">◫</span> Calendar
+            </a>
+            <a href="#" class="nav-link" data-view="contacts">
+                <span class="nav-icon">◎</span> Network
+            </a>
+            <a href="#" class="nav-link" data-view="analytics">
+                <span class="nav-icon">⊛</span> Analytics
+            </a>
+            <a href="#" class="nav-link" data-view="goals">
+                <span class="nav-icon">⊕</span> Goals
             </a>
         </nav>
 
@@ -164,6 +177,7 @@
                         title="Column view">⊞</button>
                     <button class="layout-btn" id="layout-btn-swimlane" data-layout="swimlane"
                         title="Swimlane view">☰</button>
+                    <button class="layout-btn" id="layout-btn-table" data-layout="table" title="Table view">≡</button>
                 </div>
                 <div class="board-period-filters">
                     <button class="board-filter active" data-period="all">All Time</button>
@@ -171,7 +185,50 @@
                     <button class="board-filter" data-period="month">This Month</button>
                     <button class="board-filter" data-period="week">This Week</button>
                 </div>
-                <span class="board-drag-hint">⠿ Drag cards between columns to move stages</span>
+                <span class="board-drag-hint" id="board-drag-hint">⠿ Drag cards between columns to move stages</span>
+            </div>
+            <!-- Search + filter bar -->
+            <div class="board-search-bar">
+                <div class="board-search-wrap">
+                    <input type="text" class="text-input" id="board-search" placeholder="Search role, company…" />
+                </div>
+                <div class="board-filter-chips" id="board-filter-chips">
+                    <select class="select-input board-filter-select" id="board-filter-stage">
+                        <option value="">All Stages</option>
+                        <option value="saved">Saved</option>
+                        <option value="applied">Applied</option>
+                        <option value="screening">Screening</option>
+                        <option value="interview">Interview</option>
+                        <option value="offer">Offer</option>
+                        <option value="declined">Declined</option>
+                        <option value="archived">Archived</option>
+                    </select>
+                    <select class="select-input board-filter-select" id="board-filter-work-type">
+                        <option value="">All Work Types</option>
+                        <option value="Remote">Remote</option>
+                        <option value="On-site">On-site</option>
+                        <option value="Hybrid">Hybrid</option>
+                    </select>
+                    <select class="select-input board-filter-select" id="board-filter-seniority">
+                        <option value="">All Seniority</option>
+                        <option value="Internship">Internship</option>
+                        <option value="Junior">Junior</option>
+                        <option value="Mid-Level">Mid-Level</option>
+                        <option value="Senior">Senior</option>
+                        <option value="Lead">Lead</option>
+                        <option value="Staff">Staff</option>
+                    </select>
+                    <select class="select-input board-filter-select" id="board-sort-table" style="display:none">
+                        <option value="date-desc">Newest First</option>
+                        <option value="date-asc">Oldest First</option>
+                        <option value="fit-desc">Fit Score ↓</option>
+                        <option value="fit-asc">Fit Score ↑</option>
+                        <option value="role-asc">Role A–Z</option>
+                        <option value="company-asc">Company A–Z</option>
+                    </select>
+                    <button class="btn-ghost board-clear-filters" id="board-clear-filters"
+                        style="display:none;font-size:11px;padding:4px 10px">✕ Clear</button>
+                </div>
             </div>
             <div class="kanban" id="kanban-board">
                 <!-- columns rendered by JS -->
@@ -387,6 +444,150 @@
                 <div id="resources-grid"></div>
             </div>
 
+        </section>
+
+        <!-- ── VIEW: CALENDAR ───────────────────────────────── -->
+        <section class="view" id="view-calendar">
+            <div class="cal-view-controls">
+                <div class="cal-view-tabs">
+                    <button class="cal-tab active" data-cal-mode="month">Month</button>
+                    <button class="cal-tab" data-cal-mode="week">Week</button>
+                    <button class="cal-tab" data-cal-mode="year">Year</button>
+                </div>
+                <div class="cal-view-nav">
+                    <button class="cal-nav-btn" id="cal-nav-prev">&#8592;</button>
+                    <span class="cal-view-period-label" id="cal-period-label"></span>
+                    <button class="cal-nav-btn" id="cal-nav-next">&#8594;</button>
+                    <button class="cal-today-btn" id="cal-today-btn">Today</button>
+                </div>
+                <div class="cal-legend">
+                    <span class="cal-legend-dot cal-legend-job"></span> Job Added
+                    <span class="cal-legend-dot cal-legend-deadline"></span> Deadline
+                    <span class="cal-legend-dot cal-legend-contact"></span> Follow-up
+                </div>
+            </div>
+            <div class="cal-event-filters">
+                <button class="cal-event-filter active" data-event-type="all">All Events</button>
+                <button class="cal-event-filter" data-event-type="jobs">Jobs Added</button>
+                <button class="cal-event-filter" data-event-type="deadlines">Deadlines</button>
+                <button class="cal-event-filter" data-event-type="followups">Follow-ups</button>
+            </div>
+            <div id="cal-view-body"></div>
+            <div class="cal-upcoming-strip">
+                <div class="cal-upcoming-title">Upcoming in 7 Days</div>
+                <div id="cal-upcoming-list"></div>
+            </div>
+        </section>
+
+        <!-- ── VIEW: CONTACTS / NETWORK ─────────────────────── -->
+        <section class="view" id="view-contacts">
+            <div class="contacts-controls">
+                <div class="contacts-search-wrap">
+                    <input type="text" class="text-input" id="contacts-search"
+                        placeholder="Search by name, company, role…" />
+                </div>
+                <div class="contacts-type-filters">
+                    <button class="contact-filter-btn active" data-type="all">All</button>
+                    <button class="contact-filter-btn" data-type="Recruiter">Recruiters</button>
+                    <button class="contact-filter-btn" data-type="HM">Hiring Mgrs</button>
+                    <button class="contact-filter-btn" data-type="Referral">Referrals</button>
+                    <button class="contact-filter-btn" data-type="Other">Other</button>
+                </div>
+                <div class="contacts-sort">
+                    <select class="select-input" id="contacts-sort">
+                        <option value="recent">Last Contacted ↓</option>
+                        <option value="name">Name A–Z</option>
+                        <option value="followup">Next Follow-up</option>
+                        <option value="company">Company</option>
+                    </select>
+                </div>
+            </div>
+            <div class="contacts-stat-strip" id="contacts-stat-strip"></div>
+            <div class="contacts-grid" id="contacts-grid">
+                <p class="empty-msg">No contacts yet. Click <strong>+ Add Contact</strong> to get started.</p>
+            </div>
+        </section>
+
+        <!-- ── VIEW: ANALYTICS ──────────────────────────────── -->
+        <section class="view" id="view-analytics">
+            <div class="analytics-controls">
+                <div class="an-period-tabs">
+                    <button class="an-tab active" data-an-period="all">All Time</button>
+                    <button class="an-tab" data-an-period="year">This Year</button>
+                    <button class="an-tab" data-an-period="month">This Month</button>
+                    <button class="an-tab" data-an-period="week">This Week</button>
+                </div>
+            </div>
+            <div class="an-kpi-strip" id="an-kpi-strip"></div>
+            <div class="an-row-two">
+                <div class="dash-card">
+                    <div class="dash-card-header">Application Funnel</div>
+                    <div class="dash-card-body" id="an-funnel"></div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header">Response Rate by Stage</div>
+                    <div class="dash-card-body" id="an-response-rate"></div>
+                </div>
+            </div>
+            <div class="an-row-two">
+                <div class="dash-card">
+                    <div class="dash-card-header dash-card-header-row">
+                        <span>Applications Over Time</span>
+                        <div class="an-time-btns">
+                            <button class="an-time-btn active" data-time="weekly">Weekly</button>
+                            <button class="an-time-btn" data-time="monthly">Monthly</button>
+                        </div>
+                    </div>
+                    <div class="dash-card-body" id="an-over-time"></div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header">Top Companies Applied To</div>
+                    <div class="dash-card-body" id="an-top-companies"></div>
+                </div>
+            </div>
+            <div class="an-row-two">
+                <div class="dash-card">
+                    <div class="dash-card-header">Top Skill Gaps</div>
+                    <div class="dash-card-body" id="an-skill-gaps"></div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header">Fit Score Distribution</div>
+                    <div class="dash-card-body" id="an-fit-dist"></div>
+                </div>
+            </div>
+            <div class="an-row-three">
+                <div class="dash-card">
+                    <div class="dash-card-header">Work Type</div>
+                    <div class="dash-card-body" id="an-work-type"></div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header">Job Type</div>
+                    <div class="dash-card-body" id="an-job-type"></div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-header">Seniority</div>
+                    <div class="dash-card-body" id="an-seniority"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── VIEW: GOALS ──────────────────────────────────── -->
+        <section class="view" id="view-goals">
+            <div class="goals-controls">
+                <div class="goals-period-tabs">
+                    <button class="goal-period-tab active" data-goal-period="week">This Week</button>
+                    <button class="goal-period-tab" data-goal-period="month">This Month</button>
+                    <button class="goal-period-tab" data-goal-period="all">All Goals</button>
+                </div>
+                <div class="goals-hint">Goals automatically count activity from your job board.</div>
+            </div>
+            <div class="goals-summary-strip" id="goals-summary-strip"></div>
+            <div class="goals-grid" id="goals-grid"></div>
+            <div class="goals-empty" id="goals-empty" style="display:none">
+                <p class="empty-msg">No goals for this period. Click <strong>+ Add Goal</strong> to get started, or use
+                    a preset:</p>
+                <div class="goals-preset-row" id="goals-preset-row"></div>
+            </div>
         </section>
 
     </main>
@@ -609,6 +810,122 @@
         </div>
     </div>
 
+    <!-- ── MODAL: ADD / EDIT CONTACT ────────────────────────── -->
+    <div class="modal-overlay" id="modal-contact" aria-hidden="true">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-contact-title">Add Contact</h2>
+                <button class="modal-close" data-close="modal-contact">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="contact-edit-id" />
+                <div class="form-row three-col">
+                    <div class="form-group">
+                        <label class="form-label">Name *</label>
+                        <input type="text" class="text-input" id="contact-name" placeholder="e.g. Jane Smith" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Company</label>
+                        <input type="text" class="text-input" id="contact-company" placeholder="e.g. Acme Corp" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Role / Title</label>
+                        <input type="text" class="text-input" id="contact-role"
+                            placeholder="e.g. Technical Recruiter" />
+                    </div>
+                </div>
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label class="form-label">Type</label>
+                        <select class="select-input" id="contact-type">
+                            <option value="Recruiter">Recruiter</option>
+                            <option value="HM">Hiring Manager</option>
+                            <option value="Referral">Referral</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Linked Job</label>
+                        <select class="select-input" id="contact-job-id">
+                            <option value="">— None —</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="text-input" id="contact-email" placeholder="jane@company.com" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone</label>
+                        <input type="tel" class="text-input" id="contact-phone" placeholder="+1 555-000-0000" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">LinkedIn URL</label>
+                    <input type="url" class="text-input" id="contact-linkedin"
+                        placeholder="https://linkedin.com/in/…" />
+                </div>
+                <div class="form-row two-col">
+                    <div class="form-group">
+                        <label class="form-label">Last Contacted</label>
+                        <input type="date" class="text-input" id="contact-last-contact" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Next Follow-up</label>
+                        <input type="date" class="text-input" id="contact-next-followup" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Notes</label>
+                    <textarea class="text-area" id="contact-notes" rows="3"
+                        placeholder="How you met, conversation highlights, action items…"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-ghost" data-close="modal-contact">Cancel</button>
+                <button class="btn-primary" id="save-contact-btn">Save Contact</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── MODAL: ADD / EDIT GOAL ─────────────────────────── -->
+    <div class="modal-overlay" id="modal-goal" aria-hidden="true">
+        <div class="modal" style="max-width:420px">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-goal-title">Add Goal</h2>
+                <button class="modal-close" data-close="modal-goal">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="goal-edit-id" />
+                <div class="form-group">
+                    <label class="form-label">Goal Type *</label>
+                    <select class="select-input" id="goal-type">
+                        <option value="applications">Applications Sent</option>
+                        <option value="interviews">Interviews Reached</option>
+                        <option value="offers">Offers Received</option>
+                        <option value="responses">Responses Received</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Period *</label>
+                    <select class="select-input" id="goal-period">
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Target *</label>
+                    <input type="number" class="text-input" id="goal-target" min="1" max="999" placeholder="e.g. 10" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-ghost" data-close="modal-goal">Cancel</button>
+                <button class="btn-primary" id="save-goal-btn">Save Goal</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ── TOAST ──────────────────────────────────────────── -->
     <div class="toast" id="toast"></div>
 
@@ -617,6 +934,20 @@
     <!-- Word .docx parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <script src="javascript/animations.js"></script>
+    <!-- Core data & state -->
+    <script src="javascript/data.js"></script>
+    <script src="javascript/state.js"></script>
+    <script src="javascript/utils.js"></script>
+    <!-- View renderers -->
+    <script src="javascript/views-dashboard.js"></script>
+    <script src="javascript/views-board.js"></script>
+    <script src="javascript/views-profile.js"></script>
+    <script src="javascript/views-resume.js"></script>
+    <script src="javascript/views-calendar.js"></script>
+    <script src="javascript/views-contacts.js"></script>
+    <script src="javascript/views-analytics.js"></script>
+    <script src="javascript/views-goals.js"></script>
+    <!-- Entry point & extensions -->
     <script src="javascript/app.js"></script>
     <script src="javascript/features.js"></script>
 </body>
