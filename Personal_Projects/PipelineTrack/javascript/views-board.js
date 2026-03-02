@@ -78,6 +78,23 @@ function renderBoard() {
 
   updateBoardFilterUI();
 
+  // Wire period filter + layout buttons (must run for all layouts, including table)
+  document.querySelectorAll('.board-filter').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.board-filter').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      boardPeriod = btn.dataset.period;
+      renderBoard();
+    };
+  });
+  document.querySelectorAll('.layout-btn').forEach(btn => {
+    btn.onclick = () => {
+      boardLayout = btn.dataset.layout;
+      localStorage.setItem('pt-board-layout', boardLayout);
+      renderBoard();
+    };
+  });
+
   if (boardLayout === 'table') {
     const visibleJobs = sortTableJobs(
       boardFilterStage ?
@@ -225,25 +242,6 @@ function renderBoard() {
       }
       draggedJobId = null;
     });
-  });
-
-  // Wire board period filter buttons
-  document.querySelectorAll('.board-filter').forEach(btn => {
-    btn.onclick = () => {
-      document.querySelectorAll('.board-filter').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      boardPeriod = btn.dataset.period;
-      renderBoard();
-    };
-  });
-
-  // Wire layout toggle buttons
-  document.querySelectorAll('.layout-btn').forEach(btn => {
-    btn.onclick = () => {
-      boardLayout = btn.dataset.layout;
-      localStorage.setItem('pt-board-layout', boardLayout);
-      renderBoard();
-    };
   });
 
   wireSearchAndFilters();
