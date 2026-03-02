@@ -77,9 +77,9 @@ Each job stores:
 | Seniority | Internship, Junior, Mid-Level, Senior, Lead, Staff |
 | Job Type | Full-time, Part-time, Contract, Freelance, Internship, Temporary, Apprenticeship |
 | Work Type | Remote, On-site, Hybrid |
-| Other | Department, Salary, Date Posted, Benefits, Notes, Job URL |
+| Other | Department, Salary, Date Posted, Benefits, Company Notes, Notes, Job URL |
 
-Seniority, job type, and work type each appear as color-coded badges in the detail view. Benefits are automatically parsed into labeled chips — health insurance, 401k, PTO, equity, and more — rather than showing raw pasted text.
+Seniority, job type, and work type each appear as color-coded badges in the detail view. Benefits are automatically parsed into labeled chips — health insurance, 401k, PTO, equity, and more — rather than showing raw pasted text. **Company Notes** is a dedicated field for information about the company itself (culture, size, funding, tech stack) — separate from the job description and your personal notes.
 
 Clicking **Edit** on a job opens the edit form with a **← Back** button to return to the detail view without losing your place.
 

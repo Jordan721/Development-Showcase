@@ -150,6 +150,15 @@ function wireEvents() {
     if (file) handleResumeFile(file);
   });
 
+  // Detail modal — save company notes on change
+  document.getElementById('detail-company-notes').addEventListener('input', () => {
+    const job = state.jobs.find(j => j.id === state.activeJobId);
+    if (job) {
+      job.companyNotes = document.getElementById('detail-company-notes').value;
+      save();
+    }
+  });
+
   // Detail modal — save notes on change
   document.getElementById('detail-notes').addEventListener('input', () => {
     const job = state.jobs.find(j => j.id === state.activeJobId);

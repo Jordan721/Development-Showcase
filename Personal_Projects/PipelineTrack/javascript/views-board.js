@@ -468,6 +468,9 @@ function openJobDetail(id) {
   // Description
   document.getElementById('detail-desc').textContent = job.description || 'No description provided.';
 
+  // Company Notes
+  document.getElementById('detail-company-notes').value = job.companyNotes || '';
+
   // Notes
   document.getElementById('detail-notes').value = job.notes || '';
 
@@ -515,6 +518,7 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-work-type').value = job ? job.workType || '' : '';
   document.getElementById('job-description').value = job ? job.description || '' : '';
   document.getElementById('job-benefits').value = job ? job.benefits || '' : '';
+  document.getElementById('job-company-notes').value = job ? job.companyNotes || '' : '';
   document.getElementById('job-notes').value = job ? job.notes || '' : '';
 
   openModal('modal-job');
@@ -550,6 +554,7 @@ function saveJob() {
     stage: document.getElementById('job-stage').value,
     description,
     benefits: document.getElementById('job-benefits').value.trim(),
+    companyNotes: document.getElementById('job-company-notes').value.trim(),
     notes: document.getElementById('job-notes').value.trim(),
     fitScore: score,
     matched,
