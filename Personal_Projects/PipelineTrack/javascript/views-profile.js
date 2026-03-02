@@ -39,6 +39,7 @@ function saveLinks() {
 }
 
 const CERT_TYPES = ["Certificate","Associate's","Bachelor's","Master's","PhD","Bootcamp","License"];
+const CERT_SHOW_LIMIT = 1;
 
 function certTypeOptions(selected) {
   return CERT_TYPES.map(t => `<option value="${t}"${t === selected ? ' selected' : ''}>${t}</option>`).join('');
@@ -46,12 +47,20 @@ function certTypeOptions(selected) {
 
 function renderCertTags() {
   const container = document.getElementById('cert-tags-container');
+  const footer = document.getElementById('cert-footer');
   const certs = state.profile.certifications;
+  if (typeof window._certsExpanded === 'undefined') window._certsExpanded = false;
+
   if (certs.length === 0) {
     container.innerHTML = '<p class="empty-msg" style="margin-top:8px">No certifications, degrees, or licenses added yet.</p>';
+    if (footer) footer.innerHTML = '';
     return;
   }
-  container.innerHTML = certs.map((c, i) => `
+
+  const showAll = window._certsExpanded || certs.length <= CERT_SHOW_LIMIT;
+  const visible = showAll ? certs : certs.slice(0, CERT_SHOW_LIMIT);
+
+  container.innerHTML = visible.map((c, i) => `
     <div class="cert-card" data-cert-index="${i}">
       <div class="cert-card-view">
         <div class="cert-card-header">
@@ -121,6 +130,21 @@ function renderCertTags() {
       renderCertTags();
     });
   });
+
+  // Show more / fewer footer
+  if (footer) {
+    const hidden = certs.length - CERT_SHOW_LIMIT;
+    footer.innerHTML = certs.length > CERT_SHOW_LIMIT
+      ? `<button class="skill-expand-toggle" id="cert-expand-toggle">${showAll ? 'Show fewer' : `Show ${hidden} more`}</button>`
+      : '';
+    const toggleBtn = document.getElementById('cert-expand-toggle');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        window._certsExpanded = !window._certsExpanded;
+        renderCertTags();
+      });
+    }
+  }
 }
 
 function addCert() {
