@@ -11,11 +11,18 @@ function analyzeJob(description) {
   };
 
   const userSkills = state.profile.skills.map(s => s.name.toLowerCase());
+
+  // Extract known skills mentioned in cert/license/degree descriptions
+  const certText = (state.profile.certifications || [])
+    .map(c => c.description || '').join(' ').toLowerCase();
+  const certSkills = certText ? [...KNOWN_SKILLS].filter(skill => certText.includes(skill)) : [];
+  const allUserSkills = [...new Set([...userSkills, ...certSkills])];
+
   const text = description.toLowerCase();
 
   // Check known skills by looking for them in the job description text
   const foundInJob = [...KNOWN_SKILLS].filter(skill => text.includes(skill));
-  const matched = foundInJob.filter(skill => userSkills.some(us => us.includes(skill) || skill.includes(us)));
+  const matched = foundInJob.filter(skill => allUserSkills.some(us => us.includes(skill) || skill.includes(us)));
   const missing = foundInJob.filter(skill => !matched.includes(skill));
 
   const total = matched.length + missing.length;

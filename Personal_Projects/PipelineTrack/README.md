@@ -88,10 +88,10 @@ Clicking **Edit** on a job opens the edit form with a **← Back** button to ret
 ### 🎯 Fit Analysis
 Paste a job description when adding a job and PipelineTrack scores your match automatically.
 
-- **Fit score** — percentage based on your profile skills vs. the job description
+- **Fit score** — percentage based on your profile skills vs. the job description; also factors in skills mentioned in your certification and license descriptions
 - **Matched skills** — shown in green
 - **Skill gaps** — shown in red
-- Score recalculates whenever you update your profile
+- Score recalculates whenever you update your profile, skills, or credentials
 - Quick link to [Cash Compass](https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html) to check your financial runway alongside any offer
 
 ---
@@ -100,7 +100,7 @@ Paste a job description when adding a job and PipelineTrack scores your match au
 Build the foundation for your fit scores and recommendations.
 
 - **Skills** — add skills one at a time or paste a whole block (comma or newline-separated) using the **Bulk** button; skills are grouped and color-coded by level — green for Expert, teal for Intermediate, gray for Beginner; click the level badge on any tag to cycle it in place; filter to a single level with the **All / Expert / Intermediate / Beginner** pill buttons; if you have more than 10, the list collapses with a **Show X more** toggle; **Clear all** removes everything at once with a confirmation prompt; duplicates are automatically skipped
-- **Certifications & Degrees** — track certificates, degrees, bootcamps, and licenses by credential type
+- **Certifications, Degrees & Licenses** — track credentials by type (Certificate, Associate's, Bachelor's, Master's, PhD, Bootcamp, License); each entry supports an optional description (skills covered, technologies, field of study) which feeds directly into fit scoring; click the **✎** button on any card to edit the name, type, or description inline without removing and re-adding it
 - **Resume Summary** — a short bio for your own reference
 - **Skill Coverage chart** — see how often each of your skills appears across tracked jobs; grouped and color-coded by level with the same **All / Expert / Intermediate / Beginner** filter pills and a **Show X more** collapse when you have many skills
 - **Data Backup** — export all your data to a `.json` file and import it on any other device or browser; the filename and a confirmation message appear under the buttons after each action

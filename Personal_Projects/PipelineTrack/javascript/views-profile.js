@@ -38,25 +38,86 @@ function saveLinks() {
   toast('Links saved!', 'success');
 }
 
+const CERT_TYPES = ["Certificate","Associate's","Bachelor's","Master's","PhD","Bootcamp","License"];
+
+function certTypeOptions(selected) {
+  return CERT_TYPES.map(t => `<option value="${t}"${t === selected ? ' selected' : ''}>${t}</option>`).join('');
+}
+
 function renderCertTags() {
   const container = document.getElementById('cert-tags-container');
   const certs = state.profile.certifications;
   if (certs.length === 0) {
-    container.innerHTML = '<p class="empty-msg" style="margin-top:8px">No certifications or degrees added yet.</p>';
+    container.innerHTML = '<p class="empty-msg" style="margin-top:8px">No certifications, degrees, or licenses added yet.</p>';
     return;
   }
   container.innerHTML = certs.map((c, i) => `
-    <span class="skill-tag">
-      ${escHtml(c.name)}
-      <span class="level">${c.type}</span>
-      <span class="skill-tag-remove" data-index="${i}">✕</span>
-    </span>
+    <div class="cert-card" data-cert-index="${i}">
+      <div class="cert-card-view">
+        <div class="cert-card-header">
+          <span class="cert-card-name">${escHtml(c.name)}</span>
+          <span class="level">${escHtml(c.type)}</span>
+          <button class="cert-card-edit" data-index="${i}" title="Edit">✎</button>
+          <button class="cert-card-remove" data-index="${i}" title="Remove">✕</button>
+        </div>
+        ${c.description ? `<div class="cert-card-desc">${escHtml(c.description)}</div>` : '<div class="cert-card-desc cert-no-desc">No description — click ✎ to add one</div>'}
+      </div>
+      <div class="cert-card-edit-form" style="display:none">
+        <input class="text-input cert-edit-name" value="${escHtml(c.name)}" placeholder="Name" />
+        <select class="select-input cert-edit-type">${certTypeOptions(c.type)}</select>
+        <textarea class="text-area cert-edit-desc" rows="2" placeholder="Skills covered, technologies, field of study…">${escHtml(c.description || '')}</textarea>
+        <div class="cert-edit-actions">
+          <button class="btn-primary cert-save-btn" data-index="${i}">Save</button>
+          <button class="btn-ghost cert-cancel-btn" data-index="${i}">Cancel</button>
+        </div>
+      </div>
+    </div>
   `).join('');
 
-  container.querySelectorAll('.skill-tag-remove').forEach(btn => {
+  // Edit button — toggle to edit form
+  container.querySelectorAll('.cert-card-edit').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = container.querySelector(`.cert-card[data-cert-index="${btn.dataset.index}"]`);
+      card.querySelector('.cert-card-view').style.display = 'none';
+      card.querySelector('.cert-card-edit-form').style.display = '';
+      card.querySelector('.cert-edit-name').focus();
+    });
+  });
+
+  // Cancel — back to view
+  container.querySelectorAll('.cert-cancel-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = container.querySelector(`.cert-card[data-cert-index="${btn.dataset.index}"]`);
+      card.querySelector('.cert-card-view').style.display = '';
+      card.querySelector('.cert-card-edit-form').style.display = 'none';
+    });
+  });
+
+  // Save edit
+  container.querySelectorAll('.cert-save-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.index);
+      const card = container.querySelector(`.cert-card[data-cert-index="${idx}"]`);
+      const name = card.querySelector('.cert-edit-name').value.trim();
+      if (!name) { toast('Name is required.', 'error'); return; }
+      state.profile.certifications[idx] = {
+        name,
+        type: card.querySelector('.cert-edit-type').value,
+        description: card.querySelector('.cert-edit-desc').value.trim(),
+      };
+      save();
+      reanalyzeAllJobs();
+      renderCertTags();
+      toast('Updated!', 'success');
+    });
+  });
+
+  // Remove
+  container.querySelectorAll('.cert-card-remove').forEach(btn => {
     btn.addEventListener('click', () => {
       state.profile.certifications.splice(parseInt(btn.dataset.index), 1);
       save();
+      reanalyzeAllJobs();
       renderCertTags();
     });
   });
@@ -64,19 +125,20 @@ function renderCertTags() {
 
 function addCert() {
   const input = document.getElementById('cert-input');
+  const descEl = document.getElementById('cert-desc');
   const type = document.getElementById('cert-type').value;
   const name = input.value.trim();
+  const description = descEl ? descEl.value.trim() : '';
   if (!name) return;
   if (state.profile.certifications.some(c => c.name.toLowerCase() === name.toLowerCase())) {
     toast('Already added.', 'error');
     return;
   }
-  state.profile.certifications.push({
-    name,
-    type
-  });
+  state.profile.certifications.push({ name, type, description });
   input.value = '';
+  if (descEl) descEl.value = '';
   save();
+  reanalyzeAllJobs();
   renderCertTags();
   toast(`"${name}" added!`, 'success');
 }
