@@ -41,6 +41,15 @@ function wireEvents() {
     });
   });
 
+  // Job modal tab switching
+  document.getElementById('job-modal-tabs').addEventListener('click', e => {
+    const btn = e.target.closest('.modal-tab-btn');
+    if (!btn) return;
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('#job-modal-tabs .modal-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('#modal-job .modal-tab-panel').forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
+  });
+
   // Save job
   document.getElementById('save-job-btn').addEventListener('click', saveJob);
 

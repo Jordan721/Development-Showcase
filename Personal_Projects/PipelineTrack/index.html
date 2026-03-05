@@ -586,7 +586,7 @@
 
     <!-- ── MODAL: ADD / EDIT JOB ──────────────────────────── -->
     <div class="modal-overlay" id="modal-job" aria-hidden="true">
-        <div class="modal">
+        <div class="modal modal-lg">
             <div class="modal-header">
                 <div style="display:flex;align-items:center;gap:10px">
                     <button class="detail-back-btn" id="job-modal-back-btn" style="display:none">← Back</button>
@@ -594,109 +594,126 @@
                 </div>
                 <button class="modal-close" data-close="modal-job">✕</button>
             </div>
+            <div class="modal-tabs" id="job-modal-tabs">
+                <button class="modal-tab-btn active" data-tab="details">Details</button>
+                <button class="modal-tab-btn" data-tab="job-info">Job Info</button>
+                <button class="modal-tab-btn" data-tab="application">Application</button>
+            </div>
             <div class="modal-body">
                 <input type="hidden" id="job-edit-id" />
-                <div class="form-row three-col">
-                    <div class="form-group">
-                        <label class="form-label">Role / Title *</label>
-                        <input type="text" class="text-input" id="job-role" placeholder="e.g. Frontend Engineer" />
+
+                <!-- ── Tab: Details ── -->
+                <div class="modal-tab-panel active" data-tab="details">
+                    <div class="form-row three-col">
+                        <div class="form-group">
+                            <label class="form-label">Role / Title *</label>
+                            <input type="text" class="text-input" id="job-role" placeholder="e.g. Frontend Engineer" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Company *</label>
+                            <input type="text" class="text-input" id="job-company" placeholder="e.g. Acme Corp" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Department</label>
+                            <input type="text" class="text-input" id="job-department" placeholder="e.g. Engineering, Data" />
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Company *</label>
-                        <input type="text" class="text-input" id="job-company" placeholder="e.g. Acme Corp" />
+                    <div class="form-row four-col">
+                        <div class="form-group">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="text-input" id="job-location" placeholder="e.g. New York, NY" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Job URL</label>
+                            <input type="url" class="text-input" id="job-url" placeholder="https://…" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Salary / Pay Range</label>
+                            <input type="text" class="text-input" id="job-salary" placeholder="e.g. $80k–$100k" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date Posted</label>
+                            <input type="date" class="text-input" id="job-date-posted" />
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Department</label>
-                        <input type="text" class="text-input" id="job-department"
-                            placeholder="e.g. Engineering, Data" />
+                    <div class="form-row four-col">
+                        <div class="form-group">
+                            <label class="form-label">Stage</label>
+                            <select class="select-input" id="job-stage">
+                                <option value="saved">Saved</option>
+                                <option value="applied">Applied</option>
+                                <option value="screening">Screening</option>
+                                <option value="interview">Interview</option>
+                                <option value="offer">Offer</option>
+                                <option value="declined">Declined</option>
+                                <option value="archived">Archived</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Seniority</label>
+                            <select class="select-input" id="job-seniority">
+                                <option value="">— Select —</option>
+                                <option value="Internship">Internship</option>
+                                <option value="Junior">Junior</option>
+                                <option value="Mid-Level">Mid-Level</option>
+                                <option value="Senior">Senior</option>
+                                <option value="Lead">Lead</option>
+                                <option value="Staff">Staff</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Job Type</label>
+                            <select class="select-input" id="job-type">
+                                <option value="">— Select —</option>
+                                <option value="Full-time">Full-time</option>
+                                <option value="Part-time">Part-time</option>
+                                <option value="Contract">Contract</option>
+                                <option value="Freelance">Freelance</option>
+                                <option value="Internship">Internship</option>
+                                <option value="Temporary">Temporary</option>
+                                <option value="Apprenticeship">Apprenticeship</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Work Type</label>
+                            <select class="select-input" id="job-work-type">
+                                <option value="">— Select —</option>
+                                <option value="Remote">Remote</option>
+                                <option value="On-site">On-site</option>
+                                <option value="Hybrid">Hybrid</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="form-row four-col">
+
+                <!-- ── Tab: Job Info ── -->
+                <div class="modal-tab-panel" data-tab="job-info">
                     <div class="form-group">
-                        <label class="form-label">Location</label>
-                        <input type="text" class="text-input" id="job-location" placeholder="e.g. New York, NY" />
+                        <label class="form-label">Job Description <span class="label-hint">(paste for fit analysis)</span></label>
+                        <textarea class="text-area" id="job-description" rows="8" placeholder="Paste the full job description here…"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Job URL</label>
-                        <input type="url" class="text-input" id="job-url" placeholder="https://…" />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Salary / Pay Range</label>
-                        <input type="text" class="text-input" id="job-salary" placeholder="e.g. $80k–$100k" />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Date Posted</label>
-                        <input type="date" class="text-input" id="job-date-posted" />
-                    </div>
-                </div>
-                <div class="form-row four-col">
-                    <div class="form-group">
-                        <label class="form-label">Stage</label>
-                        <select class="select-input" id="job-stage">
-                            <option value="saved">Saved</option>
-                            <option value="applied">Applied</option>
-                            <option value="screening">Screening</option>
-                            <option value="interview">Interview</option>
-                            <option value="offer">Offer</option>
-                            <option value="declined">Declined</option>
-                            <option value="archived">Archived</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Seniority</label>
-                        <select class="select-input" id="job-seniority">
-                            <option value="">— Select —</option>
-                            <option value="Internship">Internship</option>
-                            <option value="Junior">Junior</option>
-                            <option value="Mid-Level">Mid-Level</option>
-                            <option value="Senior">Senior</option>
-                            <option value="Lead">Lead</option>
-                            <option value="Staff">Staff</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Job Type</label>
-                        <select class="select-input" id="job-type">
-                            <option value="">— Select —</option>
-                            <option value="Full-time">Full-time</option>
-                            <option value="Part-time">Part-time</option>
-                            <option value="Contract">Contract</option>
-                            <option value="Freelance">Freelance</option>
-                            <option value="Internship">Internship</option>
-                            <option value="Temporary">Temporary</option>
-                            <option value="Apprenticeship">Apprenticeship</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Work Type</label>
-                        <select class="select-input" id="job-work-type">
-                            <option value="">— Select —</option>
-                            <option value="Remote">Remote</option>
-                            <option value="On-site">On-site</option>
-                            <option value="Hybrid">Hybrid</option>
-                        </select>
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label class="form-label">Benefits</label>
+                            <textarea class="text-area" id="job-benefits" rows="4" placeholder="e.g. Health insurance, 401k match, unlimited PTO, equity…"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Company Notes</label>
+                            <textarea class="text-area" id="job-company-notes" rows="4" placeholder="Culture, size, funding, tech stack…"></textarea>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Job Description <span class="label-hint">(paste for fit
-                            analysis)</span></label>
-                    <textarea class="text-area" id="job-description" rows="5"
-                        placeholder="Paste the full job description here…"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Benefits</label>
-                    <textarea class="text-area" id="job-benefits" rows="2"
-                        placeholder="e.g. Health insurance, 401k match, unlimited PTO, equity…"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Company Notes</label>
-                    <textarea class="text-area" id="job-company-notes" rows="2"
-                        placeholder="About this company — culture, size, funding, tech stack…"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Notes</label>
-                    <textarea class="text-area" id="job-notes" rows="2"
-                        placeholder="Referral contact, recruiter name, interview tips…"></textarea>
+
+                <!-- ── Tab: Application ── -->
+                <div class="modal-tab-panel" data-tab="application">
+                    <div class="form-group">
+                        <label class="form-label">Cover Letter</label>
+                        <textarea class="text-area" id="job-cover-letter" rows="12" placeholder="Paste or draft your cover letter here…"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notes</label>
+                        <textarea class="text-area" id="job-notes" rows="3" placeholder="Referral contact, recruiter name, interview tips…"></textarea>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">

@@ -77,9 +77,17 @@ Each job stores:
 | Seniority | Internship, Junior, Mid-Level, Senior, Lead, Staff |
 | Job Type | Full-time, Part-time, Contract, Freelance, Internship, Temporary, Apprenticeship |
 | Work Type | Remote, On-site, Hybrid |
-| Other | Department, Salary, Date Posted, Benefits, Company Notes, Notes, Job URL |
+| Other | Department, Salary, Date Posted, Benefits, Company Notes, Notes, Job URL, Cover Letter |
 
 Seniority, job type, and work type each appear as color-coded badges in the detail view. Benefits are automatically parsed into labeled chips — health insurance, 401k, PTO, equity, and more — rather than showing raw pasted text. **Company Notes** is a dedicated field for information about the company itself (culture, size, funding, tech stack) — separate from the job description and your personal notes.
+
+The **Add / Edit Job** form is organized into three tabs to keep it compact:
+
+- **Details** — role, company, department, location, URL, salary, date posted, stage, seniority, job type, and work type
+- **Job Info** — job description (used for fit analysis), benefits, and company notes side by side
+- **Application** — cover letter and personal notes
+
+**Cover Letter** is stored per job so you can draft or paste a tailored letter directly alongside the listing without leaving the app.
 
 Clicking **Edit** on a job opens the edit form with a **← Back** button to return to the detail view without losing your place.
 
@@ -224,7 +232,7 @@ PipelineTrack/
 1. Clone or download this folder
 2. Open `index.html` in your browser
 3. Go to **My Profile** — add your skills and any certifications
-4. Go to **Job Board** → **+ Add Job** — paste a job description and fill in department, seniority, job type, work type, and other optional fields
+4. Go to **Job Board** → **+ Add Job** — fill in the **Details** tab, paste the job description in **Job Info** for fit scoring, and optionally draft your cover letter in the **Application** tab
 5. Click any job card to see your fit score and skill breakdown
 6. Check the **Learning Hub** to see what to learn next
 7. Use **Resume Hub** to parse your resume, scan your GitHub, check your writing, and explore tools

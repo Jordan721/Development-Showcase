@@ -520,6 +520,11 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-benefits').value = job ? job.benefits || '' : '';
   document.getElementById('job-company-notes').value = job ? job.companyNotes || '' : '';
   document.getElementById('job-notes').value = job ? job.notes || '' : '';
+  document.getElementById('job-cover-letter').value = job ? job.coverLetter || '' : '';
+
+  // Reset to first tab
+  document.querySelectorAll('#job-modal-tabs .modal-tab-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
+  document.querySelectorAll('#modal-job .modal-tab-panel').forEach((p, i) => p.classList.toggle('active', i === 0));
 
   openModal('modal-job');
 }
@@ -556,6 +561,7 @@ function saveJob() {
     benefits: document.getElementById('job-benefits').value.trim(),
     companyNotes: document.getElementById('job-company-notes').value.trim(),
     notes: document.getElementById('job-notes').value.trim(),
+    coverLetter: document.getElementById('job-cover-letter').value.trim(),
     fitScore: score,
     matched,
     missing,
