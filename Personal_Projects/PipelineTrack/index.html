@@ -293,10 +293,43 @@
                     <div class="profile-section-title">Data Backup</div>
                     <p class="profile-hint">Export all your jobs, skills, and settings to a file. Import that file on
                         any other device or browser to restore everything.</p>
-                    <div class="backup-actions">
-                        <button class="btn-primary" id="export-btn">⬇ Export Backup</button>
-                        <button class="btn-ghost" id="import-btn">⬆ Import Backup</button>
-                        <button class="btn-danger" id="clear-all-btn">✕ Clear All Jobs</button>
+                    <div class="backup-tiles">
+                        <button class="backup-tile" id="export-btn">
+                            <div class="backup-tile-icon backup-tile-icon--json">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2v11M10 13L6 9m4 4l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 16h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                            </div>
+                            <div class="backup-tile-text">
+                                <div class="backup-tile-title">Export Backup</div>
+                                <div class="backup-tile-desc">Full data · JSON</div>
+                            </div>
+                        </button>
+                        <button class="backup-tile" id="export-csv-btn">
+                            <div class="backup-tile-icon backup-tile-icon--csv">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2v11M10 13L6 9m4 4l4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 16h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                            </div>
+                            <div class="backup-tile-text">
+                                <div class="backup-tile-title">Export Jobs</div>
+                                <div class="backup-tile-desc">Job list · CSV</div>
+                            </div>
+                        </button>
+                        <button class="backup-tile" id="import-btn">
+                            <div class="backup-tile-icon backup-tile-icon--import">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 13V2M10 2L6 6m4-4l4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 16h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                            </div>
+                            <div class="backup-tile-text">
+                                <div class="backup-tile-title">Import Backup</div>
+                                <div class="backup-tile-desc">Restore · .json file</div>
+                            </div>
+                        </button>
+                        <button class="backup-tile backup-tile--danger" id="clear-all-btn">
+                            <div class="backup-tile-icon backup-tile-icon--danger">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                            </div>
+                            <div class="backup-tile-text">
+                                <div class="backup-tile-title">Clear All Jobs</div>
+                                <div class="backup-tile-desc">Cannot be undone</div>
+                            </div>
+                        </button>
                         <input type="file" id="import-file-input" accept=".json" style="display:none" />
                     </div>
                     <div id="backup-status"></div>

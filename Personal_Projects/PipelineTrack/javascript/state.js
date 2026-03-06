@@ -124,6 +124,56 @@ function exportData() {
   }
 }
 
+function exportCSV() {
+  const csvCell = v => {
+    if (v === null || v === undefined) return '';
+    const s = String(v);
+    return s.includes(',') || s.includes('"') || s.includes('\n') ? '"' + s.replace(/"/g, '""') + '"' : s;
+  };
+
+  const headers = [
+    'Role', 'Company', 'Location', 'Stage', 'Seniority', 'Job Type', 'Work Type',
+    'Department', 'Salary', 'Date Posted', 'Date Added', 'Fit Score (%)',
+    'Matched Skills', 'Skill Gaps', 'URL', 'Notes', 'Company Notes'
+  ];
+
+  const rows = state.jobs.map(j => [
+    j.role,
+    j.company,
+    j.location,
+    STAGE_LABELS[j.stage] || j.stage,
+    j.seniority,
+    j.jobType,
+    j.workType,
+    j.department,
+    j.salary,
+    j.datePosted,
+    j.dateAdded ? j.dateAdded.slice(0, 10) : '',
+    j.fitScore !== null && j.fitScore !== undefined ? j.fitScore : '',
+    (j.matched || []).join('; '),
+    (j.missing || []).join('; '),
+    j.url,
+    j.notes,
+    j.companyNotes
+  ].map(csvCell).join(','));
+
+  const csv = [headers.join(','), ...rows].join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const filename = 'pipelinetrack-jobs-' + new Date().toISOString().slice(0, 10) + '.csv';
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('CSV downloaded.', 'success');
+  const statusEl = document.getElementById('backup-status');
+  if (statusEl) {
+    statusEl.textContent = '⬇ Exported: ' + filename + ' (' + state.jobs.length + ' jobs)';
+    statusEl.className = 'import-status success';
+  }
+}
+
 function importData(file) {
   const reader = new FileReader();
   reader.onload = e => {

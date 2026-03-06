@@ -104,6 +104,7 @@ function wireEvents() {
 
   // Export / Import / Clear All
   document.getElementById('export-btn').addEventListener('click', exportData);
+  document.getElementById('export-csv-btn').addEventListener('click', exportCSV);
   document.getElementById('import-btn').addEventListener('click', () => document.getElementById('import-file-input').click());
   document.getElementById('clear-all-btn').addEventListener('click', () => {
     if (!confirm('Clear all tracked jobs? This cannot be undone.')) return;

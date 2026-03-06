@@ -114,6 +114,7 @@ Build the foundation for your fit scores and recommendations.
 - **Resume Summary** — a short bio for your own reference
 - **Skill Coverage chart** — see how often each of your skills appears across tracked jobs; grouped and color-coded by level with the same **All / Expert / Intermediate / Beginner** filter pills and a **Show X more** collapse when you have many skills
 - **Data Backup** — export all your data to a `.json` file and import it on any other device or browser; the filename and a confirmation message appear under the buttons after each action
+- **Export Jobs as CSV** — download your full job list as a spreadsheet-ready `.csv` file (role, company, stage, fit score, matched skills, skill gaps, salary, notes, and more); the JSON backup and CSV export coexist so you can use both
 - **Clear All Jobs** — wipe all tracked jobs in one click (with confirmation) to start fresh
 - **Your Links** — save your LinkedIn, GitHub, and Portfolio URLs locally for quick access
 
@@ -249,7 +250,6 @@ All data is saved to your browser's localStorage. Nothing is sent anywhere. Use 
 
 ## 🗺️ Roadmap Ideas
 
-- Export job list to CSV
 - Support for non-tech industry job searches
 
 ---
