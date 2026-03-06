@@ -48,8 +48,15 @@ function renderDashboard() {
     gapsEl.innerHTML = '<p class="empty-msg">Add jobs with descriptions to see skill gaps.</p>';
   } else {
     gapsEl.innerHTML = sortedGaps.map(([skill, count]) =>
-      `<span class="gap-tag">${skill} <span class="gap-count">${count}</span></span>`
+      `<span class="gap-tag dash-gap-tag" data-skill="${escHtml(skill)}" title="View ${count} job${count !== 1 ? 's' : ''} missing this skill">${escHtml(skill)} <span class="gap-count">${count}</span></span>`
     ).join('');
+    gapsEl.querySelectorAll('.dash-gap-tag').forEach(tag => {
+      tag.addEventListener('click', () => {
+        const skill = tag.dataset.skill;
+        const matched = jobs.filter(j => (j.missing || []).includes(skill));
+        openFilterModal(`Skill Gap: ${skill}`, `${matched.length} job${matched.length !== 1 ? 's' : ''}`, matched);
+      });
+    });
   }
 
   // Recent activity
@@ -79,12 +86,19 @@ function renderDashboard() {
     const count = jobs.filter(j => j.stage === stage).length;
     const pct = Math.round((count / maxCount) * 100);
     return `
-      <div class="pipeline-bar-row">
+      <div class="pipeline-bar-row pipeline-bar-row-click" data-stage="${stage}" title="View ${count} job${count !== 1 ? 's' : ''}">
         <div class="pipeline-bar-label">${STAGE_LABELS[stage]}</div>
         <div class="pipeline-bar-track"><div class="pipeline-bar-fill" style="width:${pct}%"></div></div>
         <div class="pipeline-bar-count">${count}</div>
       </div>`;
   }).join('');
+  barsEl.querySelectorAll('.pipeline-bar-row-click').forEach(row => {
+    row.addEventListener('click', () => {
+      const stage = row.dataset.stage;
+      const matched = jobs.filter(j => j.stage === stage);
+      openFilterModal(`Stage: ${STAGE_LABELS[stage]}`, `${matched.length} job${matched.length !== 1 ? 's' : ''}`, matched);
+    });
+  });
 
   // Top skills — green if matched in any tracked job
   const skillsEl = document.getElementById('dash-skills');
@@ -101,11 +115,21 @@ function renderDashboard() {
       const matchCount = Object.entries(matchedCountMap).reduce((sum, [ms, c]) =>
         (ms.includes(key) || key.includes(ms)) ? sum + c : sum, 0);
       const isMatched = matchCount > 0;
-      return `<span class="skill-tag${isMatched ? ' skill-matched' : ''}" style="margin:3px">
+      return `<span class="skill-tag${isMatched ? ' skill-matched' : ''} dash-skill-tag" data-key="${escHtml(key)}" data-name="${escHtml(s.name)}" style="margin:3px${isMatched ? ';cursor:pointer' : ''}">
         ${escHtml(s.name)}
         <span class="level">${isMatched ? `✓ ${matchCount} job${matchCount !== 1 ? 's' : ''}` : s.level}</span>
       </span>`;
     }).join('');
+    skillsEl.querySelectorAll('.dash-skill-tag[data-key]').forEach(tag => {
+      tag.addEventListener('click', () => {
+        const key = tag.dataset.key;
+        const matched = jobs.filter(j =>
+          (j.matched || []).some(ms => ms.toLowerCase().includes(key) || key.includes(ms.toLowerCase()))
+        );
+        if (matched.length === 0) return;
+        openFilterModal(`Skill: ${tag.dataset.name}`, `${matched.length} matched job${matched.length !== 1 ? 's' : ''}`, matched);
+      });
+    });
   }
 
   if (typeof animateDashboardStats === 'function') animateDashboardStats();

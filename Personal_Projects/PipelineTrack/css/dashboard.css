@@ -447,6 +447,22 @@
   margin-bottom: 10px;
 }
 
+.pipeline-bar-row-click {
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  padding: 3px 4px;
+  margin-left: -4px;
+  transition: background .15s;
+}
+
+.pipeline-bar-row-click:hover {
+  background: var(--hover);
+}
+
+.pipeline-bar-row-click:hover .pipeline-bar-label {
+  color: var(--text);
+}
+
 .pipeline-bar-label {
   width: 80px;
   font-size: 12px;
@@ -496,6 +512,16 @@
   border-radius: 99px;
   padding: 1px 6px;
   font-size: 10px;
+}
+
+.dash-gap-tag {
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+
+.dash-gap-tag:hover {
+  background: rgba(255, 77, 109, .22);
+  border-color: rgba(255, 77, 109, .55);
 }
 
 .recent-item {

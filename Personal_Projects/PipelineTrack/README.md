@@ -50,7 +50,9 @@ I built PipelineTrack to solve that. One tool to:
 At-a-glance view of your entire job search.
 
 - Six stat cards in a 2-row grid: **Total Tracked, Applied, In Progress, Offers, Declined, Avg Fit Score**
-- Top skill gaps and top matched skills across all your jobs
+- **Top Skill Gaps** — click any gap tag to see which jobs are missing that skill
+- **Top Skills** — matched skills (showing ✓ job count) are clickable to see the jobs they matched against
+- **Pipeline Overview** — click any stage bar to see all jobs in that stage
 - Recent applications list — click any entry to open the full job detail
 
 ---
@@ -160,14 +162,15 @@ Track the people in your job search — recruiters, hiring managers, referrals, 
 ### 📊 Analytics
 A data-driven overview of your entire job search.
 
-- **7 KPI cards**: Tracked, Applied, In Progress, Offers, Declined, Avg Fit, Response Rate
-- **Application funnel**: shows conversion rates from Applied → Screening → Interview → Offer
-- **Response rate** bars per stage
-- **Over-time chart**: applications by week (last 8 weeks) or month (last 12 months)
-- **Top companies** by application count
-- **Skill gaps** bar chart across all jobs
-- **Fit score distribution** bucketed into four ranges
-- Work type, job type, and seniority breakdowns
+- **7 KPI cards**: Tracked, Applied, In Progress, Offers, Declined, Avg Fit, Response Rate — numbers animate in with a count-up on load
+- **Application Funnel** — conversion rates from Applied → Screening → Interview → Offer; click any stage row to see those jobs
+- **Response Rate by Stage** — click any bar to see the jobs at that stage
+- **Applications Over Time** — weekly (last 8 weeks) or monthly (last 12 months); click any bar column to see jobs added that period
+- **Top Companies** by application count; click any row to see those jobs
+- **Skill Gaps** bar chart — click any row to see jobs missing that skill
+- **Fit Score Distribution** bucketed into four ranges — click any range to see matching jobs
+- **Work Type, Job Type, Seniority** breakdowns — click any row to drill into those jobs
+- All charts animate in with staggered entrance and bar-fill transitions on load
 - Filter all charts by **This Week / This Month / This Year / All Time**
 
 ---

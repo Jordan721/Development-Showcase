@@ -685,6 +685,25 @@
    ANALYTICS VIEW
    ════════════════════════════════════════════════════════════ */
 
+@keyframes an-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* KPI card staggered entrance */
+.an-kpi-card.an-kpi-enter {
+  opacity: 0;
+  animation: an-fade-up .35s ease forwards;
+  animation-delay: calc(var(--i, 0) * 55ms);
+}
+
+/* Section card staggered entrance */
+.dash-card.an-card-enter {
+  opacity: 0;
+  animation: an-fade-up .4s ease forwards;
+  animation-delay: calc(var(--ci, 0) * 45ms);
+}
+
 .analytics-controls {
   display: flex;
   align-items: center;
@@ -842,12 +861,50 @@
   flex-shrink: 0;
 }
 
+.an-bar-row-clickable {
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  padding: 3px 4px;
+  margin-left: -4px;
+  transition: background .15s;
+}
+
+.an-bar-row-clickable:hover {
+  background: var(--hover);
+}
+
+.an-bar-row-clickable:hover .an-bar-label {
+  color: var(--text);
+}
+
+.an-filter-modal-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
 /* Funnel bars */
 .an-funnel-row {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
+}
+
+.an-funnel-row-click {
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  padding: 3px 4px;
+  margin-left: -4px;
+  transition: background .15s;
+}
+
+.an-funnel-row-click:hover {
+  background: var(--hover);
+}
+
+.an-funnel-row-click:hover .an-funnel-label {
+  color: var(--text);
 }
 
 .an-funnel-label {
@@ -916,6 +973,21 @@
 }
 
 .an-timechart-bar:hover {
+  opacity: 1;
+}
+
+.an-col-click {
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background .15s;
+  padding: 2px 2px 0;
+}
+
+.an-col-click:hover {
+  background: var(--hover);
+}
+
+.an-col-click:hover .an-timechart-bar {
   opacity: 1;
 }
 
