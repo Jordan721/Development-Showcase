@@ -133,8 +133,8 @@ function exportCSV() {
 
   const headers = [
     'Role', 'Company', 'Location', 'Stage', 'Seniority', 'Job Type', 'Work Type',
-    'Department', 'Salary', 'Date Posted', 'Date Added', 'Fit Score (%)',
-    'Matched Skills', 'Skill Gaps', 'URL', 'Notes', 'Company Notes'
+    'Department', 'Salary', 'Date Posted', 'Date Added', 'Deadline', 'Fit Score (%)',
+    'Matched Skills', 'Skill Gaps', 'URL', 'Notes', 'Company Notes', 'Benefits', 'Cover Letter', 'Job Description'
   ];
 
   const rows = state.jobs.map(j => [
@@ -149,12 +149,16 @@ function exportCSV() {
     j.salary,
     j.datePosted,
     j.dateAdded ? j.dateAdded.slice(0, 10) : '',
+    j.deadline || '',
     j.fitScore !== null && j.fitScore !== undefined ? j.fitScore : '',
     (j.matched || []).join('; '),
     (j.missing || []).join('; '),
     j.url,
     j.notes,
-    j.companyNotes
+    j.companyNotes,
+    j.benefits,
+    j.coverLetter,
+    j.description,
   ].map(csvCell).join(','));
 
   const csv = [headers.join(','), ...rows].join('\r\n');
@@ -174,38 +178,121 @@ function exportCSV() {
   }
 }
 
+function _parseCSVRow(row) {
+  const fields = [];
+  let field = '';
+  let inQuotes = false;
+  for (let i = 0; i < row.length; i++) {
+    const ch = row[i];
+    if (inQuotes) {
+      if (ch === '"' && row[i + 1] === '"') { field += '"'; i++; }
+      else if (ch === '"') { inQuotes = false; }
+      else { field += ch; }
+    } else {
+      if (ch === '"') { inQuotes = true; }
+      else if (ch === ',') { fields.push(field); field = ''; }
+      else { field += ch; }
+    }
+  }
+  fields.push(field);
+  return fields;
+}
+
+function _importFromCSV(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) throw new Error('Empty CSV');
+
+  const headers = _parseCSVRow(lines[0]).map(h => h.trim().toLowerCase());
+  const idx = name => headers.indexOf(name.toLowerCase());
+  const get = (fields, col) => (fields[idx(col)] || '').trim();
+
+  const stageLabelToKey = {};
+  Object.entries(STAGE_LABELS).forEach(([k, v]) => { stageLabelToKey[v.toLowerCase()] = k; });
+
+  let count = 0;
+  for (let i = 1; i < lines.length; i++) {
+    const f = _parseCSVRow(lines[i]);
+    const role = get(f, 'role');
+    const company = get(f, 'company');
+    if (!role && !company) continue;
+
+    const stageRaw = get(f, 'stage').toLowerCase();
+    const fitRaw = get(f, 'fit score (%)');
+    const fitScore = fitRaw !== '' && !isNaN(parseInt(fitRaw)) ? parseInt(fitRaw) : null;
+
+    state.jobs.push({
+      id: 'j' + Date.now() + Math.random().toString(36).slice(2, 6),
+      role, company,
+      location:     get(f, 'location'),
+      stage:        stageLabelToKey[stageRaw] || 'saved',
+      seniority:    get(f, 'seniority'),
+      jobType:      get(f, 'job type'),
+      workType:     get(f, 'work type'),
+      department:   get(f, 'department'),
+      salary:       get(f, 'salary'),
+      datePosted:   get(f, 'date posted'),
+      dateAdded:    get(f, 'date added') || new Date().toISOString().slice(0, 10),
+      fitScore,
+      matched:      get(f, 'matched skills') ? get(f, 'matched skills').split(';').map(s => s.trim()).filter(Boolean) : [],
+      missing:      get(f, 'skill gaps')     ? get(f, 'skill gaps').split(';').map(s => s.trim()).filter(Boolean)     : [],
+      url:          get(f, 'url'),
+      notes:        get(f, 'notes'),
+      companyNotes: get(f, 'company notes'),
+      benefits:     get(f, 'benefits'),
+      coverLetter:  get(f, 'cover letter'),
+      description:  get(f, 'job description'),
+      deadline:     get(f, 'deadline'),
+    });
+    count++;
+  }
+  return count;
+}
+
 function importData(file) {
+  const isCSV = file.name.toLowerCase().endsWith('.csv');
   const reader = new FileReader();
   reader.onload = e => {
+    const statusEl = document.getElementById('backup-status');
     try {
-      const data = JSON.parse(e.target.result);
-      const statusEl = document.getElementById('backup-status');
-      if (!Array.isArray(data.jobs) || typeof data.profile !== 'object') {
-        if (statusEl) {
-          statusEl.textContent = '✕ Invalid backup file — make sure you\'re using a PipelineTrack export.';
-          statusEl.className = 'import-status error';
+      if (isCSV) {
+        const count = _importFromCSV(e.target.result);
+        save();
+        renderView(state.activeView);
+        const freshStatusEl = document.getElementById('backup-status');
+        if (freshStatusEl) {
+          freshStatusEl.textContent = '⬆ Imported: ' + file.name + ' — ' + count + ' job' + (count !== 1 ? 's' : '') + ' added';
+          freshStatusEl.className = 'import-status success';
         }
-        return;
+        toast(count + ' job' + (count !== 1 ? 's' : '') + ' imported from CSV.', 'success');
+      } else {
+        const data = JSON.parse(e.target.result);
+        if (!Array.isArray(data.jobs) || typeof data.profile !== 'object') {
+          if (statusEl) {
+            statusEl.textContent = '✕ Invalid backup file — make sure you\'re using a PipelineTrack export.';
+            statusEl.className = 'import-status error';
+          }
+          return;
+        }
+        state.jobs = data.jobs;
+        state.profile = data.profile;
+        if (!state.profile.certifications) state.profile.certifications = [];
+        state.savedCourses = Array.isArray(data.savedCourses) ? data.savedCourses : [];
+        save();
+        reanalyzeAllJobs();
+        renderView(state.activeView);
+        const freshStatusEl = document.getElementById('backup-status');
+        if (freshStatusEl) {
+          const count = state.jobs.length;
+          freshStatusEl.textContent = '⬆ Imported: ' + file.name + ' — ' + count + ' job' + (count !== 1 ? 's' : '');
+          freshStatusEl.className = 'import-status success';
+        }
+        toast('Backup imported successfully.', 'success');
       }
-      state.jobs = data.jobs;
-      state.profile = data.profile;
-      if (!state.profile.certifications) state.profile.certifications = [];
-      state.savedCourses = Array.isArray(data.savedCourses) ? data.savedCourses : [];
-      save();
-      reanalyzeAllJobs();
-      renderView(state.activeView);
-      // Re-query after renderView since it rebuilds the DOM
-      const freshStatusEl = document.getElementById('backup-status');
-      if (freshStatusEl) {
-        const count = state.jobs.length;
-        freshStatusEl.textContent = '⬆ Imported: ' + file.name + ' — ' + count + ' job' + (count !== 1 ? 's' : '');
-        freshStatusEl.className = 'import-status success';
-      }
-      toast('Backup imported successfully.', 'success');
     } catch {
-      const statusEl = document.getElementById('backup-status');
       if (statusEl) {
-        statusEl.textContent = '✕ Could not read file. Make sure it\'s a valid .json backup.';
+        statusEl.textContent = isCSV
+          ? '✕ Could not read CSV. Make sure it\'s a PipelineTrack CSV export.'
+          : '✕ Could not read file. Make sure it\'s a valid .json backup.';
         statusEl.className = 'import-status error';
       }
     }
