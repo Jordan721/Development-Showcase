@@ -299,11 +299,18 @@ function renderAnalyticsSkillGaps(jobs) {
     return;
   }
   const max = sorted[0][1];
-  el.innerHTML = sorted.map(([skill, count]) => `<div class="an-bar-row">
+  el.innerHTML = sorted.map(([skill, count]) => `<div class="an-bar-row an-bar-row-clickable" data-skill="${escHtml(skill)}" title="View ${count} job${count !== 1 ? 's' : ''} missing ${escHtml(skill)}">
     <div class="an-bar-label">${escHtml(skill)}</div>
     <div class="an-bar-track"><div class="an-bar-fill fill-red" style="width:0" data-aw="${Math.round((count/max)*100)}"></div></div>
     <div class="an-bar-count">${count}</div>
   </div>`).join('');
+  el.querySelectorAll('.an-bar-row-clickable').forEach(row => {
+    row.addEventListener('click', () => {
+      const skill = row.dataset.skill;
+      const matched = jobs.filter(j => (j.missing || []).includes(skill));
+      openFilterModal(`Skill Gap: ${skill}`, `${matched.length} job${matched.length !== 1 ? 's' : ''} missing this skill`, matched);
+    });
+  });
   _animateBars(el);
 }
 

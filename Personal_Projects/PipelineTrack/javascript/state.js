@@ -11,6 +11,12 @@ let boardFilterStage = '';
 let boardFilterWorkType = '';
 let boardFilterSeniority = '';
 let boardSortTable = 'date-desc';
+const STAGE_EMOJIS = {
+  saved: '🔖', applied: '📨', screening: '📞',
+  interview: '🤝', offer: '🎉', declined: '❌',
+  ghosted: '👻', archived: '📦',
+};
+
 const STAGE_LABELS = {
   saved: 'Saved',
   applied: 'Applied',

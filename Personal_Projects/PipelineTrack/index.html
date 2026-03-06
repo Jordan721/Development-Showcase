@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="css/features.css" />
     <link rel="stylesheet" href="css/animations.css" />
     <link rel="stylesheet" href="css/views.css" />
+    <link rel="stylesheet" href="css/fun.css" />
 </head>
 
 <body>
@@ -80,6 +81,11 @@
         <header class="topbar">
             <div class="topbar-title" id="topbar-title">Dashboard</div>
             <div style="display:flex;align-items:center;gap:10px">
+                <div class="theme-swatches" id="theme-swatches">
+                    <button class="theme-swatch theme-swatch--midnight" data-theme="midnight" title="Midnight theme">M</button>
+                    <button class="theme-swatch theme-swatch--sunset"   data-theme="sunset"   title="Sunset theme">S</button>
+                    <button class="theme-swatch theme-swatch--ocean"    data-theme="ocean"    title="Ocean theme">O</button>
+                </div>
                 <button class="theme-toggle" id="theme-toggle-btn" title="Toggle light/dark mode"><span
                         id="theme-icon"></span></button>
                 <button class="btn-primary" id="topbar-action" data-action="add-job">+ Add Job</button>
@@ -94,6 +100,7 @@
                     data analytics, IT, and related fields. Skill matching and course recommendations are tailored to
                     tech. Support for other industries may be added in the future.</span>
             </div>
+            <div id="dash-vibe-row" class="dash-vibe-row"></div>
             <div class="stat-grid">
                 <div class="stat-card">
                     <div class="stat-label">Total Tracked</div>
@@ -1014,6 +1021,7 @@
     <script src="javascript/views-contacts.js"></script>
     <script src="javascript/views-analytics.js"></script>
     <script src="javascript/views-goals.js"></script>
+    <script src="javascript/fun.js"></script>
     <!-- Entry point & extensions -->
     <script src="javascript/app.js"></script>
     <script src="javascript/features.js"></script>

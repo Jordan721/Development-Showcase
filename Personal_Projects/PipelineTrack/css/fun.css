@@ -1,0 +1,168 @@
+/* ════════════════════════════════════════════════════════════
+   fun.css — personality, celebrations, themes, card flair
+   ════════════════════════════════════════════════════════════ */
+
+/* ── EXTRA THEMES ───────────────────────────────────────── */
+[data-theme="midnight"] {
+  --bg: #0d0d1a;
+  --surface: #12122a;
+  --card: #1a1a35;
+  --border: #2e2e50;
+  --accent: #a78bfa;
+  --accent-dim: #2d2060;
+  --green: #34d399;
+  --yellow: #fbbf24;
+  --red: #f87171;
+  --text: #e2e8f0;
+  --text-muted: #94a3b8;
+  --hover: rgba(167, 139, 250, .08);
+}
+
+[data-theme="sunset"] {
+  --bg: #1a0e0e;
+  --surface: #221414;
+  --card: #2d1a1a;
+  --border: #4a2828;
+  --accent: #fb923c;
+  --accent-dim: #3a1500;
+  --green: #4ade80;
+  --yellow: #fbbf24;
+  --red: #f43f5e;
+  --text: #fef2f2;
+  --text-muted: #c9a0a0;
+  --hover: rgba(251, 146, 60, .08);
+}
+
+[data-theme="ocean"] {
+  --bg: #060d18;
+  --surface: #0b1628;
+  --card: #111e35;
+  --border: #1b3054;
+  --accent: #38bdf8;
+  --accent-dim: #0c2a40;
+  --green: #34d399;
+  --yellow: #fbbf24;
+  --red: #f87171;
+  --text: #e0f0ff;
+  --text-muted: #6b96c8;
+  --hover: rgba(56, 189, 248, .08);
+}
+
+/* ── THEME SWATCH PICKER ────────────────────────────────── */
+.theme-swatches {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.theme-swatch {
+  background: none;
+  border: none;
+  padding: 4px 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  border-radius: 4px;
+  opacity: 0.55;
+  transition: opacity .15s, transform .2s;
+}
+
+.theme-swatch:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.theme-swatch.theme-swatch--active {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.theme-swatch--midnight { color: #a78bfa; }
+.theme-swatch--sunset   { color: #fb923c; }
+.theme-swatch--ocean    { color: #38bdf8; }
+
+/* ── STAGE-COLORED LEFT BORDER ON CARDS ─────────────────── */
+.job-card {
+  border-left-width: 3px;
+  border-left-style: solid;
+}
+
+.job-card[data-stage="saved"]     { border-left-color: var(--text-muted); }
+.job-card[data-stage="applied"]   { border-left-color: var(--accent); }
+.job-card[data-stage="screening"] { border-left-color: #a78bfa; }
+.job-card[data-stage="interview"] { border-left-color: var(--yellow); }
+.job-card[data-stage="offer"]     { border-left-color: var(--green); }
+.job-card[data-stage="declined"]  { border-left-color: var(--red); }
+.job-card[data-stage="ghosted"]   { border-left-color: #64748b; }
+.job-card[data-stage="archived"]  { border-left-color: var(--text-muted); }
+
+/* ── CARD TILT ON DRAG ──────────────────────────────────── */
+.job-card.dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+  transform: rotate(3deg) scale(1.04);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+  z-index: 100;
+}
+
+/* ── CONFETTI ────────────────────────────────────────────── */
+.confetti-piece {
+  position: fixed;
+  top: -12px;
+  pointer-events: none;
+  z-index: 9999;
+  animation: confetti-fall linear forwards;
+}
+
+@keyframes confetti-fall {
+  to {
+    transform: translateY(105vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* ── GOAL COMPLETE POP ──────────────────────────────────── */
+@keyframes goal-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.04); }
+  70%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+.goal-pop { animation: goal-pop .5s ease; }
+
+/* ── STREAK BADGE + NUDGE ───────────────────────────────── */
+.dash-vibe-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  min-height: 28px;
+  margin-bottom: 16px;
+}
+
+.dash-streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--yellow);
+  background: rgba(210, 153, 34, .12);
+  border: 1px solid rgba(210, 153, 34, .3);
+  border-radius: 99px;
+  padding: 4px 12px;
+}
+
+.dash-nudge {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ── STAGE EMOJI IN COLUMN/SWIMLANE HEADERS ─────────────── */
+.stage-emoji {
+  font-style: normal;
+  margin-right: 4px;
+}

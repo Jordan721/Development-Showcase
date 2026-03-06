@@ -37,6 +37,16 @@ function renderDashboard() {
   }
   document.getElementById('sidebar-job-count').textContent = `${total} job${total !== 1 ? 's' : ''} tracked`;
 
+  // Streak + motivational nudge
+  const vibeRow = document.getElementById('dash-vibe-row');
+  if (vibeRow) {
+    const streak = computeStreak(jobs);
+    const streakHtml = streak >= 2
+      ? `<span class="dash-streak">🔥 ${streak}-day streak</span>`
+      : '';
+    vibeRow.innerHTML = streakHtml + `<span class="dash-nudge">${getDashboardNudge(jobs)}</span>`;
+  }
+
   // Gap aggregation
   const gapCount = {};
   jobs.forEach(j => (j.missing || []).forEach(skill => {

@@ -110,9 +110,11 @@ function renderBoard() {
         e.stopPropagation();
         const job = state.jobs.find(j => j.id === sel.dataset.jobId);
         if (job) {
-          job.stage = sel.value;
+          const newStage = sel.value;
+          job.stage = newStage;
           save();
           renderBoard();
+          if (newStage === 'offer') setTimeout(launchConfetti, 200);
         }
       });
       sel.addEventListener('click', e => e.stopPropagation());
@@ -148,7 +150,7 @@ function renderBoard() {
         <div class="kanban-col" data-stage="${stage}">
           <div class="col-stripe stripe-${stage}"></div>
           <div class="kanban-col-header">
-            ${STAGE_LABELS[stage]}
+            <span class="stage-emoji">${STAGE_EMOJIS[stage] || ''}</span>${STAGE_LABELS[stage]}
             <span class="kanban-col-count">${jobs.length}</span>
           </div>
           <div class="kanban-col-body" data-stage="${stage}">
@@ -166,7 +168,7 @@ function renderBoard() {
           <div class="swimlane-label">
             <div class="col-stripe stripe-${stage}"></div>
             <div class="swimlane-label-inner">
-              <span class="swimlane-stage-name">${STAGE_LABELS[stage]}</span>
+              <span class="swimlane-stage-name"><span class="stage-emoji">${STAGE_EMOJIS[stage] || ''}</span>${STAGE_LABELS[stage]}</span>
               <span class="kanban-col-count">${jobs.length}</span>
             </div>
           </div>
@@ -238,7 +240,8 @@ function renderBoard() {
         job.stage = targetStage;
         save();
         renderBoard();
-        toast(`Moved to ${STAGE_LABELS[targetStage]}.`, 'success');
+        toast(`${STAGE_EMOJIS[targetStage] || ''} Moved to ${STAGE_LABELS[targetStage]}.`, 'success');
+        if (targetStage === 'offer') setTimeout(launchConfetti, 200);
       }
       draggedJobId = null;
     });
@@ -339,7 +342,7 @@ function jobCardHTML(job) {
   const cls = fitBadgeClass(job.fitScore);
   const label = fitBadgeLabel(job.fitScore);
   return `
-    <div class="job-card" data-job-id="${job.id}" draggable="true">
+    <div class="job-card" data-job-id="${job.id}" data-stage="${job.stage}" draggable="true">
       <button class="card-delete-btn" data-delete-id="${job.id}" title="Delete job" draggable="false">&times;</button>
       <div class="job-card-role"><span class="drag-handle" title="Drag to move stage" draggable="false">&#8942;</span>${escHtml(job.role)}</div>
       <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
@@ -586,6 +589,8 @@ function saveJob() {
   save();
   closeModal('modal-job');
   toast(editId ? 'Job updated.' : 'Job added!', 'success');
+  if (!editId) checkMilestoneToast(state.jobs.length);
+  if (!editId && jobData.stage === 'offer') setTimeout(launchConfetti, 300);
   renderView(state.activeView);
   if (editId) openJobDetail(editId);
 }

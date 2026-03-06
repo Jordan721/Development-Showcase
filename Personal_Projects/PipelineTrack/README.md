@@ -6,7 +6,7 @@ A personal job search companion built to take the chaos out of hunting for work 
 ![No Sign-up](https://img.shields.io/badge/No%20Sign--up-Required-4ade80?style=for-the-badge)
 ![Works Offline](https://img.shields.io/badge/Works-Offline-60a5fa?style=for-the-badge)
 ![100% Private](https://img.shields.io/badge/100%25-Private-a78bfa?style=for-the-badge)
-![Light & Dark Mode](https://img.shields.io/badge/Light%20%26%20Dark-Mode-f59e0b?style=for-the-badge)
+![Themes](https://img.shields.io/badge/5%20Themes-Dark%20%7C%20Light%20%7C%20Midnight%20%7C%20Sunset%20%7C%20Ocean-f59e0b?style=for-the-badge)
 
 > **Note:** PipelineTrack is built for tech industry job searches (software engineering, data analytics, IT, etc.). Support for other industries may be added in the future.
 
@@ -40,7 +40,7 @@ I built PipelineTrack to solve that. One tool to:
 - Surface exactly what you're missing and where to learn it
 - Help you put your best resume forward
 - Work entirely in the browser — no sign-up, no backend
-- Switch between light and dark mode to suit your preference
+- Switch between light, dark, Midnight, Sunset, and Ocean themes to suit your preference
 
 ---
 
@@ -50,6 +50,7 @@ I built PipelineTrack to solve that. One tool to:
 At-a-glance view of your entire job search.
 
 - Six stat cards in a 2-row grid: **Total Tracked, Applied, In Progress, Offers, Declined, Avg Fit Score**
+- **Streak & nudge bar** — shows your current daily application streak and a contextual motivational message based on your progress
 - **Top Skill Gaps** — click any gap tag to see which jobs are missing that skill
 - **Top Skills** — matched skills (showing ✓ job count) are clickable to see the jobs they matched against
 - **Pipeline Overview** — click any stage bar to see all jobs in that stage
@@ -211,7 +212,8 @@ PipelineTrack/
 │   ├── board.css           # kanban columns, swimlane, table view, job cards
 │   ├── modals.css          # modals, profile, learning hub, resume hub
 │   ├── features.css        # deadline banner, notes timeline
-│   └── views.css           # calendar, contacts, analytics, goals views
+│   ├── views.css           # calendar, contacts, analytics, goals views
+│   └── fun.css             # extra themes (Midnight, Sunset, Ocean), confetti, streak, card flair
 └── javascript/
     ├── data.js             # static data: KNOWN_SKILLS, LEARNING, RESOURCES, WRITING_RULES
     ├── state.js            # app state, localStorage save/load, export/import
@@ -226,7 +228,8 @@ PipelineTrack/
     ├── views-goals.js      # goals view (live-counted progress)
     ├── app.js              # event wiring and app init
     ├── features.js         # deadline reminders, notes timeline, resume versioning
-    └── animations.js       # UI animations and transitions
+    ├── animations.js       # UI animations and transitions
+    └── fun.js              # confetti, milestone toasts, streak counter, dashboard nudge
 ```
 
 ---
@@ -244,7 +247,7 @@ PipelineTrack/
 9. Visit **Analytics** for KPIs and charts across your full job search
 10. Use **Goals** to set weekly or monthly targets and watch them update as you track applications
 
-All data is saved to your browser's localStorage. Nothing is sent anywhere. Use the ☀️ / 🌙 button in the top bar to switch between light and dark mode — your preference is remembered.
+All data is saved to your browser's localStorage. Nothing is sent anywhere. Use the ☀️ / 🌙 toggle in the top bar to switch between light and dark mode, or pick a color theme — **M** (Midnight), **S** (Sunset), or **O** (Ocean) — from the buttons beside it. Your preference is remembered.
 
 ---
 

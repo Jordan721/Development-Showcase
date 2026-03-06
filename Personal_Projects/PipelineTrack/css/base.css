@@ -11,6 +11,7 @@
   --red: #ff4d6d;
   --text: #e6edf3;
   --text-muted: #8b949e;
+  --hover: rgba(255, 255, 255, .05);
   --sidebar-w: 220px;
   --radius: 10px;
   --radius-sm: 6px;
@@ -29,6 +30,7 @@
   --red: #d1242f;
   --text: #1f2328;
   --text-muted: #57606a;
+  --hover: rgba(0, 0, 0, .05);
 }
 
 [data-theme="light"] input[type="date"]::-webkit-calendar-picker-indicator {

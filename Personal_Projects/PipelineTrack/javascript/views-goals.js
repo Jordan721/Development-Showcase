@@ -212,6 +212,7 @@ function renderGoals() {
   } else {
     if (emptyEl) emptyEl.style.display = 'none';
     grid.innerHTML = filtered.map(g => goalCardHTML(g)).join('');
+    if (typeof animateCompleteGoals === 'function') animateCompleteGoals();
     grid.querySelectorAll('.goal-edit-btn').forEach(btn => {
       btn.addEventListener('click', () => openGoalModal(btn.dataset.id));
     });
