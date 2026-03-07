@@ -382,6 +382,15 @@ function openJobDetail(id) {
     datePostedRow.style.display = 'none';
   }
 
+  // Date applied
+  const dateAppliedRow = document.getElementById('detail-date-applied-row');
+  if (job.dateApplied) {
+    document.getElementById('detail-date-applied').textContent = formatDate(job.dateApplied + 'T12:00:00');
+    dateAppliedRow.style.display = '';
+  } else {
+    dateAppliedRow.style.display = 'none';
+  }
+
   // Benefits
   const benefitsRow = document.getElementById('detail-benefits-row');
   if (job.benefits) {
@@ -515,6 +524,7 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-url').value = job ? job.url || '' : '';
   document.getElementById('job-salary').value = job ? job.salary || '' : '';
   document.getElementById('job-date-posted').value = job ? job.datePosted || '' : '';
+  document.getElementById('job-date-applied').value = job ? job.dateApplied || '' : '';
   document.getElementById('job-stage').value = job ? job.stage || 'saved' : '';
   document.getElementById('job-seniority').value = job ? job.seniority || '' : '';
   document.getElementById('job-type').value = job ? job.jobType || '' : '';
@@ -556,6 +566,7 @@ function saveJob() {
     url: document.getElementById('job-url').value.trim(),
     salary: document.getElementById('job-salary').value.trim(),
     datePosted: document.getElementById('job-date-posted').value,
+    dateApplied: document.getElementById('job-date-applied').value,
     seniority: document.getElementById('job-seniority').value,
     jobType: document.getElementById('job-type').value,
     workType: document.getElementById('job-work-type').value,

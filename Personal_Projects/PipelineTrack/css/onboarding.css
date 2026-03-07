@@ -1,0 +1,153 @@
+/* ══════════════════════════════════════════════════════════
+   ONBOARDING MODAL
+   ══════════════════════════════════════════════════════════ */
+
+.onboarding-modal {
+  max-width: 480px;
+  padding: 36px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  user-select: none;
+}
+
+/* ── Steps ─────────────────────────────────────────────── */
+.onboarding-steps {
+  position: relative;
+  min-height: 180px;
+}
+
+.onboarding-step {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  animation: ob-fadein .2s ease;
+}
+
+.onboarding-step.active {
+  display: flex;
+}
+
+@keyframes ob-fadein {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.onboarding-icon {
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.onboarding-step h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.onboarding-step p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.onboarding-step ul {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.onboarding-step ul li {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.onboarding-step ul li strong {
+  color: var(--text);
+}
+
+.onboarding-tip {
+  font-size: 0.8rem !important;
+  color: var(--accent) !important;
+  background: var(--accent-dim);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+/* ── Footer ────────────────────────────────────────────── */
+.onboarding-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ── Step dots ─────────────────────────────────────────── */
+.onboarding-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.onboarding-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background .2s, transform .2s;
+}
+
+.onboarding-dot.active {
+  background: var(--accent);
+  transform: scale(1.3);
+}
+
+/* ── Nav buttons ───────────────────────────────────────── */
+.onboarding-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#onboarding-skip {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color .15s;
+}
+
+#onboarding-skip:hover {
+  color: var(--text);
+}
+
+/* ── Help button (topbar) ──────────────────────────────── */
+.onboarding-help-btn {
+  background: none;
+  border: none;
+  padding: 4px 7px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  line-height: 1;
+  transition: color .15s, border-color .15s, transform .2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.onboarding-help-btn:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+  transform: scale(1.15);
+}

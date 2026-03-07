@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="css/animations.css" />
     <link rel="stylesheet" href="css/views.css" />
     <link rel="stylesheet" href="css/fun.css" />
+    <link rel="stylesheet" href="css/onboarding.css" />
 </head>
 
 <body>
@@ -88,6 +89,7 @@
                 </div>
                 <button class="theme-toggle" id="theme-toggle-btn" title="Toggle light/dark mode"><span
                         id="theme-icon"></span></button>
+                <button class="onboarding-help-btn" id="onboarding-help-btn" title="Open getting started guide">?</button>
                 <button class="btn-primary" id="topbar-action" data-action="add-job">+ Add Job</button>
             </div>
         </header>
@@ -96,9 +98,7 @@
         <section class="view active" id="view-dashboard">
             <div class="scope-notice">
                 <span class="scope-notice-icon">ℹ</span>
-                <span>PipelineTrack is currently built for <strong>tech industry roles</strong> — software engineering,
-                    data analytics, IT, and related fields. Skill matching and course recommendations are tailored to
-                    tech. Support for other industries may be added in the future.</span>
+                <span>PipelineTrack supports <strong>Tech</strong> (Software Engineering, Data, IT), <strong>Business</strong> (Business Operations, Financial Operations, Project Management), and <strong>Customer Experience</strong> (Banking, Customer Success). Skill matching and course recommendations are tailored to all supported fields.</span>
             </div>
             <div id="dash-vibe-row" class="dash-vibe-row"></div>
             <div class="stat-grid">
@@ -675,6 +675,10 @@
                             <label class="form-label">Date Posted</label>
                             <input type="date" class="text-input" id="job-date-posted" />
                         </div>
+                        <div class="form-group">
+                            <label class="form-label">Date Applied</label>
+                            <input type="date" class="text-input" id="job-date-applied" />
+                        </div>
                     </div>
                     <div class="form-row four-col">
                         <div class="form-group">
@@ -823,6 +827,10 @@
                     <div class="detail-meta-row" id="detail-date-posted-row" style="display:none">
                         <span class="detail-meta-label">Date Posted</span>
                         <span class="detail-meta-value" id="detail-date-posted"></span>
+                    </div>
+                    <div class="detail-meta-row" id="detail-date-applied-row" style="display:none">
+                        <span class="detail-meta-label">Date Applied</span>
+                        <span class="detail-meta-value" id="detail-date-applied"></span>
                     </div>
                     <div class="detail-meta-row" id="detail-benefits-row" style="display:none">
                         <span class="detail-meta-label">Benefits</span>
@@ -1003,6 +1011,65 @@
     <!-- ── TOAST ──────────────────────────────────────────── -->
     <div class="toast" id="toast"></div>
 
+    <!-- ── ONBOARDING MODAL ────────────────────────────────── -->
+    <div class="modal-overlay" id="modal-onboarding" aria-hidden="true">
+        <div class="modal onboarding-modal">
+
+            <div class="onboarding-steps">
+                <!-- Step 1 — Welcome -->
+                <div class="onboarding-step active" data-step="1">
+                    <div class="onboarding-icon">🎯</div>
+                    <h2>Welcome to PipelineTrack</h2>
+                    <p>Your personal job search companion. Track every application, score your skill fit, and close your gaps — all in your browser, no account needed.</p>
+                    <p>Supports <strong>Tech</strong>, <strong>Business</strong>, and <strong>Customer Experience</strong> roles.</p>
+                </div>
+
+                <!-- Step 2 — Profile -->
+                <div class="onboarding-step" data-step="2">
+                    <div class="onboarding-icon">👤</div>
+                    <h2>Start with your skills</h2>
+                    <p>Head to <strong>My Profile</strong> and add your skills. This is what powers fit scoring — without it, all fit scores will show 0%.</p>
+                    <p class="onboarding-tip">Use the <strong>Bulk</strong> button to paste a whole comma-separated list at once.</p>
+                </div>
+
+                <!-- Step 3 — Add a job -->
+                <div class="onboarding-step" data-step="3">
+                    <div class="onboarding-icon">📋</div>
+                    <h2>Add your first job</h2>
+                    <p>Hit <strong>+ Add Job</strong> on the Job Board. Fill in the <strong>Details</strong> tab, then paste the job description in <strong>Job Info</strong> to get an instant fit score and skill gap breakdown.</p>
+                </div>
+
+                <!-- Step 4 — Explore -->
+                <div class="onboarding-step" data-step="4">
+                    <div class="onboarding-icon">🚀</div>
+                    <h2>You're all set</h2>
+                    <ul>
+                        <li><strong>Learning Hub</strong> — courses matched to your skill gaps</li>
+                        <li><strong>Analytics</strong> — charts and KPIs across your full search</li>
+                        <li><strong>Goals</strong> — set weekly or monthly application targets</li>
+                        <li><strong>Calendar</strong> — deadlines and follow-up dates in one view</li>
+                    </ul>
+                    <p class="onboarding-tip">Reopen this guide anytime with the <strong>?</strong> button in the top bar.</p>
+                </div>
+            </div>
+
+            <div class="onboarding-footer">
+                <div class="onboarding-dots">
+                    <span class="onboarding-dot active" data-dot="1"></span>
+                    <span class="onboarding-dot" data-dot="2"></span>
+                    <span class="onboarding-dot" data-dot="3"></span>
+                    <span class="onboarding-dot" data-dot="4"></span>
+                </div>
+                <div class="onboarding-actions">
+                    <button id="onboarding-skip">Skip</button>
+                    <button class="btn-ghost" id="onboarding-prev" style="display:none">Back</button>
+                    <button class="btn-primary" id="onboarding-next">Next</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
     <!-- PDF parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <!-- Word .docx parsing -->
@@ -1010,6 +1077,7 @@
     <script src="javascript/animations.js"></script>
     <!-- Core data & state -->
     <script src="javascript/data.js"></script>
+    <script src="javascript/data-industries.js"></script>
     <script src="javascript/state.js"></script>
     <script src="javascript/utils.js"></script>
     <!-- View renderers -->
@@ -1025,6 +1093,7 @@
     <!-- Entry point & extensions -->
     <script src="javascript/app.js"></script>
     <script src="javascript/features.js"></script>
+    <script src="javascript/onboarding.js"></script>
 </body>
 
 </html>

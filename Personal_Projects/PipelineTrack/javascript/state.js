@@ -139,7 +139,7 @@ function exportCSV() {
 
   const headers = [
     'Role', 'Company', 'Location', 'Stage', 'Seniority', 'Job Type', 'Work Type',
-    'Department', 'Salary', 'Date Posted', 'Date Added', 'Deadline', 'Fit Score (%)',
+    'Department', 'Salary', 'Date Posted', 'Date Applied', 'Date Added', 'Deadline', 'Fit Score (%)',
     'Matched Skills', 'Skill Gaps', 'URL', 'Notes', 'Company Notes', 'Benefits', 'Cover Letter', 'Job Description'
   ];
 
@@ -154,6 +154,7 @@ function exportCSV() {
     j.department,
     j.salary,
     j.datePosted,
+    j.dateApplied || '',
     j.dateAdded ? j.dateAdded.slice(0, 10) : '',
     j.deadline || '',
     j.fitScore !== null && j.fitScore !== undefined ? j.fitScore : '',

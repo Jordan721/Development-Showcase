@@ -1,6 +1,6 @@
 # PipelineTrack
 
-A personal job search companion built to take the chaos out of hunting for work in tech. Track every application, measure your skill fit, polish your resume, and close your gaps — all in one place, no account required.
+A personal job search companion built to take the chaos out of hunting for work. Track every application, measure your skill fit, polish your resume, and close your gaps — all in one place, no account required.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-View%20Site-%2300bfa5?style=for-the-badge)](https://jordan721.github.io/Development-Showcase/Personal_Projects/PipelineTrack/index.html)
 ![No Sign-up](https://img.shields.io/badge/No%20Sign--up-Required-4ade80?style=for-the-badge)
@@ -8,7 +8,7 @@ A personal job search companion built to take the chaos out of hunting for work 
 ![100% Private](https://img.shields.io/badge/100%25-Private-a78bfa?style=for-the-badge)
 ![Themes](https://img.shields.io/badge/5%20Themes-Dark%20%7C%20Light%20%7C%20Midnight%20%7C%20Sunset%20%7C%20Ocean-f59e0b?style=for-the-badge)
 
-> **Note:** PipelineTrack is built for tech industry job searches (software engineering, data analytics, IT, etc.). Support for other industries may be added in the future.
+> **Supported industries:** Tech (Software Engineering, Data, IT) · Business (Business Operations, Financial Operations, Project Management) · Customer Experience (Banking, Customer Success)
 
 ---
 
@@ -31,7 +31,7 @@ A personal job search companion built to take the chaos out of hunting for work 
 
 ## 💡 Why I Built This
 
-Breaking into tech is overwhelming — dozens of tabs, spreadsheets, and sticky notes just to track where you applied and what happened next.
+Job searching is overwhelming — dozens of tabs, spreadsheets, and sticky notes just to track where you applied and what happened next.
 
 I built PipelineTrack to solve that. One tool to:
 
@@ -41,6 +41,7 @@ I built PipelineTrack to solve that. One tool to:
 - Help you put your best resume forward
 - Work entirely in the browser — no sign-up, no backend
 - Switch between light, dark, Midnight, Sunset, and Ocean themes to suit your preference
+- Work across multiple fields — tech, business, finance, project management, banking, and customer success
 
 ---
 
@@ -80,13 +81,13 @@ Each job stores:
 | Seniority | Internship, Junior, Mid-Level, Senior, Lead, Staff |
 | Job Type | Full-time, Part-time, Contract, Freelance, Internship, Temporary, Apprenticeship |
 | Work Type | Remote, On-site, Hybrid |
-| Other | Department, Salary, Date Posted, Benefits, Company Notes, Notes, Job URL, Cover Letter |
+| Other | Department, Salary, Date Posted, Date Applied, Benefits, Company Notes, Notes, Job URL, Cover Letter |
 
 Seniority, job type, and work type each appear as color-coded badges in the detail view. Benefits are automatically parsed into labeled chips — health insurance, 401k, PTO, equity, and more — rather than showing raw pasted text. **Company Notes** is a dedicated field for information about the company itself (culture, size, funding, tech stack) — separate from the job description and your personal notes.
 
 The **Add / Edit Job** form is organized into three tabs to keep it compact:
 
-- **Details** — role, company, department, location, URL, salary, date posted, stage, seniority, job type, and work type
+- **Details** — role, company, department, location, URL, salary, date posted, date applied, stage, seniority, job type, and work type
 - **Job Info** — job description (used for fit analysis), benefits, and company notes side by side
 - **Application** — cover letter and personal notes
 
@@ -213,9 +214,11 @@ PipelineTrack/
 │   ├── modals.css          # modals, profile, learning hub, resume hub
 │   ├── features.css        # deadline banner, notes timeline
 │   ├── views.css           # calendar, contacts, analytics, goals views
-│   └── fun.css             # extra themes (Midnight, Sunset, Ocean), confetti, streak, card flair
+│   ├── fun.css             # extra themes (Midnight, Sunset, Ocean), confetti, streak, card flair
+│   └── onboarding.css      # first-run onboarding modal styles
 └── javascript/
-    ├── data.js             # static data: KNOWN_SKILLS, LEARNING, RESOURCES, WRITING_RULES
+    ├── data.js             # static data: KNOWN_SKILLS, LEARNING, RESOURCES, WRITING_RULES (tech)
+    ├── data-industries.js  # extends KNOWN_SKILLS & LEARNING for Business, Finance, PM, Banking, CX
     ├── state.js            # app state, localStorage save/load, export/import
     ├── utils.js            # shared helpers, fit analysis, navigation
     ├── views-dashboard.js  # dashboard stats and activity calendar
@@ -229,7 +232,8 @@ PipelineTrack/
     ├── app.js              # event wiring and app init
     ├── features.js         # deadline reminders, notes timeline, resume versioning
     ├── animations.js       # UI animations and transitions
-    └── fun.js              # confetti, milestone toasts, streak counter, dashboard nudge
+    ├── fun.js              # confetti, milestone toasts, streak counter, dashboard nudge
+    └── onboarding.js       # first-run guide, step navigation, reopen via ? button
 ```
 
 ---
@@ -238,14 +242,15 @@ PipelineTrack/
 
 1. Clone or download this folder
 2. Open `index.html` in your browser
-3. Go to **My Profile** — add your skills and any certifications
-4. Go to **Job Board** → **+ Add Job** — fill in the **Details** tab, paste the job description in **Job Info** for fit scoring, and optionally draft your cover letter in the **Application** tab
-5. Click any job card to see your fit score and skill breakdown
-6. Check the **Learning Hub** to see what to learn next
-7. Use **Resume Hub** to parse your resume, scan your GitHub, check your writing, and explore tools
-8. Head to **Network** to track recruiters and contacts — follow-up dates appear in the **Calendar**
-9. Visit **Analytics** for KPIs and charts across your full job search
-10. Use **Goals** to set weekly or monthly targets and watch them update as you track applications
+3. Follow the **getting started guide** that opens automatically — or reopen it anytime with the **?** button in the top bar
+4. Go to **My Profile** — add your skills and any certifications
+5. Go to **Job Board** → **+ Add Job** — fill in the **Details** tab, paste the job description in **Job Info** for fit scoring, and optionally draft your cover letter in the **Application** tab
+6. Click any job card to see your fit score and skill breakdown
+7. Check the **Learning Hub** to see what to learn next
+8. Use **Resume Hub** to parse your resume, scan your GitHub, check your writing, and explore tools
+9. Head to **Network** to track recruiters and contacts — follow-up dates appear in the **Calendar**
+10. Visit **Analytics** for KPIs and charts across your full job search
+11. Use **Goals** to set weekly or monthly targets and watch them update as you track applications
 
 All data is saved to your browser's localStorage. Nothing is sent anywhere. Use the ☀️ / 🌙 toggle in the top bar to switch between light and dark mode, or pick a color theme — **M** (Midnight), **S** (Sunset), or **O** (Ocean) — from the buttons beside it. Your preference is remembered.
 
@@ -253,7 +258,7 @@ All data is saved to your browser's localStorage. Nothing is sent anywhere. Use 
 
 ## 🗺️ Roadmap Ideas
 
-- Support for non-tech industry job searches
+- Support for additional industries beyond current coverage
 
 ---
 
