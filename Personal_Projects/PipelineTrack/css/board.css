@@ -497,3 +497,189 @@
 .table-delete-btn:hover {
   background: rgba(255, 77, 109, .15);
 }
+
+/* ── TIMELINE LAYOUT ────────────────────────────────────── */
+.kanban--timeline {
+  display: block;
+  overflow-x: auto;
+}
+
+.tl-container {
+  min-width: 620px;
+  font-size: 13px;
+}
+
+.tl-empty {
+  padding: 32px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* Axis header row */
+.tl-axis-row {
+  display: flex;
+  align-items: flex-end;
+  height: 38px;
+  margin-bottom: 2px;
+}
+
+.tl-label-spacer {
+  width: 210px;
+  flex-shrink: 0;
+}
+
+.tl-axis-track {
+  flex: 1;
+  position: relative;
+  height: 100%;
+  border-left: 1px solid var(--border);
+}
+
+/* Month tick marks */
+.tl-tick {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  pointer-events: none;
+}
+
+.tl-tick-line {
+  width: 1px;
+  height: 8px;
+  background: var(--border);
+}
+
+.tl-tick-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Today marker in the axis */
+.tl-today-marker {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  pointer-events: none;
+}
+
+.tl-today-line-head {
+  width: 2px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 1px;
+}
+
+.tl-today-label-head {
+  font-size: 10px;
+  color: var(--accent);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Job rows */
+.tl-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+  min-height: 52px;
+}
+
+.tl-row:hover {
+  background: var(--card);
+}
+
+.tl-row-label {
+  width: 210px;
+  flex-shrink: 0;
+  padding: 8px 14px 8px 0;
+  border-right: 1px solid var(--border);
+}
+
+.tl-row-role {
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 196px;
+}
+
+.tl-row-company {
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 196px;
+}
+
+/* Track area */
+.tl-row-track {
+  flex: 1;
+  height: 52px;
+  position: relative;
+}
+
+/* Vertical "today" line running through each row */
+.tl-today-track-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--accent);
+  opacity: 0.25;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+@keyframes tl-bar-in {
+  from { transform: translateY(-50%) scaleX(0); opacity: 0; }
+  to   { transform: translateY(-50%) scaleX(1); opacity: 0.82; }
+}
+
+/* The colored bar */
+.tl-bar {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transform-origin: left center;
+  height: 26px;
+  background: var(--bar-color, var(--accent));
+  border-radius: 5px;
+  opacity: 0.82;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  overflow: hidden;
+  transition: opacity 0.15s, height 0.12s;
+  min-width: 3px;
+  box-sizing: border-box;
+  animation: tl-bar-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.tl-bar:hover {
+  opacity: 1;
+  height: 30px;
+}
+
+.tl-bar-text {
+  font-size: 11px;
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}

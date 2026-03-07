@@ -55,7 +55,7 @@ function updateBoardFilterUI() {
   const sortSel = document.getElementById('board-sort-table');
   if (sortSel) sortSel.style.display = boardLayout === 'table' ? '' : 'none';
   const dragHint = document.getElementById('board-drag-hint');
-  if (dragHint) dragHint.style.display = boardLayout === 'table' ? 'none' : '';
+  if (dragHint) dragHint.style.display = (boardLayout === 'table' || boardLayout === 'timeline') ? 'none' : '';
 }
 
 function renderBoard() {
@@ -138,6 +138,16 @@ function renderBoard() {
         if (sortSel) sortSel.value = boardSortTable;
         renderBoard();
       });
+    });
+    wireSearchAndFilters();
+    return;
+  }
+
+  if (boardLayout === 'timeline') {
+    const visibleJobs = periodJobs.filter(j => visibleStages.includes(j.stage));
+    board.innerHTML = renderBoardTimeline(visibleJobs);
+    board.querySelectorAll('.tl-row[data-job-id]').forEach(row => {
+      row.addEventListener('click', () => openJobDetail(row.dataset.jobId));
     });
     wireSearchAndFilters();
     return;
@@ -351,6 +361,85 @@ function jobCardHTML(job) {
         <span class="fit-badge ${cls}">${label}</span>
       </div>
     </div>`;
+}
+
+function renderBoardTimeline(jobs) {
+  if (jobs.length === 0) {
+    return '<div class="tl-empty">No jobs match your filters.</div>';
+  }
+
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
+
+  const sorted = [...jobs].sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded));
+
+  const minDate = new Date(sorted[0].dateAdded);
+  minDate.setHours(0, 0, 0, 0);
+
+  const spanMs = (today - minDate) || 1;
+  const todayPct = 94; // pin "today" at 94% to leave a small right margin
+
+  const pct = (date) => Math.max(0, Math.min(todayPct, ((new Date(date) - minDate) / spanMs) * todayPct));
+
+  // Build month tick marks
+  const ticks = [];
+  const m = new Date(minDate);
+  m.setDate(1);
+  while (m <= today) {
+    ticks.push({ label: m.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }), p: pct(m) });
+    m.setMonth(m.getMonth() + 1);
+  }
+
+  const stageColors = {
+    saved: 'var(--text-muted)',
+    applied: 'var(--accent)',
+    screening: '#a78bfa',
+    interview: 'var(--yellow)',
+    offer: 'var(--green)',
+    declined: 'var(--red)',
+    ghosted: '#f97316',
+    archived: 'var(--border)',
+  };
+
+  const axisHTML = ticks.map(t =>
+    `<div class="tl-tick" style="left:${t.p.toFixed(2)}%">
+      <div class="tl-tick-line"></div>
+      <div class="tl-tick-label">${t.label}</div>
+    </div>`
+  ).join('') +
+  `<div class="tl-today-marker" style="left:${todayPct}%">
+    <div class="tl-today-line-head"></div>
+    <div class="tl-today-label-head">Today</div>
+  </div>`;
+
+  const rowsHTML = sorted.map((j, idx) => {
+    const startPct = pct(j.dateAdded);
+    const widthPct = Math.max(0.8, todayPct - startPct);
+    const color = stageColors[j.stage] || 'var(--accent)';
+    const daysAgo = Math.floor((today - new Date(j.dateAdded)) / 86400000);
+    const age = daysAgo === 0 ? 'Today' : daysAgo === 1 ? '1d' : `${daysAgo}d`;
+    const stageName = STAGE_LABELS[j.stage] || j.stage;
+    return `<div class="tl-row" data-job-id="${j.id}">
+      <div class="tl-row-label">
+        <div class="tl-row-role">${escHtml(j.role)}</div>
+        <div class="tl-row-company">${escHtml(j.company)}</div>
+      </div>
+      <div class="tl-row-track">
+        <div class="tl-today-track-line" style="left:${todayPct}%"></div>
+        <div class="tl-bar" style="left:${startPct.toFixed(2)}%;width:${widthPct.toFixed(2)}%;--bar-color:${color};animation-delay:${idx * 55}ms" title="${escHtml(j.role)} @ ${escHtml(j.company)} — ${stageName} — ${age} ago">
+          <span class="tl-bar-text">${STAGE_EMOJIS[j.stage] || ''}${stageName} &middot; ${age}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `<div class="tl-container">
+    <div class="tl-axis-row">
+      <div class="tl-label-spacer"></div>
+      <div class="tl-axis-track">${axisHTML}</div>
+    </div>
+    ${rowsHTML}
+  </div>`;
 }
 
 /* ══════════════════════════════════════════════════════════

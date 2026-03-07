@@ -16,7 +16,7 @@ A personal job search companion built to take the chaos out of hunting for work.
 
 | Feature | What it does |
 |---|---|
-| 📋 Job Board | 8-stage kanban pipeline (including Ghosted) with columns, swimlane, and table views — search and filter built in |
+| 📋 Job Board | 8-stage kanban pipeline (including Ghosted) with columns, swimlane, table, and timeline views — search and filter built in |
 | 🎯 Fit Analysis | Scores your skill match against any job description |
 | 🧠 Learning Hub | Course recommendations based on your skill gaps |
 | 📄 Resume Hub | Parse your resume, scan GitHub, and polish your writing |
@@ -65,7 +65,7 @@ A visual pipeline with eight stages: **Saved → Applied → Screening → Inter
 - **Declined** — for roles where the company said no; tracked separately so you can see your rejection rate
 - **Ghosted** — for roles where you never heard back; distinct from Declined so you can track non-responses separately
 - **Archived** — for roles you chose to remove from your active view
-- Three layout modes: **Columns** (classic kanban), **Swimlane** (horizontal rows), **Table** (sortable spreadsheet view)
+- Four layout modes: **Columns** (classic kanban), **Swimlane** (horizontal rows), **Table** (sortable spreadsheet view), **Timeline** (Gantt-style bars showing how long each job has been in your pipeline, color-coded by stage)
 - Drag cards between columns to update their stage
 - Hover a card to reveal a quick-delete **×** button
 - Toggle Archived / Declined / Ghosted columns on or off to keep the board clean
@@ -210,7 +210,7 @@ PipelineTrack/
 ├── css/
 │   ├── base.css            # variables, reset, layout, buttons, forms
 │   ├── dashboard.css       # stat cards, activity calendar
-│   ├── board.css           # kanban columns, swimlane, table view, job cards
+│   ├── board.css           # kanban columns, swimlane, table, timeline views, job cards
 │   ├── modals.css          # modals, profile, learning hub, resume hub
 │   ├── features.css        # deadline banner, notes timeline
 │   ├── views.css           # calendar, contacts, analytics, goals views
@@ -222,7 +222,7 @@ PipelineTrack/
     ├── state.js            # app state, localStorage save/load, export/import
     ├── utils.js            # shared helpers, fit analysis, navigation
     ├── views-dashboard.js  # dashboard stats and activity calendar
-    ├── views-board.js      # kanban board, table view, job detail & add/edit modals
+    ├── views-board.js      # kanban board, table, timeline views, job detail & add/edit modals
     ├── views-profile.js    # profile, skills, certifications, coverage chart
     ├── views-resume.js     # learning hub and resume hub
     ├── views-calendar.js   # calendar view (month/week/year)
