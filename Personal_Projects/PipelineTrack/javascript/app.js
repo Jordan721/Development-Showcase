@@ -193,7 +193,9 @@ function wireEvents() {
       badge.textContent = STAGE_LABELS[job.stage];
       badge.className = `stage-badge stage-${job.stage}`;
       toast('Stage updated.', 'success');
+      if (job.stage === 'offer') setTimeout(launchConfetti, 200);
       renderView(state.activeView);
+      if (MILESTONE_STAGES.includes(job.stage)) setTimeout(() => openStageMilestoneModal(job, job.stage), 350);
     }
   });
 

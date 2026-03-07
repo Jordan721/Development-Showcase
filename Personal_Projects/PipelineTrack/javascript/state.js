@@ -43,6 +43,7 @@ let state = {
   savedCourses: [],
   contacts: [],
   goals: [],
+  events: [],
   activeView: 'dashboard',
   activeJobId: null,
 };
@@ -56,6 +57,7 @@ function save() {
   localStorage.setItem('pt_saved_courses', JSON.stringify(state.savedCourses));
   localStorage.setItem('pt_contacts', JSON.stringify(state.contacts));
   localStorage.setItem('pt_goals', JSON.stringify(state.goals));
+  localStorage.setItem('pt_events', JSON.stringify(state.events));
 }
 
 function load() {
@@ -99,6 +101,11 @@ function load() {
   } catch {
     state.goals = [];
   }
+  try {
+    state.events = JSON.parse(localStorage.getItem('pt_events')) || [];
+  } catch {
+    state.events = [];
+  }
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -111,6 +118,7 @@ function exportData() {
     jobs: state.jobs,
     profile: state.profile,
     savedCourses: state.savedCourses,
+    events: state.events,
   };
   const blob = new Blob([JSON.stringify(backup, null, 2)], {
     type: 'application/json'
@@ -284,6 +292,7 @@ function importData(file) {
         state.profile = data.profile;
         if (!state.profile.certifications) state.profile.certifications = [];
         state.savedCourses = Array.isArray(data.savedCourses) ? data.savedCourses : [];
+        state.events = Array.isArray(data.events) ? data.events : [];
         save();
         reanalyzeAllJobs();
         renderView(state.activeView);

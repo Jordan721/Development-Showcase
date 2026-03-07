@@ -21,7 +21,7 @@ A personal job search companion built to take the chaos out of hunting for work.
 | 🧠 Learning Hub | Course recommendations based on your skill gaps |
 | 📄 Resume Hub | Parse your resume, scan GitHub, and polish your writing |
 | 👤 My Profile | Skills, certifications, resume summary, and saved links |
-| 📅 Calendar & Activity | Month/week/year view of job events, deadlines, and follow-up dates — plus a job activity history |
+| 📅 Calendar & Activity | Month/week/year view of job events, deadlines, follow-up dates, and job fairs — plus a job activity history |
 | 🤝 Network | Track recruiters, hiring managers, and referrals with follow-up reminders |
 | 📊 Analytics | KPIs, application funnel, response rates, skill gaps, and breakdowns |
 | 🎯 Goals | Set weekly/monthly targets and track live progress against your job board data |
@@ -95,6 +95,16 @@ The **Add / Edit Job** form is organized into three tabs to keep it compact:
 
 Clicking **Edit** on a job opens the edit form with a **← Back** button to return to the detail view without losing your place.
 
+When a job moves to **Screening**, **Interview**, or **Offer**, a milestone modal appears automatically to log the details:
+
+| Stage | Fields |
+|---|---|
+| Screening | Date, time, type (Phone / Video / In-person), notes |
+| Interview | Date, time, round (1st–Final), type (Phone / Video / Panel / Technical / In-person), notes |
+| Offer | Salary offered, deadline to respond, notes |
+
+Logged milestones appear as a color-coded **Application Timeline** strip inside the job detail modal. Each milestone can be edited at any time via the ✎ button. The modal can be skipped — the stage change always sticks regardless.
+
 ---
 
 ### 🎯 Fit Analysis
@@ -145,9 +155,10 @@ A workspace for getting your resume and portfolio in shape.
 A full calendar combined with your job activity history — all in one view.
 
 - Toggle between **Month**, **Week**, and **Year** layouts with prev/next navigation
-- Three event types: **job added** (teal), **application deadline** (red), **contact follow-up** (purple)
+- Four event types: **job added** (teal), **application deadline** (red), **contact follow-up** (yellow), **job fair / event** (purple)
 - Filter the calendar to show only one event type at a time
-- **Upcoming strip** below the calendar shows the next 7 days of events at a glance
+- **+ Add Event** button to log job fairs, career events, and networking sessions — with format (In-Person / Hybrid / Online), venue, meeting link (Zoom, Teams, etc.), time, and notes; a **Join** button appears on any event with a link
+- **Upcoming strip** below the calendar shows the next 7 days of events at a glance, including format badges and Join links for events
 - **Job Activity** section below the upcoming strip — at-a-glance counts of jobs added **Today**, **This Week**, **This Month**, **This Year**, and **All Time**
 
 ---

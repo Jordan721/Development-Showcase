@@ -115,6 +115,7 @@ function renderBoard() {
           save();
           renderBoard();
           if (newStage === 'offer') setTimeout(launchConfetti, 200);
+          if (MILESTONE_STAGES.includes(newStage)) setTimeout(() => openStageMilestoneModal(job, newStage), 350);
         }
       });
       sel.addEventListener('click', e => e.stopPropagation());
@@ -252,6 +253,7 @@ function renderBoard() {
         renderBoard();
         toast(`${STAGE_EMOJIS[targetStage] || ''} Moved to ${STAGE_LABELS[targetStage]}.`, 'success');
         if (targetStage === 'offer') setTimeout(launchConfetti, 200);
+        if (MILESTONE_STAGES.includes(targetStage)) setTimeout(() => openStageMilestoneModal(job, targetStage), 350);
       }
       draggedJobId = null;
     });
@@ -443,6 +445,151 @@ function renderBoardTimeline(jobs) {
 }
 
 /* ══════════════════════════════════════════════════════════
+   STAGE MILESTONE MODAL
+   ══════════════════════════════════════════════════════════ */
+const MILESTONE_STAGES = ['screening', 'interview', 'offer'];
+
+function openStageMilestoneModal(job, stage) {
+  if (!MILESTONE_STAGES.includes(stage)) return;
+  const existing = job[stage + 'Milestone'] || {};
+
+  const titles = {
+    screening: '📞 Log Screening Details',
+    interview: '🤝 Log Interview Details',
+    offer: '🎉 Log Offer Details',
+  };
+  const subtitles = {
+    screening: `${escHtml(job.role)} @ ${escHtml(job.company)} moved to screening — log the call details.`,
+    interview: `${escHtml(job.role)} @ ${escHtml(job.company)} has an interview — log the details.`,
+    offer: `You received an offer from ${escHtml(job.company)}! Log the details here.`,
+  };
+
+  document.getElementById('milestone-modal-title').textContent = titles[stage];
+
+  let bodyHTML = `<p class="milestone-subtitle">${subtitles[stage]}</p>`;
+
+  if (stage === 'screening' || stage === 'interview') {
+    const typeOpts = stage === 'screening'
+      ? ['Phone', 'Video', 'In-person']
+      : ['Phone', 'Video', 'In-person', 'Panel', 'Technical'];
+    const defaultType = existing.type || (stage === 'screening' ? 'Phone' : 'Video');
+    bodyHTML += `
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input type="date" class="text-input" id="milestone-date" value="${existing.date || ''}"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Time</label>
+          <input type="time" class="text-input" id="milestone-time" value="${existing.time || ''}"/>
+        </div>
+      </div>
+      ${stage === 'interview' ? `
+      <div class="form-group">
+        <label class="form-label">Round</label>
+        <select class="select-input" id="milestone-round">
+          <option value="">—</option>
+          ${['1st Round', '2nd Round', '3rd Round', 'Final Round'].map(r =>
+            `<option value="${r}"${existing.round === r ? ' selected' : ''}>${r}</option>`
+          ).join('')}
+        </select>
+      </div>` : ''}
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <div class="milestone-type-group">
+          ${typeOpts.map(t =>
+            `<label class="milestone-type-option"><input type="radio" name="milestone-type" value="${t}"${defaultType === t ? ' checked' : ''}/> ${t}</label>`
+          ).join('')}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea class="text-input" id="milestone-notes" rows="2" placeholder="${stage === 'screening' ? 'Recruiter name, topics to cover…' : 'Interviewer, topics to prepare, format…'}">${escHtml(existing.notes || '')}</textarea>
+      </div>`;
+  } else {
+    bodyHTML += `
+      <div class="form-group">
+        <label class="form-label">Salary Offered</label>
+        <input type="text" class="text-input" id="milestone-salary" value="${escHtml(existing.salaryOffered || '')}" placeholder="e.g. $95,000 / year"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Deadline to Respond</label>
+        <input type="date" class="text-input" id="milestone-deadline" value="${existing.responseDeadline || ''}"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes</label>
+        <textarea class="text-input" id="milestone-notes" rows="2" placeholder="Benefits, equity, negotiation notes…">${escHtml(existing.notes || '')}</textarea>
+      </div>`;
+  }
+
+  document.getElementById('milestone-modal-body').innerHTML = bodyHTML;
+
+  document.getElementById('milestone-save-btn').onclick = () => {
+    const milestone = {};
+    if (stage === 'screening' || stage === 'interview') {
+      milestone.date  = (document.getElementById('milestone-date') || {}).value || '';
+      milestone.time  = (document.getElementById('milestone-time') || {}).value || '';
+      milestone.type  = (document.querySelector('input[name="milestone-type"]:checked') || {}).value || '';
+      milestone.notes = (document.getElementById('milestone-notes') || {}).value.trim();
+      if (stage === 'interview') milestone.round = (document.getElementById('milestone-round') || {}).value || '';
+    } else {
+      milestone.salaryOffered    = (document.getElementById('milestone-salary') || {}).value.trim();
+      milestone.responseDeadline = (document.getElementById('milestone-deadline') || {}).value || '';
+      milestone.notes            = (document.getElementById('milestone-notes') || {}).value.trim();
+    }
+    job[stage + 'Milestone'] = milestone;
+    save();
+    closeModal('modal-milestone');
+    renderView(state.activeView);
+    if (state.activeJobId === job.id) openJobDetail(job.id);
+    toast('Details saved.', 'success');
+  };
+
+  openModal('modal-milestone');
+}
+
+function renderMilestoneStrip(job) {
+  const el = document.getElementById('detail-milestone-strip');
+  if (!el) return;
+  const active = MILESTONE_STAGES.filter(s => job[s + 'Milestone']);
+  if (active.length === 0) { el.style.display = 'none'; el.innerHTML = ''; return; }
+
+  const icons  = { screening: '📞', interview: '🤝', offer: '🎉' };
+  const labels = { screening: 'Screening', interview: 'Interview', offer: 'Offer' };
+
+  el.style.display = '';
+  el.innerHTML = `
+    <div class="milestone-strip-title">Application Timeline</div>
+    <div class="milestone-strip">
+      ${active.map((s, i) => {
+        const m = job[s + 'Milestone'];
+        const parts = [
+          m.date  ? formatDate(m.date + 'T12:00:00') : '',
+          m.time  ? m.time : '',
+          m.round ? m.round : '',
+          m.type  ? m.type : '',
+          m.salaryOffered    ? m.salaryOffered : '',
+          m.responseDeadline ? 'Respond by ' + formatDate(m.responseDeadline + 'T12:00:00') : '',
+        ].filter(Boolean);
+        return `${i > 0 ? '<div class="milestone-connector"></div>' : ''}
+        <div class="milestone-item milestone-item-${s}">
+          <div class="milestone-icon">${icons[s]}</div>
+          <div class="milestone-info">
+            <div class="milestone-label">${labels[s]}</div>
+            <div class="milestone-detail">${parts.length ? escHtml(parts.join(' · ')) : '<span style="opacity:.5">No details yet</span>'}</div>
+            ${m.notes ? `<div class="milestone-notes">${escHtml(m.notes)}</div>` : ''}
+          </div>
+          <button class="milestone-edit-btn" data-stage="${s}" title="Edit">✎</button>
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  el.querySelectorAll('.milestone-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => openStageMilestoneModal(job, btn.dataset.stage));
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
    JOB DETAIL MODAL
    ══════════════════════════════════════════════════════════ */
 function openJobDetail(id) {
@@ -560,6 +707,9 @@ function openJobDetail(id) {
     (job.matched || []).length ? job.matched.map(s => `<span class="skill-badge green">${s}</span>`).join('') : '<span style="font-size:12px;color:var(--text-muted)">None detected</span>';
   document.getElementById('detail-missing').innerHTML =
     (job.missing || []).length ? job.missing.map(s => `<span class="skill-badge red">${s}</span>`).join('') : '<span style="font-size:12px;color:var(--text-muted)">None — great fit!</span>';
+
+  // Milestone strip
+  renderMilestoneStrip(job);
 
   // Stage badge
   const stageBadge = document.getElementById('detail-stage-badge');

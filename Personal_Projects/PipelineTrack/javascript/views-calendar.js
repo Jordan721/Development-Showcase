@@ -34,6 +34,15 @@ function buildCalendarEvents() {
       id: c.id
     });
   });
+  (state.events || []).forEach(ev => {
+    events.push({
+      date: new Date(ev.date + 'T00:00:00'),
+      type: 'event',
+      label: ev.title,
+      id: ev.id,
+      eventData: ev
+    });
+  });
   return events;
 }
 
@@ -174,7 +183,7 @@ function buildCalYearGrid(year, events) {
       html += '<div class="cal-year-event-dots">';
       const shown = monthEvents.slice(0, 20);
       shown.forEach(ev => {
-        const colorCls = ev.type === 'job' ? 'cal-legend-job' : ev.type === 'deadline' ? 'cal-legend-deadline' : 'cal-legend-contact';
+        const colorCls = ev.type === 'job' ? 'cal-legend-job' : ev.type === 'deadline' ? 'cal-legend-deadline' : ev.type === 'event' ? 'cal-legend-event' : 'cal-legend-contact';
         html += `<div class="cal-year-dot ${colorCls}" title="${escHtml(ev.label)}"></div>`;
       });
       if (monthEvents.length > 20) html += `<div style="font-size:9px;color:var(--text-muted)">+${monthEvents.length - 20}</div>`;
@@ -203,22 +212,31 @@ function renderCalendarUpcoming(allEvents) {
     return;
   }
   list.innerHTML = upcoming.map(ev => {
-    const dotCls = ev.type === 'job' ? 'cal-legend-job' : ev.type === 'deadline' ? 'cal-legend-deadline' : 'cal-legend-contact';
-    const tag = ev.type === 'deadline' ? 'Deadline' : ev.type === 'contact' ? 'Follow-up' : 'Job Added';
+    const dotCls = ev.type === 'job' ? 'cal-legend-job' : ev.type === 'deadline' ? 'cal-legend-deadline' : ev.type === 'event' ? 'cal-legend-event' : 'cal-legend-contact';
+    const tag = ev.type === 'deadline' ? 'Deadline' : ev.type === 'contact' ? 'Follow-up' : ev.type === 'event' ? 'Event' : 'Job Added';
+    const evData = ev.eventData;
+    const linkBtn = evData && evData.link
+      ? `<a class="cal-event-join-btn" href="${escHtml(evData.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Join</a>`
+      : '';
+    const formatBadge = evData ? `<span class="cal-event-format-badge cal-event-format-${evData.format}">${evData.format}</span>` : '';
     return `<div class="cal-upcoming-item" data-ev-id="${ev.id}" data-ev-type="${ev.type}">
       <span class="cal-upcoming-dot ${dotCls}"></span>
       <span class="cal-upcoming-date">${ev.date.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
       <span class="cal-upcoming-label">${escHtml(ev.label)}</span>
+      ${formatBadge}
       <span class="cal-upcoming-tag">${tag}</span>
+      ${linkBtn}
     </div>`;
   }).join('');
   list.querySelectorAll('.cal-upcoming-item').forEach(item => {
     item.addEventListener('click', () => {
-      const {
-        evId,
-        evType
-      } = item.dataset;
+      const evType = item.dataset.evType;
       if (evType === 'contact') return;
+      if (evType === 'event') {
+        const ev = (state.events || []).find(e => e.id === item.dataset.evId);
+        if (ev) openEventModal(ev);
+        return;
+      }
       openJobDetail(item.dataset.evId);
     });
   });
@@ -265,7 +283,12 @@ function wireCalendarControls() {
       if (e.target.classList.contains('cal-full-event')) {
         const evType = e.target.dataset.evType;
         const evId = e.target.dataset.evId;
-        if (evType !== 'contact') openJobDetail(evId);
+        if (evType === 'event') {
+          const ev = (state.events || []).find(e => e.id === evId);
+          if (ev) openEventModal(ev);
+        } else if (evType !== 'contact') {
+          openJobDetail(evId);
+        }
         return;
       }
       const k = cell.dataset.cellDate;
@@ -299,19 +322,36 @@ function openDayModal(dateKey, events) {
   document.getElementById('day-modal-title').textContent = label;
   const body = document.getElementById('day-modal-jobs');
   body.innerHTML = events.map(ev => {
-    const dotCls = ev.type === 'job' ? 'cal-legend-job' : ev.type === 'deadline' ? 'cal-legend-deadline' : 'cal-legend-contact';
-    const tag = ev.type === 'deadline' ? 'Deadline' : ev.type === 'contact' ? 'Follow-up' : 'Job Added';
-    return `<div class="day-modal-job" data-job-id="${ev.id}" data-ev-type="${ev.type}" style="display:flex;align-items:center;gap:10px;padding:10px;cursor:${ev.type !== 'contact' ? 'pointer' : 'default'};border-radius:var(--radius-sm);transition:background .15s;" onmouseenter="this.style.background='var(--card)'" onmouseleave="this.style.background=''">
+    const dotCls = ev.type === 'job' ? 'cal-legend-job' : ev.type === 'deadline' ? 'cal-legend-deadline' : ev.type === 'event' ? 'cal-legend-event' : 'cal-legend-contact';
+    const tag = ev.type === 'deadline' ? 'Deadline' : ev.type === 'contact' ? 'Follow-up' : ev.type === 'event' ? 'Event' : 'Job Added';
+    const evData = ev.eventData;
+    const extraInfo = evData ? [
+      evData.format ? `<span class="cal-event-format-badge cal-event-format-${evData.format}">${evData.format}</span>` : '',
+      evData.time ? `<span style="font-size:11px;color:var(--text-muted)">${escHtml(evData.time)}</span>` : '',
+      evData.location ? `<span style="font-size:11px;color:var(--text-muted)">📍 ${escHtml(evData.location)}</span>` : '',
+    ].filter(Boolean).join(' ') : '';
+    const linkBtn = evData && evData.link
+      ? `<a class="cal-event-join-btn" href="${escHtml(evData.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Join</a>`
+      : '';
+    const isClickable = ev.type !== 'contact';
+    return `<div class="day-modal-job" data-job-id="${ev.id}" data-ev-type="${ev.type}" style="display:flex;align-items:center;gap:10px;padding:10px;cursor:${isClickable ? 'pointer' : 'default'};border-radius:var(--radius-sm);transition:background .15s;" onmouseenter="this.style.background='var(--card)'" onmouseleave="this.style.background=''">
       <span class="cal-legend-dot ${dotCls}" style="flex-shrink:0"></span>
-      <div style="flex:1">
+      <div style="flex:1;min-width:0">
         <div style="font-weight:600;font-size:13px">${escHtml(ev.label)}</div>
-        <div style="font-size:11px;color:var(--text-muted)">${tag}</div>
+        <div style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:2px">${tag}${extraInfo ? ' · ' + extraInfo : ''}</div>
       </div>
+      ${linkBtn}
     </div>`;
   }).join('');
   body.querySelectorAll('.day-modal-job').forEach(item => {
     item.addEventListener('click', () => {
-      if (item.dataset.evType === 'contact') return;
+      const evType = item.dataset.evType;
+      if (evType === 'contact') return;
+      if (evType === 'event') {
+        const ev = (state.events || []).find(e => e.id === item.dataset.jobId);
+        if (ev) { closeModal('modal-day'); openEventModal(ev); }
+        return;
+      }
       closeModal('modal-day');
       openJobDetail(item.dataset.jobId);
     });
@@ -334,6 +374,7 @@ function renderCalendarView() {
     if (calEventFilter === 'jobs') return ev.type === 'job';
     if (calEventFilter === 'deadlines') return ev.type === 'deadline';
     if (calEventFilter === 'followups') return ev.type === 'contact';
+    if (calEventFilter === 'events') return ev.type === 'event';
     return true;
   });
   const body = document.getElementById('cal-view-body');
@@ -344,6 +385,9 @@ function renderCalendarView() {
   wireCalendarControls();
   renderCalendarUpcoming(allEvents);
   renderActivity();
+
+  const addBtn = document.getElementById('cal-add-event-btn');
+  if (addBtn) addBtn.onclick = () => openEventModal(null);
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -377,4 +421,83 @@ function renderActivity() {
       <div class="act-count-label">${p.label}</div>
     </div>`).join('')
   }</div>`;
+}
+
+/* ══════════════════════════════════════════════════════════
+   EVENT MODAL (JOB FAIRS & EVENTS)
+   ══════════════════════════════════════════════════════════ */
+function openEventModal(ev) {
+  const isEdit = !!ev;
+  document.getElementById('event-modal-title').textContent = isEdit ? 'Edit Event' : 'Add Event';
+  document.getElementById('event-edit-id').value = isEdit ? ev.id : '';
+  document.getElementById('event-title').value = isEdit ? ev.title : '';
+  document.getElementById('event-date').value = isEdit ? ev.date : '';
+  document.getElementById('event-time').value = isEdit ? (ev.time || '') : '';
+  document.getElementById('event-location').value = isEdit ? (ev.location || '') : '';
+  document.getElementById('event-link').value = isEdit ? (ev.link || '') : '';
+  document.getElementById('event-notes').value = isEdit ? (ev.notes || '') : '';
+
+  const format = isEdit ? (ev.format || 'in-person') : 'in-person';
+  document.querySelectorAll('input[name="event-format"]').forEach(r => {
+    r.checked = r.value === format;
+  });
+  updateEventFormatFields(format);
+
+  document.getElementById('event-delete-btn').style.display = isEdit ? '' : 'none';
+
+  document.querySelectorAll('input[name="event-format"]').forEach(r => {
+    r.onchange = () => updateEventFormatFields(r.value);
+  });
+
+  document.getElementById('event-save-btn').onclick = saveEvent;
+  document.getElementById('event-delete-btn').onclick = () => {
+    if (!confirm('Delete this event?')) return;
+    state.events = state.events.filter(e => e.id !== ev.id);
+    save();
+    closeModal('modal-event');
+    renderCalendarView();
+  };
+
+  openModal('modal-event');
+  document.getElementById('event-title').focus();
+}
+
+function updateEventFormatFields(format) {
+  const locationGroup = document.getElementById('event-location-group');
+  const linkGroup = document.getElementById('event-link-group');
+  locationGroup.style.display = (format === 'online') ? 'none' : '';
+  linkGroup.style.display = (format === 'in-person') ? 'none' : '';
+}
+
+function saveEvent() {
+  const title = document.getElementById('event-title').value.trim();
+  const date = document.getElementById('event-date').value;
+  if (!title || !date) {
+    toast('Please fill in a title and date.', 'error');
+    return;
+  }
+  const format = document.querySelector('input[name="event-format"]:checked').value;
+  const editId = document.getElementById('event-edit-id').value;
+  const evObj = {
+    id: editId || ('ev' + Date.now() + Math.random().toString(36).slice(2, 5)),
+    title,
+    date,
+    time: document.getElementById('event-time').value || '',
+    format,
+    location: document.getElementById('event-location').value.trim(),
+    link: document.getElementById('event-link').value.trim(),
+    notes: document.getElementById('event-notes').value.trim(),
+  };
+
+  if (editId) {
+    const idx = state.events.findIndex(e => e.id === editId);
+    if (idx !== -1) state.events[idx] = evObj;
+  } else {
+    if (!state.events) state.events = [];
+    state.events.push(evObj);
+  }
+  save();
+  closeModal('modal-event');
+  renderCalendarView();
+  toast((editId ? 'Event updated.' : 'Event added.'), 'success');
 }

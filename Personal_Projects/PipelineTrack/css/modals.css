@@ -784,6 +784,137 @@
   flex-shrink: 0;
 }
 
+/* ── STAGE MILESTONE MODAL ──────────────────────────────── */
+.milestone-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 0 0 16px;
+  line-height: 1.5;
+}
+
+.milestone-type-group {
+  display: flex;
+  gap: 18px;
+  padding: 4px 0;
+}
+
+.milestone-type-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* ── MILESTONE STRIP (inside job detail) ────────────────── */
+#detail-milestone-strip {
+  margin-bottom: 16px;
+}
+
+.milestone-strip-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.milestone-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.milestone-connector {
+  width: 20px;
+  height: 2px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.milestone-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  flex: 1;
+  min-width: 140px;
+  position: relative;
+  border-right: 1px solid var(--border);
+}
+
+.milestone-item:last-child {
+  border-right: none;
+}
+
+.milestone-item-screening { border-top: 2px solid #a78bfa; }
+.milestone-item-interview  { border-top: 2px solid var(--yellow); }
+.milestone-item-offer      { border-top: 2px solid var(--green); }
+
+.milestone-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.milestone-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.milestone-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--text-muted);
+  margin-bottom: 2px;
+}
+
+.milestone-detail {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.milestone-notes {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.milestone-edit-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity .15s, color .15s;
+  flex-shrink: 0;
+}
+
+.milestone-item:hover .milestone-edit-btn {
+  opacity: 1;
+}
+
+.milestone-edit-btn:hover {
+  color: var(--accent);
+}
+
 /* detail modal body */
 .detail-body {
   display: grid;

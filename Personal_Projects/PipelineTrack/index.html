@@ -499,13 +499,16 @@
                     <span class="cal-legend-dot cal-legend-job"></span> Job Added
                     <span class="cal-legend-dot cal-legend-deadline"></span> Deadline
                     <span class="cal-legend-dot cal-legend-contact"></span> Follow-up
+                    <span class="cal-legend-dot cal-legend-event"></span> Event
                 </div>
+                <button class="btn btn-sm" id="cal-add-event-btn" style="margin-left:auto">+ Add Event</button>
             </div>
             <div class="cal-event-filters">
                 <button class="cal-event-filter active" data-event-type="all">All Events</button>
                 <button class="cal-event-filter" data-event-type="jobs">Jobs Added</button>
                 <button class="cal-event-filter" data-event-type="deadlines">Deadlines</button>
                 <button class="cal-event-filter" data-event-type="followups">Follow-ups</button>
+                <button class="cal-event-filter" data-event-type="events">Job Fairs &amp; Events</button>
             </div>
             <div id="cal-view-body"></div>
             <div class="cal-upcoming-strip">
@@ -849,6 +852,7 @@
                             href="https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html"
                             target="_blank" rel="noopener">Track finances in Cash Compass ↗</a>
                     </div>
+                    <div id="detail-milestone-strip" style="display:none"></div>
                     <div class="detail-desc-label">Job Description</div>
                     <div class="detail-desc" id="detail-desc"></div>
                     <div class="form-group" style="margin-top:1rem" id="detail-company-notes-row">
@@ -866,6 +870,81 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <!-- ── MODAL: STAGE MILESTONE ───────────────────────── -->
+    <div class="modal-overlay" id="modal-milestone" aria-hidden="true">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="milestone-modal-title">Log Details</h2>
+                <button class="modal-close" data-close="modal-milestone">✕</button>
+            </div>
+            <div class="modal-body" id="milestone-modal-body">
+                <!-- populated by JS -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" data-close="modal-milestone">Skip for now</button>
+                <button class="btn" id="milestone-save-btn">Save Details</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── MODAL: ADD / EDIT EVENT ──────────────────────── -->
+    <div class="modal-overlay" id="modal-event" aria-hidden="true">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="event-modal-title">Add Event</h2>
+                <button class="modal-close" data-close="modal-event">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="event-edit-id" />
+                <div class="form-group">
+                    <label class="form-label">Event Title *</label>
+                    <input type="text" class="text-input" id="event-title" placeholder="e.g. TechConnect Job Fair" />
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Date *</label>
+                        <input type="date" class="text-input" id="event-date" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Time (optional)</label>
+                        <input type="time" class="text-input" id="event-time" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Format</label>
+                    <div class="event-format-group">
+                        <label class="event-format-option">
+                            <input type="radio" name="event-format" value="in-person" checked /> In-Person
+                        </label>
+                        <label class="event-format-option">
+                            <input type="radio" name="event-format" value="hybrid" /> Hybrid
+                        </label>
+                        <label class="event-format-option">
+                            <input type="radio" name="event-format" value="online" /> Online
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" id="event-location-group">
+                    <label class="form-label">Location / Venue</label>
+                    <input type="text" class="text-input" id="event-location" placeholder="e.g. Convention Center, Hall B" />
+                </div>
+                <div class="form-group" id="event-link-group" style="display:none">
+                    <label class="form-label">Meeting Link</label>
+                    <input type="url" class="text-input" id="event-link" placeholder="Zoom, Teams, Google Meet URL…" />
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Notes</label>
+                    <textarea class="text-input" id="event-notes" rows="3" placeholder="What to bring, who's attending, companies you want to target…"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-ghost" id="event-delete-btn" style="display:none;margin-right:auto;color:var(--red)">Delete Event</button>
+                <button class="btn btn-ghost" data-close="modal-event">Cancel</button>
+                <button class="btn" id="event-save-btn">Save Event</button>
             </div>
         </div>
     </div>
