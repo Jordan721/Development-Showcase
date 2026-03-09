@@ -315,4 +315,14 @@ When opening a job that has contacts linked to it (via Network), those contacts 
 
 ---
 
+## 📄 License
+
+© 2025 Jordan. All Rights Reserved.
+
+This project is publicly viewable for portfolio purposes only. You may not copy, use, modify, or distribute any part of this code without explicit written permission from the author.
+
+To request permission, open an issue or reach out via GitHub.
+
+---
+
 *Built as part of a personal portfolio while actively searching for opportunities in tech.*
