@@ -142,3 +142,447 @@
 .note-add-input:focus {
   border-color: var(--accent);
 }
+
+/* ══════════════════════════════════════════════════════════
+   NEW FEATURES
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Skill badge dismiss button ─────────────────────────── */
+.skill-badge-dismiss {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 12px;
+  line-height: 1;
+  padding: 0 0 0 4px;
+  opacity: 0.45;
+  vertical-align: middle;
+  font-family: inherit;
+}
+
+.skill-badge-dismiss:hover {
+  opacity: 1;
+}
+
+/* ── JD Keyword Highlight ────────────────────────────────── */
+.kw-match {
+  background: rgba(63, 185, 80, .22);
+  color: var(--green);
+  border-radius: 3px;
+  padding: 0 2px;
+  font-weight: 600;
+}
+
+.kw-gap {
+  background: rgba(255, 77, 109, .18);
+  color: var(--red);
+  border-radius: 3px;
+  padding: 0 2px;
+  font-weight: 600;
+}
+
+.detail-desc-legend {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 6px;
+  font-size: 11px;
+}
+
+.detail-desc-legend-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-muted);
+}
+
+.detail-desc-legend-dot span {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* ── Weekly Dashboard Summary ────────────────────────────── */
+.dash-week-summary {
+  grid-column: 1 / -1;
+  margin-top: 0;
+}
+
+.week-summary-body {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+  padding: 0 !important;
+}
+
+.week-stat {
+  flex: 1;
+  min-width: 90px;
+  padding: 14px 18px;
+  text-align: center;
+  border-right: 1px solid var(--border);
+}
+
+.week-stat:last-child {
+  border-right: none;
+}
+
+.week-stat-val {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.week-stat-val.accent {
+  color: var(--accent);
+}
+
+.week-stat-val.yellow {
+  color: var(--yellow);
+}
+
+.week-stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.week-goals-section {
+  flex: 2;
+  min-width: 180px;
+  padding: 10px 18px;
+  border-left: 1px solid var(--border);
+}
+
+.week-goal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 3px 0;
+  font-size: 12px;
+}
+
+.week-goal-label {
+  color: var(--text-muted);
+}
+
+.week-goal-val {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* ── Thank-You Sent badge in milestone strip ─────────────── */
+.milestone-ty-sent {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--green);
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* ── Linked Contacts in detail modal ────────────────────── */
+.detail-contacts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.detail-contact-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+.detail-contact-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.detail-contact-meta {
+  color: var(--text-muted);
+  margin-left: 6px;
+  font-size: 11px;
+}
+
+.detail-contact-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* ── Email Templates (profile section) ──────────────────── */
+.template-input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.template-input-row .text-input {
+  flex: 1;
+}
+
+.template-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.template-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+
+.template-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.template-card-name {
+  font-size: 13px;
+  font-weight: 600;
+  flex: 1;
+}
+
+.template-type-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  text-transform: capitalize;
+}
+
+.tpl-thank-you {
+  background: rgba(63, 185, 80, .15);
+  color: var(--green);
+}
+
+.tpl-follow-up {
+  background: rgba(0, 212, 170, .15);
+  color: var(--accent);
+}
+
+.tpl-withdrawal {
+  background: rgba(251, 191, 36, .15);
+  color: var(--yellow);
+}
+
+.tpl-custom {
+  background: rgba(167, 139, 250, .15);
+  color: #a78bfa;
+}
+
+.template-card-body {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: pre-wrap;
+  max-height: 80px;
+  overflow: hidden;
+  line-height: 1.5;
+  position: relative;
+}
+
+.template-card-body.expanded {
+  max-height: none;
+}
+
+.template-card-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.template-edit-area {
+  width: 100%;
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  resize: vertical;
+  outline: none;
+  transition: border-color .15s;
+  line-height: 1.5;
+}
+
+.template-edit-area:focus {
+  border-color: var(--accent);
+}
+
+/* ── Job Comparison modal ────────────────────────────────── */
+.compare-picker-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.compare-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color .15s;
+  user-select: none;
+}
+
+.compare-picker-item:hover {
+  border-color: var(--accent);
+}
+
+.compare-picker-item.selected {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.compare-picker-item input[type="checkbox"] {
+  flex-shrink: 0;
+  accent-color: var(--accent);
+  width: 15px;
+  height: 15px;
+}
+
+.compare-picker-info {
+  flex: 1;
+}
+
+.compare-picker-role {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.compare-picker-company {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.compare-count-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.compare-grid {
+  display: grid;
+  gap: 12px;
+  overflow-x: auto;
+}
+
+.compare-col {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  min-width: 200px;
+}
+
+.compare-col-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.compare-col-role {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.compare-col-company {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.compare-col-body {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.compare-row {
+  font-size: 12px;
+}
+
+.compare-row-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+
+.compare-row-value {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.compare-skill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.compare-search-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.compare-search-row .text-input {
+  flex: 1;
+}
+
+/* Load-template inline picker */
+.tpl-load-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tpl-load-select {
+  flex: 1;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 12px;
+  color: var(--text);
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+}
+
+.tpl-load-select:focus {
+  border-color: var(--accent);
+}

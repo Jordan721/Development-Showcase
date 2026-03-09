@@ -37,26 +37,26 @@
             <a href="#" class="nav-link" data-view="board">
                 <span class="nav-icon">⊞</span> Job Board
             </a>
-            <a href="#" class="nav-link" data-view="profile">
-                <span class="nav-icon">◉</span> My Profile
-            </a>
-            <a href="#" class="nav-link" data-view="learning">
-                <span class="nav-icon">◎</span> Learning Hub
-            </a>
-            <a href="#" class="nav-link" data-view="resume">
-                <span class="nav-icon">✦</span> Resume Hub
-            </a>
             <a href="#" class="nav-link" data-view="calendar">
                 <span class="nav-icon">◫</span> Calendar & Activity
             </a>
             <a href="#" class="nav-link" data-view="contacts">
                 <span class="nav-icon">◎</span> Network
             </a>
+            <a href="#" class="nav-link" data-view="goals">
+                <span class="nav-icon">⊕</span> Goals
+            </a>
             <a href="#" class="nav-link" data-view="analytics">
                 <span class="nav-icon">⊛</span> Analytics
             </a>
-            <a href="#" class="nav-link" data-view="goals">
-                <span class="nav-icon">⊕</span> Goals
+            <a href="#" class="nav-link" data-view="profile">
+                <span class="nav-icon">◉</span> My Profile
+            </a>
+            <a href="#" class="nav-link" data-view="resume">
+                <span class="nav-icon">✦</span> Resume Hub
+            </a>
+            <a href="#" class="nav-link" data-view="learning">
+                <span class="nav-icon">◎</span> Learning Hub
             </a>
         </nav>
 
@@ -161,6 +161,9 @@
                 </div>
             </div>
 
+            <!-- Weekly Summary — rendered by JS -->
+            <div id="dash-week-summary" style="margin-top:14px"></div>
+
         </section>
 
         <!-- ── VIEW: JOB BOARD ──────────────────────────────── -->
@@ -191,6 +194,8 @@
                     <button class="board-filter" data-period="week">This Week</button>
                 </div>
                 <span class="board-drag-hint" id="board-drag-hint">⠿ Drag cards between columns to move stages</span>
+                <button class="btn-secondary" id="board-compare-btn"
+                    style="margin-left:auto;padding:5px 12px;font-size:12px">⊜ Compare Jobs</button>
             </div>
             <!-- Search + filter bar -->
             <div class="board-search-bar">
@@ -327,7 +332,8 @@
                                 <div class="backup-tile-desc">Full data · JSON</div>
                             </div>
                         </button>
-                        <button class="backup-tile" id="export-csv-btn">
+                        <button class="backup-tile" id="export-csv-btn"
+                            title="Jobs only — skills, contacts, and goals are not included in CSV">
                             <div class="backup-tile-icon backup-tile-icon--csv">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                                     <path d="M10 2v11M10 13L6 9m4 4l4-4" stroke="currentColor" stroke-width="1.8"
@@ -336,8 +342,8 @@
                                         stroke-linecap="round" /></svg>
                             </div>
                             <div class="backup-tile-text">
-                                <div class="backup-tile-title">Export Backup</div>
-                                <div class="backup-tile-desc">Full data · CSV</div>
+                                <div class="backup-tile-title">Export CSV</div>
+                                <div class="backup-tile-desc">Jobs only · spreadsheet</div>
                             </div>
                         </button>
                         <button class="backup-tile" id="import-btn">
@@ -414,6 +420,24 @@
                         </div>
                     </div>
                     <button class="btn-secondary" id="save-links-btn" style="margin-top:14px">Save Links</button>
+                </div>
+
+                <div class="profile-card full-width">
+                    <div class="profile-section-title">Email Templates</div>
+                    <p class="profile-hint">Save reusable email templates — thank-you notes, follow-ups, withdrawal
+                        messages. Load any template into a job's cover letter from the Application tab.</p>
+                    <div class="template-input-row">
+                        <input type="text" class="text-input" id="template-name"
+                            placeholder="Template name e.g. Thank-You After Interview…" />
+                        <select class="select-input" id="template-type" style="width:auto">
+                            <option value="thank-you">Thank-You</option>
+                            <option value="follow-up">Follow-Up</option>
+                            <option value="withdrawal">Withdrawal</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                        <button class="btn-primary" id="add-template-btn">Add</button>
+                    </div>
+                    <div class="template-list" id="template-list"></div>
                 </div>
 
                 <div class="profile-card full-width">
@@ -798,7 +822,17 @@
                 <!-- ── Tab: Application ── -->
                 <div class="modal-tab-panel" data-tab="application">
                     <div class="form-group">
-                        <label class="form-label">Cover Letter</label>
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                            <label class="form-label" style="margin-bottom:0">Cover Letter</label>
+                            <div class="tpl-load-row">
+                                <select class="tpl-load-select" id="tpl-load-select"
+                                    style="font-size:11px;padding:4px 6px">
+                                    <option value="">— Load Template —</option>
+                                </select>
+                                <button class="btn-ghost" id="tpl-load-btn"
+                                    style="font-size:11px;padding:4px 10px">Load</button>
+                            </div>
+                        </div>
                         <textarea class="text-area" id="job-cover-letter" rows="12"
                             placeholder="Paste or draft your cover letter here…"></textarea>
                     </div>
@@ -893,7 +927,14 @@
                     </div>
                     <div id="detail-milestone-strip" style="display:none"></div>
                     <div class="detail-desc-label">Job Description</div>
+                    <div class="detail-desc-legend" id="detail-desc-legend" style="display:none">
+                        <span class="detail-desc-legend-dot"><span style="background:rgba(63,185,80,.35)"></span>
+                            Matched</span>
+                        <span class="detail-desc-legend-dot"><span style="background:rgba(255,77,109,.3)"></span>
+                            Gap</span>
+                    </div>
                     <div class="detail-desc" id="detail-desc"></div>
+                    <div id="detail-linked-contacts" style="display:none;margin-top:10px"></div>
                     <div class="form-group" style="margin-top:1rem" id="detail-company-notes-row">
                         <label class="form-label">Company Notes</label>
                         <textarea class="text-area" id="detail-company-notes" rows="3"
@@ -1172,6 +1213,9 @@
                     <p>Hit <strong>+ Add Job</strong> on the Job Board. Fill in the <strong>Details</strong> tab, then
                         paste the job description in <strong>Job Info</strong> to get an instant fit score and skill gap
                         breakdown.</p>
+                    <p>Open any job to see matched skills highlighted <strong style="color:var(--green)">green</strong>
+                        and gaps in <strong style="color:var(--red)">red</strong> right inside the description. Click
+                        <strong>×</strong> on any skill tag to dismiss false positives.</p>
                 </div>
 
                 <!-- Step 4 — Explore -->
@@ -1183,6 +1227,12 @@
                         <li><strong>Analytics</strong> — charts and KPIs across your full search</li>
                         <li><strong>Goals</strong> — set weekly or monthly application targets</li>
                         <li><strong>Calendar</strong> — deadlines and follow-up dates in one view</li>
+                        <li><strong>Network</strong> — track recruiters and contacts; they appear directly inside job
+                            details</li>
+                        <li><strong>Compare Jobs</strong> — select 2–3 jobs on the Job Board to compare them side by
+                            side</li>
+                        <li><strong>Email Templates</strong> — save reusable thank-you and follow-up templates in My
+                            Profile</li>
                     </ul>
                     <p class="onboarding-tip">Reopen this guide anytime with the <strong>?</strong> button in the top
                         bar.</p>
@@ -1203,6 +1253,38 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- ── MODAL: JOB COMPARISON ──────────────────────────── -->
+    <div class="modal-overlay" id="modal-compare" aria-hidden="true">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <div style="display:flex;align-items:center;gap:10px">
+                    <button class="detail-back-btn" id="compare-back-btn" style="display:none">← Back</button>
+                    <h2 class="modal-title">Compare Jobs</h2>
+                </div>
+                <button class="modal-close" data-close="modal-compare">✕</button>
+            </div>
+            <div class="modal-body">
+                <!-- Picker view -->
+                <div id="compare-picker-view">
+                    <p class="compare-count-note">Select 2–3 jobs to compare side by side.</p>
+                    <div class="compare-search-row">
+                        <input type="text" class="text-input" id="compare-search"
+                            placeholder="Search by role or company…" />
+                    </div>
+                    <div class="compare-picker-list" id="compare-picker-list"></div>
+                </div>
+                <!-- Result view -->
+                <div id="compare-result-view" style="display:none">
+                    <div class="compare-grid" id="compare-result-grid"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-ghost" data-close="modal-compare">Close</button>
+                <button class="btn-primary" id="compare-go-btn" disabled>Select 2–3 Jobs</button>
+            </div>
         </div>
     </div>
 

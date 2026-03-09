@@ -388,7 +388,13 @@ function renderBoardTimeline(jobs) {
   const m = new Date(minDate);
   m.setDate(1);
   while (m <= today) {
-    ticks.push({ label: m.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }), p: pct(m) });
+    ticks.push({
+      label: m.toLocaleDateString('en-US', {
+        month: 'short',
+        year: '2-digit'
+      }),
+      p: pct(m)
+    });
     m.setMonth(m.getMonth() + 1);
   }
 
@@ -404,12 +410,12 @@ function renderBoardTimeline(jobs) {
   };
 
   const axisHTML = ticks.map(t =>
-    `<div class="tl-tick" style="left:${t.p.toFixed(2)}%">
+      `<div class="tl-tick" style="left:${t.p.toFixed(2)}%">
       <div class="tl-tick-line"></div>
       <div class="tl-tick-label">${t.label}</div>
     </div>`
-  ).join('') +
-  `<div class="tl-today-marker" style="left:${todayPct}%">
+    ).join('') +
+    `<div class="tl-today-marker" style="left:${todayPct}%">
     <div class="tl-today-line-head"></div>
     <div class="tl-today-label-head">Today</div>
   </div>`;
@@ -469,9 +475,9 @@ function openStageMilestoneModal(job, stage) {
   let bodyHTML = `<p class="milestone-subtitle">${subtitles[stage]}</p>`;
 
   if (stage === 'screening' || stage === 'interview') {
-    const typeOpts = stage === 'screening'
-      ? ['Phone', 'Video', 'In-person']
-      : ['Phone', 'Video', 'In-person', 'Panel', 'Technical'];
+    const typeOpts = stage === 'screening' ?
+      ['Phone', 'Video', 'In-person'] :
+      ['Phone', 'Video', 'In-person', 'Panel', 'Technical'];
     const defaultType = existing.type || (stage === 'screening' ? 'Phone' : 'Video');
     bodyHTML += `
       <div class="form-row">
@@ -505,6 +511,12 @@ function openStageMilestoneModal(job, stage) {
       <div class="form-group">
         <label class="form-label">Notes</label>
         <textarea class="text-input" id="milestone-notes" rows="2" placeholder="${stage === 'screening' ? 'Recruiter name, topics to cover…' : 'Interviewer, topics to prepare, format…'}">${escHtml(existing.notes || '')}</textarea>
+      </div>
+      <div class="form-group" style="margin-top:8px">
+        <label class="toggle-label">
+          <input type="checkbox" id="milestone-thankyou" ${existing.thankYouSent ? 'checked' : ''}/>
+          Thank-you note sent
+        </label>
       </div>`;
   } else {
     bodyHTML += `
@@ -519,6 +531,12 @@ function openStageMilestoneModal(job, stage) {
       <div class="form-group">
         <label class="form-label">Notes</label>
         <textarea class="text-input" id="milestone-notes" rows="2" placeholder="Benefits, equity, negotiation notes…">${escHtml(existing.notes || '')}</textarea>
+      </div>
+      <div class="form-group" style="margin-top:8px">
+        <label class="toggle-label">
+          <input type="checkbox" id="milestone-thankyou" ${existing.thankYouSent ? 'checked' : ''}/>
+          Thank-you note sent
+        </label>
       </div>`;
   }
 
@@ -527,16 +545,17 @@ function openStageMilestoneModal(job, stage) {
   document.getElementById('milestone-save-btn').onclick = () => {
     const milestone = {};
     if (stage === 'screening' || stage === 'interview') {
-      milestone.date  = (document.getElementById('milestone-date') || {}).value || '';
-      milestone.time  = (document.getElementById('milestone-time') || {}).value || '';
-      milestone.type  = (document.querySelector('input[name="milestone-type"]:checked') || {}).value || '';
+      milestone.date = (document.getElementById('milestone-date') || {}).value || '';
+      milestone.time = (document.getElementById('milestone-time') || {}).value || '';
+      milestone.type = (document.querySelector('input[name="milestone-type"]:checked') || {}).value || '';
       milestone.notes = (document.getElementById('milestone-notes') || {}).value.trim();
       if (stage === 'interview') milestone.round = (document.getElementById('milestone-round') || {}).value || '';
     } else {
-      milestone.salaryOffered    = (document.getElementById('milestone-salary') || {}).value.trim();
+      milestone.salaryOffered = (document.getElementById('milestone-salary') || {}).value.trim();
       milestone.responseDeadline = (document.getElementById('milestone-deadline') || {}).value || '';
-      milestone.notes            = (document.getElementById('milestone-notes') || {}).value.trim();
+      milestone.notes = (document.getElementById('milestone-notes') || {}).value.trim();
     }
+    milestone.thankYouSent = !!(document.getElementById('milestone-thankyou') || {}).checked;
     job[stage + 'Milestone'] = milestone;
     save();
     closeModal('modal-milestone');
@@ -552,10 +571,22 @@ function renderMilestoneStrip(job) {
   const el = document.getElementById('detail-milestone-strip');
   if (!el) return;
   const active = MILESTONE_STAGES.filter(s => job[s + 'Milestone']);
-  if (active.length === 0) { el.style.display = 'none'; el.innerHTML = ''; return; }
+  if (active.length === 0) {
+    el.style.display = 'none';
+    el.innerHTML = '';
+    return;
+  }
 
-  const icons  = { screening: '📞', interview: '🤝', offer: '🎉' };
-  const labels = { screening: 'Screening', interview: 'Interview', offer: 'Offer' };
+  const icons = {
+    screening: '📞',
+    interview: '🤝',
+    offer: '🎉'
+  };
+  const labels = {
+    screening: 'Screening',
+    interview: 'Interview',
+    offer: 'Offer'
+  };
 
   el.style.display = '';
   el.innerHTML = `
@@ -578,6 +609,7 @@ function renderMilestoneStrip(job) {
             <div class="milestone-label">${labels[s]}</div>
             <div class="milestone-detail">${parts.length ? escHtml(parts.join(' · ')) : '<span style="opacity:.5">No details yet</span>'}</div>
             ${m.notes ? `<div class="milestone-notes">${escHtml(m.notes)}</div>` : ''}
+            ${m.thankYouSent ? `<div class="milestone-ty-sent">✓ Thank-you sent</div>` : ''}
           </div>
           <button class="milestone-edit-btn" data-stage="${s}" title="Edit">✎</button>
         </div>`;
@@ -702,11 +734,59 @@ function openJobDetail(id) {
     ring.style.strokeDashoffset = circumference;
   }
 
-  // Matched / missing
-  document.getElementById('detail-matched').innerHTML =
-    (job.matched || []).length ? job.matched.map(s => `<span class="skill-badge green">${s}</span>`).join('') : '<span style="font-size:12px;color:var(--text-muted)">None detected</span>';
-  document.getElementById('detail-missing').innerHTML =
-    (job.missing || []).length ? job.missing.map(s => `<span class="skill-badge red">${s}</span>`).join('') : '<span style="font-size:12px;color:var(--text-muted)">None — great fit!</span>';
+  // Matched / missing — with dismiss buttons to remove false positives
+  function renderSkillBadges(listId, arr, field, colorClass) {
+    const el = document.getElementById(listId);
+    if (!arr.length) {
+      el.innerHTML = field === 'matched' ?
+        '<span style="font-size:12px;color:var(--text-muted)">None detected</span>' :
+        '<span style="font-size:12px;color:var(--text-muted)">None — great fit!</span>';
+      return;
+    }
+    el.innerHTML = arr.map(s =>
+      `<span class="skill-badge ${colorClass}" style="padding-right:4px">
+        ${escHtml(s)}
+        <button class="skill-badge-dismiss" data-skill="${escHtml(s)}" title="Remove — not relevant to this job">×</button>
+      </span>`
+    ).join('');
+    el.querySelectorAll('.skill-badge-dismiss').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const skill = btn.dataset.skill;
+        job[field] = job[field].filter(x => x !== skill);
+        // Recalculate fit score
+        const total = (job.matched || []).length + (job.missing || []).length;
+        job.fitScore = total === 0 ? null : Math.round(((job.matched || []).length / total) * 100);
+        save();
+        renderSkillBadges(listId, job[field], field, colorClass);
+        // Refresh description highlights and fit ring
+        const descEl = document.getElementById('detail-desc');
+        const legendEl = document.getElementById('detail-desc-legend');
+        if (job.description && (job.matched || []).length + (job.missing || []).length > 0) {
+          descEl.innerHTML = highlightJobDescription(job.description, job.matched || [], job.missing || []);
+          if (legendEl) legendEl.style.display = '';
+        } else {
+          descEl.textContent = job.description || '';
+          if (legendEl) legendEl.style.display = 'none';
+        }
+        // Refresh fit ring
+        const ring = document.getElementById('detail-fit-ring');
+        const label = document.getElementById('detail-fit-label');
+        const circumference = 2 * Math.PI * 20;
+        if (job.fitScore !== null && job.fitScore !== undefined) {
+          const offset = circumference - (job.fitScore / 100) * circumference;
+          ring.style.strokeDashoffset = offset;
+          ring.style.stroke = job.fitScore >= 70 ? 'var(--green)' : job.fitScore >= 40 ? 'var(--accent)' : 'var(--red)';
+          label.textContent = job.fitScore + '%';
+        } else {
+          ring.style.strokeDashoffset = circumference;
+          label.textContent = '—';
+        }
+      });
+    });
+  }
+  renderSkillBadges('detail-matched', job.matched || [], 'matched', 'green');
+  renderSkillBadges('detail-missing', job.missing || [], 'missing', 'red');
 
   // Milestone strip
   renderMilestoneStrip(job);
@@ -716,8 +796,16 @@ function openJobDetail(id) {
   stageBadge.textContent = STAGE_LABELS[job.stage];
   stageBadge.className = `stage-badge stage-${job.stage}`;
 
-  // Description
-  document.getElementById('detail-desc').textContent = job.description || 'No description provided.';
+  // Description with keyword highlighting
+  const descEl = document.getElementById('detail-desc');
+  const legendEl = document.getElementById('detail-desc-legend');
+  if (job.description && (job.matched || []).length + (job.missing || []).length > 0) {
+    descEl.innerHTML = highlightJobDescription(job.description, job.matched || [], job.missing || []);
+    if (legendEl) legendEl.style.display = '';
+  } else {
+    descEl.textContent = job.description || 'No description provided.';
+    if (legendEl) legendEl.style.display = 'none';
+  }
 
   // Company Notes
   document.getElementById('detail-company-notes').value = job.companyNotes || '';
@@ -744,7 +832,55 @@ function openJobDetail(id) {
     backBtn.onclick = null;
   }
 
+  // Linked contacts
+  renderDetailLinkedContacts(job);
+
   openModal('modal-detail');
+}
+
+function renderDetailLinkedContacts(job) {
+  const el = document.getElementById('detail-linked-contacts');
+  if (!el) return;
+  const contacts = (state.contacts || []).filter(c => c.jobId === job.id);
+  if (contacts.length === 0) {
+    el.innerHTML = '';
+    el.style.display = 'none';
+    return;
+  }
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const typeLabels = {
+    Recruiter: 'Recruiter',
+    HM: 'Hiring Mgr',
+    Referral: 'Referral',
+    Other: 'Other'
+  };
+  const typeCls = {
+    Recruiter: 'type-recruiter',
+    HM: 'type-hm',
+    Referral: 'type-referral',
+    Other: 'type-other'
+  };
+  el.style.display = '';
+  el.innerHTML = `
+    <div class="detail-desc-label">Linked Contacts</div>
+    <div class="detail-contacts-list">
+      ${contacts.map(c => {
+        const isOverdue = c.nextFollowUp && new Date(c.nextFollowUp + 'T00:00:00') <= today;
+        const lbl = typeLabels[c.type] || c.type;
+        const cls = typeCls[c.type] || 'type-other';
+        return `<div class="detail-contact-row">
+          <div class="detail-contact-info">
+            <span class="detail-contact-name">${escHtml(c.name)}</span>
+            ${c.role || c.company ? `<span class="detail-contact-meta">${escHtml([c.role, c.company].filter(Boolean).join(' · '))}</span>` : ''}
+          </div>
+          <div class="detail-contact-badges">
+            <span class="contact-type-badge ${cls}">${lbl}</span>
+            ${c.nextFollowUp ? `<span style="font-size:11px;color:${isOverdue ? 'var(--red)' : 'var(--text-muted)'}">${isOverdue ? '⚠ ' : ''}${formatDate(c.nextFollowUp)}</span>` : ''}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -843,4 +979,144 @@ function saveJob() {
   if (!editId && jobData.stage === 'offer') setTimeout(launchConfetti, 300);
   renderView(state.activeView);
   if (editId) openJobDetail(editId);
+}
+
+/* ══════════════════════════════════════════════════════════
+   JOB COMPARISON
+   ══════════════════════════════════════════════════════════ */
+let _compareSearch = '';
+
+function openComparePickerModal() {
+  _compareSearch = '';
+  renderComparePicker('');
+  openModal('modal-compare');
+}
+
+function renderComparePicker(search) {
+  const list = document.getElementById('compare-picker-list');
+  const btn = document.getElementById('compare-go-btn');
+  if (!list) return;
+
+  const q = search.trim().toLowerCase();
+  const jobs = state.jobs.filter(j => !['archived'].includes(j.stage));
+  const filtered = q ?
+    jobs.filter(j => j.role.toLowerCase().includes(q) || j.company.toLowerCase().includes(q)) :
+    jobs;
+
+  const checked = Array.from(list.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+
+  list.innerHTML = filtered.length === 0 ?
+    '<p class="empty-msg">No jobs found.</p>' :
+    filtered.map(j => {
+      const isChecked = checked.includes(j.id);
+      const fitLabel = j.fitScore !== null && j.fitScore !== undefined ? `${j.fitScore}%` : 'No score';
+      return `<label class="compare-picker-item${isChecked ? ' selected' : ''}">
+          <input type="checkbox" value="${j.id}" ${isChecked ? 'checked' : ''}/>
+          <div class="compare-picker-info">
+            <div class="compare-picker-role">${escHtml(j.role)}</div>
+            <div class="compare-picker-company">${escHtml(j.company)}${j.location ? ' · ' + escHtml(j.location) : ''}</div>
+          </div>
+          <span class="fit-badge ${fitBadgeClass(j.fitScore)}">${fitLabel}</span>
+          <span class="stage-badge stage-${j.stage}" style="font-size:10px">${STAGE_LABELS[j.stage]}</span>
+        </label>`;
+    }).join('');
+
+  list.querySelectorAll('.compare-picker-item').forEach(item => {
+    item.addEventListener('change', () => {
+      item.classList.toggle('selected', item.querySelector('input').checked);
+      const total = list.querySelectorAll('input:checked').length;
+      if (btn) {
+        btn.disabled = total < 2;
+        btn.textContent = total >= 2 ? `Compare ${total} Jobs` : 'Select 2–3 Jobs';
+      }
+      // Enforce max 3
+      if (total > 3) {
+        item.querySelector('input').checked = false;
+        item.classList.remove('selected');
+        toast('Select up to 3 jobs to compare.', 'error');
+      }
+    });
+  });
+
+  const total = list.querySelectorAll('input:checked').length;
+  if (btn) {
+    btn.disabled = total < 2;
+    btn.textContent = total >= 2 ? `Compare ${total} Jobs` : 'Select 2–3 Jobs';
+  }
+}
+
+function runComparison() {
+  const list = document.getElementById('compare-picker-list');
+  const ids = Array.from(list.querySelectorAll('input:checked')).map(cb => cb.value);
+  if (ids.length < 2) {
+    toast('Select at least 2 jobs.', 'error');
+    return;
+  }
+  const jobs = ids.map(id => state.jobs.find(j => j.id === id)).filter(Boolean);
+  renderComparisonGrid(jobs);
+  document.getElementById('compare-picker-view').style.display = 'none';
+  document.getElementById('compare-result-view').style.display = '';
+  document.getElementById('compare-back-btn').style.display = '';
+}
+
+function renderComparisonGrid(jobs) {
+  const grid = document.getElementById('compare-result-grid');
+  if (!grid) return;
+
+  grid.style.gridTemplateColumns = `repeat(${jobs.length}, 1fr)`;
+
+  grid.innerHTML = jobs.map(j => {
+    const fitColor = j.fitScore >= 70 ? 'var(--green)' : j.fitScore >= 40 ? 'var(--yellow)' : j.fitScore !== null ? 'var(--red)' : 'var(--text-muted)';
+    const parsedBenefits = j.benefits ? parseBenefits(j.benefits) : [];
+    return `<div class="compare-col">
+      <div class="compare-col-header">
+        <div class="compare-col-role">${escHtml(j.role)}</div>
+        <div class="compare-col-company">${escHtml(j.company)}${j.location ? ' · ' + escHtml(j.location) : ''}</div>
+      </div>
+      <div class="compare-col-body">
+        <div class="compare-row">
+          <div class="compare-row-label">Stage</div>
+          <span class="stage-badge stage-${j.stage}">${STAGE_LABELS[j.stage]}</span>
+        </div>
+        <div class="compare-row">
+          <div class="compare-row-label">Fit Score</div>
+          <div class="compare-row-value" style="color:${fitColor};font-size:20px;font-weight:700">
+            ${j.fitScore !== null && j.fitScore !== undefined ? j.fitScore + '%' : '—'}
+          </div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-row-label">Salary</div>
+          <div class="compare-row-value">${escHtml(j.salary || '—')}</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-row-label">Work Type</div>
+          <div class="compare-row-value">${escHtml(j.workType || '—')}</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-row-label">Seniority</div>
+          <div class="compare-row-value">${escHtml(j.seniority || '—')}</div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-row-label">Matched Skills <span style="color:var(--green)">(${(j.matched||[]).length})</span></div>
+          <div class="compare-skill-list">
+            ${(j.matched || []).slice(0, 8).map(s => `<span class="skill-badge green">${s}</span>`).join('')}
+            ${(j.matched||[]).length > 8 ? `<span style="font-size:11px;color:var(--text-muted)">+${(j.matched||[]).length - 8} more</span>` : ''}
+          </div>
+        </div>
+        <div class="compare-row">
+          <div class="compare-row-label">Skill Gaps <span style="color:var(--red)">(${(j.missing||[]).length})</span></div>
+          <div class="compare-skill-list">
+            ${(j.missing || []).slice(0, 8).map(s => `<span class="skill-badge red">${s}</span>`).join('')}
+            ${(j.missing||[]).length > 8 ? `<span style="font-size:11px;color:var(--text-muted)">+${(j.missing||[]).length - 8} more</span>` : ''}
+          </div>
+        </div>
+        ${parsedBenefits.length ? `<div class="compare-row">
+          <div class="compare-row-label">Benefits</div>
+          <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:2px">
+            ${parsedBenefits.map(b => `<span class="benefit-chip">${escHtml(b)}</span>`).join('')}
+          </div>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
 }

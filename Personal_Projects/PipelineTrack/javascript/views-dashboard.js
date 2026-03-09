@@ -41,9 +41,9 @@ function renderDashboard() {
   const vibeRow = document.getElementById('dash-vibe-row');
   if (vibeRow) {
     const streak = computeStreak(jobs);
-    const streakHtml = streak >= 2
-      ? `<span class="dash-streak">🔥 ${streak}-day streak</span>`
-      : '';
+    const streakHtml = streak >= 2 ?
+      `<span class="dash-streak">🔥 ${streak}-day streak</span>` :
+      '';
     vibeRow.innerHTML = streakHtml + `<span class="dash-nudge">${getDashboardNudge(jobs)}</span>`;
   }
 
@@ -142,10 +142,70 @@ function renderDashboard() {
     });
   }
 
+  renderWeekSummary();
+
   if (typeof animateDashboardStats === 'function') animateDashboardStats();
   if (typeof animateBars === 'function') animateBars('.pipeline-bar-fill');
 }
 
+function renderWeekSummary() {
+  const el = document.getElementById('dash-week-summary');
+  if (!el) return;
+
+  const now = new Date();
+  const weekStart = new Date(now);
+  weekStart.setDate(now.getDate() - now.getDay());
+  weekStart.setHours(0, 0, 0, 0);
+
+  const jobs = state.jobs;
+  const thisWeekJobs = jobs.filter(j => new Date(j.dateAdded) >= weekStart);
+  const appsAdded = thisWeekJobs.length;
+  const inProgress = jobs.filter(j => ['screening', 'interview'].includes(j.stage)).length;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const followupsDue = (state.contacts || []).filter(c =>
+    c.nextFollowUp && new Date(c.nextFollowUp + 'T00:00:00') <= today
+  ).length;
+
+  // Weekly goals — computeGoalCurrent is in views-goals.js (loaded after)
+  const weekGoals = (state.goals || []).filter(g => g.period === 'week');
+  const goalsHTML = weekGoals.length === 0 ? '' :
+    `<div class="week-goals-section">
+      ${weekGoals.map(g => {
+        const current = typeof computeGoalCurrent === 'function' ? computeGoalCurrent(g) : 0;
+        const pct = g.target > 0 ? Math.min(Math.round((current / g.target) * 100), 100) : 0;
+        const color = pct >= 100 ? 'var(--green)' : pct >= 50 ? 'var(--accent)' : 'var(--red)';
+        const label = (typeof GOAL_TYPE_LABELS !== 'undefined' && GOAL_TYPE_LABELS[g.type]) || g.type;
+        return `<div class="week-goal-row">
+          <span class="week-goal-label">${label}</span>
+          <span class="week-goal-val" style="color:${color}">${current}/${g.target}</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+
+  const fuColor = followupsDue > 0 ? 'var(--red)' : 'var(--text-muted)';
+
+  el.innerHTML = `
+    <div class="dash-card dash-week-summary-card">
+      <div class="dash-card-header">This Week</div>
+      <div class="week-summary-body">
+        <div class="week-stat">
+          <div class="week-stat-val" style="color:var(--accent)">${appsAdded}</div>
+          <div class="week-stat-label">Added This Week</div>
+        </div>
+        <div class="week-stat">
+          <div class="week-stat-val" style="color:var(--yellow)">${inProgress}</div>
+          <div class="week-stat-label">In Progress</div>
+        </div>
+        <div class="week-stat">
+          <div class="week-stat-val" style="color:${fuColor}">${followupsDue}</div>
+          <div class="week-stat-label">Follow-ups Due</div>
+        </div>
+        ${goalsHTML}
+      </div>
+    </div>`;
+}
+
 
 /* renderActivity() lives in views-calendar.js */
-

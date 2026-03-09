@@ -3,6 +3,13 @@
 /* ══════════════════════════════════════════════════════════
    FIT ANALYSIS
    ══════════════════════════════════════════════════════════ */
+// Returns a regex that matches a skill as a whole word/token,
+// not as a substring of another word (e.g. "r" won't match "requirements").
+function _skillRegex(skill) {
+  const esc = skill.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp('(?<![a-zA-Z0-9])' + esc + '(?![a-zA-Z0-9])', 'i');
+}
+
 function analyzeJob(description) {
   if (!description || !description.trim()) return {
     score: null,
@@ -15,13 +22,11 @@ function analyzeJob(description) {
   // Extract known skills mentioned in cert/license/degree descriptions
   const certText = (state.profile.certifications || [])
     .map(c => c.description || '').join(' ').toLowerCase();
-  const certSkills = certText ? [...KNOWN_SKILLS].filter(skill => certText.includes(skill)) : [];
+  const certSkills = certText ? [...KNOWN_SKILLS].filter(skill => _skillRegex(skill).test(certText)) : [];
   const allUserSkills = [...new Set([...userSkills, ...certSkills])];
 
-  const text = description.toLowerCase();
-
-  // Check known skills by looking for them in the job description text
-  const foundInJob = [...KNOWN_SKILLS].filter(skill => text.includes(skill));
+  // Check known skills by looking for them as whole words in the job description
+  const foundInJob = [...KNOWN_SKILLS].filter(skill => _skillRegex(skill).test(description));
   const matched = foundInJob.filter(skill => allUserSkills.some(us => us.includes(skill) || skill.includes(us)));
   const missing = foundInJob.filter(skill => !matched.includes(skill));
 
@@ -192,6 +197,56 @@ function renderView(view) {
 
 function escHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function highlightJobDescription(text, matched, missing) {
+  if (!text) return '';
+  if (!matched.length && !missing.length) return escHtml(text);
+
+  // Build list of skills with their CSS class, longest first to avoid partial overlaps
+  const allSkills = [
+    ...matched.map(s => ({
+      s: s.toLowerCase(),
+      cls: 'kw-match'
+    })),
+    ...missing.map(s => ({
+      s: s.toLowerCase(),
+      cls: 'kw-gap'
+    })),
+  ];
+  allSkills.sort((a, b) => b.s.length - a.s.length);
+
+  const marks = [];
+
+  for (const {
+      s,
+      cls
+    } of allSkills) {
+    const re = new RegExp('(?<![a-zA-Z0-9])' + s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![a-zA-Z0-9])', 'gi');
+    let m;
+    while ((m = re.exec(text)) !== null) {
+      const start = m.index;
+      const end = start + m[0].length;
+      const overlap = marks.some(mk => mk.start < end && mk.end > start);
+      if (!overlap) marks.push({
+        start,
+        end,
+        cls
+      });
+    }
+  }
+
+  marks.sort((a, b) => a.start - b.start);
+
+  let html = '';
+  let pos = 0;
+  for (const m of marks) {
+    if (m.start > pos) html += escHtml(text.slice(pos, m.start));
+    html += `<mark class="${m.cls}">${escHtml(text.slice(m.start, m.end))}</mark>`;
+    pos = m.end;
+  }
+  if (pos < text.length) html += escHtml(text.slice(pos));
+  return html;
 }
 
 function parseBenefits(text) {

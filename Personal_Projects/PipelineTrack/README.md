@@ -126,7 +126,7 @@ Build the foundation for your fit scores and recommendations.
 - **Resume Summary** — a short bio for your own reference
 - **Skill Coverage chart** — see how often each of your skills appears across tracked jobs; grouped and color-coded by level with the same **All / Expert / Intermediate / Beginner** filter pills and a **Show X more** collapse when you have many skills
 - **Data Backup** — export all your data to a `.json` file and import it on any other device or browser; the filename and a confirmation message appear under the buttons after each action
-- **Export Jobs as CSV** — download your full job list as a spreadsheet-ready `.csv` file (role, company, stage, fit score, matched skills, skill gaps, salary, notes, and more); the JSON backup and CSV export coexist so you can use both
+- **Export Jobs as CSV** — download your job list as a spreadsheet-ready `.csv` file (role, company, stage, fit score, matched skills, skill gaps, salary, notes, and more); **jobs only** — skills, contacts, goals, and events are not included in the CSV; use the JSON backup for a full restore
 - **Clear All Jobs** — wipe all tracked jobs in one click (with confirmation) to start fresh
 - **Delete All Data** — wipe everything (jobs, contacts, goals, events, profile, skills, and certifications) in one click (with confirmation)
 - **Your Links** — save your LinkedIn, GitHub, and Portfolio URLs locally for quick access
@@ -265,6 +265,47 @@ PipelineTrack/
 11. Use **Goals** to set weekly or monthly targets and watch them update as you track applications
 
 All data is saved to your browser's localStorage. Nothing is sent anywhere. Use the ☀️ / 🌙 toggle in the top bar to switch between light and dark mode, or pick a color theme — **M** (Midnight), **S** (Sunset), or **O** (Ocean) — from the buttons beside it. Your preference is remembered.
+
+---
+
+---
+
+### 🔍 Job Description Keyword Highlight
+When viewing a job's description in the detail modal, matched skills are **highlighted green** and skill gaps are **highlighted red** directly in the text — no more hunting for keywords manually.
+
+Each matched and missing skill tag has a **×** dismiss button. Click it to remove a false positive (e.g. "go" detected as the Go language when it's just the word "go") — the fit score recalculates instantly and the highlights update. The change is saved automatically.
+
+---
+
+### ⊜ Job Comparison View
+Click **⊜ Compare Jobs** on the Job Board to select 2–3 jobs and compare them side by side:
+- Fit score, salary, stage, seniority, work type
+- Full matched skills and skill gaps lists
+- Benefits chips
+- Supports search filtering to find jobs quickly
+
+---
+
+### 📧 Email Templates
+Save reusable email templates in **My Profile → Email Templates**:
+- Types: **Thank-You**, **Follow-Up**, **Withdrawal**, **Custom**
+- Load any saved template directly into a job's cover letter from the **Application** tab
+- Edit template body inline without leaving the profile view
+
+---
+
+### ✓ Thank-You Sent checkbox
+When logging Screening, Interview, or Offer milestone details, check **Thank-you note sent** to track it. A ✓ indicator appears in the Application Timeline strip on the job detail view.
+
+---
+
+### 📋 This Week Summary
+The Dashboard now includes a **This Week** recap card showing: jobs added this week, currently in-progress count, overdue follow-ups, and live progress against all weekly goals.
+
+---
+
+### 👥 Linked Contacts in Job Detail
+When opening a job that has contacts linked to it (via Network), those contacts now appear inline in the job detail modal — including their type, follow-up status, and overdue alerts — without needing to switch views.
 
 ---
 

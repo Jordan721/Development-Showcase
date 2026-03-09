@@ -125,7 +125,17 @@ function wireEvents() {
     state.goals = [];
     state.events = [];
     state.savedCourses = [];
-    state.profile = { skills: [], certifications: [], summary: '', links: { linkedin: '', github: '', portfolio: '' } };
+    state.templates = [];
+    state.profile = {
+      skills: [],
+      certifications: [],
+      summary: '',
+      links: {
+        linkedin: '',
+        github: '',
+        portfolio: ''
+      }
+    };
     save();
     toast('All data deleted.', '');
     renderView(state.activeView);
@@ -239,6 +249,59 @@ function wireEvents() {
 
   // Save goal
   document.getElementById('save-goal-btn').addEventListener('click', saveGoal);
+
+  // Email templates
+  const addTplBtn = document.getElementById('add-template-btn');
+  if (addTplBtn) addTplBtn.addEventListener('click', addTemplate);
+  const tplNameInput = document.getElementById('template-name');
+  if (tplNameInput) tplNameInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') addTemplate();
+  });
+
+  // Job comparison
+  const compareBtn = document.getElementById('board-compare-btn');
+  if (compareBtn) compareBtn.addEventListener('click', openComparePickerModal);
+
+  const compareSearchInput = document.getElementById('compare-search');
+  if (compareSearchInput) compareSearchInput.addEventListener('input', () => {
+    _compareSearch = compareSearchInput.value;
+    renderComparePicker(_compareSearch);
+  });
+
+  const compareGoBtn = document.getElementById('compare-go-btn');
+  if (compareGoBtn) compareGoBtn.addEventListener('click', runComparison);
+
+  const compareBackBtn = document.getElementById('compare-back-btn');
+  if (compareBackBtn) compareBackBtn.addEventListener('click', () => {
+    document.getElementById('compare-picker-view').style.display = '';
+    document.getElementById('compare-result-view').style.display = 'none';
+    compareBackBtn.style.display = 'none';
+  });
+
+  // Template loader in job modal (cover letter tab)
+  const tplLoadBtn = document.getElementById('tpl-load-btn');
+  if (tplLoadBtn) tplLoadBtn.addEventListener('click', () => {
+    const sel = document.getElementById('tpl-load-select');
+    if (!sel || sel.value === '') return;
+    const tpl = state.templates[parseInt(sel.value)];
+    if (!tpl) return;
+    const cl = document.getElementById('job-cover-letter');
+    if (cl) {
+      cl.value = tpl.body;
+      toast(`Template "${tpl.name}" loaded.`, 'success');
+    }
+  });
+  // Also re-populate the template select whenever the modal tab switches to Application
+  const jobTabsEl = document.getElementById('job-modal-tabs');
+  if (jobTabsEl) {
+    jobTabsEl.addEventListener('click', e => {
+      const btn = e.target.closest('.modal-tab-btn');
+      if (btn && btn.dataset.tab === 'application') {
+        const sel = document.getElementById('tpl-load-select');
+        if (sel) sel.innerHTML = buildTemplateOptions();
+      }
+    });
+  }
 }
 
 /* ══════════════════════════════════════════════════════════

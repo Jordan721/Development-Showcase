@@ -9,6 +9,7 @@ function renderProfile() {
   document.getElementById('profile-summary').value = state.profile.summary || '';
   renderCoverageBars();
   renderLinks();
+  renderTemplates();
 }
 
 function renderLinks() {
@@ -38,7 +39,7 @@ function saveLinks() {
   toast('Links saved!', 'success');
 }
 
-const CERT_TYPES = ["Certificate","Associate's","Bachelor's","Master's","PhD","Bootcamp","License"];
+const CERT_TYPES = ["Certificate", "Associate's", "Bachelor's", "Master's", "PhD", "Bootcamp", "License"];
 const CERT_SHOW_LIMIT = 1;
 
 function certTypeOptions(selected) {
@@ -108,7 +109,10 @@ function renderCertTags() {
       const idx = parseInt(btn.dataset.index);
       const card = container.querySelector(`.cert-card[data-cert-index="${idx}"]`);
       const name = card.querySelector('.cert-edit-name').value.trim();
-      if (!name) { toast('Name is required.', 'error'); return; }
+      if (!name) {
+        toast('Name is required.', 'error');
+        return;
+      }
       state.profile.certifications[idx] = {
         name,
         type: card.querySelector('.cert-edit-type').value,
@@ -134,9 +138,9 @@ function renderCertTags() {
   // Show more / fewer footer
   if (footer) {
     const hidden = certs.length - CERT_SHOW_LIMIT;
-    footer.innerHTML = certs.length > CERT_SHOW_LIMIT
-      ? `<button class="skill-expand-toggle" id="cert-expand-toggle">${showAll ? 'Show fewer' : `Show ${hidden} more`}</button>`
-      : '';
+    footer.innerHTML = certs.length > CERT_SHOW_LIMIT ?
+      `<button class="skill-expand-toggle" id="cert-expand-toggle">${showAll ? 'Show fewer' : `Show ${hidden} more`}</button>` :
+      '';
     const toggleBtn = document.getElementById('cert-expand-toggle');
     if (toggleBtn) {
       toggleBtn.addEventListener('click', () => {
@@ -158,7 +162,11 @@ function addCert() {
     toast('Already added.', 'error');
     return;
   }
-  state.profile.certifications.push({ name, type, description });
+  state.profile.certifications.push({
+    name,
+    type,
+    description
+  });
   input.value = '';
   if (descEl) descEl.value = '';
   save();
@@ -423,4 +431,118 @@ function reanalyzeAllJobs() {
     };
   });
   save();
+}
+
+/* ══════════════════════════════════════════════════════════
+   EMAIL TEMPLATES
+   ══════════════════════════════════════════════════════════ */
+const TEMPLATE_TYPES = ['thank-you', 'follow-up', 'withdrawal', 'custom'];
+const TEMPLATE_TYPE_LABELS = {
+  'thank-you': 'Thank-You',
+  'follow-up': 'Follow-Up',
+  'withdrawal': 'Withdrawal',
+  'custom': 'Custom',
+};
+
+function renderTemplates() {
+  const list = document.getElementById('template-list');
+  if (!list) return;
+  const templates = state.templates || [];
+  if (templates.length === 0) {
+    list.innerHTML = '<p class="empty-msg" style="margin-top:4px">No templates saved yet.</p>';
+    return;
+  }
+  list.innerHTML = templates.map((t, i) => `
+    <div class="template-card" data-tpl-index="${i}">
+      <div class="template-card-header">
+        <span class="template-card-name">${escHtml(t.name)}</span>
+        <span class="template-type-badge tpl-${escHtml(t.type)}">${TEMPLATE_TYPE_LABELS[t.type] || t.type}</span>
+      </div>
+      <div class="template-card-body" id="tpl-body-${i}">${escHtml(t.body)}</div>
+      <div class="template-card-actions">
+        <button class="btn-secondary tpl-edit-btn" data-index="${i}" style="font-size:11px;padding:3px 10px">Edit</button>
+        <button class="btn-ghost tpl-delete-btn" data-index="${i}" style="font-size:11px">Delete</button>
+      </div>
+    </div>`).join('');
+
+  list.querySelectorAll('.tpl-edit-btn').forEach(btn => {
+    btn.addEventListener('click', () => openTemplateEditInline(parseInt(btn.dataset.index)));
+  });
+  list.querySelectorAll('.tpl-delete-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.index);
+      if (!confirm(`Delete template "${state.templates[idx].name}"?`)) return;
+      state.templates.splice(idx, 1);
+      save();
+      renderTemplates();
+      toast('Template deleted.', '');
+    });
+  });
+}
+
+function openTemplateEditInline(idx) {
+  const t = state.templates[idx];
+  const list = document.getElementById('template-list');
+  const card = list.querySelector(`[data-tpl-index="${idx}"]`);
+  if (!card) return;
+  card.innerHTML = `
+    <div class="template-card-header">
+      <input class="text-input tpl-edit-name" value="${escHtml(t.name)}" placeholder="Template name" style="flex:1;font-size:13px"/>
+      <select class="select-input tpl-edit-type" style="width:auto;font-size:12px">
+        ${TEMPLATE_TYPES.map(tp => `<option value="${tp}"${tp === t.type ? ' selected' : ''}>${TEMPLATE_TYPE_LABELS[tp]}</option>`).join('')}
+      </select>
+    </div>
+    <textarea class="template-edit-area" rows="6">${escHtml(t.body)}</textarea>
+    <div class="template-card-actions" style="margin-top:6px">
+      <button class="btn-primary tpl-save-edit-btn" data-index="${idx}" style="font-size:12px;padding:5px 14px">Save</button>
+      <button class="btn-ghost tpl-cancel-edit-btn" style="font-size:12px">Cancel</button>
+    </div>`;
+  card.querySelector('.tpl-save-edit-btn').addEventListener('click', () => {
+    const name = card.querySelector('.tpl-edit-name').value.trim();
+    if (!name) {
+      toast('Template name is required.', 'error');
+      return;
+    }
+    state.templates[idx] = {
+      ...state.templates[idx],
+      name,
+      type: card.querySelector('.tpl-edit-type').value,
+      body: card.querySelector('.template-edit-area').value,
+    };
+    save();
+    renderTemplates();
+    toast('Template saved.', 'success');
+  });
+  card.querySelector('.tpl-cancel-edit-btn').addEventListener('click', () => renderTemplates());
+}
+
+function addTemplate() {
+  const nameEl = document.getElementById('template-name');
+  const typeEl = document.getElementById('template-type');
+  const name = (nameEl || {}).value && nameEl.value.trim();
+  if (!name) {
+    toast('Template name is required.', 'error');
+    return;
+  }
+  state.templates = state.templates || [];
+  state.templates.push({
+    id: uid(),
+    name,
+    type: typeEl ? typeEl.value : 'custom',
+    body: '',
+  });
+  save();
+  if (nameEl) nameEl.value = '';
+  renderTemplates();
+  // Auto-open edit for the new template so user can fill in the body
+  openTemplateEditInline(state.templates.length - 1);
+  toast('Template added — fill in the body below.', 'success');
+}
+
+// Called from the job modal to populate the template picker
+function buildTemplateOptions() {
+  const templates = state.templates || [];
+  if (templates.length === 0) return '<option value="">No templates saved</option>';
+  return '<option value="">— Pick a template —</option>' +
+    templates.map((t, i) => `<option value="${i}">[${TEMPLATE_TYPE_LABELS[t.type] || t.type}] ${escHtml(t.name)}</option>`).join('');
 }
