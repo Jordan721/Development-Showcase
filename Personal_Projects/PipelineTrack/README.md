@@ -16,16 +16,15 @@ A personal job search companion built to take the chaos out of hunting for work.
 
 | Feature | What it does |
 |---|---|
+| ◈ Dashboard | At-a-glance stats, streak, skill gaps, pipeline overview, and this week's summary |
 | 📋 Job Board | 8-stage kanban pipeline (including Ghosted) with columns, swimlane, table, and timeline views — search and filter built in |
-| 🎯 Fit Analysis | Scores your skill match against any job description |
-| 🧠 Learning Hub | Course recommendations based on your skill gaps |
-| 📄 Resume Hub | Parse your resume, scan GitHub, and polish your writing |
-| 👤 My Profile | Skills, certifications, resume summary, and saved links |
 | 📅 Calendar & Activity | Month/week/year view of job events, deadlines, follow-up dates, and job fairs — plus a job activity history |
 | 🤝 Network | Track recruiters, hiring managers, and referrals with follow-up reminders |
-| 📊 Analytics | KPIs, application funnel, response rates, skill gaps, and breakdowns |
 | 🎯 Goals | Set weekly/monthly targets and track live progress against your job board data |
-| 💾 Data Backup | Export and import your data across devices |
+| 📊 Analytics | KPIs, application funnel, response rates, skill gaps, and breakdowns |
+| 👤 My Profile | Skills, certifications, resume summary, email templates, and data backup |
+| 📄 Resume Hub | Parse your resume, scan GitHub, and polish your writing |
+| 🧠 Learning Hub | Course recommendations based on your skill gaps |
 
 ---
 
@@ -52,6 +51,7 @@ At-a-glance view of your entire job search.
 
 - Six stat cards in a 2-row grid: **Total Tracked, Applied, In Progress, Offers, Declined, Avg Fit Score**
 - **Streak & nudge bar** — shows your current daily application streak and a contextual motivational message based on your progress
+- **This Week summary** — jobs added, in-progress count, overdue follow-ups, and weekly goal progress at a glance
 - **Top Skill Gaps** — click any gap tag to see which jobs are missing that skill
 - **Top Skills** — matched skills (showing ✓ job count) are clickable to see the jobs they matched against
 - **Pipeline Overview** — click any stage bar to see all jobs in that stage
@@ -73,6 +73,7 @@ A visual pipeline with eight stages: **Saved → Applied → Screening → Inter
 - **Search bar** — filter by role, company, or location in real time
 - **Filter dropdowns** — narrow by stage, work type, and seniority
 - **Table sort** — click any column header or use the sort dropdown to sort by role, company, fit score, or date added
+- **⊜ Compare Jobs** — select 2–3 jobs to compare fit score, salary, stage, skills, and benefits side by side
 
 Each job stores:
 
@@ -89,7 +90,7 @@ The **Add / Edit Job** form is organized into three tabs to keep it compact:
 
 - **Details** — role, company, department, location, URL, salary, date posted, date applied, stage, seniority, job type, and work type
 - **Job Info** — job description (used for fit analysis), benefits, and company notes side by side
-- **Application** — cover letter and personal notes
+- **Application** — cover letter, personal notes, and a template loader to paste any saved email template
 
 **Cover Letter** is stored per job so you can draft or paste a tailored letter directly alongside the listing without leaving the app.
 
@@ -99,56 +100,19 @@ When a job moves to **Screening**, **Interview**, or **Offer**, a milestone moda
 
 | Stage | Fields |
 |---|---|
-| Screening | Date, time, type (Phone / Video / In-person), notes |
-| Interview | Date, time, round (1st–Final), type (Phone / Video / Panel / Technical / In-person), notes |
-| Offer | Salary offered, deadline to respond, notes |
+| Screening | Date, time, type (Phone / Video / In-person), notes, thank-you sent checkbox |
+| Interview | Date, time, round (1st–Final), type (Phone / Video / Panel / Technical / In-person), notes, thank-you sent checkbox |
+| Offer | Salary offered, deadline to respond, notes, thank-you sent checkbox |
 
 Logged milestones appear as a color-coded **Application Timeline** strip inside the job detail modal. Each milestone can be edited at any time via the ✎ button. The modal can be skipped — the stage change always sticks regardless.
 
----
-
-### 🎯 Fit Analysis
-Paste a job description when adding a job and PipelineTrack scores your match automatically.
+The job detail also shows **Fit Analysis** inline:
 
 - **Fit score** — percentage based on your profile skills vs. the job description; also factors in skills mentioned in your certification and license descriptions
-- **Matched skills** — shown in green
-- **Skill gaps** — shown in red
-- Score recalculates whenever you update your profile, skills, or credentials
+- **Matched skills** (green) and **skill gaps** (red) — each tag has a **×** dismiss button to remove false positives; the fit score and highlights update instantly
+- Matched/missing keywords are **highlighted directly in the job description** — green for matched, red for gaps
+- **Linked contacts** — any Network contacts tied to this job appear inline without switching views
 - Quick link to [Cash Compass](https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html) to check your financial runway alongside any offer
-
----
-
-### 👤 My Profile
-Build the foundation for your fit scores and recommendations.
-
-- **Skills** — add skills one at a time or paste a whole block (comma or newline-separated) using the **Bulk** button; skills are grouped and color-coded by level — green for Expert, teal for Intermediate, gray for Beginner; click the level badge on any tag to cycle it in place; filter to a single level with the **All / Expert / Intermediate / Beginner** pill buttons; if you have more than 10, the list collapses with a **Show X more** toggle; **Clear all** removes everything at once with a confirmation prompt; duplicates are automatically skipped
-- **Certifications, Degrees & Licenses** — track credentials by type (Certificate, Associate's, Bachelor's, Master's, PhD, Bootcamp, License); each entry supports an optional description (skills covered, technologies, field of study) which feeds directly into fit scoring; click the **✎** button on any card to edit the name, type, or description inline without removing and re-adding it
-- **Resume Summary** — a short bio for your own reference
-- **Skill Coverage chart** — see how often each of your skills appears across tracked jobs; grouped and color-coded by level with the same **All / Expert / Intermediate / Beginner** filter pills and a **Show X more** collapse when you have many skills
-- **Data Backup** — export all your data to a `.json` file and import it on any other device or browser; the filename and a confirmation message appear under the buttons after each action
-- **Export Jobs as CSV** — download your job list as a spreadsheet-ready `.csv` file (role, company, stage, fit score, matched skills, skill gaps, salary, notes, and more); **jobs only** — skills, contacts, goals, and events are not included in the CSV; use the JSON backup for a full restore
-- **Clear All Jobs** — wipe all tracked jobs in one click (with confirmation) to start fresh
-- **Delete All Data** — wipe everything (jobs, contacts, goals, events, profile, skills, and certifications) in one click (with confirmation)
-- **Your Links** — save your LinkedIn, GitHub, and Portfolio URLs locally for quick access
-
----
-
-### 🧠 Learning Hub
-Course and certification recommendations built from your skill gaps.
-
-- Pulls from Coursera, Google, AWS, LinkedIn Learning, Udemy, and more
-- Each resource includes an estimated time commitment
-- Bookmark picks and filter to see only your saved resources
-
----
-
-### 📄 Resume Hub
-A workspace for getting your resume and portfolio in shape.
-
-- **Resume Parser** — upload a PDF, Word (.docx), or plain text file, or paste directly. Detected skills are cross-referenced with your profile and can be imported in one click.
-- **GitHub / Portfolio Scanner** — paste a GitHub profile or GitHub Pages URL to scan public repos for languages and topics. Import detected skills the same way.
-- **Writing Polish** — flags passive voice, filler words, weak phrases, and vague language with suggestions and a quality score.
-- **Resources & AI Tools** — curated tools for writing, resume building, portfolio hosting, job research, and financial planning.
 
 ---
 
@@ -171,6 +135,19 @@ Track the people in your job search — recruiters, hiring managers, referrals, 
 - **Stat strip** shows total contacts, how many have a follow-up due today or earlier, and a count by type
 - Search by name or company; filter by contact type; sort by name, company, or most recent
 - Overdue follow-ups are highlighted; next follow-up dates appear in the Calendar view
+- Contacts linked to a job appear directly inside that job's detail modal
+
+---
+
+### 🎯 Goals
+Set targets and track your progress live using real job board data.
+
+- Create goals for: **Applications**, **Interviews**, **Offers**, or **Responses**
+- Set a **weekly** or **monthly** period
+- Each goal card shows live current count vs. target with a progress bar and status label (Complete / On Track / Behind / Not Started)
+- **Summary strip** with mini progress rings for all active goals
+- Quick-add **preset buttons** when no goals exist yet
+- Filter the goals view by week or month period
 
 ---
 
@@ -190,15 +167,38 @@ A data-driven overview of your entire job search.
 
 ---
 
-### 🎯 Goals
-Set targets and track your progress live using real job board data.
+### 👤 My Profile
+Build the foundation for your fit scores and recommendations.
 
-- Create goals for: **Applications**, **Interviews**, **Offers**, or **Responses**
-- Set a **weekly** or **monthly** period
-- Each goal card shows live current count vs. target with a progress bar and status label (Complete / On Track / Behind / Not Started)
-- **Summary strip** with mini progress rings for all active goals
-- Quick-add **preset buttons** when no goals exist yet
-- Filter the goals view by week or month period
+- **Skills** — add skills one at a time or paste a whole block (comma or newline-separated) using the **Bulk** button; skills are grouped and color-coded by level — green for Expert, teal for Intermediate, gray for Beginner; click the level badge on any tag to cycle it in place; filter to a single level with the **All / Expert / Intermediate / Beginner** pill buttons; if you have more than 10, the list collapses with a **Show X more** toggle; **Clear all** removes everything at once with a confirmation prompt; duplicates are automatically skipped
+- **Certifications, Degrees & Licenses** — track credentials by type (Certificate, Associate's, Bachelor's, Master's, PhD, Bootcamp, License); each entry supports an optional description (skills covered, technologies, field of study) which feeds directly into fit scoring; click the **✎** button on any card to edit the name, type, or description inline without removing and re-adding it
+- **Resume Summary** — a short bio for your own reference
+- **Skill Coverage chart** — see how often each of your skills appears across tracked jobs; grouped and color-coded by level with the same **All / Expert / Intermediate / Beginner** filter pills and a **Show X more** collapse when you have many skills
+- **Email Templates** — save reusable thank-you, follow-up, withdrawal, and custom email templates; load any template directly into a job's cover letter from the Application tab
+- **Data Backup** — export all your data to a `.json` file and import it on any other device or browser; the filename and a confirmation message appear under the buttons after each action
+- **Export Jobs as CSV** — download your job list as a spreadsheet-ready `.csv` file (role, company, stage, fit score, matched skills, skill gaps, salary, notes, and more); **jobs only** — skills, contacts, goals, and events are not included in the CSV; use the JSON backup for a full restore
+- **Clear All Jobs** — wipe all tracked jobs in one click (with confirmation) to start fresh
+- **Delete All Data** — wipe everything (jobs, contacts, goals, events, profile, skills, and certifications) in one click (with confirmation)
+- **Your Links** — save your LinkedIn, GitHub, and Portfolio URLs locally for quick access
+
+---
+
+### 📄 Resume Hub
+A workspace for getting your resume and portfolio in shape.
+
+- **Resume Parser** — upload a PDF, Word (.docx), or plain text file, or paste directly. Detected skills are cross-referenced with your profile and can be imported in one click.
+- **GitHub / Portfolio Scanner** — paste a GitHub profile or GitHub Pages URL to scan public repos for languages and topics. Import detected skills the same way.
+- **Writing Polish** — flags passive voice, filler words, weak phrases, and vague language with suggestions and a quality score.
+- **Resources & AI Tools** — curated tools for writing, resume building, portfolio hosting, job research, and financial planning.
+
+---
+
+### 🧠 Learning Hub
+Course and certification recommendations built from your skill gaps.
+
+- Pulls from Coursera, Google, AWS, LinkedIn Learning, Udemy, and more
+- Each resource includes an estimated time commitment
+- Bookmark picks and filter to see only your saved resources
 
 ---
 
