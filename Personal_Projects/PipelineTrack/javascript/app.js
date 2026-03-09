@@ -118,6 +118,18 @@ function wireEvents() {
     toast('All jobs cleared.', '');
     renderView(state.activeView);
   });
+  document.getElementById('clear-all-data-btn').addEventListener('click', () => {
+    if (!confirm('Delete ALL data — jobs, contacts, goals, events, profile, and skills? This cannot be undone.')) return;
+    state.jobs = [];
+    state.contacts = [];
+    state.goals = [];
+    state.events = [];
+    state.savedCourses = [];
+    state.profile = { skills: [], certifications: [], summary: '', links: { linkedin: '', github: '', portfolio: '' } };
+    save();
+    toast('All data deleted.', '');
+    renderView(state.activeView);
+  });
   document.getElementById('import-file-input').addEventListener('change', e => {
     if (e.target.files[0]) {
       importData(e.target.files[0]);

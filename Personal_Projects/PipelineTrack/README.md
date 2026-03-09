@@ -128,6 +128,7 @@ Build the foundation for your fit scores and recommendations.
 - **Data Backup** — export all your data to a `.json` file and import it on any other device or browser; the filename and a confirmation message appear under the buttons after each action
 - **Export Jobs as CSV** — download your full job list as a spreadsheet-ready `.csv` file (role, company, stage, fit score, matched skills, skill gaps, salary, notes, and more); the JSON backup and CSV export coexist so you can use both
 - **Clear All Jobs** — wipe all tracked jobs in one click (with confirmation) to start fresh
+- **Delete All Data** — wipe everything (jobs, contacts, goals, events, profile, skills, and certifications) in one click (with confirmation)
 - **Your Links** — save your LinkedIn, GitHub, and Portfolio URLs locally for quick access
 
 ---
