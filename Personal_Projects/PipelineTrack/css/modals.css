@@ -248,6 +248,22 @@
   background: rgba(0, 212, 170, 0.12);
 }
 
+.link-copy-btn {
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--text-muted);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.link-copy-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 @media (max-width: 800px) {
   .links-grid {
     grid-template-columns: 1fr;

@@ -17,13 +17,23 @@ function renderLinks() {
   ['linkedin', 'github', 'portfolio'].forEach(key => {
     const input = document.getElementById('link-' + key);
     const openBtn = document.getElementById('link-' + key + '-open');
+    const copyBtn = document.getElementById('link-' + key + '-copy');
     if (!input) return;
     input.value = links[key] || '';
     if (links[key]) {
       openBtn.href = links[key];
       openBtn.style.display = '';
+      copyBtn.style.display = '';
+      copyBtn.onclick = () => {
+        navigator.clipboard.writeText(links[key]).then(() => {
+          const orig = copyBtn.textContent;
+          copyBtn.textContent = '✓';
+          setTimeout(() => { copyBtn.textContent = orig; }, 1500);
+        });
+      };
     } else {
       openBtn.style.display = 'none';
+      copyBtn.style.display = 'none';
     }
   });
 }
