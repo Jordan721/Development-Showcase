@@ -84,7 +84,7 @@ Each job stores:
 | Work Type | Remote, On-site, Hybrid |
 | Other | Department, Salary, Date Posted, Date Applied, Benefits, Company Notes, Notes, Job URL, Cover Letter |
 
-Seniority, job type, and work type each appear as color-coded badges in the detail view. Benefits are automatically parsed into labeled chips — health insurance, 401k, PTO, equity, and more — rather than showing raw pasted text. **Company Notes** is a dedicated field for information about the company itself (culture, size, funding, tech stack) — separate from the job description and your personal notes.
+Seniority, job type, and work type each appear as color-coded badges in the detail view. Benefits are automatically parsed into labeled chips — health insurance, 401k, PTO, equity, and more — rather than showing raw pasted text. **Company Notes** is a dedicated field for information about the company itself (culture, size, funding, tech stack) — separate from the job description and your personal notes. **Salary** is automatically formatted — type `80k`, `10k - 100k`, or `150000` and it displays as `$80,000`, `$10,000 – $100,000`, or `$150,000`.
 
 The **Add / Edit Job** form is organized into three tabs to keep it compact:
 

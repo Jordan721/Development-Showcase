@@ -58,6 +58,40 @@ function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
 
+// Converts salary input like "80k", "10k-100k", "150000" → "$80,000", "$10,000 – $100,000"
+function formatSalary(raw) {
+  if (!raw || typeof raw !== 'string') return raw;
+
+  function parseAmt(s) {
+    s = s.trim().replace(/^\$/, '').replace(/,/g, '');
+    const kMatch = s.match(/^([\d.]+)\s*[kK]$/);
+    if (kMatch) return Math.round(parseFloat(kMatch[1]) * 1000);
+    const n = parseFloat(s);
+    return (!isNaN(n) && n > 0) ? Math.round(n) : null;
+  }
+
+  function fmt(n) { return '$' + n.toLocaleString('en-US'); }
+
+  // Range: two monetary values separated by -, –, or "to"
+  const rangeMatch = raw.match(/^(\$?[\d,]+(?:\.\d+)?\s*[kK]?)\s*(?:[-–—]|to)\s*(\$?[\d,]+(?:\.\d+)?\s*[kK]?)([\s\S]*)$/i);
+  if (rangeMatch) {
+    const a = parseAmt(rangeMatch[1]);
+    const b = parseAmt(rangeMatch[2]);
+    const suffix = rangeMatch[3].trim();
+    if (a && b) return fmt(a) + ' – ' + fmt(b) + (suffix ? ' ' + suffix : '');
+  }
+
+  // Single value with optional suffix (e.g. "80k/yr", "95000 per year")
+  const singleMatch = raw.match(/^(\$?[\d,]+(?:\.\d+)?\s*[kK]?)([\s\S]*)$/i);
+  if (singleMatch) {
+    const n = parseAmt(singleMatch[1]);
+    const suffix = singleMatch[2].trim();
+    if (n) return fmt(n) + (suffix ? ' ' + suffix : '');
+  }
+
+  return raw;
+}
+
 function formatDate(iso) {
   const d = new Date(iso);
   return d.toLocaleDateString('en-US', {

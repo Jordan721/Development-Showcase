@@ -337,7 +337,7 @@ function renderBoardTable(jobs) {
             <select class="table-stage-select stage-select-${j.stage}" data-job-id="${j.id}">${stageOptions(j.stage)}</select>
           </td>
           <td class="table-td"><span class="table-tag">${escHtml(j.workType || '—')}</span></td>
-          <td class="table-td table-muted">${escHtml(j.salary || '—')}</td>
+          <td class="table-td table-muted">${escHtml(formatSalary(j.salary) || '—')}</td>
           <td class="table-td"><span class="fit-badge ${fitCls}">${fitLabel}</span></td>
           <td class="table-td table-muted">${formatDate(j.dateAdded)}</td>
           <td class="table-td table-muted${j.deadline && new Date(j.deadline+'T00:00:00') <= new Date() ? ' table-overdue' : ''}">${j.deadline ? formatDate(j.deadline) : '—'}</td>
@@ -635,7 +635,7 @@ function openJobDetail(id) {
   // Salary
   const salaryRow = document.getElementById('detail-salary-row');
   if (job.salary) {
-    document.getElementById('detail-salary').textContent = job.salary;
+    document.getElementById('detail-salary').textContent = formatSalary(job.salary);
     salaryRow.style.display = '';
   } else {
     salaryRow.style.display = 'none';
@@ -939,7 +939,7 @@ function saveJob() {
     department: document.getElementById('job-department').value.trim(),
     location: document.getElementById('job-location').value.trim(),
     url: document.getElementById('job-url').value.trim(),
-    salary: document.getElementById('job-salary').value.trim(),
+    salary: formatSalary(document.getElementById('job-salary').value.trim()),
     datePosted: document.getElementById('job-date-posted').value,
     dateApplied: document.getElementById('job-date-applied').value,
     seniority: document.getElementById('job-seniority').value,
