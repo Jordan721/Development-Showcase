@@ -1,23 +1,66 @@
 // === Data Structure ===
 const categories = {
-    income: [
-        { name: 'Salary', icon: 'fa-briefcase' },
-        { name: 'Freelance', icon: 'fa-laptop-code' },
-        { name: 'Investment', icon: 'fa-chart-line' },
-        { name: 'Gift', icon: 'fa-gift' },
-        { name: 'Other Income', icon: 'fa-money-bill-wave' }
+    income: [{
+            name: 'Salary',
+            icon: 'fa-briefcase'
+        },
+        {
+            name: 'Freelance',
+            icon: 'fa-laptop-code'
+        },
+        {
+            name: 'Investment',
+            icon: 'fa-chart-line'
+        },
+        {
+            name: 'Gift',
+            icon: 'fa-gift'
+        },
+        {
+            name: 'Other Income',
+            icon: 'fa-money-bill-wave'
+        }
     ],
-    expense: [
-        { name: 'Housing', icon: 'fa-home' },
-        { name: 'Transportation', icon: 'fa-car' },
-        { name: 'Food & Dining', icon: 'fa-utensils' },
-        { name: 'Groceries', icon: 'fa-shopping-cart' },
-        { name: 'Entertainment', icon: 'fa-film' },
-        { name: 'Healthcare', icon: 'fa-heartbeat' },
-        { name: 'Utilities', icon: 'fa-bolt' },
-        { name: 'Shopping', icon: 'fa-shopping-bag' },
-        { name: 'Education', icon: 'fa-graduation-cap' },
-        { name: 'Other Expense', icon: 'fa-receipt' }
+    expense: [{
+            name: 'Housing',
+            icon: 'fa-home'
+        },
+        {
+            name: 'Transportation',
+            icon: 'fa-car'
+        },
+        {
+            name: 'Food & Dining',
+            icon: 'fa-utensils'
+        },
+        {
+            name: 'Groceries',
+            icon: 'fa-shopping-cart'
+        },
+        {
+            name: 'Entertainment',
+            icon: 'fa-film'
+        },
+        {
+            name: 'Healthcare',
+            icon: 'fa-heartbeat'
+        },
+        {
+            name: 'Utilities',
+            icon: 'fa-bolt'
+        },
+        {
+            name: 'Shopping',
+            icon: 'fa-shopping-bag'
+        },
+        {
+            name: 'Education',
+            icon: 'fa-graduation-cap'
+        },
+        {
+            name: 'Other Expense',
+            icon: 'fa-receipt'
+        }
     ]
 };
 
@@ -230,7 +273,7 @@ function calculateTotals() {
     const previousMonthTransactions = transactions.filter(t => {
         const date = new Date(t.date);
         return date.getMonth() === lastMonth.getMonth() &&
-               date.getFullYear() === lastMonth.getFullYear();
+            date.getFullYear() === lastMonth.getFullYear();
     });
 
     const prevIncome = previousMonthTransactions
@@ -383,8 +426,8 @@ function createExpenseChart() {
         .filter(t => {
             const date = new Date(t.date);
             return t.type === 'expense' &&
-                   date.getMonth() === currentMonth &&
-                   date.getFullYear() === currentYear;
+                date.getMonth() === currentMonth &&
+                date.getFullYear() === currentYear;
         })
         .forEach(t => {
             expensesByCategory[t.category] = (expensesByCategory[t.category] || 0) + t.amount;
@@ -433,12 +476,17 @@ function createExpenseChart() {
                     borderWidth: 1,
                     padding: 14,
                     cornerRadius: 10,
-                    titleFont: { size: 14, weight: '600' },
-                    bodyFont: { size: 13 },
+                    titleFont: {
+                        size: 14,
+                        weight: '600'
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
                     displayColors: true,
                     boxPadding: 6,
                     callbacks: {
-                        label: function(context) {
+                        label: function (context) {
                             const value = formatCurrency(context.parsed);
                             const total = context.dataset.data.reduce((a, b) => a + b, 0);
                             const percentage = ((context.parsed / total) * 100).toFixed(1);
@@ -498,8 +546,7 @@ function createTrendChart() {
         type: 'line',
         data: {
             labels: monthsData.labels,
-            datasets: [
-                {
+            datasets: [{
                     label: 'Income',
                     data: monthsData.income,
                     borderColor: '#10b981',
@@ -548,7 +595,10 @@ function createTrendChart() {
                     position: 'top',
                     labels: {
                         color: textColor,
-                        font: { size: 13, weight: '600' },
+                        font: {
+                            size: 13,
+                            weight: '600'
+                        },
                         padding: 20,
                         usePointStyle: true,
                         pointStyle: 'circle'
@@ -562,11 +612,16 @@ function createTrendChart() {
                     borderWidth: 1,
                     padding: 14,
                     cornerRadius: 10,
-                    titleFont: { size: 14, weight: '600' },
-                    bodyFont: { size: 13 },
+                    titleFont: {
+                        size: 14,
+                        weight: '600'
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
                     boxPadding: 6,
                     callbacks: {
-                        label: function(context) {
+                        label: function (context) {
                             return ` ${context.dataset.label}: ${formatCurrency(context.parsed.y)}`;
                         }
                     }
@@ -580,7 +635,7 @@ function createTrendChart() {
                     },
                     ticks: {
                         color: textColor,
-                        callback: function(value) {
+                        callback: function (value) {
                             return '$' + value.toLocaleString();
                         }
                     }
@@ -607,7 +662,9 @@ function getLast6MonthsData() {
 
     for (let i = 5; i >= 0; i--) {
         const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        const month = date.toLocaleString('default', { month: 'short' });
+        const month = date.toLocaleString('default', {
+            month: 'short'
+        });
         const year = date.getFullYear();
 
         months.push(`${month} ${year}`);
@@ -615,7 +672,7 @@ function getLast6MonthsData() {
         const monthTransactions = transactions.filter(t => {
             const tDate = new Date(t.date);
             return tDate.getMonth() === date.getMonth() &&
-                   tDate.getFullYear() === date.getFullYear();
+                tDate.getFullYear() === date.getFullYear();
         });
 
         const monthIncome = monthTransactions
@@ -630,7 +687,11 @@ function getLast6MonthsData() {
         expenses.push(monthExpenses);
     }
 
-    return { labels: months, income, expenses };
+    return {
+        labels: months,
+        income,
+        expenses
+    };
 }
 
 // === Budget Management ===
@@ -701,8 +762,8 @@ function renderBudgets() {
         .filter(t => {
             const date = new Date(t.date);
             return t.type === 'expense' &&
-                   date.getMonth() === currentMonth &&
-                   date.getFullYear() === currentYear;
+                date.getMonth() === currentMonth &&
+                date.getFullYear() === currentYear;
         })
         .forEach(t => {
             expensesByCategory[t.category] = (expensesByCategory[t.category] || 0) + t.amount;
@@ -780,7 +841,9 @@ function exportToJSON() {
 }
 
 function downloadFile(content, filename, contentType) {
-    const blob = new Blob([content], { type: contentType });
+    const blob = new Blob([content], {
+        type: contentType
+    });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -831,14 +894,69 @@ function showNotification(message, type = 'info') {
 
 // === Sample Data (for demo purposes) ===
 function loadSampleData() {
-    const sampleTransactions = [
-        { id: Date.now() - 1000, type: 'income', category: 'Salary', amount: 5000, date: '2026-01-01', description: 'Monthly Salary', timestamp: new Date().toISOString() },
-        { id: Date.now() - 2000, type: 'expense', category: 'Housing', amount: 1500, date: '2026-01-02', description: 'Rent Payment', timestamp: new Date().toISOString() },
-        { id: Date.now() - 3000, type: 'expense', category: 'Groceries', amount: 250, date: '2026-01-05', description: 'Weekly Groceries', timestamp: new Date().toISOString() },
-        { id: Date.now() - 4000, type: 'expense', category: 'Transportation', amount: 80, date: '2026-01-07', description: 'Gas', timestamp: new Date().toISOString() },
-        { id: Date.now() - 5000, type: 'income', category: 'Freelance', amount: 800, date: '2026-01-08', description: 'Web Design Project', timestamp: new Date().toISOString() },
-        { id: Date.now() - 6000, type: 'expense', category: 'Food & Dining', amount: 120, date: '2026-01-09', description: 'Restaurant Dinner', timestamp: new Date().toISOString() },
-        { id: Date.now() - 7000, type: 'expense', category: 'Entertainment', amount: 60, date: '2026-01-10', description: 'Movie Tickets', timestamp: new Date().toISOString() }
+    const sampleTransactions = [{
+            id: Date.now() - 1000,
+            type: 'income',
+            category: 'Salary',
+            amount: 5000,
+            date: '2026-01-01',
+            description: 'Monthly Salary',
+            timestamp: new Date().toISOString()
+        },
+        {
+            id: Date.now() - 2000,
+            type: 'expense',
+            category: 'Housing',
+            amount: 1500,
+            date: '2026-01-02',
+            description: 'Rent Payment',
+            timestamp: new Date().toISOString()
+        },
+        {
+            id: Date.now() - 3000,
+            type: 'expense',
+            category: 'Groceries',
+            amount: 250,
+            date: '2026-01-05',
+            description: 'Weekly Groceries',
+            timestamp: new Date().toISOString()
+        },
+        {
+            id: Date.now() - 4000,
+            type: 'expense',
+            category: 'Transportation',
+            amount: 80,
+            date: '2026-01-07',
+            description: 'Gas',
+            timestamp: new Date().toISOString()
+        },
+        {
+            id: Date.now() - 5000,
+            type: 'income',
+            category: 'Freelance',
+            amount: 800,
+            date: '2026-01-08',
+            description: 'Web Design Project',
+            timestamp: new Date().toISOString()
+        },
+        {
+            id: Date.now() - 6000,
+            type: 'expense',
+            category: 'Food & Dining',
+            amount: 120,
+            date: '2026-01-09',
+            description: 'Restaurant Dinner',
+            timestamp: new Date().toISOString()
+        },
+        {
+            id: Date.now() - 7000,
+            type: 'expense',
+            category: 'Entertainment',
+            amount: 60,
+            date: '2026-01-10',
+            description: 'Movie Tickets',
+            timestamp: new Date().toISOString()
+        }
     ];
 
     transactions = sampleTransactions;

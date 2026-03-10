@@ -170,6 +170,18 @@ const categories = {
 ### 📅 Modify Budget Periods
 Currently set to monthly. Edit date filtering logic in `script.js` to change to weekly, yearly, etc.
 
+## 🔗 Pairs With PipelineTrack
+
+Cash Compass is designed to complement [PipelineTrack](https://jordan721.github.io/Development-Showcase/Personal_Projects/PipelineTrack/index.html), a job search tracker built alongside it.
+
+While you're job hunting:
+- Use **PipelineTrack** to track applications, score your skill fit against job descriptions, and manage interviews and offers
+- Use **Cash Compass** to track your financial runway — know how long you can sustain your search, budget for job-search expenses (certifications, interview travel), and evaluate salary offers against your actual cost of living
+
+When an offer comes in, PipelineTrack links directly to Cash Compass so you can cross-reference the offered salary with your real monthly numbers.
+
+---
+
 ## 🔮 Future Enhancements
 
 Potential features to add:
@@ -201,7 +213,9 @@ If you encounter any bugs or have suggestions for improvements:
 
 ## 📜 License
 
-Free to use for personal and educational purposes.
+© 2025 Jordan. All Rights Reserved.
+
+This project is publicly viewable for portfolio purposes only. You may not copy, use, modify, or distribute any part of this code without explicit written permission from the author. To request permission, open an issue on GitHub.
 
 ## 👨‍💻 Credits
 
