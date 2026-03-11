@@ -48,8 +48,14 @@ function computeStreak(jobs) {
     d.setHours(0, 0, 0, 0);
     return d.getTime();
   }));
-  let streak = 0;
+  // If nothing added today, allow starting from yesterday so importing
+  // a backup doesn't wipe a streak before today's job is added
   const day = new Date(today);
+  if (!dates.has(day.getTime())) {
+    day.setDate(day.getDate() - 1);
+    if (!dates.has(day.getTime())) return 0;
+  }
+  let streak = 0;
   while (dates.has(day.getTime())) {
     streak++;
     day.setDate(day.getDate() - 1);
