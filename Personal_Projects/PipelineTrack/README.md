@@ -317,7 +317,7 @@ When opening a job that has contacts linked to it (via Network), those contacts 
 
 ## 📄 License
 
-© 2025 Jordan. All Rights Reserved.
+© 2026 Jordan. All Rights Reserved.
 
 This project is publicly viewable for portfolio purposes only. You may not copy, use, modify, or distribute any part of this code without explicit written permission from the author.
 
