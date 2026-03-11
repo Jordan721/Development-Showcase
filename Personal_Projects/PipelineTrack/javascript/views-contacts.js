@@ -50,8 +50,13 @@ function saveContact() {
     notes: document.getElementById('contact-notes').value.trim(),
   };
   const idx = state.contacts.findIndex(x => x.id === id);
-  if (idx >= 0) state.contacts[idx] = contact;
-  else state.contacts.push(contact);
+  if (idx >= 0) {
+    contact.dateAdded = state.contacts[idx].dateAdded || new Date().toISOString().slice(0, 10);
+    state.contacts[idx] = contact;
+  } else {
+    contact.dateAdded = new Date().toISOString().slice(0, 10);
+    state.contacts.push(contact);
+  }
   save();
   closeModal('modal-contact');
   toast(idx >= 0 ? 'Contact updated.' : 'Contact added.', 'success');

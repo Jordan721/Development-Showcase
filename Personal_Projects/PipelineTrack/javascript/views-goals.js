@@ -10,6 +10,9 @@ const GOAL_TYPE_LABELS = {
   interviews: 'Interviews Reached',
   offers: 'Offers Received',
   responses: 'Responses Received',
+  screenings: 'Screenings Reached',
+  saved: 'Jobs Researched',
+  networking: 'Contacts Added',
 };
 
 function filterJobsByGoalPeriod(jobs, period) {
@@ -35,6 +38,25 @@ function computeGoalCurrent(goal) {
   if (goal.type === 'interviews') return j.filter(x => ['interview', 'offer'].includes(x.stage)).length;
   if (goal.type === 'offers') return j.filter(x => x.stage === 'offer').length;
   if (goal.type === 'responses') return j.filter(x => ['screening', 'interview', 'offer'].includes(x.stage)).length;
+  if (goal.type === 'screenings') return j.filter(x => ['screening', 'interview', 'offer'].includes(x.stage)).length;
+  if (goal.type === 'saved') return j.filter(x => x.stage === 'saved').length;
+  if (goal.type === 'networking') {
+    const now = new Date();
+    const contacts = state.contacts || [];
+    if (goal.period === 'week') {
+      const start = new Date(now);
+      start.setDate(now.getDate() - now.getDay());
+      start.setHours(0, 0, 0, 0);
+      return contacts.filter(c => c.dateAdded && new Date(c.dateAdded) >= start).length;
+    }
+    if (goal.period === 'month') {
+      return contacts.filter(c => {
+        if (!c.dateAdded) return false;
+        const d = new Date(c.dateAdded);
+        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+      }).length;
+    }
+  }
   return 0;
 }
 
@@ -144,31 +166,16 @@ function renderGoalsSummary(goals) {
   }).join('');
 }
 
-const GOAL_PRESETS = [{
-    period: 'week',
-    type: 'applications',
-    target: 10
-  },
-  {
-    period: 'week',
-    type: 'interviews',
-    target: 2
-  },
-  {
-    period: 'month',
-    type: 'applications',
-    target: 30
-  },
-  {
-    period: 'month',
-    type: 'responses',
-    target: 5
-  },
-  {
-    period: 'month',
-    type: 'offers',
-    target: 1
-  },
+const GOAL_PRESETS = [
+  { period: 'week',  type: 'applications', target: 10 },
+  { period: 'week',  type: 'saved',        target: 15 },
+  { period: 'week',  type: 'networking',   target: 3  },
+  { period: 'week',  type: 'interviews',   target: 2  },
+  { period: 'month', type: 'applications', target: 30 },
+  { period: 'month', type: 'screenings',   target: 5  },
+  { period: 'month', type: 'responses',    target: 5  },
+  { period: 'month', type: 'networking',   target: 10 },
+  { period: 'month', type: 'offers',       target: 1  },
 ];
 
 function renderGoalPresets() {

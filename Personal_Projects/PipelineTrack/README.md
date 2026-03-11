@@ -142,7 +142,7 @@ Track the people in your job search — recruiters, hiring managers, referrals, 
 ### 🎯 Goals
 Set targets and track your progress live using real job board data.
 
-- Create goals for: **Applications**, **Interviews**, **Offers**, or **Responses**
+- Create goals for: **Applications Sent**, **Screenings Reached**, **Interviews Reached**, **Offers Received**, **Responses Received**, **Jobs Researched** (Saved stage), or **Contacts Added**
 - Set a **weekly** or **monthly** period
 - Each goal card shows live current count vs. target with a progress bar and status label (Complete / On Track / Behind / Not Started)
 - **Summary strip** with mini progress rings for all active goals
