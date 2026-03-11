@@ -336,11 +336,49 @@ function toggleTheme() {
   setTheme(next);
 }
 
+// Cleans up pasted text: normalises line endings, strips trailing spaces
+// per line, and collapses more than 2 consecutive blank lines to 2.
+function cleanPastedText(text) {
+  return text
+    .replace(/\r\n/g, '\n')
+    .replace(/\r/g, '\n')
+    .split('\n')
+    .map(line => line.trimEnd())
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+function wirePasteCleaners() {
+  const ids = [
+    'job-description', 'job-cover-letter', 'job-notes',
+    'job-benefits', 'job-company-notes',
+    'detail-notes', 'detail-company-notes',
+    'resume-text', 'polish-text',
+    'contact-notes', 'event-notes', 'profile-summary',
+  ];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('paste', e => {
+      e.preventDefault();
+      const raw = (e.clipboardData || window.clipboardData).getData('text');
+      const cleaned = cleanPastedText(raw);
+      const start = el.selectionStart;
+      const end = el.selectionEnd;
+      el.value = el.value.slice(0, start) + cleaned + el.value.slice(end);
+      el.selectionStart = el.selectionEnd = start + cleaned.length;
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  });
+}
+
 function init() {
   initTheme();
   load();
   reanalyzeAllJobs();
   wireEvents();
+  wirePasteCleaners();
   navigate('dashboard');
 }
 
