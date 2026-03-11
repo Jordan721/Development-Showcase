@@ -147,6 +147,31 @@
    NEW FEATURES
    ══════════════════════════════════════════════════════════ */
 
+/* ── Benefits clickable chips & view-all button ─────────── */
+.benefit-chip--clickable {
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.benefit-chip--clickable:hover {
+  opacity: 0.75;
+}
+.benefit-view-all {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 11px;
+  padding: 3px 10px;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: color 0.15s, border-color 0.15s;
+}
+.benefit-view-all:hover {
+  color: var(--text);
+  border-color: var(--text-muted);
+}
+
 /* ── Skill badge dismiss button ─────────────────────────── */
 .skill-badge-dismiss {
   background: none;

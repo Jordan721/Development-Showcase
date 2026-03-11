@@ -284,58 +284,42 @@ function highlightJobDescription(text, matched, missing) {
 }
 
 function parseBenefits(text) {
-  // Keyword map: pattern → short label
+  // Scan the full text for each pattern — works with bullet lists, paragraphs, or plain sentences.
+  // Order matters: more specific patterns (e.g. Signing Bonus, Unlimited PTO) must come before
+  // broader ones (Bonus, PTO) so they aren't swallowed by a generic match.
   const MAP = [
-    [/health\s*insurance|medical/i, 'Health Insurance'],
-    [/dental/i, 'Dental'],
-    [/vision/i, 'Vision'],
-    [/401k|retirement|pension/i, '401k / Retirement'],
-    [/equity|stock|rsu|espp/i, 'Equity'],
-    [/bonus/i, 'Bonus'],
-    [/unlimited\s*pto|unlimited\s*vacation/i, 'Unlimited PTO'],
-    [/pto|paid\s*time\s*off|vacation/i, 'PTO'],
-    [/sick\s*(days?|leave)/i, 'Sick Leave'],
-    [/parental\s*leave|maternity|paternity/i, 'Parental Leave'],
-    [/remote|work\s*from\s*home|wfh/i, 'Remote Work'],
-    [/flexible\s*(hours?|schedule)/i, 'Flexible Hours'],
-    [/life\s*insurance/i, 'Life Insurance'],
-    [/disability/i, 'Disability Insurance'],
-    [/hsa|fsa/i, 'HSA / FSA'],
-    [/tuition|education|learning\s*stipend/i, 'Education Stipend'],
-    [/professional\s*development/i, 'Prof. Development'],
-    [/gym|fitness|wellness/i, 'Wellness / Gym'],
-    [/commuter|transit|parking/i, 'Commuter Benefits'],
-    [/relocation/i, 'Relocation'],
-    [/signing\s*bonus/i, 'Signing Bonus'],
-    [/snacks?|lunch|meals?|food/i, 'Free Food'],
-    [/home\s*office\s*stipend|equipment/i, 'Home Office Stipend'],
-    [/mental\s*health/i, 'Mental Health'],
-    [/childcare|dependent\s*care/i, 'Childcare'],
-    [/volunteer|community/i, 'Volunteer Time'],
+    [/signing\s*bonus/i,                                          'Signing Bonus'],
+    [/unlimited\s*pto|unlimited\s*paid\s*time\s*off|unlimited\s*vacation/i, 'Unlimited PTO'],
+    [/pto\b|paid\s*time\s*off|paid\s*vacation/i,                 'PTO'],
+    [/performance\s*bonus|annual\s*bonus|quarterly\s*bonus/i,    'Performance Bonus'],
+    [/\bbonus\b/i,                                               'Bonus'],
+    [/health\s*insurance|medical\s*(insurance|coverage|benefits)/i, 'Health Insurance'],
+    [/dental\s*(insurance|coverage|plan|care)/i,                 'Dental'],
+    [/vision\s*(insurance|coverage|plan|care)/i,                 'Vision'],
+    [/401\s*k|403\s*b|\bretirement\s*(plan|savings|benefits)\b|\bpension\b/i, '401k / Retirement'],
+    [/equity|stock\s*(options?|grants?|awards?)|rsu|espp/i,      'Equity'],
+    [/sick\s*(days?|leave|time)/i,                               'Sick Leave'],
+    [/parental\s*(leave|benefits)|maternity\s*leave|paternity\s*leave/i, 'Parental Leave'],
+    [/work\s*from\s*home|remote\s*work|fully\s*remote|wfh/i,    'Remote Work'],
+    [/flexible\s*(hours?|schedule|work(ing)?\s*hours?)/i,        'Flexible Hours'],
+    [/life\s*insurance/i,                                        'Life Insurance'],
+    [/disability\s*(insurance|coverage|benefits)/i,              'Disability Insurance'],
+    [/\bhsa\b|\bfsa\b|health\s*savings\s*account|flexible\s*spending/i, 'HSA / FSA'],
+    [/tuition\s*(reimbursement|assistance|benefit)|education\s*(reimbursement|stipend|assistance)|learning\s*stipend/i, 'Education Stipend'],
+    [/professional\s*development|career\s*development|training\s*(budget|allowance)/i, 'Prof. Development'],
+    [/gym\s*(membership|subsidy|reimbursement)|fitness\s*(benefit|allowance|stipend)|wellness\s*(benefit|program|stipend)/i, 'Wellness / Gym'],
+    [/commuter\s*(benefits?|allowance)|transit\s*(benefits?|pass|allowance)|\bparking\b/i, 'Commuter Benefits'],
+    [/relocation\s*(assistance|package|reimbursement)/i,         'Relocation'],
+    [/free\s*(lunch|meals?|snacks?|food|breakfast)|catered\s*(lunch|meals?)|meal\s*(allowance|stipend)/i, 'Free Food'],
+    [/home\s*office\s*(stipend|allowance|setup|reimbursement)|equipment\s*(stipend|allowance|provided)/i, 'Home Office Stipend'],
+    [/mental\s*health\s*(benefits?|support|coverage|days?)/i,    'Mental Health'],
+    [/childcare|child\s*care|dependent\s*care/i,                 'Childcare'],
+    [/volunteer\s*(time|days?|hours?|opportunities)/i,           'Volunteer Time'],
   ];
 
-  // Split on common delimiters
-  const parts = text.split(/[,;\n•\-\*]+/).map(s => s.trim()).filter(Boolean);
-
-  const seen = new Set();
   const results = [];
-
-  for (const part of parts) {
-    let matched = false;
-    for (const [pattern, label] of MAP) {
-      if (pattern.test(part) && !seen.has(label)) {
-        seen.add(label);
-        results.push(label);
-        matched = true;
-        break;
-      }
-    }
-    // If nothing matched but it's short enough, show it as-is
-    if (!matched && part.length <= 40 && !seen.has(part)) {
-      seen.add(part);
-      results.push(part);
-    }
+  for (const [pattern, label] of MAP) {
+    if (pattern.test(text)) results.push(label);
   }
-
   return results;
 }

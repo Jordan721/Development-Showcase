@@ -664,11 +664,21 @@ function openJobDetail(id) {
   if (job.benefits) {
     const chips = parseBenefits(job.benefits);
     const el = document.getElementById('detail-benefits');
+    const openBenefitsModal = () => {
+      document.getElementById('benefits-modal-chips').innerHTML =
+        chips.length ? chips.map(b => `<span class="benefit-chip">${escHtml(b)}</span>`).join('') : '';
+      document.getElementById('benefits-modal-raw').textContent = job.benefits;
+      openModal('modal-benefits');
+    };
     if (chips.length) {
-      el.innerHTML = chips.map(b => `<span class="benefit-chip">${escHtml(b)}</span>`).join('');
+      el.innerHTML = chips.map(b => `<span class="benefit-chip benefit-chip--clickable" title="Click to see full benefits">${escHtml(b)}</span>`).join('') +
+        `<button class="benefit-view-all">View all ↗</button>`;
     } else {
-      el.textContent = job.benefits;
+      el.innerHTML = `<button class="benefit-view-all">View benefits ↗</button>`;
     }
+    el.querySelectorAll('.benefit-chip--clickable, .benefit-view-all').forEach(btn => {
+      btn.addEventListener('click', openBenefitsModal);
+    });
     benefitsRow.style.display = '';
   } else {
     benefitsRow.style.display = 'none';
