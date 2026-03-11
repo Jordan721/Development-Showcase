@@ -79,7 +79,7 @@ Each job stores:
 
 | Field | Options |
 |---|---|
-| Seniority | Internship, Junior, Mid-Level, Senior, Lead, Staff |
+| Seniority | Internship, Entry Level, Junior, Mid-Level, Senior, Lead, Staff |
 | Job Type | Full-time, Part-time, Contract, Freelance, Internship, Temporary, Apprenticeship |
 | Work Type | Remote, On-site, Hybrid |
 | Other | Department, Salary, Date Posted, Date Applied, Benefits, Company Notes, Notes, Job URL, Cover Letter |
