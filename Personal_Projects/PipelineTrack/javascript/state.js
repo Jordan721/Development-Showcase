@@ -273,10 +273,12 @@ function _importFromCSV(text) {
     stageLabelToKey[v.toLowerCase()] = k;
   });
 
-  // Replace existing jobs rather than appending
-  state.jobs = [];
+  // Merge: match by role+company, update existing or add new. Keep jobs not in the file.
+  const jobKey = j => (j.role + '|' + j.company).toLowerCase();
+  const currentByKey = {};
+  state.jobs.forEach((j, i) => { currentByKey[jobKey(j)] = i; });
 
-  let count = 0;
+  let added = 0, updated = 0;
   for (let i = 1; i < rows.length; i++) {
     const f = rows[i];
     const role = get(f, 'role');
@@ -287,8 +289,10 @@ function _importFromCSV(text) {
     const fitRaw = get(f, 'fit score (%)');
     const fitScore = fitRaw !== '' && !isNaN(parseInt(fitRaw)) ? parseInt(fitRaw) : null;
 
-    state.jobs.push({
-      id: 'j' + Date.now() + Math.random().toString(36).slice(2, 6),
+    const rowKey = (role + '|' + company).toLowerCase();
+    const existingIdx = currentByKey[rowKey];
+
+    const jobData = {
       role,
       company,
       location: get(f, 'location'),
@@ -310,10 +314,17 @@ function _importFromCSV(text) {
       coverLetter: get(f, 'cover letter'),
       description: get(f, 'job description'),
       deadline: get(f, 'deadline'),
-    });
-    count++;
+    };
+
+    if (existingIdx !== undefined) {
+      state.jobs[existingIdx] = { ...state.jobs[existingIdx], ...jobData };
+      updated++;
+    } else {
+      state.jobs.push({ id: 'j' + Date.now() + Math.random().toString(36).slice(2, 6), ...jobData });
+      added++;
+    }
   }
-  return count;
+  return { added, updated };
 }
 
 function importData(file) {
@@ -323,15 +334,15 @@ function importData(file) {
     const statusEl = document.getElementById('backup-status');
     try {
       if (isCSV) {
-        const count = _importFromCSV(e.target.result);
+        const { added, updated } = _importFromCSV(e.target.result);
         save();
         renderView(state.activeView);
         const freshStatusEl = document.getElementById('backup-status');
         if (freshStatusEl) {
-          freshStatusEl.textContent = '⬆ Imported: ' + file.name + ' — ' + count + ' job' + (count !== 1 ? 's' : '') + ' replaced. Note: CSV only restores jobs. Use a JSON backup to restore skills, contacts, goals, and events.';
+          freshStatusEl.textContent = `⬆ Imported: ${file.name} — ${added} added, ${updated} updated. New jobs not in the file were kept. Note: CSV only merges jobs — use JSON backup to restore skills, contacts, goals, and events.`;
           freshStatusEl.className = 'import-status success';
         }
-        toast(count + ' job' + (count !== 1 ? 's' : '') + ' imported from CSV. Skills/contacts not included — use JSON backup for full restore.', 'success');
+        toast(`CSV merged: ${added} added, ${updated} updated. Your new jobs were kept.`, 'success');
       } else {
         const data = JSON.parse(e.target.result);
         if (!Array.isArray(data.jobs) || typeof data.profile !== 'object') {
@@ -341,22 +352,49 @@ function importData(file) {
           }
           return;
         }
-        state.jobs = data.jobs;
-        state.profile = data.profile;
-        if (!state.profile.certifications) state.profile.certifications = [];
-        state.savedCourses = Array.isArray(data.savedCourses) ? data.savedCourses : [];
-        state.events = Array.isArray(data.events) ? data.events : [];
-        state.templates = Array.isArray(data.templates) ? data.templates : [];
+        // Merge jobs by ID: update existing, add new, keep current-only jobs
+        const currentById = {};
+        state.jobs.forEach((j, i) => { currentById[j.id] = i; });
+        let added = 0, updated = 0;
+        data.jobs.forEach(importedJob => {
+          if (currentById[importedJob.id] !== undefined) {
+            state.jobs[currentById[importedJob.id]] = importedJob;
+            updated++;
+          } else {
+            state.jobs.push(importedJob);
+            added++;
+          }
+        });
+        // Merge contacts, events, templates by ID
+        const mergeById = (current, incoming) => {
+          if (!Array.isArray(incoming)) return current;
+          const map = {};
+          current.forEach((item, i) => { if (item.id) map[item.id] = i; });
+          incoming.forEach(item => {
+            if (item.id && map[item.id] !== undefined) {
+              current[map[item.id]] = item;
+            } else {
+              current.push(item);
+            }
+          });
+          return current;
+        };
+        state.events = mergeById(state.events, data.events);
+        state.templates = mergeById(state.templates, data.templates);
+        if (Array.isArray(data.savedCourses)) {
+          const courseSet = new Set(state.savedCourses);
+          data.savedCourses.forEach(c => courseSet.add(c));
+          state.savedCourses = [...courseSet];
+        }
         save();
         reanalyzeAllJobs();
         renderView(state.activeView);
         const freshStatusEl = document.getElementById('backup-status');
         if (freshStatusEl) {
-          const count = state.jobs.length;
-          freshStatusEl.textContent = '⬆ Imported: ' + file.name + ' — ' + count + ' job' + (count !== 1 ? 's' : '');
+          freshStatusEl.textContent = `⬆ Imported: ${file.name} — ${added} added, ${updated} updated. Your new jobs were kept.`;
           freshStatusEl.className = 'import-status success';
         }
-        toast('Backup imported successfully.', 'success');
+        toast(`Backup merged: ${added} added, ${updated} updated. Your new jobs were kept.`, 'success');
       }
     } catch {
       if (statusEl) {

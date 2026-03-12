@@ -177,8 +177,8 @@ Build the foundation for your fit scores and recommendations.
 - **Resume Summary** — a short bio for your own reference
 - **Skill Coverage chart** — see how often each of your skills appears across tracked jobs; grouped and color-coded by level with the same **All / Expert / Intermediate / Beginner** filter pills and a **Show X more** collapse when you have many skills
 - **Email Templates** — save reusable thank-you, follow-up, withdrawal, and custom email templates; load any template directly into a job's cover letter from the Application tab
-- **Data Backup** — export all your data to a `.json` file and import it on any other device or browser; the filename and a confirmation message appear under the buttons after each action
-- **Export Jobs as CSV** — download your job list as a spreadsheet-ready `.csv` file (role, company, stage, fit score, matched skills, skill gaps, salary, notes, and more); **jobs only** — skills, contacts, goals, and events are not included in the CSV; use the JSON backup for a full restore
+- **Data Backup** — export all your data to a `.json` file and import it on any other device or browser; imports **merge** rather than replace — jobs are matched by ID so any jobs added since the last export are kept; contacts, events, and templates also merge by ID; the filename and a result summary appear after each action
+- **Export Jobs as CSV** — download your job list as a spreadsheet-ready `.csv` file (role, company, stage, fit score, matched skills, skill gaps, salary, notes, and more); CSV imports also merge — jobs are matched by role + company so new jobs are never overwritten; **jobs only** — use the JSON backup for a full restore
 - **Clear All Jobs** — wipe all tracked jobs in one click (with confirmation) to start fresh
 - **Delete All Data** — wipe everything (jobs, contacts, goals, events, profile, skills, and certifications) in one click (with confirmation)
 - **Your Links** — save your LinkedIn, GitHub, and Portfolio URLs locally for quick access; each saved link has an **Open ↗** button and a **⎘ copy** button to copy the URL to clipboard instantly
