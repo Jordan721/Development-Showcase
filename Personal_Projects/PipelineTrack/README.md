@@ -49,7 +49,7 @@ I built PipelineTrack to solve that. One tool to:
 ### 📊 Dashboard
 At-a-glance view of your entire job search.
 
-- Six stat cards in a 2-row grid: **Total Tracked, Applied, In Progress, Offers, Not Selected, Avg Fit Score**
+- Six stat cards: **Total Tracked, Applied, In Progress, Offers, Not Selected, Avg Fit Score** — the Total Tracked card also shows your application pace as `avg. X/wk · X/mo · X/yr` beneath the number, calculated from your first tracked job to today
 - **Streak & nudge bar** — shows your current daily application streak and a contextual motivational message based on your progress
 - **This Week summary** — jobs added, in-progress count, overdue follow-ups, and weekly goal progress at a glance
 - **Top Skill Gaps** — click any gap tag to see which jobs are missing that skill

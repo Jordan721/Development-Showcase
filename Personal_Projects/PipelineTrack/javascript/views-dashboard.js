@@ -35,6 +35,25 @@ function renderDashboard() {
     fitEl.textContent = '—';
     delete fitEl.dataset.count;
   }
+  // Pace — avg jobs per week / month / year shown as sub-label under Total
+  const paceEl = document.getElementById('stat-pace');
+  if (paceEl) {
+    if (jobs.length >= 1) {
+      const earliest = Math.min(...jobs.map(j => new Date(j.dateAdded).getTime()));
+      const msElapsed = Date.now() - earliest;
+      const weeksElapsed  = msElapsed / (7 * 24 * 60 * 60 * 1000);
+      const monthsElapsed = msElapsed / (30.44 * 24 * 60 * 60 * 1000);
+      const yearsElapsed  = msElapsed / (365.25 * 24 * 60 * 60 * 1000);
+      const wk  = weeksElapsed  >= 1 ? (total / weeksElapsed).toFixed(1)  + '/wk'  : null;
+      const mo  = monthsElapsed >= 1 ? (total / monthsElapsed).toFixed(1) + '/mo'  : null;
+      const yr  = yearsElapsed  >= 1 ? (total / yearsElapsed).toFixed(1)  + '/yr'  : null;
+      const parts = [wk, mo, yr].filter(Boolean);
+      paceEl.textContent = parts.length ? 'avg. ' + parts.join(' · ') : '';
+    } else {
+      paceEl.textContent = '';
+    }
+  }
+
   document.getElementById('sidebar-job-count').textContent = `${total} job${total !== 1 ? 's' : ''} tracked`;
 
   // Streak + motivational nudge
