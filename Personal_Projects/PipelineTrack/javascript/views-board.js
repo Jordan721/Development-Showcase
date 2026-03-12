@@ -3,6 +3,7 @@
 /* ══════════════════════════════════════════════════════════
    BOARD (KANBAN)
    ══════════════════════════════════════════════════════════ */
+const collapsedColumns = new Set(JSON.parse(localStorage.getItem('pt-collapsed-cols') || '[]'));
 function boardInPeriod(job) {
   const d = new Date(job.dateAdded);
   const now = new Date();
@@ -60,7 +61,7 @@ function updateBoardFilterUI() {
 
 function renderBoard() {
   const showArchived = document.getElementById('show-archived').checked;
-  const visibleStages = showArchived ? STAGES : STAGES.filter(s => s !== 'archived' && s !== 'declined' && s !== 'ghosted');
+  const visibleStages = showArchived ? STAGES : STAGES.filter(s => s !== 'archived' && s !== 'declined' && s !== 'withdrew' && s !== 'ghosted');
   const board = document.getElementById('kanban-board');
   const periodJobs = applyBoardFilters(state.jobs.filter(boardInPeriod));
 
@@ -112,6 +113,7 @@ function renderBoard() {
         if (job) {
           const newStage = sel.value;
           job.stage = newStage;
+          if (newStage === 'declined') job.declinedAt = new Date().toISOString();
           save();
           renderBoard();
           if (newStage === 'offer') setTimeout(launchConfetti, 200);
@@ -157,12 +159,14 @@ function renderBoard() {
   if (boardLayout === 'columns') {
     board.innerHTML = visibleStages.map(stage => {
       const jobs = periodJobs.filter(j => j.stage === stage);
+      const collapsed = collapsedColumns.has(stage);
       return `
-        <div class="kanban-col" data-stage="${stage}">
+        <div class="kanban-col${collapsed ? ' kanban-col--collapsed' : ''}" data-stage="${stage}">
           <div class="col-stripe stripe-${stage}"></div>
-          <div class="kanban-col-header">
-            <span class="stage-emoji">${STAGE_EMOJIS[stage] || ''}</span>${STAGE_LABELS[stage]}
+          <div class="kanban-col-header kanban-col-header--clickable" data-collapse-stage="${stage}" title="${collapsed ? 'Expand' : 'Collapse'} column">
+            <span class="kanban-col-header-label"><span class="stage-emoji">${STAGE_EMOJIS[stage] || ''}</span>${STAGE_LABELS[stage]}</span>
             <span class="kanban-col-count">${jobs.length}</span>
+            <span class="kanban-col-collapse-icon">${collapsed ? '›' : '‹'}</span>
           </div>
           <div class="kanban-col-body" data-stage="${stage}">
             ${jobs.length === 0
@@ -171,11 +175,25 @@ function renderBoard() {
           </div>
         </div>`;
     }).join('');
+
+    board.querySelectorAll('.kanban-col-header--clickable').forEach(header => {
+      header.addEventListener('click', () => {
+        const stage = header.dataset.collapseStage;
+        if (collapsedColumns.has(stage)) {
+          collapsedColumns.delete(stage);
+        } else {
+          collapsedColumns.add(stage);
+        }
+        localStorage.setItem('pt-collapsed-cols', JSON.stringify([...collapsedColumns]));
+        renderBoard();
+      });
+    });
   } else {
     board.innerHTML = visibleStages.map(stage => {
       const jobs = periodJobs.filter(j => j.stage === stage);
+      const isEmpty = jobs.length === 0;
       return `
-        <div class="swimlane-row" data-stage="${stage}">
+        <div class="swimlane-row${isEmpty ? ' swimlane-row--empty' : ''}" data-stage="${stage}">
           <div class="swimlane-label">
             <div class="col-stripe stripe-${stage}"></div>
             <div class="swimlane-label-inner">
@@ -184,7 +202,7 @@ function renderBoard() {
             </div>
           </div>
           <div class="swimlane-cards" data-stage="${stage}">
-            ${jobs.length === 0
+            ${isEmpty
               ? `<div class="no-jobs-col">No jobs here</div>`
               : jobs.map(j => jobCardHTML(j)).join('')}
           </div>
@@ -249,6 +267,7 @@ function renderBoard() {
       const job = state.jobs.find(j => j.id === draggedJobId);
       if (job && job.stage !== targetStage) {
         job.stage = targetStage;
+        if (targetStage === 'declined') job.declinedAt = new Date().toISOString();
         save();
         renderBoard();
         toast(`${STAGE_EMOJIS[targetStage] || ''} Moved to ${STAGE_LABELS[targetStage]}.`, 'success');
@@ -359,7 +378,7 @@ function jobCardHTML(job) {
       <div class="job-card-role"><span class="drag-handle" title="Drag to move stage" draggable="false">&#8942;</span>${escHtml(job.role)}</div>
       <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
       <div class="job-card-footer">
-        <span class="job-card-date">${formatDate(job.dateAdded)}</span>
+        <span class="job-card-date">${job.stage === 'declined' && job.declinedAt ? '❌ ' + formatDate(job.declinedAt) : formatDate(job.dateAdded)}</span>
         <span class="fit-badge ${cls}">${label}</span>
       </div>
     </div>`;
@@ -405,7 +424,8 @@ function renderBoardTimeline(jobs) {
     interview: 'var(--yellow)',
     offer: 'var(--green)',
     declined: 'var(--red)',
-    ghosted: '#f97316',
+    withdrew: '#f97316',
+    ghosted: '#94a3b8',
     archived: 'var(--border)',
   };
 
@@ -657,6 +677,15 @@ function openJobDetail(id) {
     dateAppliedRow.style.display = '';
   } else {
     dateAppliedRow.style.display = 'none';
+  }
+
+  // Date declined
+  const dateDeclinedRow = document.getElementById('detail-date-declined-row');
+  if (job.declinedAt) {
+    document.getElementById('detail-date-declined').textContent = formatDate(job.declinedAt);
+    dateDeclinedRow.style.display = '';
+  } else {
+    dateDeclinedRow.style.display = 'none';
   }
 
   // Benefits

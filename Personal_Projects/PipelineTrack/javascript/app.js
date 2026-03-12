@@ -210,6 +210,7 @@ function wireEvents() {
     const job = state.jobs.find(j => j.id === state.activeJobId);
     if (job) {
       job.stage = e.target.value;
+      if (job.stage === 'declined') job.declinedAt = new Date().toISOString();
       save();
       const badge = document.getElementById('detail-stage-badge');
       badge.textContent = STAGE_LABELS[job.stage];

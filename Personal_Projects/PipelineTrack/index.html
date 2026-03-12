@@ -125,7 +125,7 @@
                     <div class="stat-value green" id="stat-offers">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Declined</div>
+                    <div class="stat-label">Not Selected</div>
                     <div class="stat-value red" id="stat-declined">0</div>
                 </div>
                 <div class="stat-card">
@@ -210,7 +210,8 @@
                         <option value="screening">Screening</option>
                         <option value="interview">Interview</option>
                         <option value="offer">Offer</option>
-                        <option value="declined">Declined</option>
+                        <option value="declined">Not Selected</option>
+                        <option value="withdrew">Declined</option>
                         <option value="archived">Archived</option>
                     </select>
                     <select class="select-input board-filter-select" id="board-filter-work-type">
@@ -760,7 +761,8 @@
                                 <option value="screening">Screening</option>
                                 <option value="interview">Interview</option>
                                 <option value="offer">Offer</option>
-                                <option value="declined">Declined</option>
+                                <option value="declined">Not Selected</option>
+                                <option value="withdrew">Declined</option>
                                 <option value="archived">Archived</option>
                             </select>
                         </div>
@@ -919,6 +921,10 @@
                     <div class="detail-meta-row" id="detail-date-applied-row" style="display:none">
                         <span class="detail-meta-label">Date Applied</span>
                         <span class="detail-meta-value" id="detail-date-applied"></span>
+                    </div>
+                    <div class="detail-meta-row" id="detail-date-declined-row" style="display:none">
+                        <span class="detail-meta-label">Not Selected On</span>
+                        <span class="detail-meta-value" id="detail-date-declined"></span>
                     </div>
                     <div class="detail-meta-row" id="detail-benefits-row" style="display:none">
                         <span class="detail-meta-label">Benefits</span>

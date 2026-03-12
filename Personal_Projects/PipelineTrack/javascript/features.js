@@ -57,7 +57,7 @@ function renderDeadlineBanner() {
 
   const urgent = state.jobs.filter(j => {
     if (!j.deadline) return false;
-    if (j.stage === 'declined' || j.stage === 'archived' || j.stage === 'offer') return false;
+    if (j.stage === 'declined' || j.stage === 'withdrew' || j.stage === 'archived' || j.stage === 'offer') return false;
     const d = deadlineDaysLeft(j.deadline);
     return d !== null && d <= 7;
   });

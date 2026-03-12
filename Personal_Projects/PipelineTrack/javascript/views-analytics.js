@@ -94,7 +94,7 @@ function renderAnalyticsKPIs(jobs) {
       color: 'var(--green)'
     },
     {
-      label: 'Declined',
+      label: 'Not Selected',
       value: declined,
       raw: declined,
       suffix: '',
@@ -172,18 +172,20 @@ function renderAnalyticsResponseRate(jobs) {
   const el = document.getElementById('an-response-rate');
   if (!el) return;
   const applied = jobs.filter(j => j.stage !== 'saved').length;
-  const stages = ['screening', 'interview', 'offer', 'declined'];
+  const stages = ['screening', 'interview', 'offer', 'declined', 'withdrew'];
   const labels = {
     screening: 'Screening',
     interview: 'Interview',
     offer: 'Offer',
-    declined: 'Declined'
+    declined: 'Not Selected',
+    withdrew: 'Declined'
   };
   const colors = {
     screening: '#a78bfa',
     interview: 'var(--yellow)',
     offer: 'var(--green)',
-    declined: 'var(--red)'
+    declined: 'var(--red)',
+    withdrew: '#f97316'
   };
   if (applied === 0) {
     el.innerHTML = '<p class="empty-msg">No applications yet.</p>';

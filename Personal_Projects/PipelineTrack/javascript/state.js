@@ -3,7 +3,7 @@
 /* ══════════════════════════════════════════════════════════
    STATE
    ══════════════════════════════════════════════════════════ */
-const STAGES = ['saved', 'applied', 'screening', 'interview', 'offer', 'declined', 'ghosted', 'archived'];
+const STAGES = ['saved', 'applied', 'screening', 'interview', 'offer', 'declined', 'withdrew', 'ghosted', 'archived'];
 let boardPeriod = 'all';
 let boardLayout = localStorage.getItem('pt-board-layout') || 'swimlane';
 let boardSearch = '';
@@ -18,6 +18,7 @@ const STAGE_EMOJIS = {
   interview: '🤝',
   offer: '🎉',
   declined: '❌',
+  withdrew: '🚫',
   ghosted: '👻',
   archived: '📦',
 };
@@ -28,7 +29,8 @@ const STAGE_LABELS = {
   screening: 'Screening',
   interview: 'Interview',
   offer: 'Offer',
-  declined: 'Declined',
+  declined: 'Not Selected',
+  withdrew: 'Declined',
   ghosted: 'Ghosted',
   archived: 'Archived'
 };

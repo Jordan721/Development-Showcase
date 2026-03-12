@@ -49,7 +49,7 @@ I built PipelineTrack to solve that. One tool to:
 ### 📊 Dashboard
 At-a-glance view of your entire job search.
 
-- Six stat cards in a 2-row grid: **Total Tracked, Applied, In Progress, Offers, Declined, Avg Fit Score**
+- Six stat cards in a 2-row grid: **Total Tracked, Applied, In Progress, Offers, Not Selected, Avg Fit Score**
 - **Streak & nudge bar** — shows your current daily application streak and a contextual motivational message based on your progress
 - **This Week summary** — jobs added, in-progress count, overdue follow-ups, and weekly goal progress at a glance
 - **Top Skill Gaps** — click any gap tag to see which jobs are missing that skill
@@ -60,15 +60,17 @@ At-a-glance view of your entire job search.
 ---
 
 ### 📋 Job Board
-A visual pipeline with eight stages: **Saved → Applied → Screening → Interview → Offer → Declined → Ghosted → Archived**
+A visual pipeline with nine stages: **Saved → Applied → Screening → Interview → Offer → Not Selected → Declined → Ghosted → Archived**
 
-- **Declined** — for roles where the company said no; tracked separately so you can see your rejection rate
-- **Ghosted** — for roles where you never heard back; distinct from Declined so you can track non-responses separately
+- **Not Selected** — for roles where the company said no (they didn't pick you); date is automatically stamped and shown on the card and in the detail view
+- **Declined** — for roles where you chose not to pursue (you turned it down)
+- **Ghosted** — for roles where you never heard back; tracked separately from Not Selected and Declined
 - **Archived** — for roles you chose to remove from your active view
-- Four layout modes: **Columns** (classic kanban), **Swimlane** (horizontal rows), **Table** (sortable spreadsheet view), **Timeline** (Gantt-style bars showing how long each job has been in your pipeline, color-coded by stage)
+- Four layout modes: **Columns** (classic kanban with collapsible columns), **Swimlane** (horizontal rows), **Table** (sortable spreadsheet view), **Timeline** (Gantt-style bars showing how long each job has been in your pipeline, color-coded by stage)
+- **Collapsible columns** — click any column header to collapse it to a slim vertical strip showing the stage name and count; click again to expand; collapsed state persists across page refreshes
 - Drag cards between columns to update their stage
 - Hover a card to reveal a quick-delete **×** button
-- Toggle Archived / Declined / Ghosted columns on or off to keep the board clean
+- Toggle Archived / Not Selected / Declined / Ghosted columns on or off to keep the board clean
 - Filter by **This Week / This Month / This Year / All Time**
 - **Search bar** — filter by role, company, or location in real time
 - **Filter dropdowns** — narrow by stage, work type, and seniority
@@ -154,7 +156,7 @@ Set targets and track your progress live using real job board data.
 ### 📊 Analytics
 A data-driven overview of your entire job search.
 
-- **7 KPI cards**: Tracked, Applied, In Progress, Offers, Declined, Avg Fit, Response Rate — numbers animate in with a count-up on load
+- **7 KPI cards**: Tracked, Applied, In Progress, Offers, Not Selected, Avg Fit, Response Rate — numbers animate in with a count-up on load
 - **Application Funnel** — conversion rates from Applied → Screening → Interview → Offer; click any stage row to see those jobs
 - **Response Rate by Stage** — click any bar to see the jobs at that stage
 - **Applications Over Time** — weekly (last 8 weeks) or monthly (last 12 months); click any bar column to see jobs added that period
@@ -267,6 +269,16 @@ PipelineTrack/
 All data is saved to your browser's localStorage. Nothing is sent anywhere. Use the ☀️ / 🌙 toggle in the top bar to switch between light and dark mode, or pick a color theme — **M** (Midnight), **S** (Sunset), or **O** (Ocean) — from the buttons beside it. Your preference is remembered.
 
 ---
+
+---
+
+### ❌ Not Selected vs. Declined
+Two distinct terminal stages to accurately reflect what actually happened:
+
+- **Not Selected** — the company didn't choose you. The date you moved the job to this stage is automatically stamped and shown on the card and in the detail view so you can track how long the process took.
+- **Declined** — you chose not to pursue the role. Use this when you turned down an opportunity, withdrew from the process, or decided it wasn't the right fit for you.
+
+Both are togglable on the board so you can hide them when you want to focus on active applications.
 
 ---
 
