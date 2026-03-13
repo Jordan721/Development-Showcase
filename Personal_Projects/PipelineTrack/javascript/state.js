@@ -141,7 +141,7 @@ function exportData() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  const filename = 'pipelinetrack-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+  const filename = 'pipelinetrack-backup-' + new Date().toLocaleDateString('en-CA') + '.json';
   a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
@@ -198,7 +198,7 @@ function exportCSV() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  const filename = 'pipelinetrack-jobs-' + new Date().toISOString().slice(0, 10) + '.csv';
+  const filename = 'pipelinetrack-jobs-' + new Date().toLocaleDateString('en-CA') + '.csv';
   a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
