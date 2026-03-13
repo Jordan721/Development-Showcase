@@ -6,6 +6,7 @@
 let calMode = 'month';
 let calOffset = 0;
 let calEventFilter = 'all';
+let calAnimDir = 'fade'; // 'fade' | 'left' | 'right'
 
 function buildCalendarEvents() {
   const events = [];
@@ -249,6 +250,7 @@ function wireCalendarControls() {
       btn.classList.add('active');
       calMode = btn.dataset.calMode;
       calOffset = 0;
+      calAnimDir = 'fade';
       renderCalendarView();
     };
   });
@@ -257,13 +259,16 @@ function wireCalendarControls() {
   const todayBtn = document.getElementById('cal-today-btn');
   if (prev) prev.onclick = () => {
     calOffset--;
+    calAnimDir = 'right';
     renderCalendarView();
   };
   if (next) next.onclick = () => {
     calOffset++;
+    calAnimDir = 'left';
     renderCalendarView();
   };
   if (todayBtn) todayBtn.onclick = () => {
+    calAnimDir = 'fade';
     calOffset = 0;
     renderCalendarView();
   };
@@ -306,6 +311,7 @@ function wireCalendarControls() {
       const now = new Date();
       calMode = 'month';
       calOffset = (y - now.getFullYear()) * 12 + (m - now.getMonth());
+      calAnimDir = 'fade';
       document.querySelectorAll('.cal-tab').forEach(b => b.classList.toggle('active', b.dataset.calMode === 'month'));
       renderCalendarView();
     });
@@ -382,6 +388,15 @@ function renderCalendarView() {
   if (calMode === 'month') body.innerHTML = buildFullMonthGrid(periodStart, visibleEvents);
   else if (calMode === 'week') body.innerHTML = buildCalWeekStrip(periodStart, visibleEvents);
   else if (calMode === 'year') body.innerHTML = buildCalYearGrid(periodStart.getFullYear(), visibleEvents);
+
+  // Animate the incoming content
+  body.classList.remove('cal-anim-fade', 'cal-anim-from-left', 'cal-anim-from-right');
+  void body.offsetWidth; // force reflow to restart animation
+  if (calAnimDir === 'left')       body.classList.add('cal-anim-from-right');
+  else if (calAnimDir === 'right') body.classList.add('cal-anim-from-left');
+  else                             body.classList.add('cal-anim-fade');
+  calAnimDir = 'fade'; // reset
+
   wireCalendarControls();
   renderCalendarUpcoming(allEvents);
   renderActivity();
