@@ -240,7 +240,14 @@ function renderSkillTags() {
       <span class="skill-tag-remove" data-index="${s.realIdx}">✕</span>
     </span>`;
   });
+  container.classList.remove('skill-filter-exit');
   container.innerHTML = html;
+  container.querySelectorAll('.skill-tag').forEach((tag, i) => {
+    tag.style.setProperty('--skill-i', i);
+  });
+  container.querySelectorAll('.skill-group-label').forEach((lbl, i) => {
+    lbl.style.setProperty('--skill-i', i * 0.3);
+  });
 
   container.querySelectorAll('.level-btn').forEach(btn => {
     btn.addEventListener('click', () => {

@@ -154,3 +154,44 @@
 #cal-view-body.cal-anim-from-left {
   animation: calSlideFromLeft 0.22s ease;
 }
+
+/* ─── Profile Skills filter animations ──────────────────── */
+
+/* Exit: container fades + collapses upward slightly */
+@keyframes skillFilterExit {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-6px) scale(0.98); }
+}
+
+#skill-tags-container.skill-filter-exit {
+  animation: skillFilterExit 0.11s ease forwards;
+  pointer-events: none;
+}
+
+/* Entrance: each pill pops in with spring + stagger */
+@keyframes skillPillIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+#skill-tags-container .skill-tag {
+  animation: skillPillIn 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--skill-i, 0) * 30ms);
+}
+
+/* Group labels slide in a touch faster */
+@keyframes skillLabelIn {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+#skill-tags-container .skill-group-label {
+  animation: skillLabelIn 0.18s ease both;
+  animation-delay: calc(var(--skill-i, 0) * 40ms);
+}

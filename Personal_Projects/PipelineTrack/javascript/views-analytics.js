@@ -137,11 +137,11 @@ function renderAnalyticsFunnel(jobs) {
   const stages = ['applied', 'screening', 'interview', 'offer'];
   const counts = stages.map(s => jobs.filter(j => j.stage === s).length);
   const max = Math.max(...counts, 1);
-  const colors = {
-    applied: 'var(--accent)',
-    screening: '#a78bfa',
-    interview: 'var(--yellow)',
-    offer: 'var(--green)'
+  const colorClasses = {
+    applied: '',
+    screening: 'fill-purple',
+    interview: 'fill-yellow',
+    offer: 'fill-green'
   };
   el.innerHTML = stages.map((s, i) => {
     const count = counts[i];
@@ -152,7 +152,7 @@ function renderAnalyticsFunnel(jobs) {
     return `<div class="an-funnel-row an-funnel-row-click" data-stage="${s}" title="View ${count} job${count !== 1 ? 's' : ''}">
       <div class="an-funnel-label">${STAGE_LABELS[s]}</div>
       <div class="an-funnel-bar-wrap">
-        <div class="an-funnel-bar" style="width:0;background:${colors[s]}" data-aw="${Math.max(pct, 1)}">${count > 0 ? count : ''}</div>
+        <div class="an-funnel-bar ${colorClasses[s]}" style="width:0" data-aw="${Math.max(pct, 1)}">${count > 0 ? count : ''}</div>
         ${convText}
       </div>
     </div>`;
@@ -180,12 +180,12 @@ function renderAnalyticsResponseRate(jobs) {
     declined: 'Not Selected',
     withdrew: 'Declined'
   };
-  const colors = {
-    screening: '#a78bfa',
-    interview: 'var(--yellow)',
-    offer: 'var(--green)',
-    declined: 'var(--red)',
-    withdrew: '#f97316'
+  const colorClasses = {
+    screening: 'fill-purple',
+    interview: 'fill-yellow',
+    offer: 'fill-green',
+    declined: 'fill-red',
+    withdrew: 'fill-orange'
   };
   if (applied === 0) {
     el.innerHTML = '<p class="empty-msg">No applications yet.</p>';
@@ -196,7 +196,7 @@ function renderAnalyticsResponseRate(jobs) {
     const pct = Math.round((count / applied) * 100);
     return `<div class="an-bar-row an-bar-row-clickable" data-stage="${s}" title="View ${count} job${count !== 1 ? 's' : ''}">
       <div class="an-bar-label">${labels[s]}</div>
-      <div class="an-bar-track"><div class="an-bar-fill" style="width:0;background:${colors[s]}" data-aw="${pct}"></div></div>
+      <div class="an-bar-track"><div class="an-bar-fill ${colorClasses[s]}" style="width:0" data-aw="${pct}"></div></div>
       <div class="an-bar-count">${count}</div>
     </div>`;
   }).join('') + `<div style="font-size:11px;color:var(--text-muted);margin-top:8px">Based on ${applied} applications</div>`;

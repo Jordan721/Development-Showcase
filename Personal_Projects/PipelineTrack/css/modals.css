@@ -514,6 +514,84 @@
   font-weight: 600;
 }
 
+/* ── Profile Skill Pills — enhancements ─────────────────── */
+
+/* Group labels: trailing colored divider rule */
+#skill-tags-container .skill-group-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+#skill-tags-container .skill-group-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+#skill-tags-container .skill-group-label[data-group="Expert"]::after {
+  background: rgba(63, 185, 80, 0.3);
+}
+
+#skill-tags-container .skill-group-label[data-group="Intermediate"]::after {
+  background: rgba(0, 212, 170, 0.3);
+}
+
+/* Pill hover: lift + level-tinted glow */
+#skill-tags-container .skill-tag {
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s;
+}
+
+#skill-tags-container .skill-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+}
+
+#skill-tags-container .skill-tag[data-level="Expert"]:hover {
+  box-shadow: 0 4px 14px rgba(63, 185, 80, 0.22);
+  border-color: var(--green);
+}
+
+#skill-tags-container .skill-tag[data-level="Intermediate"]:hover {
+  box-shadow: 0 4px 14px rgba(0, 212, 170, 0.2);
+}
+
+/* Level btn → proper small badge inside the pill */
+#skill-tags-container .skill-tag .level-btn {
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 99px;
+  padding: 1px 7px;
+  opacity: 1;
+  font-weight: 600;
+  letter-spacing: .02em;
+  transition: background .15s, transform .12s;
+}
+
+#skill-tags-container .skill-tag .level-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: scale(1.06);
+  opacity: 1;
+}
+
+/* Remove btn: hidden until pill is hovered */
+#skill-tags-container .skill-tag .skill-tag-remove {
+  opacity: 0;
+  transition: opacity .15s, color .15s;
+}
+
+#skill-tags-container .skill-tag:hover .skill-tag-remove {
+  opacity: 0.65;
+}
+
+#skill-tags-container .skill-tag .skill-tag-remove:hover {
+  opacity: 1;
+  color: var(--red);
+}
+
 /* coverage bars */
 .coverage-row {
   display: flex;
@@ -669,24 +747,27 @@
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  padding: 11px 16px;
+  padding: 10px 14px;
   margin-bottom: -1px;
   font-family: inherit;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-muted);
   cursor: pointer;
-  transition: color .15s, border-color .15s;
+  transition: color .15s, border-color .15s, background .15s;
   white-space: nowrap;
+  border-radius: 6px 6px 0 0;
 }
 
 .modal-tab-btn:hover {
   color: var(--text);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .modal-tab-btn.active {
   color: var(--accent);
   border-bottom-color: var(--accent);
+  background: rgba(0, 212, 170, 0.06);
 }
 
 .modal-tab-panel {
@@ -701,7 +782,9 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, .65);
+  background: rgba(0, 0, 0, .55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -719,14 +802,32 @@
 
 .modal {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
   width: 100%;
   max-width: 720px;
   max-height: 94vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 0 0 1px rgba(0, 212, 170, 0.06),
+    0 24px 64px rgba(0, 0, 0, 0.55),
+    0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Accent top stripe */
+.modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, var(--accent) 0%, rgba(0, 212, 170, 0.2) 60%, transparent 100%);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .modal-lg {
@@ -740,6 +841,7 @@
   padding: 20px 24px 16px;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(0, 212, 170, 0.04) 0%, transparent 55%);
 }
 
 .modal-title {
@@ -749,14 +851,19 @@
 
 .modal-close {
   color: var(--text-muted);
-  font-size: 16px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: background .15s;
+  font-size: 14px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .15s, color .15s;
 }
 
 .modal-close:hover {
-  background: var(--card);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text);
 }
 
@@ -796,8 +903,18 @@
   justify-content: flex-end;
   gap: 10px;
   padding: 16px 24px;
-  border-top: 1px solid var(--border);
   flex-shrink: 0;
+  position: relative;
+}
+
+.modal-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border) 25%, var(--border) 75%, transparent);
 }
 
 /* ── STAGE MILESTONE MODAL ──────────────────────────────── */
@@ -969,6 +1086,7 @@
   stroke-width: 10;
   stroke-linecap: round;
   transition: stroke-dashoffset .6s ease, stroke .3s;
+  filter: drop-shadow(0 0 5px rgba(0, 212, 170, 0.45));
 }
 
 .fit-ring-label {
@@ -1124,9 +1242,23 @@
 .stage-badge {
   font-size: 11px;
   font-weight: 700;
-  padding: 3px 10px;
+  padding: 3px 10px 3px 8px;
   border-radius: 99px;
   text-transform: capitalize;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.stage-badge::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.8;
+  flex-shrink: 0;
 }
 
 .job-type-badge {
@@ -1536,4 +1668,29 @@
 
 .resource-link:hover {
   text-decoration: underline;
+}
+
+/* ── LIGHT THEME MODAL ADJUSTMENTS ─────────────────────── */
+[data-theme="light"] .modal {
+  border-color: var(--border);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.06),
+    0 24px 64px rgba(0, 0, 0, 0.18),
+    0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .modal-overlay {
+  background: rgba(15, 17, 23, 0.4);
+}
+
+[data-theme="light"] .modal-close:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .modal-tab-btn:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .modal-tab-btn.active {
+  background: rgba(0, 153, 168, 0.08);
 }

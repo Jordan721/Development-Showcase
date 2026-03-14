@@ -81,7 +81,13 @@ function wireEvents() {
     btn.addEventListener('click', () => {
       window._skillFilter = btn.dataset.filter;
       window._skillsExpanded = false;
-      renderSkillTags();
+      const container = document.getElementById('skill-tags-container');
+      if (container) {
+        container.classList.add('skill-filter-exit');
+        setTimeout(() => renderSkillTags(), 110);
+      } else {
+        renderSkillTags();
+      }
     });
   });
 

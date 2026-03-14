@@ -318,6 +318,7 @@ textarea {
 .text-input:focus {
   outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.15);
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
@@ -342,6 +343,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 .text-area:focus {
   outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.15);
 }
 
 .select-input {
@@ -356,6 +358,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 .select-input:focus {
   outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.15);
 }
 
 .form-row {
@@ -388,6 +391,12 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: .5px;
+  transition: color .15s;
+}
+
+/* Label shifts to accent when its field is focused */
+.form-group:focus-within .form-label {
+  color: var(--accent);
 }
 
 .label-hint {

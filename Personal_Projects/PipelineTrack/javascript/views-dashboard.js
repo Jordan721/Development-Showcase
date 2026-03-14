@@ -139,15 +139,24 @@ function renderDashboard() {
     jobs.forEach(j => (j.matched || []).forEach(ms => {
       matchedCountMap[ms] = (matchedCountMap[ms] || 0) + 1;
     }));
+    const levelDotCount = { Expert: 3, Intermediate: 2, Beginner: 1 };
     skillsEl.innerHTML = skills.slice(0, 10).map(s => {
       const key = s.name.toLowerCase();
       const matchCount = Object.entries(matchedCountMap).reduce((sum, [ms, c]) =>
         (ms.includes(key) || key.includes(ms)) ? sum + c : sum, 0);
       const isMatched = matchCount > 0;
-      return `<span class="skill-tag${isMatched ? ' skill-matched' : ''} dash-skill-tag" data-key="${escHtml(key)}" data-name="${escHtml(s.name)}" style="margin:3px${isMatched ? ';cursor:pointer' : ''}">
-        ${escHtml(s.name)}
-        <span class="level">${isMatched ? `✓ ${matchCount} job${matchCount !== 1 ? 's' : ''}` : s.level}</span>
-      </span>`;
+      const dots = levelDotCount[s.level] || 2;
+      const dotsHtml = [1,2,3].map(i => `<span class="skill-dot${i <= dots ? ' filled' : ''}"></span>`).join('');
+      const levelClass = s.level === 'Expert' ? 'skill-card--expert' : s.level === 'Beginner' ? 'skill-card--beginner' : 'skill-card--intermediate';
+      return `<div class="skill-card ${levelClass}${isMatched ? ' skill-card--matched' : ''} dash-skill-tag" data-key="${escHtml(key)}" data-name="${escHtml(s.name)}"${isMatched ? ' style="cursor:pointer"' : ''}>
+        <div class="skill-card-name">${escHtml(s.name)}</div>
+        <div class="skill-card-footer">
+          <div class="skill-card-dots">${dotsHtml}</div>
+          ${isMatched
+            ? `<span class="skill-card-match">✓ ${matchCount} job${matchCount !== 1 ? 's' : ''}</span>`
+            : `<span class="skill-card-level">${escHtml(s.level)}</span>`}
+        </div>
+      </div>`;
     }).join('');
     skillsEl.querySelectorAll('.dash-skill-tag[data-key]').forEach(tag => {
       tag.addEventListener('click', () => {

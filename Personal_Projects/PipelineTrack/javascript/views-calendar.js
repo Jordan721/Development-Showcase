@@ -131,11 +131,13 @@ function buildFullMonthGrid(periodStart, events) {
     const k = dateKey(cellDate);
     const dayEvents = map[k] || [];
     const isTodayCell = sameDay(cellDate, today);
-    html += `<div class="cal-full-cell${isTodayCell ? ' cal-today' : ''}" data-cell-date="${k}">`;
-    html += `<div class="cal-cell-day-num">${day}</div>`;
+    const dow = cellDate.getDay();
+    const isWeekend = dow === 0 || dow === 6;
+    html += `<div class="cal-full-cell${isTodayCell ? ' cal-today' : ''}${isWeekend ? ' cal-weekend' : ''}" data-cell-date="${k}">`;
+    html += `<div class="cal-cell-day-num"><span class="cal-day-num-inner">${day}</span></div>`;
     const shown = dayEvents.slice(0, 3);
     shown.forEach(ev => {
-      html += `<span class="cal-full-event ev-${ev.type}" data-ev-id="${ev.id}" data-ev-type="${ev.type}" title="${escHtml(ev.label)}">${escHtml(ev.label)}</span>`;
+      html += `<span class="cal-full-event ev-${ev.type}" data-ev-id="${ev.id}" data-ev-type="${ev.type}" title="${escHtml(ev.label)}"><span class="cal-ev-dot"></span>${escHtml(ev.label)}</span>`;
     });
     if (dayEvents.length > 3) html += `<div class="cal-more-events">+${dayEvents.length - 3} more</div>`;
     html += '</div>';
@@ -155,11 +157,12 @@ function buildCalWeekStrip(periodStart, events) {
     const k = dateKey(d);
     const dayEvents = map[k] || [];
     const isTodayCell = sameDay(d, today);
-    html += `<div class="cal-week-day-cell${isTodayCell ? ' cal-today' : ''}" data-cell-date="${k}">`;
+    const isWeekend = d.getDay() === 0 || d.getDay() === 6;
+    html += `<div class="cal-week-day-cell${isTodayCell ? ' cal-today' : ''}${isWeekend ? ' cal-weekend' : ''}" data-cell-date="${k}">`;
     html += `<div class="cal-week-dow">${dows[d.getDay()]}</div>`;
-    html += `<div class="cal-week-date">${d.getDate()}</div>`;
+    html += `<div class="cal-week-date"><span class="cal-day-num-inner">${d.getDate()}</span></div>`;
     dayEvents.forEach(ev => {
-      html += `<span class="cal-full-event ev-${ev.type}" data-ev-id="${ev.id}" data-ev-type="${ev.type}" title="${escHtml(ev.label)}">${escHtml(ev.label)}</span>`;
+      html += `<span class="cal-full-event ev-${ev.type}" data-ev-id="${ev.id}" data-ev-type="${ev.type}" title="${escHtml(ev.label)}"><span class="cal-ev-dot"></span>${escHtml(ev.label)}</span>`;
     });
     html += '</div>';
   }
@@ -179,7 +182,7 @@ function buildCalYearGrid(year, events) {
       if (map[k]) monthEvents.push(...map[k]);
     }
     html += `<div class="cal-year-month" data-year="${year}" data-month="${m}">`;
-    html += `<div class="cal-year-month-name">${months[m]}</div>`;
+    html += `<div class="cal-year-month-name">${months[m]}${monthEvents.length > 0 ? `<span class="cal-year-event-count">${monthEvents.length}</span>` : ''}</div>`;
     if (monthEvents.length > 0) {
       html += '<div class="cal-year-event-dots">';
       const shown = monthEvents.slice(0, 20);

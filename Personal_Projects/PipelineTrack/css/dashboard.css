@@ -511,6 +511,10 @@
   font-size: 12px;
   font-weight: 500;
   margin: 3px 3px 3px 0;
+  /* 3D raised pill */
+  box-shadow: 0 3px 0 rgba(190, 30, 55, 0.45), 0 5px 10px rgba(0, 0, 0, 0.2);
+  transform: translateY(0);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s, background .15s;
 }
 
 .gap-tag .gap-count {
@@ -523,12 +527,153 @@
 
 .dash-gap-tag {
   cursor: pointer;
-  transition: border-color .15s, background .15s;
 }
 
 .dash-gap-tag:hover {
   background: rgba(255, 77, 109, .22);
   border-color: rgba(255, 77, 109, .55);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 0 rgba(190, 30, 55, 0.45), 0 9px 16px rgba(0, 0, 0, 0.25);
+}
+
+.dash-gap-tag:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(190, 30, 55, 0.45), 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Your Skills grid ──────────────────────────────────── */
+#dash-skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.skill-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--text-muted);
+  border-radius: var(--radius-sm);
+  padding: 10px 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s;
+}
+
+.skill-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+}
+
+.skill-card:active {
+  transform: translateY(0);
+}
+
+/* Level accent borders */
+.skill-card--expert {
+  border-left-color: var(--green);
+}
+
+.skill-card--intermediate {
+  border-left-color: var(--accent);
+}
+
+.skill-card--beginner {
+  border-left-color: var(--text-muted);
+}
+
+/* Matched state — glowing card */
+.skill-card--matched {
+  background: rgba(0, 212, 170, 0.04);
+  border-color: rgba(0, 212, 170, 0.25);
+  border-left-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(0, 212, 170, 0.1) inset;
+}
+
+.skill-card--matched.skill-card--expert {
+  border-left-color: var(--green);
+  box-shadow: 0 0 0 1px rgba(63, 185, 80, 0.1) inset;
+}
+
+.skill-card--matched:hover {
+  box-shadow: 0 6px 18px rgba(0, 212, 170, 0.18), 0 0 0 1px rgba(0, 212, 170, 0.15) inset;
+}
+
+.skill-card-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+  word-break: break-word;
+}
+
+.skill-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+/* Level strength dots */
+.skill-card-dots {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.skill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.skill-card--expert .skill-dot.filled {
+  background: var(--green);
+}
+
+.skill-card--intermediate .skill-dot.filled {
+  background: var(--accent);
+}
+
+.skill-card--beginner .skill-dot.filled {
+  background: var(--text-muted);
+}
+
+/* Matched: override dot color to green */
+.skill-card--matched .skill-dot.filled {
+  background: var(--accent);
+}
+
+.skill-card--matched.skill-card--expert .skill-dot.filled {
+  background: var(--green);
+}
+
+/* Level label (unmatched) */
+.skill-card-level {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+/* Match badge (matched) */
+.skill-card-match {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(0, 212, 170, 0.14);
+  border-radius: 99px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+.skill-card--expert .skill-card-match {
+  color: var(--green);
+  background: rgba(63, 185, 80, 0.14);
 }
 
 .recent-item {

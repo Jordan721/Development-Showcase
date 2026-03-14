@@ -176,33 +176,45 @@
 }
 
 .cal-full-dow {
-  padding: 6px 8px;
+  padding: 8px 8px;
   font-size: 11px;
   font-weight: 700;
   color: var(--text-muted);
   text-align: center;
   background: var(--card);
   text-transform: uppercase;
-  letter-spacing: .05em;
+  letter-spacing: .06em;
+}
+
+/* Weekend day-of-week headers (Sun = first, Sat = last) */
+.cal-full-dow:first-child,
+.cal-full-dow:nth-child(7) {
+  color: rgba(255, 100, 130, 0.65);
 }
 
 .cal-full-cell {
   background: var(--surface);
-  min-height: 90px;
-  padding: 6px;
+  min-height: 110px;
+  padding: 8px 6px 6px;
   border: 1px solid var(--border);
   cursor: pointer;
-  transition: background .15s;
+  transition: background .15s, box-shadow .15s;
   overflow: hidden;
 }
 
 .cal-full-cell:hover {
   background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.cal-full-cell.cal-weekend {
+  background: rgba(255, 255, 255, 0.018);
 }
 
 .cal-full-cell.cal-today {
-  background: rgba(0, 212, 170, .06);
+  background: rgba(0, 212, 170, .05);
   border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
 }
 
 .cal-full-cell.cal-other-month .cal-cell-day-num {
@@ -213,43 +225,77 @@
   font-size: 12px;
   font-weight: 700;
   color: var(--text-muted);
-  margin-bottom: 4px;
+  margin-bottom: 5px;
 }
 
-.cal-today .cal-cell-day-num {
-  color: var(--accent);
+/* Day number badge wrapper */
+.cal-day-num-inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cal-today .cal-day-num-inner {
+  background: var(--accent);
+  color: #000;
+  font-weight: 800;
+  box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.2);
 }
 
 .cal-full-event {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 4px;
   font-size: 10px;
   font-weight: 600;
-  padding: 2px 5px;
+  padding: 2px 6px 2px 5px;
   border-radius: 3px;
   margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: pointer;
+  border-left: 3px solid currentColor;
+  transition: filter .1s;
+}
+
+.cal-full-event:hover {
+  filter: brightness(1.15);
+}
+
+/* Color dot inside each event chip */
+.cal-ev-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+  opacity: 0.8;
 }
 
 .cal-full-event.ev-job {
-  background: rgba(0, 212, 170, .18);
+  background: rgba(0, 212, 170, .12);
   color: var(--accent);
 }
 
 .cal-full-event.ev-deadline {
-  background: rgba(255, 77, 109, .18);
+  background: rgba(255, 77, 109, .12);
   color: var(--red);
 }
 
 .cal-full-event.ev-contact {
-  background: rgba(210, 153, 34, .18);
+  background: rgba(210, 153, 34, .12);
   color: var(--yellow);
 }
 
 .cal-full-event.ev-event {
-  background: rgba(167, 139, 250, .18);
+  background: rgba(167, 139, 250, .12);
   color: #a78bfa;
 }
 
@@ -313,9 +359,16 @@
 }
 
 .cal-more-events {
-  font-size: 10px;
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
   color: var(--text-muted);
-  margin-top: 2px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 1px 7px;
+  margin-top: 3px;
+  letter-spacing: .02em;
 }
 
 /* Week strip */
@@ -329,38 +382,58 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 10px 8px;
-  min-height: 120px;
+  padding: 12px 10px;
+  min-height: 140px;
   cursor: pointer;
-  transition: background .15s;
+  transition: background .15s, box-shadow .15s;
 }
 
 .cal-week-day-cell:hover {
   background: var(--card);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.cal-week-day-cell.cal-weekend {
+  background: rgba(255, 255, 255, 0.018);
 }
 
 .cal-week-day-cell.cal-today {
   border-color: var(--accent);
   background: rgba(0, 212, 170, .05);
+  box-shadow: inset 0 0 0 1px var(--accent);
 }
 
 .cal-week-dow {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: .05em;
-  margin-bottom: 2px;
+  letter-spacing: .06em;
+  margin-bottom: 4px;
+}
+
+.cal-week-day-cell.cal-weekend .cal-week-dow {
+  color: rgba(255, 100, 130, 0.6);
 }
 
 .cal-week-date {
   font-size: 18px;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-.cal-today .cal-week-date {
-  color: var(--accent);
+/* Circle badge on week view today */
+.cal-week-date .cal-day-num-inner {
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+}
+
+.cal-today .cal-week-date .cal-day-num-inner {
+  background: var(--accent);
+  color: #000;
+  font-weight: 800;
+  box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.2);
 }
 
 /* Year grid */
@@ -376,14 +449,19 @@
   border-radius: var(--radius-sm);
   padding: 12px;
   cursor: pointer;
-  transition: background .15s;
+  transition: background .15s, border-color .15s, box-shadow .15s;
 }
 
 .cal-year-month:hover {
   background: var(--card);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent) inset;
 }
 
 .cal-year-month-name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 12px;
   font-weight: 700;
   color: var(--text-muted);
@@ -392,16 +470,32 @@
   letter-spacing: .05em;
 }
 
+/* Event count badge per month in year view */
+.cal-year-event-count {
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-radius: 99px;
+  padding: 1px 7px;
+  letter-spacing: 0;
+}
+
 .cal-year-event-dots {
   display: flex;
   flex-wrap: wrap;
-  gap: 3px;
+  gap: 4px;
 }
 
 .cal-year-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
+  transition: transform .1s;
+}
+
+.cal-year-dot:hover {
+  transform: scale(1.5);
 }
 
 /* Upcoming strip */
@@ -425,19 +519,27 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 6px 0;
-  border-bottom: 1px solid var(--border);
+  padding: 7px 8px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--border);
+  margin-bottom: 4px;
   cursor: pointer;
-  transition: color .15s;
+  transition: background .15s, border-color .15s;
 }
 
-.cal-upcoming-item:last-child {
-  border-bottom: none;
+.cal-upcoming-item:hover {
+  background: var(--card);
 }
 
 .cal-upcoming-item:hover .cal-upcoming-label {
   color: var(--accent);
 }
+
+/* Color the left border by event type */
+.cal-upcoming-item[data-ev-type="job"]      { border-left-color: var(--accent); }
+.cal-upcoming-item[data-ev-type="deadline"] { border-left-color: var(--red); }
+.cal-upcoming-item[data-ev-type="contact"]  { border-left-color: var(--yellow); }
+.cal-upcoming-item[data-ev-type="event"]    { border-left-color: #a78bfa; }
 
 .cal-upcoming-dot {
   width: 8px;
@@ -509,14 +611,37 @@
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  padding: 12px 10px;
+  padding: 14px 10px 10px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.act-count-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent) inset;
+}
+
+/* Bottom accent bar */
+.act-count-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--accent), rgba(0, 212, 170, 0.3));
+  opacity: 0.5;
 }
 
 .act-count-value {
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--accent);
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent) 0%, rgba(0, 212, 170, 0.6) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   line-height: 1;
 }
 
@@ -526,7 +651,7 @@
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: .05em;
-  margin-top: 5px;
+  margin-top: 6px;
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -874,59 +999,84 @@
 .an-bar-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 9px;
+  gap: 12px;
+  margin-bottom: 10px;
 }
 
 .an-bar-label {
-  width: 90px;
+  width: 100px;
   font-size: 12px;
+  font-weight: 600;
   color: var(--text-muted);
   text-align: right;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   flex-shrink: 0;
+  transition: color .15s;
 }
 
 .an-bar-track {
   flex: 1;
-  height: 12px;
-  background: var(--border);
+  height: 20px;
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 99px;
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .an-bar-fill {
   height: 100%;
   border-radius: 99px;
-  background: var(--accent);
-  transition: width .4s;
+  background: linear-gradient(90deg, var(--accent) 0%, rgba(0, 212, 170, 0.4) 100%);
+  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   width: 0;
+  position: relative;
+  min-width: 0;
+}
+
+/* Soft gloss on top half */
+.an-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.04) 55%,
+    transparent 100%
+  );
+  pointer-events: none;
 }
 
 .an-bar-fill.fill-green {
-  background: var(--green);
+  background: linear-gradient(90deg, var(--green) 0%, rgba(63, 185, 80, 0.4) 100%);
 }
 
 .an-bar-fill.fill-yellow {
-  background: var(--yellow);
+  background: linear-gradient(90deg, var(--yellow) 0%, rgba(210, 153, 34, 0.4) 100%);
 }
 
 .an-bar-fill.fill-red {
-  background: var(--red);
+  background: linear-gradient(90deg, var(--red) 0%, rgba(255, 77, 109, 0.4) 100%);
 }
 
 .an-bar-fill.fill-purple {
-  background: #a78bfa;
+  background: linear-gradient(90deg, #a78bfa 0%, rgba(167, 139, 250, 0.4) 100%);
+}
+
+.an-bar-fill.fill-orange {
+  background: linear-gradient(90deg, #f97316 0%, rgba(249, 115, 22, 0.4) 100%);
 }
 
 .an-bar-count {
   font-size: 12px;
-  font-weight: 600;
-  width: 28px;
+  font-weight: 700;
+  width: 30px;
   text-align: right;
   flex-shrink: 0;
+  color: var(--text);
 }
 
 .an-bar-row-clickable {
@@ -991,18 +1141,41 @@
 }
 
 .an-funnel-bar {
-  height: 24px;
-  border-radius: var(--radius-sm);
-  min-width: 4px;
-  transition: width .4s;
+  height: 28px;
+  border-radius: 99px;
+  min-width: 6px;
+  transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-right: 6px;
+  padding-right: 10px;
   font-size: 12px;
   font-weight: 700;
-  color: #000;
-  background: var(--accent);
+  color: rgba(0, 0, 0, 0.75);
+  background: linear-gradient(90deg, var(--accent) 0%, rgba(0, 212, 170, 0.5) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.an-funnel-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.an-funnel-bar.fill-purple {
+  background: linear-gradient(90deg, #a78bfa 0%, rgba(167, 139, 250, 0.5) 100%);
+}
+
+.an-funnel-bar.fill-yellow {
+  background: linear-gradient(90deg, var(--yellow) 0%, rgba(210, 153, 34, 0.5) 100%);
+}
+
+.an-funnel-bar.fill-green {
+  background: linear-gradient(90deg, var(--green) 0%, rgba(63, 185, 80, 0.5) 100%);
 }
 
 .an-conv-rate {
@@ -1033,15 +1206,21 @@
 .an-timechart-bar {
   width: 100%;
   max-width: 48px;
-  background: var(--accent);
-  border-radius: 4px 4px 0 0;
+  background: linear-gradient(to top, var(--accent) 0%, rgba(0, 212, 170, 0.45) 100%);
+  border-radius: 5px 5px 2px 2px;
   min-height: 3px;
-  transition: height .4s;
-  opacity: .85;
+  transition: height 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-.an-timechart-bar:hover {
-  opacity: 1;
+/* Side gloss on vertical bars */
+.an-timechart-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.18) 0%, transparent 45%);
+  pointer-events: none;
 }
 
 .an-col-click {
@@ -1056,7 +1235,7 @@
 }
 
 .an-col-click:hover .an-timechart-bar {
-  opacity: 1;
+  filter: brightness(1.2);
 }
 
 .an-timechart-label {
