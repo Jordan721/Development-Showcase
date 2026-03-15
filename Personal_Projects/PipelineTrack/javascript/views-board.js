@@ -57,7 +57,113 @@ function updateBoardFilterUI() {
   const sortSel = document.getElementById('board-sort-table');
   if (sortSel) sortSel.style.display = boardLayout === 'table' ? '' : 'none';
   const dragHint = document.getElementById('board-drag-hint');
-  if (dragHint) dragHint.style.display = (boardLayout === 'table' || boardLayout === 'timeline') ? 'none' : '';
+  if (dragHint) dragHint.style.display = (boardLayout === 'table' || boardLayout === 'timeline' || boardLayout === 'matrix') ? 'none' : '';
+}
+
+/* ── PRIORITY MATRIX HELPERS ───────────────────────────── */
+function getJobUrgency(job) {
+  const now = new Date();
+  if (job.deadline) {
+    const d = new Date(job.deadline + 'T00:00:00');
+    return (d - now) / 86400000 <= 14; // within 14 days (or overdue)
+  }
+  return (now - new Date(job.dateAdded)) / 86400000 >= 14; // 2+ weeks old
+}
+
+const PM_STAGE_COLORS = {
+  saved: 'var(--text-muted)', applied: 'var(--accent)', screening: '#a78bfa',
+  interview: 'var(--yellow)', offer: 'var(--green)', declined: 'var(--red)',
+  withdrew: '#f97316', ghosted: '#94a3b8', archived: 'var(--border)',
+};
+
+function pmCardHTML(job) {
+  const cls = fitBadgeClass(job.fitScore);
+  const label = fitBadgeLabel(job.fitScore);
+  const accent = PM_STAGE_COLORS[job.stage] || 'var(--border)';
+  const now = new Date();
+  let timeInfo;
+  if (job.deadline) {
+    const days = Math.round((new Date(job.deadline + 'T00:00:00') - now) / 86400000);
+    timeInfo = days < 0
+      ? `<span style="color:var(--red);font-weight:600">${Math.abs(days)}d overdue</span>`
+      : `<span style="color:var(--yellow);font-weight:600">${days}d left</span>`;
+  } else {
+    const days = Math.floor((now - new Date(job.dateAdded)) / 86400000);
+    timeInfo = days === 0 ? 'Today' : `${days}d ago`;
+  }
+  return `
+    <div class="job-card pm-card" data-job-id="${job.id}" data-stage="${job.stage}" draggable="false" style="--card-accent:${accent}">
+      <button class="card-delete-btn" data-delete-id="${job.id}" title="Delete job" draggable="false">&times;</button>
+      <div class="pm-card-stage"><span class="pm-stage-dot stripe-${job.stage}"></span>${STAGE_LABELS[job.stage]}</div>
+      <div class="job-card-role" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:148px">${escHtml(job.role)}</div>
+      <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
+      <div class="job-card-footer">
+        <span class="job-card-date">${timeInfo}</span>
+        <span class="fit-badge ${cls}">${label}</span>
+      </div>
+    </div>`;
+}
+
+function renderBoardMatrix(jobs) {
+  if (jobs.length === 0) {
+    return '<div style="padding:48px;text-align:center;color:var(--text-muted)">No jobs match your filters.</div>';
+  }
+
+  const scored = jobs.filter(j => j.fitScore != null);
+  const unscored = jobs.filter(j => j.fitScore == null);
+
+  const quadrants = [
+    { id: 'tl', title: 'Plan Ahead', icon: '⭐', desc: 'High fit · Low urgency', highFit: true, urgent: false },
+    { id: 'tr', title: 'Act Now',    icon: '🔥', desc: 'High fit · High urgency', highFit: true, urgent: true  },
+    { id: 'bl', title: 'Low Priority', icon: '📋', desc: 'Low fit · Low urgency', highFit: false, urgent: false },
+    { id: 'br', title: 'Quick Apply',  icon: '⚡', desc: 'Low fit · High urgency', highFit: false, urgent: true  },
+  ];
+
+  const qJobs = {};
+  quadrants.forEach(q => {
+    qJobs[q.id] = scored.filter(j => {
+      const hf = j.fitScore >= 70;
+      const urg = getJobUrgency(j);
+      return hf === q.highFit && urg === q.urgent;
+    });
+  });
+
+  return `
+    <div class="pm-wrapper">
+      <div class="pm-matrix-area">
+        <div class="pm-y-label"><span>← HIGH FIT · LOW FIT →</span></div>
+        <div class="pm-inner">
+          <div class="pm-axis-top">
+            <span class="pm-axis-cap">← Low Urgency</span>
+            <span class="pm-axis-title">URGENCY</span>
+            <span class="pm-axis-cap">High Urgency →</span>
+          </div>
+          <div class="pm-grid">
+            ${quadrants.map(q => `
+              <div class="pm-quadrant pm-q-${q.id}">
+                <div class="pm-quadrant-header">
+                  <div class="pm-q-icon-wrap">${q.icon}</div>
+                  <div class="pm-q-meta">
+                    <div class="pm-q-title">${q.title}</div>
+                    <div class="pm-q-desc">${q.desc}</div>
+                  </div>
+                  <span class="pm-q-count">${qJobs[q.id].length}</span>
+                </div>
+                <div class="pm-cards">
+                  ${qJobs[q.id].length === 0
+                    ? `<div class="pm-empty-q">No jobs here</div>`
+                    : qJobs[q.id].map(j => pmCardHTML(j)).join('')}
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>
+      </div>
+      ${unscored.length > 0 ? `
+        <div class="pm-unscored">
+          <div class="pm-unscored-title">⚪ Unscored (${unscored.length}) — add a Fit Score to place these in the matrix</div>
+          <div class="pm-unscored-cards">${unscored.map(j => pmCardHTML(j)).join('')}</div>
+        </div>` : ''}
+    </div>`;
 }
 
 function renderBoard() {
@@ -157,61 +263,64 @@ function renderBoard() {
     return;
   }
 
-  if (boardLayout === 'columns') {
-    board.innerHTML = visibleStages.map(stage => {
-      const jobs = periodJobs.filter(j => j.stage === stage);
-      const collapsed = collapsedColumns.has(stage);
-      return `
-        <div class="kanban-col${collapsed ? ' kanban-col--collapsed' : ''}" data-stage="${stage}">
-          <div class="col-stripe stripe-${stage}"></div>
-          <div class="kanban-col-header kanban-col-header--clickable" data-collapse-stage="${stage}" title="${collapsed ? 'Expand' : 'Collapse'} column">
-            <span class="kanban-col-header-label"><span class="stage-emoji">${STAGE_EMOJIS[stage] || ''}</span>${STAGE_LABELS[stage]}</span>
-            <span class="kanban-col-count">${jobs.length}</span>
-            <span class="kanban-col-collapse-icon">${collapsed ? '›' : '‹'}</span>
-          </div>
-          <div class="kanban-col-body" data-stage="${stage}">
-            ${jobs.length === 0
-              ? `<div class="no-jobs-col">No jobs here</div>`
-              : jobs.map(j => jobCardHTML(j)).join('')}
-          </div>
-        </div>`;
-    }).join('');
-
-    board.querySelectorAll('.kanban-col-header--clickable').forEach(header => {
-      header.addEventListener('click', () => {
-        const stage = header.dataset.collapseStage;
-        if (collapsedColumns.has(stage)) {
-          collapsedColumns.delete(stage);
-        } else {
-          collapsedColumns.add(stage);
-        }
-        localStorage.setItem('pt-collapsed-cols', JSON.stringify([...collapsedColumns]));
+  if (boardLayout === 'matrix') {
+    const visibleJobs = periodJobs.filter(j => visibleStages.includes(j.stage));
+    board.innerHTML = renderBoardMatrix(visibleJobs);
+    board.querySelectorAll('.card-delete-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const id = btn.dataset.deleteId;
+        const job = state.jobs.find(j => j.id === id);
+        if (!job) return;
+        state.jobs = state.jobs.filter(j => j.id !== id);
+        save();
         renderBoard();
+        if (state.activeView === 'dashboard') renderDashboard();
+        toast(`"${job.role}" deleted.`, 'success');
       });
     });
-  } else {
-    board.innerHTML = visibleStages.map(stage => {
-      const jobs = periodJobs.filter(j => j.stage === stage);
-      const isEmpty = jobs.length === 0;
-      return `
-        <div class="swimlane-row${isEmpty ? ' swimlane-row--empty' : ''}" data-stage="${stage}">
-          <div class="swimlane-label">
-            <div class="col-stripe stripe-${stage}"></div>
-            <div class="swimlane-label-inner">
-              <span class="swimlane-stage-name"><span class="stage-emoji">${STAGE_EMOJIS[stage] || ''}</span>${STAGE_LABELS[stage]}</span>
-              <span class="kanban-col-count">${jobs.length}</span>
-            </div>
-          </div>
-          <div class="swimlane-cards" data-stage="${stage}">
-            ${isEmpty
-              ? `<div class="no-jobs-col">No jobs here</div>`
-              : jobs.map(j => jobCardHTML(j)).join('')}
-          </div>
-        </div>`;
-    }).join('');
+    board.querySelectorAll('.job-card').forEach(card => {
+      card.addEventListener('click', () => openJobDetail(card.dataset.jobId));
+    });
+    wireSearchAndFilters();
+    if (typeof animateBoardCards === 'function') animateBoardCards();
+    return;
   }
 
-  const dropSelector = boardLayout === 'columns' ? '.kanban-col-body' : '.swimlane-cards';
+  // columns layout
+  board.innerHTML = visibleStages.map(stage => {
+    const jobs = periodJobs.filter(j => j.stage === stage);
+    const collapsed = collapsedColumns.has(stage);
+    return `
+      <div class="kanban-col${collapsed ? ' kanban-col--collapsed' : ''}" data-stage="${stage}">
+        <div class="col-stripe stripe-${stage}"></div>
+        <div class="kanban-col-header kanban-col-header--clickable" data-collapse-stage="${stage}" title="${collapsed ? 'Expand' : 'Collapse'} column">
+          <span class="kanban-col-header-label"><span class="stage-emoji">${STAGE_EMOJIS[stage] || ''}</span>${STAGE_LABELS[stage]}</span>
+          <span class="kanban-col-count">${jobs.length}</span>
+          <span class="kanban-col-collapse-icon">${collapsed ? '›' : '‹'}</span>
+        </div>
+        <div class="kanban-col-body" data-stage="${stage}">
+          ${jobs.length === 0
+            ? `<div class="no-jobs-col">No jobs here</div>`
+            : jobs.map(j => jobCardHTML(j)).join('')}
+        </div>
+      </div>`;
+  }).join('');
+
+  board.querySelectorAll('.kanban-col-header--clickable').forEach(header => {
+    header.addEventListener('click', () => {
+      const stage = header.dataset.collapseStage;
+      if (collapsedColumns.has(stage)) {
+        collapsedColumns.delete(stage);
+      } else {
+        collapsedColumns.add(stage);
+      }
+      localStorage.setItem('pt-collapsed-cols', JSON.stringify([...collapsedColumns]));
+      renderBoard();
+    });
+  });
+
+  const dropSelector = '.kanban-col-body';
   let draggedJobId = null;
 
   board.querySelectorAll('.card-delete-btn').forEach(btn => {

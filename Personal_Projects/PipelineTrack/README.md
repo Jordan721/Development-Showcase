@@ -17,7 +17,7 @@ A personal job search companion built to take the chaos out of hunting for work.
 | Feature | What it does |
 |---|---|
 | ◈ Dashboard | At-a-glance stats, streak, skill gaps, pipeline overview, and this week's summary |
-| 📋 Job Board | 8-stage kanban pipeline (including Ghosted) with columns, swimlane, table, and timeline views — search and filter built in |
+| 📋 Job Board | 8-stage kanban pipeline (including Ghosted) with columns, priority matrix, table, and timeline views — search and filter built in |
 | 📅 Calendar & Activity | Month/week/year view of job events, deadlines, follow-up dates, and job fairs — plus a job activity history |
 | 🤝 Network | Track recruiters, hiring managers, and referrals with follow-up reminders |
 | 🎯 Goals | Set weekly/monthly targets and track live progress against your job board data |
@@ -66,8 +66,9 @@ A visual pipeline with nine stages: **Saved → Applied → Screening → Interv
 - **Declined** — for roles where you chose not to pursue (you turned it down)
 - **Ghosted** — for roles where you never heard back; tracked separately from Not Selected and Declined
 - **Archived** — for roles you chose to remove from your active view
-- Four layout modes: **Columns** (classic kanban with collapsible columns), **Swimlane** (horizontal rows), **Table** (sortable spreadsheet view), **Timeline** (Gantt-style bars showing how long each job has been in your pipeline, color-coded by stage)
+- Four layout modes: **Columns** (classic kanban with collapsible columns), **Priority Matrix** (2×2 quadrant view plotting jobs by fit score vs. urgency — Act Now 🔥, Plan Ahead ⭐, Quick Apply ⚡, Low Priority 📋), **Table** (sortable spreadsheet view), **Timeline** (Gantt-style bars showing how long each job has been in your pipeline, color-coded by stage)
 - **Collapsible columns** — click any column header to collapse it to a slim vertical strip showing the stage name and count; click again to expand; collapsed state persists across page refreshes
+- **Priority Matrix** — jobs are automatically placed into one of four quadrants based on your fit score (≥70 = high) and urgency (deadline within 14 days or applied 14+ days ago = urgent); jobs without a fit score appear in an unscored strip below the matrix with a prompt to add one; each card shows a left accent in its stage color, time info (days left, overdue, or days since applied), and fit badge
 - Drag cards between columns to update their stage
 - Hover a card to reveal a quick-delete **×** button
 - Toggle Archived / Not Selected / Declined / Ghosted columns on or off to keep the board clean
@@ -224,7 +225,7 @@ PipelineTrack/
 ├── css/
 │   ├── base.css            # variables, reset, layout, buttons, forms
 │   ├── dashboard.css       # stat cards, activity calendar
-│   ├── board.css           # kanban columns, swimlane, table, timeline views, job cards
+│   ├── board.css           # kanban columns, priority matrix, table, timeline views, job cards
 │   ├── modals.css          # modals, profile, learning hub, resume hub
 │   ├── features.css        # deadline banner, notes timeline
 │   ├── views.css           # calendar, contacts, analytics, goals views
@@ -286,6 +287,20 @@ Both are togglable on the board so you can hide them when you want to focus on a
 When viewing a job's description in the detail modal, matched skills are **highlighted green** and skill gaps are **highlighted red** directly in the text — no more hunting for keywords manually.
 
 Each matched and missing skill tag has a **×** dismiss button. Click it to remove a false positive (e.g. "go" detected as the Go language when it's just the word "go") — the fit score recalculates instantly and the highlights update. The change is saved automatically.
+
+---
+
+### ▣ Priority Matrix
+The Priority Matrix view plots every job onto a 2×2 grid so you can instantly see where to focus your energy:
+
+| | Low Urgency | High Urgency |
+|---|---|---|
+| **High Fit (≥70)** | ⭐ Plan Ahead | 🔥 Act Now |
+| **Low Fit (<70)** | 📋 Low Priority | ⚡ Quick Apply |
+
+**Urgency** is calculated automatically — a job is urgent if its deadline is within 14 days (or overdue), or if no deadline is set and it has been in your pipeline for 14+ days without a response.
+
+Each card shows its stage (with a colored left accent), time info (days remaining, days overdue, or days since applied), and fit badge. Jobs without a fit score are collected in an unscored strip below the grid with a prompt to add one.
 
 ---
 

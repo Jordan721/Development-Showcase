@@ -5,7 +5,7 @@
    ══════════════════════════════════════════════════════════ */
 const STAGES = ['saved', 'applied', 'screening', 'interview', 'offer', 'declined', 'withdrew', 'ghosted', 'archived'];
 let boardPeriod = 'all';
-let boardLayout = localStorage.getItem('pt-board-layout') || 'swimlane';
+let boardLayout = (() => { const v = localStorage.getItem('pt-board-layout'); return (v && v !== 'swimlane') ? v : 'matrix'; })();
 let boardSearch = '';
 let boardFilterStage = '';
 let boardFilterWorkType = '';
