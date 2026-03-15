@@ -278,11 +278,35 @@ function wireEvents() {
   const compareGoBtn = document.getElementById('compare-go-btn');
   if (compareGoBtn) compareGoBtn.addEventListener('click', runComparison);
 
+  const compareClearBtn = document.getElementById('compare-clear-btn');
+  if (compareClearBtn) compareClearBtn.addEventListener('click', () => {
+    const list = document.getElementById('compare-picker-list');
+    if (!list) return;
+    list.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+      cb.checked = false;
+      const item = cb.closest('.compare-picker-item');
+      if (item) {
+        item.classList.remove('selected');
+        const check = item.querySelector('.compare-picker-check');
+        if (check) check.textContent = '';
+      }
+    });
+    renderComparePicker(document.getElementById('compare-search')?.value || '');
+  });
+
   const compareBackBtn = document.getElementById('compare-back-btn');
   if (compareBackBtn) compareBackBtn.addEventListener('click', () => {
-    document.getElementById('compare-picker-view').style.display = '';
-    document.getElementById('compare-result-view').style.display = 'none';
-    compareBackBtn.style.display = 'none';
+    const resultView = document.getElementById('compare-result-view');
+    const pickerView = document.getElementById('compare-picker-view');
+    resultView.style.animation = 'compareViewOut 0.2s ease forwards';
+    setTimeout(() => {
+      resultView.style.display = 'none';
+      resultView.style.animation = '';
+      pickerView.style.display = '';
+      pickerView.classList.add('compare-view-in');
+      pickerView.addEventListener('animationend', () => pickerView.classList.remove('compare-view-in'), { once: true });
+      compareBackBtn.style.display = 'none';
+    }, 200);
   });
 
   // Template loader in job modal (cover letter tab)

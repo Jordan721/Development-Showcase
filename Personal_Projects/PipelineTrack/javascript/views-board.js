@@ -1033,6 +1033,8 @@ function openComparePickerModal() {
 function renderComparePicker(search) {
   const list = document.getElementById('compare-picker-list');
   const btn = document.getElementById('compare-go-btn');
+  const counter = document.getElementById('compare-selected-counter');
+  const clearBtn = document.getElementById('compare-clear-btn');
   if (!list) return;
 
   const q = search.trim().toLowerCase();
@@ -1045,11 +1047,12 @@ function renderComparePicker(search) {
 
   list.innerHTML = filtered.length === 0 ?
     '<p class="empty-msg">No jobs found.</p>' :
-    filtered.map(j => {
+    filtered.map((j, i) => {
       const isChecked = checked.includes(j.id);
       const fitLabel = j.fitScore !== null && j.fitScore !== undefined ? `${j.fitScore}%` : 'No score';
-      return `<label class="compare-picker-item${isChecked ? ' selected' : ''}">
+      return `<label class="compare-picker-item${isChecked ? ' selected' : ''}" style="animation-delay:${i * 35}ms">
           <input type="checkbox" value="${j.id}" ${isChecked ? 'checked' : ''}/>
+          <div class="compare-picker-check">${isChecked ? '✓' : ''}</div>
           <div class="compare-picker-info">
             <div class="compare-picker-role">${escHtml(j.role)}</div>
             <div class="compare-picker-company">${escHtml(j.company)}${j.location ? ' · ' + escHtml(j.location) : ''}</div>
@@ -1059,72 +1062,130 @@ function renderComparePicker(search) {
         </label>`;
     }).join('');
 
+  function updateCount() {
+    const total = list.querySelectorAll('input:checked').length;
+    if (btn) {
+      btn.disabled = total < 2;
+      btn.textContent = total >= 2 ? `Compare ${total} Jobs` : 'Select 2–3 Jobs';
+    }
+    if (counter) {
+      counter.textContent = `${total} / 3 selected`;
+      counter.classList.toggle('ready', total >= 2);
+    }
+    if (clearBtn) clearBtn.style.display = total > 0 ? '' : 'none';
+  }
+
   list.querySelectorAll('.compare-picker-item').forEach(item => {
     item.addEventListener('change', () => {
-      item.classList.toggle('selected', item.querySelector('input').checked);
+      const cb = item.querySelector('input');
+      const check = item.querySelector('.compare-picker-check');
       const total = list.querySelectorAll('input:checked').length;
-      if (btn) {
-        btn.disabled = total < 2;
-        btn.textContent = total >= 2 ? `Compare ${total} Jobs` : 'Select 2–3 Jobs';
-      }
-      // Enforce max 3
       if (total > 3) {
-        item.querySelector('input').checked = false;
+        cb.checked = false;
         item.classList.remove('selected');
+        if (check) check.textContent = '';
         toast('Select up to 3 jobs to compare.', 'error');
+        updateCount();
+        return;
       }
+      item.classList.toggle('selected', cb.checked);
+      if (check) check.textContent = cb.checked ? '✓' : '';
+      updateCount();
     });
   });
 
-  const total = list.querySelectorAll('input:checked').length;
-  if (btn) {
-    btn.disabled = total < 2;
-    btn.textContent = total >= 2 ? `Compare ${total} Jobs` : 'Select 2–3 Jobs';
-  }
+  updateCount();
 }
 
 function runComparison() {
   const list = document.getElementById('compare-picker-list');
+  const pickerView = document.getElementById('compare-picker-view');
+  const resultView = document.getElementById('compare-result-view');
+  const backBtn = document.getElementById('compare-back-btn');
   const ids = Array.from(list.querySelectorAll('input:checked')).map(cb => cb.value);
   if (ids.length < 2) {
     toast('Select at least 2 jobs.', 'error');
     return;
   }
   const jobs = ids.map(id => state.jobs.find(j => j.id === id)).filter(Boolean);
-  renderComparisonGrid(jobs);
-  document.getElementById('compare-picker-view').style.display = 'none';
-  document.getElementById('compare-result-view').style.display = '';
-  document.getElementById('compare-back-btn').style.display = '';
+  pickerView.style.animation = 'compareViewOut 0.2s ease forwards';
+  setTimeout(() => {
+    pickerView.style.display = 'none';
+    pickerView.style.animation = '';
+    renderComparisonGrid(jobs);
+    resultView.style.display = '';
+    resultView.classList.add('compare-view-in');
+    resultView.addEventListener('animationend', () => resultView.classList.remove('compare-view-in'), {
+      once: true
+    });
+    if (backBtn) backBtn.style.display = '';
+  }, 200);
 }
 
 function renderComparisonGrid(jobs) {
   const grid = document.getElementById('compare-result-grid');
   if (!grid) return;
 
+  const COL_COLORS = ['#6366f1', '#f59e0b', '#10b981'];
+  const CIRCUMFERENCE = 2 * Math.PI * 24;
+
+  const maxFit = Math.max(...jobs.map(j => j.fitScore ?? -1));
+
+  function parseSalaryNum(s) {
+    if (!s) return null;
+    const nums = s.replace(/,/g, '').match(/\d+(\.\d+)?/g);
+    if (!nums) return null;
+    const vals = nums.map(Number).map(n => n < 1500 ? n * 1000 : n);
+    return vals.reduce((a, b) => a + b, 0) / vals.length;
+  }
+
+  const salaryNums = jobs.map(j => parseSalaryNum(j.salary));
+  const maxSalary = Math.max(...salaryNums.filter(Boolean));
+
   grid.style.gridTemplateColumns = `repeat(${jobs.length}, 1fr)`;
 
-  grid.innerHTML = jobs.map(j => {
-    const fitColor = j.fitScore >= 70 ? 'var(--green)' : j.fitScore >= 40 ? 'var(--yellow)' : j.fitScore !== null ? 'var(--red)' : 'var(--text-muted)';
+  grid.innerHTML = jobs.map((j, i) => {
+    const color = COL_COLORS[i % COL_COLORS.length];
+    const isWinner = j.fitScore !== null && j.fitScore !== undefined && j.fitScore === maxFit && maxFit >= 0;
+    const fitScore = (j.fitScore !== null && j.fitScore !== undefined) ? j.fitScore : null;
+    const fitColor = fitScore >= 70 ? 'var(--green)' : fitScore >= 40 ? 'var(--yellow)' : fitScore !== null ? 'var(--red)' : 'var(--text-muted)';
+    const fitSub = fitScore >= 70 ? 'Strong fit' : fitScore >= 40 ? 'Moderate fit' : fitScore !== null ? 'Low fit' : 'No score';
+    const dashOffset = fitScore !== null ? CIRCUMFERENCE * (1 - fitScore / 100) : CIRCUMFERENCE;
+    const salaryNum = salaryNums[i];
+    const salaryPct = (maxSalary && salaryNum) ? Math.round((salaryNum / maxSalary) * 100) : 0;
     const parsedBenefits = j.benefits ? parseBenefits(j.benefits) : [];
-    return `<div class="compare-col">
+    return `<div class="compare-col${isWinner ? ' is-winner' : ''}" style="--col-accent:${color}">
       <div class="compare-col-header">
+        ${isWinner ? '<div class="compare-col-winner-badge" title="Best fit score">👑</div>' : ''}
         <div class="compare-col-role">${escHtml(j.role)}</div>
         <div class="compare-col-company">${escHtml(j.company)}${j.location ? ' · ' + escHtml(j.location) : ''}</div>
       </div>
       <div class="compare-col-body">
         <div class="compare-row">
+          <div class="compare-row-label">Fit Score</div>
+          <div class="compare-fit-label">
+            <svg viewBox="0 0 60 60" class="compare-fit-ring">
+              <circle class="compare-fit-track" cx="30" cy="30" r="24"/>
+              <circle class="compare-fit-fill" cx="30" cy="30" r="24"
+                stroke-dasharray="${CIRCUMFERENCE}"
+                stroke-dashoffset="${CIRCUMFERENCE}"
+                data-offset="${dashOffset}"
+                style="stroke:${fitColor}"/>
+            </svg>
+            <div>
+              <div class="compare-fit-number" style="color:${fitColor}">${fitScore !== null ? fitScore + '%' : '—'}</div>
+              <div class="compare-fit-sub">${fitSub}</div>
+            </div>
+          </div>
+        </div>
+        <div class="compare-row">
           <div class="compare-row-label">Stage</div>
           <span class="stage-badge stage-${j.stage}">${STAGE_LABELS[j.stage]}</span>
         </div>
         <div class="compare-row">
-          <div class="compare-row-label">Fit Score</div>
-          <div class="compare-row-value" style="color:${fitColor};font-size:20px;font-weight:700">
-            ${j.fitScore !== null && j.fitScore !== undefined ? j.fitScore + '%' : '—'}
-          </div>
-        </div>
-        <div class="compare-row">
           <div class="compare-row-label">Salary</div>
           <div class="compare-row-value">${escHtml(j.salary || '—')}</div>
+          ${salaryPct > 0 ? `<div class="compare-salary-bar-wrap"><div class="compare-salary-bar" data-pct="${salaryPct}"></div></div>` : ''}
         </div>
         <div class="compare-row">
           <div class="compare-row-label">Work Type</div>
@@ -1137,24 +1198,48 @@ function renderComparisonGrid(jobs) {
         <div class="compare-row">
           <div class="compare-row-label">Matched Skills <span style="color:var(--green)">(${(j.matched||[]).length})</span></div>
           <div class="compare-skill-list">
-            ${(j.matched || []).slice(0, 8).map(s => `<span class="skill-badge green">${s}</span>`).join('')}
+            ${(j.matched || []).slice(0, 8).map((s, si) => `<span class="skill-badge green skill-pop" style="animation-delay:${si * 45}ms">${s}</span>`).join('')}
             ${(j.matched||[]).length > 8 ? `<span style="font-size:11px;color:var(--text-muted)">+${(j.matched||[]).length - 8} more</span>` : ''}
           </div>
         </div>
         <div class="compare-row">
           <div class="compare-row-label">Skill Gaps <span style="color:var(--red)">(${(j.missing||[]).length})</span></div>
           <div class="compare-skill-list">
-            ${(j.missing || []).slice(0, 8).map(s => `<span class="skill-badge red">${s}</span>`).join('')}
+            ${(j.missing || []).slice(0, 8).map((s, si) => `<span class="skill-badge red skill-pop" style="animation-delay:${(si + 8) * 45}ms">${s}</span>`).join('')}
             ${(j.missing||[]).length > 8 ? `<span style="font-size:11px;color:var(--text-muted)">+${(j.missing||[]).length - 8} more</span>` : ''}
           </div>
         </div>
         ${parsedBenefits.length ? `<div class="compare-row">
           <div class="compare-row-label">Benefits</div>
-          <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:2px">
+          <div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px">
             ${parsedBenefits.map(b => `<span class="benefit-chip">${escHtml(b)}</span>`).join('')}
           </div>
         </div>` : ''}
       </div>
     </div>`;
   }).join('');
+
+  // Stagger column entrance
+  grid.querySelectorAll('.compare-col').forEach((col, i) => {
+    col.style.opacity = '0';
+    col.style.animationDelay = `${i * 90}ms`;
+    col.classList.add('compare-col-enter');
+    col.addEventListener('animationend', () => {
+      col.style.opacity = '';
+      col.classList.remove('compare-col-enter');
+      col.style.animationDelay = '';
+    }, {
+      once: true
+    });
+  });
+
+  // Animate fit ring arcs + salary bars after paint
+  requestAnimationFrame(() => {
+    grid.querySelectorAll('.compare-fit-fill').forEach(arc => {
+      arc.style.strokeDashoffset = arc.dataset.offset;
+    });
+    grid.querySelectorAll('.compare-salary-bar').forEach(bar => {
+      bar.style.width = bar.dataset.pct + '%';
+    });
+  });
 }

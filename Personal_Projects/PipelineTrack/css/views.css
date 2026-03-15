@@ -536,10 +536,21 @@
 }
 
 /* Color the left border by event type */
-.cal-upcoming-item[data-ev-type="job"]      { border-left-color: var(--accent); }
-.cal-upcoming-item[data-ev-type="deadline"] { border-left-color: var(--red); }
-.cal-upcoming-item[data-ev-type="contact"]  { border-left-color: var(--yellow); }
-.cal-upcoming-item[data-ev-type="event"]    { border-left-color: #a78bfa; }
+.cal-upcoming-item[data-ev-type="job"] {
+  border-left-color: var(--accent);
+}
+
+.cal-upcoming-item[data-ev-type="deadline"] {
+  border-left-color: var(--red);
+}
+
+.cal-upcoming-item[data-ev-type="contact"] {
+  border-left-color: var(--yellow);
+}
+
+.cal-upcoming-item[data-ev-type="event"] {
+  border-left-color: #a78bfa;
+}
 
 .cal-upcoming-dot {
   width: 8px;
@@ -879,8 +890,15 @@
    ════════════════════════════════════════════════════════════ */
 
 @keyframes an-fade-up {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* KPI card staggered entrance */
@@ -1041,12 +1059,10 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.2) 0%,
-    rgba(255, 255, 255, 0.04) 55%,
-    transparent 100%
-  );
+  background: linear-gradient(to bottom,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(255, 255, 255, 0.04) 55%,
+      transparent 100%);
   pointer-events: none;
 }
 
@@ -1580,13 +1596,40 @@
 }
 
 /* Per-view accent colours */
-.view-hero--dashboard  { --vh-accent: var(--accent);  background: linear-gradient(135deg, rgba(0, 212, 170, 0.06) 0%, transparent 55%); }
-.view-hero--board      { --vh-accent: #a78bfa;          background: linear-gradient(135deg, rgba(167, 139, 250, 0.06) 0%, transparent 55%); }
-.view-hero--learning   { --vh-accent: var(--green);     background: linear-gradient(135deg, rgba(63, 185, 80, 0.06) 0%, transparent 55%); }
-.view-hero--calendar   { --vh-accent: var(--yellow);    background: linear-gradient(135deg, rgba(210, 153, 34, 0.06) 0%, transparent 55%); }
-.view-hero--contacts   { --vh-accent: #60a5fa;           background: linear-gradient(135deg, rgba(96, 165, 250, 0.06) 0%, transparent 55%); }
-.view-hero--goals      { --vh-accent: #fb923c;           background: linear-gradient(135deg, rgba(251, 146, 60, 0.06) 0%, transparent 55%); }
-.view-hero--analytics  { --vh-accent: var(--accent);    background: linear-gradient(135deg, rgba(0, 212, 170, 0.06) 0%, transparent 55%); }
+.view-hero--dashboard {
+  --vh-accent: var(--accent);
+  background: linear-gradient(135deg, rgba(0, 212, 170, 0.06) 0%, transparent 55%);
+}
+
+.view-hero--board {
+  --vh-accent: #a78bfa;
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.06) 0%, transparent 55%);
+}
+
+.view-hero--learning {
+  --vh-accent: var(--green);
+  background: linear-gradient(135deg, rgba(63, 185, 80, 0.06) 0%, transparent 55%);
+}
+
+.view-hero--calendar {
+  --vh-accent: var(--yellow);
+  background: linear-gradient(135deg, rgba(210, 153, 34, 0.06) 0%, transparent 55%);
+}
+
+.view-hero--contacts {
+  --vh-accent: #60a5fa;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.06) 0%, transparent 55%);
+}
+
+.view-hero--goals {
+  --vh-accent: #fb923c;
+  background: linear-gradient(135deg, rgba(251, 146, 60, 0.06) 0%, transparent 55%);
+}
+
+.view-hero--analytics {
+  --vh-accent: var(--accent);
+  background: linear-gradient(135deg, rgba(0, 212, 170, 0.06) 0%, transparent 55%);
+}
 
 .view-hero-icon {
   width: 54px;
@@ -1602,11 +1645,25 @@
   box-shadow: 0 0 18px rgba(0, 212, 170, 0.1);
 }
 
-.view-hero--board    .view-hero-icon { box-shadow: 0 0 18px rgba(167, 139, 250, 0.12); }
-.view-hero--learning .view-hero-icon { box-shadow: 0 0 18px rgba(63, 185, 80, 0.12); }
-.view-hero--calendar .view-hero-icon { box-shadow: 0 0 18px rgba(210, 153, 34, 0.12); }
-.view-hero--contacts .view-hero-icon { box-shadow: 0 0 18px rgba(96, 165, 250, 0.12); }
-.view-hero--goals    .view-hero-icon { box-shadow: 0 0 18px rgba(251, 146, 60, 0.12); }
+.view-hero--board .view-hero-icon {
+  box-shadow: 0 0 18px rgba(167, 139, 250, 0.12);
+}
+
+.view-hero--learning .view-hero-icon {
+  box-shadow: 0 0 18px rgba(63, 185, 80, 0.12);
+}
+
+.view-hero--calendar .view-hero-icon {
+  box-shadow: 0 0 18px rgba(210, 153, 34, 0.12);
+}
+
+.view-hero--contacts .view-hero-icon {
+  box-shadow: 0 0 18px rgba(96, 165, 250, 0.12);
+}
+
+.view-hero--goals .view-hero-icon {
+  box-shadow: 0 0 18px rgba(251, 146, 60, 0.12);
+}
 
 .view-hero-title {
   font-size: 20px;
@@ -1624,6 +1681,7 @@
 
 /* Stack icon above text on medium screens for content-heavy heroes */
 @media (max-width: 960px) {
+
   .view-hero--dashboard,
   .view-hero--board,
   .view-hero--learning {

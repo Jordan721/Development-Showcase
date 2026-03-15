@@ -80,7 +80,9 @@
   border: 1px solid rgba(0, 212, 170, .25);
 }
 
-.backup-tile-icon--json:hover { border-color: var(--accent); }
+.backup-tile-icon--json:hover {
+  border-color: var(--accent);
+}
 
 .backup-tile:hover .backup-tile-icon--json {
   background: rgba(0, 212, 170, .2);
@@ -175,8 +177,13 @@
   flex-shrink: 0;
 }
 
-.cert-card-edit:hover { color: var(--accent); }
-.cert-card-remove:hover { color: var(--red); }
+.cert-card-edit:hover {
+  color: var(--accent);
+}
+
+.cert-card-remove:hover {
+  color: var(--red);
+}
 
 .cert-card-desc {
   font-size: 12px;
@@ -259,6 +266,7 @@
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s;
 }
+
 .link-copy-btn:hover {
   color: var(--accent);
   border-color: var(--accent);
@@ -632,13 +640,33 @@
    ══════════════════════════════════════════════════════════ */
 
 /* ── Card accent colours via CSS custom prop ─────────────── */
-.profile-card[data-card="skills"]    { --card-accent: var(--accent); }
-.profile-card[data-card="summary"]   { --card-accent: #a78bfa; }
-.profile-card[data-card="certs"]     { --card-accent: var(--yellow); }
-.profile-card[data-card="backup"]    { --card-accent: var(--text-muted); }
-.profile-card[data-card="links"]     { --card-accent: #60a5fa; }
-.profile-card[data-card="templates"] { --card-accent: #fb923c; }
-.profile-card[data-card="coverage"]  { --card-accent: var(--green); }
+.profile-card[data-card="skills"] {
+  --card-accent: var(--accent);
+}
+
+.profile-card[data-card="summary"] {
+  --card-accent: #a78bfa;
+}
+
+.profile-card[data-card="certs"] {
+  --card-accent: var(--yellow);
+}
+
+.profile-card[data-card="backup"] {
+  --card-accent: var(--text-muted);
+}
+
+.profile-card[data-card="links"] {
+  --card-accent: #60a5fa;
+}
+
+.profile-card[data-card="templates"] {
+  --card-accent: #fb923c;
+}
+
+.profile-card[data-card="coverage"] {
+  --card-accent: var(--green);
+}
 
 /* Top accent bar + hover lift on every profile card */
 .profile-card[data-card] {
@@ -996,6 +1024,10 @@
   max-width: 860px;
 }
 
+.modal-xl {
+  max-width: 1060px;
+}
+
 .modal-header {
   display: flex;
   justify-content: space-between;
@@ -1148,9 +1180,17 @@
   border-right: none;
 }
 
-.milestone-item-screening { border-top: 2px solid #a78bfa; }
-.milestone-item-interview  { border-top: 2px solid var(--yellow); }
-.milestone-item-offer      { border-top: 2px solid var(--green); }
+.milestone-item-screening {
+  border-top: 2px solid #a78bfa;
+}
+
+.milestone-item-interview {
+  border-top: 2px solid var(--yellow);
+}
+
+.milestone-item-offer {
+  border-top: 2px solid var(--green);
+}
 
 .milestone-icon {
   font-size: 18px;
@@ -1547,9 +1587,17 @@
 }
 
 /* ── Section accent colours ──────────────────────────────── */
-.resume-section[data-card="parser"]    { --resume-accent: var(--accent); }
-.resume-section[data-card="polish"]    { --resume-accent: #a78bfa; }
-.resume-section[data-card="resources"] { --resume-accent: var(--yellow); }
+.resume-section[data-card="parser"] {
+  --resume-accent: var(--accent);
+}
+
+.resume-section[data-card="polish"] {
+  --resume-accent: #a78bfa;
+}
+
+.resume-section[data-card="resources"] {
+  --resume-accent: var(--yellow);
+}
 
 .resume-section[data-card] {
   border-top: 2px solid var(--resume-accent, var(--border));

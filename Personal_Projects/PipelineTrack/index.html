@@ -1441,7 +1441,7 @@
 
     <!-- ── MODAL: JOB COMPARISON ──────────────────────────── -->
     <div class="modal-overlay" id="modal-compare" aria-hidden="true">
-        <div class="modal modal-lg">
+        <div class="modal modal-xl">
             <div class="modal-header">
                 <div style="display:flex;align-items:center;gap:10px">
                     <button class="detail-back-btn" id="compare-back-btn" style="display:none">← Back</button>
@@ -1452,7 +1452,13 @@
             <div class="modal-body">
                 <!-- Picker view -->
                 <div id="compare-picker-view">
-                    <p class="compare-count-note">Select 2–3 jobs to compare side by side.</p>
+                    <div class="compare-picker-header">
+                        <p class="compare-count-note">Select 2–3 jobs to compare side by side.</p>
+                        <div style="display:flex;align-items:center;gap:8px">
+                            <button class="btn-ghost" id="compare-clear-btn" style="display:none;font-size:11px;padding:3px 10px">Clear</button>
+                            <div class="compare-selected-counter" id="compare-selected-counter">0 / 3 selected</div>
+                        </div>
+                    </div>
                     <div class="compare-search-row">
                         <input type="text" class="text-input" id="compare-search"
                             placeholder="Search by role or company…" />
