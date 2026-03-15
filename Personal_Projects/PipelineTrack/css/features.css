@@ -152,9 +152,11 @@
   cursor: pointer;
   transition: opacity 0.15s;
 }
+
 .benefit-chip--clickable:hover {
   opacity: 0.75;
 }
+
 .benefit-view-all {
   background: none;
   border: 1px solid var(--border);
@@ -167,6 +169,7 @@
   font-family: inherit;
   transition: color 0.15s, border-color 0.15s;
 }
+
 .benefit-view-all:hover {
   color: var(--text);
   border-color: var(--text-muted);

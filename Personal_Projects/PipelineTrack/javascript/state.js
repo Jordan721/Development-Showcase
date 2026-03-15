@@ -276,9 +276,12 @@ function _importFromCSV(text) {
   // Merge: match by role+company, update existing or add new. Keep jobs not in the file.
   const jobKey = j => (j.role + '|' + j.company).toLowerCase();
   const currentByKey = {};
-  state.jobs.forEach((j, i) => { currentByKey[jobKey(j)] = i; });
+  state.jobs.forEach((j, i) => {
+    currentByKey[jobKey(j)] = i;
+  });
 
-  let added = 0, updated = 0;
+  let added = 0,
+    updated = 0;
   for (let i = 1; i < rows.length; i++) {
     const f = rows[i];
     const role = get(f, 'role');
@@ -317,14 +320,23 @@ function _importFromCSV(text) {
     };
 
     if (existingIdx !== undefined) {
-      state.jobs[existingIdx] = { ...state.jobs[existingIdx], ...jobData };
+      state.jobs[existingIdx] = {
+        ...state.jobs[existingIdx],
+        ...jobData
+      };
       updated++;
     } else {
-      state.jobs.push({ id: 'j' + Date.now() + Math.random().toString(36).slice(2, 6), ...jobData });
+      state.jobs.push({
+        id: 'j' + Date.now() + Math.random().toString(36).slice(2, 6),
+        ...jobData
+      });
       added++;
     }
   }
-  return { added, updated };
+  return {
+    added,
+    updated
+  };
 }
 
 function importData(file) {
@@ -334,7 +346,10 @@ function importData(file) {
     const statusEl = document.getElementById('backup-status');
     try {
       if (isCSV) {
-        const { added, updated } = _importFromCSV(e.target.result);
+        const {
+          added,
+          updated
+        } = _importFromCSV(e.target.result);
         save();
         renderView(state.activeView);
         const freshStatusEl = document.getElementById('backup-status');
@@ -354,8 +369,11 @@ function importData(file) {
         }
         // Merge jobs by ID: update existing, add new, keep current-only jobs
         const currentById = {};
-        state.jobs.forEach((j, i) => { currentById[j.id] = i; });
-        let added = 0, updated = 0;
+        state.jobs.forEach((j, i) => {
+          currentById[j.id] = i;
+        });
+        let added = 0,
+          updated = 0;
         data.jobs.forEach(importedJob => {
           if (currentById[importedJob.id] !== undefined) {
             state.jobs[currentById[importedJob.id]] = importedJob;
@@ -369,7 +387,9 @@ function importData(file) {
         const mergeById = (current, incoming) => {
           if (!Array.isArray(incoming)) return current;
           const map = {};
-          current.forEach((item, i) => { if (item.id) map[item.id] = i; });
+          current.forEach((item, i) => {
+            if (item.id) map[item.id] = i;
+          });
           incoming.forEach(item => {
             if (item.id && map[item.id] !== undefined) {
               current[map[item.id]] = item;

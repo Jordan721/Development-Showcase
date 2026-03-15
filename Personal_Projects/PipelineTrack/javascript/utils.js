@@ -70,7 +70,9 @@ function formatSalary(raw) {
     return (!isNaN(n) && n > 0) ? Math.round(n) : null;
   }
 
-  function fmt(n) { return '$' + n.toLocaleString('en-US'); }
+  function fmt(n) {
+    return '$' + n.toLocaleString('en-US');
+  }
 
   // Range: two monetary values separated by -, –, or "to"
   const rangeMatch = raw.match(/^(\$?[\d,]+(?:\.\d+)?\s*[kK]?)\s*(?:[-–—]|to)\s*(\$?[\d,]+(?:\.\d+)?\s*[kK]?)([\s\S]*)$/i);
@@ -288,33 +290,33 @@ function parseBenefits(text) {
   // Order matters: more specific patterns (e.g. Signing Bonus, Unlimited PTO) must come before
   // broader ones (Bonus, PTO) so they aren't swallowed by a generic match.
   const MAP = [
-    [/signing\s*bonus/i,                                          'Signing Bonus'],
+    [/signing\s*bonus/i, 'Signing Bonus'],
     [/unlimited\s*pto|unlimited\s*paid\s*time\s*off|unlimited\s*vacation/i, 'Unlimited PTO'],
-    [/pto\b|paid\s*time\s*off|paid\s*vacation/i,                 'PTO'],
-    [/performance\s*bonus|annual\s*bonus|quarterly\s*bonus/i,    'Performance Bonus'],
-    [/\bbonus\b/i,                                               'Bonus'],
+    [/pto\b|paid\s*time\s*off|paid\s*vacation/i, 'PTO'],
+    [/performance\s*bonus|annual\s*bonus|quarterly\s*bonus/i, 'Performance Bonus'],
+    [/\bbonus\b/i, 'Bonus'],
     [/health\s*insurance|medical\s*(insurance|coverage|benefits)/i, 'Health Insurance'],
-    [/dental\s*(insurance|coverage|plan|care)/i,                 'Dental'],
-    [/vision\s*(insurance|coverage|plan|care)/i,                 'Vision'],
+    [/dental\s*(insurance|coverage|plan|care)/i, 'Dental'],
+    [/vision\s*(insurance|coverage|plan|care)/i, 'Vision'],
     [/401\s*k|403\s*b|\bretirement\s*(plan|savings|benefits)\b|\bpension\b/i, '401k / Retirement'],
-    [/equity|stock\s*(options?|grants?|awards?)|rsu|espp/i,      'Equity'],
-    [/sick\s*(days?|leave|time)/i,                               'Sick Leave'],
+    [/equity|stock\s*(options?|grants?|awards?)|rsu|espp/i, 'Equity'],
+    [/sick\s*(days?|leave|time)/i, 'Sick Leave'],
     [/parental\s*(leave|benefits)|maternity\s*leave|paternity\s*leave/i, 'Parental Leave'],
-    [/work\s*from\s*home|remote\s*work|fully\s*remote|wfh/i,    'Remote Work'],
-    [/flexible\s*(hours?|schedule|work(ing)?\s*hours?)/i,        'Flexible Hours'],
-    [/life\s*insurance/i,                                        'Life Insurance'],
-    [/disability\s*(insurance|coverage|benefits)/i,              'Disability Insurance'],
+    [/work\s*from\s*home|remote\s*work|fully\s*remote|wfh/i, 'Remote Work'],
+    [/flexible\s*(hours?|schedule|work(ing)?\s*hours?)/i, 'Flexible Hours'],
+    [/life\s*insurance/i, 'Life Insurance'],
+    [/disability\s*(insurance|coverage|benefits)/i, 'Disability Insurance'],
     [/\bhsa\b|\bfsa\b|health\s*savings\s*account|flexible\s*spending/i, 'HSA / FSA'],
     [/tuition\s*(reimbursement|assistance|benefit)|education\s*(reimbursement|stipend|assistance)|learning\s*stipend/i, 'Education Stipend'],
     [/professional\s*development|career\s*development|training\s*(budget|allowance)/i, 'Prof. Development'],
     [/gym\s*(membership|subsidy|reimbursement)|fitness\s*(benefit|allowance|stipend)|wellness\s*(benefit|program|stipend)/i, 'Wellness / Gym'],
     [/commuter\s*(benefits?|allowance)|transit\s*(benefits?|pass|allowance)|\bparking\b/i, 'Commuter Benefits'],
-    [/relocation\s*(assistance|package|reimbursement)/i,         'Relocation'],
+    [/relocation\s*(assistance|package|reimbursement)/i, 'Relocation'],
     [/free\s*(lunch|meals?|snacks?|food|breakfast)|catered\s*(lunch|meals?)|meal\s*(allowance|stipend)/i, 'Free Food'],
     [/home\s*office\s*(stipend|allowance|setup|reimbursement)|equipment\s*(stipend|allowance|provided)/i, 'Home Office Stipend'],
-    [/mental\s*health\s*(benefits?|support|coverage|days?)/i,    'Mental Health'],
-    [/childcare|child\s*care|dependent\s*care/i,                 'Childcare'],
-    [/volunteer\s*(time|days?|hours?|opportunities)/i,           'Volunteer Time'],
+    [/mental\s*health\s*(benefits?|support|coverage|days?)/i, 'Mental Health'],
+    [/childcare|child\s*care|dependent\s*care/i, 'Childcare'],
+    [/volunteer\s*(time|days?|hours?|opportunities)/i, 'Volunteer Time'],
   ];
 
   const results = [];

@@ -228,7 +228,12 @@ function renderAnalyticsOverTime(jobs, granularity) {
         const d = new Date(j.dateAdded);
         return d >= start && d <= end;
       }).length;
-      buckets.push({ label: (start.getMonth() + 1) + '/' + start.getDate(), count, start: start.getTime(), end: end.getTime() });
+      buckets.push({
+        label: (start.getMonth() + 1) + '/' + start.getDate(),
+        count,
+        start: start.getTime(),
+        end: end.getTime()
+      });
     }
   } else {
     for (let i = 11; i >= 0; i--) {
@@ -240,7 +245,9 @@ function renderAnalyticsOverTime(jobs, granularity) {
       }).length;
       buckets.push({
         label: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getMonth()],
-        count, start: d.getTime(), end: end.getTime()
+        count,
+        start: d.getTime(),
+        end: end.getTime()
       });
     }
   }
@@ -260,7 +267,10 @@ function renderAnalyticsOverTime(jobs, granularity) {
     col.addEventListener('click', () => {
       const start = new Date(+col.dataset.start);
       const end = new Date(+col.dataset.end);
-      const matched = jobs.filter(j => { const d = new Date(j.dateAdded); return d >= start && d <= end; });
+      const matched = jobs.filter(j => {
+        const d = new Date(j.dateAdded);
+        return d >= start && d <= end;
+      });
       openFilterModal(`Added: ${col.dataset.label}`, `${matched.length} job${matched.length !== 1 ? 's' : ''}`, matched);
     });
   });
@@ -360,7 +370,8 @@ function renderAnalyticsFitDistribution(jobs) {
 
   el.querySelectorAll('.an-bar-row-clickable[data-min]').forEach((row, i) => {
     row.addEventListener('click', () => {
-      const min = +row.dataset.min, maxScore = +row.dataset.max;
+      const min = +row.dataset.min,
+        maxScore = +row.dataset.max;
       const matched = scored.filter(j => j.fitScore >= min && j.fitScore <= maxScore);
       openFilterModal(`Fit Score: ${buckets[i].label}`, `${matched.length} job${matched.length !== 1 ? 's' : ''}`, matched);
     });
@@ -431,7 +442,11 @@ function openFilterModal(title, subtitle, matchedJobs) {
 }
 
 function openAnalyticsFilterModal(field, val, jobs) {
-  const fieldLabels = { workType: 'Work Type', jobType: 'Job Type', seniority: 'Seniority' };
+  const fieldLabels = {
+    workType: 'Work Type',
+    jobType: 'Job Type',
+    seniority: 'Seniority'
+  };
   const matched = jobs.filter(j => (j[field] || 'Unknown') === val);
   openFilterModal(
     `${fieldLabels[field] || field}: ${val}`,

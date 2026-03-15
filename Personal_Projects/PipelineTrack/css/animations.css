@@ -129,18 +129,37 @@
 
 /* ─── Calendar view transitions ─────────────────────────── */
 @keyframes calFadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes calSlideFromRight {
-  from { opacity: 0; transform: translateX(40px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes calSlideFromLeft {
-  from { opacity: 0; transform: translateX(-40px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 #cal-view-body.cal-anim-fade {
@@ -159,8 +178,15 @@
 
 /* Exit: container fades + collapses upward slightly */
 @keyframes skillFilterExit {
-  from { opacity: 1; transform: translateY(0) scale(1); }
-  to   { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
 }
 
 #skill-tags-container.skill-filter-exit {
@@ -174,6 +200,7 @@
     opacity: 0;
     transform: translateY(10px) scale(0.88);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -187,8 +214,15 @@
 
 /* Group labels slide in a touch faster */
 @keyframes skillLabelIn {
-  from { opacity: 0; transform: translateX(-6px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 #skill-tags-container .skill-group-label {

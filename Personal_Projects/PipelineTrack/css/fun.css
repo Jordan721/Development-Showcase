@@ -79,9 +79,17 @@
   text-underline-offset: 3px;
 }
 
-.theme-swatch--midnight { color: #a78bfa; }
-.theme-swatch--sunset   { color: #fb923c; }
-.theme-swatch--ocean    { color: #38bdf8; }
+.theme-swatch--midnight {
+  color: #a78bfa;
+}
+
+.theme-swatch--sunset {
+  color: #fb923c;
+}
+
+.theme-swatch--ocean {
+  color: #38bdf8;
+}
 
 /* ── STAGE-COLORED LEFT BORDER ON CARDS ─────────────────── */
 .job-card {
@@ -89,14 +97,37 @@
   border-left-style: solid;
 }
 
-.job-card[data-stage="saved"]     { border-left-color: var(--text-muted); }
-.job-card[data-stage="applied"]   { border-left-color: var(--accent); }
-.job-card[data-stage="screening"] { border-left-color: #a78bfa; }
-.job-card[data-stage="interview"] { border-left-color: var(--yellow); }
-.job-card[data-stage="offer"]     { border-left-color: var(--green); }
-.job-card[data-stage="declined"]  { border-left-color: var(--red); }
-.job-card[data-stage="ghosted"]   { border-left-color: #64748b; }
-.job-card[data-stage="archived"]  { border-left-color: var(--text-muted); }
+.job-card[data-stage="saved"] {
+  border-left-color: var(--text-muted);
+}
+
+.job-card[data-stage="applied"] {
+  border-left-color: var(--accent);
+}
+
+.job-card[data-stage="screening"] {
+  border-left-color: #a78bfa;
+}
+
+.job-card[data-stage="interview"] {
+  border-left-color: var(--yellow);
+}
+
+.job-card[data-stage="offer"] {
+  border-left-color: var(--green);
+}
+
+.job-card[data-stage="declined"] {
+  border-left-color: var(--red);
+}
+
+.job-card[data-stage="ghosted"] {
+  border-left-color: #64748b;
+}
+
+.job-card[data-stage="archived"] {
+  border-left-color: var(--text-muted);
+}
 
 /* ── CARD TILT ON DRAG ──────────────────────────────────── */
 .job-card.dragging {
@@ -125,13 +156,26 @@
 
 /* ── GOAL COMPLETE POP ──────────────────────────────────── */
 @keyframes goal-pop {
-  0%   { transform: scale(1); }
-  40%  { transform: scale(1.04); }
-  70%  { transform: scale(0.97); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(1.04);
+  }
+
+  70% {
+    transform: scale(0.97);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
-.goal-pop { animation: goal-pop .5s ease; }
+.goal-pop {
+  animation: goal-pop .5s ease;
+}
 
 /* ── STREAK BADGE + NUDGE ───────────────────────────────── */
 .dash-vibe-row {

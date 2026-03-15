@@ -375,7 +375,9 @@ function wirePasteCleaners() {
       const end = el.selectionEnd;
       el.value = el.value.slice(0, start) + cleaned + el.value.slice(end);
       el.selectionStart = el.selectionEnd = start + cleaned.length;
-      el.dispatchEvent(new Event('input', { bubbles: true }));
+      el.dispatchEvent(new Event('input', {
+        bubbles: true
+      }));
     });
   });
 }

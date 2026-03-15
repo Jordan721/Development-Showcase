@@ -41,12 +41,12 @@ function renderDashboard() {
     if (jobs.length >= 1) {
       const earliest = Math.min(...jobs.map(j => new Date(j.dateAdded).getTime()));
       const msElapsed = Date.now() - earliest;
-      const weeksElapsed  = msElapsed / (7 * 24 * 60 * 60 * 1000);
+      const weeksElapsed = msElapsed / (7 * 24 * 60 * 60 * 1000);
       const monthsElapsed = msElapsed / (30.44 * 24 * 60 * 60 * 1000);
-      const yearsElapsed  = msElapsed / (365.25 * 24 * 60 * 60 * 1000);
-      const wk  = weeksElapsed  >= 1 ? (total / weeksElapsed).toFixed(1)  + '/wk'  : null;
-      const mo  = monthsElapsed >= 1 ? (total / monthsElapsed).toFixed(1) + '/mo'  : null;
-      const yr  = yearsElapsed  >= 1 ? (total / yearsElapsed).toFixed(1)  + '/yr'  : null;
+      const yearsElapsed = msElapsed / (365.25 * 24 * 60 * 60 * 1000);
+      const wk = weeksElapsed >= 1 ? (total / weeksElapsed).toFixed(1) + '/wk' : null;
+      const mo = monthsElapsed >= 1 ? (total / monthsElapsed).toFixed(1) + '/mo' : null;
+      const yr = yearsElapsed >= 1 ? (total / yearsElapsed).toFixed(1) + '/yr' : null;
       const parts = [wk, mo, yr].filter(Boolean);
       paceEl.textContent = parts.length ? 'avg. ' + parts.join(' · ') : '';
     } else {
@@ -139,14 +139,18 @@ function renderDashboard() {
     jobs.forEach(j => (j.matched || []).forEach(ms => {
       matchedCountMap[ms] = (matchedCountMap[ms] || 0) + 1;
     }));
-    const levelDotCount = { Expert: 3, Intermediate: 2, Beginner: 1 };
+    const levelDotCount = {
+      Expert: 3,
+      Intermediate: 2,
+      Beginner: 1
+    };
     skillsEl.innerHTML = skills.slice(0, 10).map(s => {
       const key = s.name.toLowerCase();
       const matchCount = Object.entries(matchedCountMap).reduce((sum, [ms, c]) =>
         (ms.includes(key) || key.includes(ms)) ? sum + c : sum, 0);
       const isMatched = matchCount > 0;
       const dots = levelDotCount[s.level] || 2;
-      const dotsHtml = [1,2,3].map(i => `<span class="skill-dot${i <= dots ? ' filled' : ''}"></span>`).join('');
+      const dotsHtml = [1, 2, 3].map(i => `<span class="skill-dot${i <= dots ? ' filled' : ''}"></span>`).join('');
       const levelClass = s.level === 'Expert' ? 'skill-card--expert' : s.level === 'Beginner' ? 'skill-card--beginner' : 'skill-card--intermediate';
       return `<div class="skill-card ${levelClass}${isMatched ? ' skill-card--matched' : ''} dash-skill-tag" data-key="${escHtml(key)}" data-name="${escHtml(s.name)}"${isMatched ? ' style="cursor:pointer"' : ''}>
         <div class="skill-card-name">${escHtml(s.name)}</div>

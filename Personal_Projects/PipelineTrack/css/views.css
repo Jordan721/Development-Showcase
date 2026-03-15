@@ -1561,3 +1561,85 @@
   border-color: var(--accent);
   color: var(--accent);
 }
+
+/* ════════════════════════════════════════════════════════════
+   SHARED VIEW HERO BANNER
+   ════════════════════════════════════════════════════════════ */
+
+.view-hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--vh-accent, var(--accent));
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  background: linear-gradient(135deg, rgba(0, 212, 170, 0.06) 0%, transparent 55%);
+  margin-bottom: 0;
+}
+
+/* Per-view accent colours */
+.view-hero--dashboard  { --vh-accent: var(--accent);  background: linear-gradient(135deg, rgba(0, 212, 170, 0.06) 0%, transparent 55%); }
+.view-hero--board      { --vh-accent: #a78bfa;          background: linear-gradient(135deg, rgba(167, 139, 250, 0.06) 0%, transparent 55%); }
+.view-hero--learning   { --vh-accent: var(--green);     background: linear-gradient(135deg, rgba(63, 185, 80, 0.06) 0%, transparent 55%); }
+.view-hero--calendar   { --vh-accent: var(--yellow);    background: linear-gradient(135deg, rgba(210, 153, 34, 0.06) 0%, transparent 55%); }
+.view-hero--contacts   { --vh-accent: #60a5fa;           background: linear-gradient(135deg, rgba(96, 165, 250, 0.06) 0%, transparent 55%); }
+.view-hero--goals      { --vh-accent: #fb923c;           background: linear-gradient(135deg, rgba(251, 146, 60, 0.06) 0%, transparent 55%); }
+.view-hero--analytics  { --vh-accent: var(--accent);    background: linear-gradient(135deg, rgba(0, 212, 170, 0.06) 0%, transparent 55%); }
+
+.view-hero-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1.5px solid var(--vh-accent, var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--vh-accent, var(--accent));
+  flex-shrink: 0;
+  box-shadow: 0 0 18px rgba(0, 212, 170, 0.1);
+}
+
+.view-hero--board    .view-hero-icon { box-shadow: 0 0 18px rgba(167, 139, 250, 0.12); }
+.view-hero--learning .view-hero-icon { box-shadow: 0 0 18px rgba(63, 185, 80, 0.12); }
+.view-hero--calendar .view-hero-icon { box-shadow: 0 0 18px rgba(210, 153, 34, 0.12); }
+.view-hero--contacts .view-hero-icon { box-shadow: 0 0 18px rgba(96, 165, 250, 0.12); }
+.view-hero--goals    .view-hero-icon { box-shadow: 0 0 18px rgba(251, 146, 60, 0.12); }
+
+.view-hero-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.view-hero-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.55;
+  max-width: 560px;
+}
+
+/* Stack icon above text on medium screens for content-heavy heroes */
+@media (max-width: 960px) {
+  .view-hero--dashboard,
+  .view-hero--board,
+  .view-hero--learning {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px 22px;
+  }
+}
+
+/* All heroes stack on small screens */
+@media (max-width: 600px) {
+  .view-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 18px;
+  }
+}

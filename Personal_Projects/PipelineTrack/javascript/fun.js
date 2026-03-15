@@ -26,10 +26,10 @@ function launchConfetti() {
 
 /* ── MILESTONE TOASTS ─────────────────────────────────────── */
 const MILESTONE_MSGS = {
-  1:   '🎯 First job tracked! The search is on.',
-  10:  '📬 10 applications tracked. Building momentum!',
-  25:  '🔥 25 applications — you\'re putting in the work.',
-  50:  '👀 50 applications. That\'s commitment.',
+  1: '🎯 First job tracked! The search is on.',
+  10: '📬 10 applications tracked. Building momentum!',
+  25: '🔥 25 applications — you\'re putting in the work.',
+  50: '👀 50 applications. That\'s commitment.',
   100: '💯 100 jobs tracked. Legendary.',
 };
 
@@ -75,11 +75,11 @@ function animateCompleteGoals() {
 /* ── DASHBOARD NUDGE ──────────────────────────────────────── */
 function getDashboardNudge(jobs) {
   const applied = jobs.filter(j => j.stage !== 'saved').length;
-  const offers  = jobs.filter(j => j.stage === 'offer').length;
-  if (!jobs.length)    return '✨ Add your first job to kick things off.';
-  if (offers > 0)      return `🎉 You have ${offers} offer${offers > 1 ? 's' : ''}! Keep pushing.`;
-  if (applied >= 50)   return '💪 50+ applications deep. Consistency is your superpower.';
-  if (applied >= 20)   return `📈 ${applied} applications and counting — great momentum!`;
-  if (applied >= 5)    return '🔥 Things are heating up. Keep the pace!';
+  const offers = jobs.filter(j => j.stage === 'offer').length;
+  if (!jobs.length) return '✨ Add your first job to kick things off.';
+  if (offers > 0) return `🎉 You have ${offers} offer${offers > 1 ? 's' : ''}! Keep pushing.`;
+  if (applied >= 50) return '💪 50+ applications deep. Consistency is your superpower.';
+  if (applied >= 20) return `📈 ${applied} applications and counting — great momentum!`;
+  if (applied >= 5) return '🔥 Things are heating up. Keep the pace!';
   return '🌱 Good start! Apply consistently for the best results.';
 }

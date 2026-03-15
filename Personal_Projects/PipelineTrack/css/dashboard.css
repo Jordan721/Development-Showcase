@@ -425,7 +425,61 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
 }
+
+.dash-card:hover {
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Dash-card accent top borders (Dashboard cards) */
+.dash-card[data-card="gaps"]       { border-top: 2px solid var(--red); }
+.dash-card[data-card="activity"]   { border-top: 2px solid var(--accent); }
+.dash-card[data-card="pipeline"]   { border-top: 2px solid #a78bfa; }
+.dash-card[data-card="top-skills"] { border-top: 2px solid var(--green); }
+
+/* Analytics cards */
+.dash-card[data-card="funnel"]         { border-top: 2px solid var(--accent); }
+.dash-card[data-card="response-rate"]  { border-top: 2px solid #a78bfa; }
+.dash-card[data-card="over-time"]      { border-top: 2px solid #60a5fa; }
+.dash-card[data-card="top-companies"]  { border-top: 2px solid var(--yellow); }
+.dash-card[data-card="skill-gaps"]     { border-top: 2px solid var(--red); }
+.dash-card[data-card="fit-dist"]       { border-top: 2px solid var(--green); }
+.dash-card[data-card="work-type"]      { border-top: 2px solid #fb923c; }
+.dash-card[data-card="job-type"]       { border-top: 2px solid var(--accent); }
+.dash-card[data-card="seniority"]      { border-top: 2px solid #a78bfa; }
+
+/* Colored dot before dash-card-header text when card has an accent */
+.dash-card[data-card] .dash-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dash-card[data-card] .dash-card-header::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--dash-dot, var(--text-muted));
+}
+
+.dash-card[data-card="gaps"]           { --dash-dot: var(--red); }
+.dash-card[data-card="activity"]       { --dash-dot: var(--accent); }
+.dash-card[data-card="pipeline"]       { --dash-dot: #a78bfa; }
+.dash-card[data-card="top-skills"]     { --dash-dot: var(--green); }
+.dash-card[data-card="funnel"]         { --dash-dot: var(--accent); }
+.dash-card[data-card="response-rate"]  { --dash-dot: #a78bfa; }
+.dash-card[data-card="over-time"]      { --dash-dot: #60a5fa; }
+.dash-card[data-card="top-companies"]  { --dash-dot: var(--yellow); }
+.dash-card[data-card="skill-gaps"]     { --dash-dot: var(--red); }
+.dash-card[data-card="fit-dist"]       { --dash-dot: var(--green); }
+.dash-card[data-card="work-type"]      { --dash-dot: #fb923c; }
+.dash-card[data-card="job-type"]       { --dash-dot: var(--accent); }
+.dash-card[data-card="seniority"]      { --dash-dot: #a78bfa; }
 
 .dash-card-header {
   display: flex;

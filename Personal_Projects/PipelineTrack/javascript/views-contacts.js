@@ -219,4 +219,3 @@ function renderContacts() {
     renderContacts();
   };
 }
-

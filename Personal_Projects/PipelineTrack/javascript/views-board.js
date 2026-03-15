@@ -4,6 +4,7 @@
    BOARD (KANBAN)
    ══════════════════════════════════════════════════════════ */
 const collapsedColumns = new Set(JSON.parse(localStorage.getItem('pt-collapsed-cols') || '[]'));
+
 function boardInPeriod(job) {
   const d = new Date(job.dateAdded);
   const now = new Date();
@@ -495,9 +496,7 @@ function openStageMilestoneModal(job, stage) {
   let bodyHTML = `<p class="milestone-subtitle">${subtitles[stage]}</p>`;
 
   if (stage === 'screening' || stage === 'interview') {
-    const typeOpts = stage === 'screening' ?
-      ['Phone', 'Video', 'In-person'] :
-      ['Phone', 'Video', 'In-person', 'Panel', 'Technical'];
+    const typeOpts = stage === 'screening' ? ['Phone', 'Video', 'In-person'] : ['Phone', 'Video', 'In-person', 'Panel', 'Technical'];
     const defaultType = existing.type || (stage === 'screening' ? 'Phone' : 'Video');
     bodyHTML += `
       <div class="form-row">

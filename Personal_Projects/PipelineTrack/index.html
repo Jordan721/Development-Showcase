@@ -99,6 +99,23 @@
 
         <!-- ── VIEW: DASHBOARD ──────────────────────────────── -->
         <section class="view active" id="view-dashboard">
+            <div class="view-hero view-hero--dashboard">
+                <div class="view-hero-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="7" />
+                        <rect x="14" y="3" width="7" height="7" />
+                        <rect x="14" y="14" width="7" height="7" />
+                        <rect x="3" y="14" width="7" height="7" />
+                    </svg>
+                </div>
+                <div class="view-hero-content">
+                    <div class="view-hero-title">Dashboard</div>
+                    <div class="view-hero-sub">Your job search at a glance — stats, recent activity, skill gaps, and
+                        pipeline health.</div>
+                </div>
+            </div>
+            <br>
             <div class="scope-notice">
                 <span class="scope-notice-icon">ℹ</span>
                 <span>PipelineTrack supports <strong>Tech</strong> (Software Engineering, Data, IT),
@@ -136,25 +153,25 @@
             </div>
 
             <div class="dash-grid">
-                <div class="dash-card">
+                <div class="dash-card" data-card="gaps">
                     <div class="dash-card-header">Top Skill Gaps</div>
                     <div class="dash-card-body" id="dash-gaps">
                         <p class="empty-msg">Add jobs with descriptions to see skill gaps.</p>
                     </div>
                 </div>
-                <div class="dash-card">
+                <div class="dash-card" data-card="activity">
                     <div class="dash-card-header">Recent Activity</div>
                     <div class="dash-card-body" id="dash-recent">
                         <p class="empty-msg">No jobs tracked yet.</p>
                     </div>
                 </div>
-                <div class="dash-card">
+                <div class="dash-card" data-card="pipeline">
                     <div class="dash-card-header">Pipeline Overview</div>
                     <div class="dash-card-body">
                         <div id="dash-pipeline-bars"></div>
                     </div>
                 </div>
-                <div class="dash-card">
+                <div class="dash-card" data-card="top-skills">
                     <div class="dash-card-header">Your Top Skills</div>
                     <div class="dash-card-body" id="dash-skills">
                         <p class="empty-msg">Add skills in My Profile.</p>
@@ -169,6 +186,22 @@
 
         <!-- ── VIEW: JOB BOARD ──────────────────────────────── -->
         <section class="view" id="view-board">
+            <div class="view-hero view-hero--board">
+                <div class="view-hero-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="5" height="18" rx="1" />
+                        <rect x="10" y="3" width="5" height="11" rx="1" />
+                        <rect x="17" y="3" width="5" height="15" rx="1" />
+                    </svg>
+                </div>
+                <div class="view-hero-content">
+                    <div class="view-hero-title">Job Board</div>
+                    <div class="view-hero-sub">Track every application from saved to offer — filter, sort, compare, and
+                        manage your pipeline in one place.</div>
+                </div>
+            </div>
+            <br>
             <div class="board-controls">
                 <label class="toggle-label">
                     <input type="checkbox" id="show-archived" />
@@ -251,7 +284,18 @@
         <!-- ── VIEW: PROFILE ────────────────────────────────── -->
         <section class="view" id="view-profile">
             <div class="profile-grid">
-                <div class="profile-card">
+
+                <!-- ── HERO ──────────────────────────────────────── -->
+                <div class="profile-card profile-hero full-width">
+                    <div class="profile-hero-avatar" id="profile-hero-avatar">?</div>
+                    <div class="profile-hero-body">
+                        <input type="text" class="profile-name-input" id="profile-name" placeholder="Your name…"
+                            autocomplete="off" />
+                        <div class="profile-hero-stats" id="profile-hero-stats"></div>
+                    </div>
+                </div>
+
+                <div class="profile-card" data-card="skills">
                     <div class="profile-section-title">Your Skills</div>
                     <p class="profile-hint">These skills are used to calculate your fit score on every job.</p>
                     <div class="skill-input-row">
@@ -284,7 +328,7 @@
                     <div class="skill-footer" id="skill-footer"></div>
                 </div>
 
-                <div class="profile-card">
+                <div class="profile-card" data-card="summary">
                     <div class="profile-section-title">Resume Summary</div>
                     <p class="profile-hint">A brief description of your background (for your reference).</p>
                     <textarea class="text-area" id="profile-summary" rows="6"
@@ -292,7 +336,7 @@
                     <button class="btn-secondary" id="save-summary-btn">Save Summary</button>
                 </div>
 
-                <div class="profile-card">
+                <div class="profile-card" data-card="certs">
                     <div class="profile-section-title">Certifications &amp; Degrees</div>
                     <p class="profile-hint">Track your credentials — certificates, degrees, bootcamps, and licenses.</p>
                     <div class="skill-input-row">
@@ -317,7 +361,7 @@
                     <div id="cert-footer"></div>
                 </div>
 
-                <div class="profile-card">
+                <div class="profile-card" data-card="backup">
                     <div class="profile-section-title">Data Backup</div>
                     <p class="profile-hint">Export all your jobs, skills, and settings to a file. Import that file on
                         any other device or browser to restore everything.</p>
@@ -389,7 +433,7 @@
                     <div id="backup-status"></div>
                 </div>
 
-                <div class="profile-card full-width">
+                <div class="profile-card full-width" data-card="links">
                     <div class="profile-section-title">Your Links</div>
                     <p class="profile-hint">Save your professional links for quick reference. Stored locally and never
                         shared.</p>
@@ -399,7 +443,8 @@
                             <div class="links-input-row">
                                 <input type="url" class="text-input" id="link-linkedin"
                                     placeholder="https://linkedin.com/in/yourname" />
-                                <button class="link-copy-btn" id="link-linkedin-copy" style="display:none" title="Copy link">⎘</button>
+                                <button class="link-copy-btn" id="link-linkedin-copy" style="display:none"
+                                    title="Copy link">⎘</button>
                                 <a class="link-open-btn" id="link-linkedin-open" href="#" target="_blank" rel="noopener"
                                     style="display:none">Open ↗</a>
                             </div>
@@ -409,7 +454,8 @@
                             <div class="links-input-row">
                                 <input type="url" class="text-input" id="link-github"
                                     placeholder="https://github.com/yourusername" />
-                                <button class="link-copy-btn" id="link-github-copy" style="display:none" title="Copy link">⎘</button>
+                                <button class="link-copy-btn" id="link-github-copy" style="display:none"
+                                    title="Copy link">⎘</button>
                                 <a class="link-open-btn" id="link-github-open" href="#" target="_blank" rel="noopener"
                                     style="display:none">Open ↗</a>
                             </div>
@@ -419,7 +465,8 @@
                             <div class="links-input-row">
                                 <input type="url" class="text-input" id="link-portfolio"
                                     placeholder="https://yourportfolio.com" />
-                                <button class="link-copy-btn" id="link-portfolio-copy" style="display:none" title="Copy link">⎘</button>
+                                <button class="link-copy-btn" id="link-portfolio-copy" style="display:none"
+                                    title="Copy link">⎘</button>
                                 <a class="link-open-btn" id="link-portfolio-open" href="#" target="_blank"
                                     rel="noopener" style="display:none">Open ↗</a>
                             </div>
@@ -428,7 +475,7 @@
                     <button class="btn-secondary" id="save-links-btn" style="margin-top:14px">Save Links</button>
                 </div>
 
-                <div class="profile-card full-width">
+                <div class="profile-card full-width" data-card="templates">
                     <div class="profile-section-title">Email Templates</div>
                     <p class="profile-hint">Save reusable email templates — thank-you notes, follow-ups, withdrawal
                         messages. Load any template into a job's cover letter from the Application tab.</p>
@@ -446,7 +493,7 @@
                     <div class="template-list" id="template-list"></div>
                 </div>
 
-                <div class="profile-card full-width">
+                <div class="profile-card full-width" data-card="coverage">
                     <div class="profile-section-title">Skill Coverage</div>
                     <p class="profile-hint">How often each of your skills appears in your tracked jobs.</p>
                     <div class="skill-filter-row">
@@ -463,6 +510,21 @@
 
         <!-- ── VIEW: LEARNING HUB ───────────────────────────── -->
         <section class="view" id="view-learning">
+            <div class="view-hero view-hero--learning">
+                <div class="view-hero-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                        <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                    </svg>
+                </div>
+                <div class="view-hero-content">
+                    <div class="view-hero-title">Learning Hub</div>
+                    <div class="view-hero-sub">Courses and resources recommended based on your skill gaps across all
+                        tracked jobs.</div>
+                </div>
+            </div>
+            <br>
             <div class="learning-filter-row">
                 <span class="learning-subtitle">Recommendations based on skill gaps across all your tracked jobs.</span>
                 <label class="toggle-label">
@@ -478,8 +540,27 @@
         <!-- ── VIEW: RESUME HUB ──────────────────────────── -->
         <section class="view" id="view-resume">
 
+            <!-- Hero Banner -->
+            <div class="resume-section resume-hero">
+                <div class="resume-hero-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                </div>
+                <div class="resume-hero-content">
+                    <div class="resume-hero-title">Resume Hub</div>
+                    <div class="resume-hero-sub">Parse your resume for skills, polish your writing, and discover the
+                        best tools — all in one place.</div>
+                </div>
+            </div>
+
             <!-- Resume Parser -->
-            <div class="resume-section">
+            <div class="resume-section" data-card="parser">
                 <div class="resume-section-title">Resume Parser</div>
                 <p class="resume-section-desc">Upload your resume file or paste the text below. We'll scan it for tech
                     skills and let you import them directly into your profile.</p>
@@ -515,7 +596,7 @@
             </div>
 
             <!-- Writing Polish -->
-            <div class="resume-section">
+            <div class="resume-section" data-card="polish">
                 <div class="resume-section-title">Writing Polish</div>
                 <p class="resume-section-desc">Paste a resume bullet, bio, or cover letter paragraph. We'll flag weak
                     language, passive voice, and filler words and suggest stronger alternatives.</p>
@@ -533,7 +614,7 @@
             </div>
 
             <!-- Resources & AI Tools -->
-            <div class="resume-section">
+            <div class="resume-section" data-card="resources">
                 <div class="resume-section-title">Resources & AI Tools</div>
                 <p class="resume-section-desc">Curated tools to help you build a stronger resume, sharpen your
                     portfolio, polish your writing, and research the market.</p>
@@ -544,6 +625,22 @@
 
         <!-- ── VIEW: CALENDAR ───────────────────────────────── -->
         <section class="view" id="view-calendar">
+            <div class="view-hero view-hero--calendar">
+                <div class="view-hero-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                </div>
+                <div class="view-hero-content">
+                    <div class="view-hero-title">Calendar &amp; Activity</div>
+                    <div class="view-hero-sub">Visualize deadlines, follow-ups, events, and job activity — month, week,
+                        or year view.</div>
+                </div>
+            </div>
             <div class="cal-view-controls">
                 <div class="cal-view-tabs">
                     <button class="cal-tab active" data-cal-mode="month">Month</button>
@@ -585,6 +682,22 @@
 
         <!-- ── VIEW: CONTACTS / NETWORK ─────────────────────── -->
         <section class="view" id="view-contacts">
+            <div class="view-hero view-hero--contacts">
+                <div class="view-hero-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                </div>
+                <div class="view-hero-content">
+                    <div class="view-hero-title">Network</div>
+                    <div class="view-hero-sub">Manage your recruiters, hiring managers, and referral contacts — with
+                        follow-up reminders.</div>
+                </div>
+            </div>
             <div class="contacts-controls">
                 <div class="contacts-search-wrap">
                     <input type="text" class="text-input" id="contacts-search"
@@ -614,6 +727,21 @@
 
         <!-- ── VIEW: ANALYTICS ──────────────────────────────── -->
         <section class="view" id="view-analytics">
+            <div class="view-hero view-hero--analytics">
+                <div class="view-hero-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10" />
+                        <line x1="12" y1="20" x2="12" y2="4" />
+                        <line x1="6" y1="20" x2="6" y2="14" />
+                    </svg>
+                </div>
+                <div class="view-hero-content">
+                    <div class="view-hero-title">Analytics</div>
+                    <div class="view-hero-sub">Deep-dive into your application data — funnels, response rates, skill
+                        gaps, fit scores, and more.</div>
+                </div>
+            </div>
             <div class="analytics-controls">
                 <div class="an-period-tabs">
                     <button class="an-tab active" data-an-period="all">All Time</button>
@@ -624,17 +752,17 @@
             </div>
             <div class="an-kpi-strip" id="an-kpi-strip"></div>
             <div class="an-row-two">
-                <div class="dash-card">
+                <div class="dash-card" data-card="funnel">
                     <div class="dash-card-header">Application Funnel</div>
                     <div class="dash-card-body" id="an-funnel"></div>
                 </div>
-                <div class="dash-card">
+                <div class="dash-card" data-card="response-rate">
                     <div class="dash-card-header">Response Rate by Stage</div>
                     <div class="dash-card-body" id="an-response-rate"></div>
                 </div>
             </div>
             <div class="an-row-two">
-                <div class="dash-card">
+                <div class="dash-card" data-card="over-time">
                     <div class="dash-card-header dash-card-header-row">
                         <span>Applications Over Time</span>
                         <div class="an-time-btns">
@@ -644,31 +772,31 @@
                     </div>
                     <div class="dash-card-body" id="an-over-time"></div>
                 </div>
-                <div class="dash-card">
+                <div class="dash-card" data-card="top-companies">
                     <div class="dash-card-header">Top Companies Applied To</div>
                     <div class="dash-card-body" id="an-top-companies"></div>
                 </div>
             </div>
             <div class="an-row-two">
-                <div class="dash-card">
+                <div class="dash-card" data-card="skill-gaps">
                     <div class="dash-card-header">Top Skill Gaps</div>
                     <div class="dash-card-body" id="an-skill-gaps"></div>
                 </div>
-                <div class="dash-card">
+                <div class="dash-card" data-card="fit-dist">
                     <div class="dash-card-header">Fit Score Distribution</div>
                     <div class="dash-card-body" id="an-fit-dist"></div>
                 </div>
             </div>
             <div class="an-row-three">
-                <div class="dash-card">
+                <div class="dash-card" data-card="work-type">
                     <div class="dash-card-header">Work Type</div>
                     <div class="dash-card-body" id="an-work-type"></div>
                 </div>
-                <div class="dash-card">
+                <div class="dash-card" data-card="job-type">
                     <div class="dash-card-header">Job Type</div>
                     <div class="dash-card-body" id="an-job-type"></div>
                 </div>
-                <div class="dash-card">
+                <div class="dash-card" data-card="seniority">
                     <div class="dash-card-header">Seniority</div>
                     <div class="dash-card-body" id="an-seniority"></div>
                 </div>
@@ -677,6 +805,21 @@
 
         <!-- ── VIEW: GOALS ──────────────────────────────────── -->
         <section class="view" id="view-goals">
+            <div class="view-hero view-hero--goals">
+                <div class="view-hero-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <circle cx="12" cy="12" r="6" />
+                        <circle cx="12" cy="12" r="2" />
+                    </svg>
+                </div>
+                <div class="view-hero-content">
+                    <div class="view-hero-title">Goals</div>
+                    <div class="view-hero-sub">Set weekly and monthly application targets — track your pace and stay on
+                        top of your job search.</div>
+                </div>
+            </div>
             <div class="goals-controls">
                 <div class="goals-period-tabs">
                     <button class="goal-period-tab active" data-goal-period="week">This Week</button>
@@ -1054,7 +1197,9 @@
             </div>
             <div class="modal-body">
                 <div id="benefits-modal-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px"></div>
-                <div id="benefits-modal-raw" style="white-space:pre-wrap;font-size:13px;color:var(--text-muted);line-height:1.6;border-top:1px solid var(--border);padding-top:14px"></div>
+                <div id="benefits-modal-raw"
+                    style="white-space:pre-wrap;font-size:13px;color:var(--text-muted);line-height:1.6;border-top:1px solid var(--border);padding-top:14px">
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn-ghost" data-close="modal-benefits">← Back</button>

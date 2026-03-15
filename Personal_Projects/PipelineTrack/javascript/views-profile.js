@@ -4,12 +4,68 @@
    PROFILE
    ══════════════════════════════════════════════════════════ */
 function renderProfile() {
+  renderProfileHero();
   renderSkillTags();
   renderCertTags();
   document.getElementById('profile-summary').value = state.profile.summary || '';
   renderCoverageBars();
   renderLinks();
   renderTemplates();
+}
+
+function renderProfileHero() {
+  const nameInput = document.getElementById('profile-name');
+  const avatarEl = document.getElementById('profile-hero-avatar');
+  const statsEl = document.getElementById('profile-hero-stats');
+  if (!nameInput) return;
+
+  const name = state.profile.name || '';
+  nameInput.value = name;
+
+  if (avatarEl) {
+    const initials = name.trim()
+      .split(/\s+/).slice(0, 2)
+      .map(w => w[0]).join('').toUpperCase();
+    avatarEl.textContent = initials || '?';
+  }
+
+  if (statsEl) {
+    const counts = [{
+        value: (state.profile.skills || []).length,
+        label: 'Skills'
+      },
+      {
+        value: (state.profile.certifications || []).length,
+        label: 'Certs'
+      },
+      {
+        value: Object.values(state.profile.links || {}).filter(Boolean).length,
+        label: 'Links'
+      },
+      {
+        value: (state.templates || []).length,
+        label: 'Templates'
+      },
+    ];
+    statsEl.innerHTML = counts.map(c => `
+      <div class="profile-hero-stat">
+        <div class="profile-hero-stat-value">${c.value}</div>
+        <div class="profile-hero-stat-label">${c.label}</div>
+      </div>`).join('');
+  }
+
+  // Persist name on blur / Enter
+  nameInput.onblur = () => {
+    state.profile.name = nameInput.value.trim();
+    save();
+    if (avatarEl) {
+      const initials = state.profile.name.split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+      avatarEl.textContent = initials || '?';
+    }
+  };
+  nameInput.onkeydown = e => {
+    if (e.key === 'Enter') nameInput.blur();
+  };
 }
 
 function renderLinks() {
@@ -28,7 +84,9 @@ function renderLinks() {
         navigator.clipboard.writeText(links[key]).then(() => {
           const orig = copyBtn.textContent;
           copyBtn.textContent = '✓';
-          setTimeout(() => { copyBtn.textContent = orig; }, 1500);
+          setTimeout(() => {
+            copyBtn.textContent = orig;
+          }, 1500);
         });
       };
     } else {
