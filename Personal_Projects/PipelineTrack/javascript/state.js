@@ -132,6 +132,8 @@ function exportData() {
     jobs: state.jobs,
     profile: state.profile,
     savedCourses: state.savedCourses,
+    contacts: state.contacts,
+    goals: state.goals,
     events: state.events,
     templates: state.templates,
   };
@@ -399,6 +401,12 @@ function importData(file) {
           });
           return current;
         };
+        // Restore profile (skills, certs, summary, links)
+        if (data.profile && typeof data.profile === 'object') {
+          state.profile = data.profile;
+        }
+        state.contacts = mergeById(state.contacts, data.contacts);
+        state.goals = mergeById(state.goals, data.goals);
         state.events = mergeById(state.events, data.events);
         state.templates = mergeById(state.templates, data.templates);
         if (Array.isArray(data.savedCourses)) {
