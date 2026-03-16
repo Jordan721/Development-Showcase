@@ -333,11 +333,15 @@ function initCardPreview() {
         ${(job.missing || []).length ? `<div class="cpv-detail cpv-gap">✗ ${(job.missing||[]).length} skill gaps</div>` : ''}
         <div class="cpv-hint">Click to open</div>`;
       const rect = card.getBoundingClientRect();
-      const pw = 230;
-      let left = rect.right + 12;
-      if (left + pw > window.innerWidth - 12) left = rect.left - pw - 12;
-      let top = Math.max(8, Math.min(rect.top, window.innerHeight - 260));
-      pv.style.cssText = `left:${left}px;top:${top}px`;
+      const pw = 240;
+      const ph = 220;
+      // Prefer above the card; fall back to below if not enough room
+      let top = rect.top - ph - 10;
+      if (top < 8) top = rect.bottom + 10;
+      // Center horizontally over the card; clamp to viewport edges
+      let left = rect.left + rect.width / 2 - pw / 2;
+      left = Math.max(8, Math.min(left, window.innerWidth - pw - 8));
+      pv.style.cssText = `left:${left}px;top:${top}px;width:${pw}px`;
       pv.classList.add('show');
     }, 480);
   });
