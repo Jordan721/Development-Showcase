@@ -26,7 +26,10 @@ function initKeyboardShortcuts() {
     if (e.key === '/') {
       e.preventDefault();
       const search = document.getElementById('board-search');
-      if (search) { search.focus(); search.select(); }
+      if (search) {
+        search.focus();
+        search.select();
+      }
     }
   });
 }
@@ -34,30 +37,84 @@ function initKeyboardShortcuts() {
 /* ══════════════════════════════════════════════════════════
    COMMAND PALETTE
    ══════════════════════════════════════════════════════════ */
-const CMD_VIEWS = [
-  { icon: '◈', label: 'Dashboard', view: 'dashboard' },
-  { icon: '⊞', label: 'Job Board', view: 'board' },
-  { icon: '◫', label: 'Calendar & Activity', view: 'calendar' },
-  { icon: '◎', label: 'Network', view: 'contacts' },
-  { icon: '⊕', label: 'Goals', view: 'goals' },
-  { icon: '⊛', label: 'Analytics', view: 'analytics' },
-  { icon: '◉', label: 'My Profile', view: 'profile' },
-  { icon: '✦', label: 'Resume Hub', view: 'resume' },
-  { icon: '◎', label: 'Learning Hub', view: 'learning' },
+const CMD_VIEWS = [{
+    icon: '◈',
+    label: 'Dashboard',
+    view: 'dashboard'
+  },
+  {
+    icon: '⊞',
+    label: 'Job Board',
+    view: 'board'
+  },
+  {
+    icon: '◫',
+    label: 'Calendar & Activity',
+    view: 'calendar'
+  },
+  {
+    icon: '◎',
+    label: 'Network',
+    view: 'contacts'
+  },
+  {
+    icon: '⊕',
+    label: 'Goals',
+    view: 'goals'
+  },
+  {
+    icon: '⊛',
+    label: 'Analytics',
+    view: 'analytics'
+  },
+  {
+    icon: '◉',
+    label: 'My Profile',
+    view: 'profile'
+  },
+  {
+    icon: '✦',
+    label: 'Resume Hub',
+    view: 'resume'
+  },
+  {
+    icon: '◎',
+    label: 'Learning Hub',
+    view: 'learning'
+  },
 ];
 
-const CMD_ACTIONS = [
-  { icon: '＋', label: 'Add Job', action: () => { const b = document.getElementById('topbar-action'); if (b) b.click(); } },
-  { icon: '⬇', label: 'Export Data (JSON)', action: () => exportData() },
-  { icon: '🖨', label: 'Print Summary', action: () => printSummary() },
-  { icon: '◑', label: 'Toggle Color-Blind Mode', action: () => toggleColorBlindMode() },
+const CMD_ACTIONS = [{
+    icon: '＋',
+    label: 'Add Job',
+    action: () => {
+      const b = document.getElementById('topbar-action');
+      if (b) b.click();
+    }
+  },
+  {
+    icon: '⬇',
+    label: 'Export Data (JSON)',
+    action: () => exportData()
+  },
+  {
+    icon: '🖨',
+    label: 'Print Summary',
+    action: () => printSummary()
+  },
+  {
+    icon: '◑',
+    label: 'Toggle Color-Blind Mode',
+    action: () => toggleColorBlindMode()
+  },
 ];
 
 let _cmdOpen = false;
 let _cmdIdx = 0;
 
 function toggleCommandPalette() {
-  if (_cmdOpen) closeCommandPalette(); else openCommandPalette();
+  if (_cmdOpen) closeCommandPalette();
+  else openCommandPalette();
 }
 
 function openCommandPalette() {
@@ -67,7 +124,10 @@ function openCommandPalette() {
   ov.setAttribute('aria-hidden', 'false');
   _cmdOpen = true;
   const inp = document.getElementById('cmd-input');
-  if (inp) { inp.value = ''; inp.focus(); }
+  if (inp) {
+    inp.value = '';
+    inp.focus();
+  }
   renderCmdResults('');
 }
 
@@ -88,12 +148,18 @@ function renderCmdResults(query) {
 
   // Views
   CMD_VIEWS.forEach(v => {
-    if (!q || v.label.toLowerCase().includes(q)) items.push({ type: 'view', ...v });
+    if (!q || v.label.toLowerCase().includes(q)) items.push({
+      type: 'view',
+      ...v
+    });
   });
 
   // Actions
   CMD_ACTIONS.forEach(a => {
-    if (!q || a.label.toLowerCase().includes(q)) items.push({ type: 'action', ...a });
+    if (!q || a.label.toLowerCase().includes(q)) items.push({
+      type: 'action',
+      ...a
+    });
   });
 
   // Jobs (only when typing)
@@ -101,7 +167,12 @@ function renderCmdResults(query) {
     state.jobs
       .filter(j => j.role.toLowerCase().includes(q) || j.company.toLowerCase().includes(q))
       .slice(0, 5)
-      .forEach(j => items.push({ type: 'job', icon: (STAGE_EMOJIS && STAGE_EMOJIS[j.stage]) || '📋', label: `${j.role} · ${j.company}`, jobId: j.id }));
+      .forEach(j => items.push({
+        type: 'job',
+        icon: (STAGE_EMOJIS && STAGE_EMOJIS[j.stage]) || '📋',
+        label: `${j.role} · ${j.company}`,
+        jobId: j.id
+      }));
   }
 
   _cmdIdx = 0;
@@ -144,14 +215,19 @@ function _execCmdItem(item) {
   closeCommandPalette();
   if (item.type === 'view') navigate(item.view);
   else if (item.type === 'action') item.action();
-  else if (item.type === 'job') { navigate('board'); setTimeout(() => openJobDetail(item.jobId), 200); }
+  else if (item.type === 'job') {
+    navigate('board');
+    setTimeout(() => openJobDetail(item.jobId), 200);
+  }
 }
 
 function initCommandPalette() {
   const ov = document.getElementById('cmd-palette');
   if (!ov) return;
 
-  ov.addEventListener('click', e => { if (e.target === ov) closeCommandPalette(); });
+  ov.addEventListener('click', e => {
+    if (e.target === ov) closeCommandPalette();
+  });
 
   const inp = document.getElementById('cmd-input');
   if (!inp) return;
@@ -181,7 +257,9 @@ function initCommandPalette() {
     }
     el.querySelectorAll('.cmd-item').forEach((r, i) => r.classList.toggle('active', i === _cmdIdx));
     const active = el.querySelector('.cmd-item.active');
-    if (active) active.scrollIntoView({ block: 'nearest' });
+    if (active) active.scrollIntoView({
+      block: 'nearest'
+    });
   });
 }
 
@@ -309,19 +387,44 @@ function printSummary() {
 /* ══════════════════════════════════════════════════════════
    GETTING STARTED CHECKLIST
    ══════════════════════════════════════════════════════════ */
-const GS_STEPS = [
-  { id: 'skills',   label: 'Add your skills',    view: 'profile',  done: () => typeof state !== 'undefined' && (state.profile.skills || []).length > 0 },
-  { id: 'job',      label: 'Add your first job',  view: 'board',    done: () => typeof state !== 'undefined' && state.jobs.length > 0 },
-  { id: 'fit',      label: 'Get a fit score',     view: 'board',    done: () => typeof state !== 'undefined' && state.jobs.some(j => j.fitScore != null) },
-  { id: 'learn',    label: 'Visit Learning Hub',  view: 'learning', done: () => localStorage.getItem('pt-visited-learning') === '1' },
+const GS_STEPS = [{
+    id: 'skills',
+    label: 'Add your skills',
+    view: 'profile',
+    done: () => typeof state !== 'undefined' && (state.profile.skills || []).length > 0
+  },
+  {
+    id: 'job',
+    label: 'Add your first job',
+    view: 'board',
+    done: () => typeof state !== 'undefined' && state.jobs.length > 0
+  },
+  {
+    id: 'fit',
+    label: 'Get a fit score',
+    view: 'board',
+    done: () => typeof state !== 'undefined' && state.jobs.some(j => j.fitScore != null)
+  },
+  {
+    id: 'learn',
+    label: 'Visit Learning Hub',
+    view: 'learning',
+    done: () => localStorage.getItem('pt-visited-learning') === '1'
+  },
 ];
 
 function updateGettingStarted() {
   const bar = document.getElementById('getting-started-bar');
   if (!bar) return;
-  if (localStorage.getItem('pt-gs-dismissed') === '1') { bar.style.display = 'none'; return; }
+  if (localStorage.getItem('pt-gs-dismissed') === '1') {
+    bar.style.display = 'none';
+    return;
+  }
   const allDone = GS_STEPS.every(s => s.done());
-  if (allDone) { bar.style.display = 'none'; return; }
+  if (allDone) {
+    bar.style.display = 'none';
+    return;
+  }
   bar.style.display = '';
   const done = GS_STEPS.filter(s => s.done()).length;
   bar.innerHTML = `
@@ -336,7 +439,10 @@ function updateGettingStarted() {
       <button class="gs-close" title="Dismiss">×</button>
     </div>`;
   bar.querySelectorAll('.gs-step:not(.gs-done)').forEach(s => s.addEventListener('click', () => typeof navigate === 'function' && navigate(s.dataset.view)));
-  bar.querySelector('.gs-close').addEventListener('click', () => { localStorage.setItem('pt-gs-dismissed','1'); bar.style.display='none'; });
+  bar.querySelector('.gs-close').addEventListener('click', () => {
+    localStorage.setItem('pt-gs-dismissed', '1');
+    bar.style.display = 'none';
+  });
 }
 
 /* ══════════════════════════════════════════════════════════
