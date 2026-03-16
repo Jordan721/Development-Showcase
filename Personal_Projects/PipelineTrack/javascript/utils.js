@@ -102,14 +102,29 @@ function formatDate(iso) {
   });
 }
 
-function toast(msg, type = '') {
+function emptyStateHTML(emoji, title, subtitle = '') {
+  return `<div class="empty-state">
+    <div class="empty-state-emoji">${emoji}</div>
+    <div class="empty-state-title">${title}</div>
+    ${subtitle ? `<div class="empty-state-sub">${subtitle}</div>` : ''}
+  </div>`;
+}
+
+function toast(msg, type = '', opts = {}) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = `toast show ${type}`;
   clearTimeout(el._t);
-  el._t = setTimeout(() => {
-    el.className = 'toast';
-  }, 2600);
+  if (opts && opts.undo) {
+    el.innerHTML = `<span class="toast-msg">${escHtml(msg)}</span><button class="toast-undo-btn">Undo</button>`;
+    el.querySelector('.toast-undo-btn').addEventListener('click', () => {
+      clearTimeout(el._t);
+      el.className = 'toast';
+      opts.undo();
+    });
+  } else {
+    el.textContent = msg;
+  }
+  el.className = `toast show${type ? ' ' + type : ''}`;
+  el._t = setTimeout(() => { el.className = 'toast'; }, 3000);
 }
 
 function openModal(id) {
@@ -216,6 +231,7 @@ function navigate(view) {
   }
 
   renderView(view);
+  if (typeof updateGettingStarted === 'function') updateGettingStarted();
 }
 
 function renderView(view) {

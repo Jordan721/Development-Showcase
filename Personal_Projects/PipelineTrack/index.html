@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="css/views.css" />
     <link rel="stylesheet" href="css/fun.css" />
     <link rel="stylesheet" href="css/onboarding.css" />
+    <link rel="stylesheet" href="css/ux-enhancements.css" />
 </head>
 
 <body>
@@ -93,9 +94,13 @@
                         id="theme-icon"></span></button>
                 <button class="onboarding-help-btn" id="onboarding-help-btn"
                     title="Open getting started guide">?</button>
+                <button id="btn-colorblind" title="Toggle color-blind mode" aria-label="Toggle color-blind mode">◑</button>
                 <button class="btn-primary" id="topbar-action" data-action="add-job">+ Add Job</button>
             </div>
         </header>
+
+        <!-- ── GETTING STARTED BAR ──────────────────────────── -->
+        <div id="getting-started-bar" style="display:none;padding:0 24px;"></div>
 
         <!-- ── VIEW: DASHBOARD ──────────────────────────────── -->
         <section class="view active" id="view-dashboard">
@@ -1361,6 +1366,29 @@
         </div>
     </div>
 
+    <!-- ── COMMAND PALETTE ──────────────────────────────── -->
+    <div id="cmd-palette" aria-hidden="true">
+      <div class="cmd-box">
+        <div class="cmd-input-row">
+          <span class="cmd-search-icon">⌕</span>
+          <input id="cmd-input" type="text" placeholder="Search views, actions, or jobs…" autocomplete="off" spellcheck="false" />
+          <span class="cmd-esc-hint">Esc</span>
+        </div>
+        <div id="cmd-results"></div>
+        <div class="cmd-footer">
+          <span><kbd>↑↓</kbd> navigate</span>
+          <span><kbd>↵</kbd> select</span>
+          <span><kbd>Esc</kbd> close</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FIT SCORE TOOLTIP ──────────────────────────────── -->
+    <div id="fit-tooltip" aria-hidden="true"></div>
+
+    <!-- ── CARD HOVER PREVIEW ──────────────────────────────── -->
+    <div id="card-preview" aria-hidden="true"></div>
+
     <!-- ── TOAST ──────────────────────────────────────────── -->
     <div class="toast" id="toast"></div>
 
@@ -1406,19 +1434,15 @@
                     <div class="onboarding-icon">🚀</div>
                     <h2>You're all set</h2>
                     <ul>
+                        <li><strong>⌘K Command Palette</strong> — search views, jump to any job, or trigger actions instantly</li>
                         <li><strong>Learning Hub</strong> — courses matched to your skill gaps</li>
-                        <li><strong>Analytics</strong> — charts and KPIs across your full search</li>
+                        <li><strong>Analytics</strong> — charts and KPIs across your full search; print anytime with ⌘P</li>
                         <li><strong>Goals</strong> — set weekly or monthly application targets</li>
-                        <li><strong>Calendar</strong> — deadlines and follow-up dates in one view</li>
-                        <li><strong>Network</strong> — track recruiters and contacts; they appear directly inside job
-                            details</li>
-                        <li><strong>Compare Jobs</strong> — select 2–3 jobs on the Job Board to compare them side by
-                            side</li>
-                        <li><strong>Email Templates</strong> — save reusable thank-you and follow-up templates in My
-                            Profile</li>
+                        <li><strong>Network</strong> — track recruiters and contacts; they appear directly inside job details</li>
+                        <li><strong>Compare Jobs</strong> — select 2–3 jobs on the Job Board to compare side by side</li>
+                        <li><strong>◑ Color-Blind Mode</strong> — toggle in the top bar to switch to an accessible palette</li>
                     </ul>
-                    <p class="onboarding-tip">Reopen this guide anytime with the <strong>?</strong> button in the top
-                        bar.</p>
+                    <p class="onboarding-tip">Hover any job card for a quick preview · Hover any fit score badge for a skill breakdown · Press <strong>N</strong> to add a job fast · Reopen this guide with <strong>?</strong></p>
                 </div>
             </div>
 
@@ -1501,6 +1525,7 @@
     <script src="javascript/app.js"></script>
     <script src="javascript/features.js"></script>
     <script src="javascript/onboarding.js"></script>
+    <script src="javascript/ux-enhancements.js"></script>
 </body>
 
 </html>

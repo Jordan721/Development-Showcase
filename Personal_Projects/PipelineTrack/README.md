@@ -230,7 +230,8 @@ PipelineTrack/
 │   ├── features.css        # deadline banner, notes timeline
 │   ├── views.css           # calendar, contacts, analytics, goals views
 │   ├── fun.css             # extra themes (Midnight, Sunset, Ocean), confetti, streak, card flair
-│   └── onboarding.css      # first-run onboarding modal styles
+│   ├── onboarding.css      # first-run onboarding modal styles
+│   └── ux-enhancements.css # command palette, hover cards, tooltips, color-blind mode, print, empty states
 └── javascript/
     ├── data.js             # static data: KNOWN_SKILLS, LEARNING, RESOURCES, WRITING_RULES (tech)
     ├── data-industries.js  # extends KNOWN_SKILLS & LEARNING for Business, Finance, PM, Banking, CX
@@ -248,7 +249,8 @@ PipelineTrack/
     ├── features.js         # deadline reminders, notes timeline, resume versioning
     ├── animations.js       # UI animations and transitions
     ├── fun.js              # confetti, milestone toasts, streak counter, dashboard nudge
-    └── onboarding.js       # first-run guide, step navigation, reopen via ? button
+    ├── onboarding.js       # first-run guide, step navigation, reopen via ? button
+    └── ux-enhancements.js  # command palette, keyboard shortcuts, hover preview, tooltips, color-blind mode, getting started checklist
 ```
 
 ---
@@ -267,7 +269,7 @@ PipelineTrack/
 10. Visit **Analytics** for KPIs and charts across your full job search
 11. Use **Goals** to set weekly or monthly targets and watch them update as you track applications
 
-All data is saved to your browser's localStorage. Nothing is sent anywhere. Use the ☀️ / 🌙 toggle in the top bar to switch between light and dark mode, or pick a color theme — **M** (Midnight), **S** (Sunset), or **O** (Ocean) — from the buttons beside it. Your preference is remembered.
+All data is saved to your browser's localStorage. Nothing is sent anywhere. Use the ☀️ / 🌙 toggle in the top bar to switch between light and dark mode, or pick a color theme — **M** (Midnight), **S** (Sunset), or **O** (Ocean) — from the buttons beside it. Use **◑** to enable color-blind mode. Press `Cmd/Ctrl+K` at any time to open the command palette. Your preferences are remembered.
 
 ---
 
@@ -333,6 +335,51 @@ The Dashboard now includes a **This Week** recap card showing: jobs added this w
 
 ### 👥 Linked Contacts in Job Detail
 When opening a job that has contacts linked to it (via Network), those contacts now appear inline in the job detail modal — including their type, follow-up status, and overdue alerts — without needing to switch views.
+
+---
+
+### ⌨ Keyboard Shortcuts & Command Palette
+
+**Keyboard shortcuts** work anywhere in the app (when not typing in a field):
+
+| Key | Action |
+|---|---|
+| `Cmd / Ctrl + K` | Open command palette |
+| `N` | Open Add Job form |
+| `/` | Focus the board search bar |
+| `Escape` | Close any open modal |
+
+**Command palette** (`Cmd/Ctrl+K`) — search for views, trigger actions, or jump directly to any job by name or company. Navigate with `↑ ↓`, confirm with `Enter`, close with `Escape`. Also accessible by clicking the `⌘K` hint in the top bar.
+
+---
+
+### 🃏 Job Card Hover Preview
+Hover over any job card on the board for ~0.5 seconds to see a floating preview with salary, stage, work type, deadline, matched skill count, and skill gap count — without opening the full detail modal.
+
+---
+
+### 🔢 Fit Score Tooltip
+Hover any fit score badge to see an instant breakdown: percentage, number of matched skills (green), and number of skill gaps (red).
+
+---
+
+### ↩ Undo Job Deletion
+Deleting a job card from the kanban or priority matrix view shows an **Undo** button in the toast notification. You have 3 seconds to reverse the deletion — no confirmation required.
+
+---
+
+### 🎯 Getting Started Checklist
+A progress bar appears at the top of the app on first use with four steps: add skills → add first job → get a fit score → visit the Learning Hub. Each step is a clickable link that takes you directly to where you need to go. Dismiss it when you're done.
+
+---
+
+### ◑ Color-Blind Mode
+Toggle the **◑** button in the top bar to switch the app's red/green color scheme to orange/blue — a palette that works for the most common types of color vision deficiency. Preference is saved and remembered.
+
+---
+
+### 🖨 Print Summary
+Press `Cmd/Ctrl+P` or choose **Print Summary** from the command palette to print a clean, navigation-free version of the Analytics page — useful for sharing your job search progress with a career coach or mentor.
 
 ---
 

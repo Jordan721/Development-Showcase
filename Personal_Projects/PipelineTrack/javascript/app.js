@@ -413,6 +413,7 @@ function init() {
   wireEvents();
   wirePasteCleaners();
   navigate('dashboard');
+  if (typeof initUXEnhancements === 'function') initUXEnhancements();
 }
 
 document.addEventListener('DOMContentLoaded', init);

@@ -99,14 +99,14 @@ function pmCardHTML(job) {
       <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
       <div class="job-card-footer">
         <span class="job-card-date">${timeInfo}</span>
-        <span class="fit-badge ${cls}">${label}</span>
+        <span class="fit-badge ${cls}" data-job-id="${job.id}">${label}</span>
       </div>
     </div>`;
 }
 
 function renderBoardMatrix(jobs) {
   if (jobs.length === 0) {
-    return '<div style="padding:48px;text-align:center;color:var(--text-muted)">No jobs match your filters.</div>';
+    return emptyStateHTML('🔍', 'No results', 'Try adjusting your search or filters');
   }
 
   const scored = jobs.filter(j => j.fitScore != null);
@@ -151,7 +151,7 @@ function renderBoardMatrix(jobs) {
                 </div>
                 <div class="pm-cards">
                   ${qJobs[q.id].length === 0
-                    ? `<div class="pm-empty-q">No jobs here</div>`
+                    ? emptyStateHTML('📭', 'No jobs here', 'Drag a card here to move a job to this stage')
                     : qJobs[q.id].map(j => pmCardHTML(j)).join('')}
                 </div>
               </div>`).join('')}
@@ -272,11 +272,20 @@ function renderBoard() {
         const id = btn.dataset.deleteId;
         const job = state.jobs.find(j => j.id === id);
         if (!job) return;
+        const snapshot = JSON.parse(JSON.stringify(job));
         state.jobs = state.jobs.filter(j => j.id !== id);
         save();
         renderBoard();
         if (state.activeView === 'dashboard') renderDashboard();
-        toast(`"${job.role}" deleted.`, 'success');
+        toast(`"${job.role}" deleted.`, '', {
+          undo: () => {
+            state.jobs.push(snapshot);
+            save();
+            renderBoard();
+            if (state.activeView === 'dashboard') renderDashboard();
+            toast('Undo: job restored.', 'success');
+          }
+        });
       });
     });
     board.querySelectorAll('.job-card').forEach(card => {
@@ -301,7 +310,7 @@ function renderBoard() {
         </div>
         <div class="kanban-col-body" data-stage="${stage}">
           ${jobs.length === 0
-            ? `<div class="no-jobs-col">No jobs here</div>`
+            ? emptyStateHTML('📭', 'No jobs here', 'Drag a card here to move a job to this stage')
             : jobs.map(j => jobCardHTML(j)).join('')}
         </div>
       </div>`;
@@ -329,11 +338,20 @@ function renderBoard() {
       const id = btn.dataset.deleteId;
       const job = state.jobs.find(j => j.id === id);
       if (!job) return;
+      const snapshot = JSON.parse(JSON.stringify(job));
       state.jobs = state.jobs.filter(j => j.id !== id);
       save();
       renderBoard();
       if (state.activeView === 'dashboard') renderDashboard();
-      toast(`"${job.role}" deleted.`, 'success');
+      toast(`"${job.role}" deleted.`, '', {
+        undo: () => {
+          state.jobs.push(snapshot);
+          save();
+          renderBoard();
+          if (state.activeView === 'dashboard') renderDashboard();
+          toast('Undo: job restored.', 'success');
+        }
+      });
     });
   });
 
@@ -435,7 +453,7 @@ function wireSearchAndFilters() {
 
 function renderBoardTable(jobs) {
   if (jobs.length === 0) {
-    return '<div style="padding:32px;text-align:center;color:var(--text-muted)">No jobs match your filters.</div>';
+    return emptyStateHTML('🔍', 'No results', 'Try adjusting your search or filters');
   }
   const sortIcon = (key) => boardSortTable === key ? ' ↓' : boardSortTable === key + '-asc' ? ' ↑' : '';
   const stageOptions = (current) => STAGES
@@ -489,14 +507,14 @@ function jobCardHTML(job) {
       <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
       <div class="job-card-footer">
         <span class="job-card-date">${job.stage === 'declined' && job.declinedAt ? '❌ ' + formatDate(job.declinedAt) : formatDate(job.dateAdded)}</span>
-        <span class="fit-badge ${cls}">${label}</span>
+        <span class="fit-badge ${cls}" data-job-id="${job.id}">${label}</span>
       </div>
     </div>`;
 }
 
 function renderBoardTimeline(jobs) {
   if (jobs.length === 0) {
-    return '<div class="tl-empty">No jobs match your filters.</div>';
+    return emptyStateHTML('⏱', 'No timeline entries', 'Jobs with dates will appear here');
   }
 
   const today = new Date();

@@ -188,7 +188,7 @@ function renderContacts() {
   const grid = document.getElementById('contacts-grid');
   if (!grid) return;
   if (contacts.length === 0) {
-    grid.innerHTML = '<p class="empty-msg">No contacts found. Click <strong>+ Add Contact</strong> to get started.</p>';
+    grid.innerHTML = emptyStateHTML('🤝', 'No contacts yet', 'Add recruiters, hiring managers, and connections');
   } else {
     grid.innerHTML = contacts.map(c => contactCardHTML(c)).join('');
     grid.querySelectorAll('.contact-edit-btn').forEach(btn => {

@@ -213,7 +213,7 @@ function renderGoals() {
   const emptyEl = document.getElementById('goals-empty');
   if (!grid) return;
   if (filtered.length === 0) {
-    grid.innerHTML = '';
+    grid.innerHTML = emptyStateHTML('🎯', 'No goals yet', 'Set a weekly or monthly target to track your progress');
     if (emptyEl) emptyEl.style.display = '';
     renderGoalPresets();
   } else {

@@ -1031,3 +1031,10 @@
   pointer-events: none;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
+
+.table-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--bg-card);
+}
