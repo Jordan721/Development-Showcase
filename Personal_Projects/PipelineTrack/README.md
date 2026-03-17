@@ -269,7 +269,7 @@ PipelineTrack/
 10. Visit **Analytics** for KPIs and charts across your full job search
 11. Use **Goals** to set weekly or monthly targets and watch them update as you track applications
 
-All data is saved to your browser's localStorage. Nothing is sent anywhere. Use the ☀️ / 🌙 toggle in the top bar to switch between light and dark mode, or pick a color theme — **M** (Midnight), **S** (Sunset), or **O** (Ocean) — from the buttons beside it. Use **◑** to enable color-blind mode. Press `Cmd/Ctrl+K` at any time to open the command palette. Your preferences are remembered.
+All data is saved to your browser's localStorage. Nothing is sent anywhere. Use the ☀️ / 🌙 toggle in the top bar to switch between light and dark mode, or pick a color theme — **M** (Midnight), **S** (Sunset), or **O** (Ocean) — from the buttons beside it. Use **◑** to enable color-blind mode. Press `Cmd+Shift+K` / `Ctrl+Shift+K` at any time to open the command palette. Your preferences are remembered.
 
 ---
 
@@ -344,12 +344,12 @@ When opening a job that has contacts linked to it (via Network), those contacts 
 
 | Key | Action |
 |---|---|
-| `Cmd / Ctrl + K` | Open command palette |
+| `Cmd+Shift+K` / `Ctrl+Shift+K` | Open command palette |
 | `N` | Open Add Job form |
 | `/` | Focus the board search bar |
 | `Escape` | Close any open modal (works even when typing inside it) |
 
-**Command palette** (`Cmd/Ctrl+K`) — search for views, trigger actions, or jump directly to any job by name or company. Navigate with `↑ ↓`, confirm with `Enter`, close with `Escape`. Also accessible by clicking the `⌘K` hint in the top bar.
+**Command palette** (`Cmd+Shift+K` / `Ctrl+Shift+K`) — search for views, trigger actions, or jump directly to any job by name or company. Navigate with `↑ ↓`, confirm with `Enter`, close with `Escape`. Also accessible by clicking the `⌘K` hint in the top bar.
 
 ---
 

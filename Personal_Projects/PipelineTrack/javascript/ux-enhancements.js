@@ -5,8 +5,8 @@
    ══════════════════════════════════════════════════════════ */
 function initKeyboardShortcuts() {
   document.addEventListener('keydown', e => {
-    // Cmd/Ctrl+K → command palette
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    // Cmd+Shift+K (Mac) / Ctrl+Shift+K (Windows) → command palette
+    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key === 'K') {
       e.preventDefault();
       toggleCommandPalette();
       return;
