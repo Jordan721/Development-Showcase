@@ -527,6 +527,11 @@ html.colorblind .fit-tip-gap {
     color: #000 !important;
   }
 
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
   .kpi-card,
   .analytics-section {
     break-inside: avoid;
