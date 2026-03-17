@@ -12,6 +12,13 @@ function initKeyboardShortcuts() {
       return;
     }
 
+    // Escape → close topmost open modal (works even when typing inside it)
+    if (e.key === 'Escape') {
+      const open = document.querySelector('.modal-overlay.open');
+      if (open) { e.preventDefault(); closeModal(open.id); }
+      return;
+    }
+
     const tag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
     const typing = ['input', 'textarea', 'select'].includes(tag) || (document.activeElement && document.activeElement.isContentEditable);
     if (typing) return;

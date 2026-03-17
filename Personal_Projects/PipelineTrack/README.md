@@ -347,7 +347,7 @@ When opening a job that has contacts linked to it (via Network), those contacts 
 | `Cmd / Ctrl + K` | Open command palette |
 | `N` | Open Add Job form |
 | `/` | Focus the board search bar |
-| `Escape` | Close any open modal |
+| `Escape` | Close any open modal (works even when typing inside it) |
 
 **Command palette** (`Cmd/Ctrl+K`) — search for views, trigger actions, or jump directly to any job by name or company. Navigate with `↑ ↓`, confirm with `Enter`, close with `Escape`. Also accessible by clicking the `⌘K` hint in the top bar.
 
