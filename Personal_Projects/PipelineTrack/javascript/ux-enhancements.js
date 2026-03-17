@@ -15,7 +15,10 @@ function initKeyboardShortcuts() {
     // Escape → close topmost open modal (works even when typing inside it)
     if (e.key === 'Escape') {
       const open = document.querySelector('.modal-overlay.open');
-      if (open) { e.preventDefault(); closeModal(open.id); }
+      if (open) {
+        e.preventDefault();
+        closeModal(open.id);
+      }
       return;
     }
 
@@ -457,6 +460,230 @@ function updateGettingStarted() {
 }
 
 /* ══════════════════════════════════════════════════════════
+   SENIORITY INFERENCE
+   ══════════════════════════════════════════════════════════ */
+const _seniorityRules = [{
+    value: 'Internship',
+    patterns: [/\bintern(ship)?\b/i]
+  },
+  {
+    value: 'Entry Level',
+    patterns: [/\bentry[\s-]?level\b/i, /\bnew[\s-]?grad\b/i, /\bgraduate\b/i, /\bassociate\b/i, /\bjunior\b/i, /\bjr\.?\b/i]
+  },
+  {
+    value: 'Junior',
+    patterns: [/\bjunior\b/i, /\bjr\.?\b/i]
+  },
+  {
+    value: 'Mid-Level',
+    patterns: [/\bmid[\s-]?level\b/i, /\bintermediate\b/i, /\blevel\s?ii\b/i, /\bengineer\s?ii\b/i, /\bii\b/i]
+  },
+  {
+    value: 'Senior',
+    patterns: [/\bsenior\b/i, /\bsr\.?\b/i]
+  },
+  {
+    value: 'Lead',
+    patterns: [/\blead\b/i, /\btech\s?lead\b/i, /\bteam\s?lead\b/i]
+  },
+  {
+    value: 'Staff',
+    patterns: [/\bstaff\b/i, /\bprincipal\b/i]
+  },
+];
+
+// More specific title-only rules checked first (order matters — more specific → less specific)
+const _titleRules = [{
+    value: 'Internship',
+    patterns: [/\bintern(ship)?\b/i]
+  },
+  {
+    value: 'Staff',
+    patterns: [/\bstaff\b/i, /\bprincipal\b/i]
+  },
+  {
+    value: 'Lead',
+    patterns: [/\blead\b/i]
+  },
+  {
+    value: 'Senior',
+    patterns: [/\bsenior\b/i, /\bsr\.?\b/i]
+  },
+  {
+    value: 'Mid-Level',
+    patterns: [/\bmid[\s-]?level\b/i, /\blevel\s?ii\b/i, /\bengineer\s?ii\b/i]
+  },
+  {
+    value: 'Junior',
+    patterns: [/\bjunior\b/i, /\bjr\.?\b/i]
+  },
+  {
+    value: 'Entry Level',
+    patterns: [/\bentry[\s-]?level\b/i, /\bnew[\s-]?grad\b/i, /\bgraduate\b/i]
+  },
+];
+
+// L-levels / E-levels / P-levels used by major tech companies
+const _levelRules = [{
+    value: 'Entry Level',
+    pattern: /\b(L3|E3|IC3|T3|P3|SDE[\s-]?I|SWE[\s-]?I|engineer[\s-]?I\b)/i
+  },
+  {
+    value: 'Mid-Level',
+    pattern: /\b(L4|E4|IC4|T4|P4|SDE[\s-]?II|SWE[\s-]?II|engineer[\s-]?II\b)/i
+  },
+  {
+    value: 'Senior',
+    pattern: /\b(L5|E5|IC5|T5|P5|SDE[\s-]?III|SWE[\s-]?III|engineer[\s-]?III\b)/i
+  },
+  {
+    value: 'Lead',
+    pattern: /\b(L6|E6|IC6|T6|P6|SDE[\s-]?IV)\b/i
+  },
+  {
+    value: 'Staff',
+    pattern: /\b(L7|E7|IC7|T7|P7|distinguished)\b/i
+  },
+];
+
+function _inferFromLevels(text) {
+  if (!text) return null;
+  for (const rule of _levelRules) {
+    if (rule.pattern.test(text)) return rule.value;
+  }
+  return null;
+}
+
+// Responsibility language patterns
+const _respRules = [{
+    value: 'Lead',
+    patterns: [/\blead(ing)?\s+(a\s+)?team\b/i, /\bmanage\s+(a\s+team|engineers|developers)\b/i, /\bdirect\s+reports\b/i, /\bpeople\s+manager\b/i]
+  },
+  {
+    value: 'Senior',
+    patterns: [/\bmentor(ing)?\s+(junior|engineers|developers)\b/i, /\barchitect(ing|ure)?\s+(systems|solutions)\b/i, /\bown(ing)?\s+the\s+(technical|system)\b/i]
+  },
+  {
+    value: 'Junior',
+    patterns: [/\bunder\s+(the\s+)?(guidance|supervision|mentorship)\b/i, /\bwe('ll|will)\s+teach\b/i, /\blearning\s+opportunity\b/i, /\bno\s+experience\s+required\b/i, /\bfresh\s+gradu?a/i, /\bnew\s+gradu?a/i, /\brecent\s+gradu?a/i]
+  },
+  {
+    value: 'Entry Level',
+    patterns: [/\bno\s+experience\s+(required|necessary|needed)\b/i, /\bentry[\s-]?level\s+welcome\b/i, /\brecent\s+gradu?a/i, /\bnew\s+gradu?a/i, /\bfresh\s+gradu?a/i]
+  },
+];
+
+function _inferFromResponsibilities(description) {
+  if (!description) return null;
+  for (const rule of _respRules) {
+    if (rule.patterns.some(p => p.test(description))) return rule.value;
+  }
+  return null;
+}
+
+function _inferFromYears(description) {
+  if (!description) return null;
+  // Match patterns like "3+ years", "2-4 years", "minimum 5 years", "at least 3 years"
+  const yrsPattern = /(?:minimum\s+|at\s+least\s+|(\d+)\s*[-–]\s*)?(\d+)\+?\s*years?\s*(?:of\s+)?(?:experience|exp)?/gi;
+  const matches = [...description.matchAll(yrsPattern)];
+  if (!matches.length) return null;
+  // Use the lowest mentioned year count as the baseline requirement
+  const nums = matches.map(m => parseInt(m[1] || m[2])).filter(n => !isNaN(n) && n <= 20);
+  if (!nums.length) return null;
+  const min = Math.min(...nums);
+  if (min === 0) return 'Internship';
+  if (min <= 2) return 'Junior';
+  if (min <= 4) return 'Mid-Level';
+  if (min <= 7) return 'Senior';
+  if (min <= 10) return 'Lead';
+  return 'Staff';
+}
+
+function inferSeniority(role, description) {
+  // 1. Title keywords — most reliable
+  for (const rule of _titleRules) {
+    if (rule.patterns.some(p => p.test(role))) return rule.value;
+  }
+  // 2. L-levels / E-levels in title or description — unambiguous when present
+  const fromLevel = _inferFromLevels(role) || _inferFromLevels(description);
+  if (fromLevel) return fromLevel;
+  // 3. Years of experience — strong signal
+  const fromYears = _inferFromYears(description);
+  if (fromYears) return fromYears;
+  // 4. Responsibility language — mentoring, managing, under guidance, fresh grad etc.
+  const fromResp = _inferFromResponsibilities(description);
+  if (fromResp) return fromResp;
+  // 5. Keyword frequency in description — require ≥2 hits to reduce noise
+  if (description) {
+    for (const rule of _seniorityRules) {
+      const hits = rule.patterns.reduce((n, p) => {
+        const m = description.match(new RegExp(p.source, 'gi'));
+        return n + (m ? m.length : 0);
+      }, 0);
+      if (hits >= 2) return rule.value;
+    }
+  }
+  return null;
+}
+
+function backfillSeniority() {
+  if (typeof state === 'undefined') return;
+  let filled = 0;
+  state.jobs.forEach(job => {
+    if (job.seniority) return;
+    const inferred = inferSeniority(job.role || '', job.description || '');
+    if (inferred) {
+      job.seniority = inferred;
+      filled++;
+    }
+  });
+  if (filled > 0) {
+    if (typeof save === 'function') save();
+    if (typeof toast === 'function') toast(`Seniority inferred for ${filled} existing job${filled !== 1 ? 's' : ''}.`, 'success');
+  }
+}
+
+function initSeniorityInference() {
+  // Wire on the modal-add-job form; re-wires each time the modal opens
+  document.addEventListener('click', e => {
+    // any button that opens the add/edit form
+    if (!e.target.closest('[data-action="add-job"], .job-edit-btn, #topbar-action')) return;
+    // wait for form to render
+    requestAnimationFrame(() => _wireSeniorityFields());
+  });
+  // Also wire immediately in case form is already open
+  _wireSeniorityFields();
+}
+
+function _wireSeniorityFields() {
+  const roleInput = document.getElementById('job-role');
+  const descInput = document.getElementById('job-description');
+  const senSelect = document.getElementById('job-seniority');
+  if (!roleInput || !senSelect) return;
+  if (roleInput._senWired) return; // already wired this instance
+  roleInput._senWired = true;
+
+  const tryInfer = () => {
+    if (senSelect.value) return; // user already picked one — don't override
+    const inferred = inferSeniority(roleInput.value, descInput ? descInput.value : '');
+    if (inferred) {
+      senSelect.value = inferred;
+      senSelect.title = `Auto-inferred from job title/description — change if needed`;
+      senSelect.classList.add('inferred');
+    }
+  };
+
+  roleInput.addEventListener('blur', tryInfer);
+  if (descInput) descInput.addEventListener('blur', tryInfer);
+
+  // Clear the inferred flag when user manually changes the select
+  senSelect.addEventListener('change', () => {
+    senSelect.classList.remove('inferred');
+    senSelect.title = '';
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
    INIT
    ══════════════════════════════════════════════════════════ */
 function initUXEnhancements() {
@@ -465,6 +692,8 @@ function initUXEnhancements() {
   initFitTooltip();
   initCardPreview();
   initColorBlindMode();
+  initSeniorityInference();
+  backfillSeniority();
   updateGettingStarted();
 
   // Track learning hub visit for checklist

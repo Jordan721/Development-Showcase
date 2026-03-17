@@ -94,7 +94,8 @@
                         id="theme-icon"></span></button>
                 <button class="onboarding-help-btn" id="onboarding-help-btn"
                     title="Open getting started guide">?</button>
-                <button id="btn-colorblind" title="Toggle color-blind mode" aria-label="Toggle color-blind mode">◑</button>
+                <button id="btn-colorblind" title="Toggle color-blind mode"
+                    aria-label="Toggle color-blind mode">◑</button>
                 <button class="btn-primary" id="topbar-action" data-action="add-job">+ Add Job</button>
             </div>
         </header>
@@ -1368,19 +1369,20 @@
 
     <!-- ── COMMAND PALETTE ──────────────────────────────── -->
     <div id="cmd-palette" aria-hidden="true">
-      <div class="cmd-box">
-        <div class="cmd-input-row">
-          <span class="cmd-search-icon">⌕</span>
-          <input id="cmd-input" type="text" placeholder="Search views, actions, or jobs…" autocomplete="off" spellcheck="false" />
-          <span class="cmd-esc-hint">Esc</span>
+        <div class="cmd-box">
+            <div class="cmd-input-row">
+                <span class="cmd-search-icon">⌕</span>
+                <input id="cmd-input" type="text" placeholder="Search views, actions, or jobs…" autocomplete="off"
+                    spellcheck="false" />
+                <span class="cmd-esc-hint">Esc</span>
+            </div>
+            <div id="cmd-results"></div>
+            <div class="cmd-footer">
+                <span><kbd>↑↓</kbd> navigate</span>
+                <span><kbd>↵</kbd> select</span>
+                <span><kbd>Esc</kbd> close</span>
+            </div>
         </div>
-        <div id="cmd-results"></div>
-        <div class="cmd-footer">
-          <span><kbd>↑↓</kbd> navigate</span>
-          <span><kbd>↵</kbd> select</span>
-          <span><kbd>Esc</kbd> close</span>
-        </div>
-      </div>
     </div>
 
     <!-- ── FIT SCORE TOOLTIP ──────────────────────────────── -->
@@ -1396,56 +1398,77 @@
     <div class="modal-overlay" id="modal-onboarding" aria-hidden="true">
         <div class="modal onboarding-modal">
 
-            <div class="onboarding-steps">
-                <!-- Step 1 — Welcome -->
-                <div class="onboarding-step active" data-step="1">
-                    <div class="onboarding-icon">🎯</div>
-                    <h2>Welcome to PipelineTrack</h2>
-                    <p>Your personal job search companion. Track every application, score your skill fit, and close your
-                        gaps — all in your browser, no account needed.</p>
-                    <p>Supports <strong>Tech</strong>, <strong>Business</strong>, and <strong>Customer
-                            Experience</strong> roles.</p>
-                </div>
+            <div class="onboarding-progress-bar">
+                <div class="onboarding-progress-fill" id="onboarding-progress-fill" style="width:25%"></div>
+            </div>
 
-                <!-- Step 2 — Profile -->
-                <div class="onboarding-step" data-step="2">
-                    <div class="onboarding-icon">👤</div>
-                    <h2>Start with your skills</h2>
-                    <p>Head to <strong>My Profile</strong> and add your skills. This is what powers fit scoring —
-                        without it, all fit scores will show 0%.</p>
-                    <p class="onboarding-tip">Use the <strong>Bulk</strong> button to paste a whole comma-separated list
-                        at once.</p>
-                </div>
+            <div class="onboarding-body">
+                <div class="onboarding-steps">
 
-                <!-- Step 3 — Add a job -->
-                <div class="onboarding-step" data-step="3">
-                    <div class="onboarding-icon">📋</div>
-                    <h2>Add your first job</h2>
-                    <p>Hit <strong>+ Add Job</strong> on the Job Board. Fill in the <strong>Details</strong> tab, then
-                        paste the job description in <strong>Job Info</strong> to get an instant fit score and skill gap
-                        breakdown.</p>
-                    <p>Open any job to see matched skills highlighted <strong style="color:var(--green)">green</strong>
-                        and gaps in <strong style="color:var(--red)">red</strong> right inside the description. Click
-                        <strong>×</strong> on any skill tag to dismiss false positives.</p>
-                </div>
+                    <!-- Step 1 — Welcome -->
+                    <div class="onboarding-step active" data-step="1">
+                        <div class="onboarding-icon-wrap">
+                            <div class="onboarding-icon">🎯</div>
+                            <div class="onboarding-icon-text">
+                                <div class="ob-step-label">Step 1 of 4</div>
+                                <h2>Welcome to PipelineTrack</h2>
+                            </div>
+                        </div>
+                        <p>Your personal job search companion. Track every application, score your skill fit, and close your gaps — all in your browser, no account needed.</p>
+                        <p>Supports <strong>Tech</strong>, <strong>Business</strong>, and <strong>Customer Experience</strong> roles.</p>
+                    </div>
 
-                <!-- Step 4 — Explore -->
-                <div class="onboarding-step" data-step="4">
-                    <div class="onboarding-icon">🚀</div>
-                    <h2>You're all set</h2>
-                    <ul>
-                        <li><strong>⌘⇧K / Ctrl+Shift+K</strong> — command palette: jump to any view, action, or job instantly</li>
-                        <li><strong>N</strong> — open the Add Job form from anywhere</li>
-                        <li><strong>/</strong> — focus the board search bar</li>
-                        <li><strong>Esc</strong> — close any open modal or the command palette</li>
-                        <li><strong>Learning Hub</strong> — courses matched to your skill gaps</li>
-                        <li><strong>Analytics</strong> — charts and KPIs across your full search; print anytime with ⌘P</li>
-                        <li><strong>Goals</strong> — set weekly or monthly application targets</li>
-                        <li><strong>Network</strong> — track recruiters and contacts; they appear directly inside job details</li>
-                        <li><strong>Compare Jobs</strong> — select 2–3 jobs on the Job Board to compare side by side</li>
-                        <li><strong>◑ Color-Blind Mode</strong> — toggle in the top bar to switch to an accessible palette</li>
-                    </ul>
-                    <p class="onboarding-tip">Hover any job card for a quick preview · Hover any fit score badge for a skill breakdown · Reopen this guide with <strong>?</strong></p>
+                    <!-- Step 2 — Profile -->
+                    <div class="onboarding-step" data-step="2">
+                        <div class="onboarding-icon-wrap">
+                            <div class="onboarding-icon">👤</div>
+                            <div class="onboarding-icon-text">
+                                <div class="ob-step-label">Step 2 of 4</div>
+                                <h2>Start with your skills</h2>
+                            </div>
+                        </div>
+                        <p>Head to <strong>My Profile</strong> and add your skills. This is what powers fit scoring — without it, all fit scores will show 0%.</p>
+                        <p class="onboarding-tip">Use the <strong>Bulk</strong> button to paste a whole comma-separated list at once.</p>
+                    </div>
+
+                    <!-- Step 3 — Add a job -->
+                    <div class="onboarding-step" data-step="3">
+                        <div class="onboarding-icon-wrap">
+                            <div class="onboarding-icon">📋</div>
+                            <div class="onboarding-icon-text">
+                                <div class="ob-step-label">Step 3 of 4</div>
+                                <h2>Add your first job</h2>
+                            </div>
+                        </div>
+                        <p>Hit <strong>+ Add Job</strong> on the Job Board. Fill in the <strong>Details</strong> tab, then paste the job description in <strong>Job Info</strong> to get an instant fit score and skill gap breakdown.</p>
+                        <p>Matched skills are highlighted <strong style="color:var(--green)">green</strong> and gaps in <strong style="color:var(--red)">red</strong> inside the description. Click <strong>×</strong> on any tag to dismiss false positives.</p>
+                    </div>
+
+                    <!-- Step 4 — Explore -->
+                    <div class="onboarding-step" data-step="4">
+                        <div class="onboarding-icon-wrap">
+                            <div class="onboarding-icon">🚀</div>
+                            <div class="onboarding-icon-text">
+                                <div class="ob-step-label">Step 4 of 4</div>
+                                <h2>You're all set</h2>
+                            </div>
+                        </div>
+                        <div class="ob-shortcuts">
+                            <div class="ob-shortcut"><kbd>Ctrl+Shift+K</kbd> Command palette</div>
+                            <div class="ob-shortcut"><kbd>N</kbd> Add a job</div>
+                            <div class="ob-shortcut"><kbd>/</kbd> Focus search</div>
+                            <div class="ob-shortcut"><kbd>Esc</kbd> Close modal</div>
+                        </div>
+                        <div class="ob-features">
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Learning Hub</strong> — courses matched to your skill gaps</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Analytics</strong> — KPIs, funnel, charts; print with ⌘P</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Compare Jobs</strong> — select 2–3 jobs to compare side by side</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>◑ Color-Blind Mode</strong> — accessible palette toggle in the top bar</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Seniority auto-fill</strong> — inferred from title, level codes (L3–L7), years of experience, and description</span></div>
+                        </div>
+                        <p class="onboarding-tip">Hover any job card for a quick preview · Hover any fit badge for a skill breakdown · Reopen this guide with <strong>?</strong></p>
+                    </div>
+
                 </div>
             </div>
 
@@ -1482,7 +1505,8 @@
                     <div class="compare-picker-header">
                         <p class="compare-count-note">Select 2–3 jobs to compare side by side.</p>
                         <div style="display:flex;align-items:center;gap:8px">
-                            <button class="btn-ghost" id="compare-clear-btn" style="display:none;font-size:11px;padding:3px 10px">Clear</button>
+                            <button class="btn-ghost" id="compare-clear-btn"
+                                style="display:none;font-size:11px;padding:3px 10px">Clear</button>
                             <div class="compare-selected-counter" id="compare-selected-counter">0 / 3 selected</div>
                         </div>
                     </div>

@@ -3,25 +3,49 @@
    ══════════════════════════════════════════════════════════ */
 
 .onboarding-modal {
-  max-width: 480px;
-  padding: 36px 32px 28px;
+  max-width: 500px;
+  width: 100%;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  overflow: hidden;
+  border-radius: 16px;
   user-select: none;
+}
+
+/* ── Progress bar at top ────────────────────────────────── */
+.onboarding-progress-bar {
+  height: 3px;
+  background: var(--border);
+  position: relative;
+}
+
+.onboarding-progress-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 0 2px 2px 0;
+  transition: width 0.35s cubic-bezier(.4, 0, .2, 1);
+}
+
+/* ── Body ───────────────────────────────────────────────── */
+.onboarding-body {
+  padding: 36px 36px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 /* ── Steps ─────────────────────────────────────────────── */
 .onboarding-steps {
   position: relative;
-  min-height: 180px;
+  min-height: 200px;
 }
 
 .onboarding-step {
   display: none;
   flex-direction: column;
-  gap: 12px;
-  animation: ob-fadein .2s ease;
+  gap: 16px;
+  animation: ob-fadein .22s ease;
 }
 
 .onboarding-step.active {
@@ -31,7 +55,7 @@
 @keyframes ob-fadein {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(8px);
   }
 
   to {
@@ -40,50 +64,127 @@
   }
 }
 
-.onboarding-icon {
-  font-size: 2rem;
-  line-height: 1;
-  margin-bottom: 4px;
+/* ── Icon ───────────────────────────────────────────────── */
+.onboarding-icon-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
 }
 
-.onboarding-step h2 {
-  font-size: 1.2rem;
+.onboarding-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--accent-faint, rgba(99, 102, 241, 0.12));
+  border: 1.5px solid var(--accent-dim, rgba(99, 102, 241, 0.2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.onboarding-icon-text h2 {
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--text);
-  margin: 0;
+  margin: 0 0 3px;
+  line-height: 1.2;
 }
 
+.onboarding-icon-text .ob-step-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--accent);
+  opacity: 0.8;
+}
+
+/* ── Content ────────────────────────────────────────────── */
 .onboarding-step p {
   font-size: 0.9rem;
   color: var(--text-muted);
-  line-height: 1.6;
+  line-height: 1.65;
   margin: 0;
 }
 
-.onboarding-step ul {
-  margin: 0;
-  padding-left: 18px;
+.onboarding-step p strong {
+  color: var(--text);
+}
+
+/* ── Tip box ────────────────────────────────────────────── */
+.onboarding-tip {
+  font-size: 0.82rem !important;
+  color: var(--accent) !important;
+  background: var(--accent-faint, rgba(99, 102, 241, 0.08));
+  border: 1px solid var(--accent-dim, rgba(99, 102, 241, 0.18));
+  border-radius: 8px;
+  padding: 9px 13px;
+  line-height: 1.55 !important;
+}
+
+/* ── Step 4 — keyboard shortcuts grid ──────────────────── */
+.ob-shortcuts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.ob-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.ob-shortcut kbd {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  padding: 1px 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Step 4 — features list ─────────────────────────────── */
+.ob-features {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.onboarding-step ul li {
-  font-size: 0.875rem;
+.ob-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 12.5px;
   color: var(--text-muted);
   line-height: 1.5;
 }
 
-.onboarding-step ul li strong {
-  color: var(--text);
+.ob-feature-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-top: 6px;
+  flex-shrink: 0;
+  opacity: 0.6;
 }
 
-.onboarding-tip {
-  font-size: 0.8rem !important;
-  color: var(--accent) !important;
-  background: var(--accent-dim);
-  border-radius: 6px;
-  padding: 8px 12px;
+.ob-feature strong {
+  color: var(--text);
 }
 
 /* ── Footer ────────────────────────────────────────────── */
@@ -91,26 +192,30 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 16px 36px 24px;
+  border-top: 1px solid var(--border);
 }
 
 /* ── Step dots ─────────────────────────────────────────── */
 .onboarding-dots {
   display: flex;
-  gap: 6px;
+  gap: 5px;
   align-items: center;
 }
 
 .onboarding-dot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--border);
-  transition: background .2s, transform .2s;
+  transition: background .2s, transform .2s, width .2s;
 }
 
 .onboarding-dot.active {
   background: var(--accent);
-  transform: scale(1.3);
+  transform: scale(1.2);
+  width: 18px;
+  border-radius: 3px;
 }
 
 /* ── Nav buttons ───────────────────────────────────────── */
@@ -138,23 +243,25 @@
 /* ── Help button (topbar) ──────────────────────────────── */
 .onboarding-help-btn {
   background: none;
-  border: none;
-  padding: 4px 7px;
+  border: 1.5px solid var(--border);
+  padding: 0;
+  width: 28px;
+  height: 28px;
   cursor: pointer;
   font-size: 12px;
   font-weight: 700;
   color: var(--text-muted);
   border-radius: 50%;
-  border: 1.5px solid var(--border);
   line-height: 1;
   transition: color .15s, border-color .15s, transform .2s;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .onboarding-help-btn:hover {
   color: var(--text);
   border-color: var(--text-muted);
-  transform: scale(1.15);
+  transform: scale(1.12);
 }

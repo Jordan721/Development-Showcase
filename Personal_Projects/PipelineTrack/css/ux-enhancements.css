@@ -490,6 +490,12 @@ html.colorblind .fit-tip-gap {
   border-radius: 8px;
 }
 
+/* ── Seniority Inference ───────────────────────────────── */
+select.inferred {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 2px var(--accent-faint, rgba(99,102,241,0.18));
+}
+
 /* ── Print Styles ──────────────────────────────────────── */
 @media print {
 

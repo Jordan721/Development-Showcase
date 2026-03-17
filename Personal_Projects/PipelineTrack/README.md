@@ -373,6 +373,31 @@ A progress bar appears at the top of the app on first use with four steps: add s
 
 ---
 
+### 🎓 Seniority Inference
+When adding or editing a job, the **Seniority** field auto-fills if you leave it blank — no need to guess or look it up manually.
+
+The inference runs in order of confidence:
+
+1. **Job title keywords** — `Senior`, `Junior`, `Lead`, `Staff`, `Intern`, `Principal`, `Sr.`, `Jr.` detected directly in the role name
+2. **L-levels / E-levels / company levels** — `L3–L7`, `E3–E7`, `IC3–IC7`, `SDE I/II/III`, `SWE I/II/III` matched in the title or description — unambiguous when present
+3. **Years of experience** — phrases like `"3+ years"`, `"2–4 years"`, `"minimum 5 years of experience"` mapped to a level:
+
+| Years required | Inferred level |
+|---|---|
+| 0 | Internship |
+| 1–2 | Junior |
+| 3–4 | Mid-Level |
+| 5–7 | Senior |
+| 8–10 | Lead |
+| 11+ | Staff |
+
+4. **Responsibility language** — `"lead a team"`, `"manage engineers"`, `"direct reports"` → Lead; `"mentoring junior engineers"`, `"architect solutions"` → Senior; `"under the guidance of"`, `"we'll teach you"` → Junior; `"no experience required"`, `"recent graduate"`, `"fresh grad"` → Entry Level
+5. **Description keyword frequency** — fallback; requires a keyword to appear at least twice to reduce false positives
+
+The field is highlighted with an accent border when auto-inferred so you know to glance at it. Changing it manually clears the highlight. If you already have a seniority set, it is never overwritten. Existing jobs with no seniority are also scanned and back-filled automatically on startup.
+
+---
+
 ### ◑ Color-Blind Mode
 Toggle the **◑** button in the top bar to switch the app's red/green color scheme to orange/blue — a palette that works for the most common types of color vision deficiency. Preference is saved and remembered.
 

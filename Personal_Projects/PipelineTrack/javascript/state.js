@@ -5,7 +5,10 @@
    ══════════════════════════════════════════════════════════ */
 const STAGES = ['saved', 'applied', 'screening', 'interview', 'offer', 'declined', 'withdrew', 'ghosted', 'archived'];
 let boardPeriod = 'all';
-let boardLayout = (() => { const v = localStorage.getItem('pt-board-layout'); return (v && v !== 'swimlane') ? v : 'matrix'; })();
+let boardLayout = (() => {
+  const v = localStorage.getItem('pt-board-layout');
+  return (v && v !== 'swimlane') ? v : 'matrix';
+})();
 let boardSearch = '';
 let boardFilterStage = '';
 let boardFilterWorkType = '';
@@ -353,6 +356,7 @@ function importData(file) {
           updated
         } = _importFromCSV(e.target.result);
         save();
+        if (typeof backfillSeniority === 'function') backfillSeniority();
         renderView(state.activeView);
         const freshStatusEl = document.getElementById('backup-status');
         if (freshStatusEl) {
@@ -407,20 +411,30 @@ function importData(file) {
           // Skills: merge by lowercased name
           if (Array.isArray(imp.skills)) {
             const existing = new Set((state.profile.skills || []).map(s => s.name.toLowerCase()));
-            imp.skills.forEach(s => { if (s && s.name && !existing.has(s.name.toLowerCase())) state.profile.skills.push(s); });
+            imp.skills.forEach(s => {
+              if (s && s.name && !existing.has(s.name.toLowerCase())) state.profile.skills.push(s);
+            });
           }
           // Certifications: merge by lowercased name
           if (Array.isArray(imp.certifications)) {
             const existing = new Set((state.profile.certifications || []).map(c => c.name.toLowerCase()));
-            imp.certifications.forEach(c => { if (c && c.name && !existing.has(c.name.toLowerCase())) state.profile.certifications.push(c); });
+            imp.certifications.forEach(c => {
+              if (c && c.name && !existing.has(c.name.toLowerCase())) state.profile.certifications.push(c);
+            });
           }
           // Text fields: only overwrite if current is blank and imported has a value
           if (!state.profile.summary && imp.summary) state.profile.summary = imp.summary;
           if (imp.name && !state.profile.name) state.profile.name = imp.name;
           // Links: overwrite each key only if currently blank
           if (imp.links) {
-            if (!state.profile.links) state.profile.links = { linkedin: '', github: '', portfolio: '' };
-            ['linkedin', 'github', 'portfolio'].forEach(k => { if (!state.profile.links[k] && imp.links[k]) state.profile.links[k] = imp.links[k]; });
+            if (!state.profile.links) state.profile.links = {
+              linkedin: '',
+              github: '',
+              portfolio: ''
+            };
+            ['linkedin', 'github', 'portfolio'].forEach(k => {
+              if (!state.profile.links[k] && imp.links[k]) state.profile.links[k] = imp.links[k];
+            });
           }
         }
         state.contacts = mergeById(state.contacts, data.contacts);
@@ -434,6 +448,7 @@ function importData(file) {
         }
         save();
         reanalyzeAllJobs();
+        if (typeof backfillSeniority === 'function') backfillSeniority();
         renderView(state.activeView);
         const freshStatusEl = document.getElementById('backup-status');
         if (freshStatusEl) {

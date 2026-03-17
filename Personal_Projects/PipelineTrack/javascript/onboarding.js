@@ -32,6 +32,9 @@
 
     const nextBtn = document.getElementById('onboarding-next');
     nextBtn.textContent = currentStep === TOTAL_STEPS ? 'Get Started' : 'Next';
+
+    const fill = document.getElementById('onboarding-progress-fill');
+    if (fill) fill.style.width = (currentStep / TOTAL_STEPS * 100) + '%';
   }
 
   document.getElementById('onboarding-next').addEventListener('click', () => {
