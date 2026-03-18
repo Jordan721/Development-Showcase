@@ -842,7 +842,17 @@ function openJobDetail(id) {
   // Department
   const departmentRow = document.getElementById('detail-department-row');
   if (job.department) {
-    document.getElementById('detail-department').textContent = job.department;
+    const deptEl = document.getElementById('detail-department');
+    deptEl.textContent = job.department;
+    const existingTag = deptEl.querySelector('.inferred-tag');
+    if (existingTag) existingTag.remove();
+    if (job.departmentInferred) {
+      const tag = document.createElement('span');
+      tag.className = 'inferred-tag';
+      tag.title = 'Auto-filled from job title / description — you can edit this';
+      tag.textContent = '✦ Auto-filled';
+      deptEl.appendChild(tag);
+    }
     departmentRow.style.display = '';
   } else {
     departmentRow.style.display = 'none';
@@ -870,6 +880,13 @@ function openJobDetail(id) {
   const workTypeBadge = document.getElementById('detail-work-type');
   if (job.workType) {
     workTypeBadge.textContent = job.workType;
+    if (job.workTypeInferred) {
+      const tag = document.createElement('span');
+      tag.className = 'inferred-tag';
+      tag.title = 'Auto-filled from job description — you can edit this';
+      tag.textContent = '✦ Auto-filled';
+      workTypeBadge.appendChild(tag);
+    }
     workTypeBadge.style.display = '';
   } else {
     workTypeBadge.style.display = 'none';
@@ -1060,6 +1077,24 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-role').value = job ? job.role || '' : '';
   document.getElementById('job-company').value = job ? job.company || '' : '';
   document.getElementById('job-department').value = job ? job.department || '' : '';
+
+  // Show/clear the "Auto-filled" indicator on the department label
+  const deptLabel = document.querySelector('label[for="job-department"], #job-department').closest('.form-group').querySelector('.form-label');
+  const existingFormTag = deptLabel ? deptLabel.querySelector('.inferred-tag') : null;
+  if (existingFormTag) existingFormTag.remove();
+  if (job && job.departmentInferred && deptLabel) {
+    const tag = document.createElement('span');
+    tag.className = 'inferred-tag';
+    tag.title = 'Auto-filled from job title / description';
+    tag.textContent = '✦ Auto-filled';
+    deptLabel.appendChild(tag);
+    // Remove the tag as soon as the user manually edits the field
+    document.getElementById('job-department').addEventListener('input', function clearTag() {
+      tag.remove();
+      this.removeEventListener('input', clearTag);
+    }, { once: true });
+  }
+
   document.getElementById('job-location').value = job ? job.location || '' : '';
   document.getElementById('job-url').value = job ? job.url || '' : '';
   document.getElementById('job-salary').value = job ? job.salary || '' : '';
@@ -1069,6 +1104,24 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-seniority').value = job ? job.seniority || '' : '';
   document.getElementById('job-type').value = job ? job.jobType || '' : '';
   document.getElementById('job-work-type').value = job ? job.workType || '' : '';
+
+  // Show/clear the "Auto-filled" indicator on the work type label
+  const workTypeSelect = document.getElementById('job-work-type');
+  const workTypeLabel = workTypeSelect.closest('.form-group').querySelector('.form-label');
+  const existingWorkTag = workTypeLabel ? workTypeLabel.querySelector('.inferred-tag') : null;
+  if (existingWorkTag) existingWorkTag.remove();
+  if (job && job.workTypeInferred && workTypeLabel) {
+    const tag = document.createElement('span');
+    tag.className = 'inferred-tag';
+    tag.title = 'Auto-filled from job description';
+    tag.textContent = '✦ Auto-filled';
+    workTypeLabel.appendChild(tag);
+    workTypeSelect.addEventListener('change', function clearTag() {
+      tag.remove();
+      this.removeEventListener('change', clearTag);
+    }, { once: true });
+  }
+
   document.getElementById('job-description').value = job ? job.description || '' : '';
   document.getElementById('job-benefits').value = job ? job.benefits || '' : '';
   document.getElementById('job-company-notes').value = job ? job.companyNotes || '' : '';
@@ -1098,10 +1151,16 @@ function saveJob() {
     missing
   } = analyzeJob(description);
 
+  const typedDept = document.getElementById('job-department').value.trim();
+  const inferredDept = !typedDept ? inferDepartment(role, description) : null;
+  const department = typedDept || inferredDept || '';
+  const departmentInferred = !typedDept && !!inferredDept;
+
   const jobData = {
     role,
     company,
-    department: document.getElementById('job-department').value.trim(),
+    department,
+    departmentInferred,
     location: document.getElementById('job-location').value.trim(),
     url: document.getElementById('job-url').value.trim(),
     salary: formatSalary(document.getElementById('job-salary').value.trim()),
@@ -1109,7 +1168,11 @@ function saveJob() {
     dateApplied: document.getElementById('job-date-applied').value,
     seniority: document.getElementById('job-seniority').value,
     jobType: document.getElementById('job-type').value,
-    workType: document.getElementById('job-work-type').value,
+    ...(() => {
+      const typed = document.getElementById('job-work-type').value;
+      const inferred = !typed ? inferWorkType(description) : null;
+      return { workType: typed || inferred || '', workTypeInferred: !typed && !!inferred };
+    })(),
     stage: document.getElementById('job-stage').value,
     description,
     benefits: document.getElementById('job-benefits').value.trim(),

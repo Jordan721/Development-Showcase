@@ -1,6 +1,82 @@
 'use strict';
 
 /* ══════════════════════════════════════════════════════════
+   DEPARTMENT INFERENCE
+   ══════════════════════════════════════════════════════════ */
+const DEPT_MAP = [{
+    dept: 'Engineering',
+    keywords: ['engineer', 'developer', 'software', 'backend', 'front-end', 'frontend', 'full stack', 'fullstack', 'devops', 'platform', 'sre', 'infrastructure', 'mobile', 'ios', 'android', 'embedded', 'firmware', 'qa', 'quality assurance', 'test engineer']
+  },
+  {
+    dept: 'Data',
+    keywords: ['data scientist', 'data analyst', 'data engineer', 'machine learning', 'ml engineer', 'ai engineer', 'analytics', 'business intelligence', 'bi developer', 'nlp', 'deep learning']
+  },
+  {
+    dept: 'Design',
+    keywords: ['designer', 'ux', 'ui ', 'user experience', 'product design', 'visual design', 'graphic design', 'interaction design', 'motion design']
+  },
+  {
+    dept: 'Product',
+    keywords: ['product manager', 'product owner', 'program manager', 'scrum master', 'agile coach', 'product lead']
+  },
+  {
+    dept: 'Marketing',
+    keywords: ['marketing', 'growth', 'seo', 'content strategist', 'brand', 'social media', 'campaign', 'demand generation', 'copywriter', 'communications']
+  },
+  {
+    dept: 'Sales',
+    keywords: ['sales', 'account executive', 'business development', 'bdr', 'sdr', 'account manager', 'revenue', 'partnerships', 'closing deals']
+  },
+  {
+    dept: 'Finance',
+    keywords: ['finance', 'accounting', 'financial analyst', 'controller', 'cfo', 'treasury', 'payroll', 'bookkeeper', 'auditor', 'actuary']
+  },
+  {
+    dept: 'HR / People',
+    keywords: ['human resources', ' hr ', 'recruiter', 'recruiting', 'talent acquisition', 'people ops', 'people operations', 'compensation', 'onboarding']
+  },
+  {
+    dept: 'Legal',
+    keywords: ['legal', 'counsel', 'compliance', 'attorney', 'lawyer', 'paralegal', 'contract', 'regulatory']
+  },
+  {
+    dept: 'Operations',
+    keywords: ['operations', 'ops manager', 'supply chain', 'logistics', 'project manager', 'chief of staff', 'process improvement']
+  },
+  {
+    dept: 'Customer Success',
+    keywords: ['customer success', 'customer support', 'customer service', 'support engineer', 'technical support', 'help desk', 'client success']
+  },
+  {
+    dept: 'Security',
+    keywords: ['security engineer', 'cybersecurity', 'infosec', 'penetration', 'soc analyst', 'threat', 'vulnerability']
+  },
+  {
+    dept: 'Research',
+    keywords: ['researcher', 'research scientist', 'r&d', 'research and development', 'scientist', 'lab']
+  },
+];
+
+function inferWorkType(description) {
+  const text = (description || '').toLowerCase();
+  if (/\bhybrid\b/.test(text)) return 'Hybrid';
+  if (/\bremote\b|\bwork from home\b|\bwfh\b|\bfully remote\b|\b100%\s*remote\b/.test(text)) return 'Remote';
+  if (/\bon.?site\b|\bin.?office\b|\bin person\b|\bon location\b/.test(text)) return 'On-site';
+  return null;
+}
+
+function inferDepartment(role, description) {
+  const text = ` ${(role + ' ' + (description || '')).toLowerCase()} `;
+  for (const {
+      dept,
+      keywords
+    } of DEPT_MAP) {
+    if (keywords.some(kw => text.includes(kw))) return dept;
+  }
+  return null;
+}
+
+/* ══════════════════════════════════════════════════════════
    FIT ANALYSIS
    ══════════════════════════════════════════════════════════ */
 // Returns a regex that matches a skill as a whole word/token,
@@ -124,7 +200,9 @@ function toast(msg, type = '', opts = {}) {
     el.textContent = msg;
   }
   el.className = `toast show${type ? ' ' + type : ''}`;
-  el._t = setTimeout(() => { el.className = 'toast'; }, 3000);
+  el._t = setTimeout(() => {
+    el.className = 'toast';
+  }, 3000);
 }
 
 function openModal(id) {

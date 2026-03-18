@@ -300,6 +300,12 @@ function _importFromCSV(text) {
     const rowKey = (role + '|' + company).toLowerCase();
     const existingIdx = currentByKey[rowKey];
 
+    const csvDept = get(f, 'department');
+    const csvWorkType = get(f, 'work type');
+    const csvDesc = get(f, 'job description');
+    const inferredDept = !csvDept ? inferDepartment(role, csvDesc) : null;
+    const inferredWorkType = !csvWorkType ? inferWorkType(csvDesc) : null;
+
     const jobData = {
       role,
       company,
@@ -307,8 +313,10 @@ function _importFromCSV(text) {
       stage: stageLabelToKey[stageRaw] || 'saved',
       seniority: get(f, 'seniority'),
       jobType: get(f, 'job type'),
-      workType: get(f, 'work type'),
-      department: get(f, 'department'),
+      workType: csvWorkType || inferredWorkType || '',
+      workTypeInferred: !csvWorkType && !!inferredWorkType,
+      department: csvDept || inferredDept || '',
+      departmentInferred: !csvDept && !!inferredDept,
       salary: get(f, 'salary'),
       datePosted: get(f, 'date posted'),
       dateAdded: get(f, 'date added') || new Date().toISOString().slice(0, 10),
@@ -320,7 +328,7 @@ function _importFromCSV(text) {
       companyNotes: get(f, 'company notes'),
       benefits: get(f, 'benefits'),
       coverLetter: get(f, 'cover letter'),
-      description: get(f, 'job description'),
+      description: csvDesc,
       deadline: get(f, 'deadline'),
     };
 
