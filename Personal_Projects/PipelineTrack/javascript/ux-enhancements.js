@@ -26,6 +26,22 @@ function initKeyboardShortcuts() {
     const typing = ['input', 'textarea', 'select'].includes(tag) || (document.activeElement && document.activeElement.isContentEditable);
     if (typing) return;
 
+    // 1 / 2 / 3 → switch job modal tabs when modal is open
+    if (['1', '2', '3'].includes(e.key)) {
+      const jobModal = document.getElementById('modal-job');
+      if (jobModal && jobModal.classList.contains('open')) {
+        const idx = parseInt(e.key) - 1;
+        const tabs = document.querySelectorAll('#job-modal-tabs .modal-tab-btn');
+        const panels = document.querySelectorAll('#modal-job .modal-tab-panel');
+        if (tabs[idx]) {
+          e.preventDefault();
+          tabs.forEach((b, i) => b.classList.toggle('active', i === idx));
+          panels.forEach((p, i) => p.classList.toggle('active', i === idx));
+        }
+        return;
+      }
+    }
+
     // N → add job
     if (e.key === 'n' || e.key === 'N') {
       e.preventDefault();
