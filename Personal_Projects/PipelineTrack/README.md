@@ -398,6 +398,42 @@ The field is highlighted with an accent border when auto-inferred so you know to
 
 ---
 
+### 🏢 Department Inference
+When adding or editing a job, the **Department** field auto-fills from the job title and description if you leave it blank.
+
+The app scans across 13 departments:
+
+| Department | Example keywords detected |
+|---|---|
+| Engineering | engineer, developer, software, frontend, backend, devops, mobile, qa |
+| Data | data scientist, data analyst, machine learning, analytics, business intelligence |
+| Design | designer, ux, ui, user experience, product design, visual design |
+| Product | product manager, product owner, scrum master, program manager |
+| Marketing | marketing, seo, content strategist, growth, social media, copywriter |
+| Sales | sales, account executive, business development, bdr, sdr, account manager |
+| Finance | finance, accounting, financial analyst, controller, payroll, auditor |
+| HR / People | human resources, recruiter, talent acquisition, people ops, onboarding |
+| Legal | legal, counsel, compliance, attorney, lawyer, paralegal |
+| Operations | operations, supply chain, logistics, project manager, chief of staff |
+| Customer Success | customer success, customer support, help desk, technical support |
+| Security | security engineer, cybersecurity, infosec, penetration, soc analyst |
+| Research | researcher, research scientist, r&d, scientist |
+
+An amber **✦ Auto-filled** badge appears next to the field label in the edit form and next to the value in the detail view so you always know the app set it, not you. Hovering the badge shows a tooltip confirming it was inferred. The moment you type anything in the Department field, the badge clears automatically. If no match is found, the field stays blank.
+
+---
+
+### 🌐 Work Type Inference
+When adding or editing a job, the **Work Type** field (Remote / Hybrid / On-site) auto-fills from the job description if you leave it blank.
+
+- **Hybrid** is checked first — if the word "hybrid" appears anywhere in the description, it wins
+- **Remote** — detected from: `remote`, `work from home`, `wfh`, `fully remote`, `100% remote`
+- **On-site** — detected from: `on-site`, `in-office`, `in person`, `on location`
+
+The same amber **✦ Auto-filled** badge used for Department appears on the Work Type badge in the detail view and next to the label in the edit form. Selecting a value from the dropdown manually clears it instantly.
+
+---
+
 ### ◑ Color-Blind Mode
 Toggle the **◑** button in the top bar to switch the app's red/green color scheme to orange/blue — a palette that works for the most common types of color vision deficiency. Preference is saved and remembered.
 
