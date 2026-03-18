@@ -856,22 +856,23 @@
                 <button class="modal-close" data-close="modal-job">✕</button>
             </div>
             <div class="modal-tabs" id="job-modal-tabs">
-                <button class="modal-tab-btn active" data-tab="details">Details</button>
-                <button class="modal-tab-btn" data-tab="job-info">Job Info</button>
-                <button class="modal-tab-btn" data-tab="application">Application</button>
+                <button class="modal-tab-btn active" data-tab="details"><span class="tab-step">1</span>Details</button>
+                <button class="modal-tab-btn" data-tab="job-info"><span class="tab-step">2</span>Job Info</button>
+                <button class="modal-tab-btn" data-tab="application"><span class="tab-step">3</span>Application</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="job-edit-id" />
 
                 <!-- ── Tab: Details ── -->
                 <div class="modal-tab-panel active" data-tab="details">
+                    <div class="form-section-label">Position</div>
                     <div class="form-row three-col">
                         <div class="form-group">
-                            <label class="form-label">Role / Title *</label>
+                            <label class="form-label">Role / Title <span class="required-star">*</span></label>
                             <input type="text" class="text-input" id="job-role" placeholder="e.g. Frontend Engineer" />
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Company *</label>
+                            <label class="form-label">Company <span class="required-star">*</span></label>
                             <input type="text" class="text-input" id="job-company" placeholder="e.g. Acme Corp" />
                         </div>
                         <div class="form-group">
@@ -880,6 +881,7 @@
                                 placeholder="e.g. Engineering, Data" />
                         </div>
                     </div>
+                    <div class="form-section-label">Schedule &amp; Links</div>
                     <div class="form-row four-col">
                         <div class="form-group">
                             <label class="form-label">Location</label>
@@ -902,6 +904,7 @@
                             <input type="date" class="text-input" id="job-date-applied" />
                         </div>
                     </div>
+                    <div class="form-section-label">Classification</div>
                     <div class="form-row four-col">
                         <div class="form-group">
                             <label class="form-label">Stage</label>
@@ -979,15 +982,13 @@
                 <!-- ── Tab: Application ── -->
                 <div class="modal-tab-panel" data-tab="application">
                     <div class="form-group">
-                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-                            <label class="form-label" style="margin-bottom:0">Cover Letter</label>
+                        <div class="cover-letter-header">
+                            <label class="form-label">Cover Letter</label>
                             <div class="tpl-load-row">
-                                <select class="tpl-load-select" id="tpl-load-select"
-                                    style="font-size:11px;padding:4px 6px">
+                                <select class="tpl-load-select" id="tpl-load-select">
                                     <option value="">— Load Template —</option>
                                 </select>
-                                <button class="btn-ghost" id="tpl-load-btn"
-                                    style="font-size:11px;padding:4px 10px">Load</button>
+                                <button class="btn-ghost tpl-load-btn-sm" id="tpl-load-btn">Load</button>
                             </div>
                         </div>
                         <textarea class="text-area" id="job-cover-letter" rows="12"
@@ -1416,8 +1417,10 @@
                                 <h2>Welcome to PipelineTrack</h2>
                             </div>
                         </div>
-                        <p>Your personal job search companion. Track every application, score your skill fit, and close your gaps — all in your browser, no account needed.</p>
-                        <p>Supports <strong>Tech</strong>, <strong>Business</strong>, and <strong>Customer Experience</strong> roles.</p>
+                        <p>Your personal job search companion. Track every application, score your skill fit, and close
+                            your gaps — all in your browser, no account needed.</p>
+                        <p>Supports <strong>Tech</strong>, <strong>Business</strong>, and <strong>Customer
+                                Experience</strong> roles.</p>
                     </div>
 
                     <!-- Step 2 — Profile -->
@@ -1429,8 +1432,10 @@
                                 <h2>Start with your skills</h2>
                             </div>
                         </div>
-                        <p>Head to <strong>My Profile</strong> and add your skills. This is what powers fit scoring — without it, all fit scores will show 0%.</p>
-                        <p class="onboarding-tip">Use the <strong>Bulk</strong> button to paste a whole comma-separated list at once.</p>
+                        <p>Head to <strong>My Profile</strong> and add your skills. This is what powers fit scoring —
+                            without it, all fit scores will show 0%.</p>
+                        <p class="onboarding-tip">Use the <strong>Bulk</strong> button to paste a whole comma-separated
+                            list at once.</p>
                     </div>
 
                     <!-- Step 3 — Add a job -->
@@ -1442,8 +1447,12 @@
                                 <h2>Add your first job</h2>
                             </div>
                         </div>
-                        <p>Hit <strong>+ Add Job</strong> on the Job Board. Fill in the <strong>Details</strong> tab, then paste the job description in <strong>Job Info</strong> to get an instant fit score and skill gap breakdown.</p>
-                        <p>Matched skills are highlighted <strong style="color:var(--green)">green</strong> and gaps in <strong style="color:var(--red)">red</strong> inside the description. Click <strong>×</strong> on any tag to dismiss false positives.</p>
+                        <p>Hit <strong>+ Add Job</strong> on the Job Board. Fill in the <strong>Details</strong> tab,
+                            then paste the job description in <strong>Job Info</strong> to get an instant fit score and
+                            skill gap breakdown.</p>
+                        <p>Matched skills are highlighted <strong style="color:var(--green)">green</strong> and gaps in
+                            <strong style="color:var(--red)">red</strong> inside the description. Click
+                            <strong>×</strong> on any tag to dismiss false positives.</p>
                     </div>
 
                     <!-- Step 4 — Explore -->
@@ -1462,13 +1471,20 @@
                             <div class="ob-shortcut"><kbd>Esc</kbd> Close modal</div>
                         </div>
                         <div class="ob-features">
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Learning Hub</strong> — courses matched to your skill gaps</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Analytics</strong> — KPIs, funnel, charts; print with ⌘P</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Compare Jobs</strong> — select 2–3 jobs to compare side by side</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>◑ Color-Blind Mode</strong> — accessible palette toggle in the top bar</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Seniority auto-fill</strong> — inferred from title, level codes (L3–L7), years of experience, and description</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Learning
+                                        Hub</strong> — courses matched to your skill gaps</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Analytics</strong>
+                                    — KPIs, funnel, charts; print with ⌘P</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Compare
+                                        Jobs</strong> — select 2–3 jobs to compare side by side</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>◑ Color-Blind
+                                        Mode</strong> — accessible palette toggle in the top bar</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Seniority
+                                        auto-fill</strong> — inferred from title, level codes (L3–L7), years of
+                                    experience, and description</span></div>
                         </div>
-                        <p class="onboarding-tip">Hover any job card for a quick preview · Hover any fit badge for a skill breakdown · Reopen this guide with <strong>?</strong></p>
+                        <p class="onboarding-tip">Hover any job card for a quick preview · Hover any fit badge for a
+                            skill breakdown · Reopen this guide with <strong>?</strong></p>
                     </div>
 
                 </div>
