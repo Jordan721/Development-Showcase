@@ -11,8 +11,9 @@ let calAnimDir = 'fade'; // 'fade' | 'left' | 'right'
 function buildCalendarEvents() {
   const events = [];
   state.jobs.forEach(j => {
+    const jobDate = j.dateApplied ? new Date(j.dateApplied + 'T00:00:00') : new Date(j.dateAdded);
     events.push({
-      date: new Date(j.dateAdded),
+      date: jobDate,
       type: 'job',
       label: j.role + ' @ ' + j.company,
       id: j.id

@@ -222,6 +222,7 @@ function renderNotesTimeline(jobId) {
         job.deadline = deadline;
         job.resumeVersion = resumeVersion;
         save();
+        renderView(state.activeView);
       }
     }
   };
