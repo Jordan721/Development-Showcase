@@ -434,21 +434,58 @@
 }
 
 /* Dash-card accent top borders (Dashboard cards) */
-.dash-card[data-card="gaps"]       { border-top: 2px solid var(--red); }
-.dash-card[data-card="activity"]   { border-top: 2px solid var(--accent); }
-.dash-card[data-card="pipeline"]   { border-top: 2px solid #a78bfa; }
-.dash-card[data-card="top-skills"] { border-top: 2px solid var(--green); }
+.dash-card[data-card="gaps"] {
+  border-top: 2px solid var(--red);
+}
+
+.dash-card[data-card="activity"] {
+  border-top: 2px solid var(--accent);
+}
+
+.dash-card[data-card="pipeline"] {
+  border-top: 2px solid #a78bfa;
+}
+
+.dash-card[data-card="top-skills"] {
+  border-top: 2px solid var(--green);
+}
 
 /* Analytics cards */
-.dash-card[data-card="funnel"]         { border-top: 2px solid var(--accent); }
-.dash-card[data-card="response-rate"]  { border-top: 2px solid #a78bfa; }
-.dash-card[data-card="over-time"]      { border-top: 2px solid #60a5fa; }
-.dash-card[data-card="top-companies"]  { border-top: 2px solid var(--yellow); }
-.dash-card[data-card="skill-gaps"]     { border-top: 2px solid var(--red); }
-.dash-card[data-card="fit-dist"]       { border-top: 2px solid var(--green); }
-.dash-card[data-card="work-type"]      { border-top: 2px solid #fb923c; }
-.dash-card[data-card="job-type"]       { border-top: 2px solid var(--accent); }
-.dash-card[data-card="seniority"]      { border-top: 2px solid #a78bfa; }
+.dash-card[data-card="funnel"] {
+  border-top: 2px solid var(--accent);
+}
+
+.dash-card[data-card="response-rate"] {
+  border-top: 2px solid #a78bfa;
+}
+
+.dash-card[data-card="over-time"] {
+  border-top: 2px solid #60a5fa;
+}
+
+.dash-card[data-card="top-companies"] {
+  border-top: 2px solid var(--yellow);
+}
+
+.dash-card[data-card="skill-gaps"] {
+  border-top: 2px solid var(--red);
+}
+
+.dash-card[data-card="fit-dist"] {
+  border-top: 2px solid var(--green);
+}
+
+.dash-card[data-card="work-type"] {
+  border-top: 2px solid #fb923c;
+}
+
+.dash-card[data-card="job-type"] {
+  border-top: 2px solid var(--accent);
+}
+
+.dash-card[data-card="seniority"] {
+  border-top: 2px solid #a78bfa;
+}
 
 /* Colored dot before dash-card-header text when card has an accent */
 .dash-card[data-card] .dash-card-header {
@@ -467,19 +504,57 @@
   background: var(--dash-dot, var(--text-muted));
 }
 
-.dash-card[data-card="gaps"]           { --dash-dot: var(--red); }
-.dash-card[data-card="activity"]       { --dash-dot: var(--accent); }
-.dash-card[data-card="pipeline"]       { --dash-dot: #a78bfa; }
-.dash-card[data-card="top-skills"]     { --dash-dot: var(--green); }
-.dash-card[data-card="funnel"]         { --dash-dot: var(--accent); }
-.dash-card[data-card="response-rate"]  { --dash-dot: #a78bfa; }
-.dash-card[data-card="over-time"]      { --dash-dot: #60a5fa; }
-.dash-card[data-card="top-companies"]  { --dash-dot: var(--yellow); }
-.dash-card[data-card="skill-gaps"]     { --dash-dot: var(--red); }
-.dash-card[data-card="fit-dist"]       { --dash-dot: var(--green); }
-.dash-card[data-card="work-type"]      { --dash-dot: #fb923c; }
-.dash-card[data-card="job-type"]       { --dash-dot: var(--accent); }
-.dash-card[data-card="seniority"]      { --dash-dot: #a78bfa; }
+.dash-card[data-card="gaps"] {
+  --dash-dot: var(--red);
+}
+
+.dash-card[data-card="activity"] {
+  --dash-dot: var(--accent);
+}
+
+.dash-card[data-card="pipeline"] {
+  --dash-dot: #a78bfa;
+}
+
+.dash-card[data-card="top-skills"] {
+  --dash-dot: var(--green);
+}
+
+.dash-card[data-card="funnel"] {
+  --dash-dot: var(--accent);
+}
+
+.dash-card[data-card="response-rate"] {
+  --dash-dot: #a78bfa;
+}
+
+.dash-card[data-card="over-time"] {
+  --dash-dot: #60a5fa;
+}
+
+.dash-card[data-card="top-companies"] {
+  --dash-dot: var(--yellow);
+}
+
+.dash-card[data-card="skill-gaps"] {
+  --dash-dot: var(--red);
+}
+
+.dash-card[data-card="fit-dist"] {
+  --dash-dot: var(--green);
+}
+
+.dash-card[data-card="work-type"] {
+  --dash-dot: #fb923c;
+}
+
+.dash-card[data-card="job-type"] {
+  --dash-dot: var(--accent);
+}
+
+.dash-card[data-card="seniority"] {
+  --dash-dot: #a78bfa;
+}
 
 .dash-card-header {
   display: flex;
@@ -755,4 +830,193 @@
 .recent-date {
   color: var(--text-muted);
   font-size: 11px;
+}
+
+/* ── NEW DASHBOARD CARDS — border/dot colors ────────────── */
+.dash-card[data-card="funnel"] {
+  border-top: 2px solid var(--accent);
+  --dash-dot: var(--accent);
+}
+
+.dash-card[data-card="velocity"] {
+  border-top: 2px solid #60a5fa;
+  --dash-dot: #60a5fa;
+}
+
+.dash-card[data-card="deadlines"] {
+  border-top: 2px solid var(--yellow);
+  --dash-dot: var(--yellow);
+}
+
+.dash-card[data-card="time-in-stage"] {
+  border-top: 2px solid #a78bfa;
+  --dash-dot: #a78bfa;
+}
+
+/* Funnel conversion rate label */
+.dash-funnel-conv {
+  font-size: 10px;
+  color: var(--text-muted);
+  width: 44px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* Colored pipeline fills reused by funnel */
+.pipeline-bar-fill.fill-purple {
+  background: #a78bfa;
+}
+
+.pipeline-bar-fill.fill-yellow {
+  background: var(--yellow);
+}
+
+.pipeline-bar-fill.fill-green {
+  background: var(--green);
+}
+
+/* Weekly velocity chart */
+.dash-vel-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 110px;
+  padding-bottom: 0;
+}
+
+.dash-vel-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.dash-vel-count {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  min-height: 14px;
+  line-height: 1;
+}
+
+.dash-vel-bar-wrap {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.dash-vel-bar {
+  width: 100%;
+  background: var(--accent);
+  border-radius: 3px 3px 0 0;
+  opacity: 0.75;
+  transition: height 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  min-height: 2px;
+}
+
+.dash-vel-label {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  padding-top: 4px;
+  border-top: 1px solid var(--border);
+  width: 100%;
+}
+
+/* Upcoming deadlines */
+.dash-deadline-overdue {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--red);
+  padding: 6px 8px;
+  background: rgba(255, 77, 109, .1);
+  border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+}
+
+.dash-deadline-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .12s;
+  border-radius: var(--radius-sm);
+}
+
+.dash-deadline-item:last-child {
+  border-bottom: none;
+}
+
+.dash-deadline-item:hover {
+  background: var(--card);
+  padding-left: 6px;
+  padding-right: 6px;
+  margin: 0 -6px;
+}
+
+.dash-dl-role {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.dash-dl-company {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.dash-dl-days {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dash-deadline-item.dash-dl-soon .dash-dl-days {
+  color: var(--yellow);
+}
+
+.dash-deadline-item.dash-dl-today .dash-dl-days {
+  color: var(--red);
+}
+
+/* Time in stage note */
+.dash-time-note {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* Pipeline health warning in vibe row */
+.dash-health-warn {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--yellow);
+  background: rgba(210, 153, 34, .12);
+  border: 1px solid rgba(210, 153, 34, .25);
+  border-radius: 99px;
+  padding: 3px 10px;
+}
+
+.dash-health-warn--clickable {
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+}
+
+.dash-health-warn--clickable:hover {
+  background: rgba(210, 153, 34, .22);
+  border-color: rgba(210, 153, 34, .5);
 }

@@ -56,15 +56,8 @@ function renderDashboard() {
 
   document.getElementById('sidebar-job-count').textContent = `${total} job${total !== 1 ? 's' : ''} tracked`;
 
-  // Streak + motivational nudge
+  // Streak + motivational nudge (with health warning — see bottom of function)
   const vibeRow = document.getElementById('dash-vibe-row');
-  if (vibeRow) {
-    const streak = computeStreak(jobs);
-    const streakHtml = streak >= 2 ?
-      `<span class="dash-streak">🔥 ${streak}-day streak</span>` :
-      '';
-    vibeRow.innerHTML = streakHtml + `<span class="dash-nudge">${getDashboardNudge(jobs)}</span>`;
-  }
 
   // Gap aggregation
   const gapCount = {};
@@ -174,6 +167,29 @@ function renderDashboard() {
     });
   }
 
+  // Pipeline health warning
+  const now = new Date();
+  const stale = jobs.filter(j => ['applied', 'screening', 'interview'].includes(j.stage) &&
+    (now - new Date(j.dateAdded)) / 86400000 > 14
+  );
+  const healthHtml = stale.length > 0 ?
+    `<span class="dash-health-warn dash-health-warn--clickable">⚠ ${stale.length} job${stale.length !== 1 ? 's' : ''} inactive 14+ days</span>` :
+    '';
+  if (vibeRow) {
+    const streak = computeStreak(jobs);
+    const streakHtml = streak >= 2 ? `<span class="dash-streak">🔥 ${streak}-day streak</span>` : '';
+    vibeRow.innerHTML = streakHtml + healthHtml + `<span class="dash-nudge">${getDashboardNudge(jobs)}</span>`;
+    if (stale.length > 0) {
+      vibeRow.querySelector('.dash-health-warn--clickable').addEventListener('click', () => {
+        openFilterModal('Inactive 14+ Days', `${stale.length} job${stale.length !== 1 ? 's' : ''}`, stale);
+      });
+    }
+  }
+
+  renderDashFunnel();
+  renderDashVelocity();
+  renderDashDeadlines();
+  renderDashTimeInStage();
   renderWeekSummary();
 
   if (typeof animateDashboardStats === 'function') animateDashboardStats();
@@ -239,5 +255,190 @@ function renderWeekSummary() {
     </div>`;
 }
 
+
+function renderDashFunnel() {
+  const el = document.getElementById('dash-funnel');
+  if (!el) return;
+  const jobs = state.jobs;
+  const stages = [{
+      key: 'applied',
+      label: 'Applied',
+      cls: ''
+    },
+    {
+      key: 'screening',
+      label: 'Screening',
+      cls: 'fill-purple'
+    },
+    {
+      key: 'interview',
+      label: 'Interview',
+      cls: 'fill-yellow'
+    },
+    {
+      key: 'offer',
+      label: 'Offer',
+      cls: 'fill-green'
+    },
+  ];
+  const counts = stages.map(s => jobs.filter(j => j.stage === s.key).length);
+  const max = Math.max(...counts, 1);
+  const totalActive = jobs.filter(j => ['applied', 'screening', 'interview', 'offer'].includes(j.stage)).length;
+  if (totalActive === 0) {
+    el.innerHTML = '<p class="empty-msg">No applications yet.</p>';
+    return;
+  }
+  el.innerHTML = stages.map((s, i) => {
+    const count = counts[i];
+    const pct = Math.round((count / max) * 100);
+    const prev = i > 0 ? counts[i - 1] : null;
+    const conv = prev != null && prev > 0 ? Math.round((count / prev) * 100) + '%' : null;
+    return `<div class="pipeline-bar-row">
+      <div class="pipeline-bar-label">${s.label}</div>
+      <div class="pipeline-bar-track">
+        <div class="pipeline-bar-fill ${s.cls}" style="width:${pct}%"></div>
+      </div>
+      <div class="pipeline-bar-count">${count}</div>
+      <div class="dash-funnel-conv">${conv ? conv : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderDashVelocity() {
+  const el = document.getElementById('dash-velocity');
+  if (!el) return;
+  const jobs = state.jobs;
+  const now = new Date();
+  const weeks = [];
+  for (let i = 5; i >= 0; i--) {
+    const end = new Date(now);
+    end.setDate(now.getDate() - i * 7);
+    end.setHours(23, 59, 59, 999);
+    const start = new Date(end);
+    start.setDate(end.getDate() - 6);
+    start.setHours(0, 0, 0, 0);
+    const count = jobs.filter(j => {
+      const d = new Date(j.dateAdded);
+      return d >= start && d <= end;
+    }).length;
+    const label = start.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric'
+    });
+    weeks.push({
+      label,
+      count
+    });
+  }
+  if (weeks.every(w => w.count === 0)) {
+    el.innerHTML = '<p class="empty-msg">No applications yet.</p>';
+    return;
+  }
+  const max = Math.max(...weeks.map(w => w.count), 1);
+  el.innerHTML = `<div class="dash-vel-chart">
+    ${weeks.map(w => {
+      const h = w.count > 0 ? Math.max(Math.round((w.count / max) * 80), 6) : 2;
+      return `<div class="dash-vel-col">
+        <div class="dash-vel-count">${w.count || ''}</div>
+        <div class="dash-vel-bar-wrap">
+          <div class="dash-vel-bar" style="height:0" data-ah="${h}"></div>
+        </div>
+        <div class="dash-vel-label">${w.label}</div>
+      </div>`;
+    }).join('')}
+  </div>`;
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    el.querySelectorAll('[data-ah]').forEach(b => {
+      b.style.height = b.dataset.ah + 'px';
+    });
+  }));
+}
+
+function renderDashDeadlines() {
+  const el = document.getElementById('dash-deadlines');
+  if (!el) return;
+  const jobs = state.jobs;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const in7 = new Date(today);
+  in7.setDate(today.getDate() + 7);
+  const overdue = jobs.filter(j => j.deadline && new Date(j.deadline + 'T00:00:00') < today);
+  const upcoming = jobs
+    .filter(j => j.deadline && new Date(j.deadline + 'T00:00:00') >= today && new Date(j.deadline + 'T00:00:00') <= in7)
+    .sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+  if (overdue.length === 0 && upcoming.length === 0) {
+    el.innerHTML = '<p class="empty-msg">No upcoming deadlines in the next 7 days.</p>';
+    return;
+  }
+  let html = '';
+  if (overdue.length > 0) {
+    html += `<div class="dash-deadline-overdue">⚠ ${overdue.length} overdue deadline${overdue.length !== 1 ? 's' : ''}</div>`;
+  }
+  html += upcoming.map(j => {
+    const days = Math.round((new Date(j.deadline + 'T00:00:00') - today) / 86400000);
+    const urgCls = days === 0 ? 'dash-dl-today' : days <= 2 ? 'dash-dl-soon' : '';
+    return `<div class="dash-deadline-item ${urgCls}" data-job-id="${j.id}">
+      <div>
+        <div class="dash-dl-role">${escHtml(j.role)}</div>
+        <div class="dash-dl-company">${escHtml(j.company)}</div>
+      </div>
+      <div class="dash-dl-days">${days === 0 ? 'Today' : days === 1 ? '1d left' : days + 'd left'}</div>
+    </div>`;
+  }).join('');
+  el.innerHTML = html;
+  el.querySelectorAll('[data-job-id]').forEach(item => {
+    item.addEventListener('click', () => openJobDetail(item.dataset.jobId));
+  });
+}
+
+function renderDashTimeInStage() {
+  const el = document.getElementById('dash-time-in-stage');
+  if (!el) return;
+  const jobs = state.jobs;
+  const now = new Date();
+  const stages = [{
+      key: 'applied',
+      label: 'Applied'
+    },
+    {
+      key: 'screening',
+      label: 'Screening'
+    },
+    {
+      key: 'interview',
+      label: 'Interview'
+    },
+    {
+      key: 'offer',
+      label: 'Offer'
+    },
+  ];
+  const rows = stages.map(s => {
+    const sJobs = jobs.filter(j => j.stage === s.key);
+    if (sJobs.length === 0) return null;
+    const avgDays = Math.round(sJobs.reduce((sum, j) => sum + (now - new Date(j.dateAdded)) / 86400000, 0) / sJobs.length);
+    return {
+      label: s.label,
+      count: sJobs.length,
+      avgDays
+    };
+  }).filter(Boolean);
+  if (rows.length === 0) {
+    el.innerHTML = '<p class="empty-msg">No active applications yet.</p>';
+    return;
+  }
+  const maxDays = Math.max(...rows.map(r => r.avgDays), 1);
+  el.innerHTML = rows.map(r => {
+    const pct = Math.round((r.avgDays / maxDays) * 100);
+    const color = r.avgDays >= 30 ? 'var(--red)' : r.avgDays >= 14 ? 'var(--yellow)' : 'var(--accent)';
+    return `<div class="pipeline-bar-row">
+      <div class="pipeline-bar-label">${r.label}</div>
+      <div class="pipeline-bar-track">
+        <div class="pipeline-bar-fill" style="width:${pct}%;background:${color}"></div>
+      </div>
+      <div class="pipeline-bar-count" style="color:${color};font-weight:600;min-width:28px">${r.avgDays}d</div>
+    </div>`;
+  }).join('') + `<div class="dash-time-note">Avg. days since added, by active stage</div>`;
+}
 
 /* renderActivity() lives in views-calendar.js */

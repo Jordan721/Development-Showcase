@@ -16,15 +16,15 @@ A personal job search companion built to take the chaos out of hunting for work.
 
 | Feature | What it does |
 |---|---|
-| ◈ Dashboard | At-a-glance stats, streak, skill gaps, pipeline overview, and this week's summary |
-| 📋 Job Board | 8-stage kanban pipeline (including Ghosted) with columns, priority matrix, table, and timeline views — search and filter built in |
-| 📅 Calendar & Activity | Month/week/year view of job events, deadlines, follow-up dates, and job fairs — plus a job activity history |
+| ◈ Dashboard | Stats, streak, pipeline health, conversion funnel, weekly velocity, upcoming deadlines, skill gaps, and weekly summary |
+| 📋 Job Board | 8-stage kanban with columns, priority matrix, table, and timeline views — search and filter built in |
+| 📅 Calendar & Activity | Month/week/year view of job events, deadlines, follow-ups, and job fairs |
 | 🤝 Network | Track recruiters, hiring managers, and referrals with follow-up reminders |
 | 🎯 Goals | Set weekly/monthly targets and track live progress against your job board data |
-| 📊 Analytics | KPIs, application funnel, response rates, skill gaps, and breakdowns |
-| 👤 My Profile | Skills, certifications, resume summary, email templates, and data backup |
+| 📊 Analytics | KPIs, funnel, response rates, skill gaps, fit distribution, and breakdowns |
+| 👤 My Profile | Skills, certifications, email templates, skill coverage chart, and data backup |
 | 📄 Resume Hub | Parse your resume, scan GitHub, and polish your writing |
-| 🧠 Learning Hub | Course recommendations based on your skill gaps |
+| 🧠 Learning Hub | Course recommendations matched to your skill gaps |
 
 ---
 
@@ -32,176 +32,20 @@ A personal job search companion built to take the chaos out of hunting for work.
 
 Job searching is overwhelming — dozens of tabs, spreadsheets, and sticky notes just to track where you applied and what happened next.
 
-I built PipelineTrack to solve that. One tool to:
-
-- Track every job without losing the details
-- Show honestly how well your skills match a role
-- Surface exactly what you're missing and where to learn it
-- Help you put your best resume forward
-- Work entirely in the browser — no sign-up, no backend
-- Switch between light, dark, Midnight, Sunset, and Ocean themes to suit your preference
-- Work across multiple fields — tech, business, finance, project management, banking, and customer success
+I built PipelineTrack to solve that. One tool to track every job, score your skill fit honestly, surface what you're missing and where to learn it, and put your best resume forward — entirely in the browser, no sign-up, no backend.
 
 ---
 
-## 🔧 Features
+## 🚀 Getting Started
 
-### 📊 Dashboard
-At-a-glance view of your entire job search.
+1. Clone or download this folder and open `index.html` in any modern browser
+2. Follow the **getting started guide** that opens automatically — or reopen it anytime with the **?** button
+3. Go to **My Profile** and add your skills (this powers fit scoring)
+4. Go to **Job Board → + Add Job**, fill in the Details tab, and paste the job description in Job Info for an instant fit score
+5. Click any job card to see your fit score and skill breakdown
+6. Check **Learning Hub** to see what to learn next, **Analytics** for charts, and **Goals** to set weekly targets
 
-- Six stat cards: **Total Tracked, Applied, In Progress, Offers, Not Selected, Avg Fit Score** — the Total Tracked card also shows your application pace as `avg. X/wk · X/mo · X/yr` beneath the number, calculated from your first tracked job to today
-- **Streak & nudge bar** — shows your current daily application streak and a contextual motivational message based on your progress
-- **This Week summary** — jobs added, in-progress count, overdue follow-ups, and weekly goal progress at a glance
-- **Top Skill Gaps** — click any gap tag to see which jobs are missing that skill
-- **Top Skills** — matched skills (showing ✓ job count) are clickable to see the jobs they matched against
-- **Pipeline Overview** — click any stage bar to see all jobs in that stage
-- Recent applications list — click any entry to open the full job detail
-
----
-
-### 📋 Job Board
-A visual pipeline with nine stages: **Saved → Applied → Screening → Interview → Offer → Not Selected → Declined → Ghosted → Archived**
-
-- **Not Selected** — for roles where the company said no (they didn't pick you); date is automatically stamped and shown on the card and in the detail view
-- **Declined** — for roles where you chose not to pursue (you turned it down)
-- **Ghosted** — for roles where you never heard back; tracked separately from Not Selected and Declined
-- **Archived** — for roles you chose to remove from your active view
-- Four layout modes: **Columns** (classic kanban with collapsible columns), **Priority Matrix** (2×2 quadrant view plotting jobs by fit score vs. urgency — Act Now 🔥, Plan Ahead ⭐, Quick Apply ⚡, Low Priority 📋), **Table** (sortable spreadsheet view), **Timeline** (Gantt-style bars showing how long each job has been in your pipeline, color-coded by stage)
-- **Collapsible columns** — click any column header to collapse it to a slim vertical strip showing the stage name and count; click again to expand; collapsed state persists across page refreshes
-- **Priority Matrix** — jobs are automatically placed into one of four quadrants based on your fit score (≥70 = high) and urgency (deadline within 14 days or applied 14+ days ago = urgent); jobs without a fit score appear in an unscored strip below the matrix with a prompt to add one; each card shows a left accent in its stage color, time info (days left, overdue, or days since applied), and fit badge
-- Drag cards between columns to update their stage
-- Hover a card to reveal a quick-delete **×** button
-- Toggle Archived / Not Selected / Declined / Ghosted columns on or off to keep the board clean
-- Filter by **This Week / This Month / This Year / All Time**
-- **Search bar** — filter by role, company, or location in real time
-- **Filter dropdowns** — narrow by stage, work type, and seniority
-- **Table sort** — click any column header or use the sort dropdown to sort by role, company, fit score, or date added
-- **⊜ Compare Jobs** — select 2–3 jobs to compare fit score, salary, stage, skills, and benefits side by side
-
-Each job stores:
-
-| Field | Options |
-|---|---|
-| Seniority | Internship, Entry Level, Junior, Mid-Level, Senior, Lead, Staff |
-| Job Type | Full-time, Part-time, Contract, Freelance, Internship, Temporary, Apprenticeship |
-| Work Type | Remote, On-site, Hybrid |
-| Other | Department, Salary, Date Posted, Date Applied, Benefits, Company Notes, Notes, Job URL, Cover Letter |
-
-Seniority, job type, and work type each appear as color-coded badges in the detail view. Benefits are automatically parsed into labeled chips — health insurance, 401k, PTO, equity, and more — rather than showing raw pasted text. Click any chip or the **View all ↗** button to open a modal showing all detected chips plus the full original benefits text. **Company Notes** is a dedicated field for information about the company itself (culture, size, funding, tech stack) — separate from the job description and your personal notes. **Salary** is automatically formatted — type `80k`, `10k - 100k`, or `150000` and it displays as `$80,000`, `$10,000 – $100,000`, or `$150,000`.
-
-The **Add / Edit Job** form is organized into three tabs to keep it compact:
-
-- **Details** — role, company, department, location, URL, salary, date posted, date applied, stage, seniority, job type, and work type
-- **Job Info** — job description (used for fit analysis), benefits, and company notes side by side
-- **Application** — cover letter, personal notes, and a template loader to paste any saved email template
-
-**Cover Letter** is stored per job so you can draft or paste a tailored letter directly alongside the listing without leaving the app.
-
-Clicking **Edit** on a job opens the edit form with a **← Back** button to return to the detail view without losing your place.
-
-When a job moves to **Screening**, **Interview**, or **Offer**, a milestone modal appears automatically to log the details:
-
-| Stage | Fields |
-|---|---|
-| Screening | Date, time, type (Phone / Video / In-person), notes, thank-you sent checkbox |
-| Interview | Date, time, round (1st–Final), type (Phone / Video / Panel / Technical / In-person), notes, thank-you sent checkbox |
-| Offer | Salary offered, deadline to respond, notes, thank-you sent checkbox |
-
-Logged milestones appear as a color-coded **Application Timeline** strip inside the job detail modal. Each milestone can be edited at any time via the ✎ button. The modal can be skipped — the stage change always sticks regardless.
-
-The job detail also shows **Fit Analysis** inline:
-
-- **Fit score** — percentage based on your profile skills vs. the job description; also factors in skills mentioned in your certification and license descriptions
-- **Matched skills** (green) and **skill gaps** (red) — each tag has a **×** dismiss button to remove false positives; the fit score and highlights update instantly
-- Matched/missing keywords are **highlighted directly in the job description** — green for matched, red for gaps
-- **Linked contacts** — any Network contacts tied to this job appear inline without switching views
-- Quick link to [Cash Compass](https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html) to check your financial runway alongside any offer
-
----
-
-### 📅 Calendar & Activity
-A full calendar combined with your job activity history — all in one view.
-
-- Toggle between **Month**, **Week**, and **Year** layouts with prev/next navigation
-- Four event types: **job added** (teal), **application deadline** (red), **contact follow-up** (yellow), **job fair / event** (purple)
-- Filter the calendar to show only one event type at a time
-- **+ Add Event** button to log job fairs, career events, and networking sessions — with format (In-Person / Hybrid / Online), venue, meeting link (Zoom, Teams, etc.), time, and notes; a **Join** button appears on any event with a link
-- **Upcoming strip** below the calendar shows the next 7 days of events at a glance, including format badges and Join links for events
-- **Job Activity** section below the upcoming strip — at-a-glance counts of jobs added **Today**, **This Week**, **This Month**, **This Year**, and **All Time**
-
----
-
-### 🤝 Network & Contacts
-Track the people in your job search — recruiters, hiring managers, referrals, and connections.
-
-- Add contacts with: name, company, role, type, email, phone, LinkedIn, linked job, last contact date, next follow-up date, and notes
-- **Stat strip** shows total contacts, how many have a follow-up due today or earlier, and a count by type
-- Search by name or company; filter by contact type; sort by name, company, or most recent
-- Overdue follow-ups are highlighted; next follow-up dates appear in the Calendar view
-- Contacts linked to a job appear directly inside that job's detail modal
-
----
-
-### 🎯 Goals
-Set targets and track your progress live using real job board data.
-
-- Create goals for: **Applications Sent**, **Screenings Reached**, **Interviews Reached**, **Offers Received**, **Responses Received**, **Jobs Researched** (Saved stage), or **Contacts Added**
-- Set a **weekly** or **monthly** period
-- Each goal card shows live current count vs. target with a progress bar and status label (Complete / On Track / Behind / Not Started)
-- **Summary strip** with mini progress rings for all active goals
-- Quick-add **preset buttons** when no goals exist yet
-- Filter the goals view by week or month period
-
----
-
-### 📊 Analytics
-A data-driven overview of your entire job search.
-
-- **7 KPI cards**: Tracked, Applied, In Progress, Offers, Not Selected, Avg Fit, Response Rate — numbers animate in with a count-up on load
-- **Application Funnel** — conversion rates from Applied → Screening → Interview → Offer; click any stage row to see those jobs
-- **Response Rate by Stage** — click any bar to see the jobs at that stage
-- **Applications Over Time** — weekly (last 8 weeks) or monthly (last 12 months); click any bar column to see jobs added that period
-- **Top Companies** by application count; click any row to see those jobs
-- **Skill Gaps** bar chart — click any row to see jobs missing that skill
-- **Fit Score Distribution** bucketed into four ranges — click any range to see matching jobs
-- **Work Type, Job Type, Seniority** breakdowns — click any row to drill into those jobs
-- All charts animate in with staggered entrance and bar-fill transitions on load
-- Filter all charts by **This Week / This Month / This Year / All Time**
-
----
-
-### 👤 My Profile
-Build the foundation for your fit scores and recommendations.
-
-- **Skills** — add skills one at a time or paste a whole block (comma or newline-separated) using the **Bulk** button; skills are grouped and color-coded by level — green for Expert, teal for Intermediate, gray for Beginner; click the level badge on any tag to cycle it in place; filter to a single level with the **All / Expert / Intermediate / Beginner** pill buttons; if you have more than 10, the list collapses with a **Show X more** toggle; **Clear all** removes everything at once with a confirmation prompt; duplicates are automatically skipped
-- **Certifications, Degrees & Licenses** — track credentials by type (Certificate, Associate's, Bachelor's, Master's, PhD, Bootcamp, License); each entry supports an optional description (skills covered, technologies, field of study) which feeds directly into fit scoring; click the **✎** button on any card to edit the name, type, or description inline without removing and re-adding it
-- **Resume Summary** — a short bio for your own reference
-- **Skill Coverage chart** — see how often each of your skills appears across tracked jobs; grouped and color-coded by level with the same **All / Expert / Intermediate / Beginner** filter pills and a **Show X more** collapse when you have many skills
-- **Email Templates** — save reusable thank-you, follow-up, withdrawal, and custom email templates; load any template directly into a job's cover letter from the Application tab
-- **Data Backup** — export all your data to a `.json` file and import it on any other device or browser; imports **merge** rather than replace — jobs are matched by ID so any jobs added since the last export are kept; contacts, events, and templates also merge by ID; the filename and a result summary appear after each action
-- **Export Jobs as CSV** — download your job list as a spreadsheet-ready `.csv` file (role, company, stage, fit score, matched skills, skill gaps, salary, notes, and more); CSV imports also merge — jobs are matched by role + company so new jobs are never overwritten; **jobs only** — use the JSON backup for a full restore
-- **Clear All Jobs** — wipe all tracked jobs in one click (with confirmation) to start fresh
-- **Delete All Data** — wipe everything (jobs, contacts, goals, events, profile, skills, and certifications) in one click (with confirmation)
-- **Your Links** — save your LinkedIn, GitHub, and Portfolio URLs locally for quick access; each saved link has an **Open ↗** button and a **⎘ copy** button to copy the URL to clipboard instantly
-
----
-
-### 📄 Resume Hub
-A workspace for getting your resume and portfolio in shape.
-
-- **Resume Parser** — upload a PDF, Word (.docx), or plain text file, or paste directly. Detected skills are cross-referenced with your profile and can be imported in one click.
-- **GitHub / Portfolio Scanner** — paste a GitHub profile or GitHub Pages URL to scan public repos for languages and topics. Import detected skills the same way.
-- **Writing Polish** — flags passive voice, filler words, weak phrases, and vague language with suggestions and a quality score.
-- **Resources & AI Tools** — curated tools for writing, resume building, portfolio hosting, job research, and financial planning.
-
----
-
-### 🧠 Learning Hub
-Course and certification recommendations built from your skill gaps.
-
-- Pulls from Coursera, Google, AWS, LinkedIn Learning, Udemy, and more
-- Each resource includes an estimated time commitment
-- Bookmark picks and filter to see only your saved resources
+All data is saved to your browser's localStorage — nothing is sent anywhere. Use the ☀️ / 🌙 toggle to switch themes, **M / S / O** for Midnight, Sunset, or Ocean color themes, and **◑** for color-blind mode. Press `Ctrl+Shift+K` to open the command palette at any time.
 
 ---
 
@@ -218,13 +62,15 @@ Course and certification recommendations built from your skill gaps.
 
 No frameworks, no build tools, no server. Open `index.html` in any modern browser and it works.
 
-**File structure:**
+<details>
+<summary>File structure</summary>
+
 ```
 PipelineTrack/
 ├── index.html
 ├── css/
 │   ├── base.css            # variables, reset, layout, buttons, forms
-│   ├── dashboard.css       # stat cards, activity calendar
+│   ├── dashboard.css       # stat cards, velocity chart, deadlines, pipeline health
 │   ├── board.css           # kanban columns, priority matrix, table, timeline views, job cards
 │   ├── modals.css          # modals, profile, learning hub, resume hub
 │   ├── features.css        # deadline banner, notes timeline
@@ -237,7 +83,7 @@ PipelineTrack/
     ├── data-industries.js  # extends KNOWN_SKILLS & LEARNING for Business, Finance, PM, Banking, CX
     ├── state.js            # app state, localStorage save/load, export/import
     ├── utils.js            # shared helpers, fit analysis, navigation
-    ├── views-dashboard.js  # dashboard stats and activity calendar
+    ├── views-dashboard.js  # dashboard stats, funnel, velocity, deadlines, time-in-stage
     ├── views-board.js      # kanban board, table, timeline views, job detail & add/edit modals
     ├── views-profile.js    # profile, skills, certifications, coverage chart
     ├── views-resume.js     # learning hub and resume hub
@@ -253,195 +99,176 @@ PipelineTrack/
     └── ux-enhancements.js  # command palette, keyboard shortcuts, hover preview, tooltips, color-blind mode, getting started checklist
 ```
 
----
-
-## 🚀 Getting Started
-
-1. Clone or download this folder
-2. Open `index.html` in your browser
-3. Follow the **getting started guide** that opens automatically — or reopen it anytime with the **?** button in the top bar
-4. Go to **My Profile** — add your skills and any certifications
-5. Go to **Job Board** → **+ Add Job** — fill in the **Details** tab, paste the job description in **Job Info** for fit scoring, and optionally draft your cover letter in the **Application** tab
-6. Click any job card to see your fit score and skill breakdown
-7. Check the **Learning Hub** to see what to learn next
-8. Use **Resume Hub** to parse your resume, scan your GitHub, check your writing, and explore tools
-9. Head to **Network** to track recruiters and contacts — follow-up dates appear in the **Calendar**
-10. Visit **Analytics** for KPIs and charts across your full job search
-11. Use **Goals** to set weekly or monthly targets and watch them update as you track applications
-
-All data is saved to your browser's localStorage. Nothing is sent anywhere. Use the ☀️ / 🌙 toggle in the top bar to switch between light and dark mode, or pick a color theme — **M** (Midnight), **S** (Sunset), or **O** (Ocean) — from the buttons beside it. Use **◑** to enable color-blind mode. Press `Cmd+Shift+K` / `Ctrl+Shift+K` at any time to open the command palette. Your preferences are remembered.
+</details>
 
 ---
 
----
+## 📖 Full Feature Reference
 
-### ❌ Not Selected vs. Declined
-Two distinct terminal stages to accurately reflect what actually happened:
+<details>
+<summary><strong>◈ Dashboard</strong></summary>
 
-- **Not Selected** — the company didn't choose you. The date you moved the job to this stage is automatically stamped and shown on the card and in the detail view so you can track how long the process took.
-- **Declined** — you chose not to pursue the role. Use this when you turned down an opportunity, withdrew from the process, or decided it wasn't the right fit for you.
+- **Stat cards** — Total Tracked (with `avg. X/wk · X/mo · X/yr` pace), Applied, In Progress, Offers, Not Selected, Avg Fit Score
+- **Streak & nudge bar** — daily application streak + contextual motivational message; a clickable **⚠ Pipeline Health** warning appears if any Applied/Screening/Interview jobs haven't moved in 14+ days
+- **Conversion Funnel** — Applied → Screening → Interview → Offer with counts and % conversion from each previous stage
+- **Weekly Velocity** — animated 6-week bar chart showing jobs added per week
+- **Upcoming Deadlines** — jobs with deadlines in the next 7 days, color-coded by urgency (yellow ≤2 days, red = today); overdue banner if any have passed; click to open the job
+- **Avg. Time in Stage** — average days since added per active stage, color-coded green/yellow/red
+- **This Week summary** — jobs added, in-progress count, overdue follow-ups, and weekly goal progress
+- **Top Skill Gaps** — click any tag to see jobs missing that skill
+- **Top Skills** — matched skills show ✓ job count and are clickable
+- **Pipeline Overview** — click any stage bar to see all jobs at that stage
+- Recent applications list — click to open the full job detail
 
-Both are togglable on the board so you can hide them when you want to focus on active applications.
+</details>
 
----
+<details>
+<summary><strong>📋 Job Board</strong></summary>
 
-### 🔍 Job Description Keyword Highlight
-When viewing a job's description in the detail modal, matched skills are **highlighted green** and skill gaps are **highlighted red** directly in the text — no more hunting for keywords manually.
+Nine stages: **Saved → Applied → Screening → Interview → Offer → Not Selected → Declined → Ghosted → Archived**
 
-Each matched and missing skill tag has a **×** dismiss button. Click it to remove a false positive (e.g. "go" detected as the Go language when it's just the word "go") — the fit score recalculates instantly and the highlights update. The change is saved automatically.
+- **Not Selected** — company didn't pick you; date auto-stamped on the card and detail view
+- **Declined** — you chose not to pursue; **Ghosted** — never heard back
+- **Four layout modes:**
+  - **Columns** — classic kanban with collapsible columns (state persists across refreshes)
+  - **Priority Matrix** — 2×2 grid by fit score vs. urgency (Act Now 🔥, Plan Ahead ⭐, Quick Apply ⚡, Low Priority 📋); Act Now quadrant has a subtle green glow; long role names truncate cleanly
+  - **Table** — sortable spreadsheet with sticky header, per-stage colored left-border accents, and color-coded stage dropdowns
+  - **Timeline** — Gantt-style bars color-coded by stage with a stage legend and color dot per row label
+- Drag cards between columns · hover to reveal quick-delete **×** · toggle inactive stages on/off
+- Filter by period · search by role/company/location · filter dropdowns for stage, work type, seniority
+- **⊜ Compare Jobs** — select 2–3 jobs to compare fit, salary, stage, skills, and benefits side by side
 
----
+**Each job stores:** role, company, department, location, URL, salary (auto-formatted), seniority, job type, work type, date posted, date applied, stage, benefits (parsed into chips), company notes, job description, cover letter, personal notes.
 
-### ▣ Priority Matrix
-The Priority Matrix view plots every job onto a 2×2 grid so you can instantly see where to focus your energy:
+**Add/Edit form tabs:** Details · Job Info · Application
 
-| | Low Urgency | High Urgency |
-|---|---|---|
-| **High Fit (≥70)** | ⭐ Plan Ahead | 🔥 Act Now |
-| **Low Fit (<70)** | 📋 Low Priority | ⚡ Quick Apply |
+**Milestone logging** — moving to Screening, Interview, or Offer opens a modal to log date, time, type, round, and notes. Milestones appear as a color-coded Application Timeline strip in the job detail; each is editable via ✎.
 
-**Urgency** is calculated automatically — a job is urgent if its deadline is within 14 days (or overdue), or if no deadline is set and it has been in your pipeline for 14+ days without a response.
+**Fit Analysis** (in job detail):
+- Fit score % based on profile skills vs. job description (certifications also factor in)
+- Matched skills (green) and gaps (red) highlighted directly in the description text
+- × dismiss button on any tag to remove false positives — score updates instantly
+- Linked contacts from Network appear inline
+- Quick link to Cash Compass to check financial runway alongside an offer
 
-Each card shows its stage (with a colored left accent), time info (days remaining, days overdue, or days since applied), and fit badge. Jobs without a fit score are collected in an unscored strip below the grid with a prompt to add one.
+</details>
 
----
+<details>
+<summary><strong>📅 Calendar & Activity</strong></summary>
 
-### ⊜ Job Comparison View
-Click **⊜ Compare Jobs** on the Job Board to select 2–3 jobs and compare them side by side:
-- Fit score, salary, stage, seniority, work type
-- Full matched skills and skill gaps lists
-- Benefits chips
-- Supports search filtering to find jobs quickly
+- Toggle **Month / Week / Year** layouts with prev/next navigation
+- Four event types: job added (teal), deadline (red), contact follow-up (yellow), job fair (purple)
+- **+ Add Event** — log job fairs with format, venue, meeting link, time, and notes; Join button appears on events with a link
+- **Upcoming strip** — next 7 days of events at a glance
+- **Job Activity** — counts for Today, This Week, This Month, This Year, All Time
 
----
+</details>
 
-### 📧 Email Templates
-Save reusable email templates in **My Profile → Email Templates**:
-- Types: **Thank-You**, **Follow-Up**, **Withdrawal**, **Custom**
-- Load any saved template directly into a job's cover letter from the **Application** tab
-- Edit template body inline without leaving the profile view
+<details>
+<summary><strong>🤝 Network & Contacts</strong></summary>
 
----
+- Add contacts with name, company, role, type, email, phone, LinkedIn, linked job, last contact date, next follow-up, and notes
+- Stat strip showing totals, follow-ups due, and count by type
+- Search, filter by type, sort by name/company/most recent
+- Overdue follow-ups highlighted; dates appear in Calendar
+- Linked contacts appear inside the job's detail modal
 
-### ✓ Thank-You Sent checkbox
-When logging Screening, Interview, or Offer milestone details, check **Thank-you note sent** to track it. A ✓ indicator appears in the Application Timeline strip on the job detail view.
+</details>
 
----
+<details>
+<summary><strong>🎯 Goals</strong></summary>
 
-### 📋 This Week Summary
-The Dashboard now includes a **This Week** recap card showing: jobs added this week, currently in-progress count, overdue follow-ups, and live progress against all weekly goals.
+- Goal types: Applications Sent, Screenings, Interviews, Offers, Responses, Jobs Researched, Contacts Added
+- Weekly or monthly period; live progress bar + status label (Complete / On Track / Behind / Not Started)
+- Summary strip with mini progress rings · quick-add preset buttons
 
----
+</details>
 
-### 👥 Linked Contacts in Job Detail
-When opening a job that has contacts linked to it (via Network), those contacts now appear inline in the job detail modal — including their type, follow-up status, and overdue alerts — without needing to switch views.
+<details>
+<summary><strong>📊 Analytics</strong></summary>
 
----
+- **7 KPI cards** — Tracked, Applied, In Progress, Offers, Not Selected, Avg Fit, Response Rate (color-coded green/yellow/red)
+- **Application Funnel** — conversion rates Applied → Offer; click any row to see those jobs
+- **Response Rate by Stage** — stacked bar breakdown
+- **Applications Over Time** — weekly (8 weeks) or monthly (12 months); click any column to drill in
+- **Top Companies** · **Skill Gaps** · **Fit Score Distribution** · **Work Type / Job Type / Seniority** breakdowns
+- All charts clickable, animated, and filterable by period
 
-### ⌨ Keyboard Shortcuts & Command Palette
+</details>
 
-**Keyboard shortcuts** work anywhere in the app (when not typing in a field):
+<details>
+<summary><strong>👤 My Profile</strong></summary>
+
+- **Skills** — add individually or bulk-paste; level badges (Expert / Intermediate / Beginner) cycle on click; duplicates auto-skipped; Skill Coverage chart shows frequency across tracked jobs
+- **Certifications, Degrees & Licenses** — optional descriptions feed directly into fit scoring; inline edit via ✎
+- **Email Templates** — Thank-You, Follow-Up, Withdrawal, Custom; load any template into a job's cover letter
+- **Data Backup** — JSON export/import (merges by ID); CSV export/import (merges by role + company)
+- **Your Links** — LinkedIn, GitHub, Portfolio with one-click open and copy
+
+</details>
+
+<details>
+<summary><strong>📄 Resume Hub</strong></summary>
+
+- **Resume Parser** — PDF, .docx, plain text, or paste; detected skills importable in one click
+- **GitHub / Portfolio Scanner** — scan public repos for languages and topics
+- **Writing Polish** — flags passive voice, filler words, and weak language with a quality score
+- **Resources & AI Tools** — curated links for writing, resume building, job research, and financial planning
+
+</details>
+
+<details>
+<summary><strong>🧠 Learning Hub</strong></summary>
+
+- Course and certification recommendations pulled from your skill gaps
+- Sources: Coursera, Google, AWS, LinkedIn Learning, Udemy, and more
+- Each resource shows estimated time commitment; bookmark picks and filter to saved only
+
+</details>
+
+<details>
+<summary><strong>⌨ Keyboard Shortcuts & Command Palette</strong></summary>
 
 | Key | Action |
 |---|---|
-| `Cmd+Shift+K` / `Ctrl+Shift+K` | Open command palette |
+| `Ctrl+Shift+K` | Open command palette |
 | `N` | Open Add Job form |
 | `/` | Focus the board search bar |
-| `Escape` | Close any open modal (works even when typing inside it) |
-| `1` / `2` / `3` | Switch tabs in the Add / Edit Job modal (Details → Job Info → Application) |
+| `Escape` | Close any open modal |
+| `1` / `2` / `3` | Switch tabs in Add / Edit Job modal |
 
-**Command palette** (`Cmd+Shift+K` / `Ctrl+Shift+K`) — search for views, trigger actions, or jump directly to any job by name or company. Navigate with `↑ ↓`, confirm with `Enter`, close with `Escape`. Also accessible by clicking the `⌘K` hint in the top bar.
+**Command palette** — search views, trigger actions, or jump to any job by name or company. Navigate with `↑ ↓`, confirm with `Enter`.
 
----
+</details>
 
-### 🃏 Job Card Hover Preview
-Hover over any job card on the board for ~0.5 seconds to see a floating preview with salary, stage, work type, deadline, matched skill count, and skill gap count — without opening the full detail modal.
+<details>
+<summary><strong>🤖 Smart Auto-fill</strong></summary>
 
----
+**Seniority** — inferred from title keywords (`Senior`, `Lead`, `Jr.`), level codes (`L3–L7`, `SDE I/II/III`), years-of-experience phrases, and responsibility language. Never overwrites a value you set manually.
 
-### 🔢 Fit Score Tooltip
-Hover any fit score badge to see an instant breakdown: percentage, number of matched skills (green), and number of skill gaps (red).
+**Department** — detected across 13 departments (Engineering, Data, Design, Product, Marketing, Sales, Finance, HR, Legal, Operations, Customer Success, Security, Research) from the job title and description.
 
----
+**Work Type** — Remote / Hybrid / On-site detected from the description. Hybrid wins if the word appears anywhere.
 
-### ↩ Undo Job Deletion
-Deleting a job card from the kanban or priority matrix view shows an **Undo** button in the toast notification. You have 3 seconds to reverse the deletion — no confirmation required.
+All three show an amber **✦ Auto-filled** badge so you always know the app set it, not you. Clearing any field manually removes the badge instantly.
 
----
+</details>
 
-### 🎯 Getting Started Checklist
-A progress bar appears at the top of the app on first use with four steps: add skills → add first job → get a fit score → visit the Learning Hub. Each step is a clickable link that takes you directly to where you need to go. Dismiss it when you're done.
+<details>
+<summary><strong>🎨 Other Features</strong></summary>
 
----
+- **Job Card Hover Preview** — float preview with salary, stage, work type, deadline, and skill counts after ~0.5s hover
+- **Fit Score Tooltip** — hover any fit badge to see matched count and gap count
+- **Keyword Highlight** — matched skills highlighted green, gaps red, directly in the job description; × on any tag to dismiss false positives
+- **Undo Deletion** — 3-second undo toast after deleting a job card
+- **This Week Summary** — recap card on the dashboard with weekly stats and goal progress
+- **Linked Contacts** — contacts tied to a job appear inline in the job detail modal
+- **Thank-You Tracking** — check "Thank-you sent" in milestone modals; ✓ shows in the Application Timeline
+- **Getting Started Checklist** — progress bar on first use: add skills → add job → get fit score → visit Learning Hub
+- **Color-Blind Mode** — ◑ toggle switches red/green to orange/blue
+- **Print Summary** — `Cmd/Ctrl+P` or command palette prints a clean Analytics page
 
-### 🎓 Seniority Inference
-When adding or editing a job, the **Seniority** field auto-fills if you leave it blank — no need to guess or look it up manually.
-
-The inference runs in order of confidence:
-
-1. **Job title keywords** — `Senior`, `Junior`, `Lead`, `Staff`, `Intern`, `Principal`, `Sr.`, `Jr.` detected directly in the role name
-2. **L-levels / E-levels / company levels** — `L3–L7`, `E3–E7`, `IC3–IC7`, `SDE I/II/III`, `SWE I/II/III` matched in the title or description — unambiguous when present
-3. **Years of experience** — phrases like `"3+ years"`, `"2–4 years"`, `"minimum 5 years of experience"` mapped to a level:
-
-| Years required | Inferred level |
-|---|---|
-| 0 | Internship |
-| 1–2 | Junior |
-| 3–4 | Mid-Level |
-| 5–7 | Senior |
-| 8–10 | Lead |
-| 11+ | Staff |
-
-4. **Responsibility language** — `"lead a team"`, `"manage engineers"`, `"direct reports"` → Lead; `"mentoring junior engineers"`, `"architect solutions"` → Senior; `"under the guidance of"`, `"we'll teach you"` → Junior; `"no experience required"`, `"recent graduate"`, `"fresh grad"` → Entry Level
-5. **Description keyword frequency** — fallback; requires a keyword to appear at least twice to reduce false positives
-
-The field is highlighted with an accent border when auto-inferred so you know to glance at it. Changing it manually clears the highlight. If you already have a seniority set, it is never overwritten. Existing jobs with no seniority are also scanned and back-filled automatically on startup.
-
----
-
-### 🏢 Department Inference
-When adding or editing a job, the **Department** field auto-fills from the job title and description if you leave it blank.
-
-The app scans across 13 departments:
-
-| Department | Example keywords detected |
-|---|---|
-| Engineering | engineer, developer, software, frontend, backend, devops, mobile, qa |
-| Data | data scientist, data analyst, machine learning, analytics, business intelligence |
-| Design | designer, ux, ui, user experience, product design, visual design |
-| Product | product manager, product owner, scrum master, program manager |
-| Marketing | marketing, seo, content strategist, growth, social media, copywriter |
-| Sales | sales, account executive, business development, bdr, sdr, account manager |
-| Finance | finance, accounting, financial analyst, controller, payroll, auditor |
-| HR / People | human resources, recruiter, talent acquisition, people ops, onboarding |
-| Legal | legal, counsel, compliance, attorney, lawyer, paralegal |
-| Operations | operations, supply chain, logistics, project manager, chief of staff |
-| Customer Success | customer success, customer support, help desk, technical support |
-| Security | security engineer, cybersecurity, infosec, penetration, soc analyst |
-| Research | researcher, research scientist, r&d, scientist |
-
-An amber **✦ Auto-filled** badge appears next to the field label in the edit form and next to the value in the detail view so you always know the app set it, not you. Hovering the badge shows a tooltip confirming it was inferred. The moment you type anything in the Department field, the badge clears automatically. If no match is found, the field stays blank.
-
----
-
-### 🌐 Work Type Inference
-When adding or editing a job, the **Work Type** field (Remote / Hybrid / On-site) auto-fills from the job description if you leave it blank.
-
-- **Hybrid** is checked first — if the word "hybrid" appears anywhere in the description, it wins
-- **Remote** — detected from: `remote`, `work from home`, `wfh`, `fully remote`, `100% remote`
-- **On-site** — detected from: `on-site`, `in-office`, `in person`, `on location`
-
-The same amber **✦ Auto-filled** badge used for Department appears on the Work Type badge in the detail view and next to the label in the edit form. Selecting a value from the dropdown manually clears it instantly.
-
----
-
-### ◑ Color-Blind Mode
-Toggle the **◑** button in the top bar to switch the app's red/green color scheme to orange/blue — a palette that works for the most common types of color vision deficiency. Preference is saved and remembered.
-
----
-
-### 🖨 Print Summary
-Press `Cmd/Ctrl+P` or choose **Print Summary** from the command palette to print a clean, navigation-free version of the Analytics page — useful for sharing your job search progress with a career coach or mentor.
+</details>
 
 ---
 

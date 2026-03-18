@@ -241,20 +241,23 @@
 /* Unique top accent + diagonal tint per quadrant */
 .pm-q-tl {
   border-top: 3px solid #a78bfa;
-  background: linear-gradient(145deg, rgba(167,139,250,.07) 0%, transparent 50%);
+  background: linear-gradient(145deg, rgba(167, 139, 250, .07) 0%, transparent 50%);
 }
+
 .pm-q-tr {
   border-top: 3px solid var(--green);
-  background: linear-gradient(145deg, rgba(63,185,80,.09) 0%, transparent 50%);
+  background: linear-gradient(145deg, rgba(63, 185, 80, .09) 0%, transparent 50%);
   box-shadow: inset 0 0 0 1px rgba(63, 185, 80, .14);
 }
+
 .pm-q-bl {
   border-top: 3px solid var(--border);
   background: var(--surface);
 }
+
 .pm-q-br {
   border-top: 3px solid var(--yellow);
-  background: linear-gradient(145deg, rgba(210,153,34,.08) 0%, transparent 50%);
+  background: linear-gradient(145deg, rgba(210, 153, 34, .08) 0%, transparent 50%);
 }
 
 /* ── QUADRANT HEADER ── */
@@ -265,7 +268,7 @@
   padding: 11px 14px 10px;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
-  background: rgba(0,0,0,.015);
+  background: rgba(0, 0, 0, .015);
 }
 
 .pm-q-icon-wrap {
@@ -279,10 +282,21 @@
   flex-shrink: 0;
 }
 
-.pm-q-tl .pm-q-icon-wrap { background: rgba(167,139,250,.14); }
-.pm-q-tr .pm-q-icon-wrap { background: rgba(63,185,80,.14); }
-.pm-q-bl .pm-q-icon-wrap { background: rgba(148,163,184,.10); }
-.pm-q-br .pm-q-icon-wrap { background: rgba(210,153,34,.14); }
+.pm-q-tl .pm-q-icon-wrap {
+  background: rgba(167, 139, 250, .14);
+}
+
+.pm-q-tr .pm-q-icon-wrap {
+  background: rgba(63, 185, 80, .14);
+}
+
+.pm-q-bl .pm-q-icon-wrap {
+  background: rgba(148, 163, 184, .10);
+}
+
+.pm-q-br .pm-q-icon-wrap {
+  background: rgba(210, 153, 34, .14);
+}
 
 .pm-q-meta {
   flex: 1;
@@ -314,10 +328,25 @@
   letter-spacing: .01em;
 }
 
-.pm-q-tl .pm-q-count { background: rgba(167,139,250,.15); color: #a78bfa; }
-.pm-q-tr .pm-q-count { background: rgba(63,185,80,.15);   color: var(--green); }
-.pm-q-bl .pm-q-count { background: var(--border);          color: var(--text-muted); }
-.pm-q-br .pm-q-count { background: rgba(210,153,34,.15);  color: var(--yellow); }
+.pm-q-tl .pm-q-count {
+  background: rgba(167, 139, 250, .15);
+  color: #a78bfa;
+}
+
+.pm-q-tr .pm-q-count {
+  background: rgba(63, 185, 80, .15);
+  color: var(--green);
+}
+
+.pm-q-bl .pm-q-count {
+  background: var(--border);
+  color: var(--text-muted);
+}
+
+.pm-q-br .pm-q-count {
+  background: rgba(210, 153, 34, .15);
+  color: var(--yellow);
+}
 
 /* ── CARDS AREA ── */
 .pm-cards {
@@ -339,14 +368,20 @@
 }
 
 .pm-card-role {
+  display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.pm-card {
+  overflow: hidden;
 }
 
 .pm-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .18);
   border-color: var(--card-accent, var(--accent)) !important;
 }
 
@@ -769,15 +804,41 @@
   --stage-color: var(--border);
 }
 
-.table-row-clickable[data-stage="saved"] { --stage-color: var(--text-muted); }
-.table-row-clickable[data-stage="applied"] { --stage-color: var(--accent); }
-.table-row-clickable[data-stage="screening"] { --stage-color: #a78bfa; }
-.table-row-clickable[data-stage="interview"] { --stage-color: var(--yellow); }
-.table-row-clickable[data-stage="offer"] { --stage-color: var(--green); }
-.table-row-clickable[data-stage="declined"] { --stage-color: var(--red); }
-.table-row-clickable[data-stage="withdrew"] { --stage-color: #f97316; }
-.table-row-clickable[data-stage="ghosted"] { --stage-color: #94a3b8; }
-.table-row-clickable[data-stage="archived"] { --stage-color: var(--border); }
+.table-row-clickable[data-stage="saved"] {
+  --stage-color: var(--text-muted);
+}
+
+.table-row-clickable[data-stage="applied"] {
+  --stage-color: var(--accent);
+}
+
+.table-row-clickable[data-stage="screening"] {
+  --stage-color: #a78bfa;
+}
+
+.table-row-clickable[data-stage="interview"] {
+  --stage-color: var(--yellow);
+}
+
+.table-row-clickable[data-stage="offer"] {
+  --stage-color: var(--green);
+}
+
+.table-row-clickable[data-stage="declined"] {
+  --stage-color: var(--red);
+}
+
+.table-row-clickable[data-stage="withdrew"] {
+  --stage-color: #f97316;
+}
+
+.table-row-clickable[data-stage="ghosted"] {
+  --stage-color: #94a3b8;
+}
+
+.table-row-clickable[data-stage="archived"] {
+  --stage-color: var(--border);
+}
 
 .table-row-clickable .table-td:first-child {
   border-left: 3px solid var(--stage-color);
@@ -843,14 +904,51 @@
   transition: border-color .15s, background .15s;
 }
 
-.stage-select-applied { color: var(--accent); border-color: rgba(0,212,170,.35); background: rgba(0,212,170,.08); }
-.stage-select-screening { color: #a78bfa; border-color: rgba(167,139,250,.35); background: rgba(167,139,250,.08); }
-.stage-select-interview { color: var(--yellow); border-color: rgba(210,153,34,.35); background: rgba(210,153,34,.08); }
-.stage-select-offer { color: var(--green); border-color: rgba(63,185,80,.35); background: rgba(63,185,80,.08); }
-.stage-select-declined { color: var(--red); border-color: rgba(255,77,109,.35); background: rgba(255,77,109,.08); }
-.stage-select-ghosted { color: #f97316; border-color: rgba(249,115,22,.35); background: rgba(249,115,22,.08); }
-.stage-select-withdrew { color: #f97316; border-color: rgba(249,115,22,.35); background: rgba(249,115,22,.08); }
-.stage-select-saved { color: var(--text-muted); }
+.stage-select-applied {
+  color: var(--accent);
+  border-color: rgba(0, 212, 170, .35);
+  background: rgba(0, 212, 170, .08);
+}
+
+.stage-select-screening {
+  color: #a78bfa;
+  border-color: rgba(167, 139, 250, .35);
+  background: rgba(167, 139, 250, .08);
+}
+
+.stage-select-interview {
+  color: var(--yellow);
+  border-color: rgba(210, 153, 34, .35);
+  background: rgba(210, 153, 34, .08);
+}
+
+.stage-select-offer {
+  color: var(--green);
+  border-color: rgba(63, 185, 80, .35);
+  background: rgba(63, 185, 80, .08);
+}
+
+.stage-select-declined {
+  color: var(--red);
+  border-color: rgba(255, 77, 109, .35);
+  background: rgba(255, 77, 109, .08);
+}
+
+.stage-select-ghosted {
+  color: #f97316;
+  border-color: rgba(249, 115, 22, .35);
+  background: rgba(249, 115, 22, .08);
+}
+
+.stage-select-withdrew {
+  color: #f97316;
+  border-color: rgba(249, 115, 22, .35);
+  background: rgba(249, 115, 22, .08);
+}
+
+.stage-select-saved {
+  color: var(--text-muted);
+}
 
 .table-actions {
   width: 32px;
