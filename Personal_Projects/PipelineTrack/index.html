@@ -869,31 +869,31 @@
                     <div class="form-row three-col">
                         <div class="form-group">
                             <label class="form-label">Role / Title <span class="required-star">*</span></label>
-                            <input type="text" class="text-input" id="job-role" placeholder="e.g. Frontend Engineer" />
+                            <input type="text" class="text-input" id="job-role" placeholder="e.g. Frontend Engineer" autocomplete="off" />
                         </div>
                         <div class="form-group">
                             <label class="form-label">Company <span class="required-star">*</span></label>
-                            <input type="text" class="text-input" id="job-company" placeholder="e.g. Acme Corp" />
+                            <input type="text" class="text-input" id="job-company" placeholder="e.g. Acme Corp" autocomplete="off" />
                         </div>
                         <div class="form-group">
                             <label class="form-label">Department</label>
                             <input type="text" class="text-input" id="job-department"
-                                placeholder="e.g. Engineering, Data" />
+                                placeholder="e.g. Engineering, Data" autocomplete="off" />
                         </div>
                     </div>
                     <div class="form-section-label">Schedule &amp; Links</div>
                     <div class="form-row four-col">
                         <div class="form-group">
                             <label class="form-label">Location</label>
-                            <input type="text" class="text-input" id="job-location" placeholder="e.g. New York, NY" />
+                            <input type="text" class="text-input" id="job-location" placeholder="e.g. New York, NY" autocomplete="off" />
                         </div>
                         <div class="form-group">
                             <label class="form-label">Job URL</label>
-                            <input type="url" class="text-input" id="job-url" placeholder="https://…" />
+                            <input type="url" class="text-input" id="job-url" placeholder="https://…" autocomplete="off" />
                         </div>
                         <div class="form-group">
                             <label class="form-label">Salary / Pay Range</label>
-                            <input type="text" class="text-input" id="job-salary" placeholder="e.g. $80k–$100k" />
+                            <input type="text" class="text-input" id="job-salary" placeholder="e.g. $80k–$100k" autocomplete="off" />
                         </div>
                         <div class="form-group">
                             <label class="form-label">Date Posted</label>
@@ -1482,6 +1482,13 @@
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Seniority
                                         auto-fill</strong> — inferred from title, level codes (L3–L7), years of
                                     experience, and description</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Department
+                                        auto-fill</strong> — if left blank, inferred from the job title and description
+                                    across 13 departments; shown with an ✦ badge so you always know it was auto-filled
+                                    and can update it any time</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Work type
+                                        auto-fill</strong> — Remote, Hybrid, or On-site detected from the description
+                                    if you leave the field blank; also shown with an ✦ badge</span></div>
                         </div>
                         <p class="onboarding-tip">Hover any job card for a quick preview · Hover any fit badge for a
                             skill breakdown · Reopen this guide with <strong>?</strong></p>
