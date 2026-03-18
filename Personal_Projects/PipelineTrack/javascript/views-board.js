@@ -95,7 +95,7 @@ function pmCardHTML(job) {
     <div class="job-card pm-card" data-job-id="${job.id}" data-stage="${job.stage}" draggable="false" style="--card-accent:${accent}">
       <button class="card-delete-btn" data-delete-id="${job.id}" title="Delete job" draggable="false">&times;</button>
       <div class="pm-card-stage"><span class="pm-stage-dot stripe-${job.stage}"></span>${STAGE_LABELS[job.stage]}</div>
-      <div class="job-card-role" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:148px">${escHtml(job.role)}</div>
+      <div class="job-card-role pm-card-role">${escHtml(job.role)}</div>
       <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
       <div class="job-card-footer">
         <span class="job-card-date">${timeInfo}</span>
@@ -151,7 +151,7 @@ function renderBoardMatrix(jobs) {
                 </div>
                 <div class="pm-cards">
                   ${qJobs[q.id].length === 0
-                    ? emptyStateHTML('📭', 'No jobs here', 'Drag a card here to move a job to this stage')
+                    ? '<div class="pm-empty-q">No jobs here</div>'
                     : qJobs[q.id].map(j => pmCardHTML(j)).join('')}
                 </div>
               </div>`).join('')}
@@ -461,7 +461,7 @@ function renderBoardTable(jobs) {
 
   return `<table class="board-table">
     <thead>
-      <tr>
+      <tr class="table-header-row">
         <th class="table-th" data-sort="role-asc">Role${sortIcon('role')}</th>
         <th class="table-th" data-sort="company-asc">Company${sortIcon('company')}</th>
         <th class="table-th">Stage</th>
@@ -477,7 +477,7 @@ function renderBoardTable(jobs) {
       ${jobs.map(j => {
         const fitCls = fitBadgeClass(j.fitScore);
         const fitLabel = fitBadgeLabel(j.fitScore);
-        return `<tr class="table-row-clickable" data-job-id="${j.id}">
+        return `<tr class="table-row-clickable" data-stage="${j.stage}" data-job-id="${j.id}">
           <td class="table-td table-td-role">${escHtml(j.role)}</td>
           <td class="table-td">${escHtml(j.company)}${j.location ? `<span class="table-location"> · ${escHtml(j.location)}</span>` : ''}</td>
           <td class="table-td" onclick="event.stopPropagation()">
@@ -575,9 +575,9 @@ function renderBoardTimeline(jobs) {
     const daysAgo = Math.floor((today - new Date(j.dateAdded)) / 86400000);
     const age = daysAgo === 0 ? 'Today' : daysAgo === 1 ? '1d' : `${daysAgo}d`;
     const stageName = STAGE_LABELS[j.stage] || j.stage;
-    return `<div class="tl-row" data-job-id="${j.id}">
+    return `<div class="tl-row" data-stage="${j.stage}" data-job-id="${j.id}">
       <div class="tl-row-label">
-        <div class="tl-row-role">${escHtml(j.role)}</div>
+        <div class="tl-row-role"><span class="tl-stage-dot stripe-${j.stage}"></span>${escHtml(j.role)}</div>
         <div class="tl-row-company">${escHtml(j.company)}</div>
       </div>
       <div class="tl-row-track">
@@ -589,7 +589,13 @@ function renderBoardTimeline(jobs) {
     </div>`;
   }).join('');
 
+  const presentStages = [...new Set(sorted.map(j => j.stage))];
+  const legendHTML = `<div class="tl-legend">
+    ${presentStages.map(s => `<span class="tl-legend-item"><span class="tl-legend-dot stripe-${s}"></span>${STAGE_LABELS[s] || s}</span>`).join('')}
+  </div>`;
+
   return `<div class="tl-container">
+    ${legendHTML}
     <div class="tl-axis-row">
       <div class="tl-label-spacer"></div>
       <div class="tl-axis-track">${axisHTML}</div>
