@@ -58,6 +58,59 @@ function wireEvents() {
   // Save job
   document.getElementById('save-job-btn').addEventListener('click', saveJob);
 
+  // Smart paste panel
+  document.getElementById('show-smart-paste-btn').addEventListener('click', () => {
+    const panel = document.getElementById('smart-paste-panel');
+    panel.classList.add('open');
+    document.getElementById('smart-paste-input').focus();
+  });
+  document.getElementById('smart-paste-cancel').addEventListener('click', () => {
+    document.getElementById('smart-paste-panel').classList.remove('open');
+    document.getElementById('smart-paste-input').value = '';
+  });
+  document.getElementById('smart-paste-btn').addEventListener('click', () => {
+    const text = document.getElementById('smart-paste-input').value.trim();
+    if (!text) return;
+    const parsed = parseJobListing(text);
+
+    function addAutoTag(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const group = el.closest('.form-group');
+      if (!group) return;
+      const label = group.querySelector('.form-label');
+      if (!label) return;
+      // Remove existing auto tag
+      const existing = label.querySelector('.inferred-tag');
+      if (existing) existing.remove();
+      const tag = document.createElement('span');
+      tag.className = 'inferred-tag';
+      tag.title = 'Auto-filled from pasted listing';
+      tag.textContent = '✦ Auto-filled';
+      label.appendChild(tag);
+      // Clear tag when user edits
+      el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', () => tag.remove(), { once: true });
+    }
+
+    const fieldMap = { role: 'job-role', company: 'job-company', location: 'job-location', salary: 'job-salary' };
+    const selectMap = { workType: 'job-work-type', jobType: 'job-type', seniority: 'job-seniority' };
+
+    Object.entries(fieldMap).forEach(([key, id]) => {
+      if (parsed[key]) { document.getElementById(id).value = parsed[key]; flashField(id); addAutoTag(id); }
+    });
+    Object.entries(selectMap).forEach(([key, id]) => {
+      if (parsed[key]) { document.getElementById(id).value = parsed[key]; flashField(id); addAutoTag(id); }
+    });
+
+    // Move cleaned description to Job Info tab (metadata header stripped)
+    document.getElementById('job-description').value = parsed.description || text;
+    // Collapse the paste panel
+    document.getElementById('smart-paste-panel').classList.remove('open');
+    document.getElementById('smart-paste-input').value = '';
+    const filled = Object.values(parsed).filter(Boolean).length;
+    toast(`Auto-filled ${filled} field${filled !== 1 ? 's' : ''} — review and add the rest.`, 'success');
+  });
+
   // Add skill
   document.getElementById('add-skill-btn').addEventListener('click', addSkill);
   document.getElementById('skill-input').addEventListener('keydown', e => {

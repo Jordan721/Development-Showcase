@@ -1116,6 +1116,150 @@ function renderDetailLinkedContacts(job) {
 }
 
 /* ══════════════════════════════════════════════════════════
+   SMART PASTE PARSER
+   ══════════════════════════════════════════════════════════ */
+function parseJobListing(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const result = {};
+
+  // Role / Title
+  const titleMatch = text.match(/(?:job\s*title|position|role|title)\s*[:\-]\s*(.+)/i);
+  if (titleMatch) {
+    result.role = titleMatch[1].trim().split('\n')[0];
+  } else if (lines[0] && lines[0].length < 90) {
+    result.role = lines[0];
+  }
+
+  // Company
+  const companyMatch = text.match(/(?:company|employer|organization|hiring\s*(?:company|team))\s*[:\-]\s*(.+)/i)
+    || text.match(/(?:^|\n)(?:about|join)\s+([A-Z][a-zA-Z0-9\s&.,'-]{2,40}?)(?:\n|,|\.|$)/m);
+  if (companyMatch) result.company = companyMatch[1].trim().split('\n')[0];
+
+  // Location
+  const locationMatch = text.match(/(?:location|office|based\s*in|where\s*you.{0,10}work)\s*[:\-]\s*(.+)/i);
+  if (locationMatch) {
+    result.location = locationMatch[1].trim().split('\n')[0];
+  } else {
+    // city, ST pattern
+    const cityMatch = text.match(/\b([A-Z][a-zA-Z\s]+,\s*[A-Z]{2})\b/);
+    if (cityMatch) result.location = cityMatch[1];
+  }
+
+  // Salary
+  const salaryMatch = text.match(/(?:salary|pay|compensation|rate|package)\s*[:\-]?\s*([\$£€][\d,. ]+(?:k|K)?(?:\s*[-–—to]+\s*[\$£€]?[\d,. ]+(?:k|K)?)?(?:\s*(?:USD|GBP|EUR|per\s*year|\/yr|annually))?)/i)
+    || text.match(/([\$£€][\d,.]+\s*(?:k|K)?\s*[-–—]\s*[\$£€]?[\d,.]+\s*(?:k|K)?)/);
+  if (salaryMatch) result.salary = salaryMatch[1].trim();
+
+  // Work Type
+  if (/\b(fully\s+remote|100%\s+remote|work\s+from\s+home|wfh)\b/i.test(text)) result.workType = 'Remote';
+  else if (/\bhybrid\b/i.test(text)) result.workType = 'Hybrid';
+  else if (/\b(on[\s-]?site|in[\s-]?office|in[\s-]?person)\b/i.test(text)) result.workType = 'On-site';
+  else if (/\bremote\b/i.test(text)) result.workType = 'Remote';
+
+  // Job Type
+  if (/\bfull[\s-]?time\b/i.test(text)) result.jobType = 'Full-time';
+  else if (/\bpart[\s-]?time\b/i.test(text)) result.jobType = 'Part-time';
+  else if (/\bcontract\b/i.test(text)) result.jobType = 'Contract';
+  else if (/\bfreelance\b/i.test(text)) result.jobType = 'Freelance';
+  else if (/\btemporary\b/i.test(text)) result.jobType = 'Temporary';
+  else if (/\binternship\b/i.test(text)) result.jobType = 'Internship';
+
+  // Seniority
+  if (/\b(staff|principal)\b/i.test(text)) result.seniority = 'Staff';
+  else if (/\blead\b/i.test(text)) result.seniority = 'Lead';
+  else if (/\bsenior\b/i.test(text)) result.seniority = 'Senior';
+  else if (/\b(mid[\s-]?level)\b/i.test(text)) result.seniority = 'Mid-Level';
+  else if (/\bjunior\b/i.test(text)) result.seniority = 'Junior';
+  else if (/\bentry[\s-]?level\b/i.test(text)) result.seniority = 'Entry Level';
+  else if (/\bintern\b/i.test(text)) result.seniority = 'Internship';
+
+  // ── Clean description ──────────────────────────────────
+  // Strategy 1: find a named body header and keep everything from there
+  const BODY_HEADER = /^(?:about\s+(?:the\s+)?(?:role|job|position|company|us|this\s+role|you)|job\s+(?:description|summary|overview|details)|(?:role|position)\s+(?:overview|summary|description)|overview|summary|the\s+role|what\s+you.{0,15}(?:do|work|build|own)|what\s+we.{0,10}(?:look|need|expect)|responsibilities|key\s+responsibilities|your\s+(?:role|responsibilities|impact|mission)|duties|the\s+opportunity|who\s+(?:we|you)\s+are|we.{0,6}looking\s+for|your\s+day[\s-]to[\s-]day)/i;
+
+  // Metadata line patterns — stripped regardless of position
+  const META_LINE = [
+    /^(?:job\s*title|position|role|title)\s*[:\-–]/i,
+    /^(?:company|employer|organization|hiring\s*(?:company|team))\s*[:\-–]/i,
+    /^(?:location|office|city|where\s+(?:we\s+)?work)\s*[:\-–]/i,
+    /^(?:salary|pay|compensation|pay\s*range|package|rate)\s*[:\-–]/i,
+    /^(?:employment|job|work|contract|schedule)\s*type\s*[:\-–]/i,
+    /^(?:work\s*(?:model|mode|arrangement|type|setting))\s*[:\-–]/i,
+    /^(?:seniority|level|career\s*level|experience\s*level)\s*[:\-–]/i,
+    /^(?:department|team|division|group|org)\s*[:\-–]/i,
+    /^(?:posted|date\s*posted|listing\s*date|listed)\s*[:\-–]/i,
+    /^(?:apply\s*by|deadline|closing\s*date|application\s*(?:deadline|date))\s*[:\-–]/i,
+    /^(?:req(?:uisition)?|job|listing|posting)\s*(?:id|#|number)\s*[:\-–]/i,
+    /^(?:reports\s*to|reporting\s*line|manager)\s*[:\-–]/i,
+    /^(?:industry|sector|vertical)\s*[:\-–]/i,
+    /^(?:url|link|apply(?:\s*here)?|application\s*link|how\s*to\s*apply)\s*[:\-–]/i,
+    /^(?:headcount|openings?|vacancies)\s*[:\-–]/i,
+    /^(?:visa|sponsorship|authorization)\s*[:\-–]/i,
+    // Standalone short-form metadata values (whole-line matches)
+    /^(?:full[\s-]?time|part[\s-]?time|contract|freelance|temporary|temp|internship|apprenticeship)$/i,
+    /^(?:remote|fully\s+remote|hybrid|on[\s-]?site|in[\s-]?(?:person|office))$/i,
+    /^(?:senior|sr\.?|junior|jr\.?|mid[\s-]?level|entry[\s-]?level|staff|lead|principal|associate)$/i,
+    /^[\$£€][\d,.\s]+(?:k|K|USD|GBP|EUR)?(?:\s*[-–—to]+\s*[\$£€]?[\d,.\s]+(?:k|K|USD|GBP|EUR)?)?(?:\s*(?:\/yr|per\s*year|annually|\/hour|\/hr))?$/,
+    /^https?:\/\/\S+$/i,
+    /^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}$/,
+    /^(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\s+\d{1,2},?\s*\d{4}$/i,
+    // Pipe/bullet separated tag lines (e.g. "Full-time | Remote | $120k")
+    /^[\w\s$£€.,\-–—|•·]+$(?=.*\|)/,
+  ];
+
+  const extractedVals = new Set(
+    Object.entries(result)
+      .filter(([k]) => k !== 'description')
+      .map(([, v]) => v && v.toLowerCase().trim())
+      .filter(Boolean)
+  );
+
+  const allLines = text.split('\n');
+
+  // Try Strategy 1 first
+  let bodyStart = -1;
+  for (let i = 0; i < allLines.length; i++) {
+    const l = allLines[i].trim();
+    if (l && BODY_HEADER.test(l)) { bodyStart = i; break; }
+  }
+  if (bodyStart > 0) {
+    result.description = allLines.slice(bodyStart).join('\n').trim();
+    return result;
+  }
+
+  // Strategy 2: filter metadata lines, keep body content
+  const cleaned = [];
+  let bodyStarted = false;
+  for (let i = 0; i < allLines.length; i++) {
+    const raw = allLines[i];
+    const l = raw.trim();
+    if (!l) { if (bodyStarted) cleaned.push(''); continue; }
+
+    const isMeta = META_LINE.some(p => p.test(l))
+      || extractedVals.has(l.toLowerCase())
+      // pipe-delimited tag lines (Full-time | Remote | Senior)
+      || (/^[^.!?]{1,120}$/.test(l) && (l.match(/\|/g) || []).length >= 1 && l.split('|').every(seg => seg.trim().length < 40));
+
+    if (isMeta && !bodyStarted) continue;
+
+    bodyStarted = true;
+    cleaned.push(raw);
+  }
+
+  result.description = cleaned.join('\n').trim() || text;
+  return result;
+}
+
+function flashField(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('field-flashed');
+  void el.offsetWidth; // reflow to restart animation
+  el.classList.add('field-flashed');
+  el.addEventListener('animationend', () => el.classList.remove('field-flashed'), { once: true });
+}
+
+/* ══════════════════════════════════════════════════════════
    ADD / EDIT JOB
    ══════════════════════════════════════════════════════════ */
 function openAddJobModal(editId = null) {
@@ -1182,6 +1326,16 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-company-notes').value = job ? job.companyNotes || '' : '';
   document.getElementById('job-notes').value = job ? job.notes || '' : '';
   document.getElementById('job-cover-letter').value = job ? job.coverLetter || '' : '';
+
+  // Reset smart paste panel (hide for edits, show trigger for new jobs)
+  const spPanel = document.getElementById('smart-paste-panel');
+  const spTrigger = document.getElementById('smart-paste-trigger');
+  const spInput = document.getElementById('smart-paste-input');
+  if (spPanel) { spPanel.classList.remove('open'); spPanel.style.display = ''; }
+  if (spTrigger) spTrigger.style.display = editId ? 'none' : '';
+  if (spInput) spInput.value = '';
+  // Clear any leftover auto-fill tags
+  document.querySelectorAll('#modal-job .inferred-tag').forEach(t => t.remove());
 
   // Reset to first tab
   document.querySelectorAll('#job-modal-tabs .modal-tab-btn').forEach((b, i) => b.classList.toggle('active', i === 0));

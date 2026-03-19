@@ -2183,3 +2183,66 @@
 [data-theme="light"] #skill-tags-container .skill-tag .level-btn:hover {
   background: rgba(0, 0, 0, 0.13);
 }
+/* ── SMART PASTE PANEL ───────────────────────────────── */
+.form-section-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.smart-paste-open-btn {
+  font-size: 11px !important;
+  padding: 3px 10px !important;
+  color: var(--accent) !important;
+  border: 1px solid rgba(99,102,241,.3);
+  border-radius: 99px;
+}
+
+.smart-paste-panel {
+  display: none;
+  background: rgba(var(--accent-rgb, 99, 102, 241), 0.06);
+  border: 1px dashed rgba(var(--accent-rgb, 99, 102, 241), 0.35);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 16px;
+  animation: sp-expand .2s ease;
+}
+
+.smart-paste-panel.open {
+  display: block;
+}
+
+@keyframes sp-expand {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.smart-paste-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.smart-paste-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.smart-paste-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* flash highlight on auto-filled fields */
+@keyframes field-flash {
+  0%   { background: rgba(99, 102, 241, 0.18); }
+  100% { background: transparent; }
+}
+.field-flashed {
+  animation: field-flash .9s ease forwards;
+  border-radius: 6px;
+}

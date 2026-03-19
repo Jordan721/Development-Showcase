@@ -41,7 +41,7 @@ I built PipelineTrack to solve that. One tool to track every job, score your ski
 1. Clone or download this folder and open `index.html` in any modern browser
 2. Follow the **getting started guide** that opens automatically — navigate steps with `←` / `→` arrow keys or the `‹ ›` buttons beside the dots, or reopen it anytime with the **?** button
 3. Go to **My Profile** and add your skills (this powers fit scoring)
-4. Go to **Job Board → + Add Job**, fill in the Details tab, and paste the job description in Job Info for an instant fit score
+4. Go to **Job Board → + Add Job** — click **⚡ Paste full listing** to auto-fill fields from the raw posting, or fill in manually; paste the description in Job Info for an instant fit score
 5. Click any job card to see your fit score and skill breakdown
 6. Check **Learning Hub** to see what to learn next, **Analytics** for charts, and **Goals** to set weekly targets
 
@@ -141,6 +141,8 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 **Each job stores:** role, company, department, location, URL, salary (auto-formatted), seniority, job type, work type, date posted, date applied, application deadline, stage, benefits (parsed into chips), company notes, job description, cover letter, personal notes.
 
 **Add/Edit form tabs:** Details · Job Info · Application
+
+**⚡ Smart Paste** — click "Paste full listing" at the top of the Details tab and drop in the raw job posting. The parser extracts role, company, location, salary, work type, job type, and seniority; fills each field with a `✦ Auto-filled` tag so you know what was guessed; strips the metadata header from the description so the Job Info tab only shows the actual body of the listing. Fields are editable — the tag disappears the moment you change a value. *(Parsing is best-effort — it catches the most common formats but may miss things depending on how the listing is structured. Always review the filled fields before saving.)*
 
 **Milestone logging** — moving to Screening, Interview, or Offer opens a modal to log date, time, type, round, and notes. Milestones appear as a color-coded Application Timeline strip in the job detail; each is editable via ✎.
 
