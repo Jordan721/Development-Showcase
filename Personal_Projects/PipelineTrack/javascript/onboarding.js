@@ -35,27 +35,39 @@
 
     const fill = document.getElementById('onboarding-progress-fill');
     if (fill) fill.style.width = (currentStep / TOTAL_STEPS * 100) + '%';
+
+    // Widen modal on step 4 to fit 2-col features grid
+    const modal = document.querySelector('.onboarding-modal');
+    if (modal) modal.classList.toggle('ob-step4-active', currentStep === TOTAL_STEPS);
+
+    // Sync arrow button disabled state
+    const arrowPrev = document.getElementById('ob-arrow-prev');
+    const arrowNext = document.getElementById('ob-arrow-next');
+    if (arrowPrev) arrowPrev.disabled = currentStep === 1;
+    if (arrowNext) arrowNext.disabled = currentStep === TOTAL_STEPS;
   }
 
-  document.getElementById('onboarding-next').addEventListener('click', () => {
-    if (currentStep < TOTAL_STEPS) {
-      currentStep++;
-      updateStep();
-    } else {
-      closeOnboarding();
-    }
-  });
+  function goNext() {
+    if (currentStep < TOTAL_STEPS) { currentStep++; updateStep(); } else { closeOnboarding(); }
+  }
+  function goPrev() {
+    if (currentStep > 1) { currentStep--; updateStep(); }
+  }
 
-  document.getElementById('onboarding-prev').addEventListener('click', () => {
-    if (currentStep > 1) {
-      currentStep--;
-      updateStep();
-    }
-  });
+  document.getElementById('onboarding-next').addEventListener('click', goNext);
+  document.getElementById('onboarding-prev').addEventListener('click', goPrev);
+  document.getElementById('ob-arrow-prev').addEventListener('click', goPrev);
+  document.getElementById('ob-arrow-next').addEventListener('click', goNext);
 
   document.getElementById('onboarding-skip').addEventListener('click', closeOnboarding);
-
   document.getElementById('onboarding-help-btn').addEventListener('click', openOnboarding);
+
+  // Keyboard left/right navigation while onboarding is open
+  document.addEventListener('keydown', (e) => {
+    if (!document.getElementById('modal-onboarding').classList.contains('open')) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); goNext(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); goPrev(); }
+  });
 
   // Close on backdrop click
   document.getElementById('modal-onboarding').addEventListener('click', function (e) {

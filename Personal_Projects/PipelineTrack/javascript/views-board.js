@@ -844,6 +844,17 @@ function openJobDetail(id) {
     dateAppliedRow.style.display = 'none';
   }
 
+  // Deadline
+  const deadlineRow = document.getElementById('detail-deadline-row');
+  if (deadlineRow) {
+    if (job.deadline) {
+      document.getElementById('detail-deadline').textContent = formatDate(job.deadline + 'T12:00:00');
+      deadlineRow.style.display = '';
+    } else {
+      deadlineRow.style.display = 'none';
+    }
+  }
+
   // Date declined
   const dateDeclinedRow = document.getElementById('detail-date-declined-row');
   if (job.declinedAt) {
@@ -1141,6 +1152,7 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-salary').value = job ? job.salary || '' : '';
   document.getElementById('job-date-posted').value = job ? job.datePosted || '' : '';
   document.getElementById('job-date-applied').value = job ? job.dateApplied || '' : '';
+  document.getElementById('job-deadline').value = job ? job.deadline || '' : '';
   document.getElementById('job-stage').value = job ? job.stage || 'saved' : '';
   document.getElementById('job-seniority').value = job ? job.seniority || '' : '';
   document.getElementById('job-type').value = job ? job.jobType || '' : '';
@@ -1209,6 +1221,7 @@ function saveJob() {
     salary: formatSalary(document.getElementById('job-salary').value.trim()),
     datePosted: document.getElementById('job-date-posted').value,
     dateApplied: document.getElementById('job-date-applied').value,
+    deadline: document.getElementById('job-deadline').value,
     seniority: document.getElementById('job-seniority').value,
     jobType: document.getElementById('job-type').value,
     ...(() => {

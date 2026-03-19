@@ -39,7 +39,7 @@ I built PipelineTrack to solve that. One tool to track every job, score your ski
 ## 🚀 Getting Started
 
 1. Clone or download this folder and open `index.html` in any modern browser
-2. Follow the **getting started guide** that opens automatically — or reopen it anytime with the **?** button
+2. Follow the **getting started guide** that opens automatically — navigate steps with `←` / `→` arrow keys or the `‹ ›` buttons beside the dots, or reopen it anytime with the **?** button
 3. Go to **My Profile** and add your skills (this powers fit scoring)
 4. Go to **Job Board → + Add Job**, fill in the Details tab, and paste the job description in Job Info for an instant fit score
 5. Click any job card to see your fit score and skill breakdown
@@ -138,7 +138,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 - Filter by period · search by role/company/location · filter dropdowns for stage, work type, seniority
 - **⊜ Compare Jobs** — select 2–3 jobs to compare fit, salary, stage, skills, and benefits side by side
 
-**Each job stores:** role, company, department, location, URL, salary (auto-formatted), seniority, job type, work type, date posted, date applied, stage, benefits (parsed into chips), company notes, job description, cover letter, personal notes.
+**Each job stores:** role, company, department, location, URL, salary (auto-formatted), seniority, job type, work type, date posted, date applied, application deadline, stage, benefits (parsed into chips), company notes, job description, cover letter, personal notes.
 
 **Add/Edit form tabs:** Details · Job Info · Application
 
@@ -236,6 +236,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 | `/` | Focus the board search bar |
 | `Escape` | Close any open modal |
 | `1` / `2` / `3` | Switch tabs in Add / Edit Job modal |
+| `←` / `→` | Navigate onboarding steps (while guide is open) |
 
 **Command palette** — search views, trigger actions, or jump to any job by name or company. Navigate with `↑ ↓`, confirm with `Enter`.
 

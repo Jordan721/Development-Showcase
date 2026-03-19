@@ -1014,6 +1014,13 @@
 .dash-health-warn--clickable {
   cursor: pointer;
   transition: background .15s, border-color .15s;
+  animation: pill-pulse-once 1.6s ease 2s 1 forwards;
+}
+
+.dash-health-warn--clickable::after {
+  content: ' ›';
+  font-size: 13px;
+  opacity: 0.7;
 }
 
 .dash-health-warn--clickable:hover {
