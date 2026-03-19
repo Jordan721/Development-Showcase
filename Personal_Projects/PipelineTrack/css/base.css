@@ -295,6 +295,25 @@ textarea {
   font-size: 12px !important;
 }
 
+.btn-clear-pill {
+  background: rgba(220, 80, 80, .07) !important;
+  border: 1px solid rgba(220, 80, 80, .2) !important;
+  border-radius: 99px !important;
+  padding: 3px 10px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: var(--red) !important;
+  opacity: 0.75;
+  transition: background .15s, border-color .15s, opacity .15s !important;
+}
+
+.btn-clear-pill:hover {
+  background: rgba(220, 80, 80, .16) !important;
+  border-color: rgba(220, 80, 80, .4) !important;
+  color: var(--red) !important;
+  opacity: 1;
+}
+
 .btn-danger {
   background: transparent;
   color: var(--red);
