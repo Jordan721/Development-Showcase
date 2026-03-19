@@ -166,16 +166,51 @@ function renderGoalsSummary(goals) {
   }).join('');
 }
 
-const GOAL_PRESETS = [
-  { period: 'week',  type: 'applications', target: 10 },
-  { period: 'week',  type: 'saved',        target: 15 },
-  { period: 'week',  type: 'networking',   target: 3  },
-  { period: 'week',  type: 'interviews',   target: 2  },
-  { period: 'month', type: 'applications', target: 30 },
-  { period: 'month', type: 'screenings',   target: 5  },
-  { period: 'month', type: 'responses',    target: 5  },
-  { period: 'month', type: 'networking',   target: 10 },
-  { period: 'month', type: 'offers',       target: 1  },
+const GOAL_PRESETS = [{
+    period: 'week',
+    type: 'applications',
+    target: 10
+  },
+  {
+    period: 'week',
+    type: 'saved',
+    target: 15
+  },
+  {
+    period: 'week',
+    type: 'networking',
+    target: 3
+  },
+  {
+    period: 'week',
+    type: 'interviews',
+    target: 2
+  },
+  {
+    period: 'month',
+    type: 'applications',
+    target: 30
+  },
+  {
+    period: 'month',
+    type: 'screenings',
+    target: 5
+  },
+  {
+    period: 'month',
+    type: 'responses',
+    target: 5
+  },
+  {
+    period: 'month',
+    type: 'networking',
+    target: 10
+  },
+  {
+    period: 'month',
+    type: 'offers',
+    target: 1
+  },
 ];
 
 function renderGoalPresets() {

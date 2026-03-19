@@ -1131,8 +1131,8 @@ function parseJobListing(text) {
   }
 
   // Company
-  const companyMatch = text.match(/(?:company|employer|organization|hiring\s*(?:company|team))\s*[:\-]\s*(.+)/i)
-    || text.match(/(?:^|\n)(?:about|join)\s+([A-Z][a-zA-Z0-9\s&.,'-]{2,40}?)(?:\n|,|\.|$)/m);
+  const companyMatch = text.match(/(?:company|employer|organization|hiring\s*(?:company|team))\s*[:\-]\s*(.+)/i) ||
+    text.match(/(?:^|\n)(?:about|join)\s+([A-Z][a-zA-Z0-9\s&.,'-]{2,40}?)(?:\n|,|\.|$)/m);
   if (companyMatch) result.company = companyMatch[1].trim().split('\n')[0];
 
   // Location
@@ -1146,8 +1146,8 @@ function parseJobListing(text) {
   }
 
   // Salary
-  const salaryMatch = text.match(/(?:salary|pay|compensation|rate|package)\s*[:\-]?\s*([\$£€][\d,. ]+(?:k|K)?(?:\s*[-–—to]+\s*[\$£€]?[\d,. ]+(?:k|K)?)?(?:\s*(?:USD|GBP|EUR|per\s*year|\/yr|annually))?)/i)
-    || text.match(/([\$£€][\d,.]+\s*(?:k|K)?\s*[-–—]\s*[\$£€]?[\d,.]+\s*(?:k|K)?)/);
+  const salaryMatch = text.match(/(?:salary|pay|compensation|rate|package)\s*[:\-]?\s*([\$£€][\d,. ]+(?:k|K)?(?:\s*[-–—to]+\s*[\$£€]?[\d,. ]+(?:k|K)?)?(?:\s*(?:USD|GBP|EUR|per\s*year|\/yr|annually))?)/i) ||
+    text.match(/([\$£€][\d,.]+\s*(?:k|K)?\s*[-–—]\s*[\$£€]?[\d,.]+\s*(?:k|K)?)/);
   if (salaryMatch) result.salary = salaryMatch[1].trim();
 
   // Work Type
@@ -1209,9 +1209,9 @@ function parseJobListing(text) {
 
   const extractedVals = new Set(
     Object.entries(result)
-      .filter(([k]) => k !== 'description')
-      .map(([, v]) => v && v.toLowerCase().trim())
-      .filter(Boolean)
+    .filter(([k]) => k !== 'description')
+    .map(([, v]) => v && v.toLowerCase().trim())
+    .filter(Boolean)
   );
 
   const allLines = text.split('\n');
@@ -1220,7 +1220,10 @@ function parseJobListing(text) {
   let bodyStart = -1;
   for (let i = 0; i < allLines.length; i++) {
     const l = allLines[i].trim();
-    if (l && BODY_HEADER.test(l)) { bodyStart = i; break; }
+    if (l && BODY_HEADER.test(l)) {
+      bodyStart = i;
+      break;
+    }
   }
   if (bodyStart > 0) {
     result.description = allLines.slice(bodyStart).join('\n').trim();
@@ -1233,12 +1236,16 @@ function parseJobListing(text) {
   for (let i = 0; i < allLines.length; i++) {
     const raw = allLines[i];
     const l = raw.trim();
-    if (!l) { if (bodyStarted) cleaned.push(''); continue; }
+    if (!l) {
+      if (bodyStarted) cleaned.push('');
+      continue;
+    }
 
-    const isMeta = META_LINE.some(p => p.test(l))
-      || extractedVals.has(l.toLowerCase())
+    const isMeta = META_LINE.some(p => p.test(l)) ||
+      extractedVals.has(l.toLowerCase())
       // pipe-delimited tag lines (Full-time | Remote | Senior)
-      || (/^[^.!?]{1,120}$/.test(l) && (l.match(/\|/g) || []).length >= 1 && l.split('|').every(seg => seg.trim().length < 40));
+      ||
+      (/^[^.!?]{1,120}$/.test(l) && (l.match(/\|/g) || []).length >= 1 && l.split('|').every(seg => seg.trim().length < 40));
 
     if (isMeta && !bodyStarted) continue;
 
@@ -1256,7 +1263,9 @@ function flashField(id) {
   el.classList.remove('field-flashed');
   void el.offsetWidth; // reflow to restart animation
   el.classList.add('field-flashed');
-  el.addEventListener('animationend', () => el.classList.remove('field-flashed'), { once: true });
+  el.addEventListener('animationend', () => el.classList.remove('field-flashed'), {
+    once: true
+  });
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -1331,7 +1340,10 @@ function openAddJobModal(editId = null) {
   const spPanel = document.getElementById('smart-paste-panel');
   const spTrigger = document.getElementById('smart-paste-trigger');
   const spInput = document.getElementById('smart-paste-input');
-  if (spPanel) { spPanel.classList.remove('open'); spPanel.style.display = ''; }
+  if (spPanel) {
+    spPanel.classList.remove('open');
+    spPanel.style.display = '';
+  }
   if (spTrigger) spTrigger.style.display = editId ? 'none' : '';
   if (spInput) spInput.value = '';
   // Clear any leftover auto-fill tags

@@ -89,17 +89,36 @@ function wireEvents() {
       tag.textContent = '✦ Auto-filled';
       label.appendChild(tag);
       // Clear tag when user edits
-      el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', () => tag.remove(), { once: true });
+      el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', () => tag.remove(), {
+        once: true
+      });
     }
 
-    const fieldMap = { role: 'job-role', company: 'job-company', location: 'job-location', salary: 'job-salary' };
-    const selectMap = { workType: 'job-work-type', jobType: 'job-type', seniority: 'job-seniority' };
+    const fieldMap = {
+      role: 'job-role',
+      company: 'job-company',
+      location: 'job-location',
+      salary: 'job-salary'
+    };
+    const selectMap = {
+      workType: 'job-work-type',
+      jobType: 'job-type',
+      seniority: 'job-seniority'
+    };
 
     Object.entries(fieldMap).forEach(([key, id]) => {
-      if (parsed[key]) { document.getElementById(id).value = parsed[key]; flashField(id); addAutoTag(id); }
+      if (parsed[key]) {
+        document.getElementById(id).value = parsed[key];
+        flashField(id);
+        addAutoTag(id);
+      }
     });
     Object.entries(selectMap).forEach(([key, id]) => {
-      if (parsed[key]) { document.getElementById(id).value = parsed[key]; flashField(id); addAutoTag(id); }
+      if (parsed[key]) {
+        document.getElementById(id).value = parsed[key];
+        flashField(id);
+        addAutoTag(id);
+      }
     });
 
     // Move cleaned description to Job Info tab (metadata header stripped)
@@ -357,7 +376,9 @@ function wireEvents() {
       resultView.style.animation = '';
       pickerView.style.display = '';
       pickerView.classList.add('compare-view-in');
-      pickerView.addEventListener('animationend', () => pickerView.classList.remove('compare-view-in'), { once: true });
+      pickerView.addEventListener('animationend', () => pickerView.classList.remove('compare-view-in'), {
+        once: true
+      });
       compareBackBtn.style.display = 'none';
     }, 200);
   });

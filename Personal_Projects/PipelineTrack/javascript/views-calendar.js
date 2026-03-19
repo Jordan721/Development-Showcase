@@ -220,9 +220,9 @@ function renderCalendarUpcoming(allEvents) {
     const dotCls = ev.type === 'job' ? 'cal-legend-job' : ev.type === 'deadline' ? 'cal-legend-deadline' : ev.type === 'event' ? 'cal-legend-event' : 'cal-legend-contact';
     const tag = ev.type === 'deadline' ? 'Deadline' : ev.type === 'contact' ? 'Follow-up' : ev.type === 'event' ? 'Event' : 'Job Added';
     const evData = ev.eventData;
-    const linkBtn = evData && evData.link
-      ? `<a class="cal-event-join-btn" href="${escHtml(evData.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Join</a>`
-      : '';
+    const linkBtn = evData && evData.link ?
+      `<a class="cal-event-join-btn" href="${escHtml(evData.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Join</a>` :
+      '';
     const formatBadge = evData ? `<span class="cal-event-format-badge cal-event-format-${evData.format}">${evData.format}</span>` : '';
     return `<div class="cal-upcoming-item" data-ev-id="${ev.id}" data-ev-type="${ev.type}">
       <span class="cal-upcoming-dot ${dotCls}"></span>
@@ -340,9 +340,9 @@ function openDayModal(dateKey, events) {
       evData.time ? `<span style="font-size:11px;color:var(--text-muted)">${escHtml(evData.time)}</span>` : '',
       evData.location ? `<span style="font-size:11px;color:var(--text-muted)">📍 ${escHtml(evData.location)}</span>` : '',
     ].filter(Boolean).join(' ') : '';
-    const linkBtn = evData && evData.link
-      ? `<a class="cal-event-join-btn" href="${escHtml(evData.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Join</a>`
-      : '';
+    const linkBtn = evData && evData.link ?
+      `<a class="cal-event-join-btn" href="${escHtml(evData.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Join</a>` :
+      '';
     const isClickable = ev.type !== 'contact';
     return `<div class="day-modal-job" data-job-id="${ev.id}" data-ev-type="${ev.type}" style="display:flex;align-items:center;gap:10px;padding:10px;cursor:${isClickable ? 'pointer' : 'default'};border-radius:var(--radius-sm);transition:background .15s;" onmouseenter="this.style.background='var(--card)'" onmouseleave="this.style.background=''">
       <span class="cal-legend-dot ${dotCls}" style="flex-shrink:0"></span>
@@ -359,7 +359,10 @@ function openDayModal(dateKey, events) {
       if (evType === 'contact') return;
       if (evType === 'event') {
         const ev = (state.events || []).find(e => e.id === item.dataset.jobId);
-        if (ev) { closeModal('modal-day'); openEventModal(ev); }
+        if (ev) {
+          closeModal('modal-day');
+          openEventModal(ev);
+        }
         return;
       }
       closeModal('modal-day');
@@ -396,9 +399,9 @@ function renderCalendarView() {
   // Animate the incoming content
   body.classList.remove('cal-anim-fade', 'cal-anim-from-left', 'cal-anim-from-right');
   void body.offsetWidth; // force reflow to restart animation
-  if (calAnimDir === 'left')       body.classList.add('cal-anim-from-right');
+  if (calAnimDir === 'left') body.classList.add('cal-anim-from-right');
   else if (calAnimDir === 'right') body.classList.add('cal-anim-from-left');
-  else                             body.classList.add('cal-anim-fade');
+  else body.classList.add('cal-anim-fade');
   calAnimDir = 'fade'; // reset
 
   wireCalendarControls();
@@ -415,23 +418,37 @@ function renderCalendarView() {
 function renderActivity() {
   const el = document.getElementById('cal-activity');
   if (!el) return;
-  const now  = new Date();
+  const now = new Date();
   const jobs = state.jobs;
 
   const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const startOfWeek = new Date(startOfDay);
   startOfWeek.setDate(startOfDay.getDate() - startOfDay.getDay());
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const startOfYear  = new Date(now.getFullYear(), 0, 1);
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
 
   const count = (from) => jobs.filter(j => new Date(j.dateAdded) >= from).length;
 
-  const periods = [
-    { label: 'Today',      value: count(startOfDay)  },
-    { label: 'This Week',  value: count(startOfWeek) },
-    { label: 'This Month', value: count(startOfMonth)},
-    { label: 'This Year',  value: count(startOfYear) },
-    { label: 'All Time',   value: jobs.length         },
+  const periods = [{
+      label: 'Today',
+      value: count(startOfDay)
+    },
+    {
+      label: 'This Week',
+      value: count(startOfWeek)
+    },
+    {
+      label: 'This Month',
+      value: count(startOfMonth)
+    },
+    {
+      label: 'This Year',
+      value: count(startOfYear)
+    },
+    {
+      label: 'All Time',
+      value: jobs.length
+    },
   ];
 
   el.innerHTML = `<div class="act-counts">${
