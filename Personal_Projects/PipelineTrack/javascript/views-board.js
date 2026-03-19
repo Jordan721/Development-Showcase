@@ -978,9 +978,48 @@ function openJobDetail(id) {
     el.innerHTML = arr.map(s =>
       `<span class="skill-badge ${colorClass}" style="padding-right:4px">
         ${escHtml(s)}
+        ${field === 'missing' ? `<button class="skill-badge-add" data-skill="${escHtml(s)}" title="Add to My Skills">+</button>` : ''}
+        ${field === 'matched' ? `<button class="skill-badge-remove" data-skill="${escHtml(s)}" title="Move to Skill Gaps">−</button>` : ''}
         <button class="skill-badge-dismiss" data-skill="${escHtml(s)}" title="Remove — not relevant to this job">×</button>
       </span>`
     ).join('');
+    el.querySelectorAll('.skill-badge-add').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const skill = btn.dataset.skill;
+        const normalized = typeof normalizeSkillName === 'function' ? normalizeSkillName(skill) : skill;
+        if (!state.profile.skills.some(s => s.name.toLowerCase() === normalized.toLowerCase())) {
+          state.profile.skills.push({
+            name: normalized,
+            level: 'Beginner'
+          });
+          save();
+        }
+        // Move from missing → matched
+        job.missing = job.missing.filter(x => x !== skill);
+        job.matched = [...(job.matched || []), skill];
+        const total = (job.matched || []).length + (job.missing || []).length;
+        job.fitScore = total === 0 ? null : Math.round(((job.matched || []).length / total) * 100);
+        save();
+        renderSkillBadges('detail-matched', job.matched || [], 'matched', 'green');
+        renderSkillBadges('detail-missing', job.missing || [], 'missing', 'red');
+        toast(`"${normalized}" added to your skills`, 'success');
+      });
+    });
+    el.querySelectorAll('.skill-badge-remove').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const skill = btn.dataset.skill;
+        job.matched = job.matched.filter(x => x !== skill);
+        job.missing = [...(job.missing || []), skill];
+        const total = (job.matched || []).length + (job.missing || []).length;
+        job.fitScore = total === 0 ? null : Math.round(((job.matched || []).length / total) * 100);
+        save();
+        renderSkillBadges('detail-matched', job.matched || [], 'matched', 'green');
+        renderSkillBadges('detail-missing', job.missing || [], 'missing', 'red');
+        toast(`"${skill}" moved to skill gaps`, 'info');
+      });
+    });
     el.querySelectorAll('.skill-badge-dismiss').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();

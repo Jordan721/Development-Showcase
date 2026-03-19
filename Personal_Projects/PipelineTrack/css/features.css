@@ -193,6 +193,46 @@
   opacity: 1;
 }
 
+.skill-badge-remove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0 0 0 4px;
+  opacity: 0.55;
+  vertical-align: middle;
+  font-family: inherit;
+  transition: opacity .15s, color .15s;
+}
+
+.skill-badge-remove:hover {
+  opacity: 1;
+  color: var(--red);
+}
+
+.skill-badge-add {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0 0 0 4px;
+  opacity: 0.55;
+  vertical-align: middle;
+  font-family: inherit;
+  transition: opacity .15s, color .15s;
+}
+
+.skill-badge-add:hover {
+  opacity: 1;
+  color: var(--green);
+}
+
 /* ── JD Keyword Highlight ────────────────────────────────── */
 .kw-match {
   background: rgba(63, 185, 80, .22);

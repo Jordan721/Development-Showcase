@@ -149,7 +149,9 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 **Fit Analysis** (in job detail):
 - Fit score % based on profile skills vs. job description (certifications also factor in)
 - Matched skills (green) and gaps (red) highlighted directly in the description text
-- × dismiss button on any tag to remove false positives — score updates instantly
+- **+** on any skill gap instantly adds it to your profile (as Beginner) and moves it to matched — fit score updates live
+- **−** on any matched skill moves it back to gaps — useful for correcting false positives
+- × dismiss button on any tag to remove it entirely — score updates instantly
 - Linked contacts from Network appear inline
 - Quick link to Cash Compass to check financial runway alongside an offer
 
