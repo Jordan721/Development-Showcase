@@ -85,6 +85,9 @@ function load() {
       summary: ''
     };
     // backfill for existing saved data
+    if (state.profile.skills && typeof normalizeSkillName === 'function') {
+      state.profile.skills = state.profile.skills.map(s => ({ ...s, name: normalizeSkillName(s.name) }));
+    }
     if (!state.profile.certifications) state.profile.certifications = [];
     if (!state.profile.links) state.profile.links = {
       linkedin: '',

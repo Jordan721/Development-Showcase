@@ -440,7 +440,7 @@ function renderCoverageBars() {
 function addSkill() {
   const input = document.getElementById('skill-input');
   const level = document.getElementById('skill-level').value;
-  const name = input.value.trim();
+  const name = normalizeSkillName(input.value);
   if (!name) return;
   if (state.profile.skills.some(s => s.name.toLowerCase() === name.toLowerCase())) {
     toast('Skill already added.', 'error');
@@ -465,7 +465,7 @@ function bulkAddSkills() {
   const raw = textarea.value.trim();
   if (!raw) return;
 
-  const names = raw.split(/[\n,;]+/).map(s => s.trim()).filter(Boolean);
+  const names = raw.split(/[\n,;]+/).map(s => normalizeSkillName(s)).filter(Boolean);
   let added = 0,
     skipped = 0;
   names.forEach(name => {
