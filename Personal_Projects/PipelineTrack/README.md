@@ -16,7 +16,7 @@ A personal job search companion built to take the chaos out of hunting for work.
 
 | Feature | What it does |
 |---|---|
-| ◈ Dashboard | Stats, streak, pipeline health, conversion funnel, weekly velocity, upcoming deadlines, skill gaps, and weekly summary |
+| ◈ Dashboard | Stats, clickable streak timeline, pipeline health, conversion funnel, weekly velocity, upcoming deadlines, skill gaps, and weekly summary |
 | 📋 Job Board | 8-stage kanban with columns, priority matrix, table, and timeline views — search and filter built in |
 | 📅 Calendar & Activity | Month/week/year view of job events, deadlines, follow-ups, and job fairs |
 | 🤝 Network | Track recruiters, hiring managers, and referrals with follow-up reminders |
@@ -109,7 +109,7 @@ PipelineTrack/
 <summary><strong>◈ Dashboard</strong></summary>
 
 - **Stat cards** — Total Tracked (with `avg. X/wk · X/mo · X/yr` pace), Applied, In Progress, Offers, Not Selected, Avg Fit Score
-- **Streak & nudge bar** — daily application streak + contextual motivational message; a clickable **⚠ Pipeline Health** warning appears if any Applied/Screening/Interview jobs haven't moved in 14+ days
+- **Streak & nudge bar** — daily application streak pill; click it to open an animated timeline of every job you've applied to, grouped by date and color-coded by stage, that pans to your most recent application; a clickable **⚠ Pipeline Health** warning appears if any Applied/Screening/Interview jobs haven't moved in 14+ days
 - **Conversion Funnel** — Applied → Screening → Interview → Offer with counts and % conversion from each previous stage
 - **Weekly Velocity** — animated 6-week bar chart showing jobs added per week
 - **Upcoming Deadlines** — jobs with deadlines in the next 7 days, color-coded by urgency (yellow ≤2 days, red = today); overdue banner if any have passed; click to open the job

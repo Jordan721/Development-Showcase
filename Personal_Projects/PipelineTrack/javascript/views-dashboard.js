@@ -177,12 +177,15 @@ function renderDashboard() {
     '';
   if (vibeRow) {
     const streak = computeStreak(jobs);
-    const streakHtml = streak >= 2 ? `<span class="dash-streak">🔥 ${streak}-day streak</span>` : '';
+    const streakHtml = streak >= 2 ? `<span class="dash-streak" id="streak-pill" title="Click to see your streak timeline">🔥 ${streak}-day streak</span>` : '';
     vibeRow.innerHTML = streakHtml + healthHtml + `<span class="dash-nudge">${getDashboardNudge(jobs)}</span>`;
     if (stale.length > 0) {
       vibeRow.querySelector('.dash-health-warn--clickable').addEventListener('click', () => {
         openFilterModal('Inactive 14+ Days', `${stale.length} job${stale.length !== 1 ? 's' : ''}`, stale);
       });
+    }
+    if (streak >= 2) {
+      document.getElementById('streak-pill').addEventListener('click', () => toggleStreakTimeline(jobs));
     }
   }
 
@@ -194,6 +197,78 @@ function renderDashboard() {
 
   if (typeof animateDashboardStats === 'function') animateDashboardStats();
   if (typeof animateBars === 'function') animateBars('.pipeline-bar-fill');
+}
+
+/* ── STREAK TIMELINE POPUP ───────────────────────────────── */
+function toggleStreakTimeline(jobs) {
+  const panel = document.getElementById('streak-timeline-panel');
+  const pill = document.getElementById('streak-pill');
+  if (!panel) return;
+
+  if (!panel.hidden) {
+    panel.classList.remove('streak-timeline-panel--open');
+    panel.addEventListener('transitionend', () => {
+      panel.hidden = true;
+    }, {
+      once: true
+    });
+    pill.classList.remove('dash-streak--active');
+    return;
+  }
+
+  // Build items sorted oldest → newest
+  const STAGE_COLORS = {
+    saved: '#6b7280',
+    applied: '#3b82f6',
+    screening: '#a78bfa',
+    interview: '#f59e0b',
+    offer: '#10b981',
+    declined: '#ef4444'
+  };
+  const sorted = [...jobs]
+    .filter(j => j.dateAdded)
+    .sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded));
+
+  if (!sorted.length) return;
+
+  // Group by date
+  const byDate = {};
+  sorted.forEach(j => {
+    const d = new Date(j.dateAdded);
+    d.setHours(0, 0, 0, 0);
+    const key = d.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+    (byDate[key] = byDate[key] || []).push(j);
+  });
+
+  const rows = Object.entries(byDate).map(([date, dayJobs]) => {
+    const chips = dayJobs.map(j => {
+      const color = STAGE_COLORS[j.stage] || '#6b7280';
+      return `<span class="stl-chip" style="border-color:${color};color:${color}">${j.company || 'Unknown'} — ${j.title || 'Role'}</span>`;
+    }).join('');
+    return `<div class="stl-row"><span class="stl-date">${date}</span><div class="stl-chips">${chips}</div></div>`;
+  }).join('');
+
+  panel.innerHTML = `<div class="stl-inner" id="stl-scroll">${rows}</div>`;
+  panel.hidden = false;
+  // Force reflow then animate open
+  void panel.offsetWidth;
+  panel.classList.add('streak-timeline-panel--open');
+  pill.classList.add('dash-streak--active');
+
+  // Pan to the bottom (most recent) after transition
+  panel.addEventListener('transitionend', () => {
+    const inner = document.getElementById('stl-scroll');
+    if (inner) inner.scrollTo({
+      top: inner.scrollHeight,
+      behavior: 'smooth'
+    });
+  }, {
+    once: true
+  });
 }
 
 function renderWeekSummary() {
