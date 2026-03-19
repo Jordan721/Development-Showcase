@@ -199,7 +199,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 <details>
 <summary><strong>👤 My Profile</strong></summary>
 
-- **Skills** — add individually or bulk-paste; level badges (Expert / Intermediate / Beginner) cycle on click; duplicates auto-skipped; Skill Coverage chart shows frequency across tracked jobs
+- **Skills** — add individually or bulk-paste; search bar filters your skills in real time — if the skill isn't found a prompt lets you add it instantly or jump to the Learning Hub; level badges (Expert / Intermediate / Beginner) cycle on click; duplicates auto-skipped; casing auto-corrected on save and on load (e.g. `javascript` → `JavaScript`); Skill Coverage chart shows frequency across tracked jobs
 - **Certifications, Degrees & Licenses** — optional descriptions feed directly into fit scoring; inline edit via ✎
 - **Email Templates** — Thank-You, Follow-Up, Withdrawal, Custom; load any template into a job's cover letter
 - **Data Backup** — JSON export/import (merges by ID); CSV export/import (merges by role + company)

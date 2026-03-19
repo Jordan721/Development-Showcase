@@ -390,7 +390,46 @@
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.skill-search-row {
   margin-bottom: 10px;
+}
+
+.skill-search-row .text-input {
+  width: 100%;
+  font-size: 13px;
+  padding: 6px 10px;
+}
+
+/* No-match card */
+.skill-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
+  border: 1.5px dashed var(--border);
+  border-radius: 10px;
+  text-align: center;
+  animation: fadeUp .2s ease both;
+}
+
+.skill-not-found-icon {
+  font-size: 22px;
+}
+
+.skill-not-found-title {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.skill-not-found-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
 }
 
 .skill-filter-btn,

@@ -259,6 +259,13 @@ function renderSkillTags() {
 
   if (typeof window._skillsExpanded === 'undefined') window._skillsExpanded = false;
   if (typeof window._skillFilter === 'undefined') window._skillFilter = 'all';
+  if (typeof window._skillSearch === 'undefined') window._skillSearch = '';
+
+  // Sync search input value without overwriting mid-type
+  const searchInput = document.getElementById('skill-search-input');
+  if (searchInput && document.activeElement !== searchInput) {
+    searchInput.value = window._skillSearch;
+  }
 
   // Sort Expert → Intermediate → Beginner, preserving original array indices
   const sorted = ['Expert', 'Intermediate', 'Beginner'].flatMap(lvl =>
@@ -268,14 +275,64 @@ function renderSkillTags() {
     })).filter(s => s.level === lvl)
   );
 
-  // Apply level filter
+  // Apply level filter then search filter
   const activeFilter = window._skillFilter;
-  const filtered = activeFilter === 'all' ? sorted : sorted.filter(s => s.level === activeFilter);
+  const levelFiltered = activeFilter === 'all' ? sorted : sorted.filter(s => s.level === activeFilter);
+  const searchTerm = window._skillSearch.trim().toLowerCase();
+  const filtered = searchTerm ?
+    levelFiltered.filter(s => s.name.toLowerCase().includes(searchTerm)) :
+    levelFiltered;
 
   // Sync filter pill active state
   document.querySelectorAll('.skill-filter-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.filter === activeFilter);
   });
+
+  // No-match state when searching
+  if (searchTerm && filtered.length === 0) {
+    const escaped = escHtml(window._skillSearch.trim());
+    container.innerHTML = `
+      <div class="skill-not-found">
+        <div class="skill-not-found-icon">🔍</div>
+        <div class="skill-not-found-title">"${escaped}" isn't in your skills yet</div>
+        <div class="skill-not-found-actions">
+          <button class="btn-primary btn-sm" id="skill-notfound-add">+ Add it</button>
+          <button class="btn-secondary btn-sm" id="skill-notfound-learn">Learn in Hub</button>
+        </div>
+      </div>`;
+    if (footer) footer.innerHTML = '';
+    document.getElementById('skill-notfound-add').addEventListener('click', () => {
+      const raw = window._skillSearch.trim();
+      const name = normalizeSkillName(raw);
+      if (state.profile.skills.some(s => s.name.toLowerCase() === name.toLowerCase())) {
+        toast(`"${name}" is already in your skills.`, 'warn');
+        return;
+      }
+      state.profile.skills.push({
+        name,
+        level: 'Intermediate'
+      });
+      save();
+      reanalyzeAllJobs();
+      window._skillSearch = '';
+      if (searchInput) searchInput.value = '';
+      renderSkillTags();
+      toast(`"${name}" added as Intermediate.`, 'success');
+    });
+    document.getElementById('skill-notfound-learn').addEventListener('click', () => {
+      navigate('learning');
+    });
+    // Wire search input listener (persists across re-renders)
+    if (searchInput && !searchInput.dataset.wired) {
+      searchInput.dataset.wired = '1';
+      searchInput.addEventListener('input', () => {
+        window._skillSearch = searchInput.value;
+        window._skillsExpanded = false;
+        renderSkillTags();
+      });
+    }
+    return;
+  }
 
   const showAll = window._skillsExpanded || filtered.length <= SKILL_SHOW_LIMIT;
   const visible = showAll ? filtered : filtered.slice(0, SKILL_SHOW_LIMIT);
@@ -358,6 +415,16 @@ function renderSkillTags() {
       toast('All skills cleared.', 'success');
     });
   }
+
+  // Wire search input (use flag to avoid duplicate listeners across re-renders)
+  if (searchInput && !searchInput.dataset.wired) {
+    searchInput.dataset.wired = '1';
+    searchInput.addEventListener('input', () => {
+      window._skillSearch = searchInput.value;
+      window._skillsExpanded = false;
+      renderSkillTags();
+    });
+  }
 }
 
 const COVERAGE_SHOW_LIMIT = 8;
@@ -388,12 +455,19 @@ function renderCoverageBars() {
     skills.filter(s => s.level === lvl)
   );
   const activeCoverageFilter = window._coverageFilter;
-  const filtered = activeCoverageFilter === 'all' ? sorted : sorted.filter(s => s.level === activeCoverageFilter);
+  const levelFiltered = activeCoverageFilter === 'all' ? sorted : sorted.filter(s => s.level === activeCoverageFilter);
+  const filtered = levelFiltered.filter(s => (countMap[s.name] || 0) > 0);
 
   // Sync filter pill active state
   document.querySelectorAll('.coverage-filter-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.filter === activeCoverageFilter);
   });
+
+  if (filtered.length === 0) {
+    el.innerHTML = '<p class="empty-msg">No skills matched yet — add jobs to see coverage.</p>';
+    if (footer) footer.innerHTML = '';
+    return;
+  }
 
   const showAll = window._coverageExpanded || filtered.length <= COVERAGE_SHOW_LIMIT;
   const visible = showAll ? filtered : filtered.slice(0, COVERAGE_SHOW_LIMIT);
