@@ -71,9 +71,15 @@ function getJobUrgency(job) {
 }
 
 const PM_STAGE_COLORS = {
-  saved: 'var(--text-muted)', applied: 'var(--accent)', screening: '#a78bfa',
-  interview: 'var(--yellow)', offer: 'var(--green)', declined: 'var(--red)',
-  withdrew: '#f97316', ghosted: '#94a3b8', archived: 'var(--border)',
+  saved: 'var(--text-muted)',
+  applied: 'var(--accent)',
+  screening: '#a78bfa',
+  interview: 'var(--yellow)',
+  offer: 'var(--green)',
+  declined: 'var(--red)',
+  withdrew: '#f97316',
+  ghosted: '#94a3b8',
+  archived: 'var(--border)',
 };
 
 function pmCardHTML(job) {
@@ -84,9 +90,9 @@ function pmCardHTML(job) {
   let timeInfo;
   if (job.deadline) {
     const days = Math.round((new Date(job.deadline + 'T00:00:00') - now) / 86400000);
-    timeInfo = days < 0
-      ? `<span style="color:var(--red);font-weight:600">${Math.abs(days)}d overdue</span>`
-      : `<span style="color:var(--yellow);font-weight:600">${days}d left</span>`;
+    timeInfo = days < 0 ?
+      `<span style="color:var(--red);font-weight:600">${Math.abs(days)}d overdue</span>` :
+      `<span style="color:var(--yellow);font-weight:600">${days}d left</span>`;
   } else {
     const days = Math.floor((now - new Date(job.dateAdded)) / 86400000);
     timeInfo = days === 0 ? 'Today' : `${days}d ago`;
@@ -112,11 +118,38 @@ function renderBoardMatrix(jobs) {
   const scored = jobs.filter(j => j.fitScore != null);
   const unscored = jobs.filter(j => j.fitScore == null);
 
-  const quadrants = [
-    { id: 'tl', title: 'Plan Ahead', icon: '⭐', desc: 'High fit · Low urgency', highFit: true, urgent: false },
-    { id: 'tr', title: 'Act Now',    icon: '🔥', desc: 'High fit · High urgency', highFit: true, urgent: true  },
-    { id: 'bl', title: 'Low Priority', icon: '📋', desc: 'Low fit · Low urgency', highFit: false, urgent: false },
-    { id: 'br', title: 'Quick Apply',  icon: '⚡', desc: 'Low fit · High urgency', highFit: false, urgent: true  },
+  const quadrants = [{
+      id: 'tl',
+      title: 'Plan Ahead',
+      icon: '⭐',
+      desc: 'High fit · Low urgency',
+      highFit: true,
+      urgent: false
+    },
+    {
+      id: 'tr',
+      title: 'Act Now',
+      icon: '🔥',
+      desc: 'High fit · High urgency',
+      highFit: true,
+      urgent: true
+    },
+    {
+      id: 'bl',
+      title: 'Low Priority',
+      icon: '📋',
+      desc: 'Low fit · Low urgency',
+      highFit: false,
+      urgent: false
+    },
+    {
+      id: 'br',
+      title: 'Quick Apply',
+      icon: '⚡',
+      desc: 'Low fit · High urgency',
+      highFit: false,
+      urgent: true
+    },
   ];
 
   const qJobs = {};
@@ -474,10 +507,10 @@ function renderBoardTable(jobs) {
       </tr>
     </thead>
     <tbody>
-      ${jobs.map(j => {
+      ${jobs.map((j, i) => {
         const fitCls = fitBadgeClass(j.fitScore);
         const fitLabel = fitBadgeLabel(j.fitScore);
-        return `<tr class="table-row-clickable" data-stage="${j.stage}" data-job-id="${j.id}">
+        return `<tr class="table-row-clickable" data-stage="${j.stage}" data-job-id="${j.id}" style="animation-delay:${i * 28}ms">
           <td class="table-td table-td-role">${escHtml(j.role)}</td>
           <td class="table-td">${escHtml(j.company)}${j.location ? `<span class="table-location"> · ${escHtml(j.location)}</span>` : ''}</td>
           <td class="table-td" onclick="event.stopPropagation()">
@@ -1098,7 +1131,9 @@ function openAddJobModal(editId = null) {
     document.getElementById('job-department').addEventListener('input', function clearTag() {
       tag.remove();
       this.removeEventListener('input', clearTag);
-    }, { once: true });
+    }, {
+      once: true
+    });
   }
 
   document.getElementById('job-location').value = job ? job.location || '' : '';
@@ -1125,7 +1160,9 @@ function openAddJobModal(editId = null) {
     workTypeSelect.addEventListener('change', function clearTag() {
       tag.remove();
       this.removeEventListener('change', clearTag);
-    }, { once: true });
+    }, {
+      once: true
+    });
   }
 
   document.getElementById('job-description').value = job ? job.description || '' : '';
@@ -1177,7 +1214,10 @@ function saveJob() {
     ...(() => {
       const typed = document.getElementById('job-work-type').value;
       const inferred = !typed ? inferWorkType(description) : null;
-      return { workType: typed || inferred || '', workTypeInferred: !typed && !!inferred };
+      return {
+        workType: typed || inferred || '',
+        workTypeInferred: !typed && !!inferred
+      };
     })(),
     stage: document.getElementById('job-stage').value,
     description,
