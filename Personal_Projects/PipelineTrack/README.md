@@ -57,6 +57,7 @@ All data is saved to your browser's localStorage — nothing is sent anywhere. U
 ![localStorage](https://img.shields.io/badge/Storage-localStorage-34d399?style=flat-square)
 ![PDF.js](https://img.shields.io/badge/PDF.js-v3.11.174-red?style=flat-square)
 ![Mammoth.js](https://img.shields.io/badge/Mammoth.js-v1.6.0-orange?style=flat-square)
+![Flatpickr](https://img.shields.io/badge/Flatpickr-Date%20Picker-f59e0b?style=flat-square)
 ![GitHub API](https://img.shields.io/badge/GitHub-REST%20API-181717?style=flat-square&logo=github&logoColor=white)
 ![Google Fonts](https://img.shields.io/badge/Font-Inter-4285F4?style=flat-square&logo=google&logoColor=white)
 
@@ -139,7 +140,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 - **Deadline urgency glow** — cards with imminent deadlines get a color-coded border (yellow ≤7d, orange ≤2d, red = today/overdue)
 - **Sticky filter bar** — search and filter controls stay fixed at the top while you scroll
 - **☐ Select (Bulk Actions)** — toggle select mode to pick multiple cards then move stage, export a CSV, or delete in one shot; deletions include a 5-second undo toast
-- Filter by period · search by role/company/location · filter dropdowns for stage, work type, seniority
+- Filter by period · search by role/company/location · filter dropdowns for stage, work type (Remote / Hybrid / On-site / Remote–Hybrid / Hybrid–On-site / Flexible), seniority
 - **⊜ Compare Jobs** — select 2–3 jobs to compare fit, salary, stage, skills, and benefits side by side
 
 **Each job stores:** role, company, department, location, URL, salary (auto-formatted), seniority, job type, work type, date posted, date applied, application deadline, stage, benefits (parsed into chips), company notes, job description, cover letter, personal notes.
@@ -258,7 +259,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 
 **Department** — detected across 13 departments (Engineering, Data, Design, Product, Marketing, Sales, Finance, HR, Legal, Operations, Customer Success, Security, Research) from the job title and description.
 
-**Work Type** — Remote / Hybrid / On-site detected from the description. Hybrid wins if the word appears anywhere.
+**Work Type** — Remote / Hybrid / On-site / Remote–Hybrid / Hybrid–On-site / Flexible detected from the description. Hybrid wins if the word appears anywhere.
 
 All three show an amber **✦ Auto-filled** badge so you always know the app set it, not you. Clearing any field manually removes the badge instantly.
 
@@ -275,6 +276,8 @@ All three show an amber **✦ Auto-filled** badge so you always know the app set
 - **Back to Top** — ↑ button fades in when you scroll past 300px; click to smooth-scroll back
 - **Skeleton flash** — views pulse once on switch to signal they're loading
 - **Empty state illustrations** — inline SVG art for all empty states (no jobs, no results, no timeline entries, etc.)
+- **Custom Date Picker** — all date fields use Flatpickr for a styled calendar that matches the app theme; selected dates display as `Mar 20, 2025` and are stored as `YYYY-MM-DD`; "Pick a date" placeholder shown when empty
+- **Custom Select Dropdowns** — all dropdowns use a custom chevron arrow, hover border, and consistent font — no browser default styling
 - **Linked Contacts** — contacts tied to a job appear inline in the job detail modal
 - **Thank-You Tracking** — check "Thank-you sent" in milestone modals; ✓ shows in the Application Timeline
 - **Getting Started Checklist** — progress bar on first use: add skills → add job → get fit score → visit Learning Hub

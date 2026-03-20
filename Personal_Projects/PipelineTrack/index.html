@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="css/fun.css" />
     <link rel="stylesheet" href="css/onboarding.css" />
     <link rel="stylesheet" href="css/ux-enhancements.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
 </head>
 
 <body>
@@ -305,6 +306,9 @@
                         <option value="Remote">Remote</option>
                         <option value="On-site">On-site</option>
                         <option value="Hybrid">Hybrid</option>
+                        <option value="Remote / Hybrid">Remote / Hybrid</option>
+                        <option value="Hybrid / On-site">Hybrid / On-site</option>
+                        <option value="Flexible">Flexible</option>
                     </select>
                     <select class="select-input board-filter-select" id="board-filter-seniority">
                         <option value="">All Seniority</option>
@@ -966,15 +970,15 @@
                     <div class="form-row three-col">
                         <div class="form-group">
                             <label class="form-label">Date Posted</label>
-                            <input type="date" class="text-input" id="job-date-posted" />
+                            <input type="date" class="text-input" id="job-date-posted" placeholder="Pick a date" />
                         </div>
                         <div class="form-group">
                             <label class="form-label">Date Applied</label>
-                            <input type="date" class="text-input" id="job-date-applied" />
+                            <input type="date" class="text-input" id="job-date-applied" placeholder="Pick a date" />
                         </div>
                         <div class="form-group">
                             <label class="form-label">Application Deadline</label>
-                            <input type="date" class="text-input" id="job-deadline" />
+                            <input type="date" class="text-input" id="job-deadline" placeholder="Pick a date" />
                         </div>
                     </div>
                     <div class="form-section-label">Classification</div>
@@ -1025,6 +1029,9 @@
                                 <option value="Remote">Remote</option>
                                 <option value="On-site">On-site</option>
                                 <option value="Hybrid">Hybrid</option>
+                                <option value="Remote / Hybrid">Remote / Hybrid</option>
+                                <option value="Hybrid / On-site">Hybrid / On-site</option>
+                                <option value="Flexible">Flexible</option>
                             </select>
                         </div>
                     </div>
@@ -1229,7 +1236,7 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Date *</label>
-                        <input type="date" class="text-input" id="event-date" />
+                        <input type="date" class="text-input" id="event-date" placeholder="Pick a date" />
                     </div>
                     <div class="form-group">
                         <label class="form-label">Time (optional)</label>
@@ -1387,11 +1394,11 @@
                 <div class="form-row two-col">
                     <div class="form-group">
                         <label class="form-label">Last Contacted</label>
-                        <input type="date" class="text-input" id="contact-last-contact" />
+                        <input type="date" class="text-input" id="contact-last-contact" placeholder="Pick a date" />
                     </div>
                     <div class="form-group">
                         <label class="form-label">Next Follow-up</label>
-                        <input type="date" class="text-input" id="contact-next-followup" />
+                        <input type="date" class="text-input" id="contact-next-followup" placeholder="Pick a date" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -1479,11 +1486,17 @@
     <div class="modal-overlay" id="modal-job-picker" aria-hidden="true">
         <div class="modal job-picker-modal">
             <div class="job-picker-header">
+                <div class="job-picker-title-row">
+                    <span class="job-picker-title">Jump to Job</span>
+                    <div class="job-picker-title-right">
+                        <span class="job-picker-count" id="job-picker-count"></span>
+                        <button class="modal-close job-picker-close" data-close="modal-job-picker" title="Close">✕</button>
+                    </div>
+                </div>
                 <div class="job-picker-search-wrap">
                     <span class="job-picker-search-icon">⌕</span>
                     <input type="text" class="job-picker-search-input" id="job-picker-search"
                         placeholder="Search role, company, location, stage, salary…" autocomplete="off" />
-                    <button class="modal-close job-picker-close" data-close="modal-job-picker">✕</button>
                 </div>
                 <div class="job-picker-hint" id="job-picker-hint">↵ to select · Esc to close</div>
             </div>
@@ -1689,6 +1702,7 @@
     <script src="javascript/app.js"></script>
     <script src="javascript/features.js"></script>
     <script src="javascript/onboarding.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="javascript/ux-enhancements.js"></script>
 </body>
 
