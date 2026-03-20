@@ -38,39 +38,157 @@
 }
 
 /* ── Job Picker Modal ──────────────────────────────────── */
-.job-picker-row {
-  padding: 10px 12px;
-  border-radius: var(--radius-sm);
+.job-picker-modal {
+  max-width: 560px;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.job-picker-header {
+  padding: 16px 16px 0;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.job-picker-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 0 12px;
+  transition: border-color .15s;
+}
+
+.job-picker-search-wrap:focus-within {
+  border-color: var(--accent);
+}
+
+.job-picker-search-icon {
+  font-size: 18px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.job-picker-search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: var(--text);
+  padding: 12px 0;
+  font-family: inherit;
+}
+
+.job-picker-search-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.job-picker-close {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 15px;
   cursor: pointer;
-  transition: background .12s;
+  padding: 4px;
+  line-height: 1;
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: opacity .15s;
+}
+
+.job-picker-close:hover {
+  opacity: 1;
+}
+
+.job-picker-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  opacity: 0.5;
+  margin-top: 8px;
+  padding-left: 2px;
+}
+
+.job-picker-list {
+  max-height: 420px;
+  overflow-y: auto;
+  padding: 10px 12px 14px;
+}
+
+@keyframes picker-row-in {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.job-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
   border: 1px solid transparent;
-  margin-bottom: 4px;
+  border-left: 3px solid transparent;
+  transition: background .12s, border-color .12s;
+  animation: picker-row-in .18s ease both;
+  margin-bottom: 2px;
 }
 
 .job-picker-row:hover {
   background: var(--card);
   border-color: var(--border);
+  border-left-color: var(--accent);
+}
+
+.job-picker-row-body {
+  flex: 1;
+  min-width: 0;
 }
 
 .job-picker-role {
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .job-picker-meta {
   font-size: 12px;
   color: var(--text-muted);
   margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.job-picker-stage {
-  background: var(--accent-dim);
-  color: var(--accent);
-  border-radius: 99px;
-  padding: 1px 7px;
+.job-picker-stage-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.job-picker-fit {
+  flex-shrink: 0;
   font-size: 11px;
-  margin-left: 6px;
+  font-weight: 700;
+  border-radius: 99px;
+  padding: 2px 8px;
 }
 
 .job-picker-chips {
@@ -87,6 +205,14 @@
   padding: 1px 8px;
   font-size: 11px;
   color: var(--text-muted);
+}
+
+.job-picker-empty {
+  text-align: center;
+  padding: 36px 0;
+  color: var(--text-muted);
+  font-size: 13px;
+  opacity: 0.7;
 }
 
 /* ── Weekly Recap ──────────────────────────────────────── */

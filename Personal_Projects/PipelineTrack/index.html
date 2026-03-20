@@ -1477,16 +1477,17 @@
 
     <!-- ── JOB PICKER MODAL (E shortcut) ─────────────────── -->
     <div class="modal-overlay" id="modal-job-picker" aria-hidden="true">
-        <div class="modal" style="max-width:460px">
-            <div class="modal-header">
-                <h2 class="modal-title">✎ Edit a Job</h2>
-                <button class="modal-close" data-close="modal-job-picker">✕</button>
+        <div class="modal job-picker-modal">
+            <div class="job-picker-header">
+                <div class="job-picker-search-wrap">
+                    <span class="job-picker-search-icon">⌕</span>
+                    <input type="text" class="job-picker-search-input" id="job-picker-search"
+                        placeholder="Search role, company, location, stage, salary…" autocomplete="off" />
+                    <button class="modal-close job-picker-close" data-close="modal-job-picker">✕</button>
+                </div>
+                <div class="job-picker-hint" id="job-picker-hint">↵ to select · Esc to close</div>
             </div>
-            <div style="padding:12px 20px 0">
-                <input type="text" class="text-input" id="job-picker-search"
-                    placeholder="Search role, company, location…" autocomplete="off" style="width:100%" />
-            </div>
-            <div class="modal-body" id="job-picker-list" style="padding:12px 20px 20px;max-height:360px;overflow-y:auto"></div>
+            <div class="job-picker-list" id="job-picker-list"></div>
         </div>
     </div>
 

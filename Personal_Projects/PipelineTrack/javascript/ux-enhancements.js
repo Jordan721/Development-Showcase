@@ -70,6 +70,12 @@ function initKeyboardShortcuts() {
 /* ══════════════════════════════════════════════════════════
    JOB PICKER MODAL (E shortcut)
    ══════════════════════════════════════════════════════════ */
+const PICKER_STAGE_COLORS = {
+  saved: 'var(--text-muted)', applied: 'var(--accent)', screening: '#a78bfa',
+  interview: 'var(--yellow)', offer: 'var(--green)', declined: 'var(--red)',
+  withdrew: '#f97316', ghosted: '#94a3b8', archived: 'var(--border)'
+};
+
 function renderJobPickerList(query) {
   const list = document.getElementById('job-picker-list');
   if (!list) return;
@@ -85,22 +91,33 @@ function renderJobPickerList(query) {
       (j.workType || '').toLowerCase().includes(q) ||
       (j.salary || '').toLowerCase().includes(q);
   });
+
+  const hint = document.getElementById('job-picker-hint');
+  if (hint) hint.textContent = jobs.length ? `${jobs.length} job${jobs.length !== 1 ? 's' : ''} · ↵ to select · Esc to close` : '↵ to select · Esc to close';
+
   if (jobs.length === 0) {
-    list.innerHTML = `<p style="color:var(--text-muted);font-size:13px;text-align:center;padding:24px 0">No jobs found.</p>`;
+    list.innerHTML = `<div class="job-picker-empty">No jobs match your search.</div>`;
     return;
   }
-  list.innerHTML = jobs.map(j => {
+
+  list.innerHTML = jobs.map((j, i) => {
+    const dotColor = PICKER_STAGE_COLORS[j.stage] || 'var(--border)';
     const chips = [j.seniority, j.jobType, j.workType, j.salary].filter(Boolean);
+    const fitCls = j.fitScore != null ? (j.fitScore >= 70 ? 'green' : j.fitScore >= 40 ? 'yellow' : 'red') : '';
+    const fitPill = j.fitScore != null
+      ? `<span class="fit-badge ${fitCls} job-picker-fit">${j.fitScore}%</span>` : '';
     return `
-    <div class="job-picker-row" data-edit-id="${j.id}">
-      <div class="job-picker-role">${escHtml(j.role)}</div>
-      <div class="job-picker-meta">
-        ${escHtml(j.company)}${j.location ? ' · ' + escHtml(j.location) : ''}
-        <span class="job-picker-stage">${j.stage}</span>
+    <div class="job-picker-row" data-edit-id="${j.id}" style="animation-delay:${i * 30}ms">
+      <span class="job-picker-stage-dot" style="background:${dotColor}"></span>
+      <div class="job-picker-row-body">
+        <div class="job-picker-role">${escHtml(j.role)}</div>
+        <div class="job-picker-meta">${escHtml(j.company)}${j.location ? ' · ' + escHtml(j.location) : ''}</div>
+        ${chips.length ? `<div class="job-picker-chips">${chips.map(c => `<span class="job-picker-chip">${escHtml(c)}</span>`).join('')}</div>` : ''}
       </div>
-      ${chips.length ? `<div class="job-picker-chips">${chips.map(c => `<span class="job-picker-chip">${escHtml(c)}</span>`).join('')}</div>` : ''}
+      ${fitPill}
     </div>`;
   }).join('');
+
   list.querySelectorAll('.job-picker-row').forEach(row => {
     row.addEventListener('click', () => {
       closeModal('modal-job-picker');
