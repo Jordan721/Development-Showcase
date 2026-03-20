@@ -488,6 +488,7 @@ function init() {
   wirePasteCleaners();
   navigate('dashboard');
   if (typeof initUXEnhancements === 'function') initUXEnhancements();
+  if (typeof initBulkActions === 'function') initBulkActions();
 }
 
 document.addEventListener('DOMContentLoaded', init);

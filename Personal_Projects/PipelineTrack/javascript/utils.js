@@ -178,9 +178,47 @@ function formatDate(iso) {
   });
 }
 
+const EMPTY_STATE_SVGS = {
+  '📋': `<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="12" y="8" width="40" height="48" rx="4" fill="var(--card)" stroke="var(--border)" stroke-width="2"/>
+    <rect x="20" y="18" width="24" height="3" rx="1.5" fill="var(--border)"/>
+    <rect x="20" y="26" width="18" height="3" rx="1.5" fill="var(--border)"/>
+    <rect x="20" y="34" width="20" height="3" rx="1.5" fill="var(--border)"/>
+    <rect x="24" y="4" width="16" height="8" rx="2" fill="var(--accent-dim)" stroke="var(--accent)" stroke-width="1.5"/>
+  </svg>`,
+  '📭': `<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="8" y="20" width="48" height="32" rx="4" fill="var(--card)" stroke="var(--border)" stroke-width="2"/>
+    <path d="M8 24l24 16 24-16" stroke="var(--border)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M36 12h16M44 8v8" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round"/>
+  </svg>`,
+  '🔍': `<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="28" cy="28" r="16" fill="var(--card)" stroke="var(--border)" stroke-width="2.5"/>
+    <line x1="40" y1="40" x2="54" y2="54" stroke="var(--border)" stroke-width="3" stroke-linecap="round"/>
+    <line x1="22" y1="28" x2="34" y2="28" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round"/>
+    <line x1="28" y1="22" x2="28" y2="34" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round"/>
+  </svg>`,
+  '⏱': `<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="36" r="20" fill="var(--card)" stroke="var(--border)" stroke-width="2.5"/>
+    <line x1="32" y1="36" x2="32" y2="24" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="32" y1="36" x2="42" y2="40" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round"/>
+    <rect x="26" y="10" width="12" height="4" rx="2" fill="var(--border)"/>
+  </svg>`,
+  '👤': `<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="32" cy="22" r="12" fill="var(--card)" stroke="var(--border)" stroke-width="2"/>
+    <path d="M10 54c0-12.15 9.85-22 22-22s22 9.85 22 22" fill="var(--card)" stroke="var(--border)" stroke-width="2"/>
+  </svg>`,
+  '🧠': `<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="32" cy="32" rx="20" ry="16" fill="var(--card)" stroke="var(--border)" stroke-width="2"/>
+    <path d="M32 16c0 0-4 4-4 8s4 8 4 8" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M20 28c4 0 6 4 6 4" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M44 28c-4 0-6 4-6 4" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>`,
+};
+
 function emptyStateHTML(emoji, title, subtitle = '') {
+  const svg = EMPTY_STATE_SVGS[emoji];
   return `<div class="empty-state">
-    <div class="empty-state-emoji">${emoji}</div>
+    ${svg ? `<div class="empty-state-illustration">${svg}</div>` : `<div class="empty-state-emoji">${emoji}</div>`}
     <div class="empty-state-title">${title}</div>
     ${subtitle ? `<div class="empty-state-sub">${subtitle}</div>` : ''}
   </div>`;
@@ -202,7 +240,7 @@ function toast(msg, type = '', opts = {}) {
   el.className = `toast show${type ? ' ' + type : ''}`;
   el._t = setTimeout(() => {
     el.className = 'toast';
-  }, 3000);
+  }, opts && opts.undo ? 5000 : 3000);
 }
 
 function openModal(id) {
@@ -308,6 +346,13 @@ function navigate(view) {
     actionBtn.textContent = '+ Add Job';
   }
 
+  // skeleton flash — add class, force reflow so animation starts, render content, let animationend clean up
+  target.classList.remove('view-skeleton');
+  void target.offsetWidth;
+  target.classList.add('view-skeleton');
+  target.addEventListener('animationend', () => target.classList.remove('view-skeleton'), {
+    once: true
+  });
   renderView(view);
   if (typeof updateGettingStarted === 'function') updateGettingStarted();
 }

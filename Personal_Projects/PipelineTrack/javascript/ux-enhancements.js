@@ -48,6 +48,13 @@ function initKeyboardShortcuts() {
       const btn = document.getElementById('topbar-action');
       if (btn) btn.click();
     }
+    // E → open job picker to edit
+    if (e.key === 'e' || e.key === 'E') {
+      const jobModal = document.getElementById('modal-job');
+      if (jobModal && jobModal.classList.contains('open')) return; // already editing
+      e.preventDefault();
+      openJobPickerModal();
+    }
     // / → focus board search
     if (e.key === '/') {
       e.preventDefault();
@@ -57,6 +64,88 @@ function initKeyboardShortcuts() {
         search.select();
       }
     }
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
+   JOB PICKER MODAL (E shortcut)
+   ══════════════════════════════════════════════════════════ */
+function renderJobPickerList(query) {
+  const list = document.getElementById('job-picker-list');
+  if (!list) return;
+  const q = (query || '').toLowerCase().trim();
+  const jobs = (state.jobs || []).filter(j => {
+    if (!q) return true;
+    return (j.role || '').toLowerCase().includes(q) ||
+      (j.company || '').toLowerCase().includes(q) ||
+      (j.location || '').toLowerCase().includes(q) ||
+      (j.stage || '').toLowerCase().includes(q) ||
+      (j.seniority || '').toLowerCase().includes(q) ||
+      (j.jobType || '').toLowerCase().includes(q) ||
+      (j.workType || '').toLowerCase().includes(q) ||
+      (j.salary || '').toLowerCase().includes(q);
+  });
+  if (jobs.length === 0) {
+    list.innerHTML = `<p style="color:var(--text-muted);font-size:13px;text-align:center;padding:24px 0">No jobs found.</p>`;
+    return;
+  }
+  list.innerHTML = jobs.map(j => {
+    const chips = [j.seniority, j.jobType, j.workType, j.salary].filter(Boolean);
+    return `
+    <div class="job-picker-row" data-edit-id="${j.id}">
+      <div class="job-picker-role">${escHtml(j.role)}</div>
+      <div class="job-picker-meta">
+        ${escHtml(j.company)}${j.location ? ' · ' + escHtml(j.location) : ''}
+        <span class="job-picker-stage">${j.stage}</span>
+      </div>
+      ${chips.length ? `<div class="job-picker-chips">${chips.map(c => `<span class="job-picker-chip">${escHtml(c)}</span>`).join('')}</div>` : ''}
+    </div>`;
+  }).join('');
+  list.querySelectorAll('.job-picker-row').forEach(row => {
+    row.addEventListener('click', () => {
+      closeModal('modal-job-picker');
+      if (typeof openAddJobModal === 'function') openAddJobModal(row.dataset.editId);
+    });
+  });
+}
+
+function openJobPickerModal() {
+  const search = document.getElementById('job-picker-search');
+  if (search) search.value = '';
+  renderJobPickerList('');
+  openModal('modal-job-picker');
+  setTimeout(() => search && search.focus(), 80);
+
+  const existing = document.getElementById('job-picker-search');
+  if (existing && !existing._pickerWired) {
+    existing._pickerWired = true;
+    existing.addEventListener('input', () => renderJobPickerList(existing.value));
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   BACK TO TOP
+   ══════════════════════════════════════════════════════════ */
+function initBackToTop() {
+  const btn = document.getElementById('back-to-top');
+  if (!btn) return;
+  const content = document.getElementById('main-content') || document.documentElement;
+  const onScroll = () => btn.classList.toggle('visible', (content.scrollTop || window.scrollY) > 300);
+  content.addEventListener('scroll', onScroll, {
+    passive: true
+  });
+  window.addEventListener('scroll', onScroll, {
+    passive: true
+  });
+  btn.addEventListener('click', () => {
+    content.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   });
 }
 
@@ -702,9 +791,70 @@ function _wireSeniorityFields() {
 /* ══════════════════════════════════════════════════════════
    INIT
    ══════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════
+   WEEKLY RECAP
+   ══════════════════════════════════════════════════════════ */
+function maybeShowWeeklyRecap() {
+  const now = new Date();
+  if (now.getDay() !== 1) return; // only Monday
+  const key = 'pt-recap-shown';
+  const lastShown = localStorage.getItem(key);
+  const todayStr = now.toLocaleDateString('en-CA');
+  if (lastShown === todayStr) return;
+
+  // Build last-week stats
+  const weekStart = new Date(now);
+  weekStart.setDate(now.getDate() - 7);
+  weekStart.setHours(0, 0, 0, 0);
+  const weekEnd = new Date(now);
+  weekEnd.setHours(0, 0, 0, 0);
+
+  const jobs = state.jobs || [];
+  const applied = jobs.filter(j => {
+    const d = new Date(j.dateAdded);
+    return d >= weekStart && d < weekEnd;
+  });
+  const advanced = jobs.filter(j => {
+    const d = new Date(j.dateAdded);
+    const inStage = ['screening', 'interview', 'offer'].includes(j.stage);
+    return d >= weekStart && d < weekEnd && inStage;
+  });
+  const scored = applied.filter(j => j.fitScore != null);
+  const avgFit = scored.length ? Math.round(scored.reduce((s, j) => s + j.fitScore, 0) / scored.length) : null;
+  const topStage = (() => {
+    const counts = {};
+    applied.forEach(j => {
+      counts[j.stage] = (counts[j.stage] || 0) + 1;
+    });
+    const top = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+    return top ? top[0] : null;
+  })();
+
+  if (applied.length === 0) return; // nothing to recap
+
+  const body = document.getElementById('weekly-recap-body');
+  if (!body) return;
+
+  body.innerHTML = `
+    <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px">Here's what happened last week:</p>
+    <div class="recap-stats">
+      <div class="recap-stat"><span class="recap-stat-num">${applied.length}</span><span class="recap-stat-label">Jobs added</span></div>
+      ${avgFit != null ? `<div class="recap-stat"><span class="recap-stat-num">${avgFit}%</span><span class="recap-stat-label">Avg fit score</span></div>` : ''}
+      ${advanced.length ? `<div class="recap-stat"><span class="recap-stat-num">${advanced.length}</span><span class="recap-stat-label">In pipeline</span></div>` : ''}
+    </div>
+    ${topStage ? `<p style="font-size:12px;color:var(--text-muted);margin-top:14px">Most common stage: <strong style="color:var(--text)">${topStage}</strong></p>` : ''}
+    <p style="font-size:12px;color:var(--text-muted);margin-top:6px">Keep the momentum going this week! 💪</p>
+  `;
+
+  localStorage.setItem(key, todayStr);
+  setTimeout(() => openModal('modal-weekly-recap'), 1200);
+}
+
 function initUXEnhancements() {
   initCommandPalette();
   initKeyboardShortcuts();
+  initBackToTop();
+  setTimeout(maybeShowWeeklyRecap, 1500);
   initFitTooltip();
   initCardPreview();
   initColorBlindMode();

@@ -248,6 +248,82 @@ textarea {
   display: block;
 }
 
+/* ── SKELETON LOADING ──────────────────────────────────── */
+@keyframes view-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.view-skeleton {
+  animation: view-fade-in .22s ease-out forwards;
+}
+
+/* ── BUTTON PRESS ANIMATION ────────────────────────────── */
+@keyframes btn-press {
+  0% {
+    transform: scale(1);
+  }
+
+  40% {
+    transform: scale(0.93);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.btn-primary,
+.btn-secondary,
+.btn-ghost,
+.btn-clear-pill,
+.btn-sm,
+.board-filter,
+.layout-btn,
+.skill-filter-btn,
+.modal-tab-btn,
+.goal-period-tab,
+.cal-layout-btn,
+.cal-event-filter,
+.an-filter-btn,
+.ob-arrow-btn,
+.back-to-top,
+.card-delete-btn,
+.card-pin-btn,
+.skill-expand-toggle,
+.board-select-btn {
+  transform-origin: center;
+}
+
+.btn-primary:active,
+.btn-secondary:active,
+.btn-ghost:active,
+.btn-clear-pill:active,
+.btn-sm:active,
+.board-filter:active,
+.layout-btn:active,
+.skill-filter-btn:active,
+.modal-tab-btn:active,
+.goal-period-tab:active,
+.cal-layout-btn:active,
+.cal-event-filter:active,
+.an-filter-btn:active,
+.ob-arrow-btn:active,
+.back-to-top:active,
+.card-delete-btn:active,
+.card-pin-btn:active,
+.skill-expand-toggle:active,
+.board-select-btn:active {
+  animation: btn-press .18s ease-out forwards;
+}
+
 /* ── BUTTONS ───────────────────────────────────────────── */
 .btn-primary {
   background: var(--accent);
@@ -507,4 +583,38 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
 .toast.error {
   border-color: var(--red);
   color: var(--red);
+}
+
+/* ── BACK TO TOP ─────────────────────────────────────── */
+.back-to-top {
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 16px;
+  cursor: pointer;
+  z-index: 998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity .2s, transform .2s, border-color .15s, color .15s;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.back-to-top:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }

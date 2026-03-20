@@ -261,6 +261,27 @@
                 <span class="board-drag-hint" id="board-drag-hint">⠿ Drag cards between columns to move stages</span>
                 <button class="btn-secondary" id="board-compare-btn"
                     style="margin-left:auto;padding:5px 12px;font-size:12px">⊜ Compare Jobs</button>
+                <button class="btn-secondary" id="board-select-btn"
+                    style="padding:5px 12px;font-size:12px">☐ Select</button>
+            </div>
+            <!-- Bulk action bar -->
+            <div class="bulk-bar" id="bulk-bar" style="display:none">
+                <span class="bulk-bar-count" id="bulk-bar-count">0 selected</span>
+                <select class="select-input bulk-stage-select" id="bulk-stage-select">
+                    <option value="">Move to stage…</option>
+                    <option value="saved">Saved</option>
+                    <option value="applied">Applied</option>
+                    <option value="screening">Screening</option>
+                    <option value="interview">Interview</option>
+                    <option value="offer">Offer</option>
+                    <option value="declined">Declined</option>
+                    <option value="withdrew">Withdrew</option>
+                    <option value="ghosted">Ghosted</option>
+                    <option value="archived">Archived</option>
+                </select>
+                <button class="btn-ghost bulk-export-btn" id="bulk-export-btn">⬇ Export</button>
+                <button class="btn-clear-pill bulk-delete-btn" id="bulk-delete-btn">✕ Delete</button>
+                <button class="btn-ghost" id="bulk-cancel-btn">Cancel</button>
             </div>
             <!-- Search + filter bar -->
             <div class="board-search-bar">
@@ -865,11 +886,8 @@
             </div>
             <div class="goals-summary-strip" id="goals-summary-strip"></div>
             <div class="goals-grid" id="goals-grid"></div>
-            <div class="goals-empty" id="goals-empty" style="display:none">
-                <p class="empty-msg">No goals for this period. Click <strong>+ Add Goal</strong> to get started, or use
-                    a preset:</p>
-                <div class="goals-preset-row" id="goals-preset-row"></div>
-            </div>
+            <div class="goals-empty" id="goals-empty" style="display:none"></div>
+            <div class="goals-preset-row" id="goals-preset-row"></div>
         </section>
 
     </main>
@@ -1455,6 +1473,36 @@
 
     <!-- ── TOAST ──────────────────────────────────────────── -->
     <div class="toast" id="toast"></div>
+    <button class="back-to-top" id="back-to-top" title="Back to top" aria-label="Back to top">↑</button>
+
+    <!-- ── JOB PICKER MODAL (E shortcut) ─────────────────── -->
+    <div class="modal-overlay" id="modal-job-picker" aria-hidden="true">
+        <div class="modal" style="max-width:460px">
+            <div class="modal-header">
+                <h2 class="modal-title">✎ Edit a Job</h2>
+                <button class="modal-close" data-close="modal-job-picker">✕</button>
+            </div>
+            <div style="padding:12px 20px 0">
+                <input type="text" class="text-input" id="job-picker-search"
+                    placeholder="Search role, company, location…" autocomplete="off" style="width:100%" />
+            </div>
+            <div class="modal-body" id="job-picker-list" style="padding:12px 20px 20px;max-height:360px;overflow-y:auto"></div>
+        </div>
+    </div>
+
+    <!-- ── WEEKLY RECAP MODAL ─────────────────────────────── -->
+    <div class="modal-overlay" id="modal-weekly-recap" aria-hidden="true">
+        <div class="modal" style="max-width:480px">
+            <div class="modal-header">
+                <h2 class="modal-title">📅 Weekly Recap</h2>
+                <button class="modal-close" data-close="modal-weekly-recap">✕</button>
+            </div>
+            <div class="modal-body" id="weekly-recap-body" style="padding:20px 24px 24px"></div>
+            <div class="modal-footer">
+                <button class="btn-primary" data-close="modal-weekly-recap">Got it</button>
+            </div>
+        </div>
+    </div>
 
     <!-- ── ONBOARDING MODAL ────────────────────────────────── -->
     <div class="modal-overlay" id="modal-onboarding" aria-hidden="true">
@@ -1527,39 +1575,27 @@
                         <div class="ob-shortcuts">
                             <div class="ob-shortcut"><kbd>Ctrl+Shift+K</kbd> Command palette</div>
                             <div class="ob-shortcut"><kbd>N</kbd> Add a job</div>
-                            <div class="ob-shortcut"><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> Switch tabs in job modal
-                            </div>
+                            <div class="ob-shortcut"><kbd>E</kbd> Search &amp; edit a job</div>
+                            <div class="ob-shortcut"><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> Switch tabs in job modal</div>
                             <div class="ob-shortcut"><kbd>/</kbd> Focus search</div>
                             <div class="ob-shortcut"><kbd>Esc</kbd> Close modal</div>
                         </div>
                         <div class="ob-features">
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Pin jobs</strong> — 📍 pin any card to keep it at the top; deadline urgency glows red/orange/yellow</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Bulk actions</strong> — ☐ Select mode to move stage, export, or delete multiple jobs at once</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Weekly Recap</strong> — Monday morning summary of last week's applications, fit scores &amp; pipeline</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Undo</strong> — 5-second undo toast after deleting a job or skill</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Learning
                                         Hub</strong> — courses matched to your skill gaps</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Analytics</strong>
                                     — KPIs, funnel &amp; charts; print with ⌘P</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Compare
                                         Jobs</strong> — select 2–3 jobs for side-by-side view</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Color-Blind
-                                        Mode</strong> — accessible palette in the top bar</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Seniority
-                                        auto-fill</strong> — inferred from title &amp; description</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Department
-                                        auto-fill</strong> — detected across 13 departments; ✦ badge flags it</span>
-                            </div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Work type
-                                        auto-fill</strong> — Remote / Hybrid / On-site from description</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Dashboard
-                                        insights</strong> — funnel, velocity, deadlines &amp; health warnings</span>
-                            </div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Skill
-                                        search</strong> — search your profile skills; add or learn missing ones</span>
-                            </div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Application
-                                        deadline</strong> — set per job; tracked on dashboard &amp; calendar</span>
-                            </div>
+                                        insights</strong> — funnel, velocity, deadlines &amp; health warnings</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Skill gap
-                                        shortcuts</strong> — tap <strong style="color:var(--green)">+</strong> on a gap to add it to your profile instantly; tap <strong style="color:var(--red)">−</strong> on a matched skill to move it back to gaps</span>
-                            </div>
+                                        shortcuts</strong> — tap <strong style="color:var(--green)">+</strong> on a gap to add it to your profile instantly; tap <strong style="color:var(--red)">−</strong> on a matched skill to move it back to gaps</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Skill search</strong> — search your profile skills; add or learn missing ones instantly</span></div>
                         </div>
                         <p class="onboarding-tip">Hover any job card for a quick preview · Hover any fit badge for a
                             skill breakdown · Reopen this guide with <strong>?</strong></p>

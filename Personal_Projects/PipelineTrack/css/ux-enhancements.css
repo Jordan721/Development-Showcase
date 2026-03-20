@@ -18,6 +18,11 @@
   opacity: 0.6;
 }
 
+.empty-state-illustration {
+  opacity: 0.75;
+  margin-bottom: 4px;
+}
+
 .empty-state-title {
   font-size: 14px;
   font-weight: 600;
@@ -30,6 +35,90 @@
   opacity: 0.7;
   max-width: 200px;
   line-height: 1.5;
+}
+
+/* ── Job Picker Modal ──────────────────────────────────── */
+.job-picker-row {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background .12s;
+  border: 1px solid transparent;
+  margin-bottom: 4px;
+}
+
+.job-picker-row:hover {
+  background: var(--card);
+  border-color: var(--border);
+}
+
+.job-picker-role {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.job-picker-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.job-picker-stage {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-radius: 99px;
+  padding: 1px 7px;
+  font-size: 11px;
+  margin-left: 6px;
+}
+
+.job-picker-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.job-picker-chip {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 1px 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ── Weekly Recap ──────────────────────────────────────── */
+.recap-stats {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.recap-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 20px;
+  flex: 1;
+  min-width: 80px;
+  gap: 4px;
+}
+
+.recap-stat-num {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.recap-stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
 }
 
 /* ── Toast with Undo ───────────────────────────────────── */
@@ -276,7 +365,7 @@
   border-radius: 12px;
   padding: 14px 16px;
   /* large outer ring dims cards behind, inner shadows give depth */
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3), 0 24px 48px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 24px 48px rgba(0, 0, 0, 0.4);
   width: 240px;
   pointer-events: none;
   opacity: 0;
@@ -493,7 +582,7 @@ html.colorblind .fit-tip-gap {
 /* ── Seniority Inference ───────────────────────────────── */
 select.inferred {
   border-color: var(--accent) !important;
-  box-shadow: 0 0 0 2px var(--accent-faint, rgba(99,102,241,0.18));
+  box-shadow: 0 0 0 2px var(--accent-faint, rgba(99, 102, 241, 0.18));
 }
 
 /* ── Print Styles ──────────────────────────────────────── */

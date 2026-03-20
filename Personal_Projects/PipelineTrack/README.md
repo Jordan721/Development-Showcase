@@ -134,7 +134,11 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
   - **Priority Matrix** — 2×2 grid by fit score vs. urgency (Act Now 🔥, Plan Ahead ⭐, Quick Apply ⚡, Low Priority 📋); Act Now quadrant has a subtle green glow; long role names truncate cleanly
   - **Table** — sortable spreadsheet with sticky header, per-stage colored left-border accents, and color-coded stage dropdowns
   - **Timeline** — Gantt-style bars color-coded by stage with a stage legend and color dot per row label
-- Drag cards between columns · hover to reveal quick-delete **×** · toggle inactive stages on/off
+- Drag cards between columns · hover to reveal quick-delete **×** and **📍 pin** buttons · toggle inactive stages on/off
+- **Pinned jobs** — pin any job to keep it at the top of every view; pinned cards show a blue accent border
+- **Deadline urgency glow** — cards with imminent deadlines get a color-coded border (yellow ≤7d, orange ≤2d, red = today/overdue)
+- **Sticky filter bar** — search and filter controls stay fixed at the top while you scroll
+- **☐ Select (Bulk Actions)** — toggle select mode to pick multiple cards then move stage, export a CSV, or delete in one shot; deletions include a 5-second undo toast
 - Filter by period · search by role/company/location · filter dropdowns for stage, work type, seniority
 - **⊜ Compare Jobs** — select 2–3 jobs to compare fit, salary, stage, skills, and benefits side by side
 
@@ -237,6 +241,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 |---|---|
 | `Ctrl+Shift+K` | Open command palette |
 | `N` | Open Add Job form |
+| `E` | Open job picker — search by role, company, location, stage, seniority, job type, work type, or salary; click any result to edit |
 | `/` | Focus the board search bar |
 | `Escape` | Close any open modal |
 | `1` / `2` / `3` | Switch tabs in Add / Edit Job modal |
@@ -265,8 +270,11 @@ All three show an amber **✦ Auto-filled** badge so you always know the app set
 - **Job Card Hover Preview** — float preview with salary, stage, work type, deadline, and skill counts after ~0.5s hover
 - **Fit Score Tooltip** — hover any fit badge to see matched count and gap count
 - **Keyword Highlight** — matched skills highlighted green, gaps red, directly in the job description; × on any tag to dismiss false positives
-- **Undo Deletion** — 3-second undo toast after deleting a job card
-- **This Week Summary** — recap card on the dashboard with weekly stats and goal progress
+- **Undo Deletion** — 5-second undo toast after deleting a job or skill; bulk deletions also undoable
+- **Weekly Recap Modal** — appears automatically on Monday mornings with last week's application count, avg fit score, and pipeline progress
+- **Back to Top** — ↑ button fades in when you scroll past 300px; click to smooth-scroll back
+- **Skeleton flash** — views pulse once on switch to signal they're loading
+- **Empty state illustrations** — inline SVG art for all empty states (no jobs, no results, no timeline entries, etc.)
 - **Linked Contacts** — contacts tied to a job appear inline in the job detail modal
 - **Thank-You Tracking** — check "Thank-you sent" in milestone modals; ✓ shows in the Application Timeline
 - **Getting Started Checklist** — progress bar on first use: add skills → add job → get fit score → visit Learning Hub

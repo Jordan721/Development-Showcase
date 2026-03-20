@@ -11,7 +11,7 @@
   overflow: hidden;
   border-radius: 16px;
   user-select: none;
-  transition: max-width 0.3s cubic-bezier(.4,0,.2,1);
+  transition: max-width 0.3s cubic-bezier(.4, 0, .2, 1);
 }
 
 .onboarding-modal.ob-step4-active {
@@ -160,6 +160,41 @@
   padding: 1px 6px;
   white-space: nowrap;
   flex-shrink: 0;
+  display: inline-block;
+  transition: box-shadow .08s, border-color .08s;
+}
+
+@keyframes kbd-press {
+  0% {
+    transform: translateY(0);
+    border-bottom-width: 2px;
+    box-shadow: none;
+  }
+
+  35% {
+    transform: translateY(2px);
+    border-bottom-width: 1px;
+    box-shadow: none;
+    background: var(--accent-dim);
+    border-color: var(--accent);
+  }
+
+  70% {
+    transform: translateY(2px);
+    border-bottom-width: 1px;
+  }
+
+  100% {
+    transform: translateY(0);
+    border-bottom-width: 2px;
+    box-shadow: none;
+    background: var(--bg-card);
+    border-color: var(--border);
+  }
+}
+
+.ob-shortcut kbd.kbd-press {
+  animation: kbd-press .35s ease-in-out forwards;
 }
 
 /* ── Step 4 — features list ─────────────────────────────── */

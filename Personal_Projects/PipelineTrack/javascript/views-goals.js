@@ -249,8 +249,7 @@ function renderGoals() {
   if (!grid) return;
   if (filtered.length === 0) {
     grid.innerHTML = emptyStateHTML('🎯', 'No goals yet', 'Set a weekly or monthly target to track your progress');
-    if (emptyEl) emptyEl.style.display = '';
-    renderGoalPresets();
+    if (emptyEl) emptyEl.style.display = 'none';
   } else {
     if (emptyEl) emptyEl.style.display = 'none';
     grid.innerHTML = filtered.map(g => goalCardHTML(g)).join('');
@@ -262,6 +261,7 @@ function renderGoals() {
       btn.addEventListener('click', () => deleteGoal(btn.dataset.id));
     });
   }
+  renderGoalPresets();
   // Wire period tabs
   document.querySelectorAll('.goal-period-tab').forEach(btn => {
     btn.onclick = () => {

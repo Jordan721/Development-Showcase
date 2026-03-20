@@ -40,6 +40,16 @@
     const modal = document.querySelector('.onboarding-modal');
     if (modal) modal.classList.toggle('ob-step4-active', currentStep === TOTAL_STEPS);
 
+    // Animate kbd keys on step 4
+    if (currentStep === TOTAL_STEPS) {
+      const keys = document.querySelectorAll('.onboarding-step[data-step="4"] kbd');
+      keys.forEach((k, i) => {
+        k.classList.remove('kbd-press');
+        void k.offsetWidth;
+        setTimeout(() => k.classList.add('kbd-press'), i * 120);
+      });
+    }
+
     // Sync arrow button disabled state
     const arrowPrev = document.getElementById('ob-arrow-prev');
     const arrowNext = document.getElementById('ob-arrow-next');
@@ -48,10 +58,19 @@
   }
 
   function goNext() {
-    if (currentStep < TOTAL_STEPS) { currentStep++; updateStep(); } else { closeOnboarding(); }
+    if (currentStep < TOTAL_STEPS) {
+      currentStep++;
+      updateStep();
+    } else {
+      closeOnboarding();
+    }
   }
+
   function goPrev() {
-    if (currentStep > 1) { currentStep--; updateStep(); }
+    if (currentStep > 1) {
+      currentStep--;
+      updateStep();
+    }
   }
 
   document.getElementById('onboarding-next').addEventListener('click', goNext);
@@ -65,8 +84,13 @@
   // Keyboard left/right navigation while onboarding is open
   document.addEventListener('keydown', (e) => {
     if (!document.getElementById('modal-onboarding').classList.contains('open')) return;
-    if (e.key === 'ArrowRight') { e.preventDefault(); goNext(); }
-    else if (e.key === 'ArrowLeft') { e.preventDefault(); goPrev(); }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      goNext();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goPrev();
+    }
   });
 
   // Close on backdrop click

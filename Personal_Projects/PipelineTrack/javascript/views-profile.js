@@ -378,11 +378,22 @@ function renderSkillTags() {
 
   container.querySelectorAll('.skill-tag-remove').forEach(btn => {
     btn.addEventListener('click', () => {
-      state.profile.skills.splice(parseInt(btn.dataset.index), 1);
+      const idx = parseInt(btn.dataset.index);
+      const removed = state.profile.skills.splice(idx, 1)[0];
       save();
       reanalyzeAllJobs();
       renderProfile();
       if (state.activeView === 'dashboard') renderDashboard();
+      toast(`"${removed.name}" removed.`, '', {
+        undo: () => {
+          state.profile.skills.splice(idx, 0, removed);
+          save();
+          reanalyzeAllJobs();
+          renderProfile();
+          if (state.activeView === 'dashboard') renderDashboard();
+          toast(`"${removed.name}" restored.`, 'success');
+        }
+      });
     });
   });
 

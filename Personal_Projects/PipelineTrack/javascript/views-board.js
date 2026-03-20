@@ -5,6 +5,91 @@
    ══════════════════════════════════════════════════════════ */
 const collapsedColumns = new Set(JSON.parse(localStorage.getItem('pt-collapsed-cols') || '[]'));
 
+/* ── BULK SELECTION ────────────────────────────────────── */
+let bulkSelectMode = false;
+const bulkSelected = new Set();
+
+function setBulkMode(on) {
+  bulkSelectMode = on;
+  if (!on) bulkSelected.clear();
+  const btn = document.getElementById('board-select-btn');
+  const bar = document.getElementById('bulk-bar');
+  if (btn) btn.classList.toggle('active', on);
+  if (bar) bar.style.display = on ? '' : 'none';
+  renderBoard();
+}
+
+function updateBulkBar() {
+  const count = document.getElementById('bulk-bar-count');
+  if (count) count.textContent = `${bulkSelected.size} selected`;
+}
+
+function initBulkActions() {
+  const selectBtn = document.getElementById('board-select-btn');
+  const cancelBtn = document.getElementById('bulk-cancel-btn');
+  const stageSelect = document.getElementById('bulk-stage-select');
+  const deleteBtn = document.getElementById('bulk-delete-btn');
+  const exportBtn = document.getElementById('bulk-export-btn');
+
+  if (selectBtn) selectBtn.addEventListener('click', () => setBulkMode(!bulkSelectMode));
+  if (cancelBtn) cancelBtn.addEventListener('click', () => setBulkMode(false));
+
+  if (stageSelect) stageSelect.addEventListener('change', () => {
+    const stage = stageSelect.value;
+    if (!stage || !bulkSelected.size) return;
+    bulkSelected.forEach(id => {
+      const job = state.jobs.find(j => j.id === id);
+      if (job) {
+        job.stage = stage;
+        if (stage === 'declined') job.declinedAt = new Date().toISOString();
+      }
+    });
+    save();
+    toast(`Moved ${bulkSelected.size} job${bulkSelected.size > 1 ? 's' : ''} to ${STAGE_LABELS[stage]}.`, 'success');
+    if (stage === 'offer') setTimeout(launchConfetti, 200);
+    stageSelect.value = '';
+    setBulkMode(false);
+  });
+
+  if (deleteBtn) deleteBtn.addEventListener('click', () => {
+    if (!bulkSelected.size) return;
+    const ids = [...bulkSelected];
+    const snapshots = ids.map(id => JSON.parse(JSON.stringify(state.jobs.find(j => j.id === id)))).filter(Boolean);
+    state.jobs = state.jobs.filter(j => !ids.includes(j.id));
+    save();
+    setBulkMode(false);
+    if (state.activeView === 'dashboard') renderDashboard();
+    toast(`Deleted ${snapshots.length} job${snapshots.length > 1 ? 's' : ''}.`, '', {
+      undo: () => {
+        snapshots.forEach(s => state.jobs.push(s));
+        save();
+        renderBoard();
+        if (state.activeView === 'dashboard') renderDashboard();
+        toast('Undo: jobs restored.', 'success');
+      }
+    });
+  });
+
+  if (exportBtn) exportBtn.addEventListener('click', () => {
+    if (!bulkSelected.size) return;
+    const selected = state.jobs.filter(j => bulkSelected.has(j.id));
+    const csvCell = v => {
+      const s = String(v ?? '');
+      return s.includes(',') || s.includes('"') || s.includes('\n') ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    const headers = ['Role', 'Company', 'Location', 'Stage', 'Fit Score', 'Salary', 'Date Added'];
+    const rows = selected.map(j => [j.role, j.company, j.location, j.stage, j.fitScore ?? '', j.salary, j.dateAdded].map(csvCell).join(','));
+    const csv = [headers.join(','), ...rows].join('\r\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], {
+      type: 'text/csv;charset=utf-8;'
+    }));
+    a.download = `pipelinetrack-selected-${new Date().toLocaleDateString('en-CA')}.csv`;
+    a.click();
+    toast(`Exported ${selected.length} jobs.`, 'success');
+  });
+}
+
 function boardInPeriod(job) {
   const d = new Date(job.dateAdded);
   const now = new Date();
@@ -41,13 +126,14 @@ function applyBoardFilters(jobs) {
 
 function sortTableJobs(jobs) {
   const s = [...jobs];
-  if (boardSortTable === 'date-asc') return s.sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded));
-  if (boardSortTable === 'date-desc') return s.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
-  if (boardSortTable === 'fit-desc') return s.sort((a, b) => (b.fitScore != null ? b.fitScore : -1) - (a.fitScore != null ? a.fitScore : -1));
-  if (boardSortTable === 'fit-asc') return s.sort((a, b) => (a.fitScore != null ? a.fitScore : 999) - (b.fitScore != null ? b.fitScore : 999));
-  if (boardSortTable === 'role-asc') return s.sort((a, b) => a.role.localeCompare(b.role));
-  if (boardSortTable === 'company-asc') return s.sort((a, b) => a.company.localeCompare(b.company));
-  return s;
+  if (boardSortTable === 'date-asc') s.sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded));
+  else if (boardSortTable === 'date-desc') s.sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded));
+  else if (boardSortTable === 'fit-desc') s.sort((a, b) => (b.fitScore != null ? b.fitScore : -1) - (a.fitScore != null ? a.fitScore : -1));
+  else if (boardSortTable === 'fit-asc') s.sort((a, b) => (a.fitScore != null ? a.fitScore : 999) - (b.fitScore != null ? b.fitScore : 999));
+  else if (boardSortTable === 'role-asc') s.sort((a, b) => a.role.localeCompare(b.role));
+  else if (boardSortTable === 'company-asc') s.sort((a, b) => a.company.localeCompare(b.company));
+  // pinned always float to top
+  return s.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
 }
 
 function updateBoardFilterUI() {
@@ -97,8 +183,10 @@ function pmCardHTML(job) {
     const days = Math.floor((now - new Date(job.dateAdded)) / 86400000);
     timeInfo = days === 0 ? 'Today' : `${days}d ago`;
   }
+  const urgency = deadlineUrgencyClass(job);
+  const pinCls = job.pinned ? ' pinned-card' : '';
   return `
-    <div class="job-card pm-card" data-job-id="${job.id}" data-stage="${job.stage}" draggable="false" style="--card-accent:${accent}">
+    <div class="job-card pm-card${urgency ? ' ' + urgency : ''}${pinCls}" data-job-id="${job.id}" data-stage="${job.stage}" draggable="false" style="--card-accent:${accent}">
       <button class="card-delete-btn" data-delete-id="${job.id}" title="Delete job" draggable="false">&times;</button>
       <div class="pm-card-stage"><span class="pm-stage-dot stripe-${job.stage}"></span>${STAGE_LABELS[job.stage]}</div>
       <div class="job-card-role pm-card-role">${escHtml(job.role)}</div>
@@ -321,6 +409,17 @@ function renderBoard() {
         });
       });
     });
+    board.querySelectorAll('.card-pin-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const id = btn.dataset.pinId;
+        const job = state.jobs.find(j => j.id === id);
+        if (!job) return;
+        job.pinned = !job.pinned;
+        save();
+        renderBoard();
+      });
+    });
     board.querySelectorAll('.job-card').forEach(card => {
       card.addEventListener('click', () => openJobDetail(card.dataset.jobId));
     });
@@ -388,8 +487,31 @@ function renderBoard() {
     });
   });
 
+  board.querySelectorAll('.card-pin-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const id = btn.dataset.pinId;
+      const job = state.jobs.find(j => j.id === id);
+      if (!job) return;
+      job.pinned = !job.pinned;
+      save();
+      renderBoard();
+    });
+  });
+
   board.querySelectorAll('.job-card').forEach(card => {
-    card.addEventListener('click', () => openJobDetail(card.dataset.jobId));
+    card.addEventListener('click', e => {
+      if (bulkSelectMode) {
+        const id = card.dataset.jobId;
+        if (bulkSelected.has(id)) bulkSelected.delete(id);
+        else bulkSelected.add(id);
+        updateBulkBar();
+        card.classList.toggle('bulk-selected', bulkSelected.has(id));
+        card.querySelector('.bulk-check')?.classList.toggle('checked', bulkSelected.has(id));
+        return;
+      }
+      openJobDetail(card.dataset.jobId);
+    });
 
     card.addEventListener('dragstart', e => {
       draggedJobId = card.dataset.jobId;
@@ -530,17 +652,38 @@ function renderBoardTable(jobs) {
   </table>`;
 }
 
+function fitRingHTML(score) {
+  const cls = fitBadgeClass(score);
+  const label = fitBadgeLabel(score);
+  return `<span class="fit-badge ${cls}" title="Fit score${score != null ? ': ' + score + '%' : ''}">${label}</span>`;
+}
+
+function deadlineUrgencyClass(job) {
+  if (!job.deadline) return '';
+  const days = Math.round((new Date(job.deadline + 'T00:00:00') - new Date()) / 86400000);
+  if (days < 0) return 'deadline-overdue';
+  if (days === 0) return 'deadline-today';
+  if (days <= 2) return 'deadline-soon';
+  if (days <= 7) return 'deadline-week';
+  return '';
+}
+
 function jobCardHTML(job) {
-  const cls = fitBadgeClass(job.fitScore);
-  const label = fitBadgeLabel(job.fitScore);
+  const urgency = deadlineUrgencyClass(job);
+  const pinCls = job.pinned ? ' pinned-card' : '';
+  const selectedCls = bulkSelected.has(job.id) ? ' bulk-selected' : '';
+  const pinBtn = bulkSelectMode ? '' : `<button class="card-pin-btn${job.pinned ? ' pinned' : ''}" data-pin-id="${job.id}" title="${job.pinned ? 'Unpin' : 'Pin to top'}" draggable="false">${job.pinned ? '📌' : '📍'}</button>`;
+  const checkOverlay = bulkSelectMode ? `<span class="bulk-check${bulkSelected.has(job.id) ? ' checked' : ''}" data-bulk-id="${job.id}">✓</span>` : '';
   return `
-    <div class="job-card" data-job-id="${job.id}" data-stage="${job.stage}" draggable="true">
-      <button class="card-delete-btn" data-delete-id="${job.id}" title="Delete job" draggable="false">&times;</button>
+    <div class="job-card${urgency ? ' ' + urgency : ''}${pinCls}${selectedCls}" data-job-id="${job.id}" data-stage="${job.stage}" draggable="${bulkSelectMode ? 'false' : 'true'}">
+      ${bulkSelectMode ? '' : `<button class="card-delete-btn" data-delete-id="${job.id}" title="Delete job" draggable="false">&times;</button>`}
+      ${pinBtn}
+      ${checkOverlay}
       <div class="job-card-role"><span class="drag-handle" title="Drag to move stage" draggable="false">&#8942;</span>${escHtml(job.role)}</div>
       <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
       <div class="job-card-footer">
         <span class="job-card-date">${job.stage === 'declined' && job.declinedAt ? '❌ ' + formatDate(job.declinedAt) : formatDate(job.dateAdded)}</span>
-        <span class="fit-badge ${cls}" data-job-id="${job.id}">${label}</span>
+        ${fitRingHTML(job.fitScore)}
       </div>
     </div>`;
 }
