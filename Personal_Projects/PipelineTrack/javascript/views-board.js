@@ -457,7 +457,9 @@ function renderBoard() {
         collapsedColumns.add(stage);
       }
       localStorage.setItem('pt-collapsed-cols', JSON.stringify([...collapsedColumns]));
+      const scrollLeft = board.scrollLeft;
       renderBoard();
+      board.scrollLeft = scrollLeft;
     });
   });
 
