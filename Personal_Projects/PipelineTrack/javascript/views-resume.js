@@ -126,7 +126,15 @@ function renderResumeVault() {
     list.querySelectorAll('.vault-view-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const r = state.resumes.find(x => x.id === btn.dataset.id);
-        if (r) window.open(r.dataUrl, '_blank');
+        if (!r) return;
+        const [meta, b64] = r.dataUrl.split(',');
+        const mime = meta.match(/:(.*?);/)[1];
+        const bytes = atob(b64);
+        const arr = new Uint8Array(bytes.length);
+        for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+        const blob = new Blob([arr], { type: mime });
+        const url = URL.createObjectURL(blob);
+        window.open(url, '_blank');
       });
     });
 
