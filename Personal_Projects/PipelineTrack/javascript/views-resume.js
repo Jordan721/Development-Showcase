@@ -85,7 +85,97 @@ function renderLearning() {
    RESUME HUB
    ══════════════════════════════════════════════════════════ */
 function renderResume() {
+  renderResumeVault();
   renderResources();
+}
+
+/* ══════════════════════════════════════════════════════════
+   RESUME VAULT
+   ══════════════════════════════════════════════════════════ */
+function renderResumeVault() {
+  const list = document.getElementById('vault-list');
+  const uploadBtn = document.getElementById('vault-upload-btn');
+  const fileInput = document.getElementById('vault-file-input');
+  if (!list || !uploadBtn || !fileInput) return;
+
+  function renderList() {
+    if (!state.resumes || state.resumes.length === 0) {
+      list.innerHTML = '<div class="vault-empty">No resumes uploaded yet. Click <strong>+ Upload Resume</strong> to add one.</div>';
+      return;
+    }
+    list.innerHTML = state.resumes.map(r => {
+      const icon = r.fileType === 'pdf' ? '📄' : r.fileType === 'docx' ? '📝' : '📃';
+      const kb = (r.size / 1024).toFixed(1);
+      const date = new Date(r.uploadedAt).toLocaleDateString();
+      return `
+        <div class="vault-item">
+          <div class="vault-item-icon">${icon}</div>
+          <div class="vault-item-info">
+            <div class="vault-item-name">${r.name}</div>
+            <div class="vault-item-meta">${r.fileType.toUpperCase()} · ${kb} KB · ${date}</div>
+          </div>
+          <div class="vault-item-actions">
+            <button class="btn-secondary vault-view-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">View</button>
+            <button class="btn-secondary vault-dl-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Download</button>
+            <button class="vault-del-btn" data-id="${r.id}" title="Delete">×</button>
+          </div>
+        </div>`;
+    }).join('');
+
+    list.querySelectorAll('.vault-view-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const r = state.resumes.find(x => x.id === btn.dataset.id);
+        if (r) window.open(r.dataUrl, '_blank');
+      });
+    });
+
+    list.querySelectorAll('.vault-dl-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const r = state.resumes.find(x => x.id === btn.dataset.id);
+        if (!r) return;
+        const a = document.createElement('a');
+        a.href = r.dataUrl;
+        a.download = r.name;
+        a.click();
+      });
+    });
+
+    list.querySelectorAll('.vault-del-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!confirm('Remove this resume from the vault?')) return;
+        state.resumes = state.resumes.filter(x => x.id !== btn.dataset.id);
+        save();
+        renderList();
+        toast('Resume removed.', '');
+      });
+    });
+  }
+
+  uploadBtn.onclick = () => fileInput.click();
+
+  fileInput.onchange = () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const ext = file.name.split('.').pop().toLowerCase();
+      state.resumes.unshift({
+        id: Date.now().toString(),
+        name: file.name,
+        fileType: ext,
+        size: file.size,
+        uploadedAt: new Date().toISOString(),
+        dataUrl: e.target.result
+      });
+      save();
+      renderList();
+      toast('Resume saved to vault.', 'success');
+    };
+    reader.readAsDataURL(file);
+    fileInput.value = '';
+  };
+
+  renderList();
 }
 
 /* ── File upload helpers ── */

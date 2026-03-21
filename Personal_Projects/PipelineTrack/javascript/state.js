@@ -55,6 +55,7 @@ let state = {
   goals: [],
   events: [],
   templates: [],
+  resumes: [],
   activeView: 'dashboard',
   activeJobId: null,
 };
@@ -70,6 +71,7 @@ function save() {
   localStorage.setItem('pt_goals', JSON.stringify(state.goals));
   localStorage.setItem('pt_events', JSON.stringify(state.events));
   localStorage.setItem('pt_templates', JSON.stringify(state.templates));
+  localStorage.setItem('pt_resumes', JSON.stringify(state.resumes));
 }
 
 function load() {
@@ -86,7 +88,10 @@ function load() {
     };
     // backfill for existing saved data
     if (state.profile.skills && typeof normalizeSkillName === 'function') {
-      state.profile.skills = state.profile.skills.map(s => ({ ...s, name: normalizeSkillName(s.name) }));
+      state.profile.skills = state.profile.skills.map(s => ({
+        ...s,
+        name: normalizeSkillName(s.name)
+      }));
     }
     if (!state.profile.certifications) state.profile.certifications = [];
     if (!state.profile.links) state.profile.links = {
@@ -126,6 +131,11 @@ function load() {
   } catch {
     state.templates = [];
   }
+  try {
+    state.resumes = JSON.parse(localStorage.getItem('pt_resumes')) || [];
+  } catch {
+    state.resumes = [];
+  }
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -142,6 +152,7 @@ function exportData() {
     goals: state.goals,
     events: state.events,
     templates: state.templates,
+    resumes: state.resumes,
   };
   const blob = new Blob([JSON.stringify(backup, null, 2)], {
     type: 'application/json'
@@ -452,6 +463,7 @@ function importData(file) {
         state.goals = mergeById(state.goals, data.goals);
         state.events = mergeById(state.events, data.events);
         state.templates = mergeById(state.templates, data.templates);
+        state.resumes = mergeById(state.resumes, data.resumes);
         if (Array.isArray(data.savedCourses)) {
           const courseSet = new Set(state.savedCourses);
           data.savedCourses.forEach(c => courseSet.add(c));

@@ -23,7 +23,7 @@ A personal job search companion built to take the chaos out of hunting for work.
 | 🎯 Goals | Set weekly/monthly targets and track live progress against your job board data |
 | 📊 Analytics | KPIs, funnel, response rates, skill gaps, fit distribution, and breakdowns |
 | 👤 My Profile | Skills, certifications, email templates, skill coverage chart, and data backup |
-| 📄 Resume Hub | Parse your resume, scan GitHub, and polish your writing |
+| 📄 Resume Hub | Parse your resume, scan GitHub, polish your writing, and store resume versions in the vault |
 | 🧠 Learning Hub | Course recommendations matched to your skill gaps |
 
 ---
@@ -219,6 +219,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 <details>
 <summary><strong>📄 Resume Hub</strong></summary>
 
+- **Resume Vault** — upload PDF, .docx, or .txt resumes; view in-browser or download anytime; persists across sessions and included in JSON backups
 - **Resume Parser** — PDF, .docx, plain text, or paste; detected skills importable in one click
 - **GitHub / Portfolio Scanner** — scan public repos for languages and topics
 - **Writing Polish** — flags passive voice, filler words, and weak language with a quality score
