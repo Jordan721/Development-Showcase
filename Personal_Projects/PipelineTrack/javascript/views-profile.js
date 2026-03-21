@@ -699,6 +699,14 @@ function addTemplate() {
   toast('Template added — fill in the body below.', 'success');
 }
 
+// Called from the job modal to populate the vault resume picker
+function buildVaultOptions() {
+  const resumes = state.resumes || [];
+  if (resumes.length === 0) return '<option value="">No resumes in Vault</option>';
+  return '<option value="">— None —</option>' +
+    resumes.map(r => `<option value="${r.id}">${escHtml(r.name)}</option>`).join('');
+}
+
 // Called from the job modal to populate the template picker
 function buildTemplateOptions() {
   const templates = state.templates || [];

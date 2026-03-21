@@ -139,11 +139,11 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 - **Pinned jobs** — pin any job to keep it at the top of every view; pinned cards show a blue accent border
 - **Deadline urgency glow** — cards with imminent deadlines get a color-coded border (yellow ≤7d, orange ≤2d, red = today/overdue)
 - **Sticky filter bar** — search and filter controls stay fixed at the top while you scroll
-- **☐ Select (Bulk Actions)** — toggle select mode to pick multiple cards then move stage, export a CSV, or delete in one shot; deletions include a 5-second undo toast
+- **☐ Select (Bulk Actions)** — toggle select mode to pick multiple cards (or hit **Select All** to grab every visible card at once), then move stage, assign a Resume Vault resume, export a CSV, or delete in one shot; deletions include a 5-second undo toast
 - Filter by period · search by role/company/location · filter dropdowns for stage, work type (Remote / Hybrid / On-site / Remote–Hybrid / Hybrid–On-site / Flexible), seniority
 - **⊜ Compare Jobs** — select 2–3 jobs to compare fit, salary, stage, skills, and benefits side by side
 
-**Each job stores:** role, company, department, location, URL, salary (auto-formatted), seniority, job type, work type, date posted, date applied, application deadline, stage, benefits (parsed into chips), company notes, job description, cover letter, personal notes.
+**Each job stores:** role, company, department, location, URL, salary (auto-formatted), seniority, job type, work type, date posted, date applied, application deadline, stage, resume used (linked to Resume Vault), benefits (parsed into chips), company notes, job description, cover letter, personal notes.
 
 **Add/Edit form tabs:** Details · Job Info · Application
 

@@ -16,6 +16,10 @@ function setBulkMode(on) {
   const bar = document.getElementById('bulk-bar');
   if (btn) btn.classList.toggle('active', on);
   if (bar) bar.style.display = on ? '' : 'none';
+  if (on) {
+    const rs = document.getElementById('bulk-resume-select');
+    if (rs) rs.innerHTML = '<option value="">Set resume…</option>' + (state.resumes || []).map(r => `<option value="${r.id}">${r.name}</option>`).join('');
+  }
   renderBoard();
 }
 
@@ -28,11 +32,23 @@ function initBulkActions() {
   const selectBtn = document.getElementById('board-select-btn');
   const cancelBtn = document.getElementById('bulk-cancel-btn');
   const stageSelect = document.getElementById('bulk-stage-select');
+  const resumeSelect = document.getElementById('bulk-resume-select');
   const deleteBtn = document.getElementById('bulk-delete-btn');
   const exportBtn = document.getElementById('bulk-export-btn');
 
   if (selectBtn) selectBtn.addEventListener('click', () => setBulkMode(!bulkSelectMode));
   if (cancelBtn) cancelBtn.addEventListener('click', () => setBulkMode(false));
+
+  const selectAllBtn = document.getElementById('bulk-select-all-btn');
+  if (selectAllBtn) selectAllBtn.addEventListener('click', () => {
+    document.querySelectorAll('.job-card[data-job-id]').forEach(card => {
+      const id = card.dataset.jobId;
+      bulkSelected.add(id);
+      card.classList.add('bulk-selected');
+      card.querySelector('.bulk-check')?.classList.add('checked');
+    });
+    updateBulkBar();
+  });
 
   if (stageSelect) stageSelect.addEventListener('change', () => {
     const stage = stageSelect.value;
@@ -48,6 +64,21 @@ function initBulkActions() {
     toast(`Moved ${bulkSelected.size} job${bulkSelected.size > 1 ? 's' : ''} to ${STAGE_LABELS[stage]}.`, 'success');
     if (stage === 'offer') setTimeout(launchConfetti, 200);
     stageSelect.value = '';
+    setBulkMode(false);
+  });
+
+  if (resumeSelect) resumeSelect.addEventListener('change', () => {
+    const id = resumeSelect.value;
+    if (!id || !bulkSelected.size) return;
+    const resume = (state.resumes || []).find(r => r.id === id);
+    if (!resume) return;
+    bulkSelected.forEach(jobId => {
+      const job = state.jobs.find(j => j.id === jobId);
+      if (job) job.resumeVaultId = id;
+    });
+    save();
+    toast(`Set resume "${resume.name}" on ${bulkSelected.size} job${bulkSelected.size > 1 ? 's' : ''}.`, 'success');
+    resumeSelect.value = '';
     setBulkMode(false);
   });
 
@@ -1555,6 +1586,11 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-company-notes').value = job ? job.companyNotes || '' : '';
   document.getElementById('job-notes').value = job ? job.notes || '' : '';
   document.getElementById('job-cover-letter').value = job ? job.coverLetter || '' : '';
+  const vaultSel = document.getElementById('job-resume-vault-select');
+  if (vaultSel) {
+    vaultSel.innerHTML = buildVaultOptions();
+    vaultSel.value = job ? (job.resumeVaultId || '') : '';
+  }
 
   // Reset smart paste panel (hide for edits, show trigger for new jobs)
   const spPanel = document.getElementById('smart-paste-panel');
@@ -1624,6 +1660,7 @@ function saveJob() {
     companyNotes: document.getElementById('job-company-notes').value.trim(),
     notes: document.getElementById('job-notes').value.trim(),
     coverLetter: document.getElementById('job-cover-letter').value.trim(),
+    resumeVaultId: document.getElementById('job-resume-vault-select')?.value || '',
     fitScore: score,
     matched,
     missing,
