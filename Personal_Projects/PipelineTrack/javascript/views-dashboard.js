@@ -84,9 +84,14 @@ function renderDashboard() {
   // Recent activity
   const recentEl = document.getElementById('dash-recent');
   const stageColors = {
-    saved: 'var(--text-muted)', applied: '#60a5fa', screening: '#a78bfa',
-    interview: '#f59e0b', offer: 'var(--green)', declined: 'var(--red)',
+    saved: '#8b949e', applied: '#3b82f6', screening: '#8b5cf6',
+    interview: '#f59e0b', offer: '#22c55e', declined: '#ef4444',
     withdrew: '#f97316', ghosted: '#6b7280', archived: '#6b7280'
+  };
+  const stageBgColors = {
+    saved: 'rgba(139,148,158,0.15)', applied: 'rgba(59,130,246,0.15)', screening: 'rgba(139,92,246,0.15)',
+    interview: 'rgba(245,158,11,0.15)', offer: 'rgba(34,197,94,0.15)', declined: 'rgba(239,68,68,0.15)',
+    withdrew: 'rgba(249,115,22,0.15)', ghosted: 'rgba(107,114,128,0.15)', archived: 'rgba(107,114,128,0.12)'
   };
   const lastChanged = j => j.dateApplied || j.dateAdded;
   const recent = [...jobs].sort((a, b) => new Date(lastChanged(b)) - new Date(lastChanged(a))).slice(0, 6);
@@ -96,14 +101,13 @@ function renderDashboard() {
     recentEl.innerHTML = recent.map(j => `
       <div class="recent-item" data-job-id="${j.id}" style="cursor:pointer">
         <div class="recent-info">
-          <div class="recent-role">${j.role}</div>
-          <div class="recent-company">${j.company}</div>
+          <div class="recent-role">${j.role} <span style="font-weight:400;color:var(--text-muted);font-size:12px;">@ ${j.company}</span></div>
+          <div class="recent-date" style="font-size:11px;color:var(--text-muted);margin-top:2px">${formatDate(lastChanged(j))}</div>
         </div>
         <div class="recent-right">
-          <span class="recent-stage-badge" style="color:${stageColors[j.stage] || 'var(--accent)'}">
+          <span class="recent-stage-badge" style="color:${stageColors[j.stage] || 'var(--accent)'}; background:${stageBgColors[j.stage] || 'rgba(0,212,170,0.15)'}">
             ${STAGE_EMOJIS[j.stage] || ''} ${STAGE_LABELS[j.stage] || j.stage}
           </span>
-          <div class="recent-date">${formatDate(lastChanged(j))}</div>
         </div>
       </div>
     `).join('');
