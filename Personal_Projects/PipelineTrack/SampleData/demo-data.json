@@ -46,6 +46,7 @@
       "id": "j002",
       "role": "Software Engineer",
       "company": "Microsoft",
+      "pinned": true,
       "location": "Redmond, WA (Remote OK)",
       "stage": "offer",
       "seniority": "Mid-Level",
@@ -520,7 +521,7 @@
       "title": "SF Tech Job Fair Spring 2026",
       "date": "2026-03-20",
       "time": "10:00",
-      "format": "In-Person",
+      "format": "in-person",
       "location": "Moscone Center, San Francisco, CA",
       "link": "",
       "notes": "Bring 20 printed resumes. Target booths: Stripe, Figma, Notion, Linear, Vercel. Smart casual dress."
@@ -530,7 +531,7 @@
       "title": "Virtual Career Networking Night",
       "date": "2026-03-25",
       "time": "18:00",
-      "format": "Online",
+      "format": "online",
       "location": "",
       "link": "https://zoom.us/j/example",
       "notes": "Hosted by TechConnect. 100+ engineers and recruiters attending. Prep 30-second pitch."
@@ -540,7 +541,7 @@
       "title": "Google Virtual Interview Panel",
       "date": "2026-03-18",
       "time": "10:00",
-      "format": "Online",
+      "format": "online",
       "location": "",
       "link": "https://meet.google.com/example",
       "notes": "5 rounds: 2 coding, 1 system design, 1 behavioral, 1 Googleyness. Block entire day. No other meetings."
