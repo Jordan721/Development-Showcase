@@ -488,10 +488,18 @@ function openEventModal(ev) {
   document.getElementById('event-save-btn').onclick = saveEvent;
   document.getElementById('event-delete-btn').onclick = () => {
     if (!confirm('Delete this event?')) return;
+    const deleted = ev;
     state.events = state.events.filter(e => e.id !== ev.id);
     save();
     closeModal('modal-event');
     renderCalendarView();
+    toast('Event deleted.', 'error', {
+      undo: () => {
+        state.events.push(deleted);
+        save();
+        renderCalendarView();
+      }
+    });
   };
 
   openModal('modal-event');

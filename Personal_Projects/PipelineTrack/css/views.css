@@ -374,7 +374,7 @@
 /* Week strip */
 .cal-week-strip {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 8px;
 }
 
@@ -384,6 +384,8 @@
   border-radius: var(--radius-sm);
   padding: 12px 10px;
   min-height: 140px;
+  min-width: 0;
+  overflow: hidden;
   cursor: pointer;
   transition: background .15s, box-shadow .15s;
 }
@@ -663,6 +665,52 @@
   text-transform: uppercase;
   letter-spacing: .05em;
   margin-top: 6px;
+}
+
+.act-stage-breakdown {
+  margin-top: 16px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+
+.act-stage-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.act-stage-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.act-stage-row:last-child {
+  border-bottom: none;
+}
+
+.act-stage-emoji {
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.act-stage-label {
+  flex: 1;
+  color: var(--text);
+}
+
+.act-stage-count {
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 24px;
+  text-align: right;
 }
 
 /* ════════════════════════════════════════════════════════════

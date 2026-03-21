@@ -82,18 +82,29 @@ function renderDashboard() {
   }
 
   // Recent activity
-  const recent = [...jobs].sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded)).slice(0, 6);
   const recentEl = document.getElementById('dash-recent');
+  const stageColors = {
+    saved: 'var(--text-muted)', applied: '#60a5fa', screening: '#a78bfa',
+    interview: '#f59e0b', offer: 'var(--green)', declined: 'var(--red)',
+    withdrew: '#f97316', ghosted: '#6b7280', archived: '#6b7280'
+  };
+  const lastChanged = j => j.dateApplied || j.dateAdded;
+  const recent = [...jobs].sort((a, b) => new Date(lastChanged(b)) - new Date(lastChanged(a))).slice(0, 6);
   if (recent.length === 0) {
     recentEl.innerHTML = '<p class="empty-msg">No jobs tracked yet.</p>';
   } else {
     recentEl.innerHTML = recent.map(j => `
       <div class="recent-item" data-job-id="${j.id}" style="cursor:pointer">
-        <div>
+        <div class="recent-info">
           <div class="recent-role">${j.role}</div>
           <div class="recent-company">${j.company}</div>
         </div>
-        <div class="recent-date">${formatDate(j.dateAdded)}</div>
+        <div class="recent-right">
+          <span class="recent-stage-badge" style="color:${stageColors[j.stage] || 'var(--accent)'}">
+            ${STAGE_EMOJIS[j.stage] || ''} ${STAGE_LABELS[j.stage] || j.stage}
+          </span>
+          <div class="recent-date">${formatDate(lastChanged(j))}</div>
+        </div>
       </div>
     `).join('');
     recentEl.querySelectorAll('.recent-item').forEach(el => {
