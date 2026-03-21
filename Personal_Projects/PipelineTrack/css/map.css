@@ -1,0 +1,152 @@
+/* ── MAP LAYOUT ─────────────────────────────────────────── */
+.kanban--map {
+  display: block;
+  padding-bottom: 0;
+}
+
+.map-wrap {
+  position: relative;
+  width: 100%;
+  height: 68vh;
+  min-height: 420px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+#pt-map {
+  width: 100%;
+  height: 100%;
+  background: var(--surface);
+}
+
+/* Override Leaflet tiles to not conflict with dark themes */
+.leaflet-container {
+  font-family: inherit;
+  background: var(--surface);
+}
+
+/* Map loading / empty state */
+.map-status {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  padding: 5px 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+  z-index: 500;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.map-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 10px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.map-empty-icon {
+  font-size: 36px;
+  opacity: 0.4;
+}
+
+/* Legend */
+.map-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+}
+
+.map-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+}
+
+.map-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Custom pin popup */
+.leaflet-popup-content-wrapper {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+  color: var(--text) !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  width: auto !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--card) !important;
+}
+
+.map-popup {
+  padding: 12px 14px;
+  min-width: 180px;
+  cursor: pointer;
+}
+
+.map-popup:hover {
+  background: var(--surface);
+}
+
+.map-popup-role {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.map-popup-company {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.map-popup-stage {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  color: #fff;
+}
+
+.map-popup-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  opacity: 0.7;
+}
+
+/* Remote badge in legend */
+.map-remote-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 8px;
+  font-style: italic;
+}

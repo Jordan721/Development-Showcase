@@ -130,11 +130,12 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 
 - **Not Selected** — company didn't pick you; date auto-stamped on the card and detail view
 - **Declined** — you chose not to pursue; **Ghosted** — never heard back
-- **Four layout modes:**
+- **Five layout modes:**
   - **Columns** — classic kanban with collapsible columns (state persists across refreshes); drag cards onto collapsed columns to move them — the column highlights with a dashed outline on hover to confirm the drop
   - **Priority Matrix** — 2×2 grid by fit score vs. urgency (Act Now 🔥, Plan Ahead ⭐, Quick Apply ⚡, Low Priority 📋); Act Now quadrant has a subtle green glow; long role names truncate cleanly
   - **Table** — sortable spreadsheet with sticky header, per-stage colored left-border accents, and color-coded stage dropdowns
   - **Timeline** — Gantt-style bars color-coded by stage with a stage legend and color dot per row label
+  - **Map** — interactive map (OpenStreetMap + Nominatim, no API key) with color-coded pins per stage; jobs with multiple locations separated by `;` or `,` get a pin for each city; coords cached after first geocode so future loads are instant; click any pin to open the job detail
 - Drag cards between columns · hover to reveal quick-delete **×** and **📍 pin** buttons · toggle inactive stages on/off
 - **Pinned jobs** — pin any job to keep it at the top of every view; pinned cards show a blue accent border
 - **Deadline urgency glow** — cards with imminent deadlines get a color-coded border (yellow ≤7d, orange ≤2d, red = today/overdue)

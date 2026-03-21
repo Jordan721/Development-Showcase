@@ -174,7 +174,7 @@ function updateBoardFilterUI() {
   const sortSel = document.getElementById('board-sort-table');
   if (sortSel) sortSel.style.display = boardLayout === 'table' ? '' : 'none';
   const dragHint = document.getElementById('board-drag-hint');
-  if (dragHint) dragHint.style.display = (boardLayout === 'table' || boardLayout === 'timeline' || boardLayout === 'matrix') ? 'none' : '';
+  if (dragHint) dragHint.style.display = (boardLayout === 'table' || boardLayout === 'timeline' || boardLayout === 'matrix' || boardLayout === 'map') ? 'none' : '';
 }
 
 /* ── PRIORITY MATRIX HELPERS ───────────────────────────── */
@@ -411,6 +411,14 @@ function renderBoard() {
     board.querySelectorAll('.tl-row[data-job-id]').forEach(row => {
       row.addEventListener('click', () => openJobDetail(row.dataset.jobId));
     });
+    wireSearchAndFilters();
+    return;
+  }
+
+  if (boardLayout === 'map') {
+    const visibleJobs = periodJobs.filter(j => visibleStages.includes(j.stage));
+    board.innerHTML = renderBoardMap(visibleJobs);
+    wireMap(visibleJobs);
     wireSearchAndFilters();
     return;
   }
