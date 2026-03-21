@@ -117,6 +117,7 @@ function renderResumeVault() {
           <div class="vault-item-actions">
             <button class="btn-secondary vault-view-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">View</button>
             <button class="btn-secondary vault-dl-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Download</button>
+            <button class="btn-secondary vault-rename-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Rename</button>
             <button class="vault-del-btn" data-id="${r.id}" title="Delete">×</button>
           </div>
         </div>`;
@@ -137,6 +138,18 @@ function renderResumeVault() {
         a.href = r.dataUrl;
         a.download = r.name;
         a.click();
+      });
+    });
+
+    list.querySelectorAll('.vault-rename-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const r = state.resumes.find(x => x.id === btn.dataset.id);
+        if (!r) return;
+        const newName = prompt('Rename resume:', r.name);
+        if (!newName || !newName.trim() || newName.trim() === r.name) return;
+        r.name = newName.trim();
+        save();
+        renderList();
       });
     });
 

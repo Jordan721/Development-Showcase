@@ -219,7 +219,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 <details>
 <summary><strong>📄 Resume Hub</strong></summary>
 
-- **Resume Vault** — upload PDF, .docx, or .txt resumes; view in-browser or download anytime; persists across sessions and included in JSON backups
+- **Resume Vault** — upload PDF, .docx, or .txt resumes; view in-browser, download, rename, or delete anytime; persists across sessions and included in JSON backups
 - **Resume Parser** — PDF, .docx, plain text, or paste; detected skills importable in one click
 - **GitHub / Portfolio Scanner** — scan public repos for languages and topics
 - **Writing Polish** — flags passive voice, filler words, and weak language with a quality score
