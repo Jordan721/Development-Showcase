@@ -184,7 +184,7 @@
   flex-direction: column-reverse;
   align-items: center;
   justify-content: flex-start;
-  padding: 12px 6px;
+  padding: 10px 6px;
   gap: 8px;
   border-bottom: none;
   height: 100%;
@@ -207,6 +207,12 @@
 
 .kanban-col--collapsed .kanban-col-body {
   display: none;
+}
+
+.kanban-col--collapsed.drag-over {
+  outline: 2px dashed var(--accent);
+  outline-offset: -4px;
+  background: rgba(0, 212, 170, 0.07);
 }
 
 .kanban-col-body {

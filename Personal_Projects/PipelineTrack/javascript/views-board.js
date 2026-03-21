@@ -563,6 +563,42 @@ function renderBoard() {
     });
   });
 
+  // Collapsed columns as drop zones
+  board.querySelectorAll('.kanban-col--collapsed').forEach(col => {
+    const targetStage = col.dataset.stage;
+
+    col.addEventListener('dragover', e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    });
+
+    col.addEventListener('dragenter', e => {
+      e.preventDefault();
+      col.classList.add('drag-over');
+    });
+
+    col.addEventListener('dragleave', e => {
+      if (!col.contains(e.relatedTarget)) col.classList.remove('drag-over');
+    });
+
+    col.addEventListener('drop', e => {
+      e.preventDefault();
+      col.classList.remove('drag-over');
+      if (!draggedJobId) return;
+      const job = state.jobs.find(j => j.id === draggedJobId);
+      if (job && job.stage !== targetStage) {
+        job.stage = targetStage;
+        if (targetStage === 'declined') job.declinedAt = new Date().toISOString();
+        save();
+        renderBoard();
+        toast(`${STAGE_EMOJIS[targetStage] || ''} Moved to ${STAGE_LABELS[targetStage]}.`, 'success');
+        if (targetStage === 'offer') setTimeout(launchConfetti, 200);
+        if (MILESTONE_STAGES.includes(targetStage)) setTimeout(() => openStageMilestoneModal(job, targetStage), 350);
+      }
+      draggedJobId = null;
+    });
+  });
+
   wireSearchAndFilters();
   if (typeof animateBoardCards === 'function') animateBoardCards();
 }

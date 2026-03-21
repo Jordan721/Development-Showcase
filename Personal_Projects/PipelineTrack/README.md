@@ -131,7 +131,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 - **Not Selected** — company didn't pick you; date auto-stamped on the card and detail view
 - **Declined** — you chose not to pursue; **Ghosted** — never heard back
 - **Four layout modes:**
-  - **Columns** — classic kanban with collapsible columns (state persists across refreshes)
+  - **Columns** — classic kanban with collapsible columns (state persists across refreshes); drag cards onto collapsed columns to move them — the column highlights with a dashed outline on hover to confirm the drop
   - **Priority Matrix** — 2×2 grid by fit score vs. urgency (Act Now 🔥, Plan Ahead ⭐, Quick Apply ⚡, Low Priority 📋); Act Now quadrant has a subtle green glow; long role names truncate cleanly
   - **Table** — sortable spreadsheet with sticky header, per-stage colored left-border accents, and color-coded stage dropdowns
   - **Timeline** — Gantt-style bars color-coded by stage with a stage legend and color dot per row label
