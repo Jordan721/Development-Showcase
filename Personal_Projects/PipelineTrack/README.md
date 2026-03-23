@@ -57,7 +57,6 @@ All data is saved to your browser's localStorage — nothing is sent anywhere. U
 ![localStorage](https://img.shields.io/badge/Storage-localStorage-34d399?style=flat-square)
 ![PDF.js](https://img.shields.io/badge/PDF.js-v3.11.174-red?style=flat-square)
 ![Mammoth.js](https://img.shields.io/badge/Mammoth.js-v1.6.0-orange?style=flat-square)
-![Flatpickr](https://img.shields.io/badge/Flatpickr-Date%20Picker-f59e0b?style=flat-square)
 ![GitHub API](https://img.shields.io/badge/GitHub-REST%20API-181717?style=flat-square&logo=github&logoColor=white)
 ![Google Fonts](https://img.shields.io/badge/Font-Inter-4285F4?style=flat-square&logo=google&logoColor=white)
 
@@ -278,7 +277,6 @@ All three show an amber **✦ Auto-filled** badge so you always know the app set
 - **Back to Top** — ↑ button fades in when you scroll past 300px; click to smooth-scroll back
 - **Skeleton flash** — views pulse once on switch to signal they're loading
 - **Empty state illustrations** — inline SVG art for all empty states (no jobs, no results, no timeline entries, etc.)
-- **Custom Date Picker** — all date fields use Flatpickr for a styled calendar that matches the app theme; selected dates display as `Mar 20, 2025` and are stored as `YYYY-MM-DD`; "Pick a date" placeholder shown when empty
 - **Custom Select Dropdowns** — all dropdowns use a custom chevron arrow, hover border, and consistent font — no browser default styling
 - **Linked Contacts** — contacts tied to a job appear inline in the job detail modal
 - **Thank-You Tracking** — check "Thank-you sent" in milestone modals; ✓ shows in the Application Timeline

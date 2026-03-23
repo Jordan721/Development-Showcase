@@ -878,43 +878,10 @@ function maybeShowWeeklyRecap() {
   setTimeout(() => openModal('modal-weekly-recap'), 1200);
 }
 
-function initFlatpickr() {
-  if (typeof flatpickr === 'undefined') return;
-
-  document.querySelectorAll('input[type="date"]').forEach(el => {
-    if (el._flatpickr) return;
-    flatpickr(el, {
-      dateFormat: 'Y-m-d',
-      allowInput: true,
-      disableMobile: false,
-    });
-  });
-
-  // When a modal opens, views-board.js has already set .value on date inputs.
-  // Flatpickr doesn't know about those programmatic sets, so we sync them in.
-  ['modal-job', 'modal-event', 'modal-contact'].forEach(id => {
-    const modal = document.getElementById(id);
-    if (!modal) return;
-    new MutationObserver(() => {
-      if (!modal.classList.contains('open')) return;
-      setTimeout(() => {
-        modal.querySelectorAll('input[type="date"]').forEach(el => {
-          const fp = el._flatpickr;
-          if (!fp) return;
-          const val = el.value;
-          if (val) fp.setDate(val, false);
-          else fp.clear();
-        });
-      }, 30);
-    }).observe(modal, { attributes: true, attributeFilter: ['class'] });
-  });
-}
-
 function initUXEnhancements() {
   initCommandPalette();
   initKeyboardShortcuts();
   initBackToTop();
-  initFlatpickr();
   setTimeout(maybeShowWeeklyRecap, 1500);
   initFitTooltip();
   initCardPreview();
