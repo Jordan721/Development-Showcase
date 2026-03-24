@@ -255,7 +255,8 @@
                     </button>
                     <button class="layout-btn" id="layout-btn-map" data-layout="map" title="Map view">
                         <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true">
-                            <path d="M7 0C4.79 0 3 1.79 3 4c0 3 4 9 4 9s4-6 4-9c0-2.21-1.79-4-4-4zm0 5.5A1.5 1.5 0 1 1 7 2.5a1.5 1.5 0 0 1 0 3z"/>
+                            <path
+                                d="M7 0C4.79 0 3 1.79 3 4c0 3 4 9 4 9s4-6 4-9c0-2.21-1.79-4-4-4zm0 5.5A1.5 1.5 0 1 1 7 2.5a1.5 1.5 0 0 1 0 3z" />
                         </svg>
                     </button>
                 </div>
@@ -268,13 +269,14 @@
                 <span class="board-drag-hint" id="board-drag-hint">⠿ Drag cards between columns to move stages</span>
                 <button class="btn-secondary" id="board-compare-btn"
                     style="margin-left:auto;padding:5px 12px;font-size:12px">⊜ Compare Jobs</button>
-                <button class="btn-secondary" id="board-select-btn"
-                    style="padding:5px 12px;font-size:12px">☐ Select</button>
+                <button class="btn-secondary" id="board-select-btn" style="padding:5px 12px;font-size:12px">☐
+                    Select</button>
             </div>
             <!-- Bulk action bar -->
             <div class="bulk-bar" id="bulk-bar" style="display:none">
                 <span class="bulk-bar-count" id="bulk-bar-count">0 selected</span>
-                <button class="btn-ghost" id="bulk-select-all-btn" style="font-size:12px;padding:5px 10px">Select All</button>
+                <button class="btn-ghost" id="bulk-select-all-btn" style="font-size:12px;padding:5px 10px">Select
+                    All</button>
                 <select class="select-input bulk-stage-select" id="bulk-stage-select">
                     <option value="">Move to stage…</option>
                     <option value="saved">Saved</option>
@@ -297,7 +299,8 @@
             <!-- Search + filter bar -->
             <div class="board-search-bar">
                 <div class="board-search-wrap">
-                    <input type="text" class="text-input" id="board-search" placeholder="Search role, company…" autocomplete="off" />
+                    <input type="text" class="text-input" id="board-search" placeholder="Search role, company…"
+                        autocomplete="off" />
                 </div>
                 <div class="board-filter-chips" id="board-filter-chips">
                     <select class="select-input board-filter-select" id="board-filter-stage">
@@ -686,7 +689,8 @@
             <!-- Resume Vault -->
             <div class="resume-section" data-card="vault">
                 <div class="resume-section-title">Resume Vault</div>
-                <p class="resume-section-desc">Store and manage your resume versions. Upload once, view or download anytime.</p>
+                <p class="resume-section-desc">Store and manage your resume versions. Upload once, view or download
+                    anytime.</p>
                 <div class="vault-upload-row">
                     <input type="file" id="vault-file-input" accept=".pdf,.docx,.txt" style="display:none" />
                     <button class="btn-primary" id="vault-upload-btn">+ Upload Resume</button>
@@ -1517,7 +1521,8 @@
                     <span class="job-picker-title">Jump to Job</span>
                     <div class="job-picker-title-right">
                         <span class="job-picker-count" id="job-picker-count"></span>
-                        <button class="modal-close job-picker-close" data-close="modal-job-picker" title="Close">✕</button>
+                        <button class="modal-close job-picker-close" data-close="modal-job-picker"
+                            title="Close">✕</button>
                     </div>
                 </div>
                 <div class="job-picker-search-wrap">
@@ -1631,22 +1636,43 @@
                             <div class="ob-shortcut"><kbd>Ctrl+Shift+K</kbd> Command palette</div>
                             <div class="ob-shortcut"><kbd>N</kbd> Add a job</div>
                             <div class="ob-shortcut"><kbd>E</kbd> Search &amp; edit a job</div>
-                            <div class="ob-shortcut"><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> Switch tabs in job modal</div>
+                            <div class="ob-shortcut"><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> Switch tabs in job modal
+                            </div>
                             <div class="ob-shortcut"><kbd>/</kbd> Focus search</div>
                             <div class="ob-shortcut"><kbd>Esc</kbd> Close modal</div>
                         </div>
                         <div class="ob-features">
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Pin jobs</strong> — 📍 pin any card to keep it at the top; deadline urgency glows red/orange/yellow</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Bulk actions</strong> — ☐ Select mode to move stage, export, or delete multiple jobs at once</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Map view</strong> — pins every job on an interactive map, color-coded by stage; click a pin to open the job</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Weekly Recap</strong> — Monday morning summary of last week's applications, fit scores &amp; pipeline</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Resume Hub</strong> — store &amp; reorder resumes; click Review for a scored analysis covering sections, writing, action verbs, metrics &amp; skills gap; link resumes to jobs</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Learning Hub</strong> — courses matched to your skill gaps</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Analytics</strong> — KPIs, funnel &amp; charts; print with ⌘P</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Compare Jobs</strong> — select 2–3 jobs for a side-by-side view</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Dashboard insights</strong> — funnel, velocity, deadlines &amp; health warnings</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Skill shortcuts</strong> — tap <strong style="color:var(--green)">+</strong> on a gap to add it instantly; tap <strong style="color:var(--red)">−</strong> on a match to move it back</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Undo</strong> — 5-second undo toast after deleting a job or skill</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Pin jobs</strong>
+                                    — 📍 pin any card to keep it at the top; deadline urgency glows
+                                    red/orange/yellow</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Bulk
+                                        actions</strong> — ☐ Select mode to move stage, export, or delete multiple jobs
+                                    at once</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Map view</strong>
+                                    — pins every job on an interactive map, color-coded by stage; click a pin to open
+                                    the job</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Weekly
+                                        Recap</strong> — Monday morning summary of last week's applications, fit scores
+                                    &amp; pipeline</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Resume
+                                        Hub</strong> — store &amp; reorder resumes; click Review for a scored analysis
+                                    covering sections, writing, action verbs, metrics &amp; skills gap; link resumes to
+                                    jobs</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Learning
+                                        Hub</strong> — courses matched to your skill gaps</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Analytics</strong>
+                                    — KPIs, funnel &amp; charts; print with ⌘P</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Compare
+                                        Jobs</strong> — select 2–3 jobs for a side-by-side view</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Dashboard
+                                        insights</strong> — funnel, velocity, deadlines &amp; health warnings</span>
+                            </div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Skill
+                                        shortcuts</strong> — tap <strong style="color:var(--green)">+</strong> on a gap
+                                    to add it instantly; tap <strong style="color:var(--red)">−</strong> on a match to
+                                    move it back</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Undo</strong> —
+                                    5-second undo toast after deleting a job or skill</span></div>
                         </div>
                         <p class="onboarding-tip">Hover any job card for a quick preview · Hover any fit badge for a
                             skill breakdown · Reopen this guide with <strong>?</strong></p>
@@ -1740,7 +1766,7 @@
     <script src="javascript/app.js"></script>
     <script src="javascript/features.js"></script>
     <script src="javascript/onboarding.js"></script>
-<script src="javascript/ux-enhancements.js"></script>
+    <script src="javascript/ux-enhancements.js"></script>
     <script src="javascript/views-map.js"></script>
 </body>
 
