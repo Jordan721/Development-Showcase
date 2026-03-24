@@ -1531,6 +1531,20 @@
         </div>
     </div>
 
+    <!-- ── RESUME REVIEW MODAL ───────────────────────────── -->
+    <div class="modal-overlay" id="modal-resume-review" aria-hidden="true">
+        <div class="modal" style="max-width:620px">
+            <div class="modal-header">
+                <h2 class="modal-title" id="review-modal-title">Resume Review</h2>
+                <button class="modal-close" data-close="modal-resume-review">✕</button>
+            </div>
+            <div class="modal-body" id="review-modal-body" style="padding:20px 24px 8px"></div>
+            <div class="modal-footer">
+                <button class="btn-ghost" data-close="modal-resume-review">Close</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ── WEEKLY RECAP MODAL ─────────────────────────────── -->
     <div class="modal-overlay" id="modal-weekly-recap" aria-hidden="true">
         <div class="modal" style="max-width:480px">
@@ -1624,21 +1638,15 @@
                         <div class="ob-features">
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Pin jobs</strong> — 📍 pin any card to keep it at the top; deadline urgency glows red/orange/yellow</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Bulk actions</strong> — ☐ Select mode to move stage, export, or delete multiple jobs at once</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Map view</strong> — 5th board layout; pins every job location on an interactive map, color-coded by stage; supports multiple locations per job; click a pin to open the job</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Map view</strong> — pins every job on an interactive map, color-coded by stage; click a pin to open the job</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Weekly Recap</strong> — Monday morning summary of last week's applications, fit scores &amp; pipeline</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Resume Hub</strong> — store &amp; reorder resumes; click Review for a scored analysis covering sections, writing, action verbs, metrics &amp; skills gap; link resumes to jobs</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Learning Hub</strong> — courses matched to your skill gaps</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Analytics</strong> — KPIs, funnel &amp; charts; print with ⌘P</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Compare Jobs</strong> — select 2–3 jobs for a side-by-side view</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Dashboard insights</strong> — funnel, velocity, deadlines &amp; health warnings</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Skill shortcuts</strong> — tap <strong style="color:var(--green)">+</strong> on a gap to add it instantly; tap <strong style="color:var(--red)">−</strong> on a match to move it back</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Undo</strong> — 5-second undo toast after deleting a job or skill</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Resume Vault</strong> — upload &amp; store resume versions; view, download, rename, or delete anytime; link a resume to any job or bulk-assign one resume to many jobs at once</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Learning
-                                        Hub</strong> — courses matched to your skill gaps</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Analytics</strong>
-                                    — KPIs, funnel &amp; charts; print with ⌘P</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Compare
-                                        Jobs</strong> — select 2–3 jobs for side-by-side view</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Dashboard
-                                        insights</strong> — funnel, velocity, deadlines &amp; health warnings</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Skill gap
-                                        shortcuts</strong> — tap <strong style="color:var(--green)">+</strong> on a gap to add it to your profile instantly; tap <strong style="color:var(--red)">−</strong> on a matched skill to move it back to gaps</span></div>
-                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Skill search</strong> — search your profile skills; add or learn missing ones instantly</span></div>
                         </div>
                         <p class="onboarding-tip">Hover any job card for a quick preview · Hover any fit badge for a
                             skill breakdown · Reopen this guide with <strong>?</strong></p>

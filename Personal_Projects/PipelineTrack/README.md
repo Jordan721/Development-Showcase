@@ -219,7 +219,8 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 <details>
 <summary><strong>📄 Resume Hub</strong></summary>
 
-- **Resume Vault** — upload PDF, .docx, or .txt resumes; view in-browser, download, rename, or delete anytime; persists across sessions and included in JSON backups
+- **Resume Vault** — upload PDF, .docx, or .txt resumes; view in-browser, download, rename, or delete anytime; drag the ⠿ handle to reorder; persists across sessions and included in JSON backups
+- **Resume Review** — click Review on any vaulted resume to get a scored analysis (0–100) across sections, writing quality, action verbs, quantifiable achievements, resume length, and skills gap vs. your tracked jobs; each finding has an "I'll fix it" button to track what you've addressed
 - **Resume Parser** — PDF, .docx, plain text, or paste; detected skills importable in one click
 - **GitHub / Portfolio Scanner** — scan public repos for languages and topics
 - **Writing Polish** — flags passive voice, filler words, and weak language with a quality score
