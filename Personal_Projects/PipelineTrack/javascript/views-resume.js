@@ -86,6 +86,7 @@ function renderLearning() {
    ══════════════════════════════════════════════════════════ */
 function renderResume() {
   renderResumeVault();
+  renderCoverLetterVault();
   renderResources();
 }
 
@@ -214,12 +215,14 @@ function renderResumeVault() {
 
   uploadBtn.onclick = () => fileInput.click();
 
-  fileInput.onchange = () => {
-    const file = fileInput.files[0];
-    if (!file) return;
+  function addResumeFile(file) {
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (!['pdf', 'docx', 'txt'].includes(ext)) {
+      toast(`"${file.name}" — unsupported type. Use PDF, DOCX, or TXT.`, 'error');
+      return;
+    }
     const reader = new FileReader();
     reader.onload = e => {
-      const ext = file.name.split('.').pop().toLowerCase();
       state.resumes.unshift({
         id: Date.now().toString(),
         name: file.name,
@@ -230,11 +233,193 @@ function renderResumeVault() {
       });
       save();
       renderList();
-      toast('Resume saved to vault.', 'success');
+      toast(`"${file.name}" saved to Resume Vault.`, 'success');
     };
     reader.readAsDataURL(file);
+  }
+
+  fileInput.onchange = () => {
+    if (fileInput.files[0]) addResumeFile(fileInput.files[0]);
     fileInput.value = '';
   };
+
+  const dropZone = document.getElementById('vault-drop-zone');
+  if (dropZone) {
+    dropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropZone.classList.add('drag-active');
+    });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-active'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-active');
+      [...e.dataTransfer.files].forEach(file => addResumeFile(file));
+    });
+  }
+
+  renderList();
+}
+
+/* ══════════════════════════════════════════════════════════
+   COVER LETTER VAULT
+   ══════════════════════════════════════════════════════════ */
+function renderCoverLetterVault() {
+  const list = document.getElementById('cover-vault-list');
+  const uploadBtn = document.getElementById('cover-vault-upload-btn');
+  const fileInput = document.getElementById('cover-vault-file-input');
+  if (!list || !uploadBtn || !fileInput) return;
+
+  function renderList() {
+    if (!state.coverLetters || state.coverLetters.length === 0) {
+      list.innerHTML = '<div class="vault-empty">No cover letters uploaded yet. Click <strong>+ Upload Cover Letter</strong> to add one.</div>';
+      return;
+    }
+    list.innerHTML = state.coverLetters.map(r => {
+      const icon = r.fileType === 'pdf' ? '📄' : r.fileType === 'docx' ? '📝' : '📃';
+      const kb = (r.size / 1024).toFixed(1);
+      const date = new Date(r.uploadedAt).toLocaleDateString();
+      return `
+        <div class="vault-item" draggable="true" data-id="${r.id}">
+          <div class="vault-drag-handle" title="Drag to reorder">⠿</div>
+          <div class="vault-item-icon">${icon}</div>
+          <div class="vault-item-info">
+            <div class="vault-item-name">${r.name}</div>
+            <div class="vault-item-meta">${r.fileType.toUpperCase()} · ${kb} KB · ${date}</div>
+          </div>
+          <div class="vault-item-actions">
+            <button class="btn-secondary cover-vault-view-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">View</button>
+            <button class="btn-secondary cover-vault-dl-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Download</button>
+            <button class="btn-secondary cover-vault-rename-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Rename</button>
+            <button class="vault-del-btn" data-id="${r.id}" title="Delete">×</button>
+          </div>
+        </div>`;
+    }).join('');
+
+    list.querySelectorAll('.cover-vault-view-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const r = state.coverLetters.find(x => x.id === btn.dataset.id);
+        if (!r) return;
+        const [meta, b64] = r.dataUrl.split(',');
+        const mime = meta.match(/:(.*?);/)[1];
+        const bytes = atob(b64);
+        const arr = new Uint8Array(bytes.length);
+        for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+        const blob = new Blob([arr], {
+          type: mime
+        });
+        window.open(URL.createObjectURL(blob), '_blank');
+      });
+    });
+
+    list.querySelectorAll('.cover-vault-dl-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const r = state.coverLetters.find(x => x.id === btn.dataset.id);
+        if (!r) return;
+        const a = document.createElement('a');
+        a.href = r.dataUrl;
+        a.download = r.name;
+        a.click();
+      });
+    });
+
+    list.querySelectorAll('.cover-vault-rename-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const r = state.coverLetters.find(x => x.id === btn.dataset.id);
+        if (!r) return;
+        const newName = prompt('Rename cover letter:', r.name);
+        if (!newName || !newName.trim() || newName.trim() === r.name) return;
+        r.name = newName.trim();
+        save();
+        renderList();
+      });
+    });
+
+    list.querySelectorAll('.vault-del-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!confirm('Remove this cover letter from the vault?')) return;
+        state.coverLetters = state.coverLetters.filter(x => x.id !== btn.dataset.id);
+        save();
+        renderList();
+        toast('Cover letter removed.', '');
+      });
+    });
+
+    // Drag-to-reorder
+    let dragId = null;
+    list.querySelectorAll('.vault-item').forEach(item => {
+      item.addEventListener('dragstart', e => {
+        dragId = item.dataset.id;
+        item.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      item.addEventListener('dragend', () => {
+        item.classList.remove('dragging');
+        list.querySelectorAll('.vault-item').forEach(i => i.classList.remove('drag-over'));
+      });
+      item.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        list.querySelectorAll('.vault-item').forEach(i => i.classList.remove('drag-over'));
+        if (item.dataset.id !== dragId) item.classList.add('drag-over');
+      });
+      item.addEventListener('drop', e => {
+        e.preventDefault();
+        const targetId = item.dataset.id;
+        if (!dragId || dragId === targetId) return;
+        const fromIdx = state.coverLetters.findIndex(r => r.id === dragId);
+        const toIdx = state.coverLetters.findIndex(r => r.id === targetId);
+        if (fromIdx === -1 || toIdx === -1) return;
+        const [moved] = state.coverLetters.splice(fromIdx, 1);
+        state.coverLetters.splice(toIdx, 0, moved);
+        save();
+        renderList();
+      });
+    });
+  }
+
+  uploadBtn.onclick = () => fileInput.click();
+
+  function addCoverLetterFile(file) {
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (!['pdf', 'docx', 'txt'].includes(ext)) {
+      toast(`"${file.name}" — unsupported type. Use PDF, DOCX, or TXT.`, 'error');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = e => {
+      state.coverLetters.unshift({
+        id: Date.now().toString(),
+        name: file.name,
+        fileType: ext,
+        size: file.size,
+        uploadedAt: new Date().toISOString(),
+        dataUrl: e.target.result
+      });
+      save();
+      renderList();
+      toast(`"${file.name}" saved to Cover Letter Vault.`, 'success');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  fileInput.onchange = () => {
+    if (fileInput.files[0]) addCoverLetterFile(fileInput.files[0]);
+    fileInput.value = '';
+  };
+
+  const dropZone = document.getElementById('cover-vault-drop-zone');
+  if (dropZone) {
+    dropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropZone.classList.add('drag-active');
+    });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-active'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-active');
+      [...e.dataTransfer.files].forEach(file => addCoverLetterFile(file));
+    });
+  }
 
   renderList();
 }
@@ -584,146 +769,148 @@ function checkWriting() {
 function buildFitRow(j, pct, hits, total, weak) {
   const color = weak ? 'var(--red)' : pct >= 70 ? 'var(--green)' : pct >= 45 ? 'var(--yellow)' : 'var(--red)';
   const opacity = weak ? ' style="opacity:.75"' : '';
-  return '<div class="review-job-fit-row"' + opacity + '>'
-    + '<div class="review-job-fit-info">'
-    + '<div class="review-job-fit-name">' + escHtml(j.role)
-    + ' <span style="font-weight:400;color:var(--text-muted)">@ ' + escHtml(j.company) + '</span></div>'
-    + '<div class="review-job-fit-bar-wrap"><div class="review-job-fit-bar" style="width:' + pct + '%;background:' + color + '"></div></div>'
-    + '</div>'
-    + '<span class="review-job-fit-pct" style="color:' + color + '">' + pct + '%</span>'
-    + '<span class="review-job-fit-detail">' + hits + '/' + total + ' skills</span>'
-    + '</div>';
+  return '<div class="review-job-fit-row"' + opacity + '>' +
+    '<div class="review-job-fit-info">' +
+    '<div class="review-job-fit-name">' + escHtml(j.role) +
+    ' <span style="font-weight:400;color:var(--text-muted)">@ ' + escHtml(j.company) + '</span></div>' +
+    '<div class="review-job-fit-bar-wrap"><div class="review-job-fit-bar" style="width:' + pct + '%;background:' + color + '"></div></div>' +
+    '</div>' +
+    '<span class="review-job-fit-pct" style="color:' + color + '">' + pct + '%</span>' +
+    '<span class="review-job-fit-detail">' + hits + '/' + total + ' skills</span>' +
+    '</div>';
 }
 
 function buildWeakerMatchesHtml(badFits, goodFits) {
   if (!badFits.length || badFits[0] === goodFits[goodFits.length - 1]) return '';
-  return '<div style="font-size:11px;font-weight:600;color:var(--text-muted);margin:10px 0 6px;text-transform:uppercase;letter-spacing:.05em">Weaker matches</div>'
-    + badFits.map(function(f) { return buildFitRow(f.j, f.pct, f.hits, f.total, true); }).join('');
+  return '<div style="font-size:11px;font-weight:600;color:var(--text-muted);margin:10px 0 6px;text-transform:uppercase;letter-spacing:.05em">Weaker matches</div>' +
+    badFits.map(function (f) {
+      return buildFitRow(f.j, f.pct, f.hits, f.total, true);
+    }).join('');
 }
 
 async function openResumeReview(resumeId) {
-const r = state.resumes.find(x => x.id === resumeId);
-if (!r) return;
+  const r = state.resumes.find(x => x.id === resumeId);
+  if (!r) return;
 
-document.getElementById('review-modal-title').textContent = r.name;
-const body = document.getElementById('review-modal-body');
-body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">Reading resume…</div>';
-openModal('modal-resume-review');
+  document.getElementById('review-modal-title').textContent = r.name;
+  const body = document.getElementById('review-modal-body');
+  body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">Reading resume…</div>';
+  openModal('modal-resume-review');
 
-let text = '';
-try {
-  const [meta, b64] = r.dataUrl.split(',');
-  const mime = meta.match(/:(.*?);/)[1];
-  const bytes = atob(b64);
-  const arr = new Uint8Array(bytes.length);
-  for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
-  const blob = new Blob([arr], {
-    type: mime
-  });
-  const file = new File([blob], r.name, {
-    type: mime
-  });
-  if (r.fileType === 'pdf') text = await readFilePDF(file);
-  else if (r.fileType === 'docx') text = await readFileDOCX(file);
-  else text = await readFileAsText(file);
-} catch {
-  body.innerHTML = '<div class="parse-placeholder">Could not read this file for review.</div>';
-  return;
-}
-
-const lower = text.toLowerCase();
-
-// ── 1. Section checklist ──────────────────────────────────
-const sections = [{
-    label: 'Contact info (email or phone)',
-    ok: /[\w.+-]+@[\w-]+\.\w+/.test(text) || /\(?\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}/.test(text),
-    fix: 'Add your email address and phone number at the top.'
-  },
-  {
-    label: 'Summary or Objective',
-    ok: /\b(summary|objective|about me|professional profile|overview)\b/i.test(text),
-    fix: 'Add a 2–3 sentence summary highlighting your experience and goals.'
-  },
-  {
-    label: 'Work Experience',
-    ok: /\b(experience|work history|employment|positions?\s+held)\b/i.test(text),
-    fix: 'Include a Work Experience section with your past roles.'
-  },
-  {
-    label: 'Education',
-    ok: /\b(education|degree|university|college|bachelor|master|b\.s\.|m\.s\.|phd|diploma|graduated)\b/i.test(text),
-    fix: 'Add an Education section with your degrees and institutions.'
-  },
-  {
-    label: 'Skills section',
-    ok: /\b(skills|technologies|tools|competencies|technical proficiency)\b/i.test(text),
-    fix: 'Add a Skills section listing your key tools and technologies.'
-  },
-];
-
-// ── 2. Writing quality ────────────────────────────────────
-const writingIssues = [];
-WRITING_RULES.forEach(rule => {
-  const matches = text.match(rule.pattern);
-  if (matches) {
-    const unique = [...new Set(matches.map(m => m.toLowerCase()))];
-    writingIssues.push({
-      label: rule.label,
-      matches: unique,
-      suggestion: rule.suggestion
+  let text = '';
+  try {
+    const [meta, b64] = r.dataUrl.split(',');
+    const mime = meta.match(/:(.*?);/)[1];
+    const bytes = atob(b64);
+    const arr = new Uint8Array(bytes.length);
+    for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+    const blob = new Blob([arr], {
+      type: mime
     });
+    const file = new File([blob], r.name, {
+      type: mime
+    });
+    if (r.fileType === 'pdf') text = await readFilePDF(file);
+    else if (r.fileType === 'docx') text = await readFileDOCX(file);
+    else text = await readFileAsText(file);
+  } catch {
+    body.innerHTML = '<div class="parse-placeholder">Could not read this file for review.</div>';
+    return;
   }
-});
-const usedStrong = STRONG_VERBS.filter(v => lower.includes(v));
 
-// ── 3. Quantifiable achievements ─────────────────────────
-const hasMetrics = /\d+\s*%|\$[\d,]+|\d+\+?\s*(people|users|clients|team members|engineers|projects|products)|increased|decreased|reduced|improved|grew|saved|generated/i.test(text);
+  const lower = text.toLowerCase();
 
-// ── 4. Length ─────────────────────────────────────────────
-const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
-const lengthOk = wordCount >= 300 && wordCount <= 900;
-const lengthMsg = wordCount < 300 ? 'Too short — aim for at least 300 words for a full resume.' :
-  wordCount > 900 ? 'Might be too long — consider trimming to under 900 words for a 1-page resume.' :
-  `${wordCount} words — good length.`;
+  // ── 1. Section checklist ──────────────────────────────────
+  const sections = [{
+      label: 'Contact info (email or phone)',
+      ok: /[\w.+-]+@[\w-]+\.\w+/.test(text) || /\(?\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}/.test(text),
+      fix: 'Add your email address and phone number at the top.'
+    },
+    {
+      label: 'Summary or Objective',
+      ok: /\b(summary|objective|about me|professional profile|overview)\b/i.test(text),
+      fix: 'Add a 2–3 sentence summary highlighting your experience and goals.'
+    },
+    {
+      label: 'Work Experience',
+      ok: /\b(experience|work history|employment|positions?\s+held)\b/i.test(text),
+      fix: 'Include a Work Experience section with your past roles.'
+    },
+    {
+      label: 'Education',
+      ok: /\b(education|degree|university|college|bachelor|master|b\.s\.|m\.s\.|phd|diploma|graduated)\b/i.test(text),
+      fix: 'Add an Education section with your degrees and institutions.'
+    },
+    {
+      label: 'Skills section',
+      ok: /\b(skills|technologies|tools|competencies|technical proficiency)\b/i.test(text),
+      fix: 'Add a Skills section listing your key tools and technologies.'
+    },
+  ];
 
-// ── 5. Skills alignment vs. tracked jobs ─────────────────
-const resumeSkills = [...KNOWN_SKILLS].filter(s => lower.includes(s));
-const missingFromJobs = new Set();
-state.jobs.forEach(j => (j.missing || []).forEach(s => missingFromJobs.add(s)));
-const missingFromResume = [...missingFromJobs].filter(s => !lower.includes(s)).slice(0, 10);
+  // ── 2. Writing quality ────────────────────────────────────
+  const writingIssues = [];
+  WRITING_RULES.forEach(rule => {
+    const matches = text.match(rule.pattern);
+    if (matches) {
+      const unique = [...new Set(matches.map(m => m.toLowerCase()))];
+      writingIssues.push({
+        label: rule.label,
+        matches: unique,
+        suggestion: rule.suggestion
+      });
+    }
+  });
+  const usedStrong = STRONG_VERBS.filter(v => lower.includes(v));
 
-// ── 6. Per-job fit ────────────────────────────────────────
-const jobFits = state.jobs
-  .map(j => {
-    const required = [...new Set([...(j.matched || []), ...(j.missing || [])])];
-    if (required.length === 0) return null;
-    const hits = required.filter(s => resumeSkills.includes(s));
-    return {
-      j,
-      pct: Math.round(hits.length / required.length * 100),
-      hits: hits.length,
-      total: required.length
-    };
-  })
-  .filter(Boolean)
-  .sort((a, b) => b.pct - a.pct);
-const goodFits = jobFits.slice(0, 3);
-const badFits = jobFits.slice(-3).reverse().filter(x => x.pct < 60);
+  // ── 3. Quantifiable achievements ─────────────────────────
+  const hasMetrics = /\d+\s*%|\$[\d,]+|\d+\+?\s*(people|users|clients|team members|engineers|projects|products)|increased|decreased|reduced|improved|grew|saved|generated/i.test(text);
 
-// ── Score ─────────────────────────────────────────────────
-let score = 100;
-sections.forEach(s => {
-  if (!s.ok) score -= 10;
-});
-score -= writingIssues.length * 8;
-if (!hasMetrics) score -= 10;
-if (!lengthOk) score -= 5;
-if (usedStrong.length === 0) score -= 7;
-score = Math.max(0, Math.min(100, score));
-const scoreColor = score >= 80 ? 'var(--green)' : score >= 55 ? 'var(--yellow)' : 'var(--red)';
+  // ── 4. Length ─────────────────────────────────────────────
+  const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
+  const lengthOk = wordCount >= 300 && wordCount <= 900;
+  const lengthMsg = wordCount < 300 ? 'Too short — aim for at least 300 words for a full resume.' :
+    wordCount > 900 ? 'Might be too long — consider trimming to under 900 words for a 1-page resume.' :
+    `${wordCount} words — good length.`;
 
-// ── Render ────────────────────────────────────────────────
-body.innerHTML = `
+  // ── 5. Skills alignment vs. tracked jobs ─────────────────
+  const resumeSkills = [...KNOWN_SKILLS].filter(s => lower.includes(s));
+  const missingFromJobs = new Set();
+  state.jobs.forEach(j => (j.missing || []).forEach(s => missingFromJobs.add(s)));
+  const missingFromResume = [...missingFromJobs].filter(s => !lower.includes(s)).slice(0, 10);
+
+  // ── 6. Per-job fit ────────────────────────────────────────
+  const jobFits = state.jobs
+    .map(j => {
+      const required = [...new Set([...(j.matched || []), ...(j.missing || [])])];
+      if (required.length === 0) return null;
+      const hits = required.filter(s => resumeSkills.includes(s));
+      return {
+        j,
+        pct: Math.round(hits.length / required.length * 100),
+        hits: hits.length,
+        total: required.length
+      };
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.pct - a.pct);
+  const goodFits = jobFits.slice(0, 3);
+  const badFits = jobFits.slice(-3).reverse().filter(x => x.pct < 60);
+
+  // ── Score ─────────────────────────────────────────────────
+  let score = 100;
+  sections.forEach(s => {
+    if (!s.ok) score -= 10;
+  });
+  score -= writingIssues.length * 8;
+  if (!hasMetrics) score -= 10;
+  if (!lengthOk) score -= 5;
+  if (usedStrong.length === 0) score -= 7;
+  score = Math.max(0, Math.min(100, score));
+  const scoreColor = score >= 80 ? 'var(--green)' : score >= 55 ? 'var(--yellow)' : 'var(--red)';
+
+  // ── Render ────────────────────────────────────────────────
+  body.innerHTML = `
     <div class="review-score-bar">
       <div>
         <div class="review-score-num" style="color:${scoreColor}">${score}<span style="font-size:14px;font-weight:500">/100</span></div>

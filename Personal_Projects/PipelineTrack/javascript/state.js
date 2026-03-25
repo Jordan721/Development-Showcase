@@ -56,6 +56,7 @@ let state = {
   events: [],
   templates: [],
   resumes: [],
+  coverLetters: [],
   activeView: 'dashboard',
   activeJobId: null,
 };
@@ -72,6 +73,7 @@ function save() {
   localStorage.setItem('pt_events', JSON.stringify(state.events));
   localStorage.setItem('pt_templates', JSON.stringify(state.templates));
   localStorage.setItem('pt_resumes', JSON.stringify(state.resumes));
+  localStorage.setItem('pt_cover_letters', JSON.stringify(state.coverLetters));
 }
 
 function load() {
@@ -136,6 +138,11 @@ function load() {
   } catch {
     state.resumes = [];
   }
+  try {
+    state.coverLetters = JSON.parse(localStorage.getItem('pt_cover_letters')) || [];
+  } catch {
+    state.coverLetters = [];
+  }
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -153,6 +160,7 @@ function exportData() {
     events: state.events,
     templates: state.templates,
     resumes: state.resumes,
+    coverLetters: state.coverLetters,
   };
   const blob = new Blob([JSON.stringify(backup, null, 2)], {
     type: 'application/json'
@@ -464,6 +472,7 @@ function importData(file) {
         state.events = mergeById(state.events, data.events);
         state.templates = mergeById(state.templates, data.templates);
         state.resumes = mergeById(state.resumes, data.resumes);
+        state.coverLetters = mergeById(state.coverLetters, data.coverLetters || []);
         if (Array.isArray(data.savedCourses)) {
           const courseSet = new Set(state.savedCourses);
           data.savedCourses.forEach(c => courseSet.add(c));
