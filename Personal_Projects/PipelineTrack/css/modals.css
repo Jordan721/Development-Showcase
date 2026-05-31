@@ -1785,8 +1785,37 @@
 }
 
 /* ── Resume Vault ──────────────────────────────────────── */
+.vault-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
 .vault-upload-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
   margin-bottom: 10px;
+}
+
+.vault-clear-all-btn {
+  color: var(--red);
+  border-color: rgba(255, 77, 109, .35);
+}
+
+.vault-clear-all-btn:hover:not(:disabled) {
+  background: rgba(255, 77, 109, .12);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.vault-clear-all-btn:disabled {
+  cursor: not-allowed;
+  opacity: .7;
 }
 
 .vault-drop-zone {
@@ -1886,23 +1915,6 @@
   align-items: center;
   gap: 6px;
   flex-shrink: 0;
-}
-
-.vault-del-btn {
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  font-size: 18px;
-  line-height: 1;
-  cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: background .15s, color .15s;
-}
-
-.vault-del-btn:hover {
-  background: rgba(255, 77, 109, .15);
-  color: var(--red);
 }
 
 .resume-section[data-card] {

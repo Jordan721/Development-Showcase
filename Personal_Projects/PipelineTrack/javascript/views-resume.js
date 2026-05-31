@@ -96,10 +96,12 @@ function renderResume() {
 function renderResumeVault() {
   const list = document.getElementById('vault-list');
   const uploadBtn = document.getElementById('vault-upload-btn');
+  const clearBtn = document.getElementById('vault-clear-all-btn');
   const fileInput = document.getElementById('vault-file-input');
   if (!list || !uploadBtn || !fileInput) return;
 
   function renderList() {
+    if (clearBtn) clearBtn.disabled = !state.resumes || state.resumes.length === 0;
     if (!state.resumes || state.resumes.length === 0) {
       list.innerHTML = '<div class="vault-empty">No resumes uploaded yet. Click <strong>+ Upload Resume</strong> to add one.</div>';
       return;
@@ -121,7 +123,6 @@ function renderResumeVault() {
             <button class="btn-secondary vault-view-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">View</button>
             <button class="btn-secondary vault-dl-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Download</button>
             <button class="btn-secondary vault-rename-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Rename</button>
-            <button class="vault-del-btn" data-id="${r.id}" title="Delete">×</button>
           </div>
         </div>`;
     }).join('');
@@ -170,16 +171,6 @@ function renderResumeVault() {
       });
     });
 
-    list.querySelectorAll('.vault-del-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (!confirm('Remove this resume from the vault?')) return;
-        state.resumes = state.resumes.filter(x => x.id !== btn.dataset.id);
-        save();
-        renderList();
-        toast('Resume removed.', '');
-      });
-    });
-
     // Drag-to-reorder
     let dragId = null;
     list.querySelectorAll('.vault-item').forEach(item => {
@@ -214,6 +205,20 @@ function renderResumeVault() {
   }
 
   uploadBtn.onclick = () => fileInput.click();
+  if (clearBtn) {
+    clearBtn.onclick = () => {
+      const count = state.resumes ? state.resumes.length : 0;
+      if (count === 0) return;
+      if (!confirm(`Clear all ${count} resume${count !== 1 ? 's' : ''} from the vault?`)) return;
+      state.resumes = [];
+      state.jobs.forEach(job => {
+        if (job.resumeVaultId) job.resumeVaultId = '';
+      });
+      save();
+      renderList();
+      toast('Resume Vault cleared.', '');
+    };
+  }
 
   function addResumeFile(file) {
     const ext = file.name.split('.').pop().toLowerCase();
@@ -266,10 +271,12 @@ function renderResumeVault() {
 function renderCoverLetterVault() {
   const list = document.getElementById('cover-vault-list');
   const uploadBtn = document.getElementById('cover-vault-upload-btn');
+  const clearBtn = document.getElementById('cover-vault-clear-all-btn');
   const fileInput = document.getElementById('cover-vault-file-input');
   if (!list || !uploadBtn || !fileInput) return;
 
   function renderList() {
+    if (clearBtn) clearBtn.disabled = !state.coverLetters || state.coverLetters.length === 0;
     if (!state.coverLetters || state.coverLetters.length === 0) {
       list.innerHTML = '<div class="vault-empty">No cover letters uploaded yet. Click <strong>+ Upload Cover Letter</strong> to add one.</div>';
       return;
@@ -290,7 +297,6 @@ function renderCoverLetterVault() {
             <button class="btn-secondary cover-vault-view-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">View</button>
             <button class="btn-secondary cover-vault-dl-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Download</button>
             <button class="btn-secondary cover-vault-rename-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Rename</button>
-            <button class="vault-del-btn" data-id="${r.id}" title="Delete">×</button>
           </div>
         </div>`;
     }).join('');
@@ -334,16 +340,6 @@ function renderCoverLetterVault() {
       });
     });
 
-    list.querySelectorAll('.vault-del-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        if (!confirm('Remove this cover letter from the vault?')) return;
-        state.coverLetters = state.coverLetters.filter(x => x.id !== btn.dataset.id);
-        save();
-        renderList();
-        toast('Cover letter removed.', '');
-      });
-    });
-
     // Drag-to-reorder
     let dragId = null;
     list.querySelectorAll('.vault-item').forEach(item => {
@@ -378,6 +374,17 @@ function renderCoverLetterVault() {
   }
 
   uploadBtn.onclick = () => fileInput.click();
+  if (clearBtn) {
+    clearBtn.onclick = () => {
+      const count = state.coverLetters ? state.coverLetters.length : 0;
+      if (count === 0) return;
+      if (!confirm(`Clear all ${count} cover letter${count !== 1 ? 's' : ''} from the vault?`)) return;
+      state.coverLetters = [];
+      save();
+      renderList();
+      toast('Cover Letter Vault cleared.', '');
+    };
+  }
 
   function addCoverLetterFile(file) {
     const ext = file.name.split('.').pop().toLowerCase();
