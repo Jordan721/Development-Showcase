@@ -2,7 +2,7 @@
 
 /* ══════════════════════════════════════════════════════════
    INDUSTRY SKILLS — extends KNOWN_SKILLS from data.js
-   Covers: Business Operations, Financial Operations,
+   Covers: Business Operations, IT Operations, Financial Operations,
            Project Management, Banking, Customer Success
    ══════════════════════════════════════════════════════════ */
 
@@ -15,6 +15,18 @@
   'logistics', 'continuous improvement', 'erp', 'operational efficiency',
   'cross-functional', 'business operations', 'performance management',
   'reporting', 'data reporting', 'executive reporting',
+
+  // IT Operations / Computer Operator
+  'computer operator', 'computer operations', 'it operations',
+  'data center operations', 'data center', 'mainframe', 'z/os', 'as400',
+  'ibm i', 'batch processing', 'batch jobs', 'job scheduling',
+  'system monitoring', 'network monitoring', 'console monitoring',
+  'incident response', 'incident management', 'troubleshooting',
+  'service desk', 'help desk', 'technical support', 'ticketing',
+  'active directory', 'windows server', 'unix', 'shell scripting',
+  'backup and recovery', 'backups', 'disaster recovery',
+  'access control', 'change control', 'runbooks', 'sop',
+  'shift handoff', 'production support', 'operations support',
 
   // ── Financial Operations ─────────────────────────────────
   'accounts payable', 'accounts receivable', 'financial analysis',

@@ -40,6 +40,10 @@ const DEPT_MAP = [{
     keywords: ['legal', 'counsel', 'compliance', 'attorney', 'lawyer', 'paralegal', 'contract', 'regulatory']
   },
   {
+    dept: 'IT Operations',
+    keywords: ['computer operator', 'computer operations', 'it operations', 'data center', 'mainframe', 'batch processing', 'job scheduling', 'system monitoring', 'network monitoring', 'production support', 'operations support']
+  },
+  {
     dept: 'Operations',
     keywords: ['operations', 'ops manager', 'supply chain', 'logistics', 'project manager', 'chief of staff', 'process improvement']
   },
@@ -107,7 +111,7 @@ function analyzeJob(description) {
   const missing = foundInJob.filter(skill => !matched.includes(skill));
 
   const total = matched.length + missing.length;
-  const score = total === 0 ? null : Math.round((matched.length / total) * 100);
+  const score = total === 0 ? 0 : Math.round((matched.length / total) * 100);
 
   return {
     score,
