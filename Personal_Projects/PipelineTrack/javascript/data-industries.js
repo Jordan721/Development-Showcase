@@ -14,7 +14,10 @@
   'lean', 'six sigma', 'sop', 'standard operating procedures', 'supply chain',
   'logistics', 'continuous improvement', 'erp', 'operational efficiency',
   'cross-functional', 'business operations', 'performance management',
-  'reporting', 'data reporting', 'executive reporting',
+  'reporting', 'data reporting', 'executive reporting', 'data entry',
+  'administrative support', 'records management', 'microsoft excel', 'excel',
+  'microsoft office', 'office 365', 'basic computer proficiency',
+  'computer proficiency',
 
   // IT Operations / Computer Operator
   'computer operator', 'computer operations', 'it operations',
@@ -27,6 +30,7 @@
   'backup and recovery', 'backups', 'disaster recovery',
   'access control', 'change control', 'runbooks', 'sop',
   'shift handoff', 'production support', 'operations support',
+  'statewide financial system', 'sfs',
 
   // ── Financial Operations ─────────────────────────────────
   'accounts payable', 'accounts receivable', 'financial analysis',

@@ -715,6 +715,22 @@ const SKILL_CANONICAL = {
   'ui': 'UI',
   'ux': 'UX',
   'ui/ux': 'UI/UX',
+  // Business / IT Operations
+  'data entry': 'Data Entry',
+  'administrative support': 'Administrative Support',
+  'records management': 'Records Management',
+  'excel': 'Microsoft Excel',
+  'microsoft excel': 'Microsoft Excel',
+  'ms excel': 'Microsoft Excel',
+  'microsoft office': 'Microsoft Office',
+  'ms office': 'Microsoft Office',
+  'office 365': 'Office 365',
+  'basic computer proficiency': 'Basic Computer Proficiency',
+  'computer proficiency': 'Computer Proficiency',
+  'computer operator': 'Computer Operator',
+  'computer operations': 'Computer Operations',
+  'statewide financial system': 'Statewide Financial System',
+  'sfs': 'Statewide Financial System',
 };
 
 function normalizeSkillName(raw) {
