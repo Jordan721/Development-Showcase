@@ -37,14 +37,38 @@ function wireEvents() {
     });
   });
 
-  // Close modal on overlay click
+  // Close modal on a deliberate backdrop hold, which prevents accidental outside-click closes.
   document.querySelectorAll('.modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', e => {
-      if (e.target === overlay) {
-        if (overlay.id === 'modal-detail') dayModalContext = null;
-        if (overlay.id === 'modal-stale-ghost') snoozeGhostPrompt();
-        closeModal(overlay.id);
-      }
+    let closeHoldTimer = null;
+    let closeHoldPointerId = null;
+    const holdMs = 900;
+
+    function cancelBackdropHold() {
+      if (closeHoldTimer) clearTimeout(closeHoldTimer);
+      closeHoldTimer = null;
+      closeHoldPointerId = null;
+      overlay.classList.remove('hold-to-close');
+    }
+
+    function closeFromBackdropHold() {
+      cancelBackdropHold();
+      if (overlay.id === 'modal-detail') dayModalContext = null;
+      if (overlay.id === 'modal-stale-ghost') snoozeGhostPrompt();
+      closeModal(overlay.id);
+    }
+
+    overlay.addEventListener('pointerdown', e => {
+      if (e.target !== overlay || e.button > 0) return;
+      closeHoldPointerId = e.pointerId;
+      overlay.classList.add('hold-to-close');
+      closeHoldTimer = setTimeout(closeFromBackdropHold, holdMs);
+    });
+    overlay.addEventListener('pointerup', e => {
+      if (e.pointerId === closeHoldPointerId) cancelBackdropHold();
+    });
+    overlay.addEventListener('pointercancel', cancelBackdropHold);
+    overlay.addEventListener('pointerleave', e => {
+      if (e.pointerId === closeHoldPointerId) cancelBackdropHold();
     });
   });
 
@@ -59,6 +83,21 @@ function wireEvents() {
 
   // Save job
   document.getElementById('save-job-btn').addEventListener('click', saveJob);
+  const jobWorkTypeEl = document.getElementById('job-work-type');
+  if (jobWorkTypeEl) {
+    jobWorkTypeEl.addEventListener('change', () => {
+      if (typeof updateHybridDaysVisibility === 'function') updateHybridDaysVisibility(true);
+    });
+  }
+  const hybridDaysOpenBtn = document.getElementById('job-hybrid-days-open');
+  if (hybridDaysOpenBtn) hybridDaysOpenBtn.addEventListener('click', openHybridDaysModal);
+  const hybridDaysApplyBtn = document.getElementById('hybrid-days-apply-btn');
+  if (hybridDaysApplyBtn) hybridDaysApplyBtn.addEventListener('click', applyHybridDaysModal);
+  const hybridDaysClearBtn = document.getElementById('hybrid-days-clear-btn');
+  if (hybridDaysClearBtn) hybridDaysClearBtn.addEventListener('click', () => {
+    setHybridDaysValue('');
+    closeModal('modal-hybrid-days');
+  });
 
   // Smart paste panel
   document.getElementById('show-smart-paste-btn').addEventListener('click', () => {
@@ -100,7 +139,8 @@ function wireEvents() {
       role: 'job-role',
       company: 'job-company',
       location: 'job-location',
-      salary: 'job-salary'
+      salary: 'job-salary',
+      hybridDays: 'job-hybrid-days'
     };
     const selectMap = {
       workType: 'job-work-type',
@@ -110,7 +150,8 @@ function wireEvents() {
 
     Object.entries(fieldMap).forEach(([key, id]) => {
       if (parsed[key]) {
-        document.getElementById(id).value = parsed[key];
+        if (key === 'hybridDays' && typeof setHybridDaysValue === 'function') setHybridDaysValue(parsed[key]);
+        else document.getElementById(id).value = parsed[key];
         flashField(id);
         addAutoTag(id);
       }
@@ -122,6 +163,9 @@ function wireEvents() {
         addAutoTag(id);
       }
     });
+    if (typeof updateHybridDaysVisibility === 'function') {
+      updateHybridDaysVisibility(false);
+    }
 
     // Move cleaned description to Job Info tab (metadata header stripped)
     document.getElementById('job-description').value = parsed.description || text;

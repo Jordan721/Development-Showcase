@@ -719,7 +719,7 @@ function renderBoardTable(jobs) {
           <td class="table-td" onclick="event.stopPropagation()">
             <select class="table-stage-select stage-select-${j.stage}" data-job-id="${j.id}">${stageOptions(j.stage)}</select>
           </td>
-          <td class="table-td"><span class="table-tag">${escHtml(j.workType || '—')}</span></td>
+          <td class="table-td"><span class="table-tag">${escHtml(j.workType || '—')}</span>${hybridDaysLabel(j) ? `<span class="table-location"> · ${escHtml(hybridDaysLabel(j))}</span>` : ''}</td>
           <td class="table-td table-muted">${escHtml(formatSalary(j.salary) || '—')}</td>
           <td class="table-td"><span class="fit-badge ${fitCls}">${fitLabel}</span></td>
           <td class="table-td table-muted">${formatDate(j.dateAdded)}</td>
@@ -749,10 +749,84 @@ function deadlineUrgencyClass(job) {
   return '';
 }
 
+function isHybridWorkType(workType) {
+  return /\bhybrid\b/i.test(workType || '');
+}
+
+function hybridDaysLabel(job) {
+  return isHybridWorkType(job.workType) && job.hybridDays ? job.hybridDays : '';
+}
+
+function setHybridDaysValue(value) {
+  const input = document.getElementById('job-hybrid-days');
+  const summary = document.getElementById('job-hybrid-days-summary');
+  if (!input || !summary) return;
+  input.value = value || '';
+  summary.textContent = value || 'Pick in-office days';
+}
+
+function updateHybridDaysVisibility(clearWhenHidden = false) {
+  const workTypeEl = document.getElementById('job-work-type');
+  const group = document.getElementById('job-hybrid-days-group');
+  const input = document.getElementById('job-hybrid-days');
+  if (!workTypeEl || !group || !input) return;
+  const show = isHybridWorkType(workTypeEl.value);
+  group.style.display = show ? '' : 'none';
+  if (!show && clearWhenHidden) setHybridDaysValue('');
+}
+
+function openHybridDaysModal() {
+  const current = document.getElementById('job-hybrid-days')?.value || '';
+  const checks = document.querySelectorAll('#hybrid-days-grid input[type="checkbox"]');
+  const cadence = document.getElementById('hybrid-days-cadence');
+  const selected = new Set();
+  const dayAliases = {
+    mon: 'Mon',
+    monday: 'Mon',
+    tue: 'Tue',
+    tues: 'Tue',
+    tuesday: 'Tue',
+    wed: 'Wed',
+    wednesday: 'Wed',
+    thu: 'Thu',
+    thur: 'Thu',
+    thurs: 'Thu',
+    thursday: 'Thu',
+    fri: 'Fri',
+    friday: 'Fri'
+  };
+
+  current.toLowerCase().replace(/\b(mon(?:day)?|tue(?:s|sday|day)?|wed(?:nesday)?|thu(?:r|rs|rsday|rday|day)?|fri(?:day)?)\b/g, match => {
+    const day = dayAliases[match];
+    if (day) selected.add(day);
+    return match;
+  });
+
+  checks.forEach(check => {
+    check.checked = selected.has(check.value);
+  });
+
+  if (cadence) {
+    const cadenceOption = Array.from(cadence.options).find(opt => opt.value && opt.value.toLowerCase() === current.toLowerCase());
+    cadence.value = selected.size ? '' : cadenceOption ? cadenceOption.value : '';
+  }
+
+  openModal('modal-hybrid-days');
+}
+
+function applyHybridDaysModal() {
+  const selectedDays = Array.from(document.querySelectorAll('#hybrid-days-grid input[type="checkbox"]:checked'))
+    .map(input => input.value);
+  const cadence = document.getElementById('hybrid-days-cadence')?.value || '';
+  setHybridDaysValue(selectedDays.length ? selectedDays.join('/ ') : cadence);
+  closeModal('modal-hybrid-days');
+}
+
 function jobCardHTML(job) {
   const urgency = deadlineUrgencyClass(job);
   const pinCls = job.pinned ? ' pinned-card' : '';
   const selectedCls = bulkSelected.has(job.id) ? ' bulk-selected' : '';
+  const inOfficeDays = hybridDaysLabel(job);
   const pinBtn = bulkSelectMode ? '' : `<button class="card-pin-btn${job.pinned ? ' pinned' : ''}" data-pin-id="${job.id}" title="${job.pinned ? 'Unpin' : 'Pin to top'}" draggable="false">${job.pinned ? '📌' : '📍'}</button>`;
   const checkOverlay = bulkSelectMode ? `<span class="bulk-check${bulkSelected.has(job.id) ? ' checked' : ''}" data-bulk-id="${job.id}">✓</span>` : '';
   return `
@@ -762,6 +836,7 @@ function jobCardHTML(job) {
       ${checkOverlay}
       <div class="job-card-role"><span class="drag-handle" title="Drag to move stage" draggable="false">&#8942;</span>${escHtml(job.role)}</div>
       <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
+      ${inOfficeDays ? `<div class="job-card-hybrid-days">In office: ${escHtml(inOfficeDays)}</div>` : ''}
       <div class="job-card-footer">
         <span class="job-card-date">${job.stage === 'declined' && job.declinedAt ? '❌ ' + formatDate(job.declinedAt) : job.stage === 'ghosted' && job.ghostedAt ? 'Ghosted ' + formatDate(job.ghostedAt) : formatDate(job.dateAdded)}</span>
         ${fitRingHTML(job.fitScore)}
@@ -1076,6 +1151,17 @@ function openJobDetail(id) {
       deadlineRow.style.display = '';
     } else {
       deadlineRow.style.display = 'none';
+    }
+  }
+
+  const hybridDaysRow = document.getElementById('detail-hybrid-days-row');
+  if (hybridDaysRow) {
+    const inOfficeDays = hybridDaysLabel(job);
+    if (inOfficeDays) {
+      document.getElementById('detail-hybrid-days').textContent = inOfficeDays;
+      hybridDaysRow.style.display = '';
+    } else {
+      hybridDaysRow.style.display = 'none';
     }
   }
 
@@ -1422,6 +1508,14 @@ function parseJobListing(text) {
   else if (/\b(on[\s-]?site|in[\s-]?office|in[\s-]?person)\b/i.test(text)) result.workType = 'On-site';
   else if (/\bremote\b/i.test(text)) result.workType = 'Remote';
 
+  if (result.workType && isHybridWorkType(result.workType)) {
+    const daysMatch =
+      text.match(/\b(?:in[\s-]?office|office|onsite|on[\s-]?site|come\s+in)\s*(?:days?|schedule)?\s*[:\-]\s*([^\n.]+)/i) ||
+      text.match(/\b(?:hybrid|in[\s-]?office|onsite|on[\s-]?site).{0,45}?((?:mon(?:day)?|tue(?:s(?:day)?)?|wed(?:nesday)?|thu(?:rs(?:day)?)?|fri(?:day)?)(?:\s*(?:,|\/|&|and|-|to)\s*(?:mon(?:day)?|tue(?:s(?:day)?)?|wed(?:nesday)?|thu(?:rs(?:day)?)?|fri(?:day)?))*)/i) ||
+      text.match(/\b(\d+\s+(?:days?|x)\s*(?:\/|per)?\s*week)\b/i);
+    if (daysMatch) result.hybridDays = daysMatch[1].trim();
+  }
+
   // Job Type
   if (/\bfull[\s-]?time\b/i.test(text)) result.jobType = 'Full-time';
   else if (/\bpart[\s-]?time\b/i.test(text)) result.jobType = 'Part-time';
@@ -1576,6 +1670,8 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-seniority').value = job ? job.seniority || '' : '';
   document.getElementById('job-type').value = job ? job.jobType || '' : '';
   document.getElementById('job-work-type').value = job ? job.workType || '' : '';
+  setHybridDaysValue(job ? job.hybridDays || '' : '');
+  updateHybridDaysVisibility(false);
 
   // Show/clear the "Auto-filled" indicator on the work type label
   const workTypeSelect = document.getElementById('job-work-type');
@@ -1666,7 +1762,8 @@ function saveJob() {
       const inferred = !typed ? inferWorkType(description) : null;
       return {
         workType: typed || inferred || '',
-        workTypeInferred: !typed && !!inferred
+        workTypeInferred: !typed && !!inferred,
+        hybridDays: isHybridWorkType(typed || inferred || '') ? document.getElementById('job-hybrid-days').value.trim() : ''
       };
     })(),
     stage: document.getElementById('job-stage').value,
@@ -1878,6 +1975,10 @@ function renderComparisonGrid(jobs) {
           <div class="compare-row-label">Work Type</div>
           <div class="compare-row-value">${escHtml(j.workType || '—')}</div>
         </div>
+        ${hybridDaysLabel(j) ? `<div class="compare-row">
+          <div class="compare-row-label">In-office Days</div>
+          <div class="compare-row-value">${escHtml(hybridDaysLabel(j))}</div>
+        </div>` : ''}
         <div class="compare-row">
           <div class="compare-row-label">Seniority</div>
           <div class="compare-row-value">${escHtml(j.seniority || '—')}</div>

@@ -1083,6 +1083,14 @@
                             </select>
                         </div>
                     </div>
+                    <div class="form-group hybrid-days-group" id="job-hybrid-days-group" style="display:none">
+                        <label class="form-label">In-office Days</label>
+                        <input type="hidden" id="job-hybrid-days" />
+                        <button type="button" class="hybrid-days-picker-btn" id="job-hybrid-days-open">
+                            <span id="job-hybrid-days-summary">Pick in-office days</span>
+                            <span class="hybrid-days-picker-icon">Edit</span>
+                        </button>
+                    </div>
                     <div class="form-group">
                         <label class="form-label">Resume Used</label>
                         <select class="text-input" id="job-resume-vault-select">
@@ -1211,6 +1219,10 @@
                         <span class="detail-meta-label">Deadline</span>
                         <span class="detail-meta-value" id="detail-deadline"></span>
                     </div>
+                    <div class="detail-meta-row" id="detail-hybrid-days-row" style="display:none">
+                        <span class="detail-meta-label">In-office Days</span>
+                        <span class="detail-meta-value" id="detail-hybrid-days"></span>
+                    </div>
                     <div class="detail-meta-row" id="detail-date-declined-row" style="display:none">
                         <span class="detail-meta-label" id="detail-date-declined-label">Not Selected On</span>
                         <span class="detail-meta-value" id="detail-date-declined"></span>
@@ -1253,6 +1265,49 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <!-- ── MODAL: HYBRID IN-OFFICE DAYS ─────────────────── -->
+    <div class="modal-overlay" id="modal-hybrid-days" aria-hidden="true">
+        <div class="modal hybrid-days-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">In-office Days</h2>
+                <button class="modal-close" data-close="modal-hybrid-days">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="hybrid-days-grid" id="hybrid-days-grid">
+                    <label class="hybrid-day-option">
+                        <input type="checkbox" value="Mon" /> Mon
+                    </label>
+                    <label class="hybrid-day-option">
+                        <input type="checkbox" value="Tue" /> Tue
+                    </label>
+                    <label class="hybrid-day-option">
+                        <input type="checkbox" value="Wed" /> Wed
+                    </label>
+                    <label class="hybrid-day-option">
+                        <input type="checkbox" value="Thu" /> Thu
+                    </label>
+                    <label class="hybrid-day-option">
+                        <input type="checkbox" value="Fri" /> Fri
+                    </label>
+                </div>
+                <div class="form-group hybrid-days-cadence">
+                    <label class="form-label">If days are flexible</label>
+                    <select class="select-input" id="hybrid-days-cadence">
+                        <option value="">Specific days above</option>
+                        <option value="1 day/week">1 day/week</option>
+                        <option value="2 days/week">2 days/week</option>
+                        <option value="3 days/week">3 days/week</option>
+                        <option value="4 days/week">4 days/week</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-ghost" id="hybrid-days-clear-btn">Clear</button>
+                <button class="btn-primary" id="hybrid-days-apply-btn">Apply Days</button>
             </div>
         </div>
     </div>

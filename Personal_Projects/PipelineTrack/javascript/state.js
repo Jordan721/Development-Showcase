@@ -188,7 +188,7 @@ function exportCSV() {
   };
 
   const headers = [
-    'Role', 'Company', 'Location', 'Stage', 'Seniority', 'Job Type', 'Work Type',
+    'Role', 'Company', 'Location', 'Stage', 'Seniority', 'Job Type', 'Work Type', 'In-office Days',
     'Department', 'Salary', 'Date Posted', 'Date Applied', 'Date Added', 'Deadline', 'Fit Score (%)',
     'Matched Skills', 'Skill Gaps', 'URL', 'Notes', 'Company Notes', 'Benefits', 'Cover Letter', 'Job Description'
   ];
@@ -201,6 +201,7 @@ function exportCSV() {
     j.seniority,
     j.jobType,
     j.workType,
+    j.hybridDays,
     j.department,
     j.salary,
     j.datePosted,
@@ -324,6 +325,7 @@ function _importFromCSV(text) {
 
     const csvDept = get(f, 'department');
     const csvWorkType = get(f, 'work type');
+    const csvHybridDays = get(f, 'in-office days');
     const csvDesc = get(f, 'job description');
     const inferredDept = !csvDept ? inferDepartment(role, csvDesc) : null;
     const inferredWorkType = !csvWorkType ? inferWorkType(csvDesc) : null;
@@ -337,6 +339,7 @@ function _importFromCSV(text) {
       jobType: get(f, 'job type'),
       workType: csvWorkType || inferredWorkType || '',
       workTypeInferred: !csvWorkType && !!inferredWorkType,
+      hybridDays: /\bhybrid\b/i.test(csvWorkType || inferredWorkType || '') ? csvHybridDays : '',
       department: csvDept || inferredDept || '',
       departmentInferred: !csvDept && !!inferredDept,
       salary: get(f, 'salary'),
