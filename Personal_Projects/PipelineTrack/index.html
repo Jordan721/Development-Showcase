@@ -1212,7 +1212,7 @@
                         <span class="detail-meta-value" id="detail-deadline"></span>
                     </div>
                     <div class="detail-meta-row" id="detail-date-declined-row" style="display:none">
-                        <span class="detail-meta-label">Not Selected On</span>
+                        <span class="detail-meta-label" id="detail-date-declined-label">Not Selected On</span>
                         <span class="detail-meta-value" id="detail-date-declined"></span>
                     </div>
                     <div class="detail-meta-row" id="detail-benefits-row" style="display:none">
@@ -1583,6 +1583,30 @@
             <div class="modal-body" id="weekly-recap-body" style="padding:20px 24px 24px"></div>
             <div class="modal-footer">
                 <button class="btn-primary" data-close="modal-weekly-recap">Got it</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── STALE APPLICATIONS MODAL ────────────────────────── -->
+    <div class="modal-overlay" id="modal-stale-ghost" aria-hidden="true">
+        <div class="modal stale-ghost-modal">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title">Review Quiet Applications</h2>
+                    <div class="stale-ghost-subtitle" id="stale-ghost-count"></div>
+                </div>
+                <button class="modal-close" data-close="modal-stale-ghost">✕</button>
+            </div>
+            <div class="modal-body stale-ghost-body">
+                <div class="stale-ghost-note">
+                    PipelineTrack can move these to Ghosted so your active pipeline stays honest. Nothing changes unless
+                    you confirm.
+                </div>
+                <div class="stale-ghost-list" id="stale-ghost-list"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-ghost" id="stale-ghost-keep-btn">Keep as Applied</button>
+                <button class="btn-primary" id="stale-ghost-confirm-btn">Move to Ghosted</button>
             </div>
         </div>
     </div>

@@ -123,6 +123,7 @@ function renderResumeVault() {
             <button class="btn-secondary vault-view-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">View</button>
             <button class="btn-secondary vault-dl-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Download</button>
             <button class="btn-secondary vault-rename-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Rename</button>
+            <button class="btn-secondary vault-delete-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Delete</button>
           </div>
         </div>`;
     }).join('');
@@ -168,6 +169,22 @@ function renderResumeVault() {
         r.name = newName.trim();
         save();
         renderList();
+      });
+    });
+
+    list.querySelectorAll('.vault-delete-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = state.resumes.findIndex(x => x.id === btn.dataset.id);
+        if (idx === -1) return;
+        const resume = state.resumes[idx];
+        if (!confirm(`Delete resume "${resume.name}" from the vault?`)) return;
+        state.resumes.splice(idx, 1);
+        state.jobs.forEach(job => {
+          if (job.resumeVaultId === resume.id) job.resumeVaultId = '';
+        });
+        save();
+        renderList();
+        toast('Resume deleted.', '');
       });
     });
 
@@ -297,6 +314,7 @@ function renderCoverLetterVault() {
             <button class="btn-secondary cover-vault-view-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">View</button>
             <button class="btn-secondary cover-vault-dl-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Download</button>
             <button class="btn-secondary cover-vault-rename-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Rename</button>
+            <button class="btn-secondary cover-vault-delete-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Delete</button>
           </div>
         </div>`;
     }).join('');
@@ -337,6 +355,19 @@ function renderCoverLetterVault() {
         r.name = newName.trim();
         save();
         renderList();
+      });
+    });
+
+    list.querySelectorAll('.cover-vault-delete-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = state.coverLetters.findIndex(x => x.id === btn.dataset.id);
+        if (idx === -1) return;
+        const letter = state.coverLetters[idx];
+        if (!confirm(`Delete cover letter "${letter.name}" from the vault?`)) return;
+        state.coverLetters.splice(idx, 1);
+        save();
+        renderList();
+        toast('Cover letter deleted.', '');
       });
     });
 

@@ -32,6 +32,7 @@ function wireEvents() {
   document.querySelectorAll('[data-close]').forEach(btn => {
     btn.addEventListener('click', () => {
       if (btn.dataset.close === 'modal-detail') dayModalContext = null;
+      if (btn.dataset.close === 'modal-stale-ghost') snoozeGhostPrompt();
       closeModal(btn.dataset.close);
     });
   });
@@ -41,6 +42,7 @@ function wireEvents() {
     overlay.addEventListener('click', e => {
       if (e.target === overlay) {
         if (overlay.id === 'modal-detail') dayModalContext = null;
+        if (overlay.id === 'modal-stale-ghost') snoozeGhostPrompt();
         closeModal(overlay.id);
       }
     });
@@ -289,6 +291,7 @@ function wireEvents() {
     if (job) {
       job.stage = e.target.value;
       if (job.stage === 'declined') job.declinedAt = new Date().toISOString();
+      if (job.stage === 'ghosted') job.ghostedAt = new Date().toISOString();
       save();
       const badge = document.getElementById('detail-stage-badge');
       badge.textContent = STAGE_LABELS[job.stage];
@@ -328,6 +331,16 @@ function wireEvents() {
 
   // Save goal
   document.getElementById('save-goal-btn').addEventListener('click', saveGoal);
+
+  const staleGhostKeepBtn = document.getElementById('stale-ghost-keep-btn');
+  if (staleGhostKeepBtn) staleGhostKeepBtn.addEventListener('click', () => {
+    snoozeGhostPrompt();
+    closeModal('modal-stale-ghost');
+    toast('Okay, kept as Applied for now.');
+  });
+
+  const staleGhostConfirmBtn = document.getElementById('stale-ghost-confirm-btn');
+  if (staleGhostConfirmBtn) staleGhostConfirmBtn.addEventListener('click', moveStaleJobsToGhosted);
 
   // Email templates
   const addTplBtn = document.getElementById('add-template-btn');
@@ -441,6 +454,87 @@ function toggleTheme() {
   setTheme(next);
 }
 
+/* ══════════════════════════════════════════════════════════
+   STALE APPLICATION CHECK
+   ══════════════════════════════════════════════════════════ */
+const GHOST_PROMPT_DAYS = 90;
+const GHOST_PROMPT_SNOOZE_DAYS = 7;
+const GHOST_PROMPT_SNOOZE_KEY = 'pt_ghost_prompt_snoozed_until';
+
+function getApplicationDate(job) {
+  const raw = job.dateApplied || job.dateAdded;
+  if (!raw) return null;
+  const date = new Date(raw);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function getStaleAppliedJobs() {
+  const cutoff = Date.now() - GHOST_PROMPT_DAYS * 86400000;
+  return state.jobs.filter(job => {
+    if (job.stage !== 'applied') return false;
+    const applicationDate = getApplicationDate(job);
+    return applicationDate && applicationDate.getTime() <= cutoff;
+  });
+}
+
+function maybePromptForGhostedJobs() {
+  const snoozedUntil = localStorage.getItem(GHOST_PROMPT_SNOOZE_KEY);
+  if (snoozedUntil && new Date(snoozedUntil).getTime() > Date.now()) return;
+
+  const staleJobs = getStaleAppliedJobs();
+  if (staleJobs.length === 0) return;
+
+  openStaleGhostModal(staleJobs);
+}
+
+function snoozeGhostPrompt() {
+  const snoozedUntilDate = new Date(Date.now() + GHOST_PROMPT_SNOOZE_DAYS * 86400000).toISOString();
+  localStorage.setItem(GHOST_PROMPT_SNOOZE_KEY, snoozedUntilDate);
+}
+
+function openStaleGhostModal(staleJobs) {
+  const countEl = document.getElementById('stale-ghost-count');
+  const listEl = document.getElementById('stale-ghost-list');
+  const confirmBtn = document.getElementById('stale-ghost-confirm-btn');
+  if (!countEl || !listEl || !confirmBtn) return;
+
+  countEl.textContent = `${staleJobs.length} applied job${staleJobs.length !== 1 ? 's' : ''} have been waiting ${GHOST_PROMPT_DAYS}+ days with no stage change.`;
+  confirmBtn.textContent = `Move ${staleJobs.length === 1 ? 'Job' : staleJobs.length + ' Jobs'} to Ghosted`;
+
+  listEl.innerHTML = staleJobs.map(job => {
+    const applicationDate = getApplicationDate(job);
+    const ageDays = applicationDate ? Math.floor((Date.now() - applicationDate.getTime()) / 86400000) : null;
+    return `<div class="stale-ghost-job">
+      <div class="stale-ghost-job-main">
+        <div class="stale-ghost-role">${escHtml(job.role || 'Untitled role')}</div>
+        <div class="stale-ghost-company">${escHtml(job.company || 'Unknown company')}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
+      </div>
+      <div class="stale-ghost-age">${ageDays ? ageDays + 'd' : GHOST_PROMPT_DAYS + '+d'}</div>
+    </div>`;
+  }).join('');
+
+  openModal('modal-stale-ghost');
+}
+
+function moveStaleJobsToGhosted() {
+  const staleJobs = getStaleAppliedJobs();
+  if (staleJobs.length === 0) {
+    closeModal('modal-stale-ghost');
+    return;
+  }
+
+  const now = new Date().toISOString();
+  staleJobs.forEach(job => {
+    job.stage = 'ghosted';
+    job.ghostedAt = now;
+  });
+  localStorage.removeItem(GHOST_PROMPT_SNOOZE_KEY);
+  save();
+  closeModal('modal-stale-ghost');
+  renderView(state.activeView);
+  toast(`${staleJobs.length} job${staleJobs.length !== 1 ? 's' : ''} moved to Ghosted.`, 'success');
+}
+
 // Cleans up pasted text: normalises line endings, strips trailing spaces
 // per line, and collapses more than 2 consecutive blank lines to 2.
 function cleanPastedText(text) {
@@ -487,6 +581,7 @@ function init() {
   wireEvents();
   wirePasteCleaners();
   navigate('dashboard');
+  setTimeout(maybePromptForGhostedJobs, 350);
   if (typeof initUXEnhancements === 'function') initUXEnhancements();
   if (typeof initBulkActions === 'function') initBulkActions();
 }

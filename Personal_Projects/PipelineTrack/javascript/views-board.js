@@ -58,6 +58,7 @@ function initBulkActions() {
       if (job) {
         job.stage = stage;
         if (stage === 'declined') job.declinedAt = new Date().toISOString();
+        if (stage === 'ghosted') job.ghostedAt = new Date().toISOString();
       }
     });
     save();
@@ -373,6 +374,7 @@ function renderBoard() {
           const newStage = sel.value;
           job.stage = newStage;
           if (newStage === 'declined') job.declinedAt = new Date().toISOString();
+          if (newStage === 'ghosted') job.ghostedAt = new Date().toISOString();
           save();
           renderBoard();
           if (newStage === 'offer') setTimeout(launchConfetti, 200);
@@ -592,6 +594,7 @@ function renderBoard() {
       if (job && job.stage !== targetStage) {
         job.stage = targetStage;
         if (targetStage === 'declined') job.declinedAt = new Date().toISOString();
+        if (targetStage === 'ghosted') job.ghostedAt = new Date().toISOString();
         save();
         renderBoard();
         toast(`${STAGE_EMOJIS[targetStage] || ''} Moved to ${STAGE_LABELS[targetStage]}.`, 'success');
@@ -628,6 +631,7 @@ function renderBoard() {
       if (job && job.stage !== targetStage) {
         job.stage = targetStage;
         if (targetStage === 'declined') job.declinedAt = new Date().toISOString();
+        if (targetStage === 'ghosted') job.ghostedAt = new Date().toISOString();
         save();
         renderBoard();
         toast(`${STAGE_EMOJIS[targetStage] || ''} Moved to ${STAGE_LABELS[targetStage]}.`, 'success');
@@ -759,7 +763,7 @@ function jobCardHTML(job) {
       <div class="job-card-role"><span class="drag-handle" title="Drag to move stage" draggable="false">&#8942;</span>${escHtml(job.role)}</div>
       <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
       <div class="job-card-footer">
-        <span class="job-card-date">${job.stage === 'declined' && job.declinedAt ? '❌ ' + formatDate(job.declinedAt) : formatDate(job.dateAdded)}</span>
+        <span class="job-card-date">${job.stage === 'declined' && job.declinedAt ? '❌ ' + formatDate(job.declinedAt) : job.stage === 'ghosted' && job.ghostedAt ? 'Ghosted ' + formatDate(job.ghostedAt) : formatDate(job.dateAdded)}</span>
         ${fitRingHTML(job.fitScore)}
       </div>
     </div>`;
@@ -1075,10 +1079,13 @@ function openJobDetail(id) {
     }
   }
 
-  // Date declined
+  // Date declined / ghosted
   const dateDeclinedRow = document.getElementById('detail-date-declined-row');
-  if (job.declinedAt) {
-    document.getElementById('detail-date-declined').textContent = formatDate(job.declinedAt);
+  const statusDate = job.stage === 'ghosted' ? job.ghostedAt : job.declinedAt;
+  if (statusDate) {
+    const statusLabel = document.getElementById('detail-date-declined-label');
+    if (statusLabel) statusLabel.textContent = job.stage === 'ghosted' ? 'Ghosted On' : 'Not Selected On';
+    document.getElementById('detail-date-declined').textContent = formatDate(statusDate);
     dateDeclinedRow.style.display = '';
   } else {
     dateDeclinedRow.style.display = 'none';

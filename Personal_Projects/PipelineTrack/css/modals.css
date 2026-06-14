@@ -1244,6 +1244,96 @@
   background: linear-gradient(to right, transparent, var(--border) 25%, var(--border) 75%, transparent);
 }
 
+/* ── STALE APPLICATIONS MODAL ─────────────────────────── */
+.stale-ghost-modal {
+  max-width: 560px;
+}
+
+.stale-ghost-subtitle {
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.stale-ghost-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.stale-ghost-note {
+  padding: 12px 14px;
+  border: 1px solid rgba(249, 115, 22, .24);
+  border-radius: var(--radius-sm);
+  background: rgba(249, 115, 22, .08);
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.stale-ghost-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.stale-ghost-job {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+}
+
+.stale-ghost-job-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.stale-ghost-role {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stale-ghost-company {
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stale-ghost-age {
+  min-width: 44px;
+  padding: 4px 8px;
+  border-radius: 99px;
+  background: rgba(249, 115, 22, .15);
+  color: #f97316;
+  font-size: 11px;
+  font-weight: 800;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .stale-ghost-modal .modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .stale-ghost-modal .modal-footer button {
+    width: 100%;
+  }
+}
+
 /* ── STAGE MILESTONE MODAL ──────────────────────────────── */
 .milestone-subtitle {
   font-size: 13px;
@@ -1818,6 +1908,19 @@
   opacity: .7;
 }
 
+.vault-delete-btn,
+.cover-vault-delete-btn {
+  color: var(--red);
+  border-color: rgba(255, 77, 109, .35);
+}
+
+.vault-delete-btn:hover,
+.cover-vault-delete-btn:hover {
+  background: rgba(255, 77, 109, .12);
+  border-color: var(--red);
+  color: var(--red);
+}
+
 .vault-drop-zone {
   border: 2px dashed var(--border);
   border-radius: var(--radius-sm);
@@ -1913,8 +2016,11 @@
 .vault-item-actions {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 6px;
-  flex-shrink: 0;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .resume-section[data-card] {
