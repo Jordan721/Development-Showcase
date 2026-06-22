@@ -143,6 +143,16 @@ function load() {
   } catch {
     state.coverLetters = [];
   }
+
+  state.jobs = (Array.isArray(state.jobs) ? state.jobs : []).map(_normalizeJob);
+  state.profile = _normalizeProfile(state.profile);
+  state.contacts = _normalizeEntityArray(state.contacts);
+  state.goals = _normalizeEntityArray(state.goals);
+  state.events = _normalizeEntityArray(state.events);
+  state.templates = _normalizeEntityArray(state.templates);
+  state.resumes = _normalizeEntityArray(state.resumes);
+  state.coverLetters = _normalizeEntityArray(state.coverLetters);
+  state.savedCourses = Array.isArray(state.savedCourses) ? state.savedCourses : [];
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -381,6 +391,123 @@ function _isPlainObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
+function _stringValue(value) {
+  return value === null || value === undefined ? '' : String(value);
+}
+
+function _normalizeSkillEntry(skill) {
+  if (typeof skill === 'string') {
+    const name = skill.trim();
+    return name ? {
+      name,
+      level: 'Beginner'
+    } : null;
+  }
+  if (!_isPlainObject(skill)) return null;
+
+  const name = _stringValue(skill.name).trim();
+  if (!name) return null;
+
+  return {
+    ...skill,
+    name,
+    level: ['Beginner', 'Intermediate', 'Expert'].includes(skill.level) ? skill.level : 'Beginner',
+  };
+}
+
+function _normalizeCertEntry(cert) {
+  if (typeof cert === 'string') {
+    const name = cert.trim();
+    return name ? {
+      name,
+      description: ''
+    } : null;
+  }
+  if (!_isPlainObject(cert)) return null;
+
+  const name = _stringValue(cert.name).trim();
+  if (!name) return null;
+
+  return {
+    ...cert,
+    name,
+    description: _stringValue(cert.description),
+  };
+}
+
+function _normalizeProfile(profile) {
+  const source = _isPlainObject(profile) ? profile : {};
+  return {
+    ...source,
+    name: _stringValue(source.name),
+    summary: _stringValue(source.summary),
+    links: {
+      linkedin: _stringValue(source.links && source.links.linkedin),
+      github: _stringValue(source.links && source.links.github),
+      portfolio: _stringValue(source.links && source.links.portfolio),
+    },
+    skills: (Array.isArray(source.skills) ? source.skills : [])
+      .map(_normalizeSkillEntry)
+      .filter(Boolean),
+    certifications: (Array.isArray(source.certifications) ? source.certifications : [])
+      .map(_normalizeCertEntry)
+      .filter(Boolean),
+  };
+}
+
+function _normalizeStringArray(value) {
+  return (Array.isArray(value) ? value : [])
+    .map(item => _stringValue(item).trim())
+    .filter(Boolean);
+}
+
+function _normalizeFitScore(value) {
+  if (value === null || value === undefined || value === '') return null;
+  const score = Number(value);
+  return Number.isFinite(score) ? score : null;
+}
+
+function _normalizeJob(job) {
+  const source = _isPlainObject(job) ? job : {};
+  return {
+    ...source,
+    id: _stringValue(source.id).trim() || uid(),
+    role: _stringValue(source.role).trim() || 'Untitled Role',
+    company: _stringValue(source.company).trim() || 'Unknown Company',
+    department: _stringValue(source.department),
+    location: _stringValue(source.location),
+    url: _stringValue(source.url),
+    salary: _stringValue(source.salary),
+    datePosted: _stringValue(source.datePosted),
+    dateApplied: _stringValue(source.dateApplied),
+    dateAdded: _stringValue(source.dateAdded) || new Date().toISOString(),
+    deadline: _stringValue(source.deadline),
+    seniority: _stringValue(source.seniority),
+    jobType: _stringValue(source.jobType),
+    workType: _stringValue(source.workType),
+    hybridDays: _stringValue(source.hybridDays),
+    stage: STAGES.includes(source.stage) ? source.stage : 'saved',
+    description: _stringValue(source.description),
+    benefits: _stringValue(source.benefits),
+    companyNotes: _stringValue(source.companyNotes),
+    notes: _stringValue(source.notes),
+    coverLetter: _stringValue(source.coverLetter),
+    resumeVaultId: _stringValue(source.resumeVaultId),
+    matched: _normalizeStringArray(source.matched),
+    missing: _normalizeStringArray(source.missing),
+    fitScore: _normalizeFitScore(source.fitScore),
+  };
+}
+
+function _normalizeEntityArray(value) {
+  return (Array.isArray(value) ? value : [])
+    .filter(_isPlainObject)
+    .map(item => ({
+      ...item,
+      id: _stringValue(item.id).trim() || uid(),
+    }));
+}
+
 function _normalizeBackupData(data) {
   if (!_isPlainObject(data)) return null;
 
@@ -398,15 +525,15 @@ function _normalizeBackupData(data) {
   if (!knownKeys.some(key => Object.prototype.hasOwnProperty.call(data, key))) return null;
 
   return {
-    jobs: Array.isArray(data.jobs) ? data.jobs : [],
-    profile: _isPlainObject(data.profile) ? data.profile : {},
+    jobs: (Array.isArray(data.jobs) ? data.jobs : []).map(_normalizeJob),
+    profile: _normalizeProfile(data.profile),
     savedCourses: Array.isArray(data.savedCourses) ? data.savedCourses : [],
-    contacts: Array.isArray(data.contacts) ? data.contacts : [],
-    goals: Array.isArray(data.goals) ? data.goals : [],
-    events: Array.isArray(data.events) ? data.events : [],
-    templates: Array.isArray(data.templates) ? data.templates : [],
-    resumes: Array.isArray(data.resumes) ? data.resumes : [],
-    coverLetters: Array.isArray(data.coverLetters) ? data.coverLetters : [],
+    contacts: _normalizeEntityArray(data.contacts),
+    goals: _normalizeEntityArray(data.goals),
+    events: _normalizeEntityArray(data.events),
+    templates: _normalizeEntityArray(data.templates),
+    resumes: _normalizeEntityArray(data.resumes),
+    coverLetters: _normalizeEntityArray(data.coverLetters),
   };
 }
 
@@ -450,6 +577,16 @@ function importData(file) {
           }
           return;
         }
+        state.jobs = (Array.isArray(state.jobs) ? state.jobs : []).map(_normalizeJob);
+        state.profile = _normalizeProfile(state.profile);
+        state.contacts = _normalizeEntityArray(state.contacts);
+        state.goals = _normalizeEntityArray(state.goals);
+        state.events = _normalizeEntityArray(state.events);
+        state.templates = _normalizeEntityArray(state.templates);
+        state.resumes = _normalizeEntityArray(state.resumes);
+        state.coverLetters = _normalizeEntityArray(state.coverLetters);
+        state.savedCourses = Array.isArray(state.savedCourses) ? state.savedCourses : [];
+
         // Merge jobs by ID: update existing, add new, keep current-only jobs
         const currentById = {};
         state.jobs.forEach((j, i) => {
@@ -532,14 +669,21 @@ function importData(file) {
           state.savedCourses = [...courseSet];
         }
         save();
-        reanalyzeAllJobs();
-        if (typeof backfillSeniority === 'function') backfillSeniority();
-        renderView(state.activeView);
+        let refreshWarning = '';
+        try {
+          reanalyzeAllJobs();
+          if (typeof backfillSeniority === 'function') backfillSeniority();
+          renderView(state.activeView);
+        } catch (refreshErr) {
+          refreshWarning = ' Refresh the page if the screen does not update right away.';
+          console.error('PipelineTrack refresh after import failed:', refreshErr);
+        }
         const freshStatusEl = document.getElementById('backup-status');
         if (freshStatusEl) {
           freshStatusEl.textContent = `⬆ Imported: ${file.name} — ${added} added, ${updated} updated. Your new jobs were kept.`;
           freshStatusEl.className = 'import-status success';
         }
+        if (freshStatusEl && refreshWarning) freshStatusEl.textContent += refreshWarning;
         toast(`Backup merged: ${added} added, ${updated} updated. Your new jobs were kept.`, 'success');
       }
     } catch (err) {
