@@ -377,6 +377,39 @@ function _importFromCSV(text) {
   };
 }
 
+function _isPlainObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+function _normalizeBackupData(data) {
+  if (!_isPlainObject(data)) return null;
+
+  const knownKeys = [
+    'jobs',
+    'profile',
+    'savedCourses',
+    'contacts',
+    'goals',
+    'events',
+    'templates',
+    'resumes',
+    'coverLetters',
+  ];
+  if (!knownKeys.some(key => Object.prototype.hasOwnProperty.call(data, key))) return null;
+
+  return {
+    jobs: Array.isArray(data.jobs) ? data.jobs : [],
+    profile: _isPlainObject(data.profile) ? data.profile : {},
+    savedCourses: Array.isArray(data.savedCourses) ? data.savedCourses : [],
+    contacts: Array.isArray(data.contacts) ? data.contacts : [],
+    goals: Array.isArray(data.goals) ? data.goals : [],
+    events: Array.isArray(data.events) ? data.events : [],
+    templates: Array.isArray(data.templates) ? data.templates : [],
+    resumes: Array.isArray(data.resumes) ? data.resumes : [],
+    coverLetters: Array.isArray(data.coverLetters) ? data.coverLetters : [],
+  };
+}
+
 function importData(file) {
   const isCSV = file.name.toLowerCase().endsWith('.csv');
   const reader = new FileReader();
@@ -398,8 +431,19 @@ function importData(file) {
         }
         toast(`CSV merged: ${added} added, ${updated} updated. Your new jobs were kept.`, 'success');
       } else {
-        const data = JSON.parse(e.target.result);
-        if (!Array.isArray(data.jobs) || typeof data.profile !== 'object') {
+        let parsed;
+        try {
+          parsed = JSON.parse(e.target.result);
+        } catch {
+          if (statusEl) {
+            statusEl.textContent = 'Could not parse JSON. Check that the file is not empty or corrupted.';
+            statusEl.className = 'import-status error';
+          }
+          return;
+        }
+
+        const data = _normalizeBackupData(parsed);
+        if (!data) {
           if (statusEl) {
             statusEl.textContent = '✕ Invalid backup file — make sure you\'re using a PipelineTrack export.';
             statusEl.className = 'import-status error';
@@ -443,14 +487,20 @@ function importData(file) {
           const imp = data.profile;
           // Skills: merge by lowercased name
           if (Array.isArray(imp.skills)) {
-            const existing = new Set((state.profile.skills || []).map(s => s.name.toLowerCase()));
+            if (!Array.isArray(state.profile.skills)) state.profile.skills = [];
+            const existing = new Set((state.profile.skills || [])
+              .map(s => s && s.name ? s.name.toLowerCase() : '')
+              .filter(Boolean));
             imp.skills.forEach(s => {
               if (s && s.name && !existing.has(s.name.toLowerCase())) state.profile.skills.push(s);
             });
           }
           // Certifications: merge by lowercased name
           if (Array.isArray(imp.certifications)) {
-            const existing = new Set((state.profile.certifications || []).map(c => c.name.toLowerCase()));
+            if (!Array.isArray(state.profile.certifications)) state.profile.certifications = [];
+            const existing = new Set((state.profile.certifications || [])
+              .map(c => c && c.name ? c.name.toLowerCase() : '')
+              .filter(Boolean));
             imp.certifications.forEach(c => {
               if (c && c.name && !existing.has(c.name.toLowerCase())) state.profile.certifications.push(c);
             });
@@ -492,13 +542,24 @@ function importData(file) {
         }
         toast(`Backup merged: ${added} added, ${updated} updated. Your new jobs were kept.`, 'success');
       }
-    } catch {
+    } catch (err) {
       if (statusEl) {
         statusEl.textContent = isCSV ?
           '✕ Could not read CSV. Make sure it\'s a PipelineTrack CSV export.' :
           '✕ Could not read file. Make sure it\'s a valid .json backup.';
         statusEl.className = 'import-status error';
+        if (!isCSV) {
+          statusEl.textContent = 'Could not finish importing this backup. Some saved data may be malformed.';
+        }
       }
+      console.error('PipelineTrack import failed:', err);
+    }
+  };
+  reader.onerror = () => {
+    const statusEl = document.getElementById('backup-status');
+    if (statusEl) {
+      statusEl.textContent = 'Browser could not read this file. Try exporting it again or choose another file.';
+      statusEl.className = 'import-status error';
     }
   };
   reader.readAsText(file);
