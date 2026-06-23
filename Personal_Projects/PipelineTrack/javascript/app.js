@@ -89,6 +89,12 @@ function wireEvents() {
       if (typeof updateHybridDaysVisibility === 'function') updateHybridDaysVisibility(true);
     });
   }
+  const jobTypeEl = document.getElementById('job-type');
+  if (jobTypeEl) {
+    jobTypeEl.addEventListener('change', () => {
+      if (typeof updateJobDurationVisibility === 'function') updateJobDurationVisibility(true);
+    });
+  }
   const hybridDaysOpenBtn = document.getElementById('job-hybrid-days-open');
   if (hybridDaysOpenBtn) hybridDaysOpenBtn.addEventListener('click', openHybridDaysModal);
   const hybridDaysApplyBtn = document.getElementById('hybrid-days-apply-btn');
@@ -97,6 +103,21 @@ function wireEvents() {
   if (hybridDaysClearBtn) hybridDaysClearBtn.addEventListener('click', () => {
     setHybridDaysValue('');
     closeModal('modal-hybrid-days');
+  });
+  const durationOpenBtn = document.getElementById('job-duration-open');
+  if (durationOpenBtn) durationOpenBtn.addEventListener('click', openJobDurationModal);
+  const durationApplyBtn = document.getElementById('job-duration-apply-btn');
+  if (durationApplyBtn) durationApplyBtn.addEventListener('click', applyJobDurationModal);
+  const durationClearBtn = document.getElementById('job-duration-clear-btn');
+  if (durationClearBtn) durationClearBtn.addEventListener('click', () => {
+    setJobDurationValue('');
+    closeModal('modal-job-duration');
+  });
+  document.querySelectorAll('#job-duration-presets .duration-preset').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setJobDurationValue(btn.dataset.duration || '');
+      closeModal('modal-job-duration');
+    });
   });
 
   // Smart paste panel
@@ -140,7 +161,8 @@ function wireEvents() {
       company: 'job-company',
       location: 'job-location',
       salary: 'job-salary',
-      hybridDays: 'job-hybrid-days'
+      hybridDays: 'job-hybrid-days',
+      duration: 'job-duration'
     };
     const selectMap = {
       workType: 'job-work-type',
@@ -151,6 +173,7 @@ function wireEvents() {
     Object.entries(fieldMap).forEach(([key, id]) => {
       if (parsed[key]) {
         if (key === 'hybridDays' && typeof setHybridDaysValue === 'function') setHybridDaysValue(parsed[key]);
+        else if (key === 'duration' && typeof setJobDurationValue === 'function') setJobDurationValue(parsed[key]);
         else document.getElementById(id).value = parsed[key];
         flashField(id);
         addAutoTag(id);
@@ -165,6 +188,9 @@ function wireEvents() {
     });
     if (typeof updateHybridDaysVisibility === 'function') {
       updateHybridDaysVisibility(false);
+    }
+    if (typeof updateJobDurationVisibility === 'function') {
+      updateJobDurationVisibility(false);
     }
 
     // Move cleaned description to Job Info tab (metadata header stripped)

@@ -719,7 +719,7 @@ function renderBoardTable(jobs) {
           <td class="table-td" onclick="event.stopPropagation()">
             <select class="table-stage-select stage-select-${j.stage}" data-job-id="${j.id}">${stageOptions(j.stage)}</select>
           </td>
-          <td class="table-td"><span class="table-tag">${escHtml(j.workType || '—')}</span>${hybridDaysLabel(j) ? `<span class="table-location"> · ${escHtml(hybridDaysLabel(j))}</span>` : ''}</td>
+          <td class="table-td"><span class="table-tag">${escHtml(j.workType || '—')}</span>${hybridDaysLabel(j) ? `<span class="table-location"> · ${escHtml(hybridDaysLabel(j))}</span>` : ''}${jobDurationLabel(j) ? `<span class="table-location"> · ${escHtml(jobDurationLabel(j))}</span>` : ''}</td>
           <td class="table-td table-muted">${escHtml(formatSalary(j.salary) || '—')}</td>
           <td class="table-td"><span class="fit-badge ${fitCls}">${fitLabel}</span></td>
           <td class="table-td table-muted">${formatDate(j.dateAdded)}</td>
@@ -755,6 +755,61 @@ function isHybridWorkType(workType) {
 
 function hybridDaysLabel(job) {
   return isHybridWorkType(job.workType) && job.hybridDays ? job.hybridDays : '';
+}
+
+function isDurationJobType(jobType) {
+  return /\b(contract|temporary)\b/i.test(jobType || '');
+}
+
+function jobDurationLabel(job) {
+  return isDurationJobType(job.jobType) && job.duration ? job.duration : '';
+}
+
+function setJobDurationValue(value) {
+  const input = document.getElementById('job-duration');
+  const summary = document.getElementById('job-duration-summary');
+  if (!input || !summary) return;
+  input.value = value || '';
+  summary.textContent = value || 'Pick duration';
+}
+
+function updateJobDurationVisibility(clearWhenHidden = false) {
+  const jobTypeEl = document.getElementById('job-type');
+  const group = document.getElementById('job-duration-group');
+  const input = document.getElementById('job-duration');
+  if (!jobTypeEl || !group || !input) return;
+  const show = isDurationJobType(jobTypeEl.value);
+  group.style.display = show ? '' : 'none';
+  if (!show && clearWhenHidden) setJobDurationValue('');
+}
+
+function openJobDurationModal() {
+  const current = document.getElementById('job-duration')?.value || '';
+  const count = document.getElementById('job-duration-count');
+  const unit = document.getElementById('job-duration-unit');
+  document.querySelectorAll('#job-duration-presets .duration-preset').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.duration === current);
+  });
+  const match = current.match(/^\s*(\d+)\s*(week|weeks|wk|wks|month|months|mo|mos|year|years|yr|yrs)\s*$/i);
+  if (count) count.value = match ? match[1] : '';
+  if (unit) {
+    const rawUnit = match ? match[2].toLowerCase() : 'months';
+    unit.value = /^(week|wk)/.test(rawUnit) ? 'weeks' : /^(year|yr)/.test(rawUnit) ? 'years' : 'months';
+  }
+  openModal('modal-job-duration');
+}
+
+function applyJobDurationModal() {
+  const count = document.getElementById('job-duration-count')?.value;
+  const unit = document.getElementById('job-duration-unit')?.value || 'months';
+  const num = parseInt(count, 10);
+  if (!num || num < 1) {
+    toast('Choose a duration or enter a number.', 'error');
+    return;
+  }
+  const singular = unit.replace(/s$/, '');
+  setJobDurationValue(`${num} ${num === 1 ? singular : unit}`);
+  closeModal('modal-job-duration');
 }
 
 function setHybridDaysValue(value) {
@@ -827,6 +882,7 @@ function jobCardHTML(job) {
   const pinCls = job.pinned ? ' pinned-card' : '';
   const selectedCls = bulkSelected.has(job.id) ? ' bulk-selected' : '';
   const inOfficeDays = hybridDaysLabel(job);
+  const duration = jobDurationLabel(job);
   const pinBtn = bulkSelectMode ? '' : `<button class="card-pin-btn${job.pinned ? ' pinned' : ''}" data-pin-id="${job.id}" title="${job.pinned ? 'Unpin' : 'Pin to top'}" draggable="false">${job.pinned ? '📌' : '📍'}</button>`;
   const checkOverlay = bulkSelectMode ? `<span class="bulk-check${bulkSelected.has(job.id) ? ' checked' : ''}" data-bulk-id="${job.id}">✓</span>` : '';
   return `
@@ -837,6 +893,7 @@ function jobCardHTML(job) {
       <div class="job-card-role"><span class="drag-handle" title="Drag to move stage" draggable="false">&#8942;</span>${escHtml(job.role)}</div>
       <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
       ${inOfficeDays ? `<div class="job-card-hybrid-days">In office: ${escHtml(inOfficeDays)}</div>` : ''}
+      ${duration ? `<div class="job-card-duration">Duration: ${escHtml(duration)}</div>` : ''}
       <div class="job-card-footer">
         <span class="job-card-date">${job.stage === 'declined' && job.declinedAt ? '❌ ' + formatDate(job.declinedAt) : job.stage === 'ghosted' && job.ghostedAt ? 'Ghosted ' + formatDate(job.ghostedAt) : formatDate(job.dateAdded)}</span>
         ${fitRingHTML(job.fitScore)}
@@ -1162,6 +1219,18 @@ function openJobDetail(id) {
       hybridDaysRow.style.display = '';
     } else {
       hybridDaysRow.style.display = 'none';
+    }
+  }
+
+
+  const durationRow = document.getElementById('detail-duration-row');
+  if (durationRow) {
+    const duration = jobDurationLabel(job);
+    if (duration) {
+      document.getElementById('detail-duration').textContent = duration;
+      durationRow.style.display = '';
+    } else {
+      durationRow.style.display = 'none';
     }
   }
 
@@ -1521,8 +1590,15 @@ function parseJobListing(text) {
   else if (/\bpart[\s-]?time\b/i.test(text)) result.jobType = 'Part-time';
   else if (/\bcontract\b/i.test(text)) result.jobType = 'Contract';
   else if (/\bfreelance\b/i.test(text)) result.jobType = 'Freelance';
-  else if (/\btemporary\b/i.test(text)) result.jobType = 'Temporary';
+  else if (/\b(?:temporary|temp)\b/i.test(text)) result.jobType = 'Temporary';
   else if (/\binternship\b/i.test(text)) result.jobType = 'Internship';
+
+  if (isDurationJobType(result.jobType)) {
+    const durationMatch =
+      text.match(/\b(?:contract|assignment|engagement|duration|term|temporary|temp)\s*(?:length|duration|term)?\s*[:\-]?\s*((?:\d+\s*(?:week|weeks|wk|wks|month|months|mo|mos|year|years|yr|yrs)|through\s+[A-Za-z]+(?:\s+\d{4})?|until\s+[A-Za-z]+(?:\s+\d{4})?)[^\n.]*)/i) ||
+      text.match(/\b(\d+\s*(?:week|weeks|wk|wks|month|months|mo|mos|year|years|yr|yrs)\s+(?:contract|assignment|engagement|temporary|temp)\b)/i);
+    if (durationMatch) result.duration = durationMatch[1].trim();
+  }
 
   // Seniority
   if (/\b(staff|principal)\b/i.test(text)) result.seniority = 'Staff';
@@ -1670,8 +1746,10 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-seniority').value = job ? job.seniority || '' : '';
   document.getElementById('job-type').value = job ? job.jobType || '' : '';
   document.getElementById('job-work-type').value = job ? job.workType || '' : '';
+  setJobDurationValue(job ? job.duration || '' : '');
   setHybridDaysValue(job ? job.hybridDays || '' : '');
   updateHybridDaysVisibility(false);
+  updateJobDurationVisibility(false);
 
   // Show/clear the "Auto-filled" indicator on the work type label
   const workTypeSelect = document.getElementById('job-work-type');
@@ -1757,6 +1835,7 @@ function saveJob() {
     deadline: document.getElementById('job-deadline').value,
     seniority: document.getElementById('job-seniority').value,
     jobType: document.getElementById('job-type').value,
+    duration: isDurationJobType(document.getElementById('job-type').value) ? document.getElementById('job-duration').value.trim() : '',
     ...(() => {
       const typed = document.getElementById('job-work-type').value;
       const inferred = !typed ? inferWorkType(description) : null;
@@ -1978,6 +2057,10 @@ function renderComparisonGrid(jobs) {
         ${hybridDaysLabel(j) ? `<div class="compare-row">
           <div class="compare-row-label">In-office Days</div>
           <div class="compare-row-value">${escHtml(hybridDaysLabel(j))}</div>
+        </div>` : ''}
+        ${jobDurationLabel(j) ? `<div class="compare-row">
+          <div class="compare-row-label">Duration</div>
+          <div class="compare-row-value">${escHtml(jobDurationLabel(j))}</div>
         </div>` : ''}
         <div class="compare-row">
           <div class="compare-row-label">Seniority</div>

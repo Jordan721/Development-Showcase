@@ -852,7 +852,8 @@
   margin-bottom: 8px;
 }
 
-.job-card-hybrid-days {
+.job-card-hybrid-days,
+.job-card-duration {
   width: fit-content;
   max-width: 100%;
   margin: -2px 0 8px;
@@ -863,6 +864,11 @@
   font-size: 11px;
   font-weight: 600;
   line-height: 1.35;
+}
+
+.job-card-duration {
+  background: rgba(167, 139, 250, .12);
+  color: #a78bfa;
 }
 
 .job-card-footer {

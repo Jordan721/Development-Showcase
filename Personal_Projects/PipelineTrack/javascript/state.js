@@ -198,7 +198,7 @@ function exportCSV() {
   };
 
   const headers = [
-    'Role', 'Company', 'Location', 'Stage', 'Seniority', 'Job Type', 'Work Type', 'In-office Days',
+    'Role', 'Company', 'Location', 'Stage', 'Seniority', 'Job Type', 'Duration', 'Work Type', 'In-office Days',
     'Department', 'Salary', 'Date Posted', 'Date Applied', 'Date Added', 'Deadline', 'Fit Score (%)',
     'Matched Skills', 'Skill Gaps', 'URL', 'Notes', 'Company Notes', 'Benefits', 'Cover Letter', 'Job Description'
   ];
@@ -210,6 +210,7 @@ function exportCSV() {
     STAGE_LABELS[j.stage] || j.stage,
     j.seniority,
     j.jobType,
+    j.duration,
     j.workType,
     j.hybridDays,
     j.department,
@@ -347,6 +348,7 @@ function _importFromCSV(text) {
       stage: stageLabelToKey[stageRaw] || 'saved',
       seniority: get(f, 'seniority'),
       jobType: get(f, 'job type'),
+      duration: get(f, 'duration'),
       workType: csvWorkType || inferredWorkType || '',
       workTypeInferred: !csvWorkType && !!inferredWorkType,
       hybridDays: /\bhybrid\b/i.test(csvWorkType || inferredWorkType || '') ? csvHybridDays : '',
@@ -484,6 +486,7 @@ function _normalizeJob(job) {
     deadline: _stringValue(source.deadline),
     seniority: _stringValue(source.seniority),
     jobType: _stringValue(source.jobType),
+    duration: _stringValue(source.duration),
     workType: _stringValue(source.workType),
     hybridDays: _stringValue(source.hybridDays),
     stage: STAGES.includes(source.stage) ? source.stage : 'saved',

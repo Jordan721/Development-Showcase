@@ -1091,6 +1091,14 @@
                             <span class="hybrid-days-picker-icon">Edit</span>
                         </button>
                     </div>
+                    <div class="form-group job-duration-group" id="job-duration-group" style="display:none">
+                        <label class="form-label">Expected Duration</label>
+                        <input type="hidden" id="job-duration" />
+                        <button type="button" class="hybrid-days-picker-btn" id="job-duration-open">
+                            <span id="job-duration-summary">Pick duration</span>
+                            <span class="hybrid-days-picker-icon">Edit</span>
+                        </button>
+                    </div>
                     <div class="form-group">
                         <label class="form-label">Resume Used</label>
                         <select class="text-input" id="job-resume-vault-select">
@@ -1223,6 +1231,10 @@
                         <span class="detail-meta-label">In-office Days</span>
                         <span class="detail-meta-value" id="detail-hybrid-days"></span>
                     </div>
+                    <div class="detail-meta-row" id="detail-duration-row" style="display:none">
+                        <span class="detail-meta-label">Expected Duration</span>
+                        <span class="detail-meta-value" id="detail-duration"></span>
+                    </div>
                     <div class="detail-meta-row" id="detail-date-declined-row" style="display:none">
                         <span class="detail-meta-label" id="detail-date-declined-label">Not Selected On</span>
                         <span class="detail-meta-value" id="detail-date-declined"></span>
@@ -1312,6 +1324,37 @@
         </div>
     </div>
 
+    <!-- ── MODAL: JOB DURATION ──────────────────────────── -->
+    <div class="modal-overlay" id="modal-job-duration" aria-hidden="true">
+        <div class="modal hybrid-days-modal job-duration-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Expected Duration</h2>
+                <button class="modal-close" data-close="modal-job-duration">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="duration-presets" id="job-duration-presets">
+                    <button type="button" class="duration-preset" data-duration="4 weeks">4 weeks</button>
+                    <button type="button" class="duration-preset" data-duration="8 weeks">8 weeks</button>
+                    <button type="button" class="duration-preset" data-duration="3 months">3 months</button>
+                    <button type="button" class="duration-preset" data-duration="6 months">6 months</button>
+                    <button type="button" class="duration-preset" data-duration="12 months">12 months</button>
+                    <button type="button" class="duration-preset" data-duration="Until project completion">Project-based</button>
+                </div>
+                <div class="duration-custom-row">
+                    <input type="number" class="text-input" id="job-duration-count" min="1" max="99" placeholder="6" />
+                    <select class="select-input" id="job-duration-unit">
+                        <option value="weeks">weeks</option>
+                        <option value="months" selected>months</option>
+                        <option value="years">years</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-ghost" id="job-duration-clear-btn">Clear</button>
+                <button class="btn-primary" id="job-duration-apply-btn">Apply Duration</button>
+            </div>
+        </div>
+    </div>
     <!-- ── MODAL: STAGE MILESTONE ───────────────────────── -->
     <div class="modal-overlay" id="modal-milestone" aria-hidden="true">
         <div class="modal">
