@@ -2760,7 +2760,19 @@
 }
 
 [data-theme="light"] .modal-overlay {
-  background: rgba(15, 17, 23, 0.4);
+  background: rgba(31, 35, 40, .46);
+}
+
+[data-theme="light"] .modal-overlay::before {
+  background: linear-gradient(var(--accent), var(--accent)) left / 0 100% no-repeat, rgba(31, 35, 40, .18);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .65), 0 8px 20px rgba(31, 35, 40, .18);
+}
+
+[data-theme="light"] .modal-overlay::after {
+  border-color: rgba(31, 35, 40, .14);
+  background: rgba(255, 255, 255, .94);
+  color: #1f2328;
+  box-shadow: 0 14px 34px rgba(31, 35, 40, .24);
 }
 
 [data-theme="light"] .modal-close:hover {
