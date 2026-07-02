@@ -149,10 +149,47 @@ function getPayPeriodLabel(period) {
   return labels[period] || '';
 }
 
+function inferPayPeriodFromSalary(raw) {
+  if (!raw || typeof raw !== 'string') {
+    return {
+      payPeriod: 'year',
+      inferred: false
+    };
+  }
+
+  const values = [];
+  raw.replace(/(?:[$£€]\s*)?(\d+(?:,\d{3})*(?:\.\d+)?)\s*([kK])?/g, (_, amount, suffix) => {
+    const n = Number(amount.replace(/,/g, ''));
+    if (Number.isFinite(n) && n > 0) values.push(suffix ? n * 1000 : n);
+    return _;
+  });
+
+  if (!values.length) {
+    return {
+      payPeriod: 'year',
+      inferred: false
+    };
+  }
+
+  const max = Math.max(...values);
+  let payPeriod = 'year';
+  if (/\bk\b|\d\s*k\b/i.test(raw) || max >= 10000) payPeriod = 'year';
+  else if (max <= 250) payPeriod = 'hour';
+  else if (max <= 1500) payPeriod = 'day';
+  else if (max <= 7000) payPeriod = 'month';
+
+  return {
+    payPeriod,
+    inferred: true
+  };
+}
+
 function splitSalaryAndPayPeriod(raw) {
+  const inferred = inferPayPeriodFromSalary(raw);
   const fallback = {
     salary: raw || '',
-    payPeriod: 'year'
+    payPeriod: inferred.payPeriod,
+    payPeriodInferred: inferred.inferred
   };
   if (!raw || typeof raw !== 'string') return fallback;
 
@@ -173,7 +210,8 @@ function splitSalaryAndPayPeriod(raw) {
 
   return {
     salary,
-    payPeriod: match.value
+    payPeriod: match.value,
+    payPeriodInferred: false
   };
 }
 

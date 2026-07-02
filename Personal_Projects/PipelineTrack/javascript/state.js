@@ -76,6 +76,28 @@ function save() {
   localStorage.setItem('pt_cover_letters', JSON.stringify(state.coverLetters));
 }
 
+function migrateJobSalaryPayPeriods() {
+  if (typeof splitSalaryAndPayPeriod !== 'function' || typeof formatSalaryWithPayPeriod !== 'function') return false;
+
+  let changed = false;
+  state.jobs = state.jobs.map(job => {
+    if (!job || !job.salary) return job;
+    const salaryParts = splitSalaryAndPayPeriod(job.salary);
+    if (!salaryParts.payPeriodInferred) return job;
+
+    const formattedSalary = formatSalaryWithPayPeriod(salaryParts.salary, salaryParts.payPeriod);
+    if (!formattedSalary || formattedSalary === job.salary) return job;
+
+    changed = true;
+    return {
+      ...job,
+      salary: formattedSalary,
+      salaryPayPeriodInferred: true
+    };
+  });
+
+  return changed;
+}
 function load() {
   try {
     state.jobs = JSON.parse(localStorage.getItem('pt_jobs')) || [];
@@ -145,6 +167,7 @@ function load() {
   }
 
   state.jobs = (Array.isArray(state.jobs) ? state.jobs : []).map(_normalizeJob);
+  const migratedSalaryPayPeriods = migrateJobSalaryPayPeriods();
   state.profile = _normalizeProfile(state.profile);
   state.contacts = _normalizeEntityArray(state.contacts);
   state.goals = _normalizeEntityArray(state.goals);
@@ -153,6 +176,7 @@ function load() {
   state.resumes = _normalizeEntityArray(state.resumes);
   state.coverLetters = _normalizeEntityArray(state.coverLetters);
   state.savedCourses = Array.isArray(state.savedCourses) ? state.savedCourses : [];
+  if (migratedSalaryPayPeriods) save();
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -551,6 +575,7 @@ function importData(file) {
           added,
           updated
         } = _importFromCSV(e.target.result);
+        migrateJobSalaryPayPeriods();
         save();
         if (typeof backfillSeniority === 'function') backfillSeniority();
         renderView(state.activeView);
@@ -580,16 +605,6 @@ function importData(file) {
           }
           return;
         }
-        state.jobs = (Array.isArray(state.jobs) ? state.jobs : []).map(_normalizeJob);
-        state.profile = _normalizeProfile(state.profile);
-        state.contacts = _normalizeEntityArray(state.contacts);
-        state.goals = _normalizeEntityArray(state.goals);
-        state.events = _normalizeEntityArray(state.events);
-        state.templates = _normalizeEntityArray(state.templates);
-        state.resumes = _normalizeEntityArray(state.resumes);
-        state.coverLetters = _normalizeEntityArray(state.coverLetters);
-        state.savedCourses = Array.isArray(state.savedCourses) ? state.savedCourses : [];
-
         // Merge jobs by ID: update existing, add new, keep current-only jobs
         const currentById = {};
         state.jobs.forEach((j, i) => {
@@ -671,6 +686,7 @@ function importData(file) {
           data.savedCourses.forEach(c => courseSet.add(c));
           state.savedCourses = [...courseSet];
         }
+        migrateJobSalaryPayPeriods();
         save();
         let refreshWarning = '';
         try {

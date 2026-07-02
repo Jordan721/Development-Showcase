@@ -1739,8 +1739,24 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-location').value = job ? job.location || '' : '';
   document.getElementById('job-url').value = job ? job.url || '' : '';
   const salaryParts = splitSalaryAndPayPeriod(job ? job.salary || '' : '');
-  document.getElementById('job-salary').value = salaryParts.salary;
-  document.getElementById('job-pay-period').value = salaryParts.payPeriod;
+  const salaryInput = document.getElementById('job-salary');
+  const salaryPeriodSelect = document.getElementById('job-pay-period');
+  salaryInput.value = salaryParts.salary;
+  salaryPeriodSelect.value = salaryParts.payPeriod;
+
+  const salaryLabel = salaryInput.closest('.form-group').querySelector('.form-label');
+  const existingSalaryTag = salaryLabel ? salaryLabel.querySelector('.inferred-tag') : null;
+  if (existingSalaryTag) existingSalaryTag.remove();
+  if (job && job.salaryPayPeriodInferred && salaryLabel) {
+    const tag = document.createElement('span');
+    tag.className = 'inferred-tag';
+    tag.title = 'Pay period inferred from the saved salary value';
+    tag.textContent = '✦ Auto-filled pay rate';
+    salaryLabel.appendChild(tag);
+    const clearSalaryTag = () => tag.remove();
+    salaryInput.addEventListener('input', clearSalaryTag, { once: true });
+    salaryPeriodSelect.addEventListener('change', clearSalaryTag, { once: true });
+  }
   document.getElementById('job-date-posted').value = job ? job.datePosted || '' : '';
   document.getElementById('job-date-applied').value = job ? job.dateApplied || '' : '';
   document.getElementById('job-deadline').value = job ? job.deadline || '' : '';
@@ -1791,7 +1807,8 @@ function openAddJobModal(editId = null) {
     spPanel.classList.remove('open');
     spPanel.style.display = '';
   }
-  if (spTrigger) spTrigger.style.display = editId ? 'none' : '';
+  if (spTrigger) spTrigger.style.display = '';
+  document.getElementById('show-smart-paste-btn')?.style.setProperty('display', editId ? 'none' : '');
   if (spInput) spInput.value = '';
   // Clear any leftover auto-fill tags
   document.querySelectorAll('#modal-job .inferred-tag').forEach(t => t.remove());
@@ -1832,6 +1849,7 @@ function saveJob() {
     location: document.getElementById('job-location').value.trim(),
     url: document.getElementById('job-url').value.trim(),
     salary: formatSalaryWithPayPeriod(document.getElementById('job-salary').value.trim(), document.getElementById('job-pay-period').value),
+    salaryPayPeriodInferred: false,
     datePosted: document.getElementById('job-date-posted').value,
     dateApplied: document.getElementById('job-date-applied').value,
     deadline: document.getElementById('job-deadline').value,
