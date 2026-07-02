@@ -8,37 +8,62 @@ let calOffset = 0;
 let calEventFilter = 'all';
 let calAnimDir = 'fade'; // 'fade' | 'left' | 'right'
 
+function calendarDate(value) {
+  if (!value) return null;
+  if (value instanceof Date) {
+    if (Number.isNaN(value.getTime())) return null;
+    return new Date(value.getFullYear(), value.getMonth(), value.getDate());
+  }
+  const str = String(value).trim();
+  const dateOnly = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (dateOnly) {
+    return new Date(Number(dateOnly[1]), Number(dateOnly[2]) - 1, Number(dateOnly[3]));
+  }
+  const parsed = new Date(str);
+  if (Number.isNaN(parsed.getTime())) return null;
+  return new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
+}
+
 function buildCalendarEvents() {
   const events = [];
   state.jobs.forEach(j => {
-    const jobDate = j.dateApplied ? new Date(j.dateApplied + 'T00:00:00') : new Date(j.dateAdded);
-    events.push({
-      date: jobDate,
-      type: 'job',
-      label: j.role + ' @ ' + j.company,
-      id: j.id
-    });
-    if (j.deadline) {
+    const jobDate = calendarDate(j.dateApplied || j.dateAdded);
+    if (jobDate) {
       events.push({
-        date: new Date(j.deadline + 'T00:00:00'),
-        type: 'deadline',
-        label: 'Deadline: ' + j.role + ' @ ' + j.company,
+        date: jobDate,
+        type: 'job',
+        label: j.role + ' @ ' + j.company,
         id: j.id
       });
+    }
+    if (j.deadline) {
+      const deadlineDate = calendarDate(j.deadline);
+      if (deadlineDate) {
+        events.push({
+          date: deadlineDate,
+          type: 'deadline',
+          label: 'Deadline: ' + j.role + ' @ ' + j.company,
+          id: j.id
+        });
+      }
     }
   });
   (state.contacts || []).forEach(c => {
     if (!c.nextFollowUp) return;
+    const followUpDate = calendarDate(c.nextFollowUp);
+    if (!followUpDate) return;
     events.push({
-      date: new Date(c.nextFollowUp + 'T00:00:00'),
+      date: followUpDate,
       type: 'contact',
       label: 'Follow-up: ' + c.name,
       id: c.id
     });
   });
   (state.events || []).forEach(ev => {
+    const eventDate = calendarDate(ev.date);
+    if (!eventDate) return;
     events.push({
-      date: new Date(ev.date + 'T00:00:00'),
+      date: eventDate,
       type: 'event',
       label: ev.title,
       id: ev.id,
@@ -55,6 +80,7 @@ function getCalPeriodWindow(mode, offset) {
     const m = now.getMonth() + offset;
     const start = new Date(y, m, 1);
     const end = new Date(y, m + 1, 0);
+    end.setHours(23, 59, 59, 999);
     return {
       periodLabel: start.toLocaleString('en-US', {
         month: 'long',
@@ -90,7 +116,7 @@ function getCalPeriodWindow(mode, offset) {
     return {
       periodLabel: String(y),
       periodStart: new Date(y, 0, 1),
-      periodEnd: new Date(y, 11, 31, 23, 59, 59)
+      periodEnd: new Date(y, 11, 31, 23, 59, 59, 999)
     };
   }
 }
@@ -289,9 +315,10 @@ function wireCalendarControls() {
   if (!body) return;
   body.querySelectorAll('[data-cell-date]').forEach(cell => {
     cell.addEventListener('click', e => {
-      if (e.target.classList.contains('cal-full-event')) {
-        const evType = e.target.dataset.evType;
-        const evId = e.target.dataset.evId;
+      const eventEl = e.target.closest('.cal-full-event');
+      if (eventEl) {
+        const evType = eventEl.dataset.evType;
+        const evId = eventEl.dataset.evId;
         if (evType === 'event') {
           const ev = (state.events || []).find(e => e.id === evId);
           if (ev) openEventModal(ev);
