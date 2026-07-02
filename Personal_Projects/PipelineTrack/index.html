@@ -1011,8 +1011,17 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">Salary / Pay Range</label>
-                            <input type="text" class="text-input" id="job-salary" placeholder="e.g. $80k–$100k"
-                                autocomplete="off" />
+                            <div class="salary-input-row">
+                                <input type="text" class="text-input" id="job-salary" placeholder="e.g. $80k–$100k"
+                                    autocomplete="off" />
+                                <select class="select-input" id="job-pay-period" aria-label="Pay period">
+                                    <option value="hour">Hourly</option>
+                                    <option value="day">Daily</option>
+                                    <option value="week">Weekly</option>
+                                    <option value="month">Monthly</option>
+                                    <option value="year" selected>Yearly</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="form-row three-col">

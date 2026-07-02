@@ -1738,7 +1738,9 @@ function openAddJobModal(editId = null) {
 
   document.getElementById('job-location').value = job ? job.location || '' : '';
   document.getElementById('job-url').value = job ? job.url || '' : '';
-  document.getElementById('job-salary').value = job ? job.salary || '' : '';
+  const salaryParts = splitSalaryAndPayPeriod(job ? job.salary || '' : '');
+  document.getElementById('job-salary').value = salaryParts.salary;
+  document.getElementById('job-pay-period').value = salaryParts.payPeriod;
   document.getElementById('job-date-posted').value = job ? job.datePosted || '' : '';
   document.getElementById('job-date-applied').value = job ? job.dateApplied || '' : '';
   document.getElementById('job-deadline').value = job ? job.deadline || '' : '';
@@ -1829,7 +1831,7 @@ function saveJob() {
     departmentInferred,
     location: document.getElementById('job-location').value.trim(),
     url: document.getElementById('job-url').value.trim(),
-    salary: formatSalary(document.getElementById('job-salary').value.trim()),
+    salary: formatSalaryWithPayPeriod(document.getElementById('job-salary').value.trim(), document.getElementById('job-pay-period').value),
     datePosted: document.getElementById('job-date-posted').value,
     dateApplied: document.getElementById('job-date-applied').value,
     deadline: document.getElementById('job-deadline').value,

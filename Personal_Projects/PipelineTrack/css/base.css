@@ -472,6 +472,15 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.15);
 }
+.salary-input-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 118px;
+  gap: 8px;
+}
+
+.salary-input-row .select-input {
+  width: 100%;
+}
 
 .form-row {
   display: flex;

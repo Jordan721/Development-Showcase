@@ -174,7 +174,12 @@ function wireEvents() {
       if (parsed[key]) {
         if (key === 'hybridDays' && typeof setHybridDaysValue === 'function') setHybridDaysValue(parsed[key]);
         else if (key === 'duration' && typeof setJobDurationValue === 'function') setJobDurationValue(parsed[key]);
-        else document.getElementById(id).value = parsed[key];
+        else if (key === 'salary' && typeof splitSalaryAndPayPeriod === 'function') {
+          const salaryParts = splitSalaryAndPayPeriod(parsed[key]);
+          document.getElementById(id).value = salaryParts.salary;
+          const periodSelect = document.getElementById('job-pay-period');
+          if (periodSelect) periodSelect.value = salaryParts.payPeriod;
+        } else document.getElementById(id).value = parsed[key];
         flashField(id);
         addAutoTag(id);
       }

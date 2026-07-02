@@ -138,6 +138,53 @@ function uid() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
 
+function getPayPeriodLabel(period) {
+  const labels = {
+    hour: 'hour',
+    day: 'day',
+    week: 'week',
+    month: 'month',
+    year: 'year'
+  };
+  return labels[period] || '';
+}
+
+function splitSalaryAndPayPeriod(raw) {
+  const fallback = {
+    salary: raw || '',
+    payPeriod: 'year'
+  };
+  if (!raw || typeof raw !== 'string') return fallback;
+
+  const periodPatterns = [
+    { value: 'hour', regex: /(?:\/\s*|\bper\s+|\b)(?:hour|hourly|hr|hrs)\b/i },
+    { value: 'day', regex: /(?:\/\s*|\bper\s+|\b)(?:day|daily)\b/i },
+    { value: 'week', regex: /(?:\/\s*|\bper\s+|\b)(?:week|weekly|wk)\b/i },
+    { value: 'month', regex: /(?:\/\s*|\bper\s+|\b)(?:month|monthly|mo)\b/i },
+    { value: 'year', regex: /(?:\/\s*|\bper\s+|\b)(?:year|yearly|annual|annually|yr)\b/i }
+  ];
+  const match = periodPatterns.find(period => period.regex.test(raw));
+  if (!match) return fallback;
+
+  const salary = raw
+    .replace(/\s*(?:\/\s*|per\s+)?(?:hour|hourly|hr|hrs|day|daily|week|weekly|wk|month|monthly|mo|year|yearly|annual|annually|yr)\b\.?/ig, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+
+  return {
+    salary,
+    payPeriod: match.value
+  };
+}
+
+function formatSalaryWithPayPeriod(raw, period) {
+  const split = splitSalaryAndPayPeriod(raw);
+  const formattedSalary = formatSalary(split.salary).trim();
+  if (!formattedSalary) return '';
+  const selectedPeriod = period || split.payPeriod;
+  const label = getPayPeriodLabel(selectedPeriod);
+  return label ? `${formattedSalary} / ${label}` : formattedSalary;
+}
 // Converts salary input like "80k", "10k-100k", "150000" → "$80,000", "$10,000 – $100,000"
 function formatSalary(raw) {
   if (!raw || typeof raw !== 'string') return raw;
