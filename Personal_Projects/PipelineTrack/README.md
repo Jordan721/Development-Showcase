@@ -17,7 +17,7 @@ A personal job search companion built to take the chaos out of hunting for work.
 | Feature | What it does |
 |---|---|
 | ◈ Dashboard | Stats, clickable streak timeline, pipeline health, conversion funnel, weekly velocity, upcoming deadlines, skill gaps, and weekly summary |
-| 📋 Job Board | 8-stage kanban with columns, priority matrix, table, and timeline views — search and filter built in |
+| 📋 Job Board | 9-stage kanban with columns, priority matrix, table, timeline, and map views — search and filter built in |
 | 📅 Calendar & Activity | Month/week/year view of job events, deadlines, follow-ups, and job fairs |
 | 🤝 Network | Track recruiters, hiring managers, and referrals with follow-up reminders |
 | 🎯 Goals | Set weekly/monthly targets and track live progress against your job board data |
