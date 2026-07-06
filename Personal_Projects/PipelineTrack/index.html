@@ -689,38 +689,48 @@
             <!-- Resume Vault -->
             <div class="resume-section" data-card="vault">
                 <div class="vault-section-header">
-                    <div class="resume-section-title">Resume Vault</div>
-                    <button class="btn-secondary vault-clear-all-btn" id="vault-clear-all-btn">Clear Resume
-                        Vault</button>
+                    <div>
+                        <div class="resume-section-title">Resume Vault</div>
+                        <p class="resume-section-desc">Keep tailored resume versions close at hand. Reorder them by priority, review them, or attach them to jobs from the Application tab.</p>
+                    </div>
+                    <div class="vault-header-actions">
+                        <span class="vault-count-pill" id="resume-vault-count">0 files</span>
+                        <button class="btn-secondary vault-clear-all-btn" id="vault-clear-all-btn">Clear</button>
+                    </div>
                 </div>
-                <p class="resume-section-desc">Store and manage your resume versions. Upload or drag a file in, view or
-                    download anytime.</p>
-                <div class="vault-upload-row">
+                <div class="vault-upload-row" id="vault-drop-zone">
                     <input type="file" id="vault-file-input" accept=".pdf,.docx,.txt" style="display:none" />
-                    <button class="btn-primary" id="vault-upload-btn">+ Upload Resume</button>
+                    <div class="vault-upload-copy">
+                        <div class="vault-upload-title">Drop a resume here</div>
+                        <div class="vault-upload-hint">PDF, DOCX, or TXT. Stored locally in your browser.</div>
+                    </div>
+                    <button class="btn-primary" id="vault-upload-btn">Upload Resume</button>
                 </div>
-                <div class="vault-drop-zone" id="vault-drop-zone">Drop a resume file here (PDF, DOCX, TXT)</div>
                 <div id="vault-list"></div>
             </div>
 
             <!-- Cover Letter Vault -->
             <div class="resume-section" data-card="cover-vault">
                 <div class="vault-section-header">
-                    <div class="resume-section-title">Cover Letter Vault</div>
-                    <button class="btn-secondary vault-clear-all-btn" id="cover-vault-clear-all-btn">Clear Cover Letter
-                        Vault</button>
+                    <div>
+                        <div class="resume-section-title">Cover Letter Vault</div>
+                        <p class="resume-section-desc">Save reusable letters and company-specific drafts so good wording does not disappear between applications.</p>
+                    </div>
+                    <div class="vault-header-actions">
+                        <span class="vault-count-pill" id="cover-vault-count">0 files</span>
+                        <button class="btn-secondary vault-clear-all-btn" id="cover-vault-clear-all-btn">Clear</button>
+                    </div>
                 </div>
-                <p class="resume-section-desc">Store your cover letter versions. Upload or drag a file in, view or
-                    download anytime.</p>
-                <div class="vault-upload-row">
+                <div class="vault-upload-row" id="cover-vault-drop-zone">
                     <input type="file" id="cover-vault-file-input" accept=".pdf,.docx,.txt" style="display:none" />
-                    <button class="btn-primary" id="cover-vault-upload-btn">+ Upload Cover Letter</button>
-                </div>
-                <div class="vault-drop-zone" id="cover-vault-drop-zone">Drop a cover letter file here (PDF, DOCX, TXT)
+                    <div class="vault-upload-copy">
+                        <div class="vault-upload-title">Drop a cover letter here</div>
+                        <div class="vault-upload-hint">PDF, DOCX, or TXT. View, rename, download, or delete later.</div>
+                    </div>
+                    <button class="btn-primary" id="cover-vault-upload-btn">Upload Letter</button>
                 </div>
                 <div id="cover-vault-list"></div>
             </div>
-
             <!-- Resources & AI Tools -->
             <div class="resume-section" data-card="resources">
                 <div class="resume-section-title">Resources & AI Tools</div>

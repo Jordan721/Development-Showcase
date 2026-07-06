@@ -90,6 +90,19 @@ function renderResume() {
   renderResources();
 }
 
+function vaultCountLabel(count, singular) {
+  return `${count} ${singular}${count === 1 ? '' : 's'}`;
+}
+
+function vaultEmptyMarkup(kind, actionLabel) {
+  return `<div class="vault-empty">
+    <div class="vault-empty-icon">+</div>
+    <div class="vault-empty-title">No ${kind}s saved yet</div>
+    <div class="vault-empty-copy">Upload or drag in a ${kind} to start building your reusable application library.</div>
+    <div class="vault-empty-action">${actionLabel}</div>
+  </div>`;
+}
+
 /* ══════════════════════════════════════════════════════════
    RESUME VAULT
    ══════════════════════════════════════════════════════════ */
@@ -98,12 +111,15 @@ function renderResumeVault() {
   const uploadBtn = document.getElementById('vault-upload-btn');
   const clearBtn = document.getElementById('vault-clear-all-btn');
   const fileInput = document.getElementById('vault-file-input');
+  const countEl = document.getElementById('resume-vault-count');
   if (!list || !uploadBtn || !fileInput) return;
 
   function renderList() {
-    if (clearBtn) clearBtn.disabled = !state.resumes || state.resumes.length === 0;
-    if (!state.resumes || state.resumes.length === 0) {
-      list.innerHTML = '<div class="vault-empty">No resumes uploaded yet. Click <strong>+ Upload Resume</strong> to add one.</div>';
+    const count = state.resumes ? state.resumes.length : 0;
+    if (countEl) countEl.textContent = vaultCountLabel(count, 'file');
+    if (clearBtn) clearBtn.disabled = count === 0;
+    if (count === 0) {
+      list.innerHTML = vaultEmptyMarkup('resume', 'Upload Resume');
       return;
     }
     list.innerHTML = state.resumes.map(r => {
@@ -111,19 +127,23 @@ function renderResumeVault() {
       const kb = (r.size / 1024).toFixed(1);
       const date = new Date(r.uploadedAt).toLocaleDateString();
       return `
-        <div class="vault-item" draggable="true" data-id="${r.id}">
-          <div class="vault-drag-handle" title="Drag to reorder">⠿</div>
+        <div class="vault-item" draggable="true" data-id="${r.id}" data-file-type="${r.fileType}">
+          <div class="vault-drag-handle" title="Drag to reorder">::</div>
           <div class="vault-item-icon">${icon}</div>
           <div class="vault-item-info">
-            <div class="vault-item-name">${r.name}</div>
-            <div class="vault-item-meta">${r.fileType.toUpperCase()} · ${kb} KB · ${date}</div>
+            <div class="vault-item-name">${escHtml(r.name)}</div>
+            <div class="vault-item-meta">
+              <span>${r.fileType.toUpperCase()}</span>
+              <span>${kb} KB</span>
+              <span>Uploaded ${date}</span>
+            </div>
           </div>
           <div class="vault-item-actions">
-            <button class="btn-secondary vault-review-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Review</button>
-            <button class="btn-secondary vault-view-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">View</button>
-            <button class="btn-secondary vault-dl-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Download</button>
-            <button class="btn-secondary vault-rename-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Rename</button>
-            <button class="btn-secondary vault-delete-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Delete</button>
+            <button class="btn-secondary vault-action-btn vault-review-btn" data-id="${r.id}">Review</button>
+            <button class="btn-secondary vault-action-btn vault-view-btn" data-id="${r.id}">View</button>
+            <button class="btn-secondary vault-action-btn vault-dl-btn" data-id="${r.id}">Download</button>
+            <button class="btn-secondary vault-action-btn vault-rename-btn" data-id="${r.id}">Rename</button>
+            <button class="btn-secondary vault-action-btn vault-delete-btn" data-id="${r.id}">Delete</button>
           </div>
         </div>`;
     }).join('');
@@ -290,12 +310,15 @@ function renderCoverLetterVault() {
   const uploadBtn = document.getElementById('cover-vault-upload-btn');
   const clearBtn = document.getElementById('cover-vault-clear-all-btn');
   const fileInput = document.getElementById('cover-vault-file-input');
+  const countEl = document.getElementById('cover-vault-count');
   if (!list || !uploadBtn || !fileInput) return;
 
   function renderList() {
-    if (clearBtn) clearBtn.disabled = !state.coverLetters || state.coverLetters.length === 0;
-    if (!state.coverLetters || state.coverLetters.length === 0) {
-      list.innerHTML = '<div class="vault-empty">No cover letters uploaded yet. Click <strong>+ Upload Cover Letter</strong> to add one.</div>';
+    const count = state.coverLetters ? state.coverLetters.length : 0;
+    if (countEl) countEl.textContent = vaultCountLabel(count, 'file');
+    if (clearBtn) clearBtn.disabled = count === 0;
+    if (count === 0) {
+      list.innerHTML = vaultEmptyMarkup('cover letter', 'Upload Letter');
       return;
     }
     list.innerHTML = state.coverLetters.map(r => {
@@ -303,18 +326,22 @@ function renderCoverLetterVault() {
       const kb = (r.size / 1024).toFixed(1);
       const date = new Date(r.uploadedAt).toLocaleDateString();
       return `
-        <div class="vault-item" draggable="true" data-id="${r.id}">
-          <div class="vault-drag-handle" title="Drag to reorder">⠿</div>
+        <div class="vault-item" draggable="true" data-id="${r.id}" data-file-type="${r.fileType}">
+          <div class="vault-drag-handle" title="Drag to reorder">::</div>
           <div class="vault-item-icon">${icon}</div>
           <div class="vault-item-info">
-            <div class="vault-item-name">${r.name}</div>
-            <div class="vault-item-meta">${r.fileType.toUpperCase()} · ${kb} KB · ${date}</div>
+            <div class="vault-item-name">${escHtml(r.name)}</div>
+            <div class="vault-item-meta">
+              <span>${r.fileType.toUpperCase()}</span>
+              <span>${kb} KB</span>
+              <span>Uploaded ${date}</span>
+            </div>
           </div>
           <div class="vault-item-actions">
-            <button class="btn-secondary cover-vault-view-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">View</button>
-            <button class="btn-secondary cover-vault-dl-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Download</button>
-            <button class="btn-secondary cover-vault-rename-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Rename</button>
-            <button class="btn-secondary cover-vault-delete-btn" data-id="${r.id}" style="font-size:12px;padding:5px 12px">Delete</button>
+            <button class="btn-secondary vault-action-btn cover-vault-view-btn" data-id="${r.id}">View</button>
+            <button class="btn-secondary vault-action-btn cover-vault-dl-btn" data-id="${r.id}">Download</button>
+            <button class="btn-secondary vault-action-btn cover-vault-rename-btn" data-id="${r.id}">Rename</button>
+            <button class="btn-secondary vault-action-btn cover-vault-delete-btn" data-id="${r.id}">Delete</button>
           </div>
         </div>`;
     }).join('');
