@@ -630,7 +630,8 @@
 }
 
 /* ── Color-Blind Mode ──────────────────────────────────── */
-#btn-colorblind {
+#btn-colorblind,
+#btn-theme-motion {
   background: none;
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -646,7 +647,9 @@
 }
 
 #btn-colorblind:hover,
-#btn-colorblind.active {
+#btn-colorblind.active,
+#btn-theme-motion:hover,
+#btn-theme-motion.active {
   border-color: var(--accent);
   color: var(--accent);
   background: var(--accent-dim);
@@ -804,6 +807,7 @@ select.inferred {
   .theme-swatches,
   .onboarding-help-btn,
   #btn-colorblind,
+  #btn-theme-motion,
   .cmd-palette-hint {
     display: none !important;
   }

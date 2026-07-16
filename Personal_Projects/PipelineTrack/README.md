@@ -45,7 +45,7 @@ I built PipelineTrack to solve that. One tool to track every job, score your ski
 5. Click any job card to see your fit score and skill breakdown
 6. Check **Learning Hub** to see what to learn next, **Analytics** for charts, and **Goals** to set weekly targets
 
-All data is saved to your browser's localStorage — nothing is sent anywhere. Use the ☀️ / 🌙 toggle to switch themes, **M / S / O** for Midnight, Sunset, or Ocean color themes, and **◑** for color-blind mode. Press `Ctrl+Shift+K` to open the command palette at any time.
+All data is saved to your browser's localStorage — nothing is sent anywhere. Use the ☀️ / 🌙 toggle to switch light/dark themes, **M / S / O** for Midnight, Sunset, or Ocean color themes, **✦** to turn the theme-change animation on/off, and **◑** for color-blind mode. Press `Ctrl+Shift+K` to open the command palette at any time.
 
 ---
 
@@ -74,10 +74,11 @@ PipelineTrack/
 │   ├── board.css           # kanban columns, priority matrix, table, timeline views, job cards
 │   ├── modals.css          # modals, profile, learning hub, resume hub
 │   ├── features.css        # deadline banner, notes timeline
+│   ├── animations.css      # view, modal, card, calendar, compare, and theme transition effects
 │   ├── views.css           # calendar, contacts, analytics, goals views
 │   ├── fun.css             # extra themes (Midnight, Sunset, Ocean), confetti, streak, card flair
 │   ├── onboarding.css      # first-run onboarding modal styles
-│   └── ux-enhancements.css # command palette, hover cards, tooltips, color-blind mode, print, empty states
+│   └── ux-enhancements.css # command palette, hover cards, tooltips, motion toggle, color-blind mode, print, empty states
 └── javascript/
     ├── data.js             # static data: KNOWN_SKILLS, LEARNING, RESOURCES, WRITING_RULES (tech)
     ├── data-industries.js  # extends KNOWN_SKILLS & LEARNING for Business, Finance, PM, Banking, CX
@@ -277,6 +278,7 @@ All three show an amber **✦ Auto-filled** badge so you always know the app set
 - **Weekly Recap Modal** — appears automatically on Monday mornings with last week's application count, avg fit score, and pipeline progress
 - **Back to Top** — ↑ button fades in when you scroll past 300px; click to smooth-scroll back
 - **Skeleton flash** — views pulse once on switch to signal they're loading
+- **Theme Change Animation** — theme switches get a soft accent sweep; use **✦** to turn it off/on, and `prefers-reduced-motion` is respected
 - **Empty state illustrations** — inline SVG art for all empty states (no jobs, no results, no timeline entries, etc.)
 - **Custom Select Dropdowns** — all dropdowns use a custom chevron arrow, hover border, and consistent font — no browser default styling
 - **Linked Contacts** — contacts tied to a job appear inline in the job detail modal

@@ -21,11 +21,14 @@ function wireEvents() {
   });
 
   // Theme toggle
-  document.getElementById('theme-toggle-btn').addEventListener('click', toggleTheme);
+  document.getElementById('theme-toggle-btn').addEventListener('click', e => toggleTheme(e.currentTarget));
+  document.getElementById('btn-theme-motion')?.addEventListener('click', toggleThemeMotion);
 
   // Theme swatches
   document.querySelectorAll('.theme-swatch').forEach(s => {
-    s.addEventListener('click', () => setTheme(s.dataset.theme));
+    s.addEventListener('click', () => setTheme(s.dataset.theme, {
+      sourceEl: s
+    }));
   });
 
   // Close modals via [data-close]
@@ -504,29 +507,83 @@ const SVG_SUN = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" str
 const SVG_MOON = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
 
 const LIGHT_THEMES = ['light'];
+const THEME_MOTION_KEY = 'pt-theme-motion-enabled';
+let themeTransitionTimer = null;
 
 function setThemeIcon(theme) {
   document.getElementById('theme-icon').innerHTML = LIGHT_THEMES.includes(theme) ? SVG_MOON : SVG_SUN;
 }
 
-function setTheme(theme) {
+function isThemeMotionEnabled() {
+  return localStorage.getItem(THEME_MOTION_KEY) !== '0';
+}
+
+function syncThemeMotionButton() {
+  const enabled = isThemeMotionEnabled();
+  const button = document.getElementById('btn-theme-motion');
+  document.documentElement.classList.toggle('theme-motion-off', !enabled);
+  if (!button) return;
+  button.classList.toggle('active', enabled);
+  button.setAttribute('aria-pressed', String(enabled));
+  button.title = enabled ? 'Theme animation on' : 'Theme animation off';
+}
+
+function toggleThemeMotion() {
+  const enabled = !isThemeMotionEnabled();
+  localStorage.setItem(THEME_MOTION_KEY, enabled ? '1' : '0');
+  syncThemeMotionButton();
+  toast(`Theme animation ${enabled ? 'on' : 'off'}.`);
+}
+
+function playThemeTransition(sourceEl) {
+  if (!isThemeMotionEnabled() || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const root = document.documentElement;
+  root.classList.remove('theme-shift');
+  void root.offsetWidth;
+  root.classList.add('theme-shift');
+
+  if (sourceEl) {
+    sourceEl.classList.remove('theme-shift-pop');
+    void sourceEl.offsetWidth;
+    sourceEl.classList.add('theme-shift-pop');
+    sourceEl.addEventListener('animationend', () => sourceEl.classList.remove('theme-shift-pop'), {
+      once: true
+    });
+  }
+
+  if (themeTransitionTimer) clearTimeout(themeTransitionTimer);
+  themeTransitionTimer = setTimeout(() => {
+    root.classList.remove('theme-shift');
+    themeTransitionTimer = null;
+  }, 720);
+}
+
+function setTheme(theme, options = {}) {
+  const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  const shouldAnimate = options.animate !== false && previousTheme !== theme;
   document.documentElement.setAttribute('data-theme', theme);
   setThemeIcon(theme);
   localStorage.setItem('pt-theme', theme);
   document.querySelectorAll('.theme-swatch').forEach(s => {
     s.classList.toggle('theme-swatch--active', s.dataset.theme === theme);
   });
+  if (shouldAnimate) playThemeTransition(options.sourceEl);
 }
 
 function initTheme() {
   const saved = localStorage.getItem('pt-theme') || 'dark';
-  setTheme(saved);
+  setTheme(saved, {
+    animate: false
+  });
 }
 
-function toggleTheme() {
+function toggleTheme(sourceEl) {
   const current = document.documentElement.getAttribute('data-theme') || 'dark';
   const next = current === 'light' ? 'dark' : 'light';
-  setTheme(next);
+  setTheme(next, {
+    sourceEl
+  });
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -650,6 +707,7 @@ function wirePasteCleaners() {
 }
 
 function init() {
+  syncThemeMotionButton();
   initTheme();
   load();
   reanalyzeAllJobs();
