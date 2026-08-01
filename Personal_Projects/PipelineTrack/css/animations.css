@@ -290,3 +290,134 @@
 .compare-picker-item {
   animation: comparePickerItemIn 0.2s ease both;
 }
+
+/* --- Theme change flourish -------------------------------- */
+body,
+.sidebar,
+.topbar,
+.view,
+.modal,
+.stat-card,
+.dash-card,
+.job-card,
+.text-input,
+.text-area,
+.select-input,
+.btn-primary,
+.btn-secondary,
+.btn-ghost,
+.nav-link,
+.scope-notice {
+  transition:
+    background-color 0.32s ease,
+    border-color 0.32s ease,
+    color 0.32s ease,
+    box-shadow 0.32s ease,
+    filter 0.32s ease,
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle at calc(100% - 92px) 34px,
+      color-mix(in srgb, var(--accent) 42%, transparent) 0 9%,
+      color-mix(in srgb, var(--accent-dim) 54%, transparent) 24%,
+      transparent 58%);
+  transform: scale(0.72);
+  transform-origin: top right;
+}
+
+html.theme-shift body::before {
+  animation: themeSweep 0.68s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+html.theme-shift .main,
+html.theme-shift .sidebar {
+  animation: themeSettle 0.46s ease-out both;
+}
+
+.theme-shift-pop {
+  animation: themeControlPop 0.46s cubic-bezier(0.2, 1.45, 0.32, 1) both;
+}
+
+
+html.theme-motion-off.theme-shift body::before,
+html.theme-motion-off.theme-shift .main,
+html.theme-motion-off.theme-shift .sidebar,
+html.theme-motion-off .theme-shift-pop {
+  animation: none !important;
+}
+@keyframes themeSweep {
+  0% {
+    opacity: 0;
+    transform: scale(0.58);
+  }
+
+  35% {
+    opacity: 0.9;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(2.8);
+  }
+}
+
+@keyframes themeSettle {
+  0% {
+    filter: saturate(1.18) brightness(1.06);
+  }
+
+  100% {
+    filter: saturate(1) brightness(1);
+  }
+}
+
+@keyframes themeControlPop {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  45% {
+    transform: scale(1.22) rotate(8deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body,
+  .sidebar,
+  .topbar,
+  .view,
+  .modal,
+  .stat-card,
+  .dash-card,
+  .job-card,
+  .text-input,
+  .text-area,
+  .select-input,
+  .btn-primary,
+  .btn-secondary,
+  .btn-ghost,
+  .nav-link,
+  .scope-notice {
+    transition-duration: 0.01ms;
+  }
+
+  html.theme-shift body::before,
+  html.theme-shift .main,
+  html.theme-shift .sidebar,
+  .theme-shift-pop {
+    animation: none;
+  }
+}
