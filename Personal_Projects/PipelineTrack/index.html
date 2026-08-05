@@ -981,14 +981,15 @@
                     <!-- Smart Paste -->
                     <div class="smart-paste-panel" id="smart-paste-panel">
                         <div class="smart-paste-hint">Paste the entire job posting — title, company, salary, location,
-                            description… We'll extract what we can and fill the form.</div>
+                            description… We'll extract what we can, fill the form, and analyze the opportunity.</div>
                         <textarea class="text-area smart-paste-input" id="smart-paste-input" rows="6"
                             placeholder="Paste job listing here…"></textarea>
                         <div class="smart-paste-actions">
                             <button class="btn-ghost btn-sm" id="smart-paste-cancel">Cancel</button>
-                            <button class="btn-primary" id="smart-paste-btn">Parse &amp; Fill →</button>
+                            <button class="btn-primary" id="smart-paste-btn">Analyze &amp; Fill →</button>
                         </div>
                     </div>
+                    <div class="job-posting-analysis" id="smart-paste-analysis" style="display:none"></div>
                     <div class="form-section-label-row" id="smart-paste-trigger">
                         <span class="form-section-label" style="margin:0">Position</span>
                         <button class="btn-ghost btn-sm smart-paste-open-btn" id="show-smart-paste-btn">⚡ Paste full
@@ -1206,8 +1207,24 @@
                         </svg>
                         <div class="fit-ring-label">
                             <div class="fit-ring-pct" id="detail-fit-pct">—</div>
-                            <div class="fit-ring-sub">Fit Score</div>
+                            <div class="fit-ring-sub">Skill Fit</div>
                         </div>
+                    </div>
+
+                    <div class="role-fit-summary" id="detail-role-fit-summary" style="display:none">
+                        <div class="role-fit-row">
+                            <span class="role-fit-label">Role Profile</span>
+                            <span class="role-fit-value" id="detail-role-profile">General</span>
+                        </div>
+                        <div class="role-fit-row">
+                            <span class="role-fit-label">Job Fit</span>
+                            <span class="role-fit-value" id="detail-job-fit-score">—</span>
+                        </div>
+                        <div class="role-fit-row">
+                            <span class="role-fit-label">Posting Quality</span>
+                            <span class="role-fit-value" id="detail-quality-score">—</span>
+                        </div>
+                        <div class="role-red-flags" id="detail-red-flags"></div>
                     </div>
 
                     <div class="skill-match-section">
@@ -1219,7 +1236,6 @@
                         <div class="skill-badge-list" id="detail-missing"></div>
                     </div>
                 </div>
-
                 <!-- Right: info + notes -->
                 <div class="detail-right">
                     <div class="detail-info-row">

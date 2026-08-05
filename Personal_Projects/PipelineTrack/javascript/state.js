@@ -224,7 +224,7 @@ function exportCSV() {
   const headers = [
     'Role', 'Company', 'Location', 'Stage', 'Seniority', 'Job Type', 'Duration', 'Work Type', 'In-office Days',
     'Department', 'Salary', 'Date Posted', 'Date Applied', 'Date Added', 'Deadline', 'Fit Score (%)',
-    'Matched Skills', 'Skill Gaps', 'URL', 'Notes', 'Company Notes', 'Benefits', 'Cover Letter', 'Job Description'
+    'Role Profile', 'Job Fit Score (%)', 'Posting Quality Score (%)', 'Red Flags', 'Matched Skills', 'Skill Gaps', 'URL', 'Notes', 'Company Notes', 'Benefits', 'Cover Letter', 'Job Description'
   ];
 
   const rows = state.jobs.map(j => [
@@ -244,6 +244,10 @@ function exportCSV() {
     j.dateAdded ? j.dateAdded.slice(0, 10) : '',
     j.deadline || '',
     j.fitScore !== null && j.fitScore !== undefined ? j.fitScore : '',
+    j.roleProfile || '',
+    j.jobFitScore !== null && j.jobFitScore !== undefined ? j.jobFitScore : '',
+    j.jobQualityScore !== null && j.jobQualityScore !== undefined ? j.jobQualityScore : '',
+    (j.redFlags || []).join('; '),
     (j.matched || []).join('; '),
     (j.missing || []).join('; '),
     j.url,
@@ -354,6 +358,8 @@ function _importFromCSV(text) {
     const stageRaw = get(f, 'stage').toLowerCase();
     const fitRaw = get(f, 'fit score (%)');
     const fitScore = fitRaw !== '' && !isNaN(parseInt(fitRaw)) ? parseInt(fitRaw) : null;
+    const jobFitRaw = get(f, 'job fit score (%)');
+    const qualityRaw = get(f, 'posting quality score (%)');
 
     const rowKey = (role + '|' + company).toLowerCase();
     const existingIdx = currentByKey[rowKey];
@@ -391,7 +397,22 @@ function _importFromCSV(text) {
       coverLetter: get(f, 'cover letter'),
       description: csvDesc,
       deadline: get(f, 'deadline'),
+      roleProfile: get(f, 'role profile'),
+      jobFitScore: jobFitRaw !== '' && !isNaN(parseInt(jobFitRaw)) ? parseInt(jobFitRaw) : null,
+      jobQualityScore: qualityRaw !== '' && !isNaN(parseInt(qualityRaw)) ? parseInt(qualityRaw) : null,
+      redFlags: get(f, 'red flags') ? get(f, 'red flags').split(';').map(s => s.trim()).filter(Boolean) : [],
     };
+
+    if (typeof analyzeJobForRole === 'function' && (!jobData.roleProfile || jobData.jobFitScore === null || jobData.jobQualityScore === null)) {
+      const analysis = analyzeJobForRole(jobData);
+      jobData.fitScore = fitScore !== null ? fitScore : analysis.score;
+      jobData.matched = jobData.matched.length ? jobData.matched : analysis.matched;
+      jobData.missing = jobData.missing.length ? jobData.missing : analysis.missing;
+      jobData.roleProfile = jobData.roleProfile || analysis.roleProfile;
+      jobData.jobQualityScore = jobData.jobQualityScore !== null ? jobData.jobQualityScore : analysis.jobQualityScore;
+      jobData.redFlags = jobData.redFlags.length ? jobData.redFlags : analysis.redFlags;
+      jobData.jobFitScore = jobData.jobFitScore !== null ? jobData.jobFitScore : analysis.jobFitScore;
+    }
 
     if (existingIdx !== undefined) {
       state.jobs[existingIdx] = {
@@ -523,6 +544,10 @@ function _normalizeJob(job) {
     matched: _normalizeStringArray(source.matched),
     missing: _normalizeStringArray(source.missing),
     fitScore: _normalizeFitScore(source.fitScore),
+    roleProfile: _stringValue(source.roleProfile),
+    jobQualityScore: _normalizeFitScore(source.jobQualityScore),
+    jobFitScore: _normalizeFitScore(source.jobFitScore),
+    redFlags: _normalizeStringArray(source.redFlags),
   };
 }
 

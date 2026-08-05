@@ -578,16 +578,16 @@ function bulkAddSkills() {
 
 function reanalyzeAllJobs() {
   state.jobs = state.jobs.map(j => {
-    const {
-      score,
-      matched,
-      missing
-    } = analyzeJob(j.description);
+    const analysis = analyzeJobForRole(j);
     return {
       ...j,
-      fitScore: score,
-      matched,
-      missing
+      fitScore: analysis.score,
+      matched: analysis.matched,
+      missing: analysis.missing,
+      roleProfile: analysis.roleProfile,
+      jobQualityScore: analysis.jobQualityScore,
+      jobFitScore: analysis.jobFitScore,
+      redFlags: analysis.redFlags,
     };
   });
   save();

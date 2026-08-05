@@ -90,7 +90,142 @@ function _skillRegex(skill) {
   return new RegExp('(?<![a-zA-Z0-9])' + esc + '(?![a-zA-Z0-9])', 'i');
 }
 
-function analyzeJob(description) {
+const ROLE_FIT_PROFILES = [{
+    id: 'software',
+    label: 'Software Engineering',
+    patterns: [/software|frontend|front-end|backend|back-end|full[\s-]?stack|developer|engineer|web/i],
+    core: ['javascript', 'typescript', 'python', 'java', 'react', 'nodejs', 'sql', 'api', 'git', 'testing'],
+    important: ['html', 'css', 'nextjs', 'vue', 'angular', 'aws', 'docker', 'rest', 'graphql', 'ci/cd']
+  },
+  {
+    id: 'data',
+    label: 'Data / Analytics',
+    patterns: [/data|analytics|business intelligence|bi\b|machine learning|ml\b|ai\b/i],
+    core: ['sql', 'python', 'data analysis', 'pandas', 'numpy', 'statistics', 'tableau', 'power bi', 'excel'],
+    important: ['machine learning', 'spark', 'r', 'tensorflow', 'pytorch', 'data science']
+  },
+  {
+    id: 'it-support',
+    label: 'IT / Support',
+    patterns: [/it support|help desk|desktop support|technical support|systems?|network|computer operations|production support/i],
+    core: ['linux', 'windows', 'active directory', 'ticketing', 'troubleshooting', 'customer support', 'communication'],
+    important: ['networking', 'security', 'bash', 'powershell', 'jira', 'sql']
+  },
+  {
+    id: 'project',
+    label: 'Project / Product',
+    patterns: [/project manager|program manager|product manager|scrum master|product owner|operations manager/i],
+    core: ['project management', 'agile', 'scrum', 'jira', 'communication', 'leadership', 'stakeholder management'],
+    important: ['product management', 'roadmap', 'analytics', 'sql', 'collaboration']
+  },
+  {
+    id: 'customer',
+    label: 'Customer / Banking',
+    patterns: [/customer|client|support|success|banking|teller|financial services|call center/i],
+    core: ['customer service', 'customer support', 'communication', 'problem solving', 'teamwork'],
+    important: ['salesforce', 'crm', 'banking', 'financial operations', 'excel']
+  }
+];
+
+function inferRoleFitProfile(role, description, department) {
+  const text = `${role || ''} ${department || ''} ${description || ''}`;
+  return ROLE_FIT_PROFILES.find(profile => profile.patterns.some(pattern => pattern.test(text))) || {
+    id: 'general',
+    label: 'General',
+    core: [],
+    important: []
+  };
+}
+
+function skillWeightForProfile(skill, profile) {
+  if (!profile || profile.id === 'general') return 1;
+  if ((profile.core || []).some(s => s === skill || s.includes(skill) || skill.includes(s))) return 2.25;
+  if ((profile.important || []).some(s => s === skill || s.includes(skill) || skill.includes(s))) return 1.5;
+  return 1;
+}
+
+function detectJobRedFlags(jobLike) {
+  const text = `${jobLike.role || ''}\n${jobLike.description || ''}\n${jobLike.benefits || ''}`.toLowerCase();
+  const flags = [];
+  const add = label => {
+    if (!flags.includes(label)) flags.push(label);
+  };
+  if (/\bfast[\s-]?paced\s+environment\b/.test(text)) add('Fast-paced wording');
+  if (/\bwear\s+many\s+hats\b|\bjack\s+of\s+all\s+trades\b/.test(text)) add('Broad/unfocused responsibilities');
+  if (/\brockstar\b|\bninja\b|\bguru\b|\bwizard\b/.test(text)) add('Hype-heavy title language');
+  if (/\bmust\s+be\s+available\s+24\/7\b|\bon\s+call\b|\bweekends?\b/.test(text)) add('Possible schedule pressure');
+  if (/\bunpaid\b|\bvolunteer\b|\bequity\s+only\b/.test(text)) add('Possible unpaid or equity-only work');
+  if (/\bentry[\s-]?level\b[\s\S]{0,250}\b(?:5|6|7|8|9|10)\+?\s+years?\b/.test(text)) add('Entry-level role asks for high experience');
+  if (/\bcompetitive\s+(?:salary|pay|compensation)\b/.test(text)) add('Compensation is vague');
+  if (!jobLike.salary) add('No salary detected');
+  if (!jobLike.location && !jobLike.workType) add('Location/work model unclear');
+  return flags;
+}
+
+function calculateJobQualityScore(jobLike, skillTotal) {
+  const redFlags = detectJobRedFlags(jobLike);
+  const benefits = parseBenefits(`${jobLike.benefits || ''}\n${jobLike.description || ''}`);
+  let score = 100;
+  if (!jobLike.salary) score -= 18;
+  if (!jobLike.workType) score -= 10;
+  if (!jobLike.location) score -= 8;
+  if (!jobLike.jobType) score -= 6;
+  if (!skillTotal) score -= 10;
+  if (!benefits.length) score -= 8;
+  if (/\bcover\s+letter\b/i.test(jobLike.description || '')) score -= 3;
+  if (/\bassessment\b|\btake[\s-]?home\b|\bcoding\s+(?:challenge|test)\b|\bcase\s+study\b/i.test(jobLike.description || '')) score -= 5;
+  score -= Math.min(redFlags.length * 7, 28);
+  return Math.max(0, Math.min(100, score));
+}
+
+function calculateJobFitScore(fitScore, qualityScore, redFlags) {
+  if (fitScore === null || fitScore === undefined) return null;
+  const quality = qualityScore === null || qualityScore === undefined ? 70 : qualityScore;
+  const penalty = Math.min((redFlags || []).length * 3, 15);
+  return Math.max(0, Math.min(100, Math.round((fitScore * 0.72) + (quality * 0.28) - penalty)));
+}
+
+function analyzeJobForRole(jobLike) {
+  const description = jobLike.description || '';
+  if (!description.trim()) return {
+    score: null,
+    matched: [],
+    missing: [],
+    roleProfile: 'General',
+    jobQualityScore: calculateJobQualityScore(jobLike, 0),
+    redFlags: detectJobRedFlags(jobLike),
+    jobFitScore: null
+  };
+
+  const profile = inferRoleFitProfile(jobLike.role, description, jobLike.department);
+  const base = analyzeJob(description, profile);
+  const jobQualityScore = calculateJobQualityScore(jobLike, base.matched.length + base.missing.length);
+  const redFlags = detectJobRedFlags(jobLike);
+  return {
+    ...base,
+    roleProfile: profile.label,
+    jobQualityScore,
+    redFlags,
+    jobFitScore: calculateJobFitScore(base.score, jobQualityScore, redFlags)
+  };
+}
+
+function profileByLabel(label) {
+  return ROLE_FIT_PROFILES.find(profile => profile.label === label) || null;
+}
+
+function calculateRoleWeightedSkillScore(matched, missing, roleProfileLabel) {
+  const profile = profileByLabel(roleProfileLabel);
+  const matchedList = Array.isArray(matched) ? matched : [];
+  const missingList = Array.isArray(missing) ? missing : [];
+  const total = matchedList.length + missingList.length;
+  if (total === 0) return null;
+  const weightedMatched = matchedList.reduce((sum, skill) => sum + skillWeightForProfile(skill, profile), 0);
+  const weightedMissing = missingList.reduce((sum, skill) => sum + skillWeightForProfile(skill, profile), 0);
+  return Math.round((weightedMatched / (weightedMatched + weightedMissing)) * 100);
+}
+
+function analyzeJob(description, roleProfile = null) {
   if (!description || !description.trim()) return {
     score: null,
     matched: [],
@@ -111,7 +246,10 @@ function analyzeJob(description) {
   const missing = foundInJob.filter(skill => !matched.includes(skill));
 
   const total = matched.length + missing.length;
-  const score = total === 0 ? 0 : Math.round((matched.length / total) * 100);
+  const weightedMatched = matched.reduce((sum, skill) => sum + skillWeightForProfile(skill, roleProfile), 0);
+  const weightedMissing = missing.reduce((sum, skill) => sum + skillWeightForProfile(skill, roleProfile), 0);
+  const weightedTotal = weightedMatched + weightedMissing;
+  const score = total === 0 ? 0 : Math.round((weightedMatched / weightedTotal) * 100);
 
   return {
     score,

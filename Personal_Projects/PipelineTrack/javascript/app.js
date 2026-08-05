@@ -132,11 +132,17 @@ function wireEvents() {
   document.getElementById('smart-paste-cancel').addEventListener('click', () => {
     document.getElementById('smart-paste-panel').classList.remove('open');
     document.getElementById('smart-paste-input').value = '';
+    const analysisEl = document.getElementById('smart-paste-analysis');
+    if (analysisEl) {
+      analysisEl.style.display = 'none';
+      analysisEl.innerHTML = '';
+    }
   });
   document.getElementById('smart-paste-btn').addEventListener('click', () => {
     const text = document.getElementById('smart-paste-input').value.trim();
     if (!text) return;
     const parsed = parseJobListing(text);
+    const analysis = typeof analyzeJobPosting === 'function' ? analyzeJobPosting(text, parsed) : null;
 
     function addAutoTag(id) {
       const el = document.getElementById(id);
@@ -203,10 +209,11 @@ function wireEvents() {
 
     // Move cleaned description to Job Info tab (metadata header stripped)
     document.getElementById('job-description').value = parsed.description || text;
-    // Collapse the paste panel
+    if (typeof renderSmartPasteAnalysis === 'function') renderSmartPasteAnalysis(analysis);
+    // Collapse the paste panel, but keep the analyzer visible below it.
     document.getElementById('smart-paste-panel').classList.remove('open');
     document.getElementById('smart-paste-input').value = '';
-    const filled = Object.values(parsed).filter(Boolean).length;
+    const filled = Object.entries(parsed).filter(([key, value]) => key !== 'analysis' && value).length;
     toast(`Auto-filled ${filled} field${filled !== 1 ? 's' : ''} — review and add the rest.`, 'success');
   });
 

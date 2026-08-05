@@ -28,7 +28,9 @@ const KNOWN_SKILLS = new Set([
   // tools & practices
   'git', 'agile', 'scrum', 'jira', 'figma', 'photoshop', 'illustrator', 'sketch',
   'testing', 'jest', 'pytest', 'cypress', 'selenium', 'tdd', 'bdd', 'microservices',
-  'api', 'restapi', 'graphql api', 'websockets',
+  'api', 'restapi', 'graphql api', 'websockets', 'windows', 'active directory', 'ticketing',
+  'troubleshooting', 'networking', 'powershell', 'excel', 'tableau', 'power bi', 'statistics',
+  'stakeholder management', 'roadmap', 'salesforce', 'crm', 'banking', 'customer service',
   // roles / soft skills
   'leadership', 'communication', 'collaboration', 'problem solving', 'teamwork',
   'project management', 'product management', 'ux', 'ui', 'design',

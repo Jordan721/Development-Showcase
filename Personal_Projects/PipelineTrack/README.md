@@ -148,12 +148,14 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 
 **Add/Edit form tabs:** Details · Job Info · Application
 
-**⚡ Smart Paste** — click "Paste full listing" at the top of the Details tab and drop in the raw job posting. The parser extracts role, company, location, salary, work type, job type, and seniority; fills each field with a `✦ Auto-filled` tag so you know what was guessed; strips the metadata header from the description so the Job Info tab only shows the actual body of the listing. Fields are editable — the tag disappears the moment you change a value. *(Parsing is best-effort — it catches the most common formats but may miss things depending on how the listing is structured. Always review the filled fields before saving.)*
+**⚡ Smart Paste / Job Posting Analyzer** — click "Paste full listing" at the top of the Details tab and drop in the raw job posting. The parser extracts role, company, location, salary, work type, job type, seniority, hybrid days, and duration; fills each field with a `✦ Auto-filled` tag so you know what was guessed; strips the metadata header from the description so the Job Info tab only shows the actual body of the listing. It also scores posting quality, estimates application effort, surfaces required/preferred skills, logistics, benefits, culture signals, red flags, and resume tailoring prompts. Saved jobs keep role profile, Job Fit, Posting Quality, and red-flag data for detail views and exports. Fields are editable — the tag disappears the moment you change a value. *(Parsing is best-effort — it catches the most common formats but may miss things depending on how the listing is structured. Always review the filled fields before saving.)*
 
 **Milestone logging** — moving to Screening, Interview, or Offer opens a modal to log date, time, type, round, and notes. Milestones appear as a color-coded Application Timeline strip in the job detail; each is editable via ✎.
 
 **Fit Analysis** (in job detail):
-- Fit score % based on profile skills vs. job description (certifications also factor in)
+- Role-specific Skill Fit % based on profile skills vs. job description, with different weights for Software Engineering, Data / Analytics, IT / Support, Project / Product, and Customer / Banking roles (certifications also factor in)
+- Job Fit % combines skill fit, posting quality, and red-flag penalties
+- Posting Quality % and red-flag chips flag missing salary, vague work model, schedule pressure, unpaid/equity-only wording, hype-heavy language, and unrealistic entry-level requirements
 - Matched skills (green) and gaps (red) highlighted directly in the description text
 - **+** on any skill gap instantly adds it to your profile (as Beginner) and moves it to matched — fit score updates live
 - **−** on any matched skill moves it back to gaps — useful for correcting false positives

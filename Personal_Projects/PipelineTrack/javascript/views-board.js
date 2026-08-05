@@ -109,8 +109,8 @@ function initBulkActions() {
       const s = String(v ?? '');
       return s.includes(',') || s.includes('"') || s.includes('\n') ? '"' + s.replace(/"/g, '""') + '"' : s;
     };
-    const headers = ['Role', 'Company', 'Location', 'Stage', 'Fit Score', 'Salary', 'Date Added'];
-    const rows = selected.map(j => [j.role, j.company, j.location, j.stage, j.fitScore ?? '', j.salary, j.dateAdded].map(csvCell).join(','));
+    const headers = ['Role', 'Company', 'Location', 'Stage', 'Skill Fit', 'Job Fit', 'Posting Quality', 'Role Profile', 'Red Flags', 'Salary', 'Date Added'];
+    const rows = selected.map(j => [j.role, j.company, j.location, j.stage, j.fitScore ?? '', j.jobFitScore ?? '', j.jobQualityScore ?? '', j.roleProfile || '', (j.redFlags || []).join('; '), j.salary, j.dateAdded].map(csvCell).join(','));
     const csv = [headers.join(','), ...rows].join('\r\n');
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([csv], {
@@ -896,6 +896,7 @@ function jobCardHTML(job) {
       ${duration ? `<div class="job-card-duration">Duration: ${escHtml(duration)}</div>` : ''}
       <div class="job-card-footer">
         <span class="job-card-date">${job.stage === 'declined' && job.declinedAt ? '❌ ' + formatDate(job.declinedAt) : job.stage === 'ghosted' && job.ghostedAt ? 'Ghosted ' + formatDate(job.ghostedAt) : formatDate(job.dateAdded)}</span>
+        ${job.jobFitScore !== null && job.jobFitScore !== undefined ? `<span class="job-fit-pill ${fitBadgeClass(job.jobFitScore)}" title="Combined score: skill fit + posting quality - red flags">Job ${job.jobFitScore}%</span>` : ''}
         ${fitRingHTML(job.fitScore)}
       </div>
     </div>`;
@@ -1162,6 +1163,46 @@ function renderMilestoneStrip(job) {
   });
 }
 
+
+function scoreToneClass(score) {
+  if (score === null || score === undefined) return '';
+  if (score >= 80) return 'score-good';
+  if (score >= 60) return 'score-warn';
+  return 'score-bad';
+}
+
+function renderDetailRoleFitSummary(job) {
+  const wrap = document.getElementById('detail-role-fit-summary');
+  if (!wrap) return;
+  const roleEl = document.getElementById('detail-role-profile');
+  const jobFitEl = document.getElementById('detail-job-fit-score');
+  const qualityEl = document.getElementById('detail-quality-score');
+  const flagsEl = document.getElementById('detail-red-flags');
+  const redFlags = Array.isArray(job.redFlags) ? job.redFlags : [];
+  wrap.style.display = '';
+  if (roleEl) roleEl.textContent = job.roleProfile || 'General';
+  if (jobFitEl) {
+    jobFitEl.textContent = job.jobFitScore !== null && job.jobFitScore !== undefined ? `${job.jobFitScore}%` : '—';
+    jobFitEl.className = `role-fit-value ${scoreToneClass(job.jobFitScore)}`;
+  }
+  if (qualityEl) {
+    qualityEl.textContent = job.jobQualityScore !== null && job.jobQualityScore !== undefined ? `${job.jobQualityScore}%` : '—';
+    qualityEl.className = `role-fit-value ${scoreToneClass(job.jobQualityScore)}`;
+  }
+  if (flagsEl) {
+    flagsEl.innerHTML = redFlags.length ? redFlags.map(flag => `<span class="role-red-flag">${escHtml(flag)}</span>`).join('') : '<span class="role-no-flags">No major red flags detected</span>';
+  }
+}
+
+function refreshJobFitAfterSkillEdit(job) {
+  if (typeof calculateJobFitScore === 'function') {
+    if (typeof calculateRoleWeightedSkillScore === 'function') {
+      job.fitScore = calculateRoleWeightedSkillScore(job.matched || [], job.missing || [], job.roleProfile);
+    }
+    job.jobFitScore = calculateJobFitScore(job.fitScore, job.jobQualityScore, job.redFlags || []);
+  }
+  renderDetailRoleFitSummary(job);
+}
 /* ══════════════════════════════════════════════════════════
    JOB DETAIL MODAL
    ══════════════════════════════════════════════════════════ */
@@ -1170,6 +1211,19 @@ function openJobDetail(id) {
   if (!job) return;
   state.activeJobId = id;
 
+  if (typeof analyzeJobForRole === 'function' && (job.jobQualityScore === undefined || job.jobFitScore === undefined || !Array.isArray(job.redFlags) || !job.roleProfile)) {
+    const analysis = analyzeJobForRole(job);
+    Object.assign(job, {
+      fitScore: analysis.score,
+      matched: analysis.matched,
+      missing: analysis.missing,
+      roleProfile: analysis.roleProfile,
+      jobQualityScore: analysis.jobQualityScore,
+      jobFitScore: analysis.jobFitScore,
+      redFlags: analysis.redFlags,
+    });
+    save();
+  }
   document.getElementById('detail-title').textContent = `${job.role} @ ${job.company}`;
   document.getElementById('detail-meta').textContent = [job.location, formatDate(job.dateAdded)].filter(Boolean).join(' · ');
 
@@ -1348,6 +1402,8 @@ function openJobDetail(id) {
     ring.style.strokeDashoffset = circumference;
   }
 
+  renderDetailRoleFitSummary(job);
+
   // Matched / missing — with dismiss buttons to remove false positives
   function renderSkillBadges(listId, arr, field, colorClass) {
     const el = document.getElementById(listId);
@@ -1382,6 +1438,7 @@ function openJobDetail(id) {
         job.matched = [...(job.matched || []), skill];
         const total = (job.matched || []).length + (job.missing || []).length;
         job.fitScore = total === 0 ? null : Math.round(((job.matched || []).length / total) * 100);
+        refreshJobFitAfterSkillEdit(job);
         save();
         renderSkillBadges('detail-matched', job.matched || [], 'matched', 'green');
         renderSkillBadges('detail-missing', job.missing || [], 'missing', 'red');
@@ -1396,6 +1453,7 @@ function openJobDetail(id) {
         job.missing = [...(job.missing || []), skill];
         const total = (job.matched || []).length + (job.missing || []).length;
         job.fitScore = total === 0 ? null : Math.round(((job.matched || []).length / total) * 100);
+        refreshJobFitAfterSkillEdit(job);
         save();
         renderSkillBadges('detail-matched', job.matched || [], 'matched', 'green');
         renderSkillBadges('detail-missing', job.missing || [], 'missing', 'red');
@@ -1410,6 +1468,7 @@ function openJobDetail(id) {
         // Recalculate fit score
         const total = (job.matched || []).length + (job.missing || []).length;
         job.fitScore = total === 0 ? null : Math.round(((job.matched || []).length / total) * 100);
+        refreshJobFitAfterSkillEdit(job);
         save();
         renderSkillBadges(listId, job[field], field, colorClass);
         // Refresh description highlights and fit ring
@@ -1423,9 +1482,9 @@ function openJobDetail(id) {
           if (legendEl) legendEl.style.display = 'none';
         }
         // Refresh fit ring
-        const ring = document.getElementById('detail-fit-ring');
-        const label = document.getElementById('detail-fit-label');
-        const circumference = 2 * Math.PI * 20;
+        const ring = document.getElementById('fit-ring-fill');
+        const label = document.getElementById('detail-fit-pct');
+        const circumference = 326.7;
         if (job.fitScore !== null && job.fitScore !== undefined) {
           const offset = circumference - (job.fitScore / 100) * circumference;
           ring.style.strokeDashoffset = offset;
@@ -1693,6 +1752,150 @@ function parseJobListing(text) {
   return result;
 }
 
+function uniqueMatches(text, patterns) {
+  const found = [];
+  patterns.forEach(item => {
+    const pattern = Array.isArray(item) ? item[0] : item.pattern;
+    const label = Array.isArray(item) ? item[1] : item.label;
+    if (pattern.test(text) && !found.includes(label)) found.push(label);
+  });
+  return found;
+}
+
+function extractPostingSection(text, headers, stopHeaders) {
+  const lines = text.split('\n');
+  const start = lines.findIndex(line => headers.some(h => h.test(line.trim())));
+  if (start === -1) return '';
+  const body = [];
+  for (let i = start + 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (line && stopHeaders.some(h => h.test(line))) break;
+    body.push(lines[i]);
+  }
+  return body.join('\n').trim();
+}
+
+function findKnownSkills(text) {
+  const lower = text.toLowerCase();
+  return [...KNOWN_SKILLS]
+    .filter(skill => lower.includes(skill))
+    .sort((a, b) => a.localeCompare(b));
+}
+
+function analyzeJobPosting(rawText, parsed) {
+  const text = rawText || '';
+  const lower = text.toLowerCase();
+  const description = parsed.description || text;
+  const headers = [
+    /^(?:requirements?|qualifications?|what\s+you(?:'|’)?ll\s+bring|you\s+have|must\s+have|required)\b/i,
+    /^(?:preferred|nice[\s-]?to[\s-]?have|bonus|plus|desired)\b/i,
+    /^(?:responsibilities|what\s+you(?:'|’)?ll\s+do|duties|your\s+impact|day[\s-]?to[\s-]?day)\b/i,
+    /^(?:benefits|perks|what\s+we\s+offer|compensation)\b/i,
+    /^(?:about\s+(?:us|the\s+company)|company\s+overview|culture)\b/i
+  ];
+  const requiredText = extractPostingSection(text, [headers[0]], headers.slice(1));
+  const preferredText = extractPostingSection(text, [headers[1]], headers.filter(h => h !== headers[1]));
+  const responsibilityText = extractPostingSection(text, [headers[2]], headers.filter(h => h !== headers[2]));
+  const benefitsText = extractPostingSection(text, [headers[3]], headers.filter(h => h !== headers[3]));
+  const cultureText = extractPostingSection(text, [headers[4]], headers.filter(h => h !== headers[4]));
+
+  const requiredSkills = findKnownSkills(requiredText || description).slice(0, 14);
+  const preferredSkills = findKnownSkills(preferredText).filter(s => !requiredSkills.includes(s)).slice(0, 10);
+  const benefits = parseBenefits(benefitsText || text).slice(0, 8);
+
+  const yearsMatch = text.match(/(\d+)\+?\s*(?:-|to\s*)?(\d+)?\+?\s+years?\s+(?:of\s+)?(?:professional\s+)?experience/i);
+  const years = yearsMatch ? (yearsMatch[2] ? `${yearsMatch[1]}-${yearsMatch[2]} years` : `${yearsMatch[1]}+ years`) : '';
+
+  const logistics = uniqueMatches(lower, [
+    [/\b(?:no\s+)?(?:visa\s+)?sponsorship\b|\bmust\s+be\s+authorized\b|\bus\s+citizen\b|\bgreen\s+card\b/, 'Work authorization called out'],
+    [/\bsecurity\s+clearance\b|\bsecret\s+clearance\b|\btop\s+secret\b|\bpublic\s+trust\b/, 'Clearance requirement'],
+    [/\btravel\s+(?:up\s+to\s+)?\d+%|\d+%\s+travel\b/, 'Travel expected'],
+    [/\bportfolio\b|\bwork\s+samples?\b/, 'Portfolio/work samples requested'],
+    [/\bcover\s+letter\b/, 'Cover letter requested'],
+    [/\bassessment\b|\btake[\s-]?home\b|\bcoding\s+(?:challenge|test)\b|\bcase\s+study\b/, 'Assessment likely']
+  ]);
+
+  const redFlags = uniqueMatches(lower, [
+    [/\bfast[\s-]?paced\s+environment\b/, 'Fast-paced wording'],
+    [/\bwear\s+many\s+hats\b|\bjack\s+of\s+all\s+trades\b/, 'Broad/unfocused responsibilities'],
+    [/\brockstar\b|\bninja\b|\bguru\b|\bwizard\b/, 'Hype-heavy title language'],
+    [/\bmust\s+be\s+available\s+24\/7\b|\bon\s+call\b|\bweekends?\b/, 'Possible schedule pressure'],
+    [/\bunpaid\b|\bvolunteer\b|\bequity\s+only\b/, 'Possible unpaid or equity-only work'],
+    [/\bentry[\s-]?level\b[\s\S]{0,250}\b(?:5|6|7|8|9|10)\+?\s+years?\b/, 'Entry-level role asks for high experience'],
+    [/\bcompetitive\s+(?:salary|pay|compensation)\b/, 'Compensation is vague']
+  ]);
+  if (!parsed.salary) redFlags.push('No salary detected');
+  if (!parsed.location && !parsed.workType) redFlags.push('Location/work model unclear');
+
+  const effortSignals = logistics.filter(x => ['Cover letter requested', 'Portfolio/work samples requested', 'Assessment likely'].includes(x));
+  if (/\bmultiple\s+interviews?\b|\bpanel\s+interview\b|\bfinal\s+round\b|\btechnical\s+interview\b/i.test(text)) effortSignals.push('Multi-step interview process');
+  const effort = effortSignals.length >= 3 ? 'Heavy Lift' : effortSignals.length >= 1 || (description.length > 6500) ? 'Medium Effort' : 'Quick Apply';
+
+  let qualityScore = 100;
+  if (!parsed.salary) qualityScore -= 18;
+  if (!parsed.workType) qualityScore -= 10;
+  if (!parsed.location) qualityScore -= 8;
+  if (!parsed.jobType) qualityScore -= 6;
+  if (!requiredSkills.length) qualityScore -= 10;
+  if (!benefits.length) qualityScore -= 8;
+  qualityScore -= Math.min(redFlags.length * 7, 28);
+  qualityScore = Math.max(0, Math.min(100, qualityScore));
+
+  const qualityLabel = qualityScore >= 80 ? 'Strong posting' : qualityScore >= 60 ? 'Worth reviewing' : 'Needs caution';
+  const tailoring = [];
+  if (requiredSkills.length) tailoring.push(`Mirror these keywords: ${requiredSkills.slice(0, 5).join(', ')}`);
+  if (years) tailoring.push(`Make your experience level obvious: ${years}`);
+  if (responsibilityText) tailoring.push('Match 1-2 resume bullets to the responsibility language.');
+  if (preferredSkills.length) tailoring.push(`Bonus keywords if truthful: ${preferredSkills.slice(0, 4).join(', ')}`);
+  if (logistics.includes('Cover letter requested')) tailoring.push('Draft a short cover letter tied to the company and role outcomes.');
+
+  return {
+    qualityScore,
+    qualityLabel,
+    effort,
+    years,
+    requiredSkills,
+    preferredSkills,
+    benefits,
+    logistics,
+    redFlags,
+    tailoring: tailoring.slice(0, 5),
+    cultureSignals: uniqueMatches(cultureText || lower, [
+      [/\bcollaborat(?:e|ion|ive)\b/, 'Collaboration'],
+      [/\bownership\b|\bautonomy\b/, 'Ownership'],
+      [/\bmentor(?:ing|ship)?\b|\bcoaching\b/, 'Mentorship'],
+      [/\bdiversity\b|\binclusion\b|\bequity\b/, 'DEI language'],
+      [/\bcustomer[\s-]?focused\b|\bcustomer\s+obsessed\b/, 'Customer focus']
+    ]).slice(0, 6)
+  };
+}
+
+function renderSmartPasteAnalysis(analysis) {
+  const el = document.getElementById('smart-paste-analysis');
+  if (!el || !analysis) return;
+  const scoreClass = analysis.qualityScore >= 80 ? 'good' : analysis.qualityScore >= 60 ? 'warn' : 'bad';
+  const chips = items => items.length ? items.map(item => `<span class="jpa-chip">${escHtml(item)}</span>`).join('') : '<span class="jpa-empty">Nothing obvious detected</span>';
+  el.style.display = '';
+  el.innerHTML = `
+    <div class="jpa-head">
+      <div>
+        <div class="jpa-kicker">Job Posting Analyzer</div>
+        <div class="jpa-title">${analysis.qualityLabel}</div>
+      </div>
+      <div class="jpa-score ${scoreClass}">${analysis.qualityScore}<span>/100</span></div>
+      <div class="jpa-effort">${escHtml(analysis.effort)}</div>
+    </div>
+    <div class="jpa-grid">
+      <div class="jpa-block"><div class="jpa-label">Required Skills</div><div class="jpa-chips">${chips(analysis.requiredSkills)}</div></div>
+      <div class="jpa-block"><div class="jpa-label">Preferred Skills</div><div class="jpa-chips">${chips(analysis.preferredSkills)}</div></div>
+      <div class="jpa-block"><div class="jpa-label">Logistics</div><div class="jpa-chips">${chips([analysis.years, ...analysis.logistics].filter(Boolean))}</div></div>
+      <div class="jpa-block"><div class="jpa-label">Benefits</div><div class="jpa-chips">${chips(analysis.benefits)}</div></div>
+      <div class="jpa-block"><div class="jpa-label">Culture Signals</div><div class="jpa-chips">${chips(analysis.cultureSignals)}</div></div>
+      <div class="jpa-block ${analysis.redFlags.length ? 'has-flags' : ''}"><div class="jpa-label">Watchouts</div><div class="jpa-chips">${chips(analysis.redFlags)}</div></div>
+    </div>
+    ${analysis.tailoring.length ? `<div class="jpa-tailor"><div class="jpa-label">Resume Tailoring</div>${analysis.tailoring.map(t => `<div class="jpa-tip">${escHtml(t)}</div>`).join('')}</div>` : ''}
+  `;
+}
 function flashField(id) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -1810,6 +2013,11 @@ function openAddJobModal(editId = null) {
   if (spTrigger) spTrigger.style.display = '';
   document.getElementById('show-smart-paste-btn')?.style.setProperty('display', editId ? 'none' : '');
   if (spInput) spInput.value = '';
+  const spAnalysis = document.getElementById('smart-paste-analysis');
+  if (spAnalysis) {
+    spAnalysis.style.display = 'none';
+    spAnalysis.innerHTML = '';
+  }
   // Clear any leftover auto-fill tags
   document.querySelectorAll('#modal-job .inferred-tag').forEach(t => t.remove());
 
@@ -1830,11 +2038,6 @@ function saveJob() {
 
   const editId = document.getElementById('job-edit-id').value;
   const description = document.getElementById('job-description').value;
-  const {
-    score,
-    matched,
-    missing
-  } = analyzeJob(description);
 
   const typedDept = document.getElementById('job-department').value.trim();
   const inferredDept = !typedDept ? inferDepartment(role, description) : null;
@@ -1872,10 +2075,18 @@ function saveJob() {
     notes: document.getElementById('job-notes').value.trim(),
     coverLetter: document.getElementById('job-cover-letter').value.trim(),
     resumeVaultId: document.getElementById('job-resume-vault-select')?.value || '',
-    fitScore: score,
-    matched,
-    missing,
   };
+
+  const analysis = analyzeJobForRole(jobData);
+  Object.assign(jobData, {
+    fitScore: analysis.score,
+    matched: analysis.matched,
+    missing: analysis.missing,
+    roleProfile: analysis.roleProfile,
+    jobQualityScore: analysis.jobQualityScore,
+    jobFitScore: analysis.jobFitScore,
+    redFlags: analysis.redFlags,
+  });
 
   if (editId) {
     const idx = state.jobs.findIndex(j => j.id === editId);
