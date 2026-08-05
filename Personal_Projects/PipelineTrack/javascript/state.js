@@ -589,11 +589,58 @@ function _normalizeBackupData(data) {
   };
 }
 
+function _removeDuplicateResumes() {
+  if (!Array.isArray(state.resumes)) return 0;
+
+  const keptByDataUrl = new Map();
+  const replacementIds = new Map();
+  const uniqueResumes = [];
+
+  state.resumes.forEach(resume => {
+    // Only remove byte-for-byte copies of an uploaded file. Files with the
+    // same name but different contents remain separate vault entries.
+    if (!resume || typeof resume.dataUrl !== 'string' || !resume.dataUrl) {
+      uniqueResumes.push(resume);
+      return;
+    }
+
+    const keptResume = keptByDataUrl.get(resume.dataUrl);
+    if (keptResume) {
+      replacementIds.set(resume.id, keptResume.id);
+      return;
+    }
+
+    keptByDataUrl.set(resume.dataUrl, resume);
+    uniqueResumes.push(resume);
+  });
+
+  if (replacementIds.size) {
+    state.jobs.forEach(job => {
+      if (job && replacementIds.has(job.resumeVaultId)) {
+        job.resumeVaultId = replacementIds.get(job.resumeVaultId);
+      }
+    });
+    state.resumes = uniqueResumes;
+  }
+
+  return replacementIds.size;
+}
+
+function _isStorageQuotaError(err) {
+  return Boolean(err && (
+    err.name === 'QuotaExceededError' ||
+    err.name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
+    err.code === 22 ||
+    err.code === 1014
+  ));
+}
+
 function importData(file) {
   const isCSV = file.name.toLowerCase().endsWith('.csv');
   const reader = new FileReader();
   reader.onload = e => {
     const statusEl = document.getElementById('backup-status');
+    let importSnapshot = null;
     try {
       if (isCSV) {
         const {
@@ -630,6 +677,19 @@ function importData(file) {
           }
           return;
         }
+        // Keep an in-memory copy so a failed localStorage write does not
+        // leave the running app showing an import that was not saved.
+        importSnapshot = JSON.parse(JSON.stringify({
+          jobs: state.jobs,
+          profile: state.profile,
+          savedCourses: state.savedCourses,
+          contacts: state.contacts,
+          goals: state.goals,
+          events: state.events,
+          templates: state.templates,
+          resumes: state.resumes,
+          coverLetters: state.coverLetters,
+        }));
         // Merge jobs by ID: update existing, add new, keep current-only jobs
         const currentById = {};
         state.jobs.forEach((j, i) => {
@@ -712,6 +772,7 @@ function importData(file) {
           state.savedCourses = [...courseSet];
         }
         migrateJobSalaryPayPeriods();
+        const removedDuplicates = _removeDuplicateResumes();
         save();
         let refreshWarning = '';
         try {
@@ -727,16 +788,29 @@ function importData(file) {
           freshStatusEl.textContent = `⬆ Imported: ${file.name} — ${added} added, ${updated} updated. Your new jobs were kept.`;
           freshStatusEl.className = 'import-status success';
         }
+        if (freshStatusEl && removedDuplicates) {
+          freshStatusEl.textContent += ` Removed ${removedDuplicates} duplicate resume${removedDuplicates === 1 ? '' : 's'} from the Resume Vault.`;
+        }
         if (freshStatusEl && refreshWarning) freshStatusEl.textContent += refreshWarning;
         toast(`Backup merged: ${added} added, ${updated} updated. Your new jobs were kept.`, 'success');
       }
     } catch (err) {
+      if (importSnapshot) {
+        Object.assign(state, importSnapshot);
+        try {
+          save();
+        } catch (restoreErr) {
+          console.error('PipelineTrack could not restore data after failed import:', restoreErr);
+        }
+      }
       if (statusEl) {
         statusEl.textContent = isCSV ?
           '✕ Could not read CSV. Make sure it\'s a PipelineTrack CSV export.' :
           '✕ Could not read file. Make sure it\'s a valid .json backup.';
         statusEl.className = 'import-status error';
-        if (!isCSV) {
+        if (!isCSV && _isStorageQuotaError(err)) {
+          statusEl.textContent = 'Import could not be saved because browser storage is full. Remove some Resume Vault files, then try again.';
+        } else if (!isCSV) {
           statusEl.textContent = 'Could not finish importing this backup. Some saved data may be malformed.';
         }
       }
