@@ -16,9 +16,16 @@ const KNOWN_SKILLS = new Set([
   // databases
   'sql', 'mysql', 'postgresql', 'mongodb', 'sqlite', 'redis', 'elasticsearch', 'cassandra',
   'dynamodb', 'firebase', 'supabase', 'prisma', 'sequelize', 'typeorm',
+  'relational database', 'relational databases', 'rdbms', 'database design',
+  'database management', 'database administration', 'stored procedures',
+  'query optimization', 'sql joins', 'database indexing', 'normalization',
+  'database normalization', 'data modeling', 'etl',
   // cloud / devops
-  'aws', 'azure', 'gcp', 'docker', 'kubernetes', 'terraform', 'ansible', 'jenkins', 'github',
-  'gitlab', 'ci/cd', 'linux', 'bash', 'nginx', 'apache', 'serverless', 'lambda', 'ec2', 's3',
+  'aws', 'azure', 'gcp', 'google cloud', 'google cloud platform', 'cloud sql',
+  'bigquery', 'cloud run', 'cloud functions', 'cloud storage', 'pub/sub',
+  'pubsub', 'dataflow', 'dataproc', 'docker', 'kubernetes', 'terraform',
+  'ansible', 'jenkins', 'github', 'gitlab', 'ci/cd', 'linux', 'bash', 'nginx',
+  'apache', 'serverless', 'lambda', 'ec2', 's3',
   // mobile
   'react native', 'flutter', 'android', 'ios', 'xcode', 'swiftui',
   // data / ml
