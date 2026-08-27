@@ -413,7 +413,7 @@
 
                 <div class="profile-card" data-card="certs">
                     <div class="profile-section-title">Certifications &amp; Degrees</div>
-                    <p class="profile-hint">Track your credentials — certificates, degrees, bootcamps, and licenses.</p>
+                    <p class="profile-hint">Track finished credentials and ones you are working toward.</p>
                     <div class="skill-input-row">
                         <input type="text" id="cert-input" class="text-input"
                             placeholder="e.g. AWS Solutions Architect, B.S. Computer Science…" />
@@ -426,10 +426,23 @@
                             <option value="Bootcamp">Bootcamp</option>
                             <option value="License">License</option>
                         </select>
+                        <select id="cert-status" class="select-input">
+                            <option value="in-progress">In Progress</option>
+                            <option value="planned">Planned</option>
+                            <option value="completed">Completed</option>
+                        </select>
                         <button class="btn-primary" id="add-cert-btn">Add</button>
                     </div>
+                    <div class="cert-detail-grid">
+                        <input type="text" id="cert-provider" class="text-input"
+                            placeholder="School / issuer, e.g. Coursera, CompTIA, State University" />
+                        <input type="date" id="cert-start-date" class="text-input" title="Start date" />
+                        <input type="date" id="cert-target-date" class="text-input" title="Target or completed date" />
+                        <input type="number" id="cert-progress" class="text-input" min="0" max="100" step="5"
+                            placeholder="% done" />
+                    </div>
                     <textarea class="text-area" id="cert-desc" rows="2" style="margin-top:8px"
-                        placeholder="Optional description — skills covered, technologies, field of study… (used for fit scoring)"></textarea>
+                        placeholder="Optional notes — skills covered, technologies, field of study, renewal details…"></textarea>
                     <div id="cert-tags-container">
                         <!-- rendered by JS -->
                     </div>
@@ -1781,11 +1794,14 @@
                             <div class="onboarding-icon">👤</div>
                             <div class="onboarding-icon-text">
                                 <div class="ob-step-label">Step 2 of 4</div>
-                                <h2>Start with your skills</h2>
+                                <h2>Build your profile</h2>
                             </div>
                         </div>
                         <p>Head to <strong>My Profile</strong> and add your skills. This is what powers fit scoring —
                             without it, all fit scores will show 0%.</p>
+                        <p>Add certifications, degrees, diplomas, bootcamps, or licenses too. You can mark each one as
+                            <strong>Planned</strong>, <strong>In Progress</strong>, or <strong>Completed</strong>, then
+                            track the school or issuer, target date, progress, and notes.</p>
                         <p class="onboarding-tip">Use the <strong>Bulk</strong> button to paste a whole comma-separated
                             list at once.</p>
                     </div>
@@ -1845,6 +1861,9 @@
                                     jobs</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Learning
                                         Hub</strong> — courses matched to your skill gaps</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Credential
+                                        tracker</strong> — keep planned, in-progress, and completed certifications,
+                                    degrees, diplomas, bootcamps, and licenses with dates and progress</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Analytics</strong>
                                     — KPIs, funnel &amp; charts; print with ⌘P</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Compare

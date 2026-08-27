@@ -108,10 +108,45 @@ function saveLinks() {
 }
 
 const CERT_TYPES = ["Certificate", "Associate's", "Bachelor's", "Master's", "PhD", "Bootcamp", "License"];
-const CERT_SHOW_LIMIT = 1;
+const CERT_STATUSES = ['planned', 'in-progress', 'completed'];
+const CERT_STATUS_LABELS = {
+  planned: 'Planned',
+  'in-progress': 'In Progress',
+  completed: 'Completed',
+};
+const CERT_SHOW_LIMIT = 2;
 
 function certTypeOptions(selected) {
   return CERT_TYPES.map(t => `<option value="${t}"${t === selected ? ' selected' : ''}>${t}</option>`).join('');
+}
+
+function certStatusOptions(selected) {
+  return CERT_STATUSES.map(status => `<option value="${status}"${status === selected ? ' selected' : ''}>${CERT_STATUS_LABELS[status]}</option>`).join('');
+}
+
+function formatCertDate(value) {
+  if (!value) return '';
+  const date = new Date(value + 'T00:00:00');
+  if (Number.isNaN(date.getTime())) return '';
+  return date.toLocaleDateString(undefined, {
+    month: 'short',
+    year: 'numeric'
+  });
+}
+
+function getCertProgress(cert) {
+  if ((cert.status || 'completed') === 'completed') return 100;
+  const progress = Number(cert.progress);
+  return Number.isFinite(progress) ? Math.max(0, Math.min(100, Math.round(progress))) : 0;
+}
+
+function buildCertMeta(cert) {
+  const meta = [];
+  if (cert.provider) meta.push(cert.provider);
+  if (cert.startDate) meta.push(`Started ${formatCertDate(cert.startDate)}`);
+  if (cert.status === 'completed' && cert.completedDate) meta.push(`Completed ${formatCertDate(cert.completedDate)}`);
+  if (cert.status !== 'completed' && cert.targetDate) meta.push(`Target ${formatCertDate(cert.targetDate)}`);
+  return meta;
 }
 
 function renderCertTags() {
@@ -130,19 +165,32 @@ function renderCertTags() {
   const visible = showAll ? certs : certs.slice(0, CERT_SHOW_LIMIT);
 
   container.innerHTML = visible.map((c, i) => `
-    <div class="cert-card" data-cert-index="${i}">
+    <div class="cert-card cert-status-${escHtml(c.status || 'completed')}" data-cert-index="${i}">
       <div class="cert-card-view">
         <div class="cert-card-header">
           <span class="cert-card-name">${escHtml(c.name)}</span>
-          <span class="level">${escHtml(c.type)}</span>
+          <span class="level">${escHtml(c.type || 'Certificate')}</span>
+          <button class="cert-status-badge" data-index="${i}" title="Click to change status">${CERT_STATUS_LABELS[c.status] || 'Completed'}</button>
           <button class="cert-card-edit" data-index="${i}" title="Edit">✎</button>
           <button class="cert-card-remove" data-index="${i}" title="Remove">✕</button>
+        </div>
+        ${buildCertMeta(c).length ? `<div class="cert-card-meta">${buildCertMeta(c).map(escHtml).join(' · ')}</div>` : ''}
+        <div class="cert-progress-row">
+          <div class="cert-progress-track"><div class="cert-progress-fill" style="width:${getCertProgress(c)}%"></div></div>
+          <span class="cert-progress-label">${getCertProgress(c)}%</span>
         </div>
         ${c.description ? `<div class="cert-card-desc">${escHtml(c.description)}</div>` : '<div class="cert-card-desc cert-no-desc">No description — click ✎ to add one</div>'}
       </div>
       <div class="cert-card-edit-form" style="display:none">
         <input class="text-input cert-edit-name" value="${escHtml(c.name)}" placeholder="Name" />
-        <select class="select-input cert-edit-type">${certTypeOptions(c.type)}</select>
+        <div class="cert-edit-grid">
+          <select class="select-input cert-edit-type">${certTypeOptions(c.type || 'Certificate')}</select>
+          <select class="select-input cert-edit-status">${certStatusOptions(c.status || 'completed')}</select>
+          <input class="text-input cert-edit-provider" value="${escHtml(c.provider || '')}" placeholder="School / issuer" />
+          <input class="text-input cert-edit-start-date" type="date" value="${escHtml(c.startDate || '')}" title="Start date" />
+          <input class="text-input cert-edit-target-date" type="date" value="${escHtml(c.targetDate || c.completedDate || '')}" title="Target or completed date" />
+          <input class="text-input cert-edit-progress" type="number" min="0" max="100" step="5" value="${getCertProgress(c)}" placeholder="% done" />
+        </div>
         <textarea class="text-area cert-edit-desc" rows="2" placeholder="Skills covered, technologies, field of study…">${escHtml(c.description || '')}</textarea>
         <div class="cert-edit-actions">
           <button class="btn-primary cert-save-btn" data-index="${i}">Save</button>
@@ -181,14 +229,23 @@ function renderCertTags() {
         toast('Name is required.', 'error');
         return;
       }
+      const status = card.querySelector('.cert-edit-status').value;
+      const dateValue = card.querySelector('.cert-edit-target-date').value;
       state.profile.certifications[idx] = {
         name,
         type: card.querySelector('.cert-edit-type').value,
+        status,
+        provider: card.querySelector('.cert-edit-provider').value.trim(),
+        startDate: card.querySelector('.cert-edit-start-date').value,
+        targetDate: status === 'completed' ? '' : dateValue,
+        completedDate: status === 'completed' ? dateValue : '',
+        progress: status === 'completed' ? 100 : Math.max(0, Math.min(100, parseInt(card.querySelector('.cert-edit-progress').value) || 0)),
         description: card.querySelector('.cert-edit-desc').value.trim(),
       };
       save();
       reanalyzeAllJobs();
       renderCertTags();
+      renderProfileHero();
       toast('Updated!', 'success');
     });
   });
@@ -200,6 +257,29 @@ function renderCertTags() {
       save();
       reanalyzeAllJobs();
       renderCertTags();
+      renderProfileHero();
+    });
+  });
+
+  container.querySelectorAll('.cert-status-badge').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = parseInt(btn.dataset.index);
+      const cert = state.profile.certifications[idx];
+      const current = cert.status || 'completed';
+      const next = CERT_STATUSES[(CERT_STATUSES.indexOf(current) + 1) % CERT_STATUSES.length];
+      cert.status = next;
+      if (next === 'completed') {
+        cert.progress = 100;
+        cert.completedDate = cert.completedDate || new Date().toISOString().slice(0, 10);
+      } else {
+        cert.progress = next === 'planned' ? 0 : Math.min(getCertProgress(cert), 95);
+        cert.completedDate = '';
+      }
+      save();
+      reanalyzeAllJobs();
+      renderCertTags();
+      renderProfileHero();
+      toast(`Marked ${CERT_STATUS_LABELS[next].toLowerCase()}.`, 'success');
     });
   });
 
@@ -223,6 +303,11 @@ function addCert() {
   const input = document.getElementById('cert-input');
   const descEl = document.getElementById('cert-desc');
   const type = document.getElementById('cert-type').value;
+  const status = document.getElementById('cert-status').value;
+  const providerEl = document.getElementById('cert-provider');
+  const startEl = document.getElementById('cert-start-date');
+  const targetEl = document.getElementById('cert-target-date');
+  const progressEl = document.getElementById('cert-progress');
   const name = input.value.trim();
   const description = descEl ? descEl.value.trim() : '';
   if (!name) return;
@@ -233,13 +318,24 @@ function addCert() {
   state.profile.certifications.push({
     name,
     type,
+    status,
+    provider: providerEl ? providerEl.value.trim() : '',
+    startDate: startEl ? startEl.value : '',
+    targetDate: status === 'completed' ? '' : (targetEl ? targetEl.value : ''),
+    completedDate: status === 'completed' ? (targetEl ? targetEl.value : new Date().toISOString().slice(0, 10)) : '',
+    progress: status === 'completed' ? 100 : Math.max(0, Math.min(100, parseInt(progressEl ? progressEl.value : '') || 0)),
     description
   });
   input.value = '';
   if (descEl) descEl.value = '';
+  if (providerEl) providerEl.value = '';
+  if (startEl) startEl.value = '';
+  if (targetEl) targetEl.value = '';
+  if (progressEl) progressEl.value = '';
   save();
   reanalyzeAllJobs();
   renderCertTags();
+  renderProfileHero();
   toast(`"${name}" added!`, 'success');
 }
 

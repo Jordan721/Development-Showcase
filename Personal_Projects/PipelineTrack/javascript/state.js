@@ -467,6 +467,13 @@ function _normalizeCertEntry(cert) {
     const name = cert.trim();
     return name ? {
       name,
+      type: 'Certificate',
+      status: 'completed',
+      provider: '',
+      startDate: '',
+      targetDate: '',
+      completedDate: '',
+      progress: 100,
       description: ''
     } : null;
   }
@@ -474,10 +481,23 @@ function _normalizeCertEntry(cert) {
 
   const name = _stringValue(cert.name).trim();
   if (!name) return null;
+  const statuses = ['planned', 'in-progress', 'completed'];
+  const status = statuses.includes(cert.status) ? cert.status : 'completed';
+  const progress = Number(cert.progress);
+  const normalizedProgress = Number.isFinite(progress) ?
+    Math.max(0, Math.min(100, Math.round(progress))) :
+    (status === 'completed' ? 100 : 0);
 
   return {
     ...cert,
     name,
+    type: _stringValue(cert.type).trim() || 'Certificate',
+    status,
+    provider: _stringValue(cert.provider),
+    startDate: _stringValue(cert.startDate),
+    targetDate: _stringValue(cert.targetDate),
+    completedDate: _stringValue(cert.completedDate),
+    progress: status === 'completed' && normalizedProgress === 0 ? 100 : normalizedProgress,
     description: _stringValue(cert.description),
   };
 }

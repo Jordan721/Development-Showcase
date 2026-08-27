@@ -694,6 +694,7 @@ function wirePasteCleaners() {
     'detail-notes', 'detail-company-notes',
     'resume-text', 'polish-text',
     'contact-notes', 'event-notes', 'profile-summary',
+    'cert-input', 'cert-provider', 'cert-desc',
   ];
   ids.forEach(id => {
     const el = document.getElementById(id);

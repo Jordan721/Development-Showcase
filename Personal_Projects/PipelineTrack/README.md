@@ -22,7 +22,7 @@ A personal job search companion built to take the chaos out of hunting for work.
 | 🤝 Network | Track recruiters, hiring managers, and referrals with follow-up reminders |
 | 🎯 Goals | Set weekly/monthly targets and track live progress against your job board data |
 | 📊 Analytics | KPIs, funnel, response rates, skill gaps, fit distribution, and breakdowns |
-| 👤 My Profile | Skills, certifications, email templates, skill coverage chart, and data backup |
+| 👤 My Profile | Skills, credential progress, email templates, skill coverage chart, and data backup |
 | 📄 Resume Hub | Parse your resume, scan GitHub, polish your writing, and store resume versions in the vault |
 | 🧠 Learning Hub | Course recommendations matched to your skill gaps |
 
@@ -40,7 +40,7 @@ I built PipelineTrack to solve that. One tool to track every job, score your ski
 
 1. Clone or download this folder and open `index.html` in any modern browser
 2. Follow the **getting started guide** that opens automatically — navigate steps with `←` / `→` arrow keys or the `‹ ›` buttons beside the dots, or reopen it anytime with the **?** button
-3. Go to **My Profile** and add your skills (this powers fit scoring)
+3. Go to **My Profile** and add your skills, plus any certifications, degrees, licenses, diplomas, or bootcamps you have finished or are working toward
 4. Go to **Job Board → + Add Job** — click **⚡ Paste full listing** to auto-fill fields from the raw posting, or fill in manually; paste the description in Job Info for an instant fit score
 5. Click any job card to see your fit score and skill breakdown
 6. Check **Learning Hub** to see what to learn next, **Analytics** for charts, and **Goals** to set weekly targets
@@ -86,7 +86,7 @@ PipelineTrack/
     ├── utils.js            # shared helpers, fit analysis, navigation
     ├── views-dashboard.js  # dashboard stats, funnel, velocity, deadlines, time-in-stage
     ├── views-board.js      # kanban board, table, timeline views, job detail & add/edit modals
-    ├── views-profile.js    # profile, skills, certifications, coverage chart
+    ├── views-profile.js    # profile, skills, credential tracker, coverage chart
     ├── views-resume.js     # learning hub and resume hub
     ├── views-calendar.js   # calendar view (month/week/year)
     ├── views-contacts.js   # network & contacts view
@@ -212,7 +212,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 <summary><strong>👤 My Profile</strong></summary>
 
 - **Skills** — add individually or bulk-paste; search bar filters your skills in real time — if the skill isn't found a prompt lets you add it instantly or jump to the Learning Hub; level badges (Expert / Intermediate / Beginner) cycle on click; duplicates auto-skipped; casing auto-corrected on save and on load (e.g. `javascript` → `JavaScript`); Skill Coverage chart shows frequency across tracked jobs
-- **Certifications, Degrees & Licenses** — optional descriptions feed directly into fit scoring; inline edit via ✎
+- **Credential Tracker** — track certifications, degrees, diplomas, bootcamps, and licenses by status (Planned / In Progress / Completed), school or issuer, start date, target or completed date, progress %, and notes; descriptions still feed into fit scoring
 - **Email Templates** — Thank-You, Follow-Up, Withdrawal, Custom; load any template into a job's cover letter
 - **Data Backup** — JSON export/import (merges by ID); CSV export/import (merges by role + company)
 - **Your Links** — LinkedIn, GitHub, Portfolio with one-click open and copy
@@ -234,7 +234,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 <details>
 <summary><strong>🧠 Learning Hub</strong></summary>
 
-- Course and certification recommendations pulled from your skill gaps
+- Course and certification recommendations pulled from your skill gaps; save the ones you choose, then track progress toward the credential in My Profile
 - Sources: Coursera, Google, AWS, LinkedIn Learning, Udemy, and more
 - Each resource shows estimated time commitment; bookmark picks and filter to saved only
 
@@ -285,7 +285,7 @@ All three show an amber **✦ Auto-filled** badge so you always know the app set
 - **Custom Select Dropdowns** — all dropdowns use a custom chevron arrow, hover border, and consistent font — no browser default styling
 - **Linked Contacts** — contacts tied to a job appear inline in the job detail modal
 - **Thank-You Tracking** — check "Thank-you sent" in milestone modals; ✓ shows in the Application Timeline
-- **Getting Started Checklist** — progress bar on first use: add skills → add job → get fit score → visit Learning Hub
+- **Getting Started Checklist** — progress bar on first use: add profile skills/credentials → add job → get fit score → visit Learning Hub
 - **Color-Blind Mode** — ◑ toggle switches red/green to orange/blue
 - **Print Summary** — `Cmd/Ctrl+P` or command palette prints a clean Analytics page
 
