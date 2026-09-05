@@ -174,6 +174,10 @@ function updateBoardFilterUI() {
   if (clearBtn) clearBtn.style.display = hasFilters ? '' : 'none';
   const sortSel = document.getElementById('board-sort-table');
   if (sortSel) sortSel.style.display = boardLayout === 'table' ? '' : 'none';
+  const sortField = sortSel ? sortSel.closest('.board-sort-field') : null;
+  if (sortField) sortField.style.display = boardLayout === 'table' ? '' : 'none';
+  const filterChips = document.getElementById('board-filter-chips');
+  if (filterChips) filterChips.classList.toggle('has-board-sort', boardLayout === 'table');
   const dragHint = document.getElementById('board-drag-hint');
   if (dragHint) dragHint.style.display = (boardLayout === 'table' || boardLayout === 'timeline' || boardLayout === 'matrix' || boardLayout === 'map') ? 'none' : '';
 }
@@ -183,9 +187,9 @@ function getJobUrgency(job) {
   const now = new Date();
   if (job.deadline) {
     const d = new Date(job.deadline + 'T00:00:00');
-    return (d - now) / 86400000 <= 14; // within 14 days (or overdue)
+    return (d - now) / 86400000 <= matrixUrgencyDays; // within threshold (or overdue)
   }
-  return (now - new Date(job.dateAdded)) / 86400000 >= 14; // 2+ weeks old
+  return (now - new Date(job.dateAdded)) / 86400000 >= matrixUrgencyDays;
 }
 
 const PM_STAGE_COLORS = {
@@ -230,6 +234,37 @@ function pmCardHTML(job) {
     </div>`;
 }
 
+function getDeadlineDays(job) {
+  if (!job.deadline) return null;
+  return Math.round((new Date(job.deadline + 'T00:00:00') - new Date()) / 86400000);
+}
+
+function stageSummaryHTML(jobs) {
+  const scored = jobs.filter(j => j.fitScore != null);
+  const avgFit = scored.length ? Math.round(scored.reduce((sum, j) => sum + Number(j.fitScore), 0) / scored.length) : null;
+  const dueSoon = jobs.filter(j => {
+    const days = getDeadlineDays(j);
+    return days !== null && days <= matrixUrgencyDays;
+  }).length;
+  const pinned = jobs.filter(j => j.pinned).length;
+  const parts = [
+    `<span title="Average fit score">${avgFit === null ? 'No avg fit' : 'Avg fit ' + avgFit + '%'}</span>`,
+    dueSoon ? `<span class="col-stat-alert" title="Deadline within ${matrixUrgencyDays} days">${dueSoon} due soon</span>` : '<span>No deadlines</span>',
+  ];
+  if (pinned) parts.push(`<span title="Pinned jobs">${pinned} pinned</span>`);
+  return `<div class="kanban-col-stats">${parts.join('')}</div>`;
+}
+
+function matrixSummaryHTML(jobs) {
+  const scored = jobs.filter(j => j.fitScore != null);
+  const avgFit = scored.length ? Math.round(scored.reduce((sum, j) => sum + Number(j.fitScore), 0) / scored.length) : null;
+  const dueSoon = jobs.filter(j => {
+    const days = getDeadlineDays(j);
+    return days !== null && days <= matrixUrgencyDays;
+  }).length;
+  return `<div class="pm-q-summary">${jobs.length} job${jobs.length === 1 ? '' : 's'}${avgFit === null ? '' : ' · avg fit ' + avgFit + '%'}${dueSoon ? ' · ' + dueSoon + ' due soon' : ''}</div>`;
+}
+
 function renderBoardMatrix(jobs) {
   if (jobs.length === 0) {
     return emptyStateHTML('🔍', 'No results', 'Try adjusting your search or filters');
@@ -242,7 +277,7 @@ function renderBoardMatrix(jobs) {
       id: 'tl',
       title: 'Plan Ahead',
       icon: '⭐',
-      desc: 'High fit · Low urgency',
+      desc: `${matrixFitThreshold}%+ fit · Low urgency`,
       highFit: true,
       urgent: false
     },
@@ -250,7 +285,7 @@ function renderBoardMatrix(jobs) {
       id: 'tr',
       title: 'Act Now',
       icon: '🔥',
-      desc: 'High fit · High urgency',
+      desc: `${matrixFitThreshold}%+ fit · Due soon`,
       highFit: true,
       urgent: true
     },
@@ -258,7 +293,7 @@ function renderBoardMatrix(jobs) {
       id: 'bl',
       title: 'Low Priority',
       icon: '📋',
-      desc: 'Low fit · Low urgency',
+      desc: `&lt;${matrixFitThreshold}% fit · Low urgency`,
       highFit: false,
       urgent: false
     },
@@ -266,7 +301,7 @@ function renderBoardMatrix(jobs) {
       id: 'br',
       title: 'Quick Apply',
       icon: '⚡',
-      desc: 'Low fit · High urgency',
+      desc: `&lt;${matrixFitThreshold}% fit · Due soon`,
       highFit: false,
       urgent: true
     },
@@ -275,7 +310,7 @@ function renderBoardMatrix(jobs) {
   const qJobs = {};
   quadrants.forEach(q => {
     qJobs[q.id] = scored.filter(j => {
-      const hf = j.fitScore >= 70;
+      const hf = j.fitScore >= matrixFitThreshold;
       const urg = getJobUrgency(j);
       return hf === q.highFit && urg === q.urgent;
     });
@@ -283,6 +318,18 @@ function renderBoardMatrix(jobs) {
 
   return `
     <div class="pm-wrapper">
+      <div class="pm-controls" aria-label="Priority matrix settings">
+        <label class="pm-control">
+          <span>High fit</span>
+          <input type="range" id="pm-fit-threshold" min="40" max="90" step="5" value="${matrixFitThreshold}" />
+          <strong>${matrixFitThreshold}%+</strong>
+        </label>
+        <label class="pm-control">
+          <span>Urgent</span>
+          <input type="range" id="pm-urgency-days" min="3" max="30" step="1" value="${matrixUrgencyDays}" />
+          <strong>${matrixUrgencyDays}d</strong>
+        </label>
+      </div>
       <div class="pm-matrix-area">
         <div class="pm-y-label"><span>← HIGH FIT · LOW FIT →</span></div>
         <div class="pm-inner">
@@ -302,6 +349,7 @@ function renderBoardMatrix(jobs) {
                   </div>
                   <span class="pm-q-count">${qJobs[q.id].length}</span>
                 </div>
+                ${matrixSummaryHTML(qJobs[q.id])}
                 <div class="pm-cards">
                   ${qJobs[q.id].length === 0
                     ? '<div class="pm-empty-q">No jobs here</div>'
@@ -428,6 +476,18 @@ function renderBoard() {
   if (boardLayout === 'matrix') {
     const visibleJobs = periodJobs.filter(j => visibleStages.includes(j.stage));
     board.innerHTML = renderBoardMatrix(visibleJobs);
+    const fitThresholdInput = document.getElementById('pm-fit-threshold');
+    const urgencyDaysInput = document.getElementById('pm-urgency-days');
+    if (fitThresholdInput) fitThresholdInput.addEventListener('input', () => {
+      matrixFitThreshold = Number(fitThresholdInput.value) || 70;
+      localStorage.setItem('pt-matrix-fit-threshold', String(matrixFitThreshold));
+      renderBoard();
+    });
+    if (urgencyDaysInput) urgencyDaysInput.addEventListener('input', () => {
+      matrixUrgencyDays = Number(urgencyDaysInput.value) || 14;
+      localStorage.setItem('pt-matrix-urgency-days', String(matrixUrgencyDays));
+      renderBoard();
+    });
     board.querySelectorAll('.card-delete-btn').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
@@ -477,8 +537,12 @@ function renderBoard() {
       <div class="kanban-col${collapsed ? ' kanban-col--collapsed' : ''}" data-stage="${stage}">
         <div class="col-stripe stripe-${stage}"></div>
         <div class="kanban-col-header kanban-col-header--clickable" data-collapse-stage="${stage}" title="${collapsed ? 'Expand' : 'Collapse'} column">
-          <span class="kanban-col-header-label"><span class="stage-emoji">${STAGE_EMOJIS[stage] || ''}</span>${STAGE_LABELS[stage]}</span>
+          <span class="kanban-col-title-group">
+            <span class="kanban-col-header-label"><span class="stage-emoji">${STAGE_EMOJIS[stage] || ''}</span>${STAGE_LABELS[stage]}</span>
+            ${!collapsed ? stageSummaryHTML(jobs) : ''}
+          </span>
           <span class="kanban-col-count">${jobs.length}</span>
+          <button class="kanban-col-add" data-add-stage="${stage}" title="Add job to ${STAGE_LABELS[stage]}" aria-label="Add job to ${STAGE_LABELS[stage]}">+</button>
           <span class="kanban-col-collapse-icon">${collapsed ? '›' : '‹'}</span>
         </div>
         <div class="kanban-col-body" data-stage="${stage}">
@@ -501,6 +565,13 @@ function renderBoard() {
       const scrollLeft = board.scrollLeft;
       renderBoard();
       board.scrollLeft = scrollLeft;
+    });
+  });
+
+  board.querySelectorAll('.kanban-col-add').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      openAddJobModal(null, { stage: btn.dataset.addStage || 'saved' });
     });
   });
 
@@ -1910,7 +1981,7 @@ function flashField(id) {
 /* ══════════════════════════════════════════════════════════
    ADD / EDIT JOB
    ══════════════════════════════════════════════════════════ */
-function openAddJobModal(editId = null) {
+function openAddJobModal(editId = null, defaults = {}) {
   const job = editId ? state.jobs.find(j => j.id === editId) : null;
 
   document.getElementById('modal-job-title').textContent = job ? 'Edit Job' : 'Add New Job';
@@ -1963,7 +2034,7 @@ function openAddJobModal(editId = null) {
   document.getElementById('job-date-posted').value = job ? job.datePosted || '' : '';
   document.getElementById('job-date-applied').value = job ? job.dateApplied || '' : '';
   document.getElementById('job-deadline').value = job ? job.deadline || '' : '';
-  document.getElementById('job-stage').value = job ? job.stage || 'saved' : '';
+  document.getElementById('job-stage').value = job ? job.stage || 'saved' : defaults.stage || '';
   document.getElementById('job-seniority').value = job ? job.seniority || '' : '';
   document.getElementById('job-type').value = job ? job.jobType || '' : '';
   document.getElementById('job-work-type').value = job ? job.workType || '' : '';

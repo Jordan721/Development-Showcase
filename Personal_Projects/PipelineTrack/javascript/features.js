@@ -290,8 +290,8 @@ function renderNotesTimeline(jobId) {
 (function patchOpenAddJobModal() {
   const _orig = window.openAddJobModal;
 
-  window.openAddJobModal = function (editId = null) {
-    _orig(editId);
+  window.openAddJobModal = function (editId = null, defaults = {}) {
+    _orig(editId, defaults);
 
     const job = editId ? state.jobs.find(j => j.id === editId) : null;
     const dlEl = document.getElementById('job-deadline');

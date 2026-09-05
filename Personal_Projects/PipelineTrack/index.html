@@ -301,48 +301,61 @@
             <!-- Search + filter bar -->
             <div class="board-search-bar">
                 <div class="board-search-wrap">
+                    <span class="board-filter-label">Search</span>
                     <input type="text" class="text-input" id="board-search" placeholder="Search role, company…"
                         autocomplete="off" />
                 </div>
                 <div class="board-filter-chips" id="board-filter-chips">
-                    <select class="select-input board-filter-select" id="board-filter-stage">
-                        <option value="">All Stages</option>
-                        <option value="saved">Saved</option>
-                        <option value="applied">Applied</option>
-                        <option value="screening">Screening</option>
-                        <option value="interview">Interview</option>
-                        <option value="offer">Offer</option>
-                        <option value="declined">Not Selected</option>
-                        <option value="withdrew">Declined</option>
-                        <option value="archived">Archived</option>
-                    </select>
-                    <select class="select-input board-filter-select" id="board-filter-work-type">
-                        <option value="">All Work Types</option>
-                        <option value="Remote">Remote</option>
-                        <option value="On-site">On-site</option>
-                        <option value="Hybrid">Hybrid</option>
-                        <option value="Remote / Hybrid">Remote / Hybrid</option>
-                        <option value="Hybrid / On-site">Hybrid / On-site</option>
-                        <option value="Flexible">Flexible</option>
-                    </select>
-                    <select class="select-input board-filter-select" id="board-filter-seniority">
-                        <option value="">All Seniority</option>
-                        <option value="Internship">Internship</option>
-                        <option value="Entry Level">Entry Level</option>
-                        <option value="Junior">Junior</option>
-                        <option value="Mid-Level">Mid-Level</option>
-                        <option value="Senior">Senior</option>
-                        <option value="Lead">Lead</option>
-                        <option value="Staff">Staff</option>
-                    </select>
-                    <select class="select-input board-filter-select" id="board-sort-table" style="display:none">
-                        <option value="date-desc">Newest First</option>
-                        <option value="date-asc">Oldest First</option>
-                        <option value="fit-desc">Fit Score ↓</option>
-                        <option value="fit-asc">Fit Score ↑</option>
-                        <option value="role-asc">Role A–Z</option>
-                        <option value="company-asc">Company A–Z</option>
-                    </select>
+                    <label class="board-filter-field">
+                        <span class="board-filter-label">Stage</span>
+                        <select class="select-input board-filter-select" id="board-filter-stage">
+                            <option value="">All Stages</option>
+                            <option value="saved">Saved</option>
+                            <option value="applied">Applied</option>
+                            <option value="screening">Screening</option>
+                            <option value="interview">Interview</option>
+                            <option value="offer">Offer</option>
+                            <option value="declined">Not Selected</option>
+                            <option value="withdrew">Declined</option>
+                            <option value="archived">Archived</option>
+                        </select>
+                    </label>
+                    <label class="board-filter-field board-filter-field--wide">
+                        <span class="board-filter-label">Work Type</span>
+                        <select class="select-input board-filter-select" id="board-filter-work-type">
+                            <option value="">All Work Types</option>
+                            <option value="Remote">Remote</option>
+                            <option value="On-site">On-site</option>
+                            <option value="Hybrid">Hybrid</option>
+                            <option value="Remote / Hybrid">Remote / Hybrid</option>
+                            <option value="Hybrid / On-site">Hybrid / On-site</option>
+                            <option value="Flexible">Flexible</option>
+                        </select>
+                    </label>
+                    <label class="board-filter-field">
+                        <span class="board-filter-label">Seniority</span>
+                        <select class="select-input board-filter-select" id="board-filter-seniority">
+                            <option value="">All Seniority</option>
+                            <option value="Internship">Internship</option>
+                            <option value="Entry Level">Entry Level</option>
+                            <option value="Junior">Junior</option>
+                            <option value="Mid-Level">Mid-Level</option>
+                            <option value="Senior">Senior</option>
+                            <option value="Lead">Lead</option>
+                            <option value="Staff">Staff</option>
+                        </select>
+                    </label>
+                    <label class="board-filter-field board-sort-field">
+                        <span class="board-filter-label">Sort</span>
+                        <select class="select-input board-filter-select" id="board-sort-table" style="display:none">
+                            <option value="date-desc">Newest First</option>
+                            <option value="date-asc">Oldest First</option>
+                            <option value="fit-desc">Fit Score ↓</option>
+                            <option value="fit-asc">Fit Score ↑</option>
+                            <option value="role-asc">Role A–Z</option>
+                            <option value="company-asc">Company A–Z</option>
+                        </select>
+                    </label>
                     <button class="btn-ghost btn-clear-pill board-clear-filters" id="board-clear-filters"
                         style="display:none">✕ Clear</button>
                 </div>

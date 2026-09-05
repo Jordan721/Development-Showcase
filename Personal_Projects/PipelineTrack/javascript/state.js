@@ -14,6 +14,8 @@ let boardFilterStage = '';
 let boardFilterWorkType = '';
 let boardFilterSeniority = '';
 let boardSortTable = 'date-desc';
+let matrixFitThreshold = Number(localStorage.getItem('pt-matrix-fit-threshold')) || 70;
+let matrixUrgencyDays = Number(localStorage.getItem('pt-matrix-urgency-days')) || 14;
 const STAGE_EMOJIS = {
   saved: '🔖',
   applied: '📨',
