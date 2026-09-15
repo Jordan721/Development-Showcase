@@ -1265,6 +1265,22 @@ function renderDetailRoleFitSummary(job) {
   }
 }
 
+function updateDetailFitRing(job) {
+  const ring = document.getElementById('fit-ring-fill');
+  const label = document.getElementById('detail-fit-pct');
+  if (!ring || !label) return;
+
+  const pct = job.fitScore !== null && job.fitScore !== undefined ? job.fitScore : null;
+  const circumference = 326.7;
+  label.textContent = pct !== null ? `${pct}%` : '—';
+  if (pct !== null) {
+    ring.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+    ring.style.stroke = pct >= 70 ? 'var(--green)' : pct >= 40 ? 'var(--yellow)' : 'var(--red)';
+  } else {
+    ring.style.strokeDashoffset = circumference;
+  }
+}
+
 function refreshJobFitAfterSkillEdit(job) {
   if (typeof calculateJobFitScore === 'function') {
     if (typeof calculateRoleWeightedSkillScore === 'function') {
@@ -1272,6 +1288,7 @@ function refreshJobFitAfterSkillEdit(job) {
     }
     job.jobFitScore = calculateJobFitScore(job.fitScore, job.jobQualityScore, job.redFlags || []);
   }
+  updateDetailFitRing(job);
   renderDetailRoleFitSummary(job);
 }
 /* ══════════════════════════════════════════════════════════

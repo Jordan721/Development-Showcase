@@ -342,6 +342,12 @@ function addCert() {
 const SKILL_SHOW_LIMIT = 10;
 const LEVELS = ['Beginner', 'Intermediate', 'Expert'];
 
+function refreshSkillFitViews() {
+  if (document.getElementById('skill-coverage-bars')) renderCoverageBars();
+  if (state.activeView === 'dashboard') renderDashboard();
+  if (state.activeView === 'board') renderBoard();
+}
+
 function renderSkillTags() {
   const container = document.getElementById('skill-tags-container');
   const footer = document.getElementById('skill-footer');
@@ -468,7 +474,7 @@ function renderSkillTags() {
       save();
       reanalyzeAllJobs();
       renderSkillTags();
-      if (state.activeView === 'dashboard') renderDashboard();
+      refreshSkillFitViews();
     });
   });
 
