@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="The One Day Triathlon is a 24-hour game jam: draw a genre, mechanic, and wildcard, then build something playable before the clock runs out.">
+    <meta name="theme-color" content="#090b10">
+    <title>The One Day Triathlon | 24-Hour Game Jam</title>
+    <link rel="stylesheet" href="Stylesheets_For_Site/stylesheet_one_day.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header class="site-header" data-header>
+        <a class="brand" href="#top" aria-label="The One Day Triathlon home"><span class="brand-mark"
+                aria-hidden="true">1D</span><span>One Day Triathlon</span></a>
+        <button class="menu-toggle" type="button" aria-expanded="false"
+            aria-controls="site-nav"><span></span><span></span><span></span><span class="sr-only">Toggle
+                navigation</span></button>
+        <nav class="site-nav" id="site-nav" aria-label="Primary navigation">
+            <a href="#about">About</a><a href="#challenge">Challenge lab</a><a href="#format">The format</a><a
+                href="#rules">Rules</a><a class="nav-cta" href="../../index.html">Portfolio</a>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <section class="hero" id="top" aria-labelledby="hero-title">
+            <div class="hero-media" aria-hidden="true"></div>
+            <div class="hero-scanlines" aria-hidden="true"></div>
+            <div class="hero-content">
+                <p class="eyebrow"><span class="live-dot"></span> Independent game jam</p>
+                <h1 id="hero-title">Build a game.<br><em>Beat the clock.</em></h1>
+                <p class="hero-lede">Three creative disciplines. One unpredictable brief. Twenty-four hours to turn a
+                    wild idea into something people can play.</p>
+                <div class="hero-actions"><a class="button button-primary" href="#challenge">Draw your challenge <span
+                            aria-hidden="true">&#8595;</span></a><a class="text-link" href="#format">See the format
+                        <span aria-hidden="true">&#8594;</span></a></div>
+            </div>
+            <div class="hero-scoreboard" aria-label="Event summary">
+                <div><strong>24</strong><span>Hours</span></div>
+                <div><strong>03</strong><span>Stages</span></div>
+                <div><strong>01</strong><span>Playable game</span></div>
+            </div>
+        </section>
+
+        <section class="about-section section" id="about" aria-labelledby="about-title">
+            <div class="about-heading">
+                <p class="section-kicker">Project story / 00</p>
+                <h2 id="about-title">An old idea,<br><em>rebuilt with new skills.</em></h2>
+            </div>
+
+            <div class="about-story">
+                <p class="about-lede">The One Day Triathlon began as an academic project built around a simple question: what could someone create if they had only one day to make a game?</p>
+                <div class="about-copy">
+                    <p>The original website introduced the game-jam concept, explained the challenge, and offered a list of genres for participants to choose from. Its goal was to encourage experimentation under pressure, reflect the realities of creative deadlines, and give people a reason to share feedback with one another.</p>
+                    <p>Years later, I returned to the project to see how far my skills had developed. I kept its playful spirit and 24-hour premise, then rebuilt the experience from the ground up as a focused, interactive event site.</p>
+                </div>
+            </div>
+
+            <div class="evolution-grid" aria-label="Project evolution">
+                <article class="evolution-card evolution-before">
+                    <div class="evolution-label"><span>Then</span><b>Academic prototype</b></div>
+                    <h3>A simple informational website</h3>
+                    <ul>
+                        <li>Separate home, about, and genre pages</li>
+                        <li>Bootstrap-based page layouts</li>
+                        <li>Static genre descriptions</li>
+                        <li>Early experiments with visual design</li>
+                    </ul>
+                </article>
+                <article class="evolution-card evolution-now">
+                    <div class="evolution-label"><span>Now</span><b>Modern rebuild</b></div>
+                    <h3>An interactive game-jam experience</h3>
+                    <ul>
+                        <li>Responsive, custom visual system</li>
+                        <li>Dynamic challenge generator with lock controls</li>
+                        <li>Persistent 24-hour race clock</li>
+                        <li>Accessible navigation and reduced-motion support</li>
+                    </ul>
+                </article>
+            </div>
+
+            <p class="about-note">This rebuild is both a tribute to where I started and a snapshot of how I design and build for the web today.</p>
+        </section>
+
+        <section class="challenge-section section" id="challenge" aria-labelledby="challenge-title">
+            <div class="section-heading">
+                <p class="section-kicker">Challenge lab / 01</p>
+                <h2 id="challenge-title">Your brief is waiting.</h2>
+                <p>Every run combines a genre, a core mechanic, and one constraint. Lock any result you like, then
+                    reroll the rest.</p>
+            </div>
+            <div class="challenge-console">
+                <div class="console-topline"><span>Brief generator</span><span class="console-status"><i></i> System
+                        ready</span></div>
+                <div class="challenge-grid" aria-live="polite">
+                    <article class="challenge-card" data-card="genre">
+                        <div class="challenge-label"><span>01</span> Genre</div>
+                        <p class="challenge-value" data-value="genre">Platformer</p><button class="lock-button"
+                            type="button" data-lock="genre" aria-pressed="false">Lock result</button>
+                    </article>
+                    <article class="challenge-card" data-card="mechanic">
+                        <div class="challenge-label"><span>02</span> Core mechanic</div>
+                        <p class="challenge-value" data-value="mechanic">Time loop</p><button class="lock-button"
+                            type="button" data-lock="mechanic" aria-pressed="false">Lock result</button>
+                    </article>
+                    <article class="challenge-card" data-card="wildcard">
+                        <div class="challenge-label"><span>03</span> Wildcard</div>
+                        <p class="challenge-value" data-value="wildcard">One-button controls</p><button
+                            class="lock-button" type="button" data-lock="wildcard" aria-pressed="false">Lock
+                            result</button>
+                    </article>
+                </div>
+                <div class="console-actions"><button class="button button-primary roll-button" type="button"
+                        data-roll><span aria-hidden="true">&#8635;</span> Generate challenge</button><button
+                        class="button button-secondary" type="button" data-copy>Copy brief</button><span
+                        class="copy-status" role="status" data-copy-status></span></div>
+            </div>
+            <div class="timer-panel" data-timer-panel>
+                <div>
+                    <p class="section-kicker">Race clock</p>
+                    <h3>Ready when you are.</h3>
+                    <p>Your countdown is saved on this device, so the race keeps its place after a refresh.</p>
+                </div>
+                <div class="timer" aria-label="Time remaining">
+                    <div><strong data-hours>24</strong><span>Hours</span></div><b>:</b>
+                    <div><strong data-minutes>00</strong><span>Minutes</span></div><b>:</b>
+                    <div><strong data-seconds>00</strong><span>Seconds</span></div>
+                </div>
+                <div class="timer-actions"><button class="button button-dark" type="button" data-start-timer>Start
+                        24-hour clock</button><button class="reset-button" type="button" data-reset-timer
+                        hidden>Reset</button></div>
+            </div>
+        </section>
+
+        <section class="format-section section" id="format" aria-labelledby="format-title">
+            <div class="format-intro">
+                <p class="section-kicker">The format / 02</p>
+                <h2 id="format-title">A creative triathlon.</h2>
+                <p>Good game jams are about momentum, not perfection. Move through three focused stages and protect the
+                    final hours for a playable build.</p>
+            </div>
+            <div class="stage-list">
+                <article class="stage">
+                    <div class="stage-number">01</div>
+                    <div class="stage-copy">
+                        <p class="stage-time">Hours 00-02</p>
+                        <h3>Concept sprint</h3>
+                        <p>Find the smallest fun idea hiding inside the brief. Sketch the loop, choose your tools, and
+                            define what "done" means.</p>
+                    </div><span class="stage-duration">2H</span>
+                </article>
+                <article class="stage">
+                    <div class="stage-number">02</div>
+                    <div class="stage-copy">
+                        <p class="stage-time">Hours 02-20</p>
+                        <h3>Build the core</h3>
+                        <p>Make the interaction work first. Test early, trim aggressively, and keep the game playable as
+                            it grows.</p>
+                    </div><span class="stage-duration">18H</span>
+                </article>
+                <article class="stage">
+                    <div class="stage-number">03</div>
+                    <div class="stage-copy">
+                        <p class="stage-time">Hours 20-24</p>
+                        <h3>Polish &amp; pitch</h3>
+                        <p>Add feedback, fix the sharpest bugs, package the build, and tell players what makes your game
+                            special.</p>
+                    </div><span class="stage-duration">4H</span>
+                </article>
+            </div>
+        </section>
+
+        <section class="manifesto" aria-label="Event philosophy">
+            <div class="manifesto-image" role="img" aria-label="Neon arcade cabinets in a dark game room"></div>
+            <blockquote><span aria-hidden="true">&ldquo;</span>The finish line is not perfect. The finish line is
+                <em>playable.</em></blockquote>
+        </section>
+
+        <section class="rules-section section" id="rules" aria-labelledby="rules-title">
+            <div class="section-heading">
+                <p class="section-kicker">Race rules / 03</p>
+                <h2 id="rules-title">Keep it fast. Keep it fair.</h2>
+            </div>
+            <div class="rules-grid">
+                <article><span>01</span>
+                    <h3>Start fresh</h3>
+                    <p>Existing tools and asset libraries are welcome. The game itself begins when the clock does.</p>
+                </article>
+                <article><span>02</span>
+                    <h3>Honor the brief</h3>
+                    <p>Your genre, mechanic, and wildcard should all be recognizable in the final experience.</p>
+                </article>
+                <article><span>03</span>
+                    <h3>Build together</h3>
+                    <p>Solo racers and small teams compete on equal ground. Share knowledge freely along the way.</p>
+                </article>
+                <article><span>04</span>
+                    <h3>Ship something</h3>
+                    <p>Submit a playable build, a short description, and one screenshot before time expires.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="closing-section">
+            <div>
+                <p class="section-kicker">The clock is yours</p>
+                <h2>Make the idea<br>only you would make.</h2>
+            </div><a class="button button-primary" href="#challenge">Enter the challenge lab <span
+                    aria-hidden="true">&#8593;</span></a>
+        </section>
+    </main>
+    <footer><a class="brand" href="#top"><span class="brand-mark">1D</span><span>One Day Triathlon</span></a>
+        <p>Reimagined from an academic project by Jordan Alexis.</p>
+        <p>&copy; <span data-year></span> Jordan Alexis</p>
+    </footer>
+</body>
+
+</html>
