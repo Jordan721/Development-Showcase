@@ -1,14 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Press+Start+2P&display=swap');
 
 :root {
-    --ink: #090b10;
-    --ink-soft: #11151d;
-    --paper: #f4f1ea;
-    --cyan: #56f2d6;
-    --coral: #ff5d52;
+    --ink: #101018;
+    --ink-soft: #191b2f;
+    --paper: #fff4c7;
+    --cyan: #3cf2ff;
+    --coral: #ff4778;
+    --lime: #b9ff4a;
+    --violet: #8d67ff;
+    --amber: #ffcb3d;
     --white: #fff;
-    --muted: #a8aeb9;
+    --muted: #b9bad4;
     --display: "Manrope", "Arial Black", sans-serif;
+    --pixel: "Press Start 2P", "Arial Black", sans-serif;
     --mono: "DM Mono", Consolas, monospace;
     --container: min(1180px, calc(100% - 40px))
 }
@@ -23,7 +27,13 @@ html {
 
 body {
     margin: 0;
-    background: var(--ink);
+    background:
+        linear-gradient(#ffffff08 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff08 1px, transparent 1px),
+        radial-gradient(circle at 15% 18%, #8d67ff38, transparent 28%),
+        radial-gradient(circle at 84% 12%, #3cf2ff2b, transparent 24%),
+        var(--ink);
+    background-size: 28px 28px, 28px 28px, auto, auto, auto;
     color: var(--white);
     font-family: var(--display);
     line-height: 1.6;
@@ -83,14 +93,16 @@ button {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #ffffff26;
+    border-bottom: 4px solid #000;
+    background: #101018db;
+    box-shadow: 0 4px 0 #ffffff18;
     transition: background .25s, min-height .25s
 }
 
 .site-header.scrolled {
     min-height: 64px;
-    background: #090b10f0;
-    backdrop-filter: blur(16px)
+    background: #101018f5;
+    backdrop-filter: blur(10px)
 }
 
 .brand {
@@ -109,9 +121,11 @@ button {
     place-items: center;
     width: 36px;
     height: 36px;
-    background: var(--coral);
+    border: 3px solid #000;
+    background: var(--amber);
     color: var(--ink);
-    font: 500 .85rem var(--mono)
+    box-shadow: 4px 4px 0 var(--coral);
+    font: 500 .62rem var(--pixel)
 }
 
 .site-nav {
@@ -123,7 +137,7 @@ button {
 .site-nav a {
     color: #e9ebef;
     text-decoration: none;
-    font-size: .82rem;
+    font-size: .78rem;
     font-weight: 700
 }
 
@@ -133,12 +147,17 @@ button {
 
 .site-nav .nav-cta {
     padding: 10px 16px;
-    border: 1px solid #ffffff8c
+    border: 3px solid #000;
+    background: var(--lime);
+    color: var(--ink);
+    box-shadow: 4px 4px 0 #000
 }
 
 .site-nav .nav-cta:hover {
-    background: var(--white);
-    color: var(--ink)
+    background: var(--cyan);
+    color: var(--ink);
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #000
 }
 
 .menu-toggle {
@@ -161,7 +180,7 @@ button {
 
 .hero {
     position: relative;
-    min-height: 94svh;
+    min-height: 92svh;
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -172,7 +191,11 @@ button {
     position: absolute;
     z-index: -3;
     inset: 0;
-    background: url("../Pics_for_Tri/rebecca-oliver-483486-unsplash.jpg") center 48%/cover no-repeat;
+    background:
+        linear-gradient(135deg, #101018 0 18%, transparent 18% 82%, #101018 82%),
+        url("../Pics_for_Tri/rebecca-oliver-483486-unsplash.jpg") center 48%/cover no-repeat;
+    image-rendering: auto;
+    filter: saturate(1.35) contrast(1.08);
     transform: scale(1.02)
 }
 
@@ -181,15 +204,18 @@ button {
     position: absolute;
     z-index: -2;
     inset: 0;
-    background: linear-gradient(90deg, #07080cf5 0%, #07080cc7 45%, #07080c2e 78%), linear-gradient(0deg, #07080cb8, transparent 50%)
+    background:
+        linear-gradient(90deg, #101018f5 0%, #101018d6 43%, #10101856 78%),
+        linear-gradient(0deg, #101018d9, transparent 52%),
+        repeating-linear-gradient(45deg, transparent 0 16px, #3cf2ff10 16px 18px)
 }
 
 .hero-scanlines {
     position: absolute;
     z-index: -1;
     inset: 0;
-    opacity: .18;
-    background-image: repeating-linear-gradient(0deg, transparent, transparent 3px, #ffffff0f 4px);
+    opacity: .25;
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 4px, #00000066 5px, #ffffff10 6px);
     pointer-events: none
 }
 
@@ -201,10 +227,10 @@ button {
 .eyebrow,
 .section-kicker {
     margin: 0 0 20px;
-    color: var(--cyan);
-    font: 500 .75rem var(--mono);
+    color: var(--lime);
+    font: 400 .58rem var(--pixel);
     text-transform: uppercase;
-    letter-spacing: .08em
+    letter-spacing: 0
 }
 
 .live-dot {
@@ -213,16 +239,18 @@ button {
     height: 8px;
     margin-right: 9px;
     border-radius: 50%;
-    background: var(--coral);
-    box-shadow: 0 0 0 6px #ff5d5229;
+    background: var(--lime);
+    box-shadow: 0 0 0 6px #b9ff4a29;
     animation: pulse 2s infinite
 }
 
 .hero h1 {
     max-width: 860px;
     margin: 0;
-    font-size: clamp(3.5rem, 8.8vw, 8rem);
-    line-height: .88;
+    color: var(--paper);
+    text-shadow: 5px 5px 0 #000, 9px 9px 0 var(--violet);
+    font-size: clamp(3.3rem, 8.3vw, 7.5rem);
+    line-height: .94;
     letter-spacing: 0;
     text-transform: uppercase
 }
@@ -246,9 +274,80 @@ button {
     flex-wrap: wrap
 }
 
+.hero-game-card {
+    position: absolute;
+    right: max(24px, calc((100vw - 1180px)/2));
+    top: 148px;
+    width: min(300px, 28vw);
+    padding: 18px;
+    border: 4px solid #000;
+    background: #242842;
+    box-shadow: 10px 10px 0 #000, inset 0 0 0 3px #ffffff18;
+    transform: rotate(3deg)
+}
+
+.game-card-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    color: var(--lime);
+    font: 400 .55rem var(--pixel);
+    text-transform: uppercase
+}
+
+.game-card-top b {
+    color: var(--amber);
+    font-weight: 400
+}
+
+.mini-screen {
+    height: 132px;
+    margin: 18px 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    align-items: end;
+    padding: 14px;
+    border: 3px solid #000;
+    background:
+        linear-gradient(#ffffff12 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff12 1px, transparent 1px),
+        #101018;
+    background-size: 14px 14px
+}
+
+.mini-screen span {
+    display: block;
+    border: 3px solid #000;
+    background: var(--cyan);
+    box-shadow: 3px 3px 0 #000
+}
+
+.mini-screen span:nth-child(1) {
+    height: 72%;
+    background: var(--coral)
+}
+
+.mini-screen span:nth-child(2) {
+    height: 46%;
+    background: var(--lime)
+}
+
+.mini-screen span:nth-child(3) {
+    height: 88%;
+    background: var(--amber)
+}
+
+.hero-game-card p {
+    margin: 0;
+    color: #dfe2ff;
+    font: 500 .74rem var(--mono);
+    text-transform: uppercase
+}
+
 .button {
     min-height: 50px;
-    border: 1px solid transparent;
+    border: 3px solid #000;
     padding: 13px 20px;
     display: inline-flex;
     align-items: center;
@@ -257,11 +356,13 @@ button {
     text-decoration: none;
     font-weight: 800;
     cursor: pointer;
-    transition: transform .18s, background .18s, color .18s
+    box-shadow: 5px 5px 0 #000;
+    transition: transform .12s, background .12s, color .12s, box-shadow .12s
 }
 
 .button:hover {
-    transform: translateY(-2px)
+    transform: translate(3px, 3px);
+    box-shadow: 2px 2px 0 #000
 }
 
 .button-primary {
@@ -274,8 +375,8 @@ button {
 }
 
 .button-secondary {
-    border-color: #424956;
-    background: transparent;
+    border-color: #000;
+    background: #242842;
     color: var(--white)
 }
 
@@ -285,14 +386,14 @@ button {
 }
 
 .button-dark {
-    background: var(--ink);
+    background: var(--violet);
     color: var(--white)
 }
 
 .text-link {
     font-weight: 800;
     text-decoration: none;
-    border-bottom: 1px solid #ffffff73
+    border-bottom: 3px solid var(--cyan)
 }
 
 .text-link:hover {
@@ -305,6 +406,7 @@ button {
     right: max(24px, calc((100vw - 1180px)/2));
     bottom: 0;
     display: flex;
+    border: 4px solid #000;
     background: var(--paper);
     color: var(--ink)
 }
@@ -312,7 +414,7 @@ button {
 .hero-scoreboard div {
     min-width: 128px;
     padding: 18px 22px;
-    border-right: 1px solid #c9c4ba
+    border-right: 3px solid #000
 }
 
 .hero-scoreboard div:last-child {
@@ -323,7 +425,8 @@ button {
 .hero-scoreboard strong {
     display: block;
     font-size: 1.8rem;
-    line-height: 1
+    line-height: 1;
+    font-family: var(--pixel)
 }
 
 .hero-scoreboard span {
@@ -358,7 +461,8 @@ button {
     font-size: clamp(2.5rem, 5.7vw, 5.6rem);
     line-height: .98;
     letter-spacing: 0;
-    text-transform: uppercase
+    text-transform: uppercase;
+    text-shadow: 4px 4px 0 #000
 }
 
 .section-heading>p:last-child,
@@ -402,7 +506,7 @@ button {
     grid-template-columns: 1fr 1fr;
     gap: 80px;
     padding: 48px 0;
-    border-top: 1px solid #303641
+    border-top: 4px solid #000
 }
 
 .about-lede {
@@ -423,17 +527,23 @@ button {
 .evolution-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    border: 1px solid #303641
+    border: 4px solid #000;
+    box-shadow: 8px 8px 0 #000
 }
 
 .evolution-card {
     position: relative;
     min-height: 390px;
-    padding: 32px
+    padding: 32px;
+    background:
+        linear-gradient(#ffffff08 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff08 1px, transparent 1px),
+        #191b2f;
+    background-size: 18px 18px
 }
 
 .evolution-card:first-child {
-    border-right: 1px solid #303641
+    border-right: 4px solid #000
 }
 
 .evolution-label {
@@ -445,7 +555,7 @@ button {
 }
 
 .evolution-label span {
-    color: var(--coral)
+    color: var(--amber)
 }
 
 .evolution-label b {
@@ -470,7 +580,7 @@ button {
 .evolution-card li {
     position: relative;
     padding: 8px 0 8px 22px;
-    border-top: 1px solid #2b313b
+    border-top: 2px solid #343856
 }
 
 .evolution-card li:before {
@@ -482,7 +592,11 @@ button {
 }
 
 .evolution-now {
-    background: var(--paper);
+    background:
+        linear-gradient(#0000000d 1px, transparent 1px),
+        linear-gradient(90deg, #0000000d 1px, transparent 1px),
+        var(--paper);
+    background-size: 18px 18px;
     color: var(--ink)
 }
 
@@ -499,15 +613,15 @@ button {
     max-width: 780px;
     margin: 42px 0 0 auto;
     padding-left: 30px;
-    border-left: 3px solid var(--coral);
+    border-left: 6px solid var(--coral);
     color: #d7d9de;
     font-size: 1.05rem
 }
 
 .challenge-console {
-    border: 1px solid #303641;
+    border: 4px solid #000;
     background: var(--ink-soft);
-    box-shadow: 0 30px 90px #00000047
+    box-shadow: 10px 10px 0 #000
 }
 
 .console-topline {
@@ -516,7 +630,8 @@ button {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #303641;
+    border-bottom: 4px solid #000;
+    background: var(--violet);
     color: var(--muted);
     font: 500 .69rem var(--mono);
     text-transform: uppercase
@@ -526,7 +641,7 @@ button {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: var(--cyan)
+    color: var(--lime)
 }
 
 .console-status i {
@@ -542,12 +657,71 @@ button {
 }
 
 .challenge-card {
+    position: relative;
+    overflow: hidden;
     min-height: 250px;
     padding: 28px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-right: 1px solid #303641
+    background:
+        linear-gradient(#ffffff08 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff08 1px, transparent 1px),
+        #191b2f;
+    background-size: 16px 16px;
+    border-right: 4px solid #000
+}
+
+.challenge-card:before,
+.challenge-card:after {
+    content: "";
+    position: absolute;
+    pointer-events: none
+}
+
+.challenge-card:before {
+    right: 18px;
+    bottom: 18px;
+    width: 48px;
+    height: 48px;
+    opacity: .22;
+    transform: translateY(0) scale(.9);
+    transition: opacity .18s, transform .18s
+}
+
+.challenge-card[data-card="genre"]:before {
+    border: 4px solid #000;
+    background:
+        linear-gradient(90deg, transparent 0 18px, #000 18px 22px, transparent 22px),
+        linear-gradient(transparent 0 18px, #000 18px 22px, transparent 22px),
+        var(--amber);
+    box-shadow: 5px 5px 0 #000
+}
+
+.challenge-card[data-card="genre"]:after {
+    content: "?";
+    right: 31px;
+    bottom: 28px;
+    color: var(--ink);
+    opacity: .24;
+    font: 400 1.2rem var(--pixel)
+}
+
+.challenge-card[data-card="mechanic"]:before {
+    border: 7px solid var(--amber);
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: 0 0 0 4px #000, 5px 5px 0 #000
+}
+
+.challenge-card[data-card="wildcard"]:before {
+    width: 58px;
+    height: 28px;
+    border: 4px solid #000;
+    background:
+        linear-gradient(90deg, var(--coral) 0 58%, #242842 58% 100%);
+    box-shadow: 5px 5px 0 #000;
+    clip-path: polygon(0 15%, 72% 15%, 72% 0, 100% 50%, 72% 100%, 72% 85%, 0 85%)
 }
 
 .challenge-card:last-child {
@@ -555,11 +729,70 @@ button {
 }
 
 .challenge-card.is-rolling .challenge-value {
-    animation: flicker .12s linear infinite
+    color: var(--lime);
+    animation: value-jackpot .16s steps(2, end) infinite
+}
+
+.challenge-card.is-rolling {
+    animation: card-bump .38s steps(2, end) infinite
+}
+
+.challenge-card.is-rolling:before {
+    opacity: 1
+}
+
+.challenge-card[data-card="genre"].is-rolling:before {
+    animation: mystery-block-bump .38s steps(2, end) infinite
+}
+
+.challenge-card[data-card="genre"].is-rolling:after {
+    opacity: 1;
+    animation: value-jackpot .16s steps(2, end) infinite
+}
+
+.challenge-card[data-card="mechanic"].is-rolling:before {
+    animation: ring-spin .5s linear infinite
+}
+
+.challenge-card[data-card="wildcard"].is-rolling:before {
+    animation: blaster-kick .36s steps(2, end) infinite
+}
+
+.challenge-card.is-revealed .challenge-value {
+    animation: reveal-pop .28s cubic-bezier(.2, 1.7, .35, 1)
 }
 
 .challenge-card.is-locked {
-    box-shadow: inset 0 -3px 0 var(--cyan)
+    box-shadow: inset 0 -8px 0 var(--lime)
+}
+
+.challenge-card.is-locked:after {
+    content: "LOCK";
+    right: 16px;
+    top: 16px;
+    bottom: auto;
+    width: auto;
+    height: auto;
+    padding: 7px 9px;
+    border: 3px solid #000;
+    background: var(--lime);
+    color: var(--ink);
+    opacity: 1;
+    box-shadow: 4px 4px 0 #000;
+    font: 500 .62rem var(--mono);
+    text-transform: uppercase
+}
+
+.challenge-card.is-locking {
+    animation: lock-snap .5s steps(2, end)
+}
+
+.challenge-card.is-locking:after {
+    animation: lock-badge-pop .5s cubic-bezier(.2, 1.7, .35, 1)
+}
+
+.challenge-card.is-unlocking {
+    animation: unlock-rattle .38s steps(2, end)
 }
 
 .challenge-label {
@@ -571,11 +804,13 @@ button {
 }
 
 .challenge-label span {
-    color: var(--coral)
+    color: var(--amber)
 }
 
 .challenge-value {
     margin: 28px 0;
+    color: var(--paper);
+    text-shadow: 3px 3px 0 #000;
     font-size: clamp(1.65rem, 3vw, 2.5rem);
     font-weight: 800;
     line-height: 1.08
@@ -606,7 +841,7 @@ button {
     display: flex;
     align-items: center;
     gap: 14px;
-    border-top: 1px solid #303641
+    border-top: 4px solid #000
 }
 
 .copy-status {
@@ -621,13 +856,16 @@ button {
     grid-template-columns: 1fr auto auto;
     gap: 38px;
     align-items: center;
-    background: var(--cyan);
+    border: 4px solid #000;
+    background:
+        linear-gradient(135deg, transparent 0 82%, #00000014 82%),
+        var(--lime);
     color: var(--ink)
 }
 
 .timer-panel .section-kicker {
     margin-bottom: 8px;
-    color: #147b6d
+    color: #3e6200
 }
 
 .timer-panel h3 {
@@ -654,7 +892,7 @@ button {
 
 .timer strong {
     display: block;
-    font: 500 2.7rem/1 var(--mono)
+    font: 500 2.7rem/1 var(--pixel)
 }
 
 .timer span {
@@ -698,11 +936,11 @@ button {
     grid-template-columns: 54px 1fr auto;
     gap: 24px;
     padding: 34px 0;
-    border-top: 1px solid #303641
+    border-top: 4px solid #000
 }
 
 .stage:last-child {
-    border-bottom: 1px solid #303641
+    border-bottom: 4px solid #000
 }
 
 .stage-number {
@@ -710,14 +948,16 @@ button {
     height: 42px;
     display: grid;
     place-items: center;
-    border: 1px solid #424956;
-    color: var(--cyan);
-    font: 500 .75rem var(--mono)
+    border: 3px solid #000;
+    background: var(--coral);
+    color: var(--ink);
+    box-shadow: 4px 4px 0 #000;
+    font: 500 .62rem var(--pixel)
 }
 
 .stage-time {
     margin: 0 0 5px;
-    color: var(--coral);
+    color: var(--amber);
     font: 500 .67rem var(--mono);
     text-transform: uppercase
 }
@@ -734,8 +974,8 @@ button {
 
 .stage-duration {
     align-self: start;
-    color: #414856;
-    font: 500 1.8rem var(--mono)
+    color: var(--violet);
+    font: 500 1.4rem var(--pixel)
 }
 
 .manifesto {
@@ -750,14 +990,16 @@ button {
     position: absolute;
     inset: 0;
     background: url("../Pics_for_Tri/brendan-miranda-652484-unsplash.jpg") center/cover no-repeat;
-    filter: saturate(.85)
+    filter: saturate(1.35) contrast(1.08)
 }
 
 .manifesto:after {
     content: "";
     position: absolute;
     inset: 0;
-    background: #05070a8f
+    background:
+        repeating-linear-gradient(0deg, #00000000 0 4px, #0000004f 5px),
+        #101018a3
 }
 
 .manifesto blockquote {
@@ -766,7 +1008,9 @@ button {
     width: min(980px, calc(100% - 40px));
     margin: 0;
     text-align: center;
-    font-size: clamp(2.3rem, 6vw, 6.2rem);
+    color: var(--paper);
+    text-shadow: 5px 5px 0 #000, 9px 9px 0 var(--coral);
+    font-size: clamp(2.1rem, 5.5vw, 5.5rem);
     font-weight: 800;
     line-height: 1;
     text-transform: uppercase
@@ -791,14 +1035,15 @@ button {
 .rules-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    border-top: 1px solid #303641;
-    border-bottom: 1px solid #303641
+    border: 4px solid #000;
+    box-shadow: 8px 8px 0 #000
 }
 
 .rules-grid article {
     min-height: 280px;
     padding: 28px;
-    border-right: 1px solid #303641
+    background: #191b2f;
+    border-right: 4px solid #000
 }
 
 .rules-grid article:last-child {
@@ -806,8 +1051,8 @@ button {
 }
 
 .rules-grid span {
-    color: var(--coral);
-    font: 500 .72rem var(--mono)
+    color: var(--lime);
+    font: 400 .55rem var(--pixel)
 }
 
 .rules-grid h3 {
@@ -822,17 +1067,67 @@ button {
 }
 
 .closing-section {
+    position: relative;
+    overflow: hidden;
     padding: 90px max(20px, calc((100vw - 1180px)/2));
     display: flex;
     justify-content: space-between;
     align-items: end;
     gap: 40px;
+    border-top: 4px solid #000;
+    border-bottom: 4px solid #000;
     background: var(--paper);
     color: var(--ink)
 }
 
+.closing-section:before,
+.closing-section:after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none
+}
+
+.closing-section:before {
+    background:
+        linear-gradient(45deg, #00000017 25%, transparent 25% 75%, #00000017 75%),
+        linear-gradient(45deg, #00000017 25%, transparent 25% 75%, #00000017 75%),
+        linear-gradient(90deg, #ff477826, #3cf2ff24, #b9ff4a20);
+    background-position: 0 0, 18px 18px, 0 0;
+    background-size: 36px 36px, 36px 36px, 100% 100%;
+    animation: closing-grid-run 3.8s linear infinite
+}
+
+.closing-section:after {
+    inset: auto 0 0;
+    height: 12px;
+    background: repeating-linear-gradient(90deg, #000 0 18px, var(--coral) 18px 36px, var(--cyan) 36px 54px, var(--lime) 54px 72px);
+    animation: closing-stripe-run 1.4s linear infinite
+}
+
+.closing-section>div,
+.closing-section .button {
+    position: relative;
+    z-index: 1
+}
+
 .closing-section .section-kicker {
-    color: #b43f37
+    width: max-content;
+    padding: 7px 10px;
+    border: 3px solid #000;
+    background: var(--ink);
+    color: var(--lime);
+    box-shadow: 4px 4px 0 #000
+}
+
+.closing-section h2 {
+    max-width: 780px;
+    padding: 12px 16px;
+    background: #101018e8;
+    color: var(--paper);
+    text-shadow: 4px 4px 0 #000, 7px 7px 0 var(--coral);
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone
 }
 
 .closing-section .button {
@@ -864,6 +1159,116 @@ footer {
     }
 }
 
+@keyframes card-bump {
+    50% {
+        transform: translateY(-4px)
+    }
+}
+
+@keyframes mystery-block-bump {
+    50% {
+        transform: translateY(-12px) scale(1);
+        box-shadow: 5px 17px 0 #000
+    }
+}
+
+@keyframes ring-spin {
+    to {
+        transform: rotate(360deg) scale(1.08)
+    }
+}
+
+@keyframes blaster-kick {
+    50% {
+        transform: translateX(-8px) scaleX(1.12);
+        filter: drop-shadow(16px 0 0 var(--amber))
+    }
+}
+
+@keyframes value-jackpot {
+    50% {
+        opacity: .35;
+        transform: translateY(-3px) skewX(-8deg)
+    }
+}
+
+@keyframes reveal-pop {
+    0% {
+        transform: scale(.92);
+        color: var(--lime)
+    }
+
+    70% {
+        transform: scale(1.04)
+    }
+
+    100% {
+        transform: scale(1)
+    }
+}
+
+@keyframes lock-snap {
+    0% {
+        transform: translateY(-5px) scale(1.015)
+    }
+
+    35% {
+        transform: translateY(3px) scale(.99)
+    }
+
+    70% {
+        transform: translateY(0) scale(1)
+    }
+}
+
+@keyframes lock-badge-pop {
+    0% {
+        transform: translateY(-12px) scale(.55) rotate(-8deg);
+        opacity: 0
+    }
+
+    70% {
+        transform: translateY(2px) scale(1.12) rotate(2deg);
+        opacity: 1
+    }
+
+    100% {
+        transform: translateY(0) scale(1) rotate(0)
+    }
+}
+
+@keyframes unlock-rattle {
+    25% {
+        transform: translateX(-4px)
+    }
+
+    50% {
+        transform: translateX(4px)
+    }
+
+    75% {
+        transform: translateX(-2px)
+    }
+}
+
+@keyframes closing-grid-run {
+    to {
+        background-position: 36px 36px, 54px 54px, 0 0
+    }
+}
+
+@keyframes closing-stripe-run {
+    to {
+        background-position: 72px 0
+    }
+}
+
+@keyframes hero-wave-drift {
+    to {
+        background-position: 0 0, 460px 0, -520px 0, 760px 0
+    }
+}
+
 @media(max-width:900px) {
     .site-nav {
         position: fixed;
@@ -874,7 +1279,7 @@ footer {
         align-items: stretch;
         gap: 22px;
         background: var(--ink);
-        border-bottom: 1px solid #303641
+        border-bottom: 4px solid #000
     }
 
     .site-nav.open {
@@ -903,6 +1308,17 @@ footer {
         padding-top: 180px
     }
 
+    .hero-game-card {
+        top: auto;
+        right: 20px;
+        bottom: 122px;
+        width: 230px
+    }
+
+    .mini-screen {
+        height: 92px
+    }
+
     .hero-scoreboard {
         right: auto;
         left: 20px
@@ -920,7 +1336,7 @@ footer {
     .challenge-card {
         min-height: 210px;
         border-right: 0;
-        border-bottom: 1px solid #303641
+        border-bottom: 4px solid #000
     }
 
     .challenge-card:last-child {
@@ -950,7 +1366,7 @@ footer {
     }
 
     .rules-grid article:nth-child(-n+2) {
-        border-bottom: 1px solid #303641
+        border-bottom: 4px solid #000
     }
 
     footer {
@@ -984,6 +1400,10 @@ footer {
 
     .hero h1 {
         font-size: clamp(3rem, 15vw, 4.8rem)
+    }
+
+    .hero-game-card {
+        display: none
     }
 
     .hero-lede {
@@ -1074,11 +1494,11 @@ footer {
     .rules-grid article {
         min-height: 220px;
         border-right: 0;
-        border-bottom: 1px solid #303641
+        border-bottom: 4px solid #000
     }
 
     .rules-grid article:nth-child(3) {
-        border-bottom: 1px solid #303641
+        border-bottom: 4px solid #000
     }
 
     .rules-grid h3 {
@@ -1089,6 +1509,10 @@ footer {
         padding: 70px 20px;
         align-items: stretch;
         flex-direction: column
+    }
+
+    .closing-section .section-kicker {
+        width: auto
     }
 
     .closing-section .button {
@@ -1114,6 +1538,16 @@ footer {
         scroll-behavior: auto !important;
         animation-duration: .01ms !important;
         animation-iteration-count: 1 !important
+    }
+
+    .challenge-card.is-rolling .challenge-value {
+        animation: none !important
+    }
+
+    .closing-section:before,
+    .closing-section:after,
+    .jam-hero:before {
+        animation: none !important
     }
 }
 
@@ -1158,7 +1592,7 @@ footer {
 
     .evolution-card:first-child {
         border-right: 0;
-        border-bottom: 1px solid #303641
+        border-bottom: 4px solid #000
     }
 
     .evolution-card h3 {
@@ -1168,5 +1602,474 @@ footer {
     .about-note {
         margin-top: 32px;
         padding-left: 20px
+    }
+}
+
+/* New jam-page layout */
+.jam-page {
+    padding-top: 76px
+}
+
+.jam-hero {
+    min-height: auto;
+    padding: 46px 0 34px;
+    align-items: stretch
+}
+
+.jam-hero .hero-media {
+    background:
+        linear-gradient(90deg, #101018f2, #101018d8),
+        url("../Pics_for_Tri/rebecca-oliver-483486-unsplash.jpg") center 44%/cover no-repeat
+}
+
+.jam-hero:before {
+    background:
+        linear-gradient(#101018e8, #101018d2),
+        radial-gradient(ellipse at 20% 120%, transparent 0 38%, #3cf2ff18 39% 41%, transparent 42%),
+        radial-gradient(ellipse at 68% -20%, transparent 0 36%, #ff47781f 37% 40%, transparent 41%),
+        repeating-radial-gradient(ellipse at 50% 120%, transparent 0 26px, #b9ff4a12 27px 30px, transparent 31px 54px);
+    background-size: auto, 460px 180px, 520px 210px, 760px 230px;
+    animation: hero-wave-drift 8s linear infinite
+}
+
+.jam-shell,
+.jam-layout {
+    width: var(--container);
+    margin: 0 auto
+}
+
+.jam-titlebar {
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 10px 14px;
+    border: 4px solid #000;
+    background: var(--ink-soft);
+    box-shadow: 8px 8px 0 #000
+}
+
+.jam-titlebar .eyebrow {
+    margin: 0
+}
+
+.jam-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap
+}
+
+.jam-tabs a {
+    padding: 8px 10px;
+    border: 3px solid #000;
+    background: #242842;
+    color: var(--white);
+    text-decoration: none;
+    font: 700 .72rem var(--display);
+    text-transform: uppercase
+}
+
+.jam-tabs a:hover {
+    background: var(--cyan);
+    color: var(--ink)
+}
+
+.jam-hero-grid {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: minmax(240px, 340px) minmax(0, 1fr) 270px;
+    gap: 18px;
+    align-items: stretch
+}
+
+.jam-cover,
+.jam-summary,
+.jam-sidebar,
+.jam-panel,
+.jam-aside article {
+    border: 4px solid #000;
+    box-shadow: 8px 8px 0 #000
+}
+
+.jam-cover {
+    min-height: 360px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background:
+        linear-gradient(#00000018 1px, transparent 1px),
+        linear-gradient(90deg, #00000018 1px, transparent 1px),
+        var(--amber);
+    background-size: 18px 18px;
+    color: var(--ink)
+}
+
+.cover-screen {
+    min-height: 260px;
+    padding: 18px;
+    display: grid;
+    place-items: center;
+    border: 4px solid #000;
+    background:
+        radial-gradient(circle at 64% 34%, #3cf2ff 0 9%, transparent 10%),
+        linear-gradient(135deg, #ff4778 0 34%, #101018 34% 66%, #8d67ff 66%);
+    color: var(--paper);
+    text-align: center
+}
+
+.cover-screen span,
+.cover-screen b {
+    display: block;
+    text-shadow: 5px 5px 0 #000;
+    font-family: var(--pixel);
+    font-weight: 400
+}
+
+.cover-screen span {
+    font-size: clamp(2.2rem, 5vw, 4.2rem)
+}
+
+.cover-screen b {
+    margin-top: 12px;
+    color: var(--lime);
+    font-size: clamp(1.4rem, 3vw, 2.3rem)
+}
+
+.jam-cover p {
+    margin: 16px 0 0;
+    font: 700 .78rem var(--display);
+    text-transform: uppercase
+}
+
+.jam-summary {
+    padding: clamp(26px, 4vw, 44px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background:
+        linear-gradient(#ffffff08 1px, transparent 1px),
+        linear-gradient(90deg, #ffffff08 1px, transparent 1px),
+        #191b2f;
+    background-size: 20px 20px
+}
+
+.game-page-label {
+    width: max-content;
+    margin: 0 0 18px;
+    padding: 7px 10px;
+    border: 3px solid #000;
+    background: var(--lime);
+    color: var(--ink);
+    box-shadow: 4px 4px 0 #000;
+    font: 500 .68rem var(--mono);
+    text-transform: uppercase
+}
+
+.jam-summary h1 {
+    max-width: 780px;
+    margin: 0;
+    color: var(--paper);
+    text-shadow: 4px 4px 0 #000, 7px 7px 0 var(--coral);
+    font-size: clamp(2.55rem, 5.4vw, 5.25rem);
+    line-height: 1.02;
+    text-transform: uppercase
+}
+
+.jam-summary h1 span {
+    display: block
+}
+
+.jam-summary h1 span:last-child {
+    color: var(--cyan)
+}
+
+.jam-summary .hero-lede {
+    max-width: 620px
+}
+
+.jam-sidebar {
+    display: grid;
+    background: var(--paper);
+    color: var(--ink)
+}
+
+.jam-sidebar div {
+    padding: 18px;
+    border-bottom: 4px solid #000
+}
+
+.jam-sidebar div:last-child {
+    border-bottom: 0
+}
+
+.jam-sidebar span,
+.jam-aside span {
+    display: block;
+    margin-bottom: 7px;
+    color: #6e35c7;
+    font: 500 .68rem var(--mono);
+    text-transform: uppercase
+}
+
+.jam-sidebar strong,
+.jam-aside strong {
+    display: block;
+    font-size: 1.05rem;
+    line-height: 1.25
+}
+
+.jam-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 28px;
+    padding: 34px 0 110px
+}
+
+.jam-panel {
+    width: auto;
+    margin: 0;
+    padding: 28px;
+    background: #121425
+}
+
+.challenge-section {
+    grid-column: 1
+}
+
+.jam-aside {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    position: sticky;
+    top: 96px;
+    align-self: start;
+    display: grid;
+    gap: 18px
+}
+
+.jam-aside article {
+    padding: 18px;
+    background: var(--lime);
+    color: var(--ink)
+}
+
+.jam-aside article:nth-child(2) {
+    background: var(--cyan)
+}
+
+.jam-aside article:nth-child(3) {
+    background: var(--coral)
+}
+
+.jam-layout .section-heading,
+.jam-layout .about-heading,
+.jam-layout .format-section {
+    display: block
+}
+
+.jam-layout .section-heading h2,
+.jam-layout .about-heading h2,
+.jam-layout .format-intro h2,
+.closing-section h2 {
+    font-size: clamp(2rem, 4vw, 3.8rem)
+}
+
+.jam-layout .section-heading>p:last-child,
+.jam-layout .format-intro>p:last-child {
+    margin-top: 16px
+}
+
+.jam-layout .challenge-grid {
+    grid-template-columns: 1fr;
+    gap: 0
+}
+
+.jam-layout .challenge-card {
+    min-height: 160px;
+    border-right: 0;
+    border-bottom: 4px solid #000
+}
+
+.jam-layout .challenge-card:last-child {
+    border-bottom: 0
+}
+
+.jam-layout .challenge-value {
+    margin: 18px 0;
+    font-size: clamp(1.45rem, 3.6vw, 2.25rem)
+}
+
+.jam-layout .timer-panel {
+    grid-template-columns: 1fr;
+    align-items: start
+}
+
+.jam-layout .timer-actions {
+    align-items: flex-start
+}
+
+.jam-layout .about-story {
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    gap: 28px;
+    padding: 24px 0 28px
+}
+
+.jam-layout .evolution-grid {
+    grid-template-columns: 1fr;
+    box-shadow: none
+}
+
+.jam-layout .evolution-card {
+    min-height: auto
+}
+
+.jam-layout .evolution-card:first-child {
+    border-right: 0;
+    border-bottom: 4px solid #000
+}
+
+.jam-layout .evolution-card h3 {
+    margin: 28px 0 18px
+}
+
+.jam-layout .format-section {
+    grid-column: 1;
+    gap: 0
+}
+
+.jam-layout .format-intro {
+    position: static
+}
+
+.jam-layout .stage-list {
+    margin-top: 26px
+}
+
+.jam-layout .rules-section {
+    grid-column: 1
+}
+
+.jam-layout .rules-grid {
+    grid-template-columns: repeat(2, 1fr);
+    box-shadow: none
+}
+
+.jam-layout .rules-grid article {
+    min-height: 210px
+}
+
+.jam-layout .rules-grid article:nth-child(2) {
+    border-right: 0
+}
+
+.jam-layout .rules-grid article:nth-child(-n+2) {
+    border-bottom: 4px solid #000
+}
+
+.jam-layout .rules-grid h3 {
+    margin-top: 40px
+}
+
+@media(max-width:1000px) {
+    .jam-hero-grid,
+    .jam-layout {
+        grid-template-columns: 1fr
+    }
+
+    .jam-sidebar {
+        grid-template-columns: repeat(2, 1fr)
+    }
+
+    .jam-sidebar div:nth-child(2) {
+        border-right: 0
+    }
+
+    .jam-sidebar div {
+        border-right: 4px solid #000
+    }
+
+    .jam-sidebar div:nth-child(3) {
+        border-bottom: 0
+    }
+
+    .jam-aside {
+        position: static;
+        grid-column: 1;
+        grid-row: auto;
+        grid-template-columns: repeat(3, 1fr)
+    }
+}
+
+@media(max-width:700px) {
+    .jam-page {
+        padding-top: 64px
+    }
+
+    .jam-hero {
+        padding-top: 22px
+    }
+
+    .jam-titlebar,
+    .jam-tabs,
+    .hero-actions,
+    .jam-layout .timer-actions {
+        align-items: stretch;
+        flex-direction: column
+    }
+
+    .jam-tabs a,
+    .hero-actions .button,
+    .jam-layout .timer-actions .button {
+        width: 100%
+    }
+
+    .jam-cover {
+        min-height: 280px
+    }
+
+    .cover-screen {
+        min-height: 190px
+    }
+
+    .jam-summary {
+        padding: 22px
+    }
+
+    .game-page-label {
+        width: auto
+    }
+
+    .jam-summary h1 {
+        font-size: clamp(2.25rem, 13vw, 4.25rem);
+        text-shadow: 3px 3px 0 #000, 5px 5px 0 var(--coral)
+    }
+
+    .jam-sidebar,
+    .jam-aside,
+    .jam-layout .about-story,
+    .jam-layout .rules-grid {
+        grid-template-columns: 1fr
+    }
+
+    .jam-sidebar div,
+    .jam-sidebar div:nth-child(3),
+    .jam-layout .rules-grid article:nth-child(3) {
+        border-right: 0;
+        border-bottom: 4px solid #000
+    }
+
+    .jam-sidebar div:last-child {
+        border-bottom: 0
+    }
+
+    .jam-layout {
+        padding-bottom: 70px
+    }
+
+    .jam-panel {
+        margin-left: -6px;
+        margin-right: 2px;
+        padding: 20px
     }
 }

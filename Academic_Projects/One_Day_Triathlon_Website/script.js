@@ -1,7 +1,85 @@
 const challengeOptions = {
-    genre: ["Platformer", "Role-playing game", "Survival horror", "Rhythm game", "Sports game", "Turn-based strategy", "Life simulation", "Arcade racer", "Beat 'em up", "Puzzle adventure"],
-    mechanic: ["Time loop", "Physics stacking", "Deck building", "Shape shifting", "Resource trading", "Rewind movement", "Light and shadow", "Sound navigation", "Clone yourself", "Risk versus reward"],
-    wildcard: ["One-button controls", "No written dialogue", "Everything is temporary", "The map keeps shrinking", "You play as the level", "Failure makes you stronger", "Only two colors", "The enemy copies you", "Ten-second rounds", "Made for two players"]
+    genre: [
+        "Platformer",
+        "Role-playing game",
+        "Survival horror",
+        "Rhythm game",
+        "Sports game",
+        "Turn-based strategy",
+        "Life simulation",
+        "Arcade racer",
+        "Beat 'em up",
+        "Puzzle adventure",
+        "Cozy farming sim",
+        "Tower defense",
+        "Stealth game",
+        "Boss rush",
+        "Metroidvania",
+        "Visual novel",
+        "Roguelike",
+        "Point-and-click mystery",
+        "Party game",
+        "City builder",
+        "Fishing game",
+        "Tactical RPG",
+        "Bullet heaven",
+        "Cooking game",
+        "Creature collector"
+    ],
+    mechanic: [
+        "Time loop",
+        "Physics stacking",
+        "Deck building",
+        "Shape shifting",
+        "Resource trading",
+        "Rewind movement",
+        "Light and shadow",
+        "Sound navigation",
+        "Clone yourself",
+        "Risk versus reward",
+        "Inventory Tetris",
+        "Dialogue combat",
+        "Gravity swapping",
+        "Build while moving",
+        "Shared health bar",
+        "Crafting under pressure",
+        "Turn enemies into tools",
+        "Map drawing",
+        "Rhythm inputs",
+        "Weather control",
+        "Limited visibility",
+        "Body swapping",
+        "Growing and shrinking",
+        "Chain reactions",
+        "Memory matching"
+    ],
+    wildcard: [
+        "One-button controls",
+        "No written dialogue",
+        "Everything is temporary",
+        "The map keeps shrinking",
+        "You play as the level",
+        "Failure makes you stronger",
+        "Only two colors",
+        "The enemy copies you",
+        "Ten-second rounds",
+        "Made for two players",
+        "No jumping",
+        "The UI is part of the world",
+        "Every action costs health",
+        "The music controls danger",
+        "NPCs remember mistakes",
+        "The ending comes first",
+        "No direct attacks",
+        "One room only",
+        "Controls change each minute",
+        "The camera is unreliable",
+        "Everything bounces",
+        "You cannot stop moving",
+        "The goal moves away",
+        "Inventory has three slots",
+        "The tutorial lies"
+    ]
 };
 
 const state = {
@@ -29,15 +107,22 @@ function rollChallenge() {
         return;
     }
 
-    available.forEach(type => document.querySelector(`[data-card="${type}"]`).classList.add('is-rolling'));
+    available.forEach(type => {
+        const card = document.querySelector(`[data-card="${type}"]`);
+        card.classList.remove('is-revealed');
+        card.classList.add('is-rolling');
+        document.querySelector(`[data-value="${type}"]`).textContent = "???";
+    });
     status.textContent = '';
     window.setTimeout(() => {
         available.forEach(type => {
+            const card = document.querySelector(`[data-card="${type}"]`);
             state[type] = randomIndex(challengeOptions[type], state[type]);
             setChallengeValue(type);
-            document.querySelector(`[data-card="${type}"]`).classList.remove('is-rolling');
+            card.classList.remove('is-rolling');
+            card.classList.add('is-revealed');
         });
-    }, 420);
+    }, 760);
 }
 
 document.querySelector('[data-roll]').addEventListener('click', rollChallenge);
@@ -48,9 +133,16 @@ document.querySelectorAll('[data-lock]').forEach(button => {
         const wasLocked = state.locked.has(type);
         if (wasLocked) state.locked.delete(type);
         else state.locked.add(type);
+        const card = document.querySelector(`[data-card="${type}"]`);
         button.setAttribute('aria-pressed', String(!wasLocked));
         button.textContent = wasLocked ? 'Lock result' : 'Unlock result';
-        document.querySelector(`[data-card="${type}"]`).classList.toggle('is-locked', !wasLocked);
+        card.classList.toggle('is-locked', !wasLocked);
+        card.classList.remove('is-locking', 'is-unlocking');
+        void card.offsetWidth;
+        card.classList.add(wasLocked ? 'is-unlocking' : 'is-locking');
+        window.setTimeout(() => {
+            card.classList.remove('is-locking', 'is-unlocking');
+        }, 520);
     });
 });
 
