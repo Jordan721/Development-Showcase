@@ -1,575 +1,333 @@
-<!doctype HTML>
+<!doctype html>
 <html lang="en">
 
 <head>
-	<title>Run Like a G.U.R.L - Empowering Women in Politics</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description"
-		content="Run Like a G.U.R.L - A documentary following women running for office in the 2018 Mid-Term Elections">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700&display=swap" rel="stylesheet">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+		content="An educational archive and modern redesign of the Run Like A G.U.R.L documentary project about women in the 2018 midterm elections.">
+	<meta name="theme-color" content="#151317">
+	<title>Run Like A G.U.R.L | Documentary Archive</title>
+	<link rel="icon" href="GURL.ico">
 	<link rel="stylesheet" href="main.css">
-	<link rel="icon" type="image/x-icon" href="GURL.ico">
+	<script src="script.js" defer></script>
 </head>
 
-<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+<body>
+	<a class="skip-link" href="#main-content">Skip to content</a>
+	<div class="reading-progress" aria-hidden="true"><span data-progress></span></div>
 
-	<nav class="navbar navbar-default navbar-fixed-top">
-		<div class="container">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="#home">RUN LIKE A G.U.R.L</a>
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</button>
-			</div>
-			<div class="collapse navbar-collapse" id="myNavbar">
-				<ul class="nav navbar-nav navbar-right">
-					<li class="nav-item"><a href="#home"><i class="fas fa-home"></i> Home</a></li>
-					<li class="nav-item"><a href="#filmover"><i class="fas fa-film"></i> Film Overview</a></li>
-					<li class="nav-item"><a href="#about"><i class="fas fa-users"></i> Team</a></li>
-					<li class="nav-item"><a href="#news"><i class="fas fa-newspaper"></i> News</a></li>
-					<li class="nav-item"><a href="#InRace"><i class="fab fa-twitter"></i> Social</a></li>
-					<li class="nav-item"><a href="#contribute"><i class="fas fa-hand-holding-heart"></i> Contribute</a>
-					</li>
-					<li class="nav-item"><a href="#contact"><i class="fas fa-envelope"></i> Contact</a></li>
-					<li class="nav-divider"></li>
-					<li class="nav-item"><a href="../../index.html"><i class="fas fa-arrow-left"></i> Back to
-							Showcase</a></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-
-	<header id="home" class="hero-section">
-		<div class="hero-overlay"></div>
-		<div class="container">
-			<div class="hero-content">
-				<div class="video-wrapper fade-in">
-					<video controls poster="Pics/PTsans_Cover.jpg" class="hero-video">
-						<source src="Run%20Like%20Vid%20with%20Title.mp4" type="video/mp4">
-						Your browser does not support the video tag.
-					</video>
-				</div>
-				<div class="hero-text">
-					<h1 class="hero-title fade-in-delay">Run Like A G.U.R.L</h1>
-					<p class="hero-subtitle fade-in-delay-2">Documenting Women's Movement in Politics</p>
-					<div class="hero-buttons fade-in-delay-3">
-						<a href="#filmover" class="btn btn-primary btn-lg pulse">Watch the Story</a>
-						<a href="#contribute" class="btn btn-outline btn-lg">Support the Film</a>
-						<button class="btn btn-info btn-lg" id="projectInfoBtn">
-							<i class="fas fa-info-circle"></i> About This Project
-						</button>
-						<a href="Final_Submission_Group_1.pdf" target="_blank" class="btn btn-info btn-lg">
-							<i class="fas fa-file-pdf"></i> View Original Project Documentation
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="scroll-indicator">
-			<i class="fas fa-chevron-down"></i>
-		</div>
+	<header class="site-header" data-header>
+		<a class="brand" href="#top" aria-label="Run Like A G.U.R.L home">
+			<span class="brand-monogram">G</span>
+			<span>Run Like A G.U.R.L</span>
+		</a>
+		<button class="menu-button" type="button" aria-expanded="false" aria-controls="primary-nav">
+			<span></span><span></span><span></span><b class="sr-only">Toggle navigation</b>
+		</button>
+		<nav class="primary-nav" id="primary-nav" aria-label="Primary navigation">
+			<a href="#film">Film</a>
+			<a href="#timeline">Timeline</a>
+			<a href="#themes">Themes</a>
+			<a href="#people">People</a>
+			<a href="#archive">Archive</a>
+			<a href="#redesign">Redesign</a>
+			<a class="portfolio-link" href="../../index.html">Portfolio</a>
+		</nav>
 	</header>
 
-	<section id="filmover" class="section-filmover">
-		<div class="container">
-			<div class="section-header slide-in">
-				<h1 class="section-title">Film Overview</h1>
-				<div class="title-underline"></div>
-			</div>
-
-			<div class="film-image-wrapper slide-in">
-				<img src="Pics/film_o.jpg" class="film-image" alt="Film Overview">
-				<div class="image-overlay">
-					<i class="fas fa-play-circle"></i>
+	<main id="main-content">
+		<section class="hero" id="top" aria-labelledby="hero-title">
+			<div class="hero-image" aria-hidden="true"></div>
+			<div class="hero-shade" aria-hidden="true"></div>
+			<div class="hero-content">
+				<p class="eyebrow">Documentary archive / 2018</p>
+				<h1 id="hero-title">Run Like<br>A G.U.R.L</h1>
+				<p class="hero-definition">Galvanized. Unapologetic. Real. Leader.</p>
+				<p class="hero-summary">A film project examining the women who ran, organized, voted, and reshaped the
+					political conversation surrounding the 2018 midterm elections.</p>
+				<div class="hero-actions">
+					<a class="button button-primary" href="#film">Enter the archive</a>
+					<a class="button button-quiet" href="Final_Submission_Group_1.pdf" target="_blank"
+						rel="noopener">Original documentation <span aria-hidden="true">&#8599;</span></a>
 				</div>
 			</div>
+			<p class="hero-caption">Educational redesign by Jordan Alexis</p>
+		</section>
 
-			<div class="content-wrapper">
-				<div class="content-card slide-in">
-					<div class="card-icon">
-						<i class="fas fa-fist-raised"></i>
-					</div>
-					<p>On November 8, 2016—Election Day—a collective primal scream began. It was a wake-up call that
-						compelled
-						thousands of women to mobilize in ways that America has never seen before. On January 22, 2017,
-						an estimated
-						470,000 people (mostly women) took to the streets—more than three times the number of people who
-						attended
-						the inauguration—to find solace with kindred spirits, exhibit their collective outrage, and
-						affirm their
-						strength. A one-day phenomenon? Hardly.</p>
-					<p>Women are galvanized to run for office in unprecedented numbers and women at the grassroots level
-						are
-						organizing to ensure that the issues they care about will be addressed and that their voices
-						will be heard.
-						Some are saying that 2018 is on track to be the next Year of the Woman, a throwback to 1992 when
-						the number
-						of female elected officials increased due in large part to backlash from the Anita Hill debacle.
-					</p>
-				</div>
+		<aside class="archive-notice" aria-label="Archive notice">
+			<span>Archive notice</span>
+			<p>This is an independent student project preserved for educational and portfolio purposes. It is not the
+				official film website and does not represent an active campaign, fundraiser, or organization.</p>
+		</aside>
 
-				<div class="content-card slide-in">
-					<div class="card-icon">
-						<i class="fas fa-video"></i>
-					</div>
-					<p>To document the 2018 Mid-Term Elections, Run Like A G.U.R.L. will follow the political campaigns
-						of several
-						women as they run for national office. As we tell their stories, we will go beyond campaign
-						stump speeches
-						and do a deep dive into the concepts and challenges that fuel their campaigns. We will ask the
-						question, do
-						women who run for office face unique challenges and must they adhere to a code that's totally
-						different from
-						men? Do they need to be knowledgeable without seeming condescending, decisive without appearing
-						bossy,
-						assertive without being characterized as aggressive?</p>
-				</div>
-
-				<div class="content-card slide-in">
-					<div class="card-icon">
-						<i class="fas fa-vote-yea"></i>
-					</div>
-					<p>The film will also explore the make-up and motivations of the female electorate. Studies have
-						shown that when
-						women voters go to the polls, candidates win. However, not all women candidates earn the female
-						vote.
-						What makes women voters decide to support some women candidates while they sit on the sidelines
-						for others?
-						We will conduct interviews with women on the street and delve into this complex issue. We will
-						document the
-						many facets of this women's movement that seems to gain more strength every day.</p>
-				</div>
-
-				<div class="content-card slide-in highlight-card">
-					<div class="card-icon">
-						<i class="fas fa-flag-checkered"></i>
-					</div>
-					<p>Long after the last ballot is counted, the question remains: will women have made history? Will
-						women fulfill
-						the promise of 1992 by making 2018 the next Year of the Woman? The 2018 mid-terms promise to be
-						a wave if
-						not a Tsunami year for electing women into office. But whether it's a Tsunami or a wave or just
-						high tide at
-						the beach depends on whether women show up and show out for each other at the phone banks, on
-						the canvassing
-						trips, and at the polls. Are women willing to do what's necessary to win? This topic is fueling
-						water cooler
-						conversations all over America and this film will bring that buzz to the screen.</p>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section id="about" class="section-team">
-		<div class="container">
-			<div class="section-header slide-in">
-				<h1 class="section-title">About the Team</h1>
-				<div class="title-underline"></div>
-				<p class="section-subtitle">Meet the visionaries behind Run Like A G.U.R.L</p>
+		<section class="film-section section" id="film" aria-labelledby="film-title">
+			<div class="section-intro">
+				<p class="kicker">The film / 01</p>
+				<h2 id="film-title">A movement<br>in motion.</h2>
+				<p>The proposed documentary follows women running for national office during the 2018 midterms, looking
+					beyond campaign speeches to the pressures, expectations, and grassroots work shaping their
+					campaigns.</p>
 			</div>
 
-			<div class="team-grid">
-				<div class="team-member slide-in">
-					<div class="member-image-wrapper">
-						<img src="Pics/MELANIE-ORAM.png" alt="Melanie Williams Oram" class="member-image">
-						<div class="member-overlay">
-							<i class="fas fa-award"></i>
+			<div class="film-player">
+				<video controls preload="metadata" poster="Pics/PTsans_Cover.jpg" aria-describedby="video-description">
+					<source src="Run%20Like%20Vid%20with%20Title.mp4" type="video/mp4">
+					Your browser does not support embedded video.
+				</video>
+				<div class="film-meta">
+					<span>Original title sequence</span>
+					<span>Student archive</span>
+				</div>
+			</div>
+
+			<div class="film-reading-guide">
+				<div>
+					<p class="kicker">Reading guide</p>
+					<h3>The questions behind the camera</h3>
+				</div>
+				<div class="question-list">
+					<p>Do women running for office face a different standard from men?</p>
+					<p>What turns political frustration into sustained grassroots action?</p>
+					<p>How do voters decide which candidates earn their support?</p>
+				</div>
+				<details class="transcript" id="video-description">
+					<summary>Accessible video description</summary>
+					<p>A brief title sequence introduces “Run Like A G.U.R.L,” an acronym for Galvanized, Unapologetic,
+						Real Leader, and frames the film as a story about women candidates and grassroots activists
+						during the 2018 election cycle.</p>
+				</details>
+			</div>
+		</section>
+
+		<section class="timeline-section" id="timeline" aria-labelledby="timeline-title">
+			<div class="section timeline-inner">
+				<div class="section-intro compact">
+					<p class="kicker">Historical context / 02</p>
+					<h2 id="timeline-title">From reaction<br>to representation.</h2>
+				</div>
+				<ol class="timeline">
+					<li>
+						<span class="timeline-year">2016</span>
+						<div>
+							<h3>A political turning point</h3>
+							<p>The presidential election becomes a catalyst for new organizing, candidacies, and
+								conversations about representation.</p>
 						</div>
-					</div>
-					<div class="member-info">
-						<h3 class="member-name">Melanie Williams Oram</h3>
-						<p class="member-title">Director & Producer</p>
-						<div class="member-bio">
-							<p>While at HBO Sports, Melanie earned an Emmy for <strong>Real Sports with Bryant
-									Gumbel</strong> and a
-								Peabody for the documentary <strong>Dare to Compete: The Struggle of Women in
-									Sports</strong>. Under the
-								Bajan Brownstone Productions banner, she wrote and directed <strong>SHOOK</strong>, a
-								short film that aired
-								on Showtime and won several festival awards.</p>
-							<p>She directed the short play <strong>NMA</strong> that was part of a short play collection
-								called
-								<strong>The R-Word</strong> which did a short off-Broadway run. Melanie earned a
-								Bachelor of Arts,
-								cum laude from Harvard University and a MFA from Columbia University - School of the
-								Arts - Filmmaking Division.</p>
+					</li>
+					<li>
+						<span class="timeline-year">2017</span>
+						<div>
+							<h3>Mobilization becomes visible</h3>
+							<p>Women’s marches and local organizing networks turn public response into sustained
+								political participation.</p>
 						</div>
-					</div>
-				</div>
+					</li>
+					<li>
+						<span class="timeline-year">2018</span>
+						<div>
+							<h3>A record-setting election cycle</h3>
+							<p>Women run for office in unprecedented numbers, while campaigns and organizers confront
+								questions of access, identity, and electability.</p>
+						</div>
+					</li>
+					<li>
+						<span class="timeline-year">Today</span>
+						<div>
+							<h3>The archive looks back</h3>
+							<p>This redesign preserves the project as a historical snapshot and invites new reflection
+								on the questions it raised.</p>
+						</div>
+					</li>
+				</ol>
+			</div>
+		</section>
 
-				<div class="team-member slide-in">
-					<div class="member-image-wrapper">
-						<img src="Pics/ANDRETTA.png" alt="Andretta" class="member-image">
-						<div class="member-overlay">
-							<i class="fas fa-film"></i>
-						</div>
-					</div>
-					<div class="member-info">
-						<h3 class="member-name">Andretta</h3>
-						<p class="member-title">Producer</p>
-						<div class="member-bio">
-							<p>Andretta is a seasoned filmmaker and founder of Broadmind Entertainment. Most recently,
-								she produced
-								<strong>AS EVIL DOES</strong>, an independent feature starring Bill Cobbs and Dorian
-								Missick. Her other
-								production credits include the documentary <strong>AMEN: The Life and Music of Jester
-									Hairston</strong>,
-								<strong>The N Word documentary</strong> (Peabody Award winner), and the Emmy-Award
-								winning PBS documentary
-								series <strong>The Great Depression</strong>.</p>
-							<p>Prior to launching Broadmind Entertainment, Andretta worked for Walt Disney Studios in
-								the Telefilms
-								Division. She currently works with the American Film Market. She has a BA cum laude from
-								Harvard University
-								and a MFA from the University of Southern California Peter Stark Motion Picture
-								Producing Program.</p>
-						</div>
-					</div>
+		<section class="themes-section section" id="themes" aria-labelledby="themes-title">
+			<div class="section-intro compact">
+				<p class="kicker">Themes / 03</p>
+				<h2 id="themes-title">Four lenses on<br>the same race.</h2>
+			</div>
+			<div class="theme-explorer">
+				<div class="theme-tabs" role="tablist" aria-label="Documentary themes">
+					<button role="tab" id="tab-representation" aria-controls="panel-representation" aria-selected="true"
+						data-theme-tab="representation"><span>01</span> Representation</button>
+					<button role="tab" id="tab-standards" aria-controls="panel-standards" aria-selected="false"
+						data-theme-tab="standards" tabindex="-1"><span>02</span> Double standards</button>
+					<button role="tab" id="tab-grassroots" aria-controls="panel-grassroots" aria-selected="false"
+						data-theme-tab="grassroots" tabindex="-1"><span>03</span> Grassroots power</button>
+					<button role="tab" id="tab-electorate" aria-controls="panel-electorate" aria-selected="false"
+						data-theme-tab="electorate" tabindex="-1"><span>04</span> The electorate</button>
 				</div>
-
-				<div class="team-member slide-in">
-					<div class="member-image-wrapper">
-						<img src="Pics/tracy-alexander1111.png" alt="Dr. TEA Traci E. Alexander" class="member-image">
-						<div class="member-overlay">
-							<i class="fas fa-microphone"></i>
-						</div>
-					</div>
-					<div class="member-info">
-						<h3 class="member-name">Dr. "TEA" Traci E. Alexander</h3>
-						<p class="member-title">Communications & Leadership Development</p>
-						<div class="member-bio">
-							<p>Dr. "TEA" is a powerhouse in the media industry and an award-winning journalist for
-								Ebony.Com and BET.
-								She has garnered exclusive sit-down interviews with notable leaders such as President
-								Barack Obama and she
-								was the first African American woman to anchor the evening news for ABC in Central
-								Louisiana.</p>
-							<p>Dr. TEA is a connector, recognized as the "Westchester Connection and beyond"—connecting
-								people with
-								passion to causes with purpose. Her commitment to education is to increase the number of
-								men and women of
-								color attaining advanced degrees in higher education. She has strategically developed
-								signature fundraising
-								opportunities including Beverly Bond's Black Girl's Rock, Taraji P. Henson's Memoir, and
-								many others.</p>
-						</div>
-					</div>
+				<div class="theme-panels">
+					<article role="tabpanel" id="panel-representation" aria-labelledby="tab-representation"
+						data-theme-panel="representation">
+						<p class="panel-number">01 / 04</p>
+						<h3>Who gets to lead?</h3>
+						<p>The film asks what changes when more women enter races for public office, and what
+							representation means beyond a single election result.</p>
+					</article>
+					<article role="tabpanel" id="panel-standards" aria-labelledby="tab-standards"
+						data-theme-panel="standards" hidden>
+						<p class="panel-number">02 / 04</p>
+						<h3>A different code</h3>
+						<p>Women candidates are often expected to appear decisive but not aggressive, knowledgeable but
+							not condescending, and ambitious without seeming self-serving.</p>
+					</article>
+					<article role="tabpanel" id="panel-grassroots" aria-labelledby="tab-grassroots"
+						data-theme-panel="grassroots" hidden>
+						<p class="panel-number">03 / 04</p>
+						<h3>Campaigns are collective</h3>
+						<p>Phone banks, canvassing, community groups, and volunteer networks reveal the sustained labor
+							behind political momentum.</p>
+					</article>
+					<article role="tabpanel" id="panel-electorate" aria-labelledby="tab-electorate"
+						data-theme-panel="electorate" hidden>
+						<p class="panel-number">04 / 04</p>
+						<h3>The vote is not automatic</h3>
+						<p>The documentary also examines how women voters evaluate candidates and why shared identity
+							does not always translate into shared political support.</p>
+					</article>
 				</div>
 			</div>
-		</div>
-	</section>
+		</section>
 
-	<section id="news" class="section-news">
-		<div class="container">
-			<div class="section-header slide-in">
-				<h1 class="section-title">Latest News</h1>
-				<div class="title-underline"></div>
-			</div>
-
-			<div class="news-content slide-in">
-				<div class="news-image-wrapper">
-					<img src="Pics/News%20Picture%20With%20Background%20Color.png" alt="Melanie Williams Oram Award"
-						class="news-image">
-					<div class="news-badge">
-						<i class="fas fa-trophy"></i>
-						<span>Recognition</span>
-					</div>
+		<section class="people-section" id="people" aria-labelledby="people-title">
+			<div class="section">
+				<div class="section-intro people-intro">
+					<p class="kicker">The filmmakers / 04</p>
+					<h2 id="people-title">The people<br>behind the story.</h2>
+					<p>Experienced filmmakers and communicators brought documentary, production, journalism, and
+						community-building expertise to the project.</p>
 				</div>
-				<div class="news-text">
-					<h2 class="news-headline">Melanie Williams Oram Receives Certificate of Recognition</h2>
-					<p class="news-date"><i class="far fa-calendar-alt"></i> 34th Annual African-American Heritage
-						Festival</p>
-					<p>Melanie Williams Oram was honored with a Certificate of Recognition at the 34th Annual
-						African-American Heritage Festival, celebrating her outstanding contributions to documentary
-						filmmaking and her commitment to telling stories that amplify women's voices in politics.</p>
-					<p>This recognition highlights the important work being done through Run Like A G.U.R.L and its
-						mission to document the historic movement of women in American politics.</p>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section id="InRace" class="section-social">
-		<div class="container">
-			<div class="section-header slide-in">
-				<h1 class="section-title">In This Race Together</h1>
-				<div class="title-underline"></div>
-				<p class="section-subtitle">Join the conversation on social media</p>
-			</div>
-
-			<div class="social-wrapper slide-in">
-				<div class="twitter-container">
-					<a class="twitter-timeline" data-width="100%" data-height="800"
-						href="https://twitter.com/GURLFilm?ref_src=twsrc%5Etfw" data-tweet-limit="5">Tweets by
-						GURLFilm</a>
-					<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-				</div>
-
-				<div class="social-buttons">
-					<a href="https://twitter.com/GURLFilm" target="_blank" class="social-btn twitter-btn">
-						<i class="fab fa-twitter"></i>
-						<span>Follow Us on Twitter</span>
-					</a>
-					<div class="hashtag-display">
-						<i class="fas fa-hashtag"></i>
-						<span>RunLikeAGURL</span>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section id="contribute" class="section-contribute">
-		<div class="container">
-			<div class="section-header slide-in">
-				<h1 class="section-title">Support the Film</h1>
-				<div class="title-underline"></div>
-				<p class="section-subtitle">Help us bring this important story to life</p>
-			</div>
-
-			<div class="contribute-content">
-				<div class="contribute-card slide-in">
-					<div class="contribute-icon">
-						<i class="fas fa-heart"></i>
-					</div>
-					<h3>Your Support Matters</h3>
-					<p>If you would like to help this project succeed, you can make a gift to the film by using the
-						PayPal button below.
-						We are currently raising capital to help us finish the majority of our production phase for this
-						project.</p>
-
-					<div class="benefits-list">
-						<div class="benefit-item">
-							<i class="fas fa-check-circle"></i>
-							<span>All contributors will receive a named film credit</span>
+				<div class="people-grid">
+					<article class="person-card">
+						<img src="Pics/MELANIE-ORAM.png"
+							alt="Melanie Williams Oram holding a certificate of recognition">
+						<div>
+							<p class="person-role">Director &amp; producer</p>
+							<h3>Melanie Williams Oram</h3>
+							<p>An Emmy and Peabody-winning filmmaker whose work spans sports, documentary, theater, and
+								independent film.</p>
 						</div>
-					</div>
-				</div>
-
-				<div class="payment-options slide-in">
-					<div class="payment-card">
-						<h3><i class="fas fa-donate"></i> Direct Contribution</h3>
-						<p>Support us directly through PayPal</p>
-						<div class="paypal-button-wrapper">
-							<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-								<input type="hidden" name="cmd" value="_s-xclick">
-								<input type="hidden" name="hosted_button_id" value="KEGREBP2YZ7R8">
-								<input type="image" src="Pics/Paypal%20Button%20Color%20Pink.png" border="0"
-									name="submit" alt="PayPal - The safer, easier way to pay online!"
-									class="paypal-btn">
-								<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
-									width="1" height="1">
-							</form>
+					</article>
+					<article class="person-card">
+						<img src="Pics/ANDRETTA.png" alt="Portrait of producer Andretta">
+						<div>
+							<p class="person-role">Producer</p>
+							<h3>Andretta</h3>
+							<p>A filmmaker and founder of Broadmind Entertainment with credits across independent
+								features and award-winning documentaries.</p>
 						</div>
-						<p class="tax-note"><i class="fas fa-info-circle"></i> Not tax deductible</p>
-					</div>
-
-					<div class="payment-card tax-deductible">
-						<div class="tax-badge">Tax Deductible</div>
-						<h3><i class="fas fa-hand-holding-usd"></i> Fiscal Sponsor</h3>
-						<p>Make a tax-deductible donation through our fiscal sponsor</p>
-						<a href="https://newheritagetheatre.org/contribute/247-fundraiser-runlikeagurl" target="_blank"
-							class="btn btn-primary btn-lg">
-							<i class="fas fa-external-link-alt"></i> New Heritage Theatre
-						</a>
-					</div>
+					</article>
+					<article class="person-card">
+						<img src="Pics/tracy-alexander1111.png" alt="Portrait of Dr. Traci E. Alexander">
+						<div>
+							<p class="person-role">Communications &amp; leadership</p>
+							<h3>Dr. Traci E. Alexander</h3>
+							<p>An award-winning journalist, media professional, educator, and connector of people with
+								passion to causes with purpose.</p>
+						</div>
+					</article>
 				</div>
 			</div>
-		</div>
-	</section>
+		</section>
 
-	<section id="contact" class="section-contact">
-		<div class="container">
-			<div class="section-header slide-in">
-				<h1 class="section-title">Get In Touch</h1>
-				<div class="title-underline"></div>
-				<p class="section-subtitle">We'd love to hear from you</p>
+		<section class="archive-section section" id="archive" aria-labelledby="archive-title">
+			<div class="section-intro archive-intro">
+				<p class="kicker">Selected archive / 05</p>
+				<h2 id="archive-title">Materials from<br>the original project.</h2>
+				<p>These artifacts are retained as part of the project’s history. Select an image to inspect it at full
+					size.</p>
 			</div>
+			<div class="archive-grid">
+				<button class="archive-item archive-wide" type="button" data-gallery-image="Pics/film_o.jpg"
+					data-gallery-title="On the campaign trail">
+					<img src="Pics/film_o.jpg" alt="Run Like A G.U.R.L team members gathered around a campaign vehicle">
+					<span><b>Field documentation</b><small>On the campaign trail</small></span>
+				</button>
+				<button class="archive-item" type="button" data-gallery-image="Pics/PTsans_Cover.jpg"
+					data-gallery-title="Original film cover">
+					<img src="Pics/PTsans_Cover.jpg"
+						alt="Original Run Like A G.U.R.L film cover featuring the U.S. Capitol">
+					<span><b>Key art</b><small>Original film cover</small></span>
+				</button>
+				<button class="archive-item" type="button"
+					data-gallery-image="Pics/News Picture With Background Color.png"
+					data-gallery-title="Certificate of recognition">
+					<img src="Pics/News%20Picture%20With%20Background%20Color.png"
+						alt="Melanie Williams Oram holding a certificate of recognition">
+					<span><b>Recognition</b><small>Community honor</small></span>
+				</button>
+			</div>
+			<a class="document-link" href="Final_Submission_Group_1.pdf" target="_blank" rel="noopener"><span>Original
+					group submission</span><b>View the complete project PDF</b><i aria-hidden="true">PDF &#8599;</i></a>
+		</section>
 
-			<div class="contact-wrapper">
-				<div class="contact-form-container slide-in">
-					<div class="form-header">
-						<i class="fas fa-envelope-open-text"></i>
-						<h3>Send Us a Message</h3>
-					</div>
-					<form action="action_page.php" method="post" class="contact-form">
-						<div class="form-row">
-							<div class="form-group">
-								<label for="fname"><i class="fas fa-user"></i> First Name</label>
-								<input type="text" id="fname" name="firstname" placeholder="Your first name" required>
-							</div>
-
-							<div class="form-group">
-								<label for="lname"><i class="fas fa-user"></i> Last Name</label>
-								<input type="text" id="lname" name="lastname" placeholder="Your last name" required>
-							</div>
-						</div>
-
-						<div class="form-group">
-							<label for="email"><i class="fas fa-envelope"></i> Email</label>
-							<input type="email" id="email" name="email" placeholder="your.email@example.com" required>
-						</div>
-
-						<div class="form-group">
-							<label for="subject"><i class="fas fa-comment-alt"></i> Message</label>
-							<textarea id="subject" name="subject" placeholder="Tell us what's on your mind..." rows="6"
-								required></textarea>
-						</div>
-
-						<button type="submit" class="btn btn-primary btn-lg btn-submit">
-							<i class="fas fa-paper-plane"></i> Send Message
-						</button>
-					</form>
+		<section class="redesign-section" id="redesign" aria-labelledby="redesign-title">
+			<div class="section">
+				<div class="section-intro compact">
+					<p class="kicker">Project evolution / 06</p>
+					<h2 id="redesign-title">Reframing an<br>academic project.</h2>
 				</div>
-
-				<div class="contact-info-container slide-in">
-					<div class="contact-info-card">
-						<div class="info-header">
-							<i class="fas fa-building"></i>
-							<h3>Bajan Brownstone Productions, LLC</h3>
-						</div>
-
-						<div class="contact-details">
-							<div class="contact-item">
-								<i class="fas fa-map-marker-alt"></i>
-								<div>
-									<strong>Address</strong>
-									<p>306 West 140th Street Unit #1<br>New York, NY 10030</p>
-								</div>
-							</div>
-
-							<div class="contact-item">
-								<i class="fas fa-phone"></i>
-								<div>
-									<strong>Phone</strong>
-									<p><a href="tel:+12122424735">(212) 242-4735</a></p>
-								</div>
-							</div>
-
-							<div class="contact-item">
-								<i class="fas fa-envelope"></i>
-								<div>
-									<strong>Email</strong>
-									<p><a href="mailto:Info@Runlikeagurl.com">Info@Runlikeagurl.com</a></p>
-								</div>
-							</div>
-						</div>
-
-						<div class="map-wrapper">
-							<img src="Pics/Annotation%202019-06-02%20115502.png" alt="Location Map"
-								class="location-map">
-						</div>
+				<div class="redesign-story">
+					<div class="redesign-copy">
+						<p class="large-copy">This began as a student group project created after the original Run Like
+							A G.U.R.L WordPress site was no longer available.</p>
+						<p>My role was to build the website while other group members developed the artwork and final
+							documentation. The first version preserved the organization’s content in a conventional
+							promotional layout with news, social media, donation, and contact sections.</p>
+						<p>I returned to the project to make its purpose clearer and demonstrate how my approach has
+							changed. The new version treats the work as an educational archive: it prioritizes the film,
+							historical context, accessible storytelling, and transparent authorship.</p>
+					</div>
+					<div class="before-after" aria-label="Before and after comparison">
+						<article><span>Then</span>
+							<h3>Promotional mockup</h3>
+							<ul>
+								<li>Bootstrap and jQuery</li>
+								<li>Static promotional sections</li>
+								<li>Live-style donation and contact UI</li>
+								<li>Limited project context</li>
+							</ul>
+						</article>
+						<article><span>Now</span>
+							<h3>Documentary archive</h3>
+							<ul>
+								<li>Custom responsive system</li>
+								<li>Interactive thematic storytelling</li>
+								<li>Accessible media description</li>
+								<li>Clear educational provenance</li>
+							</ul>
+						</article>
 					</div>
 				</div>
+				<div class="skills-row" aria-label="Skills demonstrated"><span>Semantic HTML</span><span>Responsive
+						CSS</span><span>Vanilla JavaScript</span><span>Accessibility</span><span>Editorial
+						design</span><span>Content strategy</span></div>
 			</div>
-		</div>
-	</section>
+		</section>
 
-	<footer class="site-footer">
-		<div class="container">
-			<div class="footer-content">
-				<div class="footer-brand">
-					<h3>RUN LIKE A G.U.R.L</h3>
-					<p>Documenting the movement of women in American politics</p>
-				</div>
+		<section class="closing-section">
+			<p class="kicker">Archive note</p>
+			<h2>The questions remain<br>part of the record.</h2>
+			<p>All documentary content and original materials belong to Run Like A G.U.R.L and their respective
+				creators. This independent redesign is presented solely as an educational portfolio project.</p>
+			<a class="button button-primary" href="../../index.html">Return to Development Showcase</a>
+		</section>
+	</main>
 
-				<div class="footer-links">
-					<h4>Quick Links</h4>
-					<ul>
-						<li><a href="#home">Home</a></li>
-						<li><a href="#filmover">Film Overview</a></li>
-						<li><a href="#about">Team</a></li>
-						<li><a href="#contribute">Contribute</a></li>
-					</ul>
-				</div>
-
-				<div class="footer-social">
-					<h4>Connect With Us</h4>
-					<div class="social-icons">
-						<a href="https://twitter.com/GURLFilm" target="_blank" aria-label="Twitter">
-							<i class="fab fa-twitter"></i>
-						</a>
-						<a href="mailto:Info@Runlikeagurl.com" aria-label="Email">
-							<i class="fas fa-envelope"></i>
-						</a>
-					</div>
-				</div>
-			</div>
-
-			<div class="footer-bottom">
-				<p>&copy; 2019 Run Like a G.U.R.L. All Rights Reserved.</p>
-			</div>
-		</div>
+	<footer>
+		<a class="brand" href="#top"><span class="brand-monogram">G</span><span>Run Like A G.U.R.L</span></a>
+		<p>Educational archive redesigned by Jordan Alexis.</p>
+		<p>&copy; <span data-year></span> Portfolio presentation</p>
 	</footer>
 
-	<button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">
-		<i class="fas fa-arrow-up"></i>
-	</button>
-
-	<!-- Project Info Modal -->
-	<div id="projectInfoModal" class="project-modal">
-		<div class="modal-content-custom">
-			<span class="close-modal">&times;</span>
-			<div class="modal-header-custom">
-				<i class="fas fa-graduation-cap"></i>
-				<h2>About This Project</h2>
-			</div>
-			<div class="modal-body-custom">
-				<div class="info-badge">
-					<i class="fas fa-exclamation-triangle"></i>
-					<span>MOCKUP WEBSITE</span>
-				</div>
-				<p>This is a <strong>student group project mockup</strong> created for the Run Like A G.U.R.L
-					organization.</p>
-
-				<h3><i class="fas fa-book"></i> Project Background</h3>
-				<p>This website was recreated as part of an academic group project. The original WordPress site for Run
-					Like A G.U.R.L is no longer operational due to the web application being discontinued.</p>
-				<p>As a <strong>group project</strong>, I created the website while other team members worked on the
-					artwork and PDF documentation.</p>
-
-				<h3><i class="fas fa-tools"></i> Purpose</h3>
-				<p>The goal of this project was to recreate and modernize the website with:</p>
-				<ul>
-					<li><i class="fas fa-check"></i> A modern, responsive design</li>
-					<li><i class="fas fa-check"></i> Interactive user experience</li>
-					<li><i class="fas fa-check"></i> Improved accessibility</li>
-					<li><i class="fas fa-check"></i> Preservation of the original content and mission</li>
-				</ul>
-
-				<h3><i class="fas fa-images"></i> View the Original Website</h3>
-				<p>Want to see screenshots of how the old website looked before the redesign? The PDF contains
-					screenshots showing the original WordPress site design.</p>
-				<a href="Final_Submission_Group_1.pdf" target="_blank" class="btn btn-primary btn-lg modal-pdf-btn">
-					<i class="fas fa-file-pdf"></i> View Original Site Documentation
-				</a>
-
-				<div class="disclaimer">
-					<i class="fas fa-info-circle"></i>
-					<p><strong>Disclaimer:</strong> This is a mockup for educational purposes only. All content belongs
-						to Run Like A G.U.R.L and its respective creators.</p>
-				</div>
-
-				<div class="disclaimer">
-					<i class="fas fa-code"></i>
-					<p><strong>Design Note:</strong> The difference between what the website used to look like and how
-						it appears now is due to it being recreated and enhanced using better programming techniques and
-						modern web development practices.</p>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<script src="script.js"></script>
+	<dialog class="gallery-dialog" data-gallery-dialog>
+		<button type="button" class="dialog-close" data-gallery-close aria-label="Close image viewer">&times;</button>
+		<img data-dialog-image src="Pics/film_o.jpg" alt="">
+		<p data-dialog-title></p>
+	</dialog>
 </body>
 
 </html>
