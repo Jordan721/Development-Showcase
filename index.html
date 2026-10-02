@@ -26,683 +26,530 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-    <!-- Fonts -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap"
-        rel="stylesheet">
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="showcase.css">
 </head>
 
 <body>
-    <noscript>
-        <div
-            style="background:#1a1a2e;color:#e0e0e0;text-align:center;padding:3rem 2rem;font-family:sans-serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;">
-            <h1 style="font-size:2rem;margin-bottom:1rem;color:#a855f7;">Jordan Alexis | Development Showcase</h1>
-            <p style="max-width:500px;line-height:1.6;margin-bottom:1.5rem;">This site requires JavaScript for the
-                animated background, project filtering, and GitHub activity feed. Please enable JavaScript in your
-                browser to get the full experience.</p>
-            <a href="https://jordan721.github.io/Jordan_Alexis/" style="color:#a855f7;text-decoration:underline;">Visit
-                my portfolio instead</a>
-        </div>
-    </noscript>
-
-    <!-- Scroll Progress Bar -->
-    <div class="scroll-progress" id="scrollProgress"></div>
-
-    <!-- Animation Toggle Button -->
-    <button id="animationToggle" class="animation-toggle" aria-label="Toggle animations">
-        <i class="fas fa-play"></i>
-        <span class="tooltip">Toggle Animations</span>
-    </button>
-
-    <!-- Theme Picker Button -->
-    <button id="themeToggle" class="theme-toggle" aria-label="Change theme color">
-        <i class="fas fa-palette"></i>
-        <span class="tooltip">Theme Color</span>
-    </button>
-
-    <!-- Theme Picker Panel -->
-    <div id="themePanel" class="theme-panel">
-        <div class="theme-panel-header">
-            <h3><i class="fas fa-palette"></i> Theme Color</h3>
-            <button class="theme-panel-close" id="themePanelClose">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="theme-panel-content">
-            <div class="color-presets">
-                <button class="color-preset active" data-hue="270" style="--preset-color: #a855f7"
-                    title="Purple (Default)"></button>
-                <button class="color-preset" data-hue="210" style="--preset-color: #3b82f6" title="Blue"></button>
-                <button class="color-preset" data-hue="160" style="--preset-color: #10b981" title="Emerald"></button>
-                <button class="color-preset" data-hue="340" style="--preset-color: #f43f5e" title="Rose"></button>
-                <button class="color-preset" data-hue="30" style="--preset-color: #f97316" title="Orange"></button>
-                <button class="color-preset" data-hue="180" style="--preset-color: #06b6d4" title="Cyan"></button>
-                <button class="color-preset" data-hue="300" style="--preset-color: #d946ef" title="Pink"></button>
-                <button class="color-preset" data-hue="45" style="--preset-color: #eab308" title="Yellow"></button>
+    <a class="skip-link" href="#explore">Skip to projects</a>
+    <header class="site-header"><a class="wordmark" href="#home"><span class="brand-mark">ja.</span> Jordan Alexis <span
+                class="wordmark-sub">/ Development Showcase</span></a>
+        <nav aria-label="Main navigation"><a href="#explore">Explore projects</a><a href="https://github.com/Jordan721"
+                target="_blank" rel="noopener noreferrer">GitHub ↗</a><a class="nav-portfolio"
+                href="https://jordan721.github.io/Jordan_Alexis/" target="_blank" rel="noopener noreferrer">My portfolio
+                ↗</a></nav>
+    </header>
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-copy"><span class="eyebrow"><span class="status-dot"></span> WELCOME TO MY CREATIVE
+                    INTERNET</span>
+                <h1>I build.<br>I break.<br><span class="serif-word">I imagine.</span></h1>
+                <p>A collection of things I've built, things I've learned, and ideas I couldn't leave alone. Pick a
+                    door. See where it goes.</p>
+                <div class="hero-actions"><a class="primary-link" href="#explore">Enter the playground
+                        <span>↘</span></a><button class="surprise-button" id="surpriseProject">✦ Surprise me</button>
+                </div>
+                <div class="hero-caption"><span>25 projects & collections</span><span>Five different worlds</span></div>
             </div>
-            <div class="hue-slider-container">
-                <label for="hueSlider">Custom Color</label>
-                <input type="range" id="hueSlider" class="hue-slider" min="0" max="360" value="270">
-                <div class="hue-preview" id="huePreview"></div>
+            <div class="hero-art"
+                aria-label="Five creative worlds: experiments, professional work, coursework, games, and art">
+                <div class="art-grid"></div><span class="art-label">PICK A PORTAL. GO SOMEWHERE NEW.</span>
+                <div class="orbit orbit-one"></div>
+                <div class="orbit orbit-two"></div><a href="#personal" class="floating-tile tile-lab"><span>01 /
+                        EXPERIMENT</span><b>✳</b><em>What if?</em></a><a href="#professional"
+                    class="floating-tile tile-build"><span>02 / BUILD</span><b>⌘</b><em>Make it work.</em></a><a
+                    href="#academic" class="floating-tile tile-study"><span>03 / LEARN</span><b>↗</b><em>Level
+                        up.</em></a><a href="#games" class="floating-tile tile-play"><span>04 /
+                        PLAY</span><b>✦</b><em>Press start.</em></a><a href="#art"
+                    class="floating-tile tile-art"><span>05 / CREATE</span><b>◒</b><em>Stay curious.</em></a><span
+                    class="art-footnote">EVERY LINK IS A NEW POSSIBILITY ↗</span>
             </div>
-            <button class="reset-theme-btn" id="resetTheme">
-                <i class="fas fa-undo"></i> Reset to Default
-            </button>
+        </section>
+        <div class="ticker" aria-hidden="true">
+            <div class="ticker-track"><span>MAKE SOMETHING WEIRD <b>✳</b> FOLLOW YOUR CURIOSITY <b>↗</b> CODE • PLAY •
+                    CREATE <b>✦</b></span><span>MAKE SOMETHING WEIRD <b>✳</b> FOLLOW YOUR CURIOSITY <b>↗</b> CODE • PLAY
+                    • CREATE <b>✦</b></span><span>MAKE SOMETHING WEIRD <b>✳</b> FOLLOW YOUR CURIOSITY <b>↗</b> CODE •
+                    PLAY • CREATE <b>✦</b></span><span>MAKE SOMETHING WEIRD <b>✳</b> FOLLOW YOUR CURIOSITY <b>↗</b> CODE
+                    • PLAY • CREATE <b>✦</b></span></div>
         </div>
-    </div>
-
-    <!-- Animated Background -->
-    <div class="animated-background" id="animatedBackground">
-        <canvas id="constellationCanvas"></canvas>
-    </div>
-
-    <!-- Sticky Navigation -->
-    <nav class="site-nav" id="siteNav">
-        <div class="nav-inner">
-            <div class="nav-links" id="navLinks">
-                <a href="#home" class="nav-link active" data-section="home">Home</a>
-                <a href="#about" class="nav-link" data-section="about">About</a>
-                <a href="#personal" class="nav-link" data-section="personal">Personal</a>
-                <a href="#professional" class="nav-link" data-section="professional">Professional</a>
-                <a href="#academic" class="nav-link" data-section="academic">Academic</a>
-                <a href="#games" class="nav-link" data-section="games">Games</a>
-                <a href="#art" class="nav-link" data-section="art">Art</a>
-                <a href="#activity" class="nav-link" data-section="activity">Activity</a>
+        <section class="directory" id="explore" aria-labelledby="directory-title">
+            <div class="directory-heading">
+                <div><span class="eyebrow">THE COLLECTION</span>
+                    <h2 id="directory-title">Choose your kind of curious.</h2>
+                </div><label class="search-label"><span>Search projects</span><input type="search" id="projectSearch"
+                        placeholder="Try “animation” or “SQL”…"></label>
             </div>
-            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <nav class="chapter-nav" aria-label="Project categories"><a href="#personal"><span>01</span>experiment
+                    lab<span>↗</span></a><a href="#professional"><span>02</span>workbench<span>↗</span></a><a
+                    href="#academic"><span>03</span>launchpad<span>↗</span></a><a
+                    href="#games"><span>04</span>arcade<span>↗</span></a><a href="#art"><span>05</span>creative
+                    studio<span>↗</span></a></nav>
+            <div class="filter-row"><span class="eyebrow">FILTER BY TECH</span>
+                <div id="techFilters" class="filter-chips"><button class="filter-chip active" data-tech="all"
+                        aria-pressed="true">All</button></div>
+                <p id="resultCount" aria-live="polite">25 projects & collections</p>
+            </div>
+        </section>
+        <div id="emptyState" class="empty-state" hidden>
+            <h2>No matches this time.</h2>
+            <p>Try a different search or reset the filters.</p><button id="resetFilters">Show everything ↗</button>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h1 class="hero-name fade-in-up">
-                <span class="gradient-text">Jordan Alexis</span>
-            </h1>
-            <p class="hero-subtitle fade-in-up delay-1">Developer & Creator</p>
-            <p class="hero-desc fade-in-up delay-2">A curated portfolio of my projects, tools, and web experiences.</p>
-            <div class="hero-socials fade-in-up delay-3">
-                <a href="https://www.linkedin.com/in/jordan-alexis/" target="_blank" aria-label="LinkedIn">
-                    <i class="fab fa-linkedin"></i>
+        <section class="chapter personal" id="personal" aria-labelledby="personal-title">
+            <div class="chapter-intro"><span class="eyebrow">LAB / 01 — The experiment lab.</span>
+                <h2 id="personal-title">Ideas worth<br>playing with.</h2>
+                <p>Independent tools, curious experiments, and things I wanted to exist.</p>
+                <div class="chapter-symbol" aria-hidden="true">✳</div><span class="chapter-count">9 projects to
+                    explore</span>
+            </div>
+            <div class="card-grid"><a href="./Personal_Projects/Cash-Compass/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">01</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Cash Compass</h3>
+                    <p>Navigate your finances with confidence - Interactive budget tracker with data visualization
+                    </p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                        <span>Chart.js</span>
+                    </div>
                 </a>
-                <a href="https://linktr.ee/Jordan_Alexis_" target="_blank" aria-label="Linktree">
-                    <i class="fas fa-tree"></i>
+                <a href="./Personal_Projects/Console_Chronicles/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">02</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Console Chronicles</h3>
+                    <p>Learn SQL through gaming history - Interactive database teaching SQL with console data from
+                        1972-2020</p>
+                    <div class="card-tech">
+                        <span>SQL.js</span>
+                        <span>Chart.js</span>
+                        <span>JavaScript</span>
+                    </div>
                 </a>
-                <a href="https://github.com/Jordan721" target="_blank" aria-label="GitHub">
-                    <i class="fab fa-github"></i>
+                <a href="./Personal_Projects/Bagel_Byte_Academy/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">03</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Bagel Byte Academy</h3>
+                    <p>Interactive 3D computer exploration lab - Learn hardware, networking, and coding fundamentals
+                    </p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                        <span>Three.js</span>
+                    </div>
                 </a>
-            </div>
-            <div class="scroll-hint fade-in-up delay-4">
-                <i class="fas fa-chevron-down"></i>
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <main class="main-content">
-
-        <!-- About Section -->
-        <section class="about-section" id="about">
-            <div class="section-container">
-                <h2 class="section-heading" style="--accent: var(--color-primary)">About This Site</h2>
-                <div class="about-content">
-                    <p>This site serves as a central hub connecting you to the projects I've worked on over the years.
-                        From <strong>personal projects</strong> born out of curiosity and passion, to <strong>academic
-                            work</strong> completed during my time in college, to <strong>professional projects</strong>
-                        built through internships and bootcamps, to <strong>games</strong> I've created and reimagined
-                        for the web — it's all here in one place.</p>
-                    <p>Each section represents a different chapter of my development journey. Browse through to see how
-                        I've grown as a developer and the range of technologies I've worked with.</p>
-                    <div class="about-cta">
-                        <a href="https://jordan721.github.io/Jordan_Alexis/" target="_blank"
-                            class="about-portfolio-link">
-                            <i class="fas fa-user"></i>
-                            <div>
-                                <span class="cta-title">Want to know more about me?</span>
-                                <span class="cta-desc">Visit my portfolio to learn about my background, skills, and
-                                    experience</span>
-                            </div>
-                            <i class="fas fa-arrow-right cta-arrow"></i>
-                        </a>
+                <a href="./Personal_Projects/Bagely_Bytes_Programming/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">04</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Tech Filter -->
-        <div class="tech-filter" id="techFilter">
-            <div class="section-container">
-                <div class="filter-bar">
-                    <span class="filter-label"><i class="fas fa-filter"></i> Filter by tech:</span>
-                    <div class="filter-chips" id="filterChips">
-                        <button class="filter-chip active" data-tech="all">All</button>
+                    <h3>Bagely Bytes Programming</h3>
+                    <p>Learn programming languages like Python, JavaScript, Java, C++ and more with interactive
+                        examples</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
                     </div>
-                    <button class="filter-clear hidden" id="filterClear"><i class="fas fa-times"></i> Clear</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- No Results State -->
-        <div class="filter-no-results" id="filterNoResults">
-            <i class="fas fa-search"></i>
-            <h3>No projects found</h3>
-            <p>No projects match the selected technologies. Try selecting fewer filters or click "Clear" to reset.</p>
-        </div>
-
-        <!-- Personal Projects -->
-        <section class="project-section" id="personal">
-            <div class="section-container">
-                <h2 class="section-heading" style="--accent: #f59e0b">Personal Projects <span class="section-count"
-                        style="--count-color: #f59e0b">9</span></h2>
-                <p class="section-desc">Independent projects and personal work</p>
-                <div class="card-grid">
-
-                    <a href="./Personal_Projects/Cash-Compass/index.html" class="project-card"
-                        style="--card-accent: #f59e0b">
+                </a>
+                <a href="./Personal_Projects/Threat_Aware/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">05</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
                             <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>Cash Compass</h3>
-                        <p>Navigate your finances with confidence - Interactive budget tracker with data visualization
-                        </p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                            <span>Chart.js</span>
-                        </div>
-                    </a>
-
-                    <a href="./Personal_Projects/Console_Chronicles/index.html" class="project-card"
-                        style="--card-accent: #f59e0b">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                        </div>
-                        <h3>Console Chronicles</h3>
-                        <p>Learn SQL through gaming history - Interactive database teaching SQL with console data from
-                            1972-2020</p>
-                        <div class="card-tech">
-                            <span>SQL.js</span>
-                            <span>Chart.js</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </a>
-
-                    <a href="./Personal_Projects/Bagel_Byte_Academy/index.html" class="project-card"
-                        style="--card-accent: #f59e0b">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                        </div>
-                        <h3>Bagel Byte Academy</h3>
-                        <p>Interactive 3D computer exploration lab - Learn hardware, networking, and coding fundamentals
-                        </p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                            <span>Three.js</span>
-                        </div>
-                    </a>
-
-                    <a href="./Personal_Projects/Bagely_Bytes_Programming/index.html" class="project-card"
-                        style="--card-accent: #f59e0b">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>Bagely Bytes Programming</h3>
-                        <p>Learn programming languages like Python, JavaScript, Java, C++ and more with interactive
-                            examples</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </a>
-
-                    <a href="./Personal_Projects/Threat_Aware/index.html" class="project-card"
-                        style="--card-accent: #f59e0b">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>ThreatAware</h3>
-                        <p>Interactive cybersecurity education platform - Learn to identify threats and protect yourself
-                            online</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </a>
-
-                    <a href="./Personal_Projects/Algorithm_Arena/index.html" class="project-card"
-                        style="--card-accent: #f59e0b">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>Algorithm Arena</h3>
-                        <p>Visualize sorting & searching algorithms - Interactive animations with performance analytics
-                        </p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                            <span>Chart.js</span>
-                        </div>
-                    </a>
-
-                    <a href="./Personal_Projects/AnimateLab/index.html" class="project-card"
-                        style="--card-accent: #f59e0b">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>AnimateLab</h3>
-                        <p>Interactive playground for different animation techniques - Tweak controls, watch code update
-                            live</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                            <span>Canvas</span>
-                            <span>SVG</span>
-                        </div>
-                    </a>
-
-                    <a href="./Personal_Projects/Endpoint_Explorer/index.html" class="project-card"
-                        style="--card-accent: #f59e0b">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                        </div>
-                        <h3>Endpoint Explorer</h3>
-                        <p>Lightweight API playground - Test endpoints, inspect responses, and debug APIs in the browser
-                        </p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                            <span>Fetch API</span>
-                        </div>
-                    </a>
-
-                    <a href="./Personal_Projects/PipelineTrack/index.html" class="project-card"
-                        style="--card-accent: #f59e0b">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                        </div>
-                        <h3>PipelineTrack</h3>
-                        <p>Tech job search companion - Track applications, analyze resume fit, and close skill gaps.
-                        </p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                            <span>localStorage</span>
-                        </div>
-                    </a>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Professional Projects -->
-        <section class="project-section" id="professional">
-            <div class="section-container">
-                <h2 class="section-heading" style="--accent: #60a5fa">Professional Projects <span class="section-count"
-                        style="--count-color: #60a5fa">5</span></h2>
-                <p class="section-desc">Websites and projects from internships, bootcamps, and professional experience
-                </p>
-                <div class="card-grid">
-
-                    <a href="./Professional_Projects/DarkModes/" class="project-card" style="--card-accent: #60a5fa">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>Dark Mode Showcase</h3>
-                        <p>Showcase of how I made a dark mode with different toggle methods and customizable colors</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </a>
-
-                    <a href="./Professional_Projects/One_Heck_Of_A_Sandwich_Web_Edition/index.html" class="project-card"
-                        style="--card-accent: #60a5fa">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>One Heck Of A Sandwich</h3>
-                        <p>Interactive kiosk ordering system - Year Up United bootcamp capstone project</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </a>
-
-                    <a href="./Professional_Projects/Neighborhood-Library/index.html" class="project-card"
-                        style="--card-accent: #60a5fa">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>The Midnight Archive</h3>
-                        <p>Dark academia library with animated particles, flickering candles & 3D book spines</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </a>
-
-                    <a href="./Professional_Projects/Data_Pipeline/index.html" class="project-card"
-                        style="--card-accent: #60a5fa">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                        </div>
-                        <h3>Data Pipeline Engine</h3>
-                        <p>Automated data processing pipeline - Parse, clean, transform & export to Excel</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </a>
-
-                    <a href="https://github.com/Year-Up-United-SPR-2025" target="_blank" class="project-card"
-                        style="--card-accent: #60a5fa">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                        </div>
-                        <h3>Year Up United Bootcamp</h3>
-                        <p>Collection of projects and coursework from Year Up United bootcamp program</p>
-                        <div class="card-tech">
-                            <span>Full Stack</span>
-                            <span>Java</span>
-                            <span>Spring Boot</span>
-                        </div>
-                    </a>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Academic Projects -->
-        <section class="project-section" id="academic">
-            <div class="section-container">
-                <h2 class="section-heading" style="--accent: #d4a574">Academic Projects <span class="section-count"
-                        style="--count-color: #d4a574">6</span></h2>
-                <p class="section-desc">Coursework and class assignments</p>
-                <div class="card-grid">
-
-                    <a href="./Academic_Projects/RunLikeAG.U.R.L/index.html" class="project-card"
-                        style="--card-accent: #d4a574">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>Run Like A G.U.R.L</h3>
-                        <p>Interactive documentary archive exploring women, organizing, and representation in the 2018 midterms</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </a>
-
-                    <a href="./Academic_Projects/Social_Com's_Final/index.html" class="project-card"
-                        style="--card-accent: #d4a574">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>Social Com's Final</h3>
-                        <p>Privacy-focused social media platform mockup</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </a>
-
-                    <a href="./Academic_Projects/Orbit_Control/index.html" class="project-card"
-                        style="--card-accent: #d4a574">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                        </div>
-                        <h3>Orbit Control</h3>
-                        <p>3D orbit control with Arduino integration (Desktop only)</p>
-                        <div class="card-tech">
-                            <span>p5.js</span>
-                            <span>Arduino</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </a>
-
-                    <a href="./Academic_Projects/Dimensional_Playground/index.html" class="project-card"
-                        style="--card-accent: #d4a574">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>Dimensional Playground</h3>
-                        <p>Immersive WebVR experience with interactive 3D animations, physics simulations, and dynamic
-                            audio</p>
-                        <div class="card-tech">
-                            <span>A-Frame</span>
-                            <span>WebVR</span>
-                            <span>Three.js</span>
-                            <span>Web Audio</span>
-                        </div>
-                    </a>
-
-                    <a href="./Academic_Projects/One_Day_Triathlon_Website/index.html" class="project-card"
-                        style="--card-accent: #d4a574">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>The One Day Triathlon</h3>
-                        <p>Interactive 24-hour game jam experience with a challenge generator and persistent race clock</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                            <span>Responsive Design</span>
-                        </div>
-                    </a>
-
-                    <a href="https://prospectpark23.wixsite.com/prospect-park" target="_blank" class="project-card"
-                        style="--card-accent: #d4a574">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>Prospect Park Project</h3>
-                        <p>MES152 BMCC landmark project exploring community connections and promoting Prospect Park
-                            through media</p>
-                        <div class="card-tech">
-                            <span>Wix</span>
-                            <span>Web Design</span>
-                        </div>
-                    </a>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Game Vault -->
-        <section class="project-section" id="games">
-            <div class="section-container">
-                <h2 class="section-heading" style="--accent: #22c55e">Game Vault <span class="section-count"
-                        style="--count-color: #22c55e">1</span></h2>
-                <p class="section-desc">Games, mockups, and interactive ideas - Remade and reimagined for the web</p>
-                <div class="card-grid">
-
-                    <a href="Game_Vault/index.html" class="project-card" style="--card-accent: #22c55e">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                        </div>
-                        <h3>Game Vault</h3>
-                        <p>Games, mockups, and interactive ideas - Featuring survival horror, platformers, and more
-                            coming soon</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                            <span>Canvas</span>
-                        </div>
-                    </a>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Art Portfolio -->
-        <section class="project-section" id="art">
-            <div class="section-container">
-                <h2 class="section-heading" style="--accent: #e8a87c">Art & Design <span class="section-count"
-                        style="--count-color: #e8a87c">4</span></h2>
-                <p class="section-desc">Digital art, design projects, and creative work — past and future</p>
-                <div class="card-grid">
-
-                    <a href="./Art/index.html" class="project-card" style="--card-accent: #e8a87c">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>Art & Design Portfolio</h3>
-                        <p>A gallery showcasing work from MMA 100 and MMA 235 — montages, posters, style tiles, and a
-                            Brand Standards Guide</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                            <span>Graphic Design</span>
-                        </div>
-                    </a>
-
-                    <a href="./Art/art-history.html" class="project-card" style="--card-accent: #e8a87c">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>Art History Montage</h3>
-                        <p>Interactive museum-style showcase of my Norman Rockwell tribute — with gallery framing and
-                            animated reveals</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </a>
-
-                    <a href="./Art/human-rights.html" class="project-card" style="--card-accent: #e8a87c">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>Human Rights Poster</h3>
-                        <p>Bold interactive page on gun violence with animated statistics, CSS typography, and Article 3
-                            of the UDHR</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                        </div>
-                    </a>
-
-                    <a href="./Art/brand-guide.html" class="project-card" style="--card-accent: #e8a87c">
-                        <div class="card-platforms">
-                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
-                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
-                        </div>
-                        <h3>Watt's Gaming Brand Guide</h3>
-                        <p>Interactive 16-page Brand Standards Guide with style tiles, formstorming, and a document
-                            viewer</p>
-                        <div class="card-tech">
-                            <span>HTML</span>
-                            <span>CSS</span>
-                            <span>JavaScript</span>
-                            <span>InDesign</span>
-                        </div>
-                    </a>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- GitHub Activity -->
-        <section class="project-section" id="activity">
-            <div class="section-container">
-                <h2 class="section-heading" style="--accent: var(--color-primary)">Latest Commits</h2>
-                <p class="section-desc">Recent activity from the Development Showcase repository</p>
-
-                <div class="commits-header">
-                    <div class="repo-info">
-                        <i class="fab fa-github"></i>
-                        <div>
-                            <h3>Development Showcase</h3>
-                            <a href="https://github.com/Jordan721/Development-Showcase" target="_blank"
-                                class="repo-link">
-                                Jordan721/Development-Showcase <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        </div>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
                     </div>
-                    <button class="refresh-btn" id="refreshCommits" title="Refresh commits">
-                        <i class="fas fa-sync-alt"></i>
-                    </button>
-                </div>
-
-                <div class="commits-list" id="commitsList">
-                    <div class="loading-spinner">
-                        <i class="fas fa-spinner fa-spin"></i>
-                        <p>Loading commits...</p>
+                    <h3>ThreatAware</h3>
+                    <p>Interactive cybersecurity education platform - Learn to identify threats and protect yourself
+                        online</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
                     </div>
-                </div>
-            </div>
+                </a>
+                <a href="./Personal_Projects/Algorithm_Arena/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">06</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Algorithm Arena</h3>
+                    <p>Visualize sorting & searching algorithms - Interactive animations with performance analytics
+                    </p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                        <span>Chart.js</span>
+                    </div>
+                </a>
+                <a href="./Personal_Projects/AnimateLab/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">07</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>AnimateLab</h3>
+                    <p>Interactive playground for different animation techniques - Tweak controls, watch code update
+                        live</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                        <span>Canvas</span>
+                        <span>SVG</span>
+                    </div>
+                </a>
+                <a href="./Personal_Projects/Endpoint_Explorer/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">08</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Endpoint Explorer</h3>
+                    <p>Lightweight API playground - Test endpoints, inspect responses, and debug APIs in the browser
+                    </p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                        <span>Fetch API</span>
+                    </div>
+                </a>
+                <a href="./Personal_Projects/PipelineTrack/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">09</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>PipelineTrack</h3>
+                    <p>Tech job search companion - Track applications, analyze resume fit, and close skill gaps.
+                    </p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                        <span>localStorage</span>
+                    </div>
+                </a></div>
         </section>
-
+        <section class="chapter professional" id="professional" aria-labelledby="professional-title">
+            <div class="chapter-intro"><span class="eyebrow">BUILD / 02 — The workbench.</span>
+                <h2 id="professional-title">Built with<br>purpose.</h2>
+                <p>Practical projects from internships, bootcamps, and professional work.</p>
+                <div class="chapter-symbol" aria-hidden="true">⌘</div><span class="chapter-count">5 projects to
+                    explore</span>
+            </div>
+            <div class="card-grid"><a href="./Professional_Projects/DarkModes/" class="project-card">
+                    <div class="card-top"><span class="card-number">01</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Dark Mode Showcase</h3>
+                    <p>Showcase of how I made a dark mode with different toggle methods and customizable colors</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                    </div>
+                </a>
+                <a href="./Professional_Projects/One_Heck_Of_A_Sandwich_Web_Edition/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">02</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>One Heck Of A Sandwich</h3>
+                    <p>Interactive kiosk ordering system - Year Up United bootcamp capstone project</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                    </div>
+                </a>
+                <a href="./Professional_Projects/Neighborhood-Library/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">03</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>The Midnight Archive</h3>
+                    <p>Dark academia library with animated particles, flickering candles & 3D book spines</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                    </div>
+                </a>
+                <a href="./Professional_Projects/Data_Pipeline/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">04</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Data Pipeline Engine</h3>
+                    <p>Automated data processing pipeline - Parse, clean, transform & export to Excel</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                    </div>
+                </a>
+                <a href="https://github.com/Year-Up-United-SPR-2025" target="_blank" rel="noopener noreferrer"
+                    class="project-card">
+                    <div class="card-top"><span class="card-number">05</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Year Up United Bootcamp</h3>
+                    <p>Collection of projects and coursework from Year Up United bootcamp program</p>
+                    <div class="card-tech">
+                        <span>Full Stack</span>
+                        <span>Java</span>
+                        <span>Spring Boot</span>
+                    </div>
+                </a></div>
+        </section>
+        <section class="chapter academic" id="academic" aria-labelledby="academic-title">
+            <div class="chapter-intro"><span class="eyebrow">LEVEL UP / 03 — The launchpad.</span>
+                <h2 id="academic-title">New skills.<br>New dimensions.</h2>
+                <p>Coursework, explorations, and discoveries from the classroom.</p>
+                <div class="chapter-symbol" aria-hidden="true">↗</div><span class="chapter-count">6 projects to
+                    explore</span>
+            </div>
+            <div class="card-grid"><a href="./Academic_Projects/RunLikeAG.U.R.L/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">01</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Run Like A G.U.R.L</h3>
+                    <p>Interactive documentary archive exploring women, organizing, and representation in the 2018
+                        midterms</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                    </div>
+                </a>
+                <a href="./Academic_Projects/Social_Com's_Final/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">02</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Social Com's Final</h3>
+                    <p>Privacy-focused social media platform mockup</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                    </div>
+                </a>
+                <a href="./Academic_Projects/Orbit_Control/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">03</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Orbit Control</h3>
+                    <p>3D orbit control with Arduino integration (Desktop only)</p>
+                    <div class="card-tech">
+                        <span>p5.js</span>
+                        <span>Arduino</span>
+                        <span>JavaScript</span>
+                    </div>
+                </a>
+                <a href="./Academic_Projects/Dimensional_Playground/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">04</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Dimensional Playground</h3>
+                    <p>Immersive WebVR experience with interactive 3D animations, physics simulations, and dynamic
+                        audio</p>
+                    <div class="card-tech">
+                        <span>A-Frame</span>
+                        <span>WebVR</span>
+                        <span>Three.js</span>
+                        <span>Web Audio</span>
+                    </div>
+                </a>
+                <a href="./Academic_Projects/One_Day_Triathlon_Website/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">05</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>The One Day Triathlon</h3>
+                    <p>Interactive 24-hour game jam experience with a challenge generator and persistent race clock</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                        <span>Responsive Design</span>
+                    </div>
+                </a>
+                <a href="https://prospectpark23.wixsite.com/prospect-park" target="_blank" rel="noopener noreferrer"
+                    class="project-card">
+                    <div class="card-top"><span class="card-number">06</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Prospect Park Project</h3>
+                    <p>MES152 BMCC landmark project exploring community connections and promoting Prospect Park
+                        through media</p>
+                    <div class="card-tech">
+                        <span>Wix</span>
+                        <span>Web Design</span>
+                    </div>
+                </a></div>
+        </section>
+        <section class="chapter games" id="games" aria-labelledby="games-title">
+            <div class="chapter-intro"><span class="eyebrow">PLAY / 04 — The arcade.</span>
+                <h2 id="games-title">A little less work.<br>A lot more play.</h2>
+                <p>Step inside the Game Vault for games, mockups, and interactive worlds.</p>
+                <div class="chapter-symbol" aria-hidden="true">✦</div><span class="chapter-count">1 collection to
+                    explore</span>
+            </div>
+            <div class="card-grid"><a href="Game_Vault/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">01</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Game Vault</h3>
+                    <p>Games, mockups, and interactive ideas - Featuring survival horror, platformers, and more
+                        coming soon</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                        <span>Canvas</span>
+                    </div>
+                </a></div>
+        </section>
+        <section class="chapter art" id="art" aria-labelledby="art-title">
+            <div class="chapter-intro"><span class="eyebrow">CREATE / 05 — The creative studio.</span>
+                <h2 id="art-title">Outside<br>the lines.</h2>
+                <p>Digital art, visual stories, and experiments in design.</p>
+                <div class="chapter-symbol" aria-hidden="true">◒</div><span class="chapter-count">4 projects to
+                    explore</span>
+            </div>
+            <div class="card-grid"><a href="./Art/index.html" class="project-card">
+                    <div class="card-top"><span class="card-number">01</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Art & Design Portfolio</h3>
+                    <p>A gallery showcasing work from MMA 100 and MMA 235 — montages, posters, style tiles, and a
+                        Brand Standards Guide</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                        <span>Graphic Design</span>
+                    </div>
+                </a>
+                <a href="./Art/art-history.html" class="project-card">
+                    <div class="card-top"><span class="card-number">02</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Art History Montage</h3>
+                    <p>Interactive museum-style showcase of my Norman Rockwell tribute — with gallery framing and
+                        animated reveals</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                    </div>
+                </a>
+                <a href="./Art/human-rights.html" class="project-card">
+                    <div class="card-top"><span class="card-number">03</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Human Rights Poster</h3>
+                    <p>Bold interactive page on gun violence with animated statistics, CSS typography, and Article 3
+                        of the UDHR</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                    </div>
+                </a>
+                <a href="./Art/brand-guide.html" class="project-card">
+                    <div class="card-top"><span class="card-number">04</span>
+                        <div class="card-platforms">
+                            <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
+                            <span class="platform mobile"><i class="fas fa-mobile-alt"></i> Mobile</span>
+                        </div><span class="card-arrow" aria-hidden="true">↗</span>
+                    </div>
+                    <h3>Watt's Gaming Brand Guide</h3>
+                    <p>Interactive 16-page Brand Standards Guide with style tiles, formstorming, and a document
+                        viewer</p>
+                    <div class="card-tech">
+                        <span>HTML</span>
+                        <span>CSS</span>
+                        <span>JavaScript</span>
+                        <span>InDesign</span>
+                    </div>
+                </a></div>
+        </section>
+        <section class="activity" id="activity">
+            <div><span class="eyebrow">ALWAYS A WORK IN PROGRESS</span>
+                <h2>Follow the next idea.</h2>
+                <p>Browse the source, explore the latest commits, or get to know the person behind the projects.</p>
+            </div>
+            <div class="activity-links"><a href="https://github.com/Jordan721/Development-Showcase/commits"
+                    target="_blank" rel="noopener noreferrer">Latest repository activity <span>↗</span></a><a
+                    href="https://jordan721.github.io/Jordan_Alexis/" target="_blank" rel="noopener noreferrer">Meet the
+                    developer <span>↗</span></a></div>
+        </section>
     </main>
-
-    <!-- Footer -->
-    <footer class="site-footer">
-        <p class="footer-credit">Built by Jordan Alexis</p>
-        <p class="footer-tech">HTML, CSS & JavaScript</p>
-        <div class="footer-socials">
-            <a href="https://www.linkedin.com/in/jordan-alexis/" target="_blank" aria-label="LinkedIn">
-                <i class="fab fa-linkedin"></i>
-            </a>
-            <a href="https://linktr.ee/Jordan_Alexis_" target="_blank" aria-label="Linktree">
-                <i class="fas fa-tree"></i>
-            </a>
-            <a href="https://github.com/Jordan721" target="_blank" aria-label="GitHub">
-                <i class="fab fa-github"></i>
-            </a>
-        </div>
-        <button id="backToTop" class="back-to-top" aria-label="Back to top">
-            <i class="fas fa-arrow-up"></i>
-        </button>
+    <footer><a class="wordmark" href="#home"><span class="brand-mark">ja.</span> Made with curiosity.</a>
+        <div><a href="https://www.linkedin.com/in/jordan-alexis/" target="_blank" rel="noopener noreferrer">LinkedIn
+                ↗</a><a href="https://linktr.ee/Jordan_Alexis_" target="_blank" rel="noopener noreferrer">Linktree
+                ↗</a><a href="#home">Back to top ↑</a></div><button class="motion-button" id="motionToggle"
+            aria-pressed="false">Pause motion</button>
+        <p>Jordan Alexis / Development Showcase</p>
     </footer>
-
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+    <script src="showcase.js" defer></script>
 </body>
 
 </html>

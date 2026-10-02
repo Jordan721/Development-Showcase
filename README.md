@@ -16,31 +16,32 @@
 
 This is my **Development Showcase** — a dedicated landing page that links to every website and interactive project I've created over the years. Each project is organized into its own section with tech stack badges and platform indicators (Desktop/Mobile) so you can see at a glance what was used and where it runs.
 
-The site uses a **Minimal Catalog** design — clean typography, generous whitespace, and subtle interactions. No heavy frameworks, just HTML, CSS, and JavaScript.
+The homepage is a **creative playground** with floating category portals, neon colors, animated orbit rings, a scrolling banner, and a different visual identity for each project section. Explore **25 projects and collections** across five worlds, built with HTML, CSS, and JavaScript.
 
 ---
 
 ## Features
 
-- **Sticky Navigation** — Frosted glass nav bar that highlights the current section as you scroll, with a hamburger menu on mobile
-- **Theme Color Picker** — 8 preset colors + a custom hue slider. The entire site adapts — constellation particles, gradients, nav highlights, and more. Saved to localStorage
-- **Animation Toggle** — Pause/play the constellation particle background. Preference persists across sessions
-- **Multi-Select Tech Filter** — Filter projects by technology using chip buttons. Select multiple techs to narrow results with AND logic — only projects matching all selected techs are shown
-- **Smooth Filter Transitions** — Cards animate in and out with fade + scale transitions when filtering, instead of appearing/disappearing instantly
-- **No Results State** — Friendly message with guidance when no projects match the selected filter combination
-- **Platform Badges** — Every project card shows Desktop and/or Mobile compatibility
-- **Tech Stack Badges** — Each card lists the technologies used
-- **Live GitHub Activity** — Fetches recent commits from this repository via the GitHub API
-- **Back to Top** — Floating button on mobile for quick navigation
-- **Portfolio Link** — Direct link to the live site from the hero section
-- **Fully Responsive** — Cards stack on mobile, nav collapses to hamburger, toggle buttons move to bottom-left
+- **Floating Portals** — Animated shapes in the hero jump to personal projects, professional work, coursework, games, and art.
+- **Five Creative Worlds** — An experiment lab with tilted cards, a control room with window-style panels, a launchpad with curved cards, an arcade, and an abstract art space.
+- **Project Search** — Search project names, descriptions, platform labels, and technologies without reloading the page.
+- **Technology Filters** — Choose one technology at a time. Search and the selected technology work together to narrow the collection.
+- **Live Result Counts** — Project counts update with filtering, and sections without matches are hidden.
+- **No Results State** — Reset search and filters with “Show everything.”
+- **Surprise Me** — Highlights and focuses a random project from the current results. If there are no results, it resets the filters before choosing a project.
+- **Motion Controls** — Pause or resume the floating portals, orbit rings, and scrolling banner. The homepage respects the browser's reduced-motion preference; the manual toggle applies to the current page session.
+- **Platform and Tech Badges** — Project cards show Desktop/Mobile compatibility and their technologies.
+- **Accessible Navigation** — Skip-to-projects link, visible keyboard focus, labeled controls, and announced result counts.
+- **Responsive Layouts** — Project grids and section layouts adapt to smaller screens.
+- **Repository and Social Links** — Direct links to GitHub commit history, the portfolio, LinkedIn, and Linktree.
 
 ---
 
 ## Project Sections
 
 ### Personal Projects
-Independent projects and personal work:
+
+**Experiment lab · 9 projects** — Independent projects and personal work:
 
 | Project | Tech | Platform |
 |---------|------|----------|
@@ -55,7 +56,8 @@ Independent projects and personal work:
 | PipelineTrack | HTML, CSS, JS, localStorage | Desktop |
 
 ### Professional Projects
-Internships, bootcamps, and professional experience:
+
+**Workbench · 5 projects** — Internships, bootcamps, and professional experience:
 
 | Project | Tech | Platform |
 |---------|------|----------|
@@ -66,7 +68,8 @@ Internships, bootcamps, and professional experience:
 | Year Up United Bootcamp | Full Stack, Java, Spring Boot | Desktop |
 
 ### Academic Projects
-Coursework and class assignments:
+
+**Launchpad · 6 projects** — Coursework and class assignments:
 
 | Project | Tech | Platform |
 |---------|------|----------|
@@ -74,17 +77,20 @@ Coursework and class assignments:
 | Social Com's Final | HTML, CSS, JS | Desktop, Mobile |
 | Orbit Control | p5.js, Arduino, JS | Desktop |
 | Dimensional Playground | A-Frame, WebVR, Three.js, Web Audio | Desktop, Mobile |
+| The One Day Triathlon | HTML, CSS, JS, Responsive Design | Desktop, Mobile |
 | Prospect Park Project | Wix, Web Design | Desktop, Mobile |
 
 ### Game Vault
-Games, mockups, and interactive ideas remade for the web:
+
+**Arcade · 1 collection** — Games, mockups, and interactive ideas remade for the web:
 
 | Project | Tech | Platform |
 |---------|------|----------|
 | Game Vault (hub) | HTML, CSS, JS, Canvas | Desktop |
 
 ### Art & Design
-Digital art, design projects, and creative work — past and future:
+
+**Creative studio · 4 projects** — Digital art, design projects, and creative work:
 
 | Project | Tech | Platform |
 |---------|------|----------|
@@ -99,11 +105,9 @@ Digital art, design projects, and creative work — past and future:
 
 ```
 HTML5        — Structure & semantics
-CSS3         — Styling, animations, CSS variables
-JavaScript   — Interactivity, GitHub API, particle animation
-Font Awesome — Icons
-Google Fonts — Inter & Fira Code
-GitHub API   — Live commit feed
+CSS3         — Responsive layouts, shapes, animations, CSS variables
+JavaScript   — Search, technology filters, random discovery, motion controls
+Google Fonts — DM Sans & Space Grotesk
 ```
 
 No frameworks or build tools — vanilla web technologies only.
@@ -128,22 +132,23 @@ python -m http.server 8000
 
 ```
 Development-Showcase/
-├── index.html                 # Main landing page
-├── styles.css                 # All styles
-├── script.js                  # Constellation animation, nav, theme, commits
+├── index.html                 # Creative playground homepage
+├── showcase.css               # Active homepage styles and animations
+├── showcase.js                # Search, filters, discovery, motion controls
+├── styles.css                 # Previous homepage stylesheet (not loaded by index.html)
+├── script.js                  # Previous homepage script (not loaded by index.html)
 ├── favicon.svg                # Site icon (JA initials)
 ├── Academic_Projects/
 │   ├── RunLikeAG.U.R.L/
 │   ├── Social_Com's_Final/
 │   ├── Orbit_Control/
 │   ├── Dimensional_Playground/
-│   └── Prospect_Park_Project/
+│   └── One_Day_Triathlon_Website/
 ├── Professional_Projects/
 │   ├── DarkModes/
 │   ├── One_Heck_Of_A_Sandwich_Web_Edition/
 │   ├── Neighborhood-Library/
-│   ├── Data_Pipeline/
-│   └── Year_Up_United_Bootcamp/
+│   └── Data_Pipeline/
 ├── Personal_Projects/
 │   ├── Cash-Compass/
 │   ├── Console_Chronicles/
@@ -158,6 +163,7 @@ Development-Showcase/
 │   ├── index.html
 │   ├── Beat_Burst/
 │   ├── Idea_Space/
+│   ├── RuinMaker/
 │   ├── The_Unfair_Game_Web_Ed/
 │   ├── THW/
 │   └── TypeboundDungeon/
@@ -172,6 +178,8 @@ Development-Showcase/
 │   └── Pics/
 └── README.md
 ```
+
+The Prospect Park project and Year Up United Bootcamp collection link to external sites; they are not local project folders.
 
 ---
 
