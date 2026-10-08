@@ -16,6 +16,10 @@ function animateCountUp(el, target, suffix, duration) {
   suffix = suffix || '';
   duration = duration || 700;
   if (target === null || isNaN(target)) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = Math.round(target) + suffix;
+    return;
+  }
 
   const start = performance.now();
 
