@@ -815,13 +815,18 @@
                 <button class="cal-event-filter active" data-event-type="all">All Events</button>
                 <button class="cal-event-filter" data-event-type="jobs">Jobs Added</button>
                 <button class="cal-event-filter" data-event-type="deadlines">Deadlines</button>
+                <button class="cal-event-filter" data-event-type="interviews">Interviews</button>
                 <button class="cal-event-filter" data-event-type="followups">Follow-ups</button>
                 <button class="cal-event-filter" data-event-type="events">Job Fairs &amp; Events</button>
             </div>
-            <div id="cal-view-body"></div>
-            <div class="cal-upcoming-strip">
-                <div class="cal-upcoming-title">Upcoming in 7 Days</div>
-                <div id="cal-upcoming-list"></div>
+            <div class="cal-workspace">
+                <div class="cal-calendar-panel">
+                    <div id="cal-view-body"></div>
+                </div>
+                <div class="cal-upcoming-strip">
+                    <div class="cal-upcoming-title">Your Upcoming Agenda</div>
+                    <div id="cal-upcoming-list"></div>
+                </div>
             </div>
             <div class="cal-activity-section">
                 <div class="cal-activity-header">Job Activity</div>
@@ -900,9 +905,10 @@
                 </div>
             </div>
             <div class="an-kpi-strip" id="an-kpi-strip"></div>
+            <div class="an-summary" id="an-summary" aria-live="polite"></div>
             <div class="an-row-two">
                 <div class="dash-card" data-card="funnel">
-                    <div class="dash-card-header">Application Funnel</div>
+                    <div class="dash-card-header">Current Pipeline</div>
                     <div class="dash-card-body" id="an-funnel"></div>
                 </div>
                 <div class="dash-card" data-card="response-rate">

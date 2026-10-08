@@ -27,6 +27,17 @@ function calendarDate(value) {
 function buildCalendarEvents() {
   const events = [];
   state.jobs.forEach(j => {
+    ['screening', 'interview'].forEach(stage => {
+      const milestone = j[stage + 'Milestone'];
+      const date = milestone && calendarDate(milestone.date);
+      if (date) events.push({
+        date,
+        type: 'interview',
+        label: `${stage === 'screening' ? 'Screening' : 'Interview'}: ${j.role} @ ${j.company}`,
+        id: j.id,
+        time: milestone.time || ''
+      });
+    });
     const jobDate = calendarDate(j.dateApplied || j.dateAdded);
     if (jobDate) {
       events.push({
@@ -230,39 +241,50 @@ function buildCalYearGrid(year, events) {
 
 function renderCalendarUpcoming(allEvents) {
   const now = new Date();
+  now.setHours(0, 0, 0, 0);
   const cutoff = new Date(now);
   cutoff.setDate(now.getDate() + 7);
   cutoff.setHours(23, 59, 59, 999);
   const upcoming = allEvents
-    .filter(ev => ev.date >= now && ev.date <= cutoff)
-    .sort((a, b) => a.date - b.date);
+    .filter(ev => ev.type !== 'job' && calendarEventMatchesFilter(ev) && ev.date >= now && ev.date <= cutoff)
+    .sort((a, b) => a.date - b.date || (a.time || a.eventData ?.time || '').localeCompare(b.time || b.eventData ?.time || ''));
   const list = document.getElementById('cal-upcoming-list');
   if (!list) return;
   if (upcoming.length === 0) {
     list.innerHTML = '<p class="empty-msg">No events in the next 7 days.</p>';
     return;
   }
-  list.innerHTML = upcoming.map(ev => {
-    const dotCls = ev.type === 'job' ? 'cal-legend-job' : ev.type === 'deadline' ? 'cal-legend-deadline' : ev.type === 'event' ? 'cal-legend-event' : 'cal-legend-contact';
-    const tag = ev.type === 'deadline' ? 'Deadline' : ev.type === 'contact' ? 'Follow-up' : ev.type === 'event' ? 'Event' : 'Job Added';
+  list.innerHTML = upcoming.map((ev, index) => {
+    const dotCls = ev.type === 'interview' ? 'cal-legend-interview' : ev.type === 'job' ? 'cal-legend-job' : ev.type === 'deadline' ? 'cal-legend-deadline' : ev.type === 'event' ? 'cal-legend-event' : 'cal-legend-contact';
+    const tag = ev.type === 'interview' ? 'Interview / screening' : ev.type === 'deadline' ? 'Deadline' : ev.type === 'contact' ? 'Follow-up' : ev.type === 'event' ? 'Event' : 'Job Added';
     const evData = ev.eventData;
     const linkBtn = evData && evData.link ?
       `<a class="cal-event-join-btn" href="${escHtml(evData.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Join</a>` :
       '';
     const formatBadge = evData ? `<span class="cal-event-format-badge cal-event-format-${evData.format}">${evData.format}</span>` : '';
-    return `<div class="cal-upcoming-item" data-ev-id="${ev.id}" data-ev-type="${ev.type}">
+    return `${index === 0 ? '<div class="cal-next-heading">NEXT UP</div>' : ''}<div class="cal-upcoming-item${index === 0 ? ' cal-upcoming-next' : ''}" tabindex="0" role="button" data-ev-id="${ev.id}" data-ev-type="${ev.type}">
       <span class="cal-upcoming-dot ${dotCls}"></span>
       <span class="cal-upcoming-date">${ev.date.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
       <span class="cal-upcoming-label">${escHtml(ev.label)}</span>
+      ${ev.time || evData?.time ? `<span class="cal-upcoming-time">${escHtml(ev.time || evData.time)}</span>` : ''}
       ${formatBadge}
       <span class="cal-upcoming-tag">${tag}</span>
       ${linkBtn}
     </div>`;
   }).join('');
   list.querySelectorAll('.cal-upcoming-item').forEach(item => {
+    item.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        item.click();
+      }
+    });
     item.addEventListener('click', () => {
       const evType = item.dataset.evType;
-      if (evType === 'contact') return;
+      if (evType === 'contact') {
+        navigate('contacts');
+        return;
+      }
       if (evType === 'event') {
         const ev = (state.events || []).find(e => e.id === item.dataset.evId);
         if (ev) openEventModal(ev);
@@ -359,8 +381,8 @@ function openDayModal(dateKey, events) {
   document.getElementById('day-modal-title').textContent = label;
   const body = document.getElementById('day-modal-jobs');
   body.innerHTML = events.map(ev => {
-    const dotCls = ev.type === 'job' ? 'cal-legend-job' : ev.type === 'deadline' ? 'cal-legend-deadline' : ev.type === 'event' ? 'cal-legend-event' : 'cal-legend-contact';
-    const tag = ev.type === 'deadline' ? 'Deadline' : ev.type === 'contact' ? 'Follow-up' : ev.type === 'event' ? 'Event' : 'Job Added';
+    const dotCls = ev.type === 'interview' ? 'cal-legend-interview' : ev.type === 'job' ? 'cal-legend-job' : ev.type === 'deadline' ? 'cal-legend-deadline' : ev.type === 'event' ? 'cal-legend-event' : 'cal-legend-contact';
+    const tag = ev.type === 'interview' ? 'Interview / screening' : ev.type === 'deadline' ? 'Deadline' : ev.type === 'contact' ? 'Follow-up' : ev.type === 'event' ? 'Event' : 'Job Added';
     const evData = ev.eventData;
     const extraInfo = evData ? [
       evData.format ? `<span class="cal-event-format-badge cal-event-format-${evData.format}">${evData.format}</span>` : '',
@@ -399,6 +421,17 @@ function openDayModal(dateKey, events) {
   openModal('modal-day');
 }
 
+function calendarEventMatchesFilter(ev) {
+  const types = {
+    jobs: 'job',
+    deadlines: 'deadline',
+    followups: 'contact',
+    interviews: 'interview',
+    events: 'event'
+  };
+  return !types[calEventFilter] || ev.type === types[calEventFilter];
+}
+
 function renderCalendarView() {
   const periodLabel = document.getElementById('cal-period-label');
   if (!periodLabel) return;
@@ -411,11 +444,7 @@ function renderCalendarView() {
   periodLabel.textContent = label;
   const visibleEvents = allEvents.filter(ev => {
     if (ev.date < periodStart || ev.date > periodEnd) return false;
-    if (calEventFilter === 'jobs') return ev.type === 'job';
-    if (calEventFilter === 'deadlines') return ev.type === 'deadline';
-    if (calEventFilter === 'followups') return ev.type === 'contact';
-    if (calEventFilter === 'events') return ev.type === 'event';
-    return true;
+    return calendarEventMatchesFilter(ev);
   });
   const body = document.getElementById('cal-view-body');
   if (!body) return;
@@ -454,7 +483,7 @@ function renderActivity() {
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
   const startOfYear = new Date(now.getFullYear(), 0, 1);
 
-  const count = (from) => jobs.filter(j => new Date(j.dateAdded) >= from).length;
+  const count = (from) => jobs.filter(j => calendarDate(j.dateAdded) >= from).length;
 
   const periods = [{
       label: 'Today',
@@ -484,6 +513,30 @@ function renderActivity() {
       <div class="act-count-label">${p.label}</div>
     </div>`).join('')
   }</div>`;
+  const records = [];
+  jobs.forEach(job => {
+    const add = (value, label) => {
+      const date = calendarDate(value);
+      if (date && date <= startOfDay) records.push({
+        job,
+        date,
+        label
+      });
+    };
+    add(job.dateAdded, 'Opportunity added');
+    add(job.dateApplied, 'Application recorded');
+    add(job.declinedAt, 'Not selected');
+    add(job.ghostedAt, 'Marked as ghosted');
+  });
+  records.sort((a, b) => b.date - a.date);
+  const grouped = new Map();
+  records.slice(0, 30).forEach(record => {
+    const key = dateKey(record.date);
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key).push(record);
+  });
+  el.innerHTML += `<div class="cal-activity-feed">${[...grouped].map(([key, items]) => `<section><h3>${sameDay(items[0].date, startOfDay) ? 'Today' : items[0].date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</h3>${items.map(record => `<button class="cal-activity-record" data-activity-job="${escHtml(record.job.id)}"><span class="cal-activity-dot"></span><span><span class="cal-activity-action">${record.label}</span><strong>${escHtml(record.job.role)}</strong><span>${escHtml(record.job.company)}</span></span><span aria-hidden="true">↗</span></button>`).join('')}</section>`).join('') || '<p class="empty-msg">Add an opportunity to start your activity feed.</p>'}</div>`;
+  el.querySelectorAll('[data-activity-job]').forEach(button => button.addEventListener('click', () => openJobDetail(button.dataset.activityJob)));
 }
 
 /* ══════════════════════════════════════════════════════════

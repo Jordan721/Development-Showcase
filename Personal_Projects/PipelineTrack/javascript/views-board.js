@@ -8,6 +8,7 @@ const collapsedColumns = new Set(JSON.parse(localStorage.getItem('pt-collapsed-c
 /* ── BULK SELECTION ────────────────────────────────────── */
 let bulkSelectMode = false;
 const bulkSelected = new Set();
+let timelineEventFilter = 'all';
 
 function setBulkMode(on) {
   bulkSelectMode = on;
@@ -45,7 +46,7 @@ function initBulkActions() {
       const id = card.dataset.jobId;
       bulkSelected.add(id);
       card.classList.add('bulk-selected');
-      card.querySelector('.bulk-check')?.classList.add('checked');
+      card.querySelector('.bulk-check') ?.classList.add('checked');
     });
     updateBulkBar();
   });
@@ -223,6 +224,7 @@ function pmCardHTML(job) {
   const pinCls = job.pinned ? ' pinned-card' : '';
   return `
     <div class="job-card pm-card${urgency ? ' ' + urgency : ''}${pinCls}" data-job-id="${job.id}" data-stage="${job.stage}" draggable="false" style="--card-accent:${accent}">
+      <button class="card-pin-btn${job.pinned ? ' pinned' : ''}" data-pin-id="${job.id}" title="${job.pinned ? 'Unpin' : 'Pin'} job" aria-label="${job.pinned ? 'Unpin' : 'Pin'} job" aria-pressed="${!!job.pinned}" draggable="false">&#128204;</button>
       <button class="card-delete-btn" data-delete-id="${job.id}" title="Delete job" draggable="false">&times;</button>
       <div class="pm-card-stage"><span class="pm-stage-dot stripe-${job.stage}"></span>${STAGE_LABELS[job.stage]}</div>
       <div class="job-card-role pm-card-role">${escHtml(job.role)}</div>
@@ -275,7 +277,8 @@ function renderBoardMatrix(jobs) {
 
   const quadrants = [{
       id: 'tl',
-      title: 'Plan Ahead',
+      title: 'Plan your next move',
+      guidance: 'Strong matches with time to prepare a tailored application.',
       icon: '⭐',
       desc: `${matrixFitThreshold}%+ fit · Low urgency`,
       highFit: true,
@@ -283,15 +286,17 @@ function renderBoardMatrix(jobs) {
     },
     {
       id: 'tr',
-      title: 'Act Now',
+      title: 'Focus first',
+      guidance: 'Strong matches with a close deadline or an older application to review.',
       icon: '🔥',
-      desc: `${matrixFitThreshold}%+ fit · Due soon`,
+      desc: `${matrixFitThreshold}%+ fit · High urgency`,
       highFit: true,
       urgent: true
     },
     {
       id: 'bl',
-      title: 'Low Priority',
+      title: 'Keep on your radar',
+      guidance: 'Lower matches to revisit when you have more time.',
       icon: '📋',
       desc: `&lt;${matrixFitThreshold}% fit · Low urgency`,
       highFit: false,
@@ -299,9 +304,10 @@ function renderBoardMatrix(jobs) {
     },
     {
       id: 'br',
-      title: 'Quick Apply',
+      title: 'Make a decision',
+      guidance: 'Time-sensitive, lower matches. Decide whether they deserve your effort.',
       icon: '⚡',
-      desc: `&lt;${matrixFitThreshold}% fit · Due soon`,
+      desc: `&lt;${matrixFitThreshold}% fit · High urgency`,
       highFit: false,
       urgent: true
     },
@@ -313,11 +319,20 @@ function renderBoardMatrix(jobs) {
       const hf = j.fitScore >= matrixFitThreshold;
       const urg = getJobUrgency(j);
       return hf === q.highFit && urg === q.urgent;
-    });
+    }).sort((a, b) => (Number(!!b.pinned) - Number(!!a.pinned)) ||
+      ((getDeadlineDays(a) ?? Infinity) - (getDeadlineDays(b) ?? Infinity)) ||
+      (b.fitScore - a.fitScore));
   });
 
   return `
     <div class="pm-wrapper">
+      <div class="pm-workspace-intro">
+        <div><span class="workspace-eyebrow">OPPORTUNITY PRIORITIES</span>
+          <h2>Give your best opportunities your best attention.</h2>
+          <p>Grouped by skill fit and timing. Pinned jobs appear first in each group.</p>
+        </div>
+        <div class="pm-workspace-total"><strong>${jobs.length}</strong><span>opportunities</span></div>
+      </div>
       <div class="pm-controls" aria-label="Priority matrix settings">
         <label class="pm-control">
           <span>High fit</span>
@@ -330,6 +345,7 @@ function renderBoardMatrix(jobs) {
           <strong>${matrixUrgencyDays}d</strong>
         </label>
       </div>
+      <p class="pm-method-note">Urgency means a deadline within ${matrixUrgencyDays} days (including overdue), or a job added at least ${matrixUrgencyDays} days ago without a deadline.</p>
       <div class="pm-matrix-area">
         <div class="pm-y-label"><span>← HIGH FIT · LOW FIT →</span></div>
         <div class="pm-inner">
@@ -349,10 +365,11 @@ function renderBoardMatrix(jobs) {
                   </div>
                   <span class="pm-q-count">${qJobs[q.id].length}</span>
                 </div>
+                <p class="pm-q-guidance">${q.guidance}</p>
                 ${matrixSummaryHTML(qJobs[q.id])}
                 <div class="pm-cards">
                   ${qJobs[q.id].length === 0
-                    ? '<div class="pm-empty-q">No jobs here</div>'
+                    ? '<div class="pm-empty-q"><strong>All clear here</strong><span>Opportunities appear here as their fit and timing match this group.</span></div>'
                     : qJobs[q.id].map(j => pmCardHTML(j)).join('')}
                 </div>
               </div>`).join('')}
@@ -414,6 +431,17 @@ function renderBoard() {
     board.querySelectorAll('.table-row-clickable').forEach(row => {
       row.addEventListener('click', () => openJobDetail(row.dataset.jobId));
     });
+    board.querySelectorAll('.table-pin-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const job = state.jobs.find(j => j.id === btn.dataset.pinId);
+        if (job) {
+          job.pinned = !job.pinned;
+          save();
+          renderBoard();
+        }
+      });
+    });
     board.querySelectorAll('.table-stage-select').forEach(sel => {
       sel.addEventListener('change', e => {
         e.stopPropagation();
@@ -443,9 +471,11 @@ function renderBoard() {
       });
     });
     // Wire table sort header clicks
-    board.querySelectorAll('.table-th[data-sort]').forEach(th => {
+    board.querySelectorAll('[data-sort]').forEach(th => {
       th.addEventListener('click', () => {
-        boardSortTable = th.dataset.sort;
+        const key = th.dataset.sort;
+        boardSortTable = key === 'fit-desc' && boardSortTable === 'fit-desc' ? 'fit-asc' :
+          key === 'date-desc' && boardSortTable === 'date-desc' ? 'date-asc' : key;
         const sortSel = document.getElementById('board-sort-table');
         if (sortSel) sortSel.value = boardSortTable;
         renderBoard();
@@ -460,6 +490,12 @@ function renderBoard() {
     board.innerHTML = renderBoardTimeline(visibleJobs);
     board.querySelectorAll('.tl-row[data-job-id]').forEach(row => {
       row.addEventListener('click', () => openJobDetail(row.dataset.jobId));
+    });
+    board.querySelectorAll('[data-timeline-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        timelineEventFilter = btn.dataset.timelineFilter;
+        renderBoard();
+      });
     });
     wireSearchAndFilters();
     return;
@@ -571,7 +607,9 @@ function renderBoard() {
   board.querySelectorAll('.kanban-col-add').forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();
-      openAddJobModal(null, { stage: btn.dataset.addStage || 'saved' });
+      openAddJobModal(null, {
+        stage: btn.dataset.addStage || 'saved'
+      });
     });
   });
 
@@ -621,7 +659,7 @@ function renderBoard() {
         else bulkSelected.add(id);
         updateBulkBar();
         card.classList.toggle('bulk-selected', bulkSelected.has(id));
-        card.querySelector('.bulk-check')?.classList.toggle('checked', bulkSelected.has(id));
+        card.querySelector('.bulk-check') ?.classList.toggle('checked', bulkSelected.has(id));
         return;
       }
       openJobDetail(card.dataset.jobId);
@@ -759,49 +797,28 @@ function wireSearchAndFilters() {
 }
 
 function renderBoardTable(jobs) {
-  if (jobs.length === 0) {
-    return emptyStateHTML('🔍', 'No results', 'Try adjusting your search or filters');
-  }
-  const sortIcon = (key) => boardSortTable === key ? ' ↓' : boardSortTable === key + '-asc' ? ' ↑' : '';
-  const stageOptions = (current) => STAGES
-    .map(s => `<option value="${s}"${s === current ? ' selected' : ''}>${STAGE_LABELS[s]}</option>`).join('');
-
-  return `<table class="board-table">
-    <thead>
-      <tr class="table-header-row">
-        <th class="table-th" data-sort="role-asc">Role${sortIcon('role')}</th>
-        <th class="table-th" data-sort="company-asc">Company${sortIcon('company')}</th>
-        <th class="table-th">Stage</th>
-        <th class="table-th">Work Type</th>
-        <th class="table-th">Salary</th>
-        <th class="table-th" data-sort="fit-desc">Fit${sortIcon('fit')}</th>
-        <th class="table-th" data-sort="date-desc">Added${sortIcon('date')}</th>
-        <th class="table-th">Deadline</th>
-        <th class="table-th"></th>
-      </tr>
-    </thead>
-    <tbody>
-      ${jobs.map((j, i) => {
-        const fitCls = fitBadgeClass(j.fitScore);
-        const fitLabel = fitBadgeLabel(j.fitScore);
-        return `<tr class="table-row-clickable" data-stage="${j.stage}" data-job-id="${j.id}" style="animation-delay:${i * 28}ms">
-          <td class="table-td table-td-role">${escHtml(j.role)}</td>
-          <td class="table-td">${escHtml(j.company)}${j.location ? `<span class="table-location"> · ${escHtml(j.location)}</span>` : ''}</td>
-          <td class="table-td" onclick="event.stopPropagation()">
-            <select class="table-stage-select stage-select-${j.stage}" data-job-id="${j.id}">${stageOptions(j.stage)}</select>
-          </td>
-          <td class="table-td"><span class="table-tag">${escHtml(j.workType || '—')}</span>${hybridDaysLabel(j) ? `<span class="table-location"> · ${escHtml(hybridDaysLabel(j))}</span>` : ''}${jobDurationLabel(j) ? `<span class="table-location"> · ${escHtml(jobDurationLabel(j))}</span>` : ''}</td>
-          <td class="table-td table-muted">${escHtml(formatSalary(j.salary) || '—')}</td>
-          <td class="table-td"><span class="fit-badge ${fitCls}">${fitLabel}</span></td>
-          <td class="table-td table-muted">${formatDate(j.dateAdded)}</td>
-          <td class="table-td table-muted${j.deadline && new Date(j.deadline+'T00:00:00') <= new Date() ? ' table-overdue' : ''}">${j.deadline ? formatDate(j.deadline) : '—'}</td>
-          <td class="table-td table-actions">
-            <button class="table-delete-btn" data-delete-id="${j.id}" title="Delete">✕</button>
-          </td>
-        </tr>`;
-      }).join('')}
-    </tbody>
-  </table>`;
+  if (!jobs.length) return emptyStateHTML('⌕', 'No opportunities found', 'Adjust your filters or add a job to start comparing opportunities.');
+  const heading = (label, key) => `<button class="table-sort-btn" data-sort="${key}">${label} ${boardSortTable.split('-')[0] === key.split('-')[0] ? boardSortTable.endsWith('asc') ? '↑' : '↓' : '↕'}</button>`;
+  const sortState = key => boardSortTable.startsWith(key + '-') ? boardSortTable.endsWith('asc') ? 'ascending' : 'descending' : 'none';
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return `<div class="board-view-heading"><div><span class="workspace-eyebrow">OPPORTUNITY COMPARISON</span><h2>Find the roles worth your attention.</h2><p>Compare fit, timing, and work arrangements. Pin your favorites or update a stage directly.</p></div><span>${jobs.length} opportunities</span></div>
+  <div class="board-table-scroll"><table class="board-table"><caption class="table-sr-only">Job opportunities, sorted by ${escHtml(boardSortTable)}</caption>
+    <thead><tr><th class="table-th" aria-sort="${sortState('role')}">${heading('Opportunity','role-asc')}<br>${heading('Company','company-asc')}</th><th class="table-th">Stage</th><th class="table-th">Work arrangement</th><th class="table-th">Salary</th><th class="table-th" aria-sort="${sortState('fit')}">${heading('Skill fit','fit-desc')}</th><th class="table-th" aria-sort="${sortState('date')}">${heading('Added','date-desc')}</th><th class="table-th">Deadline</th><th class="table-th">Actions</th></tr></thead>
+    <tbody>${jobs.map((job,i) => {
+      const date = job.deadline ? new Date(job.deadline + 'T00:00:00') : null;
+      const deadlineLabel = !date ? 'No deadline' : date < today ? 'Overdue' : date.getTime() === today.getTime() ? 'Due today' : formatDate(job.deadline);
+      return `<tr class="table-row-clickable${job.pinned ? ' table-row-pinned' : ''}" data-stage="${job.stage}" data-job-id="${escHtml(job.id)}" style="animation-delay:${Math.min(i,12)*20}ms">
+        <td class="table-td table-td-role" data-label="Opportunity"><button class="table-open-btn" aria-label="Open ${escHtml(job.role)}">${escHtml(job.role)}</button><span class="table-company">${escHtml(job.company)}</span><span class="table-location">${escHtml(job.location || 'Location not specified')}</span></td>
+        <td class="table-td" data-label="Stage"><select aria-label="Stage for ${escHtml(job.role)}" class="table-stage-select stage-select-${job.stage}" data-job-id="${escHtml(job.id)}">${STAGES.map(s=>`<option value="${s}"${s===job.stage?' selected':''}>${STAGE_LABELS[s]}</option>`).join('')}</select></td>
+        <td class="table-td" data-label="Work arrangement"><span class="table-tag">${escHtml(job.workType || 'Not specified')}</span>${hybridDaysLabel(job) ? `<span class="table-location">${escHtml(hybridDaysLabel(job))}</span>` : ''}${jobDurationLabel(job) ? `<span class="table-location">${escHtml(jobDurationLabel(job))}</span>` : ''}</td>
+        <td class="table-td table-muted" data-label="Salary">${escHtml(formatSalary(job.salary) || 'Not listed')}</td>
+        <td class="table-td" data-label="Skill fit"><span class="fit-badge ${fitBadgeClass(job.fitScore)}">${fitBadgeLabel(job.fitScore)}</span></td>
+        <td class="table-td table-muted" data-label="Added">${formatDate(job.dateAdded)}</td>
+        <td class="table-td" data-label="Deadline"><span class="table-deadline${date && date < today ? ' is-overdue' : date && date.getTime() === today.getTime() ? ' is-today' : ''}">${deadlineLabel}</span>${date && date <= today ? `<span class="table-location">${formatDate(job.deadline)}</span>` : ''}</td>
+        <td class="table-td table-actions" data-label="Actions"><button class="table-pin-btn" data-pin-id="${escHtml(job.id)}" aria-pressed="${!!job.pinned}" aria-label="${job.pinned?'Unpin':'Pin'} ${escHtml(job.role)}" title="${job.pinned?'Unpin':'Pin'} job">${job.pinned?'★':'☆'}</button><button class="table-delete-btn" data-delete-id="${escHtml(job.id)}" aria-label="Delete ${escHtml(job.role)}" title="Delete job">×</button></td>
+      </tr>`;
+    }).join('')}</tbody></table></div>`;
 }
 
 function fitRingHTML(score) {
@@ -855,7 +872,7 @@ function updateJobDurationVisibility(clearWhenHidden = false) {
 }
 
 function openJobDurationModal() {
-  const current = document.getElementById('job-duration')?.value || '';
+  const current = document.getElementById('job-duration') ?.value || '';
   const count = document.getElementById('job-duration-count');
   const unit = document.getElementById('job-duration-unit');
   document.querySelectorAll('#job-duration-presets .duration-preset').forEach(btn => {
@@ -871,8 +888,8 @@ function openJobDurationModal() {
 }
 
 function applyJobDurationModal() {
-  const count = document.getElementById('job-duration-count')?.value;
-  const unit = document.getElementById('job-duration-unit')?.value || 'months';
+  const count = document.getElementById('job-duration-count') ?.value;
+  const unit = document.getElementById('job-duration-unit') ?.value || 'months';
   const num = parseInt(count, 10);
   if (!num || num < 1) {
     toast('Choose a duration or enter a number.', 'error');
@@ -902,7 +919,7 @@ function updateHybridDaysVisibility(clearWhenHidden = false) {
 }
 
 function openHybridDaysModal() {
-  const current = document.getElementById('job-hybrid-days')?.value || '';
+  const current = document.getElementById('job-hybrid-days') ?.value || '';
   const checks = document.querySelectorAll('#hybrid-days-grid input[type="checkbox"]');
   const cadence = document.getElementById('hybrid-days-cadence');
   const selected = new Set();
@@ -943,7 +960,7 @@ function openHybridDaysModal() {
 function applyHybridDaysModal() {
   const selectedDays = Array.from(document.querySelectorAll('#hybrid-days-grid input[type="checkbox"]:checked'))
     .map(input => input.value);
-  const cadence = document.getElementById('hybrid-days-cadence')?.value || '';
+  const cadence = document.getElementById('hybrid-days-cadence') ?.value || '';
   setHybridDaysValue(selectedDays.length ? selectedDays.join('/ ') : cadence);
   closeModal('modal-hybrid-days');
 }
@@ -974,100 +991,84 @@ function jobCardHTML(job) {
 }
 
 function renderBoardTimeline(jobs) {
-  if (jobs.length === 0) {
-    return emptyStateHTML('⏱', 'No timeline entries', 'Jobs with dates will appear here');
-  }
-
   const today = new Date();
-  today.setHours(23, 59, 59, 999);
-
-  const sorted = [...jobs].sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded));
-
-  const minDate = new Date(sorted[0].dateAdded);
-  minDate.setHours(0, 0, 0, 0);
-
-  const spanMs = (today - minDate) || 1;
-  const todayPct = 94; // pin "today" at 94% to leave a small right margin
-
-  const pct = (date) => Math.max(0, Math.min(todayPct, ((new Date(date) - minDate) / spanMs) * todayPct));
-
-  // Build month tick marks
-  const ticks = [];
-  const m = new Date(minDate);
-  m.setDate(1);
-  while (m <= today) {
-    ticks.push({
-      label: m.toLocaleDateString('en-US', {
-        month: 'short',
-        year: '2-digit'
-      }),
-      p: pct(m)
+  today.setHours(0, 0, 0, 0);
+  const weekEnd = new Date(today);
+  weekEnd.setDate(today.getDate() + ((7 - today.getDay()) % 7));
+  const events = [];
+  const add = (job, type, label, value, time = '') => {
+    if (!value) return;
+    const date = calendarDate(value);
+    if (!date || !Number.isFinite(date.getTime())) return;
+    events.push({
+      job,
+      type,
+      label,
+      date,
+      time
     });
-    m.setMonth(m.getMonth() + 1);
-  }
-
-  const stageColors = {
-    saved: 'var(--text-muted)',
-    applied: 'var(--accent)',
-    screening: '#a78bfa',
-    interview: 'var(--yellow)',
-    offer: 'var(--green)',
-    declined: 'var(--red)',
-    withdrew: '#f97316',
-    ghosted: '#94a3b8',
-    archived: 'var(--border)',
   };
-
-  const axisHTML = ticks.map(t =>
-      `<div class="tl-tick" style="left:${t.p.toFixed(2)}%">
-      <div class="tl-tick-line"></div>
-      <div class="tl-tick-label">${t.label}</div>
-    </div>`
-    ).join('') +
-    `<div class="tl-today-marker" style="left:${todayPct}%">
-    <div class="tl-today-line-head"></div>
-    <div class="tl-today-label-head">Today</div>
-  </div>`;
-
-  const rowsHTML = sorted.map((j, idx) => {
-    const startPct = pct(j.dateAdded);
-    const widthPct = Math.max(0.8, todayPct - startPct);
-    const color = stageColors[j.stage] || 'var(--accent)';
-    const daysAgo = Math.floor((today - new Date(j.dateAdded)) / 86400000);
-    const age = daysAgo === 0 ? 'Today' : daysAgo === 1 ? '1d' : `${daysAgo}d`;
-    const stageName = STAGE_LABELS[j.stage] || j.stage;
-    return `<div class="tl-row" data-stage="${j.stage}" data-job-id="${j.id}">
-      <div class="tl-row-label">
-        <div class="tl-row-role"><span class="tl-stage-dot stripe-${j.stage}"></span>${escHtml(j.role)}</div>
-        <div class="tl-row-company">${escHtml(j.company)}</div>
-      </div>
-      <div class="tl-row-track">
-        <div class="tl-today-track-line" style="left:${todayPct}%"></div>
-        <div class="tl-bar" style="left:${startPct.toFixed(2)}%;width:${widthPct.toFixed(2)}%;--bar-color:${color};animation-delay:${idx * 55}ms" title="${escHtml(j.role)} @ ${escHtml(j.company)} — ${stageName} — ${age} ago">
-          <span class="tl-bar-text">${STAGE_EMOJIS[j.stage] || ''}${stageName} &middot; ${age}</span>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-
-  const presentStages = [...new Set(sorted.map(j => j.stage))];
-  const legendHTML = `<div class="tl-legend">
-    ${presentStages.map(s => `<span class="tl-legend-item"><span class="tl-legend-dot stripe-${s}"></span>${STAGE_LABELS[s] || s}</span>`).join('')}
-  </div>`;
-
-  return `<div class="tl-container">
-    ${legendHTML}
-    <div class="tl-axis-row">
-      <div class="tl-label-spacer"></div>
-      <div class="tl-axis-track">${axisHTML}</div>
-    </div>
-    ${rowsHTML}
-  </div>`;
+  jobs.forEach(job => {
+    const closed = ['declined', 'withdrew', 'ghosted', 'archived', 'offer'].includes(job.stage);
+    if (!closed) {
+      add(job, 'deadline', 'Application deadline', job.deadline);
+      ['screening', 'interview'].forEach(stage => {
+        const milestone = job[stage + 'Milestone'];
+        if (milestone) add(job, 'interview', stage === 'screening' ? 'Screening' : 'Interview', milestone.date, milestone.time);
+      });
+      add(job, 'followup', 'Follow-up', job.nextFollowUp || job.followUpDate);
+    }
+    add(job, 'activity', job.dateApplied ? 'Application recorded' : 'Opportunity added', job.dateApplied || job.dateAdded);
+  });
+  events.sort((a, b) => a.date - b.date || a.time.localeCompare(b.time));
+  const next = events.find(e => e.type !== 'activity' && e.date >= today);
+  const filtered = events.filter(e => timelineEventFilter === 'all' || e.type === timelineEventFilter);
+  const groups = [{
+      title: 'Overdue',
+      kind: 'overdue',
+      match: e => e.type !== 'activity' && e.date < today
+    },
+    {
+      title: 'Today',
+      kind: 'today',
+      match: e => e.date.getTime() === today.getTime()
+    },
+    {
+      title: 'This Week',
+      kind: 'week',
+      match: e => e.date > today && e.date <= weekEnd
+    },
+    {
+      title: 'Later',
+      kind: 'later',
+      match: e => e.date > weekEnd
+    },
+    {
+      title: 'Recent Activity',
+      kind: 'history',
+      match: e => e.type === 'activity' && e.date < today
+    },
+  ];
+  const labels = {
+    all: 'All entries',
+    deadline: 'Deadlines',
+    interview: 'Interviews',
+    followup: 'Follow-ups',
+    activity: 'Activity'
+  };
+  return `<div class="board-view-heading"><div><span class="workspace-eyebrow">YOUR APPLICATION AGENDA</span><h2>Keep your next step in focus.</h2><p>Deadlines, scheduled screening and interviews, follow-ups, and recorded applications.</p></div></div>
+    <div class="agenda-filters" aria-label="Timeline event filters">${Object.entries(labels).map(([key,label])=>`<button class="btn-secondary${timelineEventFilter===key?' active':''}" data-timeline-filter="${key}" aria-pressed="${timelineEventFilter===key}">${label}</button>`).join('')}</div>
+    ${next ? `<div class="agenda-next"><span class="workspace-eyebrow">NEXT UP</span><button class="tl-row agenda-next-button" data-job-id="${escHtml(next.job.id)}"><strong>${next.label} · ${escHtml(next.job.role)}</strong><span>${formatDate(next.date)}${next.time?' · '+escHtml(next.time):''} · ${escHtml(next.job.company)}</span></button></div>` : `<div class="agenda-notice">No upcoming actions scheduled. Add a deadline or an interview date to a job to see it here.</div>`}
+    <div class="agenda-groups">${groups.map(group=>{
+      const entries = filtered.filter(group.match);
+      if (!entries.length) return '';
+      if (group.kind==='history') entries.reverse();
+      return `<section class="agenda-group agenda-${group.kind}"><h3>${group.title}<span>${entries.length}</span></h3><div>${entries.map((entry,i)=>`<button class="tl-row agenda-entry" data-job-id="${escHtml(entry.job.id)}" style="--agenda-delay:${Math.min(i,10)*25}ms"><span class="agenda-date"><strong>${entry.date.toLocaleDateString('en-US',{day:'2-digit'})}</strong><span>${entry.date.toLocaleDateString('en-US',{month:'short',year:'numeric'})}</span></span><span class="agenda-entry-content"><span class="agenda-type">${entry.label}${entry.time?' · '+escHtml(entry.time):''}</span><strong>${escHtml(entry.job.role)}</strong><span>${escHtml(entry.job.company)}</span></span><span class="stage-badge stage-${entry.job.stage}">${STAGE_LABELS[entry.job.stage] || escHtml(entry.job.stage)}</span><span class="agenda-arrow" aria-hidden="true">↗</span></button>`).join('')}</div></section>`;
+    }).join('') || ` < div class = "agenda-notice" > No $ {
+    timelineEventFilter === 'all' ? 'dated entries' : labels[timelineEventFilter].toLowerCase()
+  }
+  match these jobs.Adjust your filters or add dates to an opportunity. < /div>`}</div > `;
 }
-
-/* ══════════════════════════════════════════════════════════
-   STAGE MILESTONE MODAL
-   ══════════════════════════════════════════════════════════ */
 const MILESTONE_STAGES = ['screening', 'interview', 'offer'];
 
 function openStageMilestoneModal(job, stage) {
@@ -1080,14 +1081,36 @@ function openStageMilestoneModal(job, stage) {
     offer: '🎉 Log Offer Details',
   };
   const subtitles = {
-    screening: `${escHtml(job.role)} @ ${escHtml(job.company)} moved to screening — log the call details.`,
-    interview: `${escHtml(job.role)} @ ${escHtml(job.company)} has an interview — log the details.`,
-    offer: `You received an offer from ${escHtml(job.company)}! Log the details here.`,
+    screening: `
+  $ {
+    escHtml(job.role)
+  }
+  @ $ {
+    escHtml(job.company)
+  }
+  moved to screening— log the call details.
+  `,
+    interview: `
+  $ {
+    escHtml(job.role)
+  }
+  @ $ {
+    escHtml(job.company)
+  }
+  has an interview— log the details.
+  `,
+    offer: `
+  You received an offer from $ {
+    escHtml(job.company)
+  }!Log the details here.
+  `,
   };
 
   document.getElementById('milestone-modal-title').textContent = titles[stage];
 
-  let bodyHTML = `<p class="milestone-subtitle">${subtitles[stage]}</p>`;
+  let bodyHTML = ` < p class = "milestone-subtitle" > $ {
+    subtitles[stage]
+  } < /p>`;
 
   if (stage === 'screening' || stage === 'interview') {
     const typeOpts = stage === 'screening' ? ['Phone', 'Video', 'In-person'] : ['Phone', 'Video', 'In-person', 'Panel', 'Technical'];
@@ -1984,6 +2007,7 @@ function renderSmartPasteAnalysis(analysis) {
     ${analysis.tailoring.length ? `<div class="jpa-tailor"><div class="jpa-label">Resume Tailoring</div>${analysis.tailoring.map(t => `<div class="jpa-tip">${escHtml(t)}</div>`).join('')}</div>` : ''}
   `;
 }
+
 function flashField(id) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -2045,8 +2069,12 @@ function openAddJobModal(editId = null, defaults = {}) {
     tag.textContent = '✦ Auto-filled pay rate';
     salaryLabel.appendChild(tag);
     const clearSalaryTag = () => tag.remove();
-    salaryInput.addEventListener('input', clearSalaryTag, { once: true });
-    salaryPeriodSelect.addEventListener('change', clearSalaryTag, { once: true });
+    salaryInput.addEventListener('input', clearSalaryTag, {
+      once: true
+    });
+    salaryPeriodSelect.addEventListener('change', clearSalaryTag, {
+      once: true
+    });
   }
   document.getElementById('job-date-posted').value = job ? job.datePosted || '' : '';
   document.getElementById('job-date-applied').value = job ? job.dateApplied || '' : '';
@@ -2099,7 +2127,7 @@ function openAddJobModal(editId = null, defaults = {}) {
     spPanel.style.display = '';
   }
   if (spTrigger) spTrigger.style.display = '';
-  document.getElementById('show-smart-paste-btn')?.style.setProperty('display', editId ? 'none' : '');
+  document.getElementById('show-smart-paste-btn') ?.style.setProperty('display', editId ? 'none' : '');
   if (spInput) spInput.value = '';
   const spAnalysis = document.getElementById('smart-paste-analysis');
   if (spAnalysis) {
@@ -2162,7 +2190,7 @@ function saveJob() {
     companyNotes: document.getElementById('job-company-notes').value.trim(),
     notes: document.getElementById('job-notes').value.trim(),
     coverLetter: document.getElementById('job-cover-letter').value.trim(),
-    resumeVaultId: document.getElementById('job-resume-vault-select')?.value || '',
+    resumeVaultId: document.getElementById('job-resume-vault-select') ?.value || '',
   };
 
   const analysis = analyzeJobForRole(jobData);

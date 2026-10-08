@@ -39,6 +39,10 @@ function _animateBars(container) {
 // Count a numeric value up from 0 inside an element
 function _countUp(el, target, suffix) {
   if (!el || isNaN(target)) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = Math.round(target) + (suffix || '');
+    return;
+  }
   const duration = 650;
   const start = performance.now();
   const step = now => {
@@ -61,7 +65,7 @@ function renderAnalyticsKPIs(jobs) {
   const offers = jobs.filter(j => j.stage === 'offer').length;
   const declined = jobs.filter(j => j.stage === 'declined').length;
   const scored = jobs.filter(j => j.fitScore !== null && j.fitScore !== undefined);
-  const avgFit = scored.length ? Math.round(scored.reduce((s, j) => s + j.fitScore, 0) / scored.length) : null;
+  const avgFit = scored.length ? Math.round(scored.reduce((s, j) => s + Number(j.fitScore), 0) / scored.length) : null;
   const responseCount = jobs.filter(j => ['screening', 'interview', 'offer'].includes(j.stage)).length;
   const responseRate = applied > 0 ? Math.round((responseCount / applied) * 100) : null;
 
@@ -146,9 +150,7 @@ function renderAnalyticsFunnel(jobs) {
   el.innerHTML = stages.map((s, i) => {
     const count = counts[i];
     const pct = Math.round((count / max) * 100);
-    const prevCount = i > 0 ? counts[i - 1] : count;
-    const convRate = prevCount > 0 ? Math.round((count / prevCount) * 100) : 0;
-    const convText = i > 0 ? `<span class="an-conv-rate">${convRate}% from prev</span>` : '';
+    const convText = `<span class="an-conv-rate">${count} currently in stage</span>`;
     return `<div class="an-funnel-row an-funnel-row-click" data-stage="${s}" title="View ${count} job${count !== 1 ? 's' : ''}">
       <div class="an-funnel-label">${STAGE_LABELS[s]}</div>
       <div class="an-funnel-bar-wrap">
@@ -476,6 +478,14 @@ function wireAnalyticsControls() {
 
 function renderAnalytics() {
   const jobs = getJobsForPeriod(anPeriod);
+  const summary = document.getElementById('an-summary');
+  if (summary) {
+    const active = jobs.filter(j => ['applied', 'screening', 'interview'].includes(j.stage)).length;
+    const strong = jobs.filter(j => j.fitScore != null && Number(j.fitScore) >= 75).length;
+    summary.innerHTML = jobs.length ?
+      `<div><span class="workspace-eyebrow">YOUR SEARCH SNAPSHOT</span><h2>${active} active application${active === 1 ? '' : 's'}. Every next step counts.</h2><p>${strong} strong skill match${strong === 1 ? '' : 'es'} (75%+ fit) across ${jobs.length} tracked opportunit${jobs.length === 1 ? 'y' : 'ies'} in this period.</p></div><span class="an-summary-tag">Select a chart to explore its jobs</span>` :
+      `<div><span class="workspace-eyebrow">BUILD YOUR SEARCH STORY</span><h2>${state.jobs.length ? 'No opportunities in this period yet.' : 'Your progress starts with one opportunity.'}</h2><p>${state.jobs.length ? 'Choose another period to explore your tracked jobs.' : 'Add jobs and update their stages to see your activity, skill matches, and pipeline here.'}</p></div>`;
+  }
   renderAnalyticsKPIs(jobs);
   renderAnalyticsFunnel(jobs);
   renderAnalyticsResponseRate(jobs);

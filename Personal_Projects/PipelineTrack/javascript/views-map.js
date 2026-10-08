@@ -123,138 +123,188 @@ function mapLegendHTML(jobs) {
     </div>`).join('');
 
   const note = (hasRemote || hasNoLocation) ?
-    `<div class="map-remote-note">Remote / no-location jobs are not shown on the map</div>` :
+    `<div class="map-remote-note">Remote and unlocated opportunities are available in the job list.</div>` :
     '';
 
   return `<div class="map-legend">${dots}${note}</div>`;
 }
 
 /* ── Main render ──────────────────────────────────────── */
-function renderBoardMap(jobs) {
-  const mappable = jobs.filter(j => splitLocations(j.location).length > 0);
-  const pinnable = mappable.filter(j => Array.isArray(j.coords) && j.coords.length > 0);
-
-  if (mappable.length === 0) {
-    return `
-      <div class="map-wrap">
-        <div class="map-empty">
-          <div class="map-empty-icon">🗺️</div>
-          <div>No jobs with a location to map yet</div>
-        </div>
-      </div>`;
-  }
-
-  return `
-    <div class="map-wrap">
-      <div id="pt-map"></div>
-      <div class="map-status" id="map-status" style="display:none"></div>
-    </div>
-    ${mapLegendHTML(jobs)}`;
+function mapIsRemote(job) {
+  return String(job.workType || '').toLowerCase() === 'remote' || /remote/i.test(job.location || '');
 }
 
-/* ── Wire the Leaflet map after innerHTML is set ─────── */
-function wireMap(jobs) {
-  const container = document.getElementById('pt-map');
-  if (!container) return;
+function renderBoardMap(jobs) {
+  const remote = jobs.filter(mapIsRemote);
+  const local = jobs.filter(j => !mapIsRemote(j));
+  const card = job => `<article class="map-job" data-map-job="${escHtml(job.id)}">
+    <div class="map-job-meta"><span class="map-legend-dot" style="background:${MAP_STAGE_COLORS[job.stage] || '#6b7280'}"></span>${escHtml(STAGE_LABELS[job.stage] || job.stage)}<span class="fit-badge ${fitBadgeClass(job.fitScore)}">${fitBadgeLabel(job.fitScore)}</span></div>
+    <button class="map-job-focus" data-map-focus="${escHtml(job.id)}">${escHtml(job.role || 'Untitled role')}</button>
+    <p>${escHtml(job.company || 'Company not specified')}</p>
+    <div class="map-job-location">${escHtml(job.location || 'Location not specified')}</div>
+    <div class="map-job-actions"><span data-map-state="${escHtml(job.id)}">${mapIsRemote(job) ? 'Remote opportunity' : !job.location ? 'No location provided' : Array.isArray(job.coords) ? job.coords.length ? 'Select to explore location' : 'Location unavailable' : 'Locating opportunity…'}</span><button class="btn-ghost" data-map-open="${escHtml(job.id)}">Open job ↗</button></div>
+  </article>`;
+  return `<div class="map-explorer-heading"><div><span class="workspace-eyebrow">LOCATION EXPLORER</span><h2>Find where your next move could take you.</h2><p>Select an opportunity to explore its location. Your board filters apply here too.</p></div><span class="map-total">${jobs.length} opportunities</span></div>
+    <div class="map-explorer">
+      <aside class="map-job-list" aria-label="Opportunities by location">
+        ${local.length ? `<h3>By location <span>${local.length}</span></h3>${local.map(card).join('')}` : ''}
+        ${remote.length ? `<h3>Remote opportunities <span>${remote.length}</span></h3>${remote.map(card).join('')}` : ''}
+        ${!jobs.length ? '<div class="map-list-empty">No opportunities match your filters.</div>' : ''}
+      </aside>
+      <div class="map-canvas-panel"><div class="map-canvas-toolbar"><span>Explore your opportunities</span><button class="btn-secondary" id="map-fit-all">Fit all locations</button></div>
+        <div class="map-wrap"><div id="pt-map"></div><div class="map-status" id="map-status" role="status" style="display:none"></div></div>
+        ${mapLegendHTML(jobs)}
+      </div>
+    </div>`;
+}
 
+function wireMap(jobs) {
   if (_mapInstance) {
     _mapInstance.remove();
     _mapInstance = null;
   }
-
-  const mappable = jobs.filter(j => splitLocations(j.location).length > 0);
-  const pinnable = mappable.filter(j => Array.isArray(j.coords) && j.coords.length > 0);
-
-  _mapInstance = L.map('pt-map', {
-    zoomControl: true
+  const container = document.getElementById('pt-map');
+  if (!container) return;
+  const root = container.closest('.map-explorer');
+  root.querySelectorAll('[data-map-open]').forEach(button => {
+    button.addEventListener('click', () => openJobDetail(button.dataset.mapOpen));
   });
-
+  if (typeof L === 'undefined') {
+    container.innerHTML = '<div class="map-empty">The map could not load. You can still explore your jobs in the list.</div>';
+    root.querySelectorAll('[data-map-focus]').forEach(button => button.addEventListener('click', () => openJobDetail(button.dataset.mapFocus)));
+    root.querySelector('#map-fit-all').disabled = true;
+    return;
+  }
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const map = L.map(container, {
+    zoomControl: true,
+    zoomAnimation: !reducedMotion,
+    fadeAnimation: !reducedMotion
+  });
+  _mapInstance = map;
+  const markers = new Map();
+  const allMarkers = [];
+  let selected = null;
+  let userExploring = false;
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     maxZoom: 18,
-  }).addTo(_mapInstance);
-
-  if (pinnable.length === 0) {
-    _mapInstance.setView([39.5, -98.35], 4);
-  } else {
-    const markers = [];
-    pinnable.forEach(job => {
-      const color = MAP_STAGE_COLORS[job.stage] || '#6b7280';
-      job.coords.forEach(coordEntry => {
-        const marker = makePin(job, coordEntry);
-        marker.addTo(_mapInstance);
-
-        marker.bindPopup(`
-          <div class="map-popup" data-job-id="${job.id}">
-            <div class="map-popup-role">${job.role || 'Untitled'}</div>
-            <div class="map-popup-company">${job.company || ''} · ${coordEntry.label || job.location || ''}</div>
-            <span class="map-popup-stage" style="background:${color}">${STAGE_LABELS[job.stage] || job.stage}</span>
-            <div class="map-popup-hint">Click to open</div>
-          </div>`, {
-          maxWidth: 240
-        });
-
-        marker.on('popupopen', () => {
-          setTimeout(() => {
-            const el = document.querySelector(`.map-popup[data-job-id="${job.id}"]`);
-            if (el) el.addEventListener('click', () => {
-              _mapInstance.closePopup();
-              openJobDetail(job.id);
-            });
-          }, 50);
-        });
-
-        markers.push(marker);
+  }).addTo(map);
+  map.setView([39.5, -98.35], 4);
+  map.on('dragstart', () => {
+    userExploring = true;
+  });
+  container.addEventListener('wheel', () => {
+    userExploring = true;
+  }, {
+    passive: true
+  });
+  const fitAll = () => {
+    if (allMarkers.length) map.fitBounds(L.featureGroup(allMarkers).getBounds().pad(.2), {
+      maxZoom: 11,
+      animate: !reducedMotion
+    });
+  };
+  root.querySelector('#map-fit-all').addEventListener('click', fitAll);
+  root.querySelector('.leaflet-control-zoom') ?.addEventListener('click', () => {
+    userExploring = true;
+  });
+  const selectJob = (id, focusMap) => {
+    selected = id;
+    root.querySelectorAll('[data-map-job]').forEach(card => {
+      const active = card.dataset.mapJob === id;
+      card.classList.toggle('is-selected', active);
+      card.querySelector('[data-map-focus]').setAttribute('aria-pressed', String(active));
+      if (active && !focusMap) card.scrollIntoView({
+        block: 'nearest',
+        behavior: reducedMotion ? 'auto' : 'smooth'
       });
     });
-
-    // Fit map to all pins
-    const group = L.featureGroup(markers);
-    _mapInstance.fitBounds(group.getBounds().pad(0.2));
-  }
-
-  // Geocode any jobs that don't have coords yet
-  // Migrate old single-object coords to array format
-  mappable.forEach(j => {
-    if (j.coords && !Array.isArray(j.coords)) j.coords = undefined;
+    markers.forEach((pins, jobId) => pins.forEach(pin => pin.setStyle({
+      radius: jobId === id ? 12 : 9,
+      weight: jobId === id ? 3 : 2
+    })));
+    const pins = markers.get(id);
+    if (focusMap && pins && pins.length) {
+      userExploring = true;
+      map.fitBounds(L.featureGroup(pins).getBounds().pad(.3), {
+        maxZoom: 11,
+        animate: !reducedMotion
+      });
+      pins[0].openPopup();
+    }
+  };
+  root.querySelectorAll('[data-map-focus]').forEach(button => {
+    button.setAttribute('aria-pressed', 'false');
+    button.addEventListener('click', () => selectJob(button.dataset.mapFocus, true));
   });
-
-  const needsGeocode = mappable.filter(j => j.coords === undefined);
-  if (needsGeocode.length > 0) {
-    const statusEl = document.getElementById('map-status');
-    if (statusEl) statusEl.style.display = '';
-
-    runGeocodeQueue(mappable, (done, total, job) => {
-      if (statusEl) statusEl.textContent = `Locating jobs… ${done}/${total}`;
-      // Drop pins for this job as soon as it's geocoded
-      if (job && Array.isArray(job.coords)) {
-        const color = MAP_STAGE_COLORS[job.stage] || '#6b7280';
-        job.coords.forEach(coordEntry => {
-          const m = makePin(job, coordEntry);
-          m.addTo(_mapInstance);
-          m.bindPopup(`
-            <div class="map-popup" data-job-id="${job.id}">
-              <div class="map-popup-role">${job.role || 'Untitled'}</div>
-              <div class="map-popup-company">${job.company || ''} · ${coordEntry.label || job.location || ''}</div>
-              <span class="map-popup-stage" style="background:${color}">${STAGE_LABELS[job.stage] || job.stage}</span>
-              <div class="map-popup-hint">Click to open</div>
-            </div>`, {
-            maxWidth: 240
-          });
-          m.on('popupopen', () => {
-            setTimeout(() => {
-              const el = document.querySelector(`.map-popup[data-job-id="${job.id}"]`);
-              if (el) el.addEventListener('click', () => {
-                _mapInstance.closePopup();
-                openJobDetail(job.id);
-              });
-            }, 50);
-          });
-        });
-      }
-      if (done === total) {
-        if (statusEl) statusEl.style.display = 'none';
-      }
+  const addJobPins = job => {
+    if (markers.has(job.id)) return;
+    const pins = [];
+    (Array.isArray(job.coords) ? job.coords : []).forEach(coord => {
+      if (!Number.isFinite(coord.lat) || !Number.isFinite(coord.lng)) return;
+      const pin = makePin(job, coord).addTo(map);
+      const popup = document.createElement('div');
+      popup.className = 'map-popup';
+      popup.innerHTML = `<div class="map-popup-role">${escHtml(job.role || 'Untitled role')}</div><div class="map-popup-company">${escHtml(job.company || '')}<br>${escHtml(coord.label || job.location || '')}</div><div class="map-popup-details">${escHtml(STAGE_LABELS[job.stage] || job.stage)} · ${fitBadgeLabel(job.fitScore)}</div><button class="btn-secondary">Open job ↗</button>`;
+      popup.querySelector('button').addEventListener('click', () => openJobDetail(job.id));
+      pin.bindPopup(popup, {
+        maxWidth: 280
+      });
+      pin.on('click', () => selectJob(job.id, false));
+      pins.push(pin);
+      allMarkers.push(pin);
     });
+    markers.set(job.id, pins);
+    root.querySelectorAll('[data-map-state]').forEach(label => {
+      if (label.dataset.mapState === job.id) label.textContent = pins.length ? 'Select to explore location' : 'Location unavailable';
+    });
+    if (selected === job.id) selectJob(job.id, false);
+  };
+  const mappable = jobs.filter(j => !mapIsRemote(j) && splitLocations(j.location).length);
+  mappable.forEach(job => {
+    if (job.coords && !Array.isArray(job.coords)) job.coords = undefined;
+    if (Array.isArray(job.coords)) addJobPins(job);
+  });
+  fitAll();
+  const status = root.querySelector('#map-status');
+  const pending = mappable.filter(j => j.coords === undefined);
+  if (!allMarkers.length && !pending.length) {
+    status.style.display = '';
+    status.textContent = 'No mapped locations. Remote and unlocated jobs are available in the list.';
   }
+  if (pending.length) {
+    status.style.display = '';
+    status.textContent = 'Locating opportunities…';
+    // A previous render may still own the rate-limited queue. Retry only
+    // while this map is current, then reuse its cached coordinates.
+    const locate = () => {
+      if (_mapInstance !== map || !container.isConnected) return;
+      mappable.filter(j => Array.isArray(j.coords)).forEach(addJobPins);
+      if (_geocoding) {
+        setTimeout(locate, 1200);
+        return;
+      }
+      if (!mappable.some(j => j.coords === undefined)) {
+        status.style.display = allMarkers.length ? 'none' : '';
+        status.textContent = 'Locations could not be mapped. Your jobs remain available in the list.';
+        if (!userExploring) fitAll();
+        return;
+      }
+      runGeocodeQueue(mappable, (done, total, job) => {
+        if (_mapInstance !== map || !container.isConnected) return;
+        addJobPins(job);
+        status.textContent = `Locating opportunities… ${done}/${total}`;
+        if (!userExploring) fitAll();
+        if (done === total) {
+          status.style.display = allMarkers.length ? 'none' : '';
+          status.textContent = 'Locations could not be mapped. Your jobs remain available in the list.';
+        }
+      });
+    };
+    locate();
+  }
+  requestAnimationFrame(() => {
+    if (_mapInstance === map) map.invalidateSize();
+  });
 }

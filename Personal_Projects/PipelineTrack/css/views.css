@@ -951,15 +951,15 @@
 
 /* KPI card staggered entrance */
 .an-kpi-card.an-kpi-enter {
-  opacity: 0;
-  animation: an-fade-up .35s ease forwards;
+  opacity: 1;
+  animation: an-fade-up .35s ease backwards;
   animation-delay: calc(var(--i, 0) * 55ms);
 }
 
 /* Section card staggered entrance */
 .dash-card.an-card-enter {
-  opacity: 0;
-  animation: an-fade-up .4s ease forwards;
+  opacity: 1;
+  animation: an-fade-up .4s ease backwards;
   animation-delay: calc(var(--ci, 0) * 45ms);
 }
 
