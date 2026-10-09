@@ -122,9 +122,9 @@
                 </div>
                 <div class="view-hero-content">
                     <div class="workspace-eyebrow">YOUR CAREER WORKSPACE</div>
-                    <div class="view-hero-title">Your next chapter starts here.</div>
-                    <div class="view-hero-sub">Track your opportunities, understand your progress, and keep your next
-                        move in focus.</div>
+                    <div class="view-hero-title">Your job search, in focus.</div>
+                    <div class="view-hero-sub">See where you stand, find your best opportunities, and decide what to do
+                        next.</div>
                 </div>
             </div>
             <div class="scope-notice">
@@ -136,6 +136,10 @@
             </div>
             <div id="dash-vibe-row" class="dash-vibe-row"></div>
             <div id="streak-timeline-panel" class="streak-timeline-panel" hidden></div>
+            <div id="dash-overview" class="dash-overview" aria-live="polite"></div>
+            <div class="dash-section-heading">
+                <h2>At a glance</h2><span>Your current pipeline totals</span>
+            </div>
             <div class="stat-grid">
                 <div class="stat-card">
                     <div class="stat-label">Total Tracked</div>
@@ -164,6 +168,26 @@
                 </div>
             </div>
 
+            <div class="dash-section-heading">
+                <h2>Your next moves</h2><span>Priorities and opportunities from your tracked jobs</span>
+            </div>
+            <div class="dash-priority-grid">
+                <div class="dash-card" data-card="next-actions">
+                    <div class="dash-card-header">Needs Your Attention</div>
+                    <p class="dash-card-description">Application deadlines, older applications, and jobs ready for
+                        analysis.</p>
+                    <div class="dash-card-body" id="dash-next-actions"></div>
+                </div>
+                <div class="dash-card" data-card="best-fits">
+                    <div class="dash-card-header">Strongest Opportunities</div>
+                    <p class="dash-card-description">Your top four active jobs by skill fit. Select one to plan your
+                        next step.</p>
+                    <div class="dash-card-body" id="dash-best-fits"></div>
+                </div>
+            </div>
+            <div class="dash-section-heading">
+                <h2>Explore your search</h2><span>Skill priorities, pipeline movement, and recent activity</span>
+            </div>
             <div class="dash-grid">
                 <div class="dash-card" data-card="gaps">
                     <div class="dash-card-header">Top Skill Gaps</div>
@@ -173,30 +197,40 @@
                 </div>
                 <div class="dash-card" data-card="activity">
                     <div class="dash-card-header">Recent Activity</div>
+                    <p class="dash-card-description">A timeline of opportunities added and applications recorded. Select
+                        an event to review the job.</p>
                     <div class="dash-card-body" id="dash-recent">
                         <p class="empty-msg">No jobs tracked yet.</p>
                     </div>
                 </div>
                 <div class="dash-card" data-card="pipeline">
                     <div class="dash-card-header">Pipeline Overview</div>
+                    <p class="dash-card-description">Where your jobs stand today. Select a stage to explore those
+                        opportunities.</p>
                     <div class="dash-card-body">
                         <div id="dash-pipeline-bars"></div>
                     </div>
                 </div>
                 <div class="dash-card" data-card="top-skills">
                     <div class="dash-card-header">Your Top Skills</div>
+                    <p class="dash-card-description">Your most frequently matched profile skills, with proficiency and
+                        demand across analyzed jobs.</p>
                     <div class="dash-card-body" id="dash-skills">
                         <p class="empty-msg">Add skills in My Profile.</p>
                     </div>
                 </div>
                 <div class="dash-card" data-card="funnel">
-                    <div class="dash-card-header">Conversion Funnel</div>
+                    <div class="dash-card-header">Stage Comparison</div>
+                    <p class="dash-card-description">Current stage counts. Percentages compare adjacent stages, rather
+                        than historical conversion rates.</p>
                     <div class="dash-card-body" id="dash-funnel">
                         <p class="empty-msg">No applications yet.</p>
                     </div>
                 </div>
                 <div class="dash-card" data-card="velocity">
-                    <div class="dash-card-header">Weekly Velocity</div>
+                    <div class="dash-card-header">Weekly Velocity &middot; Jobs Added</div>
+                    <p class="dash-card-description">Jobs added in each of the last six seven-day periods, including
+                        today.</p>
                     <div class="dash-card-body" id="dash-velocity">
                         <p class="empty-msg">No applications yet.</p>
                     </div>
@@ -208,7 +242,7 @@
                     </div>
                 </div>
                 <div class="dash-card" data-card="time-in-stage">
-                    <div class="dash-card-header">Avg. Time in Stage</div>
+                    <div class="dash-card-header">Application Age by Stage</div>
                     <div class="dash-card-body" id="dash-time-in-stage">
                         <p class="empty-msg">No active applications yet.</p>
                     </div>
