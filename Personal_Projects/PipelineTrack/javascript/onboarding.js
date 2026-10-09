@@ -21,6 +21,7 @@
   }
 
   function updateStep() {
+    document.querySelector('.onboarding-body').scrollTop = 0;
     document.querySelectorAll('.onboarding-step').forEach(s => {
       s.classList.toggle('active', parseInt(s.dataset.step) === currentStep);
     });

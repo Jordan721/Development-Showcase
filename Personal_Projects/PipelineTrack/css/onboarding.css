@@ -4,6 +4,7 @@
 
 .onboarding-modal {
   max-width: 500px;
+  max-height: min(94vh, calc(100dvh - 40px));
   width: 100%;
   padding: 0;
   display: flex;
@@ -21,6 +22,7 @@
 /* ── Progress bar at top ────────────────────────────────── */
 .onboarding-progress-bar {
   height: 3px;
+  flex-shrink: 0;
   background: var(--border);
   position: relative;
 }
@@ -35,6 +37,9 @@
 /* ── Body ───────────────────────────────────────────────── */
 .onboarding-body {
   padding: 36px 36px 28px;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -230,6 +235,7 @@
 /* ── Footer ────────────────────────────────────────────── */
 .onboarding-footer {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   padding: 16px 36px 24px;
