@@ -412,34 +412,55 @@ function renderAnalyticsBreakdown(elId, jobs, field) {
 function openFilterModal(title, subtitle, matchedJobs) {
   document.getElementById('an-filter-modal-title').textContent = title;
   document.getElementById('an-filter-modal-sub').textContent = subtitle;
-
+  const searchEl = document.getElementById('an-filter-modal-search');
+  const clearEl = document.getElementById('an-filter-modal-clear');
+  searchEl.value = '';
   const listEl = document.getElementById('an-filter-modal-jobs');
-  if (matchedJobs.length === 0) {
-    listEl.innerHTML = '<p class="empty-msg">No jobs found.</p>';
-  } else {
-    listEl.innerHTML = matchedJobs.map(job => {
-      const cls = fitBadgeClass(job.fitScore);
-      const lbl = fitBadgeLabel(job.fitScore);
-      return `<div class="day-modal-job" data-job-id="${job.id}">
-        <div class="day-modal-job-info">
-          <div class="day-modal-job-role">${escHtml(job.role)}</div>
-          <div class="day-modal-job-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
-        </div>
-        <div class="day-modal-job-badges">
-          <span class="stage-badge stage-${job.stage}">${STAGE_LABELS[job.stage]}</span>
-          <span class="fit-badge ${cls}">${lbl}</span>
-        </div>
-      </div>`;
-    }).join('');
+  const renderResults = () => {
+    const query = searchEl.value.trim().toLowerCase();
+    const results = matchedJobs.filter(job => !query || [job.role, job.company, job.location].some(value => String(value || '').toLowerCase().includes(query)));
+    clearEl.hidden = searchEl.value.length === 0;
+    document.getElementById('an-filter-modal-count').textContent = query ?
+      `${results.length} of ${matchedJobs.length} matching jobs` :
+      `${matchedJobs.length} matching job${matchedJobs.length === 1 ? '' : 's'}`;
+    if (results.length === 0) {
+      listEl.innerHTML = query ?
+        '<div class="filter-modal-empty"><span aria-hidden="true">&#8981;</span><strong>No search results</strong><p>Try another role, company, or location, or clear your search.</p></div>' :
+        '<div class="filter-modal-empty"><span aria-hidden="true">&#8981;</span><strong>No matching jobs yet</strong><p>Jobs that match this insight will appear here.</p></div>';
+    } else {
+      listEl.innerHTML = results.map(job => {
+        const cls = fitBadgeClass(job.fitScore);
+        const lbl = fitBadgeLabel(job.fitScore);
+        return `<button type="button" class="filter-modal-job" data-job-id="${escHtml(job.id)}">
+          <span class="filter-modal-avatar" aria-hidden="true">${escHtml((job.company || '?').trim().slice(0, 2).toUpperCase())}</span>
+          <span class="day-modal-job-info">
+            <span class="day-modal-job-role">${escHtml(job.role)}</span>
+            <span class="day-modal-job-company">${escHtml(job.company)}${job.location ? ' &middot; ' + escHtml(job.location) : ''}</span>
+          </span>
+          <span class="day-modal-job-badges">
+            <span class="stage-badge stage-${escHtml(job.stage)}">${escHtml(STAGE_LABELS[job.stage] || job.stage)}</span>
+            <span class="fit-badge ${cls}">${lbl}</span>
+          </span>
+          <span class="filter-modal-arrow" aria-hidden="true">&rarr;</span>
+        </button>`;
+      }).join('');
 
-    listEl.querySelectorAll('.day-modal-job').forEach(item => {
-      item.addEventListener('click', () => {
-        closeModal('modal-an-filter');
-        openJobDetail(item.dataset.jobId);
+      listEl.querySelectorAll('.filter-modal-job').forEach(item => {
+        item.addEventListener('click', () => {
+          closeModal('modal-an-filter');
+          openJobDetail(item.dataset.jobId);
+        });
       });
-    });
-  }
+    }
 
+  };
+  searchEl.oninput = renderResults;
+  clearEl.onclick = () => {
+    searchEl.value = '';
+    renderResults();
+    searchEl.focus();
+  };
+  renderResults();
   openModal('modal-an-filter');
 }
 

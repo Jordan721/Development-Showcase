@@ -453,44 +453,61 @@
 
                 <div class="profile-card" data-card="summary">
                     <div class="profile-section-title">Resume Summary</div>
-                    <p class="profile-hint">A brief description of your background (for your reference).</p>
+                    <p class="profile-hint">Your experience, strengths, and the work you want to do next.</p>
+                    <label class="form-label" for="profile-summary">Professional introduction</label>
                     <textarea class="text-area" id="profile-summary" rows="6"
                         placeholder="e.g. Full-stack developer with 3 years of experience in React and Node.js…"></textarea>
-                    <button class="btn-secondary" id="save-summary-btn">Save Summary</button>
+                    <div class="profile-section-actions"><span class="profile-editor-tip">Keep it focused: a few
+                            sentences that tell your story.</span><button class="btn-secondary"
+                            id="save-summary-btn">Save Summary</button></div>
                 </div>
 
                 <div class="profile-card" data-card="certs">
                     <div class="profile-section-title">Certifications &amp; Degrees</div>
                     <p class="profile-hint">Track finished credentials and ones you are working toward.</p>
-                    <div class="skill-input-row">
-                        <input type="text" id="cert-input" class="text-input"
-                            placeholder="e.g. AWS Solutions Architect, B.S. Computer Science…" />
-                        <select id="cert-type" class="select-input">
-                            <option value="Certificate">Certificate</option>
-                            <option value="Associate's">Associate's</option>
-                            <option value="Bachelor's">Bachelor's</option>
-                            <option value="Master's">Master's</option>
-                            <option value="PhD">PhD</option>
-                            <option value="Bootcamp">Bootcamp</option>
-                            <option value="License">License</option>
-                        </select>
-                        <select id="cert-status" class="select-input">
-                            <option value="in-progress">In Progress</option>
-                            <option value="planned">Planned</option>
-                            <option value="completed">Completed</option>
-                        </select>
-                        <button class="btn-primary" id="add-cert-btn">Add</button>
+                    <div class="profile-credential-editor">
+                        <div class="profile-editor-heading">Add a credential<span>Education, certifications, and
+                                licenses</span></div>
+                        <div class="skill-input-row">
+                            <label class="form-label" for="cert-input">Credential name</label>
+                            <input type="text" id="cert-input" class="text-input"
+                                placeholder="e.g. AWS Solutions Architect, B.S. Computer Science…" />
+                            <label class="profile-credential-field"><span class="form-label">Type</span><select
+                                    id="cert-type" class="select-input">
+                                    <option value="Certificate">Certificate</option>
+                                    <option value="Associate's">Associate's</option>
+                                    <option value="Bachelor's">Bachelor's</option>
+                                    <option value="Master's">Master's</option>
+                                    <option value="PhD">PhD</option>
+                                    <option value="Bootcamp">Bootcamp</option>
+                                    <option value="License">License</option>
+                                </select></label>
+                            <label class="profile-credential-field"><span class="form-label">Status</span><select
+                                    id="cert-status" class="select-input">
+                                    <option value="in-progress">In Progress</option>
+                                    <option value="planned">Planned</option>
+                                    <option value="completed">Completed</option>
+                                </select></label>
+                        </div>
+                        <div class="cert-detail-grid">
+                            <label class="profile-credential-field profile-credential-wide"><span
+                                    class="form-label">School or issuer</span><input type="text" id="cert-provider"
+                                    class="text-input" placeholder="e.g. State University, Coursera, CompTIA" /></label>
+                            <label class="profile-credential-field"><span class="form-label">Start date</span><input
+                                    type="date" id="cert-start-date" class="text-input" /></label>
+                            <label class="profile-credential-field"><span class="form-label">Target or completed
+                                    date</span><input type="date" id="cert-target-date" class="text-input" /></label>
+                            <label class="profile-credential-field profile-credential-wide"><span
+                                    class="form-label">Progress (%)</span><input type="number" id="cert-progress"
+                                    class="text-input" min="0" max="100" step="5" placeholder="0–100" /></label>
+                        </div>
+                        <label class="form-label" for="cert-desc">Notes <span
+                                class="profile-optional">Optional</span></label>
+                        <textarea class="text-area" id="cert-desc" rows="2"
+                            placeholder="Optional notes — skills covered, technologies, field of study, renewal details…"></textarea>
+                        <div class="profile-section-actions"><button class="btn-primary" id="add-cert-btn">Add
+                                Credential</button></div>
                     </div>
-                    <div class="cert-detail-grid">
-                        <input type="text" id="cert-provider" class="text-input"
-                            placeholder="School / issuer, e.g. Coursera, CompTIA, State University" />
-                        <input type="date" id="cert-start-date" class="text-input" title="Start date" />
-                        <input type="date" id="cert-target-date" class="text-input" title="Target or completed date" />
-                        <input type="number" id="cert-progress" class="text-input" min="0" max="100" step="5"
-                            placeholder="% done" />
-                    </div>
-                    <textarea class="text-area" id="cert-desc" rows="2" style="margin-top:8px"
-                        placeholder="Optional notes — skills covered, technologies, field of study, renewal details…"></textarea>
                     <div id="cert-tags-container">
                         <!-- rendered by JS -->
                     </div>
@@ -512,7 +529,8 @@
                             </div>
                             <div class="backup-tile-text">
                                 <div class="backup-tile-title">Export Backup</div>
-                                <div class="backup-tile-desc">Full data · JSON</div>
+                                <div class="backup-tile-desc">Download a complete JSON backup to restore your workspace
+                                    later.</div>
                             </div>
                         </button>
                         <button class="backup-tile" id="export-csv-btn"
@@ -526,7 +544,8 @@
                             </div>
                             <div class="backup-tile-text">
                                 <div class="backup-tile-title">Export CSV</div>
-                                <div class="backup-tile-desc">Jobs only · spreadsheet</div>
+                                <div class="backup-tile-desc">Download your jobs as a spreadsheet. Profile data is
+                                    excluded.</div>
                             </div>
                         </button>
                         <button class="backup-tile" id="import-btn">
@@ -539,7 +558,8 @@
                             </div>
                             <div class="backup-tile-text">
                                 <div class="backup-tile-title">Import</div>
-                                <div class="backup-tile-desc">JSON backup or CSV</div>
+                                <div class="backup-tile-desc">Restore a JSON backup or bring in jobs from a CSV file.
+                                </div>
                             </div>
                         </button>
                         <button class="backup-tile backup-tile--danger" id="clear-all-btn">
@@ -550,7 +570,7 @@
                             </div>
                             <div class="backup-tile-text">
                                 <div class="backup-tile-title">Clear All Jobs</div>
-                                <div class="backup-tile-desc">Cannot be undone</div>
+                                <div class="backup-tile-desc">Remove tracked jobs. This cannot be undone.</div>
                             </div>
                         </button>
                         <button class="backup-tile backup-tile--danger" id="clear-all-data-btn">
@@ -561,7 +581,8 @@
                             </div>
                             <div class="backup-tile-text">
                                 <div class="backup-tile-title">Delete All Data</div>
-                                <div class="backup-tile-desc">Wipes everything</div>
+                                <div class="backup-tile-desc">Reset your entire workspace, including your profile and
+                                    settings.</div>
                             </div>
                         </button>
                         <input type="file" id="import-file-input" accept=".json,.csv" style="display:none" />
@@ -575,63 +596,77 @@
                         shared.</p>
                     <div class="links-grid">
                         <div class="links-field">
-                            <label class="form-label">LinkedIn</label>
+                            <span class="profile-link-icon" aria-hidden="true">in</span>
+                            <label class="form-label" for="link-linkedin">LinkedIn</label>
+                            <p class="profile-link-description">Your professional network</p>
                             <div class="links-input-row">
                                 <input type="url" class="text-input" id="link-linkedin"
                                     placeholder="https://linkedin.com/in/yourname" />
                                 <button class="link-copy-btn" id="link-linkedin-copy" style="display:none"
-                                    title="Copy link">⎘</button>
+                                    title="Copy link" aria-label="Copy LinkedIn link">⎘</button>
                                 <a class="link-open-btn" id="link-linkedin-open" href="#" target="_blank" rel="noopener"
                                     style="display:none">Open ↗</a>
                             </div>
                         </div>
                         <div class="links-field">
-                            <label class="form-label">GitHub</label>
+                            <span class="profile-link-icon" aria-hidden="true">&lt;/&gt;</span>
+                            <label class="form-label" for="link-github">GitHub</label>
+                            <p class="profile-link-description">Your code and contributions</p>
                             <div class="links-input-row">
                                 <input type="url" class="text-input" id="link-github"
                                     placeholder="https://github.com/yourusername" />
                                 <button class="link-copy-btn" id="link-github-copy" style="display:none"
-                                    title="Copy link">⎘</button>
+                                    title="Copy link" aria-label="Copy GitHub link">⎘</button>
                                 <a class="link-open-btn" id="link-github-open" href="#" target="_blank" rel="noopener"
                                     style="display:none">Open ↗</a>
                             </div>
                         </div>
                         <div class="links-field">
-                            <label class="form-label">Portfolio</label>
+                            <span class="profile-link-icon" aria-hidden="true">&nearr;</span>
+                            <label class="form-label" for="link-portfolio">Portfolio</label>
+                            <p class="profile-link-description">Your work, all in one place</p>
                             <div class="links-input-row">
                                 <input type="url" class="text-input" id="link-portfolio"
                                     placeholder="https://yourportfolio.com" />
                                 <button class="link-copy-btn" id="link-portfolio-copy" style="display:none"
-                                    title="Copy link">⎘</button>
+                                    title="Copy link" aria-label="Copy portfolio link">⎘</button>
                                 <a class="link-open-btn" id="link-portfolio-open" href="#" target="_blank"
                                     rel="noopener" style="display:none">Open ↗</a>
                             </div>
                         </div>
                     </div>
-                    <button class="btn-secondary" id="save-links-btn" style="margin-top:14px">Save Links</button>
+                    <div class="profile-section-actions"><button class="btn-secondary" id="save-links-btn">Save
+                            Links</button></div>
                 </div>
 
                 <div class="profile-card full-width" data-card="templates">
                     <div class="profile-section-title">Email Templates</div>
                     <p class="profile-hint">Save reusable email templates — thank-you notes, follow-ups, withdrawal
                         messages. Load any template into a job's cover letter from the Application tab.</p>
-                    <div class="template-input-row">
-                        <input type="text" class="text-input" id="template-name"
-                            placeholder="Template name e.g. Thank-You After Interview…" />
-                        <select class="select-input" id="template-type" style="width:auto">
-                            <option value="thank-you">Thank-You</option>
-                            <option value="follow-up">Follow-Up</option>
-                            <option value="withdrawal">Withdrawal</option>
-                            <option value="custom">Custom</option>
-                        </select>
-                        <button class="btn-primary" id="add-template-btn">Add</button>
+                    <div class="profile-template-composer">
+                        <div class="profile-editor-heading">Create a template<span>Give your next message a head
+                                start.</span></div>
+                        <div class="template-input-row">
+                            <label class="profile-credential-field"><span class="form-label">Template name</span>
+                                <input type="text" class="text-input" id="template-name"
+                                    placeholder="e.g. Thank-You After Interview" /></label>
+                            <label class="profile-credential-field"><span class="form-label">Message type</span>
+                                <select class="select-input" id="template-type">
+                                    <option value="thank-you">Thank-You</option>
+                                    <option value="follow-up">Follow-Up</option>
+                                    <option value="withdrawal">Withdrawal</option>
+                                    <option value="custom">Custom</option>
+                                </select></label>
+                            <button class="btn-primary" id="add-template-btn">Create Template</button>
+                        </div>
                     </div>
                     <div class="template-list" id="template-list"></div>
                 </div>
 
                 <div class="profile-card full-width" data-card="coverage">
                     <div class="profile-section-title">Skill Coverage</div>
-                    <p class="profile-hint">How often each of your skills appears in your tracked jobs.</p>
+                    <p class="profile-hint">See which profile skills match your tracked jobs. Each bar shows the share
+                        of all tracked jobs with a match.</p>
                     <div class="skill-filter-row">
                         <button class="coverage-filter-btn active" data-filter="all">All</button>
                         <button class="coverage-filter-btn" data-filter="Expert">Expert</button>
@@ -1577,14 +1612,26 @@
 
     <!-- ── MODAL: ANALYTICS FILTER DRILL-DOWN ───────────────── -->
     <div class="modal-overlay" id="modal-an-filter" aria-hidden="true">
-        <div class="modal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="an-filter-modal-title"
+            aria-describedby="an-filter-modal-sub">
             <div class="modal-header">
-                <div>
+                <div class="filter-modal-heading">
+                    <span class="filter-modal-eyebrow">Opportunity insights</span>
                     <h2 class="modal-title" id="an-filter-modal-title">Jobs</h2>
                     <div class="an-filter-modal-sub" id="an-filter-modal-sub"></div>
                 </div>
-                <button class="modal-close" data-close="modal-an-filter">✕</button>
+                <button class="modal-close" data-close="modal-an-filter" aria-label="Close job results">✕</button>
             </div>
+            <div class="filter-modal-search">
+                <input type="search" class="text-input" id="an-filter-modal-search"
+                    aria-label="Search matching jobs by role, company, or location"
+                    placeholder="Search role, company, or location..." autocomplete="off"
+                    aria-controls="an-filter-modal-jobs">
+                <button type="button" class="btn-ghost" id="an-filter-modal-clear" hidden>Clear</button>
+            </div>
+            <div class="filter-modal-summary"><span id="an-filter-modal-count" role="status" aria-live="polite"
+                    aria-atomic="true"></span><span>Select a job to explore the details <span
+                        aria-hidden="true">&rarr;</span></span></div>
             <div class="modal-body" id="an-filter-modal-jobs">
                 <!-- populated by JS -->
             </div>

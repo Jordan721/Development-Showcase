@@ -548,7 +548,7 @@ function renderCoverageBars() {
   const skills = state.profile.skills;
 
   if (skills.length === 0) {
-    el.innerHTML = '<p class="empty-msg">Add skills to see coverage.</p>';
+    el.innerHTML = '<div class="profile-empty-state"><span aria-hidden="true">&#9678;</span><strong>Discover your skill coverage</strong><p>Add profile skills and analyze job descriptions to see where your strengths match.</p></div>';
     if (footer) footer.innerHTML = '';
     return;
   }
@@ -558,10 +558,18 @@ function renderCoverageBars() {
 
   const jobCount = state.jobs.length;
   const countMap = {};
-  state.jobs.forEach(j => (j.matched || []).forEach(skill => {
-    const match = skills.find(s => s.name.toLowerCase().includes(skill) || skill.includes(s.name.toLowerCase()));
-    if (match) countMap[match.name] = (countMap[match.name] || 0) + 1;
-  }));
+  state.jobs.forEach(j => {
+    const matchedNames = new Set();
+    (j.matched || []).forEach(skill => {
+      const key = skill.trim().toLowerCase();
+      if (!key) return;
+      const match = skills.find(s => s.name.toLowerCase().includes(key) || key.includes(s.name.toLowerCase()));
+      if (match) matchedNames.add(match.name);
+    });
+    matchedNames.forEach(name => {
+      countMap[name] = (countMap[name] || 0) + 1;
+    });
+  });
 
   // Sort Expert → Intermediate → Beginner, then apply filter
   const sorted = ['Expert', 'Intermediate', 'Beginner'].flatMap(lvl =>
@@ -577,7 +585,7 @@ function renderCoverageBars() {
   });
 
   if (filtered.length === 0) {
-    el.innerHTML = '<p class="empty-msg">No skills matched yet — add jobs to see coverage.</p>';
+    el.innerHTML = '<div class="profile-empty-state"><span aria-hidden="true">&#9678;</span><strong>No matches in this view yet</strong><p>Try another proficiency filter or analyze more job descriptions against your profile.</p></div>';
     if (footer) footer.innerHTML = '';
     return;
   }
@@ -601,8 +609,8 @@ function renderCoverageBars() {
     const pct = jobCount > 0 ? Math.round((count / jobCount) * 100) : 0;
     html += `<div class="coverage-row">
       <div class="coverage-skill">${escHtml(s.name)}</div>
-      <div class="coverage-track"><div class="coverage-fill" style="width:${pct}%"></div></div>
-      <div class="coverage-count">${count} jobs</div>
+      <div class="coverage-track" role="meter" aria-label="${escHtml(s.name)} coverage" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><div class="coverage-fill" style="width:${pct}%"></div></div>
+      <div class="coverage-count"><strong>${pct}%</strong><span>${count} of ${jobCount} job${jobCount === 1 ? '' : 's'}</span></div>
     </div>`;
   });
   el.innerHTML = html;
@@ -711,7 +719,7 @@ function renderTemplates() {
   if (!list) return;
   const templates = state.templates || [];
   if (templates.length === 0) {
-    list.innerHTML = '<p class="empty-msg" style="margin-top:4px">No templates saved yet.</p>';
+    list.innerHTML = '<div class="profile-empty-state"><span aria-hidden="true">&#9993;</span><strong>Your message library starts here</strong><p>Create a thank-you, follow-up, or custom template to reuse across your applications.</p></div>';
     return;
   }
   list.innerHTML = templates.map((t, i) => `
@@ -720,10 +728,10 @@ function renderTemplates() {
         <span class="template-card-name">${escHtml(t.name)}</span>
         <span class="template-type-badge tpl-${escHtml(t.type)}">${TEMPLATE_TYPE_LABELS[t.type] || t.type}</span>
       </div>
-      <div class="template-card-body" id="tpl-body-${i}">${escHtml(t.body)}</div>
+      <div class="template-card-body${t.body ? '' : ' template-card-body--empty'}" id="tpl-body-${i}">${t.body ? escHtml(t.body) : 'Add your message to make this template ready to use.'}</div>
       <div class="template-card-actions">
-        <button class="btn-secondary tpl-edit-btn" data-index="${i}" style="font-size:11px;padding:3px 10px">Edit</button>
-        <button class="btn-ghost tpl-delete-btn" data-index="${i}" style="font-size:11px">Delete</button>
+        <button class="btn-secondary tpl-edit-btn" data-index="${i}">Edit Template</button>
+        <button class="btn-ghost tpl-delete-btn" data-index="${i}">Delete</button>
       </div>
     </div>`).join('');
 

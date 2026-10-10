@@ -1596,6 +1596,30 @@ div.dash-skills-summary {
 .dash-card[data-card="funnel"] {
   border-top: 2px solid var(--accent);
   --dash-dot: var(--accent);
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-card[data-card="funnel"] .dash-card-header,
+.dash-card[data-card="funnel"] .dash-card-description {
+  flex-shrink: 0;
+}
+
+#dash-funnel {
+  flex: 1;
+  display: grid;
+  grid-auto-rows: 1fr;
+  gap: 12px;
+}
+
+#dash-funnel .pipeline-bar-row {
+  min-height: 32px;
+  margin-bottom: 0;
+}
+
+#dash-funnel .empty-msg {
+  margin: 0;
 }
 
 .dash-card[data-card="velocity"] {
@@ -1637,21 +1661,20 @@ div.dash-skills-summary {
 
 /* Weekly velocity chart */
 .dash-vel-chart {
-  display: flex;
-  align-items: flex-end;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-items: stretch;
   gap: 6px;
-  height: 110px;
   padding-bottom: 0;
 }
 
 .dash-vel-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid;
+  grid-template-rows: 16px 80px minmax(24px, auto);
+  align-items: stretch;
   gap: 4px;
-  height: 100%;
-  justify-content: flex-end;
+  min-width: 0;
+  text-align: center;
 }
 
 .dash-vel-count {
@@ -1659,11 +1682,10 @@ div.dash-skills-summary {
   font-weight: 700;
   color: var(--accent);
   min-height: 14px;
-  line-height: 1;
+  line-height: 16px;
 }
 
 .dash-vel-bar-wrap {
-  flex: 1;
   display: flex;
   align-items: flex-end;
   width: 100%;
@@ -1682,9 +1704,10 @@ div.dash-skills-summary {
   font-size: 9px;
   color: var(--text-muted);
   text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  line-height: 1.4;
   max-width: 100%;
   padding-top: 4px;
   border-top: 1px solid var(--border);
