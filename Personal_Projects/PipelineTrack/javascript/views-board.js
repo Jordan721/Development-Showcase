@@ -1064,10 +1064,7 @@ function renderBoardTimeline(jobs) {
       if (!entries.length) return '';
       if (group.kind==='history') entries.reverse();
       return `<section class="agenda-group agenda-${group.kind}"><h3>${group.title}<span>${entries.length}</span></h3><div>${entries.map((entry,i)=>`<button class="tl-row agenda-entry" data-job-id="${escHtml(entry.job.id)}" style="--agenda-delay:${Math.min(i,10)*25}ms"><span class="agenda-date"><strong>${entry.date.toLocaleDateString('en-US',{day:'2-digit'})}</strong><span>${entry.date.toLocaleDateString('en-US',{month:'short',year:'numeric'})}</span></span><span class="agenda-entry-content"><span class="agenda-type">${entry.label}${entry.time?' · '+escHtml(entry.time):''}</span><strong>${escHtml(entry.job.role)}</strong><span>${escHtml(entry.job.company)}</span></span><span class="stage-badge stage-${entry.job.stage}">${STAGE_LABELS[entry.job.stage] || escHtml(entry.job.stage)}</span><span class="agenda-arrow" aria-hidden="true">↗</span></button>`).join('')}</div></section>`;
-    }).join('') || ` < div class = "agenda-notice" > No $ {
-    timelineEventFilter === 'all' ? 'dated entries' : labels[timelineEventFilter].toLowerCase()
-  }
-  match these jobs.Adjust your filters or add dates to an opportunity. < /div>`}</div > `;
+    }).join('') || `<div class="agenda-notice">No ${timelineEventFilter === 'all' ? 'dated entries' : labels[timelineEventFilter].toLowerCase()} match these jobs. Adjust your filters or add dates to an opportunity.</div>`}</div>`;
 }
 const MILESTONE_STAGES = ['screening', 'interview', 'offer'];
 
