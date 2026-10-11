@@ -8,7 +8,7 @@
 
 ## 🕹️ What is Game Vault?
 
-**Game Vault** is a retro-styled arcade hub showcasing browser-based games I've created. From survival horror to rhythm games, each project represents different aspects of game development — all playable directly in your browser.
+**Game Vault** is an arcade library showcasing browser-based games I've created. A polished dark layout, lime accents, and visible gameplay previews make the collection easy to browse, while achievements and hidden extras keep it playful. From survival horror to rhythm games, each project represents different aspects of game development — all playable directly in your browser.
 
 ![Arcade GIF](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExc2F3eDU1bDY0NmluajFiNjlpdzlibWlyMmJhazd5c3VmemF0c2dwMSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/YqMF4AHYlGEWk/giphy.gif)
 
@@ -65,9 +65,14 @@ A physics-based 3D destruction sandbox. Load a shape (or upload your own OBJ), g
 
 | Feature | Description |
 |---------|-------------|
-| 🌌 **Retro Synthwave Design** | Neon colors, glitch effects, and CRT scanlines |
-| 🎬 **Animated Backgrounds** | Dynamic canvas animations (toggleable) |
-| 🔊 **Sound Effects** | Immersive audio feedback (toggleable) |
+| 🌌 **Arcade Library Design** | Dark panels, lime accents, clean typography, and responsive cards |
+| 🌟 **Featured Game** | Beat Burst spotlight with a direct link to play |
+| 🎬 **Gameplay Previews** | Visible GIF previews on every game card |
+| 🔎 **Search & Filters** | Search titles, descriptions, and tags; combine with All games, Action, Rhythm, or Explore & create |
+| 🎲 **Surprise Me** | Launch a random game from the visible results; uses the full collection when no results match |
+| 🎬 **Animated Background** | Subtle canvas backdrop with a pause control; starts paused for reduced-motion preferences |
+| 🔊 **Sound Effects** | Optional audio feedback, off by default; your sound preference is remembered |
+| ⌨️ **Accessible Navigation** | Skip-to-games link, visible keyboard focus, labeled controls, and filter selection states |
 | 🏆 **Achievement System** | Unlock achievements by exploring |
 | 💻 **Secret Terminal** | Hidden command-line interface |
 | 🐍 **Hidden Snake Game** | Classic Snake playable in the terminal |
@@ -118,7 +123,7 @@ The web games above are **modern recreations** of projects originally built year
 
 ```
 📄 HTML5        → Structure
-🎨 CSS3         → Styling, Animations, Scanlines
+🎨 CSS3         → Responsive Layout, Styling, Animations
 ⚡ JavaScript   → Game Logic, Canvas, Interactivity
 🎵 Web Audio    → Sound Effects & Music
 🎮 Canvas API   → Game Rendering
@@ -132,9 +137,11 @@ The web games above are **modern recreations** of projects originally built year
 
 ```
 Game_Vault/
-├── 📄 index.html              # Main arcade hub
-├── 🎨 styles.css              # Retro synthwave styling
+├── 📄 index.html              # Arcade library, featured game, and game cards
+├── 🎨 styles.css              # Base hub, overlays, and legacy arcade styling
+├── 🎨 library.css             # Polished library layout and responsive overrides
 ├── ⚡ script.js               # Hub interactivity & terminal
+├── ⚡ library.js              # Search, category filters, and random game launch
 ├── 📖 README.md               # You are here!
 ├── 📁 previews/               # Game preview GIFs
 ├── 📁 Zips/                   # Legacy game downloads
@@ -151,10 +158,11 @@ Game_Vault/
 ## 🚀 Getting Started
 
 1. **Open** `index.html` in your browser
-2. **Scroll** through the game cards
-3. **Click** any game to play
-4. **Press `~`** to access the secret terminal
-5. **Try the Konami Code** for a surprise
+2. **Explore the vault** to browse the collection, or launch the featured Beat Burst game
+3. **Search or filter** by Action, Rhythm, or Explore & create to find a game
+4. **Click** a game card to play, or choose **Surprise me** for a random pick
+5. **Use the header controls** to enable sound effects or pause the background animation
+6. **Press `~`** to access the secret terminal, or try the Konami Code for a surprise
 
 ```bash
 # Or serve it locally
@@ -163,28 +171,29 @@ npx serve .
 
 ---
 
-## 📊 Dev Stats
+## 📊 Inside the Vault
 
 | Stat | Value |
 |------|-------|
-| 🎮 Games Created | 6 |
-| ⌨️ Lines of Code | 5000+ |
-| ⚡ Energy Drinks | 99 |
-| 🐛 Bugs Squashed | 404 |
+| 🎮 Browser Experiences | 6 |
+| ⌨️ Play Styles | 3: Action, Rhythm, Explore & create |
+| 📥 Legacy Downloads | 2 |
+| 🏆 Achievements to Discover | 6 |
 
 ---
 
 ## 🎨 Design Elements
 
-The Game Vault uses a retro arcade aesthetic:
+The Game Vault pairs a professional library layout with arcade details:
 
 | Element | Effect |
 |---------|--------|
-| 🌈 Neon Gradients | Purple to cyan color schemes |
-| 📺 Scanlines | CRT monitor overlay effect |
-| ✨ Glitch Text | Title animations |
-| 🖱️ Cursor Trail | Glowing particle effects |
-| 🃏 Card Hover | 3D transforms with glow |
+| 🌈 Color Palette | Dark slate panels with lime highlights |
+| 🌟 Hero | Clear introduction, featured gameplay, and browse/random actions |
+| 🎬 Game Cards | Persistent previews, readable descriptions, genre tags, and platform labels |
+| 🃏 Card Hover | Gentle lift, preview zoom, and highlighted play action |
+| 📱 Responsive Layout | Three columns on wide screens, two on medium screens, one on small phones |
+| ⌨️ Motion & Focus | Reduced-motion styling and clear keyboard focus indicators |
 
 ---
 
@@ -195,7 +204,7 @@ There are several hidden features to discover:
 1. **Konami Code** - ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️ B A
 2. **Terminal** - Press `~` key anywhere
 3. **Snake Game** - Type `snake` in terminal
-4. **Matrix Rain** - Type `matrix` in terminal
+4. **Matrix Reference** - Type `matrix` in terminal for a hidden message
 
 ---
 

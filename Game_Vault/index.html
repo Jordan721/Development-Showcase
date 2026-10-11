@@ -5,15 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Vault | Jordan's Games</title>
+    <meta name="description"
+        content="Explore Jordan's collection of browser games: arcade challenges, rhythm games, creative sandboxes, and hidden extras.">
     <link rel="icon" type="image/svg+xml" href="../favicon.svg">
     <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Press+Start+2P&family=Inter:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Press+Start+2P&family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="library.css">
 </head>
 
 <body>
+    <a class="skip-link" href="#library">Skip to games</a>
     <!-- Scanlines overlay -->
     <div class="scanlines"></div>
 
@@ -29,13 +33,17 @@
         <header class="hub-header">
             <a href="../index.html" class="back-btn">
                 <i class="fas fa-arrow-left"></i>
-                <span>EXIT</span>
+                <span>Portfolio</span>
             </a>
+            <a href="#library" class="vault-brand"><i class="fas fa-gamepad" aria-hidden="true"></i> GAME VAULT<span>by
+                    Jordan</span></a>
             <div class="header-controls">
-                <button class="anim-toggle" id="animToggle" title="Toggle Background Animation">
+                <button class="anim-toggle" id="animToggle" title="Toggle Background Animation"
+                    aria-label="Toggle background animation">
                     <i class="fas fa-pause" id="animIcon"></i>
                 </button>
-                <button class="sound-toggle" id="soundToggle" title="Toggle Sound Effects">
+                <button class="sound-toggle" id="soundToggle" title="Toggle Sound Effects"
+                    aria-label="Toggle sound effects">
                     <i class="fas fa-volume-up" id="soundIcon"></i>
                 </button>
                 <div class="player-stats">
@@ -56,34 +64,54 @@
         <!-- Title Section -->
         <section class="title-section">
             <div class="title-container">
-                <div class="subtitle-glitch" data-text="WELCOME TO THE">WELCOME TO THE</div>
-                <h1 class="main-title glitch" data-text="GAME VAULT">GAME VAULT</h1>
-                <p class="tagline">
-                    <span class="typing-text"></span>
-                    <span class="cursor">|</span>
-                </p>
-            </div>
-            <div class="press-start">
-                <span class="blink">SCROLL TO SELECT GAME</span>
-                <div class="scroll-indicator">
-                    <i class="fas fa-chevron-down"></i>
-                    <i class="fas fa-chevron-down"></i>
-                    <i class="fas fa-chevron-down"></i>
+                <div class="vault-eyebrow"><span></span> INDEPENDENT GAMES. ORIGINAL IDEAS.</div>
+                <h1 class="main-title">Small games.<br><span>Big play energy.</span></h1>
+                <p class="hero-description">A collection of late-night experiments, impossible challenges, and worlds
+                    worth exploring. Pick your next obsession.</p>
+                <div class="hero-actions"><a class="vault-button" href="#library">Explore the vault <i
+                            class="fas fa-arrow-down" aria-hidden="true"></i></a><button class="vault-button secondary"
+                        id="surpriseGame" type="button">Surprise me <i class="fas fa-dice"
+                            aria-hidden="true"></i></button></div>
+                <div class="hero-notes"><span><i class="fas fa-gamepad" aria-hidden="true"></i> 6 browser
+                        experiences</span><span><i class="fas fa-bolt" aria-hidden="true"></i> No install needed</span>
                 </div>
             </div>
+            <a class="featured-game" href="Beat_Burst/index.html">
+                <div class="featured-art"><img src="previews/beat-burst.gif" alt="Beat Burst rhythm game in action"
+                        fetchpriority="high"><span class="featured-badge"><span></span> IN THE SPOTLIGHT</span><span
+                        class="featured-play"><i class="fas fa-play" aria-hidden="true"></i></span></div>
+                <div class="featured-info">
+                    <div><span class="vault-eyebrow">RHYTHM / ARCADE</span>
+                        <h2>Beat Burst</h2>
+                        <p>Find your rhythm. Chase the perfect run.</p>
+                    </div><span class="featured-arrow" aria-hidden="true">↗</span>
+                </div>
+            </a>
         </section>
 
         <!-- Games Grid -->
-        <section class="games-section">
+        <section class="games-section" id="library" aria-labelledby="library-title">
             <div class="section-header">
-                <div class="header-line"></div>
-                <h2><i class="fas fa-folder-open"></i> SELECT GAME</h2>
-                <div class="header-line"></div>
+                <div><span class="vault-eyebrow">THE COLLECTION</span>
+                    <h2 id="library-title">Choose your next adventure.</h2>
+                </div><span class="library-count" id="libraryCount" aria-live="polite">6 experiences</span>
             </div>
+            <div class="library-toolbar">
+                <div class="library-filters" role="group" aria-label="Filter games by category"><button type="button"
+                        class="library-filter active" data-filter="all" aria-pressed="true">All games</button><button
+                        type="button" class="library-filter" data-filter="action"
+                        aria-pressed="false">Action</button><button type="button" class="library-filter"
+                        data-filter="rhythm" aria-pressed="false">Rhythm</button><button type="button"
+                        class="library-filter" data-filter="explore" aria-pressed="false">Explore &amp; create</button>
+                </div><label class="library-search"><i class="fas fa-search" aria-hidden="true"></i><span
+                        class="sr-only">Search games</span><input type="search" id="gameSearch"
+                        placeholder="Find a game…"></label>
+            </div>
+            <p class="library-empty" id="libraryEmpty" hidden>No games match. Try another search or category.</p>
 
             <div class="games-grid">
                 <!-- The Unfair Game -->
-                <a href="The_Unfair_Game_Web_Ed/index.html" class="game-card" data-game="unfair"
+                <a href="The_Unfair_Game_Web_Ed/index.html" class="game-card" data-game="unfair" data-category="action"
                     data-preview="previews/unfair-game.gif">
                     <div class="card-glow"></div>
                     <div class="card-border"></div>
@@ -134,7 +162,8 @@
                 </a>
 
                 <!-- THW Game -->
-                <a href="THW/index.html" class="game-card" data-game="thw" data-preview="previews/thw-game.gif">
+                <a href="THW/index.html" class="game-card" data-game="thw" data-category="action"
+                    data-preview="previews/thw-game.gif">
                     <div class="card-glow"></div>
                     <div class="card-border"></div>
                     <div class="game-preview">
@@ -184,7 +213,7 @@
                 </a>
 
                 <!-- The Idea Space -->
-                <a href="Idea_Space/index.html" class="game-card" data-game="ideaspace"
+                <a href="Idea_Space/index.html" class="game-card" data-game="ideaspace" data-category="explore"
                     data-preview="previews/idea-space.gif">
                     <div class="card-glow"></div>
                     <div class="card-border"></div>
@@ -237,7 +266,7 @@
                 </a>
 
                 <!-- Beat Burst -->
-                <a href="Beat_Burst/index.html" class="game-card" data-game="beatburst"
+                <a href="Beat_Burst/index.html" class="game-card" data-game="beatburst" data-category="rhythm"
                     data-preview="previews/beat-burst.gif">
                     <div class="card-glow"></div>
                     <div class="card-border"></div>
@@ -288,7 +317,8 @@
                 </a>
 
                 <!-- Typebound Dungeon -->
-                <a href="TypeboundDungeon/index.html" class="game-card" data-game="typebound-dungeon">
+                <a href="TypeboundDungeon/index.html" class="game-card" data-game="typebound-dungeon"
+                    data-category="action">
                     <div class="card-glow"></div>
                     <div class="card-border"></div>
                     <div class="game-preview">
@@ -338,7 +368,7 @@
                 </a>
 
                 <!-- RuinMaker -->
-                <a href="RuinMaker/index.html" class="game-card" data-game="ruinmaker">
+                <a href="RuinMaker/index.html" class="game-card" data-game="ruinmaker" data-category="explore">
                     <div class="card-glow"></div>
                     <div class="card-border"></div>
                     <div class="game-preview">
@@ -464,29 +494,29 @@
         <section class="stats-section">
             <div class="section-header">
                 <div class="header-line"></div>
-                <h2><i class="fas fa-chart-bar"></i> DEV STATS</h2>
+                <h2><i class="fas fa-chart-bar"></i> INSIDE THE VAULT</h2>
                 <div class="header-line"></div>
             </div>
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-code"></i></div>
                     <div class="stat-number" data-count="6">0</div>
-                    <div class="stat-name">Games Created</div>
+                    <div class="stat-name">Browser Experiences</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-keyboard"></i></div>
-                    <div class="stat-number" data-count="5000">0</div>
-                    <div class="stat-name">Lines of Code</div>
+                    <div class="stat-number" data-count="3">0</div>
+                    <div class="stat-name">Play Styles</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-bolt"></i></div>
-                    <div class="stat-number" data-count="99">0</div>
-                    <div class="stat-name">Energy Drinks Downed</div>
+                    <div class="stat-number" data-count="2">0</div>
+                    <div class="stat-name">Legacy Downloads</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon"><i class="fas fa-bug"></i></div>
-                    <div class="stat-number" data-count="404">0</div>
-                    <div class="stat-name">Bugs Squashed</div>
+                    <div class="stat-number" data-count="6">0</div>
+                    <div class="stat-name">Achievements to Discover</div>
                 </div>
             </div>
         </section>
@@ -651,6 +681,7 @@
     </div>
 
     <script src="script.js"></script>
+    <script src="library.js"></script>
 </body>
 
 </html>

@@ -5,7 +5,7 @@
 class SoundEffects {
     constructor() {
         this.audioContext = null;
-        this.enabled = localStorage.getItem('soundEnabled') !== 'false';
+        this.enabled = localStorage.getItem('soundEnabled') === 'true';
         this.initialized = false;
     }
 
@@ -106,6 +106,7 @@ const soundToggle = document.getElementById('soundToggle');
 const soundIcon = document.getElementById('soundIcon');
 
 if (soundToggle) {
+    soundToggle.setAttribute('aria-pressed', String(sfx.enabled));
     // Set initial state
     if (!sfx.enabled) {
         soundToggle.classList.add('muted');
@@ -116,6 +117,7 @@ if (soundToggle) {
         const enabled = sfx.toggle();
         soundToggle.classList.toggle('muted', !enabled);
         soundIcon.className = enabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+        soundToggle.setAttribute('aria-pressed', String(enabled));
     });
 }
 
@@ -155,7 +157,7 @@ const ctx = canvas.getContext('2d');
 let gridOffset = 0;
 const gridSpeed = 0.5;
 const horizonY = 0.35; // Where the horizon sits (percentage from top)
-let animationPaused = localStorage.getItem('animationPaused') === 'true';
+let animationPaused = localStorage.getItem('animationPaused') === 'true' || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 let animationFrameId = null;
 
 function resizeCanvas() {
@@ -351,6 +353,7 @@ const animToggle = document.getElementById('animToggle');
 const animIcon = document.getElementById('animIcon');
 
 if (animToggle) {
+    animToggle.setAttribute('aria-pressed', String(!animationPaused));
     // Set initial state
     if (animationPaused) {
         animToggle.classList.add('paused');
@@ -362,6 +365,8 @@ if (animToggle) {
         localStorage.setItem('animationPaused', animationPaused);
         animToggle.classList.toggle('paused', animationPaused);
         animIcon.className = animationPaused ? 'fas fa-play' : 'fas fa-pause';
+        animToggle.setAttribute('aria-pressed', String(!animationPaused));
+        if (animationFrameId !== null) cancelAnimationFrame(animationFrameId);
         sfx.play('toggle');
 
         if (!animationPaused) {
@@ -393,6 +398,7 @@ let typingSpeed = 100;
 const typingElement = document.querySelector('.typing-text');
 
 function typeText() {
+    if (!typingElement) return;
     const currentPhrase = phrases[phraseIndex];
 
     if (isDeleting) {
@@ -563,6 +569,7 @@ const gameCards = document.querySelectorAll('.game-card:not(.coming-soon):not(.e
 
 gameCards.forEach(card => {
     card.addEventListener('mouseenter', () => {
+        if (document.querySelector('.library-toolbar')) return;
         // Create a visual "click" indicator
         const indicator = document.createElement('div');
         indicator.style.cssText = `
@@ -623,7 +630,7 @@ window.addEventListener('scroll', () => {
     const scrolled = window.pageYOffset;
     const titleSection = document.querySelector('.title-section');
 
-    if (titleSection) {
+    if (titleSection && !document.querySelector('.library-toolbar')) {
         titleSection.style.transform = `translateY(${scrolled * 0.3}px)`;
         titleSection.style.opacity = 1 - (scrolled / 700);
     }
@@ -688,7 +695,7 @@ displayRandomQuote();
 const cursorCanvas = document.getElementById('cursorTrail');
 const cursorCtx = cursorCanvas ? cursorCanvas.getContext('2d') : null;
 
-if (cursorCanvas && cursorCtx) {
+if (cursorCanvas && cursorCtx && !document.querySelector('.library-toolbar')) {
     cursorCanvas.width = window.innerWidth;
     cursorCanvas.height = window.innerHeight;
 
@@ -1049,10 +1056,8 @@ const terminalCommands = {
 Created by Jordan Alexis
 A collection of games built with passion.
 From humble FPS Creator beginnings to modern web games.`,
-    games: () => `[01] The Unfair Game - PLAYABLE
-[02] THW - IN DEVELOPMENT
-[03] Snake - Type 'snake' to play!`,
-    stats: () => `Games Created: 2
+    games: () => Array.from(document.querySelectorAll('a.game-card[data-game]')).map((card, i) => `[0${i + 1}] ${card.querySelector('.game-title').textContent.trim()} - PLAYABLE`).join('\n') + "\n[BONUS] Snake - Type 'snake' to play!",
+    stats: () => `Games Created: 6
 Lines of Code: 5000+
 Energy Drinks: 99
 Bugs Squashed: 404`,
