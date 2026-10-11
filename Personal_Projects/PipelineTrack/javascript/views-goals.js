@@ -15,21 +15,74 @@ const GOAL_TYPE_LABELS = {
   networking: 'Contacts Added',
 };
 
+function goalPeriodBounds(period, now = new Date()) {
+  const start = new Date(now.getFullYear(), now.getMonth(), period === 'week' ? now.getDate() - now.getDay() : 1);
+  const end = period === 'week' ? new Date(start.getFullYear(), start.getMonth(), start.getDate() + 7) : new Date(start.getFullYear(), start.getMonth() + 1, 1);
+  return {
+    start,
+    end
+  };
+}
+
+function goalLocalDate(value) {
+  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) return new Date(value + 'T00:00:00');
+  return new Date(value);
+}
+
+function goalPace(goal, current, now = new Date()) {
+  const {
+    start,
+    end
+  } = goalPeriodBounds(goal.period, now);
+  // Calendar days avoid daylight-saving changes affecting pace and days left.
+  const dayNumber = date => Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000;
+  const totalDays = dayNumber(end) - dayNumber(start);
+  const elapsedDays = dayNumber(now) - dayNumber(start);
+  const daysLeft = Math.max(1, totalDays - elapsedDays);
+  const remaining = Math.max(0, goal.target - current);
+  return {
+    daysLeft,
+    remaining,
+    daily: Math.ceil(remaining / daysLeft),
+    behind: remaining > 0 && current < Math.floor(goal.target * elapsedDays / totalDays)
+  };
+}
+
+function recordGoalProgress(persist = true) {
+  let changed = false;
+  (state.goals || []).forEach(goal => {
+    const start = goalPeriodBounds(goal.period).start.toISOString();
+    const current = computeGoalCurrent(goal);
+    const history = goal.history || [];
+    const entry = history.find(item => item.start === start && item.period === goal.period && item.type === goal.type);
+    if (!entry || entry.current !== current || entry.target !== goal.target) {
+      if (entry) Object.assign(entry, {
+        current,
+        target: goal.target
+      });
+      else history.push({
+        start,
+        current,
+        target: goal.target,
+        period: goal.period,
+        type: goal.type
+      });
+      goal.history = history.slice(-24);
+      changed = true;
+    }
+  });
+  if (changed && persist) save();
+}
+
 function filterJobsByGoalPeriod(jobs, period) {
-  const now = new Date();
-  if (period === 'week') {
-    const start = new Date(now);
-    start.setDate(now.getDate() - now.getDay());
-    start.setHours(0, 0, 0, 0);
-    return jobs.filter(j => new Date(j.dateAdded) >= start);
-  }
-  if (period === 'month') {
-    return jobs.filter(j => {
-      const d = new Date(j.dateAdded);
-      return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
-    });
-  }
-  return jobs;
+  const {
+    start,
+    end
+  } = goalPeriodBounds(period);
+  return jobs.filter(job => {
+    const date = goalLocalDate(job.dateAdded);
+    return date >= start && date < end;
+  });
 }
 
 function computeGoalCurrent(goal) {
@@ -41,21 +94,7 @@ function computeGoalCurrent(goal) {
   if (goal.type === 'screenings') return j.filter(x => ['screening', 'interview', 'offer'].includes(x.stage)).length;
   if (goal.type === 'saved') return j.filter(x => x.stage === 'saved').length;
   if (goal.type === 'networking') {
-    const now = new Date();
-    const contacts = state.contacts || [];
-    if (goal.period === 'week') {
-      const start = new Date(now);
-      start.setDate(now.getDate() - now.getDay());
-      start.setHours(0, 0, 0, 0);
-      return contacts.filter(c => c.dateAdded && new Date(c.dateAdded) >= start).length;
-    }
-    if (goal.period === 'month') {
-      return contacts.filter(c => {
-        if (!c.dateAdded) return false;
-        const d = new Date(c.dateAdded);
-        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
-      }).length;
-    }
+    return filterJobsByGoalPeriod(state.contacts || [], goal.period).length;
   }
   return 0;
 }
@@ -80,7 +119,10 @@ function saveGoal() {
     return;
   }
   const id = document.getElementById('goal-edit-id').value || uid();
+  recordGoalProgress();
+  const existing = state.goals.find(g => g.id === id);
   const goal = {
+    ...existing,
     id,
     type,
     period,
@@ -107,7 +149,8 @@ function goalCardHTML(g) {
   const current = computeGoalCurrent(g);
   const pct = Math.min(Math.round((current / g.target) * 100), 100);
   const done = current >= g.target;
-  const behind = !done && current > 0 && current < g.target / 2;
+  const pace = goalPace(g, current);
+  const behind = pace.behind;
   const cardCls = done ? 'goal-complete' : behind ? 'goal-behind' : '';
   const fillCls = done ? 'fill-done' : behind ? 'fill-behind' : '';
   const statusCls = done ? 'goal-status-done' : behind ? 'goal-status-behind' : current > 0 ? 'goal-status-on-track' : 'goal-status-not-started';
@@ -128,8 +171,10 @@ function goalCardHTML(g) {
       </div>
       <div class="goal-track"><div class="goal-fill ${fillCls}" style="width:${pct}%"></div></div>
       <div class="goal-status-label ${statusCls}">${statusText} · ${pct}% complete</div>
+      <div class="goal-pace"><strong>${done ? 'Target reached' : `${pace.remaining} left · ${pace.daysLeft} day${pace.daysLeft === 1 ? '' : 's'} remaining`}</strong><span>${done ? 'You have met your goal for this period.' : `Aim for ${pace.daily} per day to finish this ${g.period}.`}</span></div>
     </div>
     <div class="goal-card-footer">
+      <button type="button" class="btn-primary goal-action-btn" data-type="${g.type}">${g.type === 'networking' ? 'Add a contact' : g.type === 'saved' ? 'Research a job' : g.type === 'applications' ? 'Add an application' : 'Review pipeline'}</button>
       <button class="btn-secondary goal-edit-btn" data-id="${g.id}" style="font-size:12px;padding:5px 12px">Edit</button>
       <button class="btn-ghost goal-delete-btn" data-id="${g.id}" style="font-size:12px">Delete</button>
     </div>
@@ -148,7 +193,7 @@ function renderGoalsSummary(goals) {
     const current = computeGoalCurrent(g);
     const pct = Math.min(Math.round((current / g.target) * 100), 100);
     const done = pct >= 100;
-    const behind = !done && current > 0 && pct < 50;
+    const behind = goalPace(g, current).behind;
     const offset = circ - (pct / 100) * circ;
     const fillCls = done ? 'ring-done' : behind ? 'ring-behind' : '';
     return `<div class="goals-summary-card">
@@ -240,7 +285,50 @@ function renderGoalPresets() {
   });
 }
 
+function renderGoalHistory(goals) {
+  const el = document.getElementById('goals-history');
+  if (!el) return;
+  const entries = goals.flatMap(goal => (goal.history || []).filter(entry => new Date(entry.start) < goalPeriodBounds(entry.period).start));
+  entries.sort((a, b) => new Date(b.start) - new Date(a.start));
+  el.innerHTML = entries.length ? entries.slice(0, 12).map(entry => {
+    const date = new Date(entry.start).toLocaleDateString(undefined, entry.period === 'week' ? {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    } : {
+      month: 'long',
+      year: 'numeric'
+    });
+    const done = entry.current >= entry.target;
+    return `<div class="goal-history-row"><div><strong>${escHtml(GOAL_TYPE_LABELS[entry.type] || entry.type)}</strong><span>${entry.period === 'week' ? 'Week of ' : ''}${escHtml(date)}</span></div><strong>${entry.current} / ${entry.target}</strong><span class="goal-history-status ${done ? 'goal-status-done' : ''}">${done ? 'Target met' : 'Below target'}</span></div>`;
+  }).join('') : '<p class="empty-msg">Your history starts now. Completed weeks and months will appear here with their last recorded progress.</p>';
+}
+
+function renderGoalActivity() {
+  const el = document.getElementById('goals-activity');
+  if (!el) return;
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const items = [...state.jobs, ...(state.contacts || [])];
+  let activeDays = 0;
+  const cells = Array.from({
+    length: 28
+  }, (_, i) => {
+    const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 27 + i);
+    const end = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+    const count = items.filter(item => {
+      const added = goalLocalDate(item.dateAdded);
+      return added >= date && added < end;
+    }).length;
+    if (count) activeDays++;
+    const label = `${date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}: ${count} job${count === 1 ? '' : 's'} or contacts added`;
+    return `<span class="goal-activity-day" data-level="${Math.min(count, 4)}" role="img" aria-label="${escHtml(label)}" title="${escHtml(label)}"><span>${date.getDate()}</span></span>`;
+  }).join('');
+  el.innerHTML = `<div class="goal-activity-summary"><strong>${activeDays} active days</strong><span>Last 28 days · Jobs and contacts added</span></div><div class="goal-activity-grid">${cells}</div><div class="goal-activity-legend"><span>Less</span>${[0, 1, 2, 3, 4].map(level => `<span class="goal-activity-day" data-level="${level}" aria-hidden="true"></span>`).join('')}<span>More</span></div>`;
+}
+
 function renderGoals() {
+  recordGoalProgress();
   const goals = state.goals || [];
   const filtered = goalPeriodFilter === 'all' ? goals : goals.filter(g => g.period === goalPeriodFilter);
   renderGoalsSummary(filtered);
@@ -260,8 +348,20 @@ function renderGoals() {
     grid.querySelectorAll('.goal-delete-btn').forEach(btn => {
       btn.addEventListener('click', () => deleteGoal(btn.dataset.id));
     });
+    grid.querySelectorAll('.goal-action-btn').forEach(btn => {
+      btn.onclick = () => {
+        if (btn.dataset.type === 'networking') openContactModal();
+        else if (['applications', 'saved'].includes(btn.dataset.type)) {
+          openAddJobModal(null, {
+            stage: btn.dataset.type === 'saved' ? 'saved' : 'applied'
+          });
+        } else navigate('board');
+      };
+    });
   }
   renderGoalPresets();
+  renderGoalHistory(filtered);
+  renderGoalActivity();
   // Wire period tabs
   document.querySelectorAll('.goal-period-tab').forEach(btn => {
     btn.onclick = () => {

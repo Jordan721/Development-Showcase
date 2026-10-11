@@ -67,6 +67,7 @@ let state = {
    LOCALSTORAGE
    ══════════════════════════════════════════════════════════ */
 function save() {
+  if (typeof recordGoalProgress === 'function') recordGoalProgress(false);
   localStorage.setItem('pt_jobs', JSON.stringify(state.jobs));
   localStorage.setItem('pt_profile', JSON.stringify(state.profile));
   localStorage.setItem('pt_saved_courses', JSON.stringify(state.savedCourses));

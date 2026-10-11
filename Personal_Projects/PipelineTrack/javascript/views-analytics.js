@@ -33,6 +33,9 @@ function _animateBars(container) {
     container.querySelectorAll('[data-ah]').forEach(el => {
       el.style.height = el.dataset.ah + 'px';
     });
+    container.querySelectorAll('[data-chart-ratio]').forEach(el => {
+      el.style.height = `max(3px, calc((100% - 42px) * ${el.dataset.chartRatio}))`;
+    });
   }));
 }
 
@@ -135,6 +138,22 @@ function renderAnalyticsKPIs(jobs) {
   });
 }
 
+// A shared composition chart with keyboard-accessible drill-down legends.
+function renderAnalyticsDonut(el, segments, total, caption, onSelect) {
+  const palette = ['var(--accent)', 'var(--purple, #a78bfa)', 'var(--yellow)', 'var(--green)', 'var(--red)', 'var(--orange, #fb923c)'];
+  let offset = 0;
+  const arcs = segments.map((segment, i) => {
+    const share = total ? segment.count / total * 100 : 0;
+    const arc = `<circle cx="60" cy="60" r="46" fill="none" stroke="${segment.color || palette[i % palette.length]}" stroke-width="13" pathLength="100" stroke-dasharray="${share} ${100 - share}" stroke-dashoffset="${-offset}" transform="rotate(-90 60 60)"><title>${escHtml(segment.label)}: ${segment.count} (${Math.round(share)}%)</title></circle>`;
+    offset += share;
+    return arc;
+  }).join('');
+  el.innerHTML = `<div class="an-composition"><div class="an-ring"><svg viewBox="0 0 120 120" role="img" aria-label="${escHtml(caption)}: ${total} jobs"><circle cx="60" cy="60" r="46" fill="none" stroke="var(--border)" stroke-width="13"/>${arcs}</svg><div class="an-ring-center"><strong>${total}</strong><span>${escHtml(caption)}</span></div></div><div class="an-chart-legend">${segments.map((segment, i) => `<button type="button" class="an-legend-item" data-segment="${i}" style="--segment-color:${segment.color || palette[i % palette.length]}"><span class="an-legend-dot" aria-hidden="true"></span><span class="an-legend-label">${escHtml(segment.label)}</span><strong>${segment.count}</strong><span class="an-legend-percent">${total ? Math.round(segment.count / total * 100) : 0}%</span></button>`).join('')}</div></div>`;
+  el.querySelectorAll('[data-segment]').forEach(button => {
+    button.onclick = () => onSelect(segments[Number(button.dataset.segment)]);
+  });
+}
+
 function renderAnalyticsFunnel(jobs) {
   const el = document.getElementById('an-funnel');
   if (!el) return;
@@ -199,7 +218,7 @@ function renderAnalyticsResponseRate(jobs) {
     return `<div class="an-bar-row an-bar-row-clickable" data-stage="${s}" title="View ${count} job${count !== 1 ? 's' : ''}">
       <div class="an-bar-label">${labels[s]}</div>
       <div class="an-bar-track"><div class="an-bar-fill ${colorClasses[s]}" style="width:0" data-aw="${pct}"></div></div>
-      <div class="an-bar-count">${count}</div>
+      <div class="an-bar-count">${pct}%<small>${count} jobs</small></div>
     </div>`;
   }).join('') + `<div style="font-size:11px;color:var(--text-muted);margin-top:8px">Based on ${applied} applications</div>`;
   _animateBars(el);
@@ -254,16 +273,13 @@ function renderAnalyticsOverTime(jobs, granularity) {
     }
   }
   const maxCount = Math.max(...buckets.map(b => b.count), 1);
-  el.innerHTML = '<div class="an-timechart">' +
-    buckets.map(b => {
-      const h = Math.round((b.count / maxCount) * 155);
-      return `<div class="an-timechart-col an-col-click" data-start="${b.start}" data-end="${b.end}" data-label="${b.label}" title="${b.label}: ${b.count} job${b.count !== 1 ? 's' : ''}">
-        <div class="an-timechart-count">${b.count || ''}</div>
-        <div class="an-timechart-bar" style="height:2px" data-ah="${Math.max(h, 2)}"></div>
-        <div class="an-timechart-label">${b.label}</div>
-      </div>`;
-    }).join('') + '</div>';
-  _animateBars(el);
+  const points = buckets.map((b, i) => ({
+    x: 32 + i * 636 / (buckets.length - 1),
+    y: 190 - b.count / maxCount * 160
+  }));
+  const line = points.map(p => `${p.x},${p.y}`).join(' ');
+  const total = buckets.reduce((sum, b) => sum + b.count, 0);
+  el.innerHTML = `<div class="an-trend-summary"><strong>${total}<span> opportunities added</span></strong><span>Last ${buckets.length} ${granularity === 'weekly' ? 'weeks' : 'months'}</span></div><div class="an-trend"><svg viewBox="0 0 700 220" role="img" aria-label="Opportunities added over time"><defs><linearGradient id="an-trend-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--accent)" stop-opacity=".3"/><stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>${[0, 0.5, 1].map(f => `<line x1="32" x2="668" y1="${190 - f * 160}" y2="${190 - f * 160}" class="an-trend-grid"/><text x="4" y="${194 - f * 160}" class="an-trend-axis">${Math.round(maxCount * f)}</text>`).join('')}<polygon points="32,190 ${line} 668,190" fill="url(#an-trend-gradient)"/><polyline points="${line}" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>${points.map((p, i) => `<circle cx="${p.x}" cy="${p.y}" r="4" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"><title>${buckets[i].label}: ${buckets[i].count} jobs</title></circle>`).join('')}</svg><div class="an-trend-periods">${buckets.map(b => `<button type="button" class="an-col-click" data-start="${b.start}" data-end="${b.end}" data-label="${b.label}" aria-label="${b.label}: ${b.count} opportunities. View jobs."><strong>${b.count}</strong><span>${b.label}</span></button>`).join('')}</div></div>`;
 
   el.querySelectorAll('.an-col-click').forEach(col => {
     col.addEventListener('click', () => {
@@ -362,21 +378,14 @@ function renderAnalyticsFitDistribution(jobs) {
     },
   ];
   const counts = buckets.map(b => scored.filter(j => j.fitScore >= b.min && j.fitScore <= b.max).length);
-  const max = Math.max(...counts, 1);
-  el.innerHTML = buckets.map((b, i) => `<div class="an-bar-row an-bar-row-clickable" data-min="${b.min}" data-max="${b.max}">
-    <div class="an-bar-label">${b.label}</div>
-    <div class="an-bar-track"><div class="an-bar-fill ${b.cls}" style="width:0" data-aw="${Math.round((counts[i]/max)*100)}"></div></div>
-    <div class="an-bar-count">${counts[i]}</div>
-  </div>`).join('');
-  _animateBars(el);
-
-  el.querySelectorAll('.an-bar-row-clickable[data-min]').forEach((row, i) => {
-    row.addEventListener('click', () => {
-      const min = +row.dataset.min,
-        maxScore = +row.dataset.max;
-      const matched = scored.filter(j => j.fitScore >= min && j.fitScore <= maxScore);
-      openFilterModal(`Fit Score: ${buckets[i].label}`, `${matched.length} job${matched.length !== 1 ? 's' : ''}`, matched);
-    });
+  const colors = ['var(--green)', 'var(--accent)', 'var(--yellow)', 'var(--red)'];
+  renderAnalyticsDonut(el, buckets.map((b, i) => ({
+    ...b,
+    count: counts[i],
+    color: colors[i]
+  })), counts.reduce((sum, count) => sum + count, 0), 'scored jobs', segment => {
+    const matched = scored.filter(j => j.fitScore >= segment.min && j.fitScore <= segment.max);
+    openFilterModal(`Fit Score: ${segment.label}`, `${matched.length} jobs`, matched);
   });
 }
 
@@ -393,18 +402,11 @@ function renderAnalyticsBreakdown(elId, jobs, field) {
     el.innerHTML = '<p class="empty-msg">No data yet.</p>';
     return;
   }
-  const max = sorted[0][1];
-  el.innerHTML = sorted.map(([val, count]) => `<div class="an-bar-row an-bar-row-clickable" data-field="${escHtml(field)}" data-val="${escHtml(val)}" title="View ${count} job${count !== 1 ? 's' : ''}">
-    <div class="an-bar-label">${escHtml(val)}</div>
-    <div class="an-bar-track"><div class="an-bar-fill" style="width:0" data-aw="${Math.round((count/max)*100)}"></div></div>
-    <div class="an-bar-count">${count}</div>
-  </div>`).join('');
-  _animateBars(el);
-
-  el.querySelectorAll('.an-bar-row-clickable').forEach(row => {
-    row.addEventListener('click', () => {
-      openAnalyticsFilterModal(field, row.dataset.val, jobs);
-    });
+  renderAnalyticsDonut(el, sorted.map(([label, count]) => ({
+    label,
+    count
+  })), jobs.length, 'tracked jobs', segment => {
+    openAnalyticsFilterModal(field, segment.label, jobs);
   });
 }
 

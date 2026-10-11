@@ -20,8 +20,8 @@ A personal job search companion built to take the chaos out of hunting for work.
 | 📋 Job Board | 9-stage kanban with columns, priority matrix, table, timeline, and map views — search and filter built in |
 | 📅 Calendar & Activity | Month/week/year view of job events, deadlines, follow-ups, and job fairs |
 | 🤝 Network | Track recruiters, hiring managers, and referrals with follow-up reminders |
-| 🎯 Goals | Set weekly/monthly targets and track live progress against your job board data |
-| 📊 Analytics | KPIs, funnel, response rates, skill gaps, fit distribution, and breakdowns |
+| 🎯 Goals | Weekly/monthly targets with live progress, calendar-based pace, action buttons, recorded history, and a 28-day activity heatmap |
+| 📊 Analytics | KPIs, pipeline and ranking bars, an activity area chart, and donut charts with clickable legends |
 | 👤 My Profile | Skills, credential progress, email templates, skill coverage chart, and data backup |
 | 📄 Resume Hub | Parse your resume, scan GitHub, polish your writing, and store resume versions in the vault |
 | 🧠 Learning Hub | Course recommendations matched to your skill gaps |
@@ -43,7 +43,8 @@ I built PipelineTrack to solve that. One tool to track every job, score your ski
 3. Go to **My Profile** and add your skills, plus any certifications, degrees, licenses, diplomas, or bootcamps you have finished or are working toward
 4. Go to **Job Board → + Add Job** — click **⚡ Paste full listing** to auto-fill fields from the raw posting, or fill in manually; paste the description in Job Info for an instant fit score
 5. Click any job card to see your fit score and skill breakdown
-6. Check **Learning Hub** to see what to learn next, **Analytics** for charts, and **Goals** to set weekly targets
+6. Check **Learning Hub** to see what to learn next and **Analytics** to explore trends; click time periods or donut legends to see matching jobs
+7. In **Goals**, set a weekly or monthly target, check days remaining and the suggested daily pace, and use the action button to add a job/contact or review your pipeline. History starts recording when you use the updated app; the activity heatmap shows jobs and contacts added over the last 28 days
 
 All data is saved to your browser's localStorage — nothing is sent anywhere. Use the ☀️ / 🌙 toggle to switch light/dark themes, **M / S / O** for Midnight, Sunset, or Ocean color themes, **✦** to turn the theme-change animation on/off, and **◑** for color-blind mode. Press `Ctrl+Shift+K` to open the command palette at any time.
 
@@ -193,18 +194,24 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 - Goal types: Applications Sent, Screenings, Interviews, Offers, Responses, Jobs Researched, Contacts Added
 - Weekly or monthly period; live progress bar + status label (Complete / On Track / Behind / Not Started)
 - Summary strip with mini progress rings · quick-add preset buttons
+- **Calendar-based pace** — status compares progress with elapsed calendar days, rather than a fixed percentage; cards show how much is left, days remaining (including today), and the daily pace needed to finish. Weeks start on Sunday
+- **Next actions** — add an application, research a saved job, add a contact, or review the pipeline directly from a goal card
+- **Goal History** — completed periods show their last recorded progress and target. Recording starts with the updated app; earlier periods are not reconstructed. Up to 24 snapshots are retained per goal, with the 12 most recent completed entries shown for the selected goals
+- **Activity heatmap** — 28 days of jobs and contacts added, with daily counts on hover; this measures additions, not stage changes
+- Progress uses each job's date added and current stage, or each contact's date added. History captures progress when data is saved or Goals is opened; it is not a log of the dates interviews or offers happened
 
 </details>
 
 <details>
 <summary><strong>📊 Analytics</strong></summary>
 
-- **7 KPI cards** — Tracked, Applied, In Progress, Offers, Not Selected, Avg Fit, Response Rate (color-coded green/yellow/red)
-- **Application Funnel** — conversion rates Applied → Offer; click any row to see those jobs
-- **Response Rate by Stage** — stacked bar breakdown
-- **Applications Over Time** — weekly (8 weeks) or monthly (12 months); click any column to drill in
-- **Top Companies** · **Skill Gaps** · **Fit Score Distribution** · **Work Type / Job Type / Seniority** breakdowns
-- All charts clickable, animated, and filterable by period
+- **7 KPI cards** — Tracked, Applied, Interviews, Offers, Not Selected, Avg Fit, Response Rate (color-coded green/yellow/red)
+- **Current Pipeline** — stage counts from Applied through Offer; click a row to see its jobs
+- **Response Rate by Stage** — separate comparison bars with percentages and job counts, based on all tracked jobs outside Saved; click a row to explore
+- **Applications Over Time** — an area chart of opportunities added, weekly (8 weeks) or monthly (12 months); click a period button beneath the chart to see matching jobs
+- **Top Companies** and **Skill Gaps** — ranking bars with clear labels and counts; skill gaps open matching jobs
+- **Fit Score Distribution** and **Work Type / Job Type / Seniority** — donut charts with counts, percentages, and keyboard-accessible legends; click a legend item to explore its jobs
+- Filter Analytics by All Time, This Year, This Month, or This Week; cards and chart content adapt to the available space
 
 </details>
 
