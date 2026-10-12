@@ -555,6 +555,8 @@ function navigate(view) {
 
   document.querySelectorAll('.nav-link').forEach(a => {
     a.classList.toggle('active', a.dataset.view === view);
+    if (a.dataset.view === view) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
   });
 
   document.getElementById('topbar-title').textContent = VIEW_TITLES[view];

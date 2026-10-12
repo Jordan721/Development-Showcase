@@ -3,87 +3,6 @@
 /* ══════════════════════════════════════════════════════════
    LEARNING HUB
    ══════════════════════════════════════════════════════════ */
-function renderLearning() {
-  const showBookmarked = document.getElementById('show-bookmarked').checked;
-  const grid = document.getElementById('learning-grid');
-
-  // Aggregate skill gaps across all jobs
-  const gapCount = {};
-  state.jobs.forEach(j => (j.missing || []).forEach(skill => {
-    gapCount[skill] = (gapCount[skill] || 0) + 1;
-  }));
-
-  // Find resources for gap skills
-  let entries = Object.entries(gapCount)
-    .sort((a, b) => b[1] - a[1])
-    .map(([skill, count]) => ({
-      skill,
-      count,
-      resource: LEARNING[skill] || null
-    }))
-    .filter(e => e.resource !== null);
-
-  // Also include bookmarked skills even if not a current gap
-  if (showBookmarked) {
-    const bookmarkedNotInGaps = state.savedCourses
-      .filter(skill => !entries.find(e => e.skill === skill))
-      .map(skill => ({
-        skill,
-        count: 0,
-        resource: LEARNING[skill] || null
-      }))
-      .filter(e => e.resource !== null);
-    entries = [...entries, ...bookmarkedNotInGaps].filter(e => state.savedCourses.includes(e.skill));
-  }
-
-  if (entries.length === 0) {
-    grid.innerHTML = `<p class="learning-empty">${
-      showBookmarked
-        ? 'No bookmarked courses yet.'
-        : state.jobs.length === 0
-          ? 'Add jobs with descriptions to get recommendations.'
-          : 'No skill gaps detected — your profile matches your jobs well!'
-    }</p>`;
-    return;
-  }
-
-  grid.innerHTML = entries.map(({
-    skill,
-    count,
-    resource
-  }) => {
-    const bookmarked = state.savedCourses.includes(skill);
-    return `
-      <div class="learning-card ${bookmarked ? 'bookmarked' : ''}" data-skill="${skill}">
-        <div class="learning-card-top">
-          <div class="learning-skill">${skill.charAt(0).toUpperCase()+skill.slice(1)}</div>
-          <span class="learning-bookmark" data-bookmark="${skill}" title="Bookmark">${bookmarked ? '★' : '☆'}</span>
-        </div>
-        <div class="learning-course">${resource.course}</div>
-        <div class="learning-provider">${resource.provider}</div>
-        <div class="learning-meta">
-          <span class="learning-tag">⏱ ${resource.time}</span>
-          ${count > 0 ? `<span class="gap-count-badge">Missing in ${count} job${count!==1?'s':''}</span>` : ''}
-        </div>
-        <a class="btn-primary" href="${resource.url}" target="_blank" rel="noopener">View Course ↗</a>
-      </div>`;
-  }).join('');
-
-  grid.querySelectorAll('.learning-bookmark').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const skill = btn.dataset.bookmark;
-      const idx = state.savedCourses.indexOf(skill);
-      if (idx === -1) state.savedCourses.push(skill);
-      else state.savedCourses.splice(idx, 1);
-      save();
-      renderLearning();
-    });
-  });
-}
-
-/* ══════════════════════════════════════════════════════════
-   RESUME HUB
-   ══════════════════════════════════════════════════════════ */
 function renderResume() {
   renderResumeVault();
   renderCoverLetterVault();
@@ -566,6 +485,7 @@ async function handleResumeFile(file) {
       return;
     }
     document.getElementById('resume-text').value = text;
+    document.getElementById('resume-text').dispatchEvent(new Event('input', { bubbles: true }));
     setDropZoneState('loaded', file.name);
     toast('File loaded! Click "Scan for Skills" to analyze.', 'success');
   } catch {
@@ -574,7 +494,7 @@ async function handleResumeFile(file) {
   }
 }
 
-function parseResume() {
+function scanResumeSkills() {
   const text = document.getElementById('resume-text').value;
   if (!text.trim()) {
     toast('Paste your resume text first.', 'error');
@@ -582,11 +502,11 @@ function parseResume() {
   }
 
   const lower = text.toLowerCase();
-  const found = [...KNOWN_SKILLS].filter(skill => lower.includes(skill));
+  const found = [...KNOWN_SKILLS].filter(skill => _skillRegex(skill).test(text));
   const container = document.getElementById('resume-parse-results');
 
   if (found.length === 0) {
-    container.innerHTML = '<div class="parse-placeholder">No recognized tech skills found. Try including your skills section or more of your experience.</div>';
+    container.innerHTML = '<div class="parse-placeholder">No recognized skills found. Review the extracted text and include your skills or experience section, then scan again.</div>';
     return;
   }
 
@@ -610,7 +530,7 @@ function parseResume() {
               style="accent-color:var(--accent);width:13px;height:13px;cursor:${has ? 'default' : 'pointer'}" />
             <span class="parsed-skill-name">${skill}</span>
           </label>
-          ${has ? '<span class="parsed-already">✓ in profile</span>' : ''}
+          ${has ? '<span class="parsed-already">✓ in profile</span>' : `<select class="select-input parse-skill-level" data-level-skill="${skill}" aria-label="Proficiency for ${skill}"><option>Beginner</option><option>Intermediate</option><option>Expert</option></select>`}
         </div>`;
     }).join('')}
     <div class="import-bar">
@@ -631,7 +551,7 @@ function parseResume() {
         if (!state.profile.skills.some(s => s.name.toLowerCase() === name)) {
           state.profile.skills.push({
             name,
-            level: 'Intermediate'
+            level: [...container.querySelectorAll('[data-level-skill]')].find(select => select.dataset.levelSkill === name)?.value || 'Beginner'
           });
         }
       });
