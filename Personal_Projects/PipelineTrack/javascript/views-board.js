@@ -1078,37 +1078,13 @@ function openStageMilestoneModal(job, stage) {
     offer: '🎉 Log Offer Details',
   };
   const subtitles = {
-    screening: `
-  $ {
-    escHtml(job.role)
-  }
-  @ $ {
-    escHtml(job.company)
-  }
-  moved to screening— log the call details.
-  `,
-    interview: `
-  $ {
-    escHtml(job.role)
-  }
-  @ $ {
-    escHtml(job.company)
-  }
-  has an interview— log the details.
-  `,
-    offer: `
-  You received an offer from $ {
-    escHtml(job.company)
-  }!Log the details here.
-  `,
+    screening: `${escHtml(job.role)} @ ${escHtml(job.company)} moved to screening — log the call details.`,
+    interview: `${escHtml(job.role)} @ ${escHtml(job.company)} has an interview — log the details.`,
+    offer: `You received an offer from ${escHtml(job.company)}! Log the details here.`,
   };
 
   document.getElementById('milestone-modal-title').textContent = titles[stage];
-
-  let bodyHTML = ` < p class = "milestone-subtitle" > $ {
-    subtitles[stage]
-  } < /p>`;
-
+  let bodyHTML = `<p class="milestone-subtitle">${subtitles[stage]}</p>`;
   if (stage === 'screening' || stage === 'interview') {
     const typeOpts = stage === 'screening' ? ['Phone', 'Video', 'In-person'] : ['Phone', 'Video', 'In-person', 'Panel', 'Technical'];
     const defaultType = existing.type || (stage === 'screening' ? 'Phone' : 'Video');

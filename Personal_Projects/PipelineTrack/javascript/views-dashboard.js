@@ -23,7 +23,7 @@ function renderDashboardPriorities(jobs) {
   active.forEach(j => {
     const deadlineDays = j.deadline ? Math.round((new Date(j.deadline + 'T00:00:00') - today) / 86400000) : NaN;
     const age = Math.floor((today - dashboardDate(j.dateApplied || j.dateAdded)) / 86400000);
-    if (j.stage === 'saved' && deadlineDays <= 7) {
+    if (j.stage === 'saved' && deadlineDays >= 0 && deadlineDays <= 7) {
       actions.push({
         job: j,
         priority: 0,
@@ -631,7 +631,7 @@ function renderDashVelocity() {
 function renderDashDeadlines() {
   const el = document.getElementById('dash-deadlines');
   if (!el) return;
-  const jobs = state.jobs.filter(j => ['saved', 'applied', 'screening', 'interview', 'offer'].includes(j.stage));
+  const jobs = state.jobs.filter(j => j.stage === 'saved');
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const in7 = new Date(today);
@@ -646,21 +646,26 @@ function renderDashDeadlines() {
   }
   let html = '';
   if (overdue.length > 0) {
-    html += `<div class="dash-deadline-overdue">⚠ ${overdue.length} overdue deadline${overdue.length !== 1 ? 's' : ''}</div>`;
+    html += '<div class="dash-past-heading">Earlier dates are here when you need them.</div>';
   }
-  html += [...overdue, ...upcoming].map(j => {
+  const renderRow = j => {
     const days = Math.round((new Date(j.deadline + 'T00:00:00') - today) / 86400000);
-    const urgCls = days <= 0 ? 'dash-dl-today' : days <= 2 ? 'dash-dl-soon' : '';
+    const urgCls = days === 0 ? 'dash-dl-today' : days > 0 && days <= 2 ? 'dash-dl-soon' : '';
     return `<button type="button" class="dash-deadline-item dash-deadline-button ${urgCls}" data-job-id="${escHtml(j.id)}">
       <div>
         <div class="dash-dl-role">${escHtml(j.role)}</div>
         <div class="dash-dl-company">${escHtml(j.company)}</div>
         <div class="dash-dl-date">${escHtml(formatDate(dashboardDate(j.deadline)))} &middot; ${escHtml(STAGE_LABELS[j.stage] || j.stage)}</div>
       </div>
-      <div class="dash-dl-days">${days < 0 ? `${Math.abs(days)}d overdue` : days === 0 ? 'Due today' : days === 1 ? '1d left' : days + 'd left'}</div>
+      <div class="dash-dl-days">${days < 0 ? `${Math.abs(days)}d ago` : days === 0 ? 'Due today' : days === 1 ? '1d left' : days + 'd left'}</div>
     </button>`;
-  }).join('');
-  html += '<p class="dash-card-note">Overdue dates and deadlines through the next seven days, for active jobs. Open a job to review or update its deadline.</p>';
+  };
+  html += upcoming.map(renderRow).join('');
+  const recent = overdue.filter(j => Math.round((today - dashboardDate(j.deadline)) / 86400000) <= 7);
+  const older = overdue.filter(j => Math.round((today - dashboardDate(j.deadline)) / 86400000) > 7);
+  if (recent.length) html += '<div class="dash-past-heading">Recently passed</div>' + recent.map(renderRow).join('');
+  if (older.length) html += `<details class="dash-past-deadlines"><summary>${older.length} earlier deadline${older.length === 1 ? '' : 's'} &middot; view when ready</summary>${older.map(renderRow).join('')}</details>`;
+  html += '<p class="dash-card-note">Apply-by dates for saved jobs. Dates more than a week ago are tucked away for reference. Applications already sent no longer trigger reminders.</p>';
   el.innerHTML = html;
   el.querySelectorAll('[data-job-id]').forEach(item => {
     item.addEventListener('click', () => openJobDetail(item.dataset.jobId));
@@ -694,27 +699,28 @@ function renderDashTimeInStage() {
     if (sJobs.length === 0) return null;
     const avgDays = Math.round(sJobs.reduce((sum, j) => sum + Math.max(0, (now - dashboardDate(j.dateAdded)) / 86400000), 0) / sJobs.length);
     return {
+      key: s.key,
+      jobs: sJobs,
       label: s.label,
       count: sJobs.length,
       avgDays
     };
   }).filter(Boolean);
   if (rows.length === 0) {
-    el.innerHTML = '<p class="empty-msg">No active applications yet.</p>';
+    el.innerHTML = '<div class="dash-clear-state"><span class="dash-insight-label">YOUR SEARCH TIMELINE</span><strong>Every application starts somewhere.</strong><p>Once you apply, compare your opportunities across stages here.</p></div>';
     return;
   }
   const maxDays = Math.max(...rows.map(r => r.avgDays), 1);
-  el.innerHTML = rows.map(r => {
+  const count = rows.reduce((sum, r) => sum + r.count, 0);
+  const average = Math.round(rows.reduce((sum, r) => sum + r.avgDays * r.count, 0) / count);
+  el.innerHTML = `<div class="dash-age-summary"><div><span class="dash-insight-label">AVERAGE AGE</span><strong>${average}<small> days</small></strong></div><span>${count} active application${count === 1 ? '' : 's'}<br>across ${rows.length} stages</span></div><div class="dash-age-rows">` + rows.map(r => {
     const pct = Math.round((r.avgDays / maxDays) * 100);
-    const color = r.avgDays >= 30 ? 'var(--red)' : r.avgDays >= 14 ? 'var(--yellow)' : 'var(--accent)';
-    return `<div class="pipeline-bar-row">
-      <div class="pipeline-bar-label">${r.label}</div>
-      <div class="pipeline-bar-track">
-        <div class="pipeline-bar-fill" style="width:${pct}%;background:${color}"></div>
-      </div>
-      <div class="pipeline-bar-count" style="color:${color};font-weight:600;min-width:28px">${r.avgDays}d</div>
-    </div>`;
-  }).join('') + `<div class="dash-time-note">Avg. days since added, by active stage</div>`;
+    return `<button type="button" class="dash-age-row" data-stage="${r.key}" aria-label="${r.label}: ${r.count} applications, average age ${r.avgDays} days. View applications."><span class="dash-age-label"><strong>${r.label}</strong><span>${r.count} application${r.count === 1 ? '' : 's'}</span></span><span class="dash-age-track"><span style="width:${Math.max(pct, 3)}%"></span></span><span class="dash-age-value">${r.avgDays}<small> days</small></span></button>`;
+  }).join('') + '</div><p class="dash-card-note">Average days since added, grouped by current stage. Hiring timelines vary; age alone does not measure progress. Select a stage to view applications.</p>';
+  el.querySelectorAll('[data-stage]').forEach(button => button.addEventListener('click', () => {
+    const row = rows.find(r => r.key === button.dataset.stage);
+    openFilterModal(`${row.label} Applications`, `${row.count} applications`, row.jobs);
+  }));
 }
 
 /* renderActivity() lives in views-calendar.js */

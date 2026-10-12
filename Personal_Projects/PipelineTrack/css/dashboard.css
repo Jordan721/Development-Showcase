@@ -1776,6 +1776,147 @@ div.dash-skills-summary {
   color: var(--red);
 }
 
+/* Application age overview */
+#dash-time-in-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dash-age-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.dash-age-summary strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 36px;
+  line-height: 1.1;
+  color: var(--accent);
+}
+
+.dash-age-summary small {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.dash-age-summary>span {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.dash-age-rows {
+  display: grid;
+  gap: 8px;
+  flex: 1;
+}
+
+.dash-age-row {
+  display: grid;
+  grid-template-columns: minmax(80px, 1fr) minmax(40px, 1.4fr) auto;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 16px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.dash-age-row:hover {
+  background: var(--surface);
+  border-color: var(--accent);
+}
+
+.dash-age-row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.dash-age-label strong {
+  display: block;
+  font-size: 13px;
+}
+
+.dash-age-label>span {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.dash-age-track {
+  display: block;
+  height: 8px;
+  background: var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.dash-age-track>span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: inherit;
+  opacity: .7;
+}
+
+.dash-age-value {
+  font-size: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.dash-age-value small {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.dash-past-heading {
+  margin: 14px 0 8px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.dash-past-deadlines {
+  margin-top: 14px;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+.dash-past-deadlines summary {
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-muted);
+  padding: 8px 0;
+}
+
+@media (max-width: 480px) {
+  .dash-age-row {
+    gap: 8px;
+    padding: 12px 8px;
+  }
+
+  .dash-age-summary {
+    padding: 14px;
+  }
+}
+
 /* Time in stage note */
 .dash-time-note {
   font-size: 11px;

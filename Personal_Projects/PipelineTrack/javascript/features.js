@@ -27,10 +27,10 @@ function deadlineLabel(dateStr) {
   if (d === null) return null;
   if (d < 0) return {
     text: 'Deadline passed',
-    cls: 'deadline-urgent'
+    cls: 'deadline-past'
   };
   if (d === 0) return {
-    text: 'Due today!',
+    text: 'Due today',
     cls: 'deadline-urgent'
   };
   if (d === 1) return {
@@ -57,9 +57,9 @@ function renderDeadlineBanner() {
 
   const urgent = state.jobs.filter(j => {
     if (!j.deadline) return false;
-    if (j.stage === 'declined' || j.stage === 'withdrew' || j.stage === 'archived' || j.stage === 'offer') return false;
+    if (j.stage !== 'saved') return false;
     const d = deadlineDaysLeft(j.deadline);
-    return d !== null && d <= 7;
+    return d !== null && d >= 0 && d <= 7;
   });
 
   if (urgent.length === 0) {
@@ -70,9 +70,7 @@ function renderDeadlineBanner() {
   urgent.sort((a, b) => deadlineDaysLeft(a.deadline) - deadlineDaysLeft(b.deadline));
 
   banner.style.display = '';
-  // Pulse if the most urgent deadline is within 3 days
-  const mostUrgent = deadlineDaysLeft(urgent[0].deadline);
-  banner.className = 'deadline-banner' + (mostUrgent !== null && mostUrgent <= 3 ? ' deadline-banner--urgent' : '');
+  banner.className = 'deadline-banner';
   banner.innerHTML =
     '<span class="deadline-banner-icon">⏰</span>' +
     '<span><strong>' + urgent.length + ' job' + (urgent.length !== 1 ? 's' : '') + '</strong> with an upcoming deadline: ' +

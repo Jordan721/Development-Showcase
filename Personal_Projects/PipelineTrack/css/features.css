@@ -8,12 +8,12 @@
   align-items: flex-start;
   gap: 10px;
   background: rgba(251, 191, 36, 0.08);
-  border: 1px solid var(--yellow);
+  border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 10px 16px;
   margin-bottom: 14px;
   font-size: 13px;
-  color: var(--yellow);
+  color: var(--text-muted);
   line-height: 1.6;
 }
 
@@ -34,6 +34,11 @@
 
 .deadline-ok {
   color: var(--green);
+}
+
+.deadline-past {
+  color: var(--text-muted);
+  font-weight: 400;
 }
 
 /* ── Notes timeline ─────────────────────────────────────── */
