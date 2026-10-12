@@ -79,6 +79,45 @@ function save() {
   localStorage.setItem('pt_cover_letters', JSON.stringify(state.coverLetters));
 }
 
+function inferJobSource(url) {
+  const text = String(url || '').trim();
+  if (!text) return '';
+  try {
+    const parsed = new URL(/^[a-z][a-z\d+.-]*:/i.test(text) ? text : 'https://' + text.replace(/^\/\//, ''));
+    if (!['http:', 'https:'].includes(parsed.protocol)) return 'Other';
+    const host = parsed.hostname.toLowerCase().replace(/\.$/, '');
+    const sources = [
+      ['LinkedIn', ['linkedin.com', 'lnkd.in']],
+      ['ZipRecruiter', ['ziprecruiter.com']],
+      ['Indeed', ['indeed.com', 'indeed.ca', 'indeed.co.uk', 'indeed.com.au']],
+      ['Glassdoor', ['glassdoor.com', 'glassdoor.ca', 'glassdoor.co.uk']],
+      ['Monster', ['monster.com', 'monster.ca', 'monster.co.uk']],
+      ['Dice', ['dice.com']],
+      ['Wellfound', ['wellfound.com']],
+      ['Handshake', ['joinhandshake.com']],
+      ['USAJOBS', ['usajobs.gov']]
+    ];
+    const match = sources.find(([, domains]) => domains.some(domain => host === domain || host.endsWith('.' + domain)));
+    return match ? match[0] : 'Other';
+  } catch {
+    return 'Other';
+  }
+}
+
+function migrateJobSources() {
+  let changed = false;
+  state.jobs.forEach(job => {
+    if (job.source && !job.sourceInferred) return;
+    const detected = inferJobSource(job.url);
+    if (job.source !== detected || Boolean(job.sourceInferred) !== Boolean(detected)) {
+      job.source = detected;
+      job.sourceInferred = Boolean(detected);
+      changed = true;
+    }
+  });
+  return changed;
+}
+
 function migrateJobSalaryPayPeriods() {
   if (typeof splitSalaryAndPayPeriod !== 'function' || typeof formatSalaryWithPayPeriod !== 'function') return false;
 
@@ -101,6 +140,7 @@ function migrateJobSalaryPayPeriods() {
 
   return changed;
 }
+
 function load() {
   try {
     state.jobs = JSON.parse(localStorage.getItem('pt_jobs')) || [];
@@ -171,6 +211,7 @@ function load() {
 
   state.jobs = (Array.isArray(state.jobs) ? state.jobs : []).map(_normalizeJob);
   const migratedSalaryPayPeriods = migrateJobSalaryPayPeriods();
+  const migratedJobSources = migrateJobSources();
   state.profile = _normalizeProfile(state.profile);
   state.contacts = _normalizeEntityArray(state.contacts);
   state.goals = _normalizeEntityArray(state.goals);
@@ -179,7 +220,7 @@ function load() {
   state.resumes = _normalizeEntityArray(state.resumes);
   state.coverLetters = _normalizeEntityArray(state.coverLetters);
   state.savedCourses = Array.isArray(state.savedCourses) ? state.savedCourses : [];
-  if (migratedSalaryPayPeriods) save();
+  if (migratedSalaryPayPeriods || migratedJobSources) save();
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -225,7 +266,7 @@ function exportCSV() {
   };
 
   const headers = [
-    'Role', 'Company', 'Location', 'Stage', 'Seniority', 'Job Type', 'Duration', 'Work Type', 'In-office Days',
+    'Role', 'Company', 'Job Source', 'Location', 'Stage', 'Seniority', 'Job Type', 'Duration', 'Work Type', 'In-office Days',
     'Department', 'Salary', 'Date Posted', 'Date Applied', 'Date Added', 'Deadline', 'Fit Score (%)',
     'Role Profile', 'Job Fit Score (%)', 'Posting Quality Score (%)', 'Red Flags', 'Matched Skills', 'Skill Gaps', 'URL', 'Notes', 'Company Notes', 'Benefits', 'Cover Letter', 'Job Description'
   ];
@@ -233,6 +274,7 @@ function exportCSV() {
   const rows = state.jobs.map(j => [
     j.role,
     j.company,
+    j.source || '',
     j.location,
     STAGE_LABELS[j.stage] || j.stage,
     j.seniority,
@@ -377,6 +419,8 @@ function _importFromCSV(text) {
     const jobData = {
       role,
       company,
+      source: idx('job source') !== -1 ? get(f, 'job source') : (existingIdx !== undefined ? state.jobs[existingIdx].source || '' : ''),
+      sourceInferred: idx('job source') === -1 && existingIdx !== undefined ? Boolean(state.jobs[existingIdx].sourceInferred) : false,
       location: get(f, 'location'),
       stage: stageLabelToKey[stageRaw] || 'saved',
       seniority: get(f, 'seniority'),
@@ -544,6 +588,8 @@ function _normalizeJob(job) {
     id: _stringValue(source.id).trim() || uid(),
     role: _stringValue(source.role).trim() || 'Untitled Role',
     company: _stringValue(source.company).trim() || 'Unknown Company',
+    source: _stringValue(source.source),
+    sourceInferred: source.sourceInferred === true,
     department: _stringValue(source.department),
     location: _stringValue(source.location),
     url: _stringValue(source.url),
@@ -671,6 +717,7 @@ function importData(file) {
           updated
         } = _importFromCSV(e.target.result);
         migrateJobSalaryPayPeriods();
+        migrateJobSources();
         save();
         if (typeof backfillSeniority === 'function') backfillSeniority();
         renderView(state.activeView);
@@ -796,6 +843,7 @@ function importData(file) {
         }
         migrateJobSalaryPayPeriods();
         const removedDuplicates = _removeDuplicateResumes();
+        migrateJobSources();
         save();
         let refreshWarning = '';
         try {

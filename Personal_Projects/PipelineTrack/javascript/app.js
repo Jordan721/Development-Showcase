@@ -86,6 +86,10 @@ function wireEvents() {
 
   // Save job
   document.getElementById('save-job-btn').addEventListener('click', saveJob);
+  document.getElementById('job-url').addEventListener('input', updateJobSourceFromUrl);
+  document.getElementById('job-source').addEventListener('input', e => {
+    e.target.dataset.inferred = 'false';
+  });
   ['job-role', 'job-company'].forEach(id => {
     document.getElementById(id).addEventListener('input', updateJobDuplicateNotice);
   });

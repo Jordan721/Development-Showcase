@@ -145,9 +145,17 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 - Filter by period · search by role/company/location · filter dropdowns for stage, work type (Remote / Hybrid / On-site / Remote–Hybrid / Hybrid–On-site / Flexible), seniority
 - **⊜ Compare Jobs** — select 2–3 jobs to compare fit, salary, stage, skills, and benefits side by side
 
-**Each job stores:** role, company, department, location, URL, salary (auto-formatted), seniority, job type, work type, date posted, date applied, application deadline, stage, resume used (linked to Resume Vault), benefits (parsed into chips), company notes, job description, cover letter, personal notes.
+**Each job stores:** role, company, department, location, URL, job source, salary (auto-formatted), seniority, job type, work type, date posted, date applied, application deadline, stage, resume used (linked to Resume Vault), benefits (parsed into chips), company notes, job description, cover letter, personal notes.
 
 **Add/Edit form tabs:** Details · Job Info · Application
+
+- **Details:** position, location, pay, seniority, job type, and work type. Only role and company are required.
+- **Job Info:** description for fit analysis, plus collapsible benefits and company notes.
+- **Application:** posting link, job source, stage, dates, resume used, notes, and a collapsible cover letter. Optional sections open automatically when editing existing content; Save and Cancel stay visible while the form scrolls.
+
+**Job source detection** — posting links automatically identify LinkedIn (including `lnkd.in`), ZipRecruiter, Indeed, Glassdoor, Monster, Dice, Wellfound, Handshake, and USAJOBS. Unrecognized or invalid links show **Other**; an empty link leaves the source blank. Detection uses the link's domain, without opening the posting or following redirects. Existing jobs with no source are filled on the next app load, and imported jobs are checked too. You can override the source (for example, **Referral**); manual values are preserved. Automatically detected values update when the link changes. Job source appears in job details and is included in JSON backups and the main CSV export/import.
+
+**Previous application notice** — entering the same company and title as another tracked job shows its status, application date when available, and a **View entry** button. Matching ignores capitalization and extra spaces, and editing excludes the current job. The notice distinguishes saved roles from previous applications and still lets you save a new opening with the same title.
 
 **⚡ Smart Paste / Job Posting Analyzer** — click "Paste full listing" at the top of the Details tab and drop in the raw job posting. The parser extracts role, company, location, salary, work type, job type, seniority, hybrid days, and duration; fills each field with a `✦ Auto-filled` tag so you know what was guessed; strips the metadata header from the description so the Job Info tab only shows the actual body of the listing. It also scores posting quality, estimates application effort, surfaces required/preferred skills, logistics, benefits, culture signals, red flags, and resume tailoring prompts. Saved jobs keep role profile, Job Fit, Posting Quality, and red-flag data for detail views and exports. Fields are editable — the tag disappears the moment you change a value. *(Parsing is best-effort — it catches the most common formats but may miss things depending on how the listing is structured. Always review the filled fields before saving.)*
 

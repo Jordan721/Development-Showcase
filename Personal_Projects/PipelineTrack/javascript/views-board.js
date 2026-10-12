@@ -1330,6 +1330,8 @@ function openJobDetail(id) {
   }
 
   // Date applied
+  document.getElementById('detail-source').textContent = job.source || '';
+  document.getElementById('detail-source-row').style.display = job.source ? '' : 'none';
   const dateAppliedRow = document.getElementById('detail-date-applied-row');
   if (job.dateApplied) {
     document.getElementById('detail-date-applied').textContent = formatDate(job.dateApplied + 'T12:00:00');
@@ -1995,6 +1997,13 @@ function flashField(id) {
 /* ══════════════════════════════════════════════════════════
    ADD / EDIT JOB
    ══════════════════════════════════════════════════════════ */
+function updateJobSourceFromUrl() {
+  const source = document.getElementById('job-source');
+  if (source.value.trim() && source.dataset.inferred !== 'true') return;
+  source.value = inferJobSource(document.getElementById('job-url').value);
+  source.dataset.inferred = source.value ? 'true' : 'false';
+}
+
 function findMatchingJobs(role, company, excludeId = '') {
   const normalize = value => String(value || '').normalize('NFKC').trim().replace(/\s+/g, ' ').toLowerCase();
   const roleKey = normalize(role);
@@ -2016,18 +2025,27 @@ function updateJobDuplicateNotice() {
   notice.replaceChildren();
   if (!matches.length) return;
 
-  const hasApplied = matches.some(job => job.dateApplied ||
-    ['applied', 'screening', 'interview', 'offer', 'declined', 'withdrew', 'ghosted'].includes(job.stage));
+  const hasApplied = matches.some(job => job.dateApplied || ['applied', 'screening', 'interview', 'offer', 'declined', 'withdrew', 'ghosted'].includes(job.stage));
   const heading = document.createElement('strong');
+  const icon = document.createElement('span');
+  icon.className = 'job-duplicate-icon';
+  icon.setAttribute('aria-hidden', 'true');
+  icon.textContent = '\u21ba';
   heading.textContent = hasApplied ? 'You\u2019ve applied to this role before' : 'Seen this role before?';
+  const header = document.createElement('div');
+  header.className = 'job-duplicate-heading';
+  header.append(icon, heading);
   const description = document.createElement('p');
   description.textContent = `The same company and title already appear in your tracker. You can still save another entry if this is a new opening.`;
-  notice.append(heading, description);
+  notice.append(header, description);
   matches.forEach(job => {
     const row = document.createElement('div');
     row.className = 'job-duplicate-entry';
     const summary = document.createElement('span');
-    summary.textContent = `${job.role} at ${job.company} \u00b7 ${STAGE_LABELS[job.stage] || 'Saved'}${job.dateApplied ? ' \u00b7 Applied ' + formatDate(job.dateApplied + 'T12:00:00') : ''}`;
+    summary.textContent = `${job.role} at ${job.company}${job.dateApplied ? ' \u00b7 Applied ' + formatDate(job.dateApplied + 'T12:00:00') : ''}`;
+    const badge = document.createElement('span');
+    badge.className = 'stage-badge stage-' + (STAGES.includes(job.stage) ? job.stage : 'saved');
+    badge.textContent = STAGE_LABELS[job.stage] || 'Saved';
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'btn-ghost btn-sm';
@@ -2036,7 +2054,7 @@ function updateJobDuplicateNotice() {
       closeModal('modal-job');
       openJobDetail(job.id);
     });
-    row.append(summary, button);
+    row.append(summary, badge, button);
     notice.appendChild(row);
   });
 }
@@ -2049,6 +2067,8 @@ function openAddJobModal(editId = null, defaults = {}) {
   document.getElementById('job-edit-id').value = editId || '';
   document.getElementById('job-role').value = job ? job.role || '' : '';
   document.getElementById('job-company').value = job ? job.company || '' : '';
+  document.getElementById('job-source').value = job ? job.source || '' : '';
+  document.getElementById('job-source').dataset.inferred = job && job.sourceInferred ? 'true' : 'false';
   document.getElementById('job-department').value = job ? job.department || '' : '';
 
   // Show/clear the "Auto-filled" indicator on the department label
@@ -2072,6 +2092,7 @@ function openAddJobModal(editId = null, defaults = {}) {
 
   document.getElementById('job-location').value = job ? job.location || '' : '';
   document.getElementById('job-url').value = job ? job.url || '' : '';
+  updateJobSourceFromUrl();
   const salaryParts = splitSalaryAndPayPeriod(job ? job.salary || '' : '');
   const salaryInput = document.getElementById('job-salary');
   const salaryPeriodSelect = document.getElementById('job-pay-period');
@@ -2098,7 +2119,7 @@ function openAddJobModal(editId = null, defaults = {}) {
   document.getElementById('job-date-posted').value = job ? job.datePosted || '' : '';
   document.getElementById('job-date-applied').value = job ? job.dateApplied || '' : '';
   document.getElementById('job-deadline').value = job ? job.deadline || '' : '';
-  document.getElementById('job-stage').value = job ? job.stage || 'saved' : defaults.stage || '';
+  document.getElementById('job-stage').value = job ? job.stage || 'saved' : defaults.stage || 'saved';
   document.getElementById('job-seniority').value = job ? job.seniority || '' : '';
   document.getElementById('job-type').value = job ? job.jobType || '' : '';
   document.getElementById('job-work-type').value = job ? job.workType || '' : '';
@@ -2131,6 +2152,8 @@ function openAddJobModal(editId = null, defaults = {}) {
   document.getElementById('job-company-notes').value = job ? job.companyNotes || '' : '';
   document.getElementById('job-notes').value = job ? job.notes || '' : '';
   document.getElementById('job-cover-letter').value = job ? job.coverLetter || '' : '';
+  document.getElementById('job-company-extras').open = Boolean(job && (job.benefits || job.companyNotes));
+  document.getElementById('job-cover-letter-section').open = Boolean(job && job.coverLetter);
   const vaultSel = document.getElementById('job-resume-vault-select');
   if (vaultSel) {
     vaultSel.innerHTML = buildVaultOptions();
@@ -2161,13 +2184,17 @@ function openAddJobModal(editId = null, defaults = {}) {
   document.querySelectorAll('#modal-job .modal-tab-panel').forEach((p, i) => p.classList.toggle('active', i === 0));
 
   updateJobDuplicateNotice();
+  document.querySelector('#modal-job .modal-body').scrollTop = 0;
   openModal('modal-job');
 }
 
 function saveJob() {
+  updateJobSourceFromUrl();
   const role = document.getElementById('job-role').value.trim();
   const company = document.getElementById('job-company').value.trim();
   if (!role || !company) {
+    document.querySelector('#job-modal-tabs [data-tab="details"]').click();
+    document.getElementById(!role ? 'job-role' : 'job-company').focus();
     toast('Role and Company are required.', 'error');
     return;
   }
@@ -2183,6 +2210,8 @@ function saveJob() {
   const jobData = {
     role,
     company,
+    source: document.getElementById('job-source').value.trim(),
+    sourceInferred: document.getElementById('job-source').dataset.inferred === 'true',
     department,
     departmentInferred,
     location: document.getElementById('job-location').value.trim(),

@@ -1076,7 +1076,10 @@
             <div class="modal-header">
                 <div style="display:flex;align-items:center;gap:10px">
                     <button class="detail-back-btn" id="job-modal-back-btn" style="display:none">← Back</button>
-                    <h2 class="modal-title" id="modal-job-title">Add New Job</h2>
+                    <div>
+                        <h2 class="modal-title" id="modal-job-title">Add New Job</h2>
+                        <p class="job-modal-subtitle">Start with the position. Add the details you have as you go.</p>
+                    </div>
                 </div>
                 <button class="modal-close" data-close="modal-job">✕</button>
             </div>
@@ -1126,16 +1129,11 @@
                     </div>
                     <div id="job-duplicate-notice" class="job-duplicate-notice" role="status" aria-live="polite" hidden>
                     </div>
-                    <div class="form-section-label">Schedule &amp; Links</div>
-                    <div class="form-row three-col">
+                    <div class="form-section-label">Work &amp; Pay</div>
+                    <div class="form-row two-col">
                         <div class="form-group">
                             <label class="form-label">Location</label>
                             <input type="text" class="text-input" id="job-location" placeholder="e.g. New York, NY"
-                                autocomplete="off" />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Job URL</label>
-                            <input type="url" class="text-input" id="job-url" placeholder="https://…"
                                 autocomplete="off" />
                         </div>
                         <div class="form-group">
@@ -1154,34 +1152,6 @@
                         </div>
                     </div>
                     <div class="form-row three-col">
-                        <div class="form-group">
-                            <label class="form-label">Date Posted</label>
-                            <input type="date" class="text-input" id="job-date-posted" placeholder="Pick a date" />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Date Applied</label>
-                            <input type="date" class="text-input" id="job-date-applied" placeholder="Pick a date" />
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Application Deadline</label>
-                            <input type="date" class="text-input" id="job-deadline" placeholder="Pick a date" />
-                        </div>
-                    </div>
-                    <div class="form-section-label">Classification</div>
-                    <div class="form-row four-col">
-                        <div class="form-group">
-                            <label class="form-label">Stage</label>
-                            <select class="select-input" id="job-stage">
-                                <option value="saved">Saved</option>
-                                <option value="applied">Applied</option>
-                                <option value="screening">Screening</option>
-                                <option value="interview">Interview</option>
-                                <option value="offer">Offer</option>
-                                <option value="declined">Not Selected</option>
-                                <option value="withdrew">Declined</option>
-                                <option value="archived">Archived</option>
-                            </select>
-                        </div>
                         <div class="form-group">
                             <label class="form-label">Seniority</label>
                             <select class="select-input" id="job-seniority">
@@ -1237,12 +1207,6 @@
                             <span class="hybrid-days-picker-icon">Edit</span>
                         </button>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Resume Used</label>
-                        <select class="text-input" id="job-resume-vault-select">
-                            <option value="">— None —</option>
-                        </select>
-                    </div>
                 </div>
 
                 <!-- ── Tab: Job Info ── -->
@@ -1253,35 +1217,103 @@
                         <textarea class="text-area" id="job-description" rows="8"
                             placeholder="Paste the full job description here…"></textarea>
                     </div>
-                    <div class="form-row two-col">
-                        <div class="form-group">
-                            <label class="form-label">Benefits</label>
-                            <textarea class="text-area" id="job-benefits" rows="4"
-                                placeholder="e.g. Health insurance, 401k match, unlimited PTO, equity…"></textarea>
+                    <details class="job-optional-section" id="job-company-extras">
+                        <summary>Benefits &amp; company notes <span>Optional</span></summary>
+                        <div class="form-row two-col">
+                            <div class="form-group">
+                                <label class="form-label">Benefits</label>
+                                <textarea class="text-area" id="job-benefits" rows="4"
+                                    placeholder="e.g. Health insurance, 401k match, unlimited PTO, equity…"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Company Notes</label>
+                                <textarea class="text-area" id="job-company-notes" rows="4"
+                                    placeholder="Culture, size, funding, tech stack…"></textarea>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Company Notes</label>
-                            <textarea class="text-area" id="job-company-notes" rows="4"
-                                placeholder="Culture, size, funding, tech stack…"></textarea>
-                        </div>
-                    </div>
+                    </details>
                 </div>
 
                 <!-- ── Tab: Application ── -->
                 <div class="modal-tab-panel" data-tab="application">
+                    <div class="form-section-label">Application Tracking</div>
                     <div class="form-group">
-                        <div class="cover-letter-header">
-                            <label class="form-label">Cover Letter</label>
-                            <div class="tpl-load-row">
-                                <select class="tpl-load-select" id="tpl-load-select">
-                                    <option value="">— Load Template —</option>
-                                </select>
-                                <button class="btn-ghost tpl-load-btn-sm" id="tpl-load-btn">Load</button>
-                            </div>
-                        </div>
-                        <textarea class="text-area" id="job-cover-letter" rows="12"
-                            placeholder="Paste or draft your cover letter here…"></textarea>
+                        <label class="form-label" for="job-url">Job URL</label>
+                        <input type="url" class="text-input" id="job-url" placeholder="https://…" autocomplete="off" />
                     </div>
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label class="form-label" for="job-stage">Stage</label>
+                            <select class="select-input" id="job-stage">
+                                <option value="saved">Saved</option>
+                                <option value="applied">Applied</option>
+                                <option value="screening">Screening</option>
+                                <option value="interview">Interview</option>
+                                <option value="offer">Offer</option>
+                                <option value="declined">Not Selected</option>
+                                <option value="withdrew">Declined</option>
+                                <option value="ghosted">Ghosted</option>
+                                <option value="archived">Archived</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="job-source">Job Source</label>
+                            <input type="text" class="text-input" id="job-source" list="job-source-options"
+                                placeholder="Where did you find this role?" autocomplete="off" />
+                            <datalist id="job-source-options">
+                                <option value="LinkedIn"></option>
+                                <option value="ZipRecruiter"></option>
+                                <option value="Indeed"></option>
+                                <option value="Glassdoor"></option>
+                                <option value="Monster"></option>
+                                <option value="Dice"></option>
+                                <option value="Wellfound"></option>
+                                <option value="Handshake"></option>
+                                <option value="USAJOBS"></option>
+                                <option value="Company website"></option>
+                                <option value="Referral"></option>
+                                <option value="Recruiter"></option>
+                                <option value="Other"></option>
+                            </datalist>
+                            <span class="label-hint">Detected from the posting link. You can change it.</span>
+                        </div>
+                    </div>
+                    <div class="form-row three-col">
+                        <div class="form-group">
+                            <label class="form-label" for="job-date-posted">Date Posted</label>
+                            <input type="date" class="text-input" id="job-date-posted" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="job-date-applied">Date Applied</label>
+                            <input type="date" class="text-input" id="job-date-applied" />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="job-deadline">Application Deadline</label>
+                            <input type="date" class="text-input" id="job-deadline" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="job-resume-vault-select">Resume Used</label>
+                        <select class="text-input" id="job-resume-vault-select">
+                            <option value="">— None —</option>
+                        </select>
+                    </div>
+                    <details class="job-optional-section" id="job-cover-letter-section">
+                        <summary>Cover letter <span>Optional</span></summary>
+                        <div class="form-group">
+                            <div class="cover-letter-header">
+                                <label class="form-label">Cover Letter</label>
+                                <div class="tpl-load-row">
+                                    <select class="tpl-load-select" id="tpl-load-select">
+                                        <option value="">— Load Template —</option>
+                                    </select>
+                                    <button class="btn-ghost tpl-load-btn-sm" id="tpl-load-btn">Load</button>
+                                </div>
+                            </div>
+                            <textarea class="text-area" id="job-cover-letter" rows="12"
+                                placeholder="Paste or draft your cover letter here…"></textarea>
+                        </div>
+                    </details>
                     <div class="form-group">
                         <label class="form-label">Notes</label>
                         <textarea class="text-area" id="job-notes" rows="3"
@@ -1290,6 +1322,7 @@
                 </div>
             </div>
             <div class="modal-footer">
+                <span class="job-footer-hint">Only role and company are required</span>
                 <button class="btn-ghost" data-close="modal-job">Cancel</button>
                 <button class="btn-primary" id="save-job-btn">Save Job</button>
             </div>
@@ -1375,6 +1408,10 @@
                     <div class="detail-meta-row" id="detail-date-applied-row" style="display:none">
                         <span class="detail-meta-label">Date Applied</span>
                         <span class="detail-meta-value" id="detail-date-applied"></span>
+                    </div>
+                    <div class="detail-meta-row" id="detail-source-row" style="display:none">
+                        <span class="detail-meta-label">Job Source</span>
+                        <span class="detail-meta-value" id="detail-source"></span>
                     </div>
                     <div class="detail-meta-row" id="detail-deadline-row" style="display:none">
                         <span class="detail-meta-label">Deadline</span>
@@ -1935,6 +1972,16 @@
                             before saving. Parsing is best-effort and will keep improving. Matched skills are
                             highlighted <strong style="color:var(--green)">green</strong> and gaps in <strong
                                 style="color:var(--red)">red</strong> inside the description.</p>
+                        <p>Only <strong>role and company</strong> are required. Use <strong>Details</strong> for position
+                            and pay, <strong>Job Info</strong> for the description, and <strong>Application</strong> for
+                            your posting link, stage, dates, and resume. Benefits, company notes, and cover letters
+                            expand when you need them. Save and Cancel stay visible as you scroll.</p>
+                        <p>Add a posting link to detect the <strong>Job Source</strong>, such as LinkedIn, ZipRecruiter,
+                            or Indeed. Unknown links show <strong>Other</strong>. Existing links are checked too, and
+                            you can change the source yourself.</p>
+                        <p>If the same <strong>company and title</strong> are already tracked, a notice shows the
+                            previous entry's status and application date. Use <strong>View entry</strong> to review it,
+                            or keep saving if this is a new opening.</p>
                     </div>
 
                     <!-- Step 4 — Explore -->
