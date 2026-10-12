@@ -5547,3 +5547,26 @@
     width: 100%;
   }
 }
+.job-duplicate-notice {
+  margin: 0 0 20px;
+  padding: 16px;
+  border: 1px solid var(--yellow);
+  border-left-width: 4px;
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--text);
+}
+
+.job-duplicate-notice[hidden] { display: none; }
+.job-duplicate-notice > strong { color: var(--yellow); }
+.job-duplicate-notice > p { margin: 8px 0; font-size: 13px; line-height: 1.5; }
+.job-duplicate-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 8px;
+  font-size: 12px;
+}
+.job-duplicate-entry > span { flex: 1 1 180px; overflow-wrap: anywhere; }

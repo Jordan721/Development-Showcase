@@ -86,6 +86,9 @@ function wireEvents() {
 
   // Save job
   document.getElementById('save-job-btn').addEventListener('click', saveJob);
+  ['job-role', 'job-company'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateJobDuplicateNotice);
+  });
   const jobWorkTypeEl = document.getElementById('job-work-type');
   if (jobWorkTypeEl) {
     jobWorkTypeEl.addEventListener('change', () => {
@@ -207,6 +210,7 @@ function wireEvents() {
       updateJobDurationVisibility(false);
     }
 
+    updateJobDuplicateNotice();
     // Move cleaned description to Job Info tab (metadata header stripped)
     document.getElementById('job-description').value = parsed.description || text;
     if (typeof renderSmartPasteAnalysis === 'function') renderSmartPasteAnalysis(analysis);

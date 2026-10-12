@@ -1995,6 +1995,52 @@ function flashField(id) {
 /* ══════════════════════════════════════════════════════════
    ADD / EDIT JOB
    ══════════════════════════════════════════════════════════ */
+function findMatchingJobs(role, company, excludeId = '') {
+  const normalize = value => String(value || '').normalize('NFKC').trim().replace(/\s+/g, ' ').toLowerCase();
+  const roleKey = normalize(role);
+  const companyKey = normalize(company);
+  if (!roleKey || !companyKey) return [];
+  return state.jobs.filter(job => job.id !== excludeId &&
+    normalize(job.role) === roleKey && normalize(job.company) === companyKey);
+}
+
+function updateJobDuplicateNotice() {
+  const notice = document.getElementById('job-duplicate-notice');
+  if (!notice) return;
+  const matches = findMatchingJobs(
+    document.getElementById('job-role').value,
+    document.getElementById('job-company').value,
+    document.getElementById('job-edit-id').value
+  );
+  notice.hidden = !matches.length;
+  notice.replaceChildren();
+  if (!matches.length) return;
+
+  const hasApplied = matches.some(job => job.dateApplied ||
+    ['applied', 'screening', 'interview', 'offer', 'declined', 'withdrew', 'ghosted'].includes(job.stage));
+  const heading = document.createElement('strong');
+  heading.textContent = hasApplied ? 'You\u2019ve applied to this role before' : 'Seen this role before?';
+  const description = document.createElement('p');
+  description.textContent = `The same company and title already appear in your tracker. You can still save another entry if this is a new opening.`;
+  notice.append(heading, description);
+  matches.forEach(job => {
+    const row = document.createElement('div');
+    row.className = 'job-duplicate-entry';
+    const summary = document.createElement('span');
+    summary.textContent = `${job.role} at ${job.company} \u00b7 ${STAGE_LABELS[job.stage] || 'Saved'}${job.dateApplied ? ' \u00b7 Applied ' + formatDate(job.dateApplied + 'T12:00:00') : ''}`;
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'btn-ghost btn-sm';
+    button.textContent = 'View entry';
+    button.addEventListener('click', () => {
+      closeModal('modal-job');
+      openJobDetail(job.id);
+    });
+    row.append(summary, button);
+    notice.appendChild(row);
+  });
+}
+
 function openAddJobModal(editId = null, defaults = {}) {
   const job = editId ? state.jobs.find(j => j.id === editId) : null;
 
@@ -2114,6 +2160,7 @@ function openAddJobModal(editId = null, defaults = {}) {
   document.querySelectorAll('#job-modal-tabs .modal-tab-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
   document.querySelectorAll('#modal-job .modal-tab-panel').forEach((p, i) => p.classList.toggle('active', i === 0));
 
+  updateJobDuplicateNotice();
   openModal('modal-job');
 }
 
