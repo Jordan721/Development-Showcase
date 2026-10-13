@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="css/sidebar.css" />
     <link rel="stylesheet" href="css/career-flow.css" />
     <link rel="stylesheet" href="css/calendar-details.css" />
+    <link rel="stylesheet" href="css/profile-skills.css" />
 </head>
 
 <body>
@@ -469,7 +470,7 @@
                             placeholder="Paste skills separated by commas or new lines&#10;e.g. React, TypeScript, Node.js, PostgreSQL"></textarea>
                         <div class="bulk-skill-actions">
                             <button class="btn-ghost" id="bulk-skill-cancel">Cancel</button>
-                            <button class="btn-primary" id="bulk-skill-add">Add All</button>
+                        <button class="btn-primary" id="bulk-skill-add">Review skills</button>
                         </div>
                     </div>
                     <div class="skill-filter-row">
@@ -1965,6 +1966,18 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="modal-bulk-skills" aria-hidden="true">
+        <div class="modal modal-lg">
+            <div class="modal-header"><h2 class="modal-title">Review your skills</h2><button class="modal-close" data-close="modal-bulk-skills" aria-label="Close skill review">✕</button></div>
+            <div class="modal-body">
+                <p class="bulk-review-intro">Spacing and capitalization are cleaned up. Edit names or accept suggested spelling before adding. Suggestions use the skill library; custom skills are welcome.</p>
+                <p id="bulk-review-summary" aria-live="polite"></p>
+                <div id="bulk-review-list"></div>
+            </div>
+            <div class="modal-footer"><button class="btn-ghost" data-close="modal-bulk-skills">Back to editing</button><button class="btn-primary" id="bulk-review-confirm">Add skills</button></div>
+        </div>
+    </div>
+
     <!-- ── ONBOARDING MODAL ────────────────────────────────── -->
     <div class="modal-overlay" id="modal-onboarding" aria-hidden="true">
         <div class="modal onboarding-modal">
@@ -2006,7 +2019,8 @@
                             <strong>Planned</strong>, <strong>In Progress</strong>, or <strong>Completed</strong>, then
                             track the school or issuer, target date, progress, and notes.</p>
                         <p class="onboarding-tip">Use the <strong>Bulk</strong> button to paste a whole comma-separated
-                            list at once.</p>
+                            list at once. Choose <strong>Review skills</strong> to check cleaned-up names, optional
+                            spelling suggestions, and duplicates before adding.</p>
                     </div>
 
                     <!-- Step 3 — Add a job -->
@@ -2203,6 +2217,7 @@
     <script src="javascript/views-dashboard.js"></script>
     <script src="javascript/views-board.js"></script>
     <script src="javascript/views-profile.js"></script>
+    <script src="javascript/bulk-skills.js"></script>
     <script src="javascript/views-resume.js"></script>
     <script src="javascript/career-flow.js"></script>
     <script src="javascript/views-calendar.js"></script>

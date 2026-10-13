@@ -451,11 +451,14 @@ function renderSkillTags() {
       const note = groupVisible < groupTotal ? ` · ${groupVisible} of ${groupTotal}` : ` · ${groupTotal}`;
       html += `<span class="skill-group-label" data-group="${s.level}">${s.level}${note}</span>`;
     }
-    html += `<span class="skill-tag" data-skill="${escHtml(s.name)}" data-level="${s.level}">
-      ${escHtml(s.name)}
-      <button class="level level-btn" data-index="${s.realIdx}" title="Click to change level">${s.level}</button>
-      <span class="skill-tag-remove" data-index="${s.realIdx}">✕</span>
-    </span>`;
+    const strength = {Beginner: 1, Intermediate: 2, Expert: 3}[s.level] || 2;
+    html += `<div class="skill-tag skill-row" data-skill="${escHtml(s.name)}" data-level="${s.level}">
+      <span class="skill-row-copy"><span class="skill-row-name">${escHtml(s.name)}</span>
+        <span class="skill-row-meter" aria-hidden="true">${[1, 2, 3].map(step => `<i class="${step <= strength ? 'filled' : ''}"></i>`).join('')}</span>
+      </span>
+      <button type="button" class="level level-btn" data-index="${s.realIdx}" title="Click to change level" aria-label="${escHtml(s.name)}: ${s.level}. Change proficiency level">${s.level}</button>
+      <button type="button" class="skill-tag-remove" data-index="${s.realIdx}" aria-label="Remove ${escHtml(s.name)}" title="Remove skill">✕</button>
+    </div>`;
   });
   container.classList.remove('skill-filter-exit');
   container.innerHTML = html;
@@ -655,35 +658,9 @@ function addSkill() {
 }
 
 function bulkAddSkills() {
-  const textarea = document.getElementById('bulk-skill-input');
-  const level = document.getElementById('skill-level').value;
-  const raw = textarea.value.trim();
-  if (!raw) return;
-
-  const names = raw.split(/[\n,;]+/).map(s => normalizeSkillName(s)).filter(Boolean);
-  let added = 0,
-    skipped = 0;
-  names.forEach(name => {
-    if (state.profile.skills.some(s => s.name.toLowerCase() === name.toLowerCase())) {
-      skipped++;
-    } else {
-      state.profile.skills.push({
-        name,
-        level
-      });
-      added++;
-    }
-  });
-
-  textarea.value = '';
-  document.getElementById('bulk-skill-area').style.display = 'none';
-  save();
-  reanalyzeAllJobs();
-  renderProfile();
-  if (state.activeView === 'dashboard') renderDashboard();
-  let msg = `${added} skill${added !== 1 ? 's' : ''} added`;
-  if (skipped) msg += `, ${skipped} duplicate${skipped !== 1 ? 's' : ''} skipped`;
-  toast(msg, added > 0 ? 'success' : 'error');
+  const raw = document.getElementById('bulk-skill-input').value;
+  if (!raw.trim()) return;
+  openBulkSkillReview(raw, document.getElementById('skill-level').value);
 }
 
 function reanalyzeAllJobs() {

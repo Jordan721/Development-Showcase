@@ -78,6 +78,7 @@ PipelineTrack/
 │   ├── animations.css      # view, modal, card, calendar, compare, and theme transition effects
 │   ├── views.css           # calendar, contacts, analytics, goals views
 │   ├── calendar-details.css # calendar dragging, job type colors, shared department badges, recent jobs, day details
+│   ├── profile-skills.css  # responsive skill rows and proficiency indicators
 │   ├── fun.css             # extra themes (Midnight, Sunset, Ocean), confetti, streak, card flair
 │   ├── onboarding.css      # first-run onboarding modal styles
 │   └── ux-enhancements.css # command palette, hover cards, tooltips, motion toggle, color-blind mode, print, empty states
@@ -90,6 +91,7 @@ PipelineTrack/
     ├── views-dashboard.js  # dashboard stats, funnel, velocity, deadlines, time-in-stage
     ├── views-board.js      # kanban board, table, timeline views, job detail & add/edit modals
     ├── views-profile.js    # profile, skills, credential tracker, coverage chart
+    ├── bulk-skills.js      # skill import review, spacing/case cleanup, spelling suggestions, duplicate checks
     ├── views-resume.js     # learning hub and resume hub
     ├── views-calendar.js   # month/week/year/agenda views, date dragging, day details, recent jobs
     ├── views-contacts.js   # network & contacts view
@@ -238,6 +240,8 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 
 - **Skills** — add individually or bulk-paste; search bar filters your skills in real time — if the skill isn't found a prompt lets you add it instantly or jump to the Learning Hub; level badges (Expert / Intermediate / Beginner) cycle on click; duplicates auto-skipped; casing auto-corrected on save and on load (e.g. `javascript` → `JavaScript`); Skill Coverage chart shows frequency across tracked jobs
 - **Credential Tracker** — track certifications, degrees, diplomas, bootcamps, and licenses by status (Planned / In Progress / Completed), school or issuer, start date, target or completed date, progress %, and notes; descriptions still feed into fit scoring
+- **Skill rows** — a two-column grid with room for long names and a three-segment indicator of your selected proficiency. Click the level button to cycle Beginner / Intermediate / Expert; remove controls support keyboard navigation. Rows stack into one column on smaller screens.
+- **Bulk skill review** — paste comma-, semicolon-, or newline-separated skills, then choose Review skills. The modal cleans spacing/capitalization, offers optional spelling suggestions from the skill library, and skips duplicates. Edit or exclude entries before confirming; custom skills remain allowed and nothing is added until confirmation.
 - **Email Templates** — Thank-You, Follow-Up, Withdrawal, Custom; load any template into a job's cover letter
 - **Data Backup** — JSON export/import (merges by ID); CSV export/import (merges by role + company)
 - **Your Links** — LinkedIn, GitHub, Portfolio with one-click open and copy
