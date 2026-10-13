@@ -24,6 +24,16 @@
   max-width: 180px;
 }
 
+#bulk-stage-select {
+  width: 220px;
+  max-width: 100%;
+  flex: 0 1 220px;
+  padding-right: 30px;
+}
+.pm-card.bulk-selectable { cursor: pointer; }
+.pm-card.bulk-selectable .pm-card-stage { padding-left: 22px; }
+.pm-card.bulk-selectable:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
 .bulk-check {
   position: absolute;
   top: 7px;
@@ -314,7 +324,7 @@
 }
 
 /* ── PRIORITY MATRIX LAYOUT ────────────────────────────── */
-.kanban--matrix {
+.kanban--actions {
   display: block;
   padding-bottom: 0;
 }
@@ -1744,3 +1754,17 @@
   border-color: rgba(239, 68, 68, .28);
   background: rgba(239, 68, 68, .08);
 }
+
+/* Action queue */
+.action-queue .job-card[draggable="true"] { cursor: grab; }
+.action-queue .job-card.dragging { opacity: .45; cursor: grabbing; }
+.action-queue .action-group.action-drop-target { outline: 2px solid var(--accent); outline-offset: -2px; background: color-mix(in srgb, var(--accent) 7%, var(--surface)); }
+.action-queue .job-card.action-insert-before { box-shadow: 0 -3px 0 var(--accent); }
+.action-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-items: start; }
+.action-queue .action-group { min-width: 0; height: auto; }
+.action-queue .pm-cards { display: flex; flex-direction: column; overflow: visible; max-height: none; }
+.action-queue .pm-q-title { margin: 0; }
+.action-timing { display: block; font-size: 12px; color: var(--text-muted); margin: 10px 0 4px; }
+.action-timing--due { color: var(--yellow); font-weight: 600; }
+@media (max-width: 1100px) { .action-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 720px) { .action-grid { grid-template-columns: minmax(0, 1fr); } }

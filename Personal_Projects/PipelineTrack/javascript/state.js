@@ -7,15 +7,14 @@ const STAGES = ['saved', 'applied', 'screening', 'interview', 'offer', 'declined
 let boardPeriod = 'all';
 let boardLayout = (() => {
   const v = localStorage.getItem('pt-board-layout');
-  return (v && v !== 'swimlane') ? v : 'matrix';
+  return ['columns', 'table', 'timeline', 'map', 'actions'].includes(v) ? v : 'actions';
 })();
 let boardSearch = '';
 let boardFilterStage = '';
 let boardFilterWorkType = '';
 let boardFilterSeniority = '';
 let boardSortTable = 'date-desc';
-let matrixFitThreshold = Number(localStorage.getItem('pt-matrix-fit-threshold')) || 70;
-let matrixUrgencyDays = Number(localStorage.getItem('pt-matrix-urgency-days')) || 14;
+const boardDueSoonDays = 14;
 const STAGE_EMOJIS = {
   saved: '🔖',
   applied: '📨',

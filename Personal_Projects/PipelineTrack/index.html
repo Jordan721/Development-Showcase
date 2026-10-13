@@ -317,8 +317,8 @@
                 <div class="layout-toggle">
                     <button class="layout-btn" id="layout-btn-columns" data-layout="columns"
                         title="Column view">⊞</button>
-                    <button class="layout-btn" id="layout-btn-matrix" data-layout="matrix"
-                        title="Priority Matrix">▣</button>
+                    <button class="layout-btn" id="layout-btn-actions" data-layout="actions"
+                        title="Action Queue" aria-label="Action Queue">☑</button>
                     <button class="layout-btn" id="layout-btn-table" data-layout="table" title="Table view">≡</button>
                     <button class="layout-btn" id="layout-btn-timeline" data-layout="timeline" title="Timeline view">
                         <svg width="15" height="12" viewBox="0 0 15 12" fill="currentColor" aria-hidden="true">
@@ -937,6 +937,7 @@
             </div>
             <div class="cal-workspace">
                 <div class="cal-calendar-panel">
+                    <p class="cal-drag-hint">In Month or Week, drag a card to another day to change its date. Undo is available after moving.</p>
                     <div id="cal-view-body"></div>
                 </div>
                 <aside class="cal-sidebar" aria-label="Upcoming agenda and recent jobs">
@@ -2060,8 +2061,26 @@
                                     — 📍 pin any card to keep it at the top; deadline urgency glows
                                     red/orange/yellow</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Bulk
-                                        actions</strong> — ☐ Select mode to move stage, export, or delete multiple jobs
-                                    at once</span></div>
+                                        actions</strong> — ☐ Select, then click cards to check them or use Select All.
+                                    Move their stage, assign a resume, export, or delete together. In Action Queue,
+                                    Enter/Space also selects; dragging pauses during selection.</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Action
+                                        Queue</strong> — drag to reorder or move jobs between groups, with Undo.
+                                    Moving into Prepare sets Screening; Completed sets Archived. Pinned jobs stay
+                                    first.</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Calendar
+                                        &amp; Agenda</strong> — drag cards between days in Month or Week to change
+                                    their dates, with Undo. Agenda lists the selected month by date; + more opens
+                                    busy days. The sidebar shows upcoming events and your five latest jobs.</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Day
+                                        details</strong> — click a day for times, job information, and available
+                                    notes. Open details or add an event with that date prefilled.</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Department
+                                        icons</strong> — recognize Software, Engineering, Data, and other departments
+                                    across job views. Icons and calendar job-type colors follow your theme.</span></div>
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Network</strong>
+                                    — review due follow-ups in Needs attention. Mark contacted records today and
+                                    clears a due reminder; Edit sets your next follow-up.</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Map view</strong>
                                     — pins every job on an interactive map, color-coded by stage; click a pin to open
                                     the job</span></div>

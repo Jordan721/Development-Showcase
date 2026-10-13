@@ -13,6 +13,7 @@ let timelineEventFilter = 'all';
 function setBulkMode(on) {
   bulkSelectMode = on;
   if (!on) bulkSelected.clear();
+  updateBulkBar();
   const btn = document.getElementById('board-select-btn');
   const bar = document.getElementById('bulk-bar');
   if (btn) btn.classList.toggle('active', on);
@@ -27,6 +28,18 @@ function setBulkMode(on) {
 function updateBulkBar() {
   const count = document.getElementById('bulk-bar-count');
   if (count) count.textContent = `${bulkSelected.size} selected`;
+}
+
+function toggleBulkCard(card) {
+  const id = card.dataset.jobId;
+  if (bulkSelected.has(id)) bulkSelected.delete(id);
+  else bulkSelected.add(id);
+  const selected = bulkSelected.has(id);
+  card.classList.toggle('bulk-selected', selected);
+  card.setAttribute('aria-checked', String(selected));
+  const check = card.querySelector('.bulk-check');
+  if (check) check.classList.toggle('checked', selected);
+  updateBulkBar();
 }
 
 function initBulkActions() {
@@ -46,7 +59,9 @@ function initBulkActions() {
       const id = card.dataset.jobId;
       bulkSelected.add(id);
       card.classList.add('bulk-selected');
-      card.querySelector('.bulk-check') ?.classList.add('checked');
+      if (card.getAttribute('role') === 'checkbox') card.setAttribute('aria-checked', 'true');
+      const check = card.querySelector('.bulk-check');
+      if (check) check.classList.add('checked');
     });
     updateBulkBar();
   });
@@ -180,19 +195,10 @@ function updateBoardFilterUI() {
   const filterChips = document.getElementById('board-filter-chips');
   if (filterChips) filterChips.classList.toggle('has-board-sort', boardLayout === 'table');
   const dragHint = document.getElementById('board-drag-hint');
-  if (dragHint) dragHint.style.display = (boardLayout === 'table' || boardLayout === 'timeline' || boardLayout === 'matrix' || boardLayout === 'map') ? 'none' : '';
+  if (dragHint) dragHint.style.display = (boardLayout === 'table' || boardLayout === 'timeline' || boardLayout === 'actions' || boardLayout === 'map') ? 'none' : '';
 }
 
-/* ── PRIORITY MATRIX HELPERS ───────────────────────────── */
-function getJobUrgency(job) {
-  const now = new Date();
-  if (job.deadline) {
-    const d = new Date(job.deadline + 'T00:00:00');
-    return (d - now) / 86400000 <= matrixUrgencyDays; // within threshold (or overdue)
-  }
-  return (now - new Date(job.dateAdded)) / 86400000 >= matrixUrgencyDays;
-}
-
+/* ── ACTION QUEUE HELPERS ───────────────────────────── */
 const PM_STAGE_COLORS = {
   saved: 'var(--text-muted)',
   applied: 'var(--accent)',
@@ -222,10 +228,12 @@ function pmCardHTML(job) {
   }
   const urgency = deadlineUrgencyClass(job);
   const pinCls = job.pinned ? ' pinned-card' : '';
+  const selectionCls = bulkSelectMode ? ' bulk-selectable' + (bulkSelected.has(job.id) ? ' bulk-selected' : '') : '';
+  const selectionAttrs = bulkSelectMode ? ` role="checkbox" tabindex="0" aria-checked="${bulkSelected.has(job.id)}" aria-label="Select ${escHtml(job.role)} at ${escHtml(job.company)}"` : '';
   return `
-    <div class="job-card pm-card${urgency ? ' ' + urgency : ''}${pinCls}" data-job-id="${job.id}" data-stage="${job.stage}" draggable="false" style="--card-accent:${accent}">
-      <button class="card-pin-btn${job.pinned ? ' pinned' : ''}" data-pin-id="${job.id}" title="${job.pinned ? 'Unpin' : 'Pin'} job" aria-label="${job.pinned ? 'Unpin' : 'Pin'} job" aria-pressed="${!!job.pinned}" draggable="false">&#128204;</button>
-      <button class="card-delete-btn" data-delete-id="${job.id}" title="Delete job" draggable="false">&times;</button>
+    <div class="job-card pm-card${urgency ? ' ' + urgency : ''}${pinCls}${selectionCls}" data-job-id="${job.id}" data-stage="${job.stage}" draggable="false"${selectionAttrs} style="--card-accent:${accent}">
+      ${bulkSelectMode ? `<span class="bulk-check${bulkSelected.has(job.id) ? ' checked' : ''}" aria-hidden="true">✓</span>` : `<button class="card-pin-btn${job.pinned ? ' pinned' : ''}" data-pin-id="${job.id}" title="${job.pinned ? 'Unpin' : 'Pin'} job" aria-label="${job.pinned ? 'Unpin' : 'Pin'} job" aria-pressed="${!!job.pinned}" draggable="false">&#128204;</button>
+      <button class="card-delete-btn" data-delete-id="${job.id}" title="Delete job" draggable="false">&times;</button>`}
       <div class="pm-card-stage"><span class="pm-stage-dot stripe-${job.stage}"></span>${STAGE_LABELS[job.stage]}</div>
       <div class="job-card-role pm-card-role">${jobDepartmentBadge(job, true)} ${escHtml(job.role)}</div>
       <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
@@ -246,142 +254,155 @@ function stageSummaryHTML(jobs) {
   const avgFit = scored.length ? Math.round(scored.reduce((sum, j) => sum + Number(j.fitScore), 0) / scored.length) : null;
   const dueSoon = jobs.filter(j => {
     const days = getDeadlineDays(j);
-    return days !== null && days <= matrixUrgencyDays;
+    return days !== null && days <= boardDueSoonDays;
   }).length;
   const pinned = jobs.filter(j => j.pinned).length;
   const parts = [
     `<span title="Average fit score">${avgFit === null ? 'No avg fit' : 'Avg fit ' + avgFit + '%'}</span>`,
-    dueSoon ? `<span class="col-stat-alert" title="Deadline within ${matrixUrgencyDays} days">${dueSoon} due soon</span>` : '<span>No deadlines</span>',
+    dueSoon ? `<span class="col-stat-alert" title="Deadline within ${boardDueSoonDays} days">${dueSoon} due soon</span>` : '<span>No deadlines</span>',
   ];
   if (pinned) parts.push(`<span title="Pinned jobs">${pinned} pinned</span>`);
   return `<div class="kanban-col-stats">${parts.join('')}</div>`;
 }
 
-function matrixSummaryHTML(jobs) {
-  const scored = jobs.filter(j => j.fitScore != null);
-  const avgFit = scored.length ? Math.round(scored.reduce((sum, j) => sum + Number(j.fitScore), 0) / scored.length) : null;
-  const dueSoon = jobs.filter(j => {
-    const days = getDeadlineDays(j);
-    return days !== null && days <= matrixUrgencyDays;
-  }).length;
-  return `<div class="pm-q-summary">${jobs.length} job${jobs.length === 1 ? '' : 's'}${avgFit === null ? '' : ' · avg fit ' + avgFit + '%'}${dueSoon ? ' · ' + dueSoon + ' due soon' : ''}</div>`;
+function actionDate(job) {
+  let value = job.stage === 'saved' ? job.deadline : job.stage === 'applied' ? job.nextFollowUp || job.followUpDate : job[job.stage + 'Milestone']?.date;
+  if (!value && job.stage === 'applied') {
+    const applied = job.dateApplied || job.dateAdded;
+    const date = new Date(/^\d{4}-\d{2}-\d{2}$/.test(applied || '') ? applied + 'T00:00:00' : applied);
+    if (!Number.isFinite(date.getTime())) return null;
+    date.setDate(date.getDate() + 7);
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }
+  if (!value) return null;
+  const date = new Date(String(value).slice(0, 10) + 'T00:00:00');
+  return Number.isFinite(date.getTime()) ? date : null;
 }
 
-function renderBoardMatrix(jobs) {
-  if (jobs.length === 0) {
-    return emptyStateHTML('🔍', 'No results', 'Try adjusting your search or filters');
-  }
+function actionTimingHTML(job) {
+  const date = actionDate(job);
+  if (!date) return '<span class="action-timing">' + ({saved: 'No application deadline', applied: 'Set a follow-up date', screening: 'Schedule your screening', interview: 'Schedule your interview', offer: 'Review your offer'}[job.stage] || 'No next action') + '</span>';
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const days = Math.round((date - today) / 86400000);
+  const label = job.stage === 'saved' ? 'Apply' : job.stage === 'applied' ? 'Follow up' : job.stage === 'screening' ? 'Screening' : 'Interview';
+  const when = days < 0 ? Math.abs(days) + 'd overdue' : days === 0 ? 'today' : days === 1 ? 'tomorrow' : 'in ' + days + 'd';
+  return '<span class="action-timing' + (days <= 0 ? ' action-timing--due' : '') + '">' + label + ': ' + when + ' · ' + escHtml(date.toLocaleDateString(undefined, {month: 'short', day: 'numeric'})) + '</span>';
+}
 
-  const scored = jobs.filter(j => j.fitScore != null);
-  const unscored = jobs.filter(j => j.fitScore == null);
-
-  const quadrants = [{
-      id: 'tl',
-      title: 'Plan your next move',
-      guidance: 'Strong matches with time to prepare a tailored application.',
-      icon: '⭐',
-      desc: `${matrixFitThreshold}%+ fit · Low urgency`,
-      highFit: true,
-      urgent: false
-    },
-    {
-      id: 'tr',
-      title: 'Focus first',
-      guidance: 'Strong matches with a close deadline or an older application to review.',
-      icon: '🔥',
-      desc: `${matrixFitThreshold}%+ fit · High urgency`,
-      highFit: true,
-      urgent: true
-    },
-    {
-      id: 'bl',
-      title: 'Keep on your radar',
-      guidance: 'Lower matches to revisit when you have more time.',
-      icon: '📋',
-      desc: `&lt;${matrixFitThreshold}% fit · Low urgency`,
-      highFit: false,
-      urgent: false
-    },
-    {
-      id: 'br',
-      title: 'Make a decision',
-      guidance: 'Time-sensitive, lower matches. Decide whether they deserve your effort.',
-      icon: '⚡',
-      desc: `&lt;${matrixFitThreshold}% fit · High urgency`,
-      highFit: false,
-      urgent: true
-    },
+function renderBoardActions(jobs) {
+  if (!jobs.length) return emptyStateHTML('🔍', 'No results', 'Try adjusting your search or filters');
+  const groups = [
+    {title: 'Apply next', icon: '📨', stages: ['saved'], guidance: 'Tailor your resume and submit your application before the deadline.'},
+    {title: 'Follow up', icon: '💬', stages: ['applied'], guidance: 'Check in on applications. Without a follow-up date, we suggest seven days after applying.'},
+    {title: 'Prepare for interviews', icon: '🤝', stages: ['screening', 'interview'], guidance: 'Research the company and prepare for your next conversation.'},
+    {title: 'Review offers', icon: '🎉', stages: ['offer'], guidance: 'Compare the details and decide on your next step.'},
   ];
+  const closed = jobs.filter(j => ['declined', 'withdrew', 'ghosted', 'archived'].includes(j.stage));
+  if (closed.length) groups.push({title: 'Completed & on hold', icon: '📦', stages: ['declined', 'withdrew', 'ghosted', 'archived'], guidance: 'These jobs have no active next step. Open a job to revisit its status.'});
+  return '<div class="pm-wrapper action-queue"><div class="pm-workspace-intro"><div><span class="workspace-eyebrow">ACTION QUEUE</span><h2>Your next move, made clear.</h2><p>Drag cards to reorder or move between groups. Moving groups updates the job stage; Prepare uses Screening and Completed uses Archived. Pinned jobs stay first.</p></div><div class="pm-workspace-total"><strong>' + (jobs.length - closed.length) + '</strong><span>active opportunities</span></div></div><div class="action-grid">' + groups.map(group => {
+    const items = jobs.filter(j => group.stages.includes(j.stage)).sort(compareActionQueueJobs);
+    return '<section class="pm-quadrant action-group" data-action-stage="' + (group.stages.includes('archived') ? 'archived' : group.stages[0]) + '"><div class="pm-quadrant-header"><div class="pm-q-icon-wrap">' + group.icon + '</div><div class="pm-q-meta"><h3 class="pm-q-title">' + group.title + '</h3></div><span class="pm-q-count">' + items.length + '</span></div><p class="pm-q-guidance">' + group.guidance + '</p><div class="pm-cards">' + (items.length ? items.map(job => pmCardHTML(job).replace('<div class="job-card-footer">', actionTimingHTML(job) + '<div class="job-card-footer">')).join('') : '<div class="pm-empty-q"><strong>All clear here</strong><span>Jobs appear here as you update their stage.</span></div>') + '</div></section>';
+  }).join('') + '</div></div>';
+}
 
-  const qJobs = {};
-  quadrants.forEach(q => {
-    qJobs[q.id] = scored.filter(j => {
-      const hf = j.fitScore >= matrixFitThreshold;
-      const urg = getJobUrgency(j);
-      return hf === q.highFit && urg === q.urgent;
-    }).sort((a, b) => (Number(!!b.pinned) - Number(!!a.pinned)) ||
-      ((getDeadlineDays(a) ?? Infinity) - (getDeadlineDays(b) ?? Infinity)) ||
-      (b.fitScore - a.fitScore));
+function actionQueueStages(stage) {
+  return [['saved'], ['applied'], ['screening', 'interview'], ['offer'], ['declined', 'withdrew', 'ghosted', 'archived']].find(stages => stages.includes(stage));
+}
+
+function compareActionQueueJobs(a, b) {
+  const rankA = Number.isFinite(a.actionQueueRank) ? a.actionQueueRank : Infinity;
+  const rankB = Number.isFinite(b.actionQueueRank) ? b.actionQueueRank : Infinity;
+  const dateA = actionDate(a);
+  const dateB = actionDate(b);
+  return Number(!!b.pinned) - Number(!!a.pinned) || rankA - rankB || (dateA ? dateA.getTime() : Infinity) - (dateB ? dateB.getTime() : Infinity) || (Number(b.fitScore) || 0) - (Number(a.fitScore) || 0);
+}
+
+function moveActionQueueJob(id, targetStage, beforeId) {
+  const job = state.jobs.find(job => job.id === id);
+  const stages = actionQueueStages(targetStage);
+  if (!job || !stages) return false;
+  const before = beforeId ? state.jobs.find(job => job.id === beforeId) : null;
+  if (beforeId === id || (beforeId && (!before || !stages.includes(before.stage)))) return false;
+  const previousStage = job.stage;
+  const nextStage = stages.includes(job.stage) ? job.stage : targetStage;
+  const items = state.jobs.filter(item => item.id !== id && stages.includes(item.stage)).sort(compareActionQueueJobs);
+  const snapshot = [job, ...items].map(item => ({id: item.id, stage: item.stage, rank: item.actionQueueRank, hadRank: Object.prototype.hasOwnProperty.call(item, 'actionQueueRank')}));
+  const index = before ? items.findIndex(item => item.id === beforeId) : items.length;
+  items.splice(index, 0, job);
+  job.stage = nextStage;
+  items.forEach((item, rank) => item.actionQueueRank = rank);
+  save();
+  renderBoard();
+  toast(previousStage === nextStage ? 'Action queue reordered.' : `Moved to ${STAGE_LABELS[nextStage]}.`, 'success', {
+    undo: () => {
+      snapshot.forEach(entry => {
+        const current = state.jobs.find(item => item.id === entry.id);
+        if (!current) return;
+        if (entry.id === id && current.stage === nextStage) current.stage = entry.stage;
+        if (entry.hadRank) current.actionQueueRank = entry.rank;
+        else delete current.actionQueueRank;
+      });
+      save();
+      renderBoard();
+    }
   });
+  if (previousStage !== nextStage && MILESTONE_STAGES.includes(nextStage)) {
+    setTimeout(() => {
+      if (state.jobs.includes(job) && job.stage === nextStage) openStageMilestoneModal(job, nextStage);
+    }, 350);
+  }
+  return true;
+}
 
-  return `
-    <div class="pm-wrapper">
-      <div class="pm-workspace-intro">
-        <div><span class="workspace-eyebrow">OPPORTUNITY PRIORITIES</span>
-          <h2>Give your best opportunities your best attention.</h2>
-          <p>Grouped by skill fit and timing. Pinned jobs appear first in each group.</p>
-        </div>
-        <div class="pm-workspace-total"><strong>${jobs.length}</strong><span>opportunities</span></div>
-      </div>
-      <div class="pm-controls" aria-label="Priority matrix settings">
-        <label class="pm-control">
-          <span>High fit</span>
-          <input type="range" id="pm-fit-threshold" min="40" max="90" step="5" value="${matrixFitThreshold}" />
-          <strong>${matrixFitThreshold}%+</strong>
-        </label>
-        <label class="pm-control">
-          <span>Urgent</span>
-          <input type="range" id="pm-urgency-days" min="3" max="30" step="1" value="${matrixUrgencyDays}" />
-          <strong>${matrixUrgencyDays}d</strong>
-        </label>
-      </div>
-      <p class="pm-method-note">Urgency means a deadline within ${matrixUrgencyDays} days (including overdue), or a job added at least ${matrixUrgencyDays} days ago without a deadline.</p>
-      <div class="pm-matrix-area">
-        <div class="pm-y-label"><span>← HIGH FIT · LOW FIT →</span></div>
-        <div class="pm-inner">
-          <div class="pm-axis-top">
-            <span class="pm-axis-cap">← Low Urgency</span>
-            <span class="pm-axis-title">URGENCY</span>
-            <span class="pm-axis-cap">High Urgency →</span>
-          </div>
-          <div class="pm-grid">
-            ${quadrants.map(q => `
-              <div class="pm-quadrant pm-q-${q.id}">
-                <div class="pm-quadrant-header">
-                  <div class="pm-q-icon-wrap">${q.icon}</div>
-                  <div class="pm-q-meta">
-                    <div class="pm-q-title">${q.title}</div>
-                    <div class="pm-q-desc">${q.desc}</div>
-                  </div>
-                  <span class="pm-q-count">${qJobs[q.id].length}</span>
-                </div>
-                <p class="pm-q-guidance">${q.guidance}</p>
-                ${matrixSummaryHTML(qJobs[q.id])}
-                <div class="pm-cards">
-                  ${qJobs[q.id].length === 0
-                    ? '<div class="pm-empty-q"><strong>All clear here</strong><span>Opportunities appear here as their fit and timing match this group.</span></div>'
-                    : qJobs[q.id].map(j => pmCardHTML(j)).join('')}
-                </div>
-              </div>`).join('')}
-          </div>
-        </div>
-      </div>
-      ${unscored.length > 0 ? `
-        <div class="pm-unscored">
-          <div class="pm-unscored-title">⚪ Unscored (${unscored.length}) — add a Fit Score to place these in the matrix</div>
-          <div class="pm-unscored-cards">${unscored.map(j => pmCardHTML(j)).join('')}</div>
-        </div>` : ''}
-    </div>`;
+function wireActionQueueDragging(board) {
+  if (bulkSelectMode) return;
+  let draggedId = null;
+  let suppressUntil = 0;
+  const clear = () => board.querySelectorAll('.action-drop-target, .action-insert-before').forEach(el => el.classList.remove('action-drop-target', 'action-insert-before'));
+  board.querySelectorAll('.job-card').forEach(card => {
+    card.draggable = true;
+    card.addEventListener('click', e => {
+      if (Date.now() < suppressUntil) { e.preventDefault(); e.stopImmediatePropagation(); }
+    }, true);
+    card.addEventListener('dragstart', e => {
+      if (e.target.closest('button')) { e.preventDefault(); return; }
+      draggedId = card.dataset.jobId;
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', draggedId);
+    });
+    card.addEventListener('dragend', () => {
+      draggedId = null;
+      suppressUntil = Date.now() + 250;
+      card.classList.remove('dragging');
+      clear();
+    });
+  });
+  board.querySelectorAll('.action-group').forEach(group => {
+    group.addEventListener('dragover', e => {
+      if (!draggedId) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      clear();
+      group.classList.add('action-drop-target');
+      const before = e.target.closest('.job-card');
+      if (before && before.dataset.jobId !== draggedId) before.classList.add('action-insert-before');
+    });
+    group.addEventListener('dragleave', e => {
+      if (!group.contains(e.relatedTarget)) clear();
+    });
+    group.addEventListener('drop', e => {
+      if (!draggedId) return;
+      e.preventDefault();
+      const before = e.target.closest('.job-card');
+      const id = draggedId;
+      draggedId = null;
+      suppressUntil = Date.now() + 250;
+      clear();
+      moveActionQueueJob(id, group.dataset.actionStage, before ? before.dataset.jobId : null);
+    });
+  });
 }
 
 function renderBoard() {
@@ -509,21 +530,10 @@ function renderBoard() {
     return;
   }
 
-  if (boardLayout === 'matrix') {
+  if (boardLayout === 'actions') {
     const visibleJobs = periodJobs.filter(j => visibleStages.includes(j.stage));
-    board.innerHTML = renderBoardMatrix(visibleJobs);
-    const fitThresholdInput = document.getElementById('pm-fit-threshold');
-    const urgencyDaysInput = document.getElementById('pm-urgency-days');
-    if (fitThresholdInput) fitThresholdInput.addEventListener('input', () => {
-      matrixFitThreshold = Number(fitThresholdInput.value) || 70;
-      localStorage.setItem('pt-matrix-fit-threshold', String(matrixFitThreshold));
-      renderBoard();
-    });
-    if (urgencyDaysInput) urgencyDaysInput.addEventListener('input', () => {
-      matrixUrgencyDays = Number(urgencyDaysInput.value) || 14;
-      localStorage.setItem('pt-matrix-urgency-days', String(matrixUrgencyDays));
-      renderBoard();
-    });
+    board.innerHTML = renderBoardActions(visibleJobs);
+    wireActionQueueDragging(board);
     board.querySelectorAll('.card-delete-btn').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
@@ -558,7 +568,16 @@ function renderBoard() {
       });
     });
     board.querySelectorAll('.job-card').forEach(card => {
-      card.addEventListener('click', () => openJobDetail(card.dataset.jobId));
+      card.addEventListener('click', () => {
+        if (bulkSelectMode) toggleBulkCard(card);
+        else openJobDetail(card.dataset.jobId);
+      });
+      card.addEventListener('keydown', e => {
+        if (bulkSelectMode && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          toggleBulkCard(card);
+        }
+      });
     });
     wireSearchAndFilters();
     if (typeof animateBoardCards === 'function') animateBoardCards();

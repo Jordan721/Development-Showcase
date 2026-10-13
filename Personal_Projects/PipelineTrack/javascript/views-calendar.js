@@ -7,6 +7,8 @@ let calMode = 'month';
 let calOffset = 0;
 let calEventFilter = 'all';
 let calAnimDir = 'fade'; // 'fade' | 'left' | 'right'
+let calDraggedEvent = null;
+let calSuppressClickUntil = 0;
 const CAL_STAGE_COLORS = {
   saved: 'var(--text-muted)',
   applied: 'var(--accent)',
@@ -45,6 +47,7 @@ function buildCalendarEvents() {
         type: 'interview',
         label: `${stage === 'screening' ? 'Screening' : 'Interview'}: ${j.role} @ ${j.company}`,
         id: j.id,
+        dateField: stage + 'Milestone',
         time: milestone.time || ''
       });
     });
@@ -53,6 +56,7 @@ function buildCalendarEvents() {
       events.push({
         date: jobDate,
         type: 'job',
+        dateField: j.dateApplied ? 'dateApplied' : 'dateAdded',
         label: j.role + ' @ ' + j.company,
         id: j.id
       });
@@ -63,6 +67,7 @@ function buildCalendarEvents() {
         events.push({
           date: deadlineDate,
           type: 'deadline',
+          dateField: 'deadline',
           label: 'Deadline: ' + j.role + ' @ ' + j.company,
           id: j.id
         });
@@ -76,6 +81,7 @@ function buildCalendarEvents() {
     events.push({
       date: followUpDate,
       type: 'contact',
+      dateField: 'nextFollowUp',
       label: 'Follow-up: ' + c.name,
       id: c.id
     });
@@ -86,6 +92,7 @@ function buildCalendarEvents() {
     events.push({
       date: eventDate,
       type: 'event',
+      dateField: 'date',
       label: ev.title,
       id: ev.id,
       eventData: ev
@@ -164,6 +171,81 @@ function calendarEventTime(ev) {
   return ev.time || (ev.eventData && ev.eventData.time) || '';
 }
 
+function calendarDateTarget(ev) {
+  const collection = ev.type === 'contact' ? state.contacts : ev.type === 'event' ? state.events : state.jobs;
+  const item = (collection || []).find(item => item.id === ev.id);
+  if (!item) return null;
+  const allowed = {job: ['dateAdded', 'dateApplied'], deadline: ['deadline'], interview: ['screeningMilestone', 'interviewMilestone'], contact: ['nextFollowUp'], event: ['date']};
+  if (!allowed[ev.type] || !allowed[ev.type].includes(ev.dateField)) return null;
+  return ev.type === 'interview' ? (item[ev.dateField] ? {item: item[ev.dateField], field: 'date'} : null) : {item, field: ev.dateField};
+}
+
+function moveCalendarEvent(ev, newDate) {
+  const date = calendarDate(newDate);
+  if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(newDate) || dateKey(date) !== newDate) return false;
+  const target = calendarDateTarget(ev);
+  if (!target) return false;
+  const previous = target.item[target.field];
+  if (previous === newDate) return false;
+  target.item[target.field] = newDate;
+  save();
+  renderCalendarView();
+  toast('Moved to ' + date.toLocaleDateString('en-US', {month: 'short', day: 'numeric', year: 'numeric'}) + '.', 'success', {
+    undo: () => {
+      const current = calendarDateTarget(ev);
+      if (!current || current.item[current.field] !== newDate) return;
+      current.item[current.field] = previous;
+      save();
+      renderCalendarView();
+    }
+  });
+  return true;
+}
+
+function wireCalendarDragging(body) {
+  const clearTargets = () => body.querySelectorAll('.cal-drop-target').forEach(cell => cell.classList.remove('cal-drop-target'));
+  body.querySelectorAll('.cal-full-event').forEach(card => {
+    if (calMode !== 'month' && calMode !== 'week') return;
+    card.draggable = true;
+    card.addEventListener('dragstart', e => {
+      calDraggedEvent = buildCalendarEvents().find(ev => ev.id === card.dataset.evId && ev.type === card.dataset.evType && ev.dateField === card.dataset.evDateField);
+      if (!calDraggedEvent || !e.dataTransfer) { e.preventDefault(); return; }
+      e.stopPropagation();
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', calDraggedEvent.label);
+      card.classList.add('cal-dragging');
+    });
+    card.addEventListener('dragend', () => {
+      calDraggedEvent = null;
+      calSuppressClickUntil = Date.now() + 250;
+      card.classList.remove('cal-dragging');
+      clearTargets();
+    });
+  });
+  body.querySelectorAll('[data-cell-date]').forEach(cell => {
+    cell.addEventListener('dragover', e => {
+      if (!calDraggedEvent) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      clearTargets();
+      cell.classList.add('cal-drop-target');
+    });
+    cell.addEventListener('dragleave', e => {
+      if (!cell.contains(e.relatedTarget)) cell.classList.remove('cal-drop-target');
+    });
+    cell.addEventListener('drop', e => {
+      if (!calDraggedEvent) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const ev = calDraggedEvent;
+      calDraggedEvent = null;
+      calSuppressClickUntil = Date.now() + 250;
+      clearTargets();
+      moveCalendarEvent(ev, cell.dataset.cellDate);
+    });
+  });
+}
+
 function calendarCardHTML(ev) {
   const job = ['job', 'deadline', 'interview'].includes(ev.type) ? state.jobs.find(j => j.id === ev.id) : null;
   const tag = {
@@ -176,7 +258,7 @@ function calendarCardHTML(ev) {
   const stage = job ? (STAGE_LABELS[job.stage] || job.stage || '') : '';
   const color = job ? (CAL_STAGE_COLORS[job.stage] || 'var(--accent)') : '';
   const time = calendarEventTime(ev);
-  return `<button type="button" class="cal-full-event cal-compact-card ev-${ev.type}${job ? ' cal-type-' + calendarJobType(job) : ''}" data-ev-id="${escHtml(ev.id)}" data-ev-type="${ev.type}" title="${escHtml(ev.label)}${stage ? ' · ' + escHtml(stage) : ''}${(job && job.jobType) ? ' · ' + escHtml(job.jobType) : ''}"><span class="cal-card-title">${job ? jobDepartmentBadge(job, true) : ''}<span>${escHtml(job ? job.company : ev.label)}</span></span>${job ? `<span class="cal-card-role">${escHtml(job.role)}</span>` : ''}<span class="cal-card-meta">${job ? `<span class="cal-status-dot" style="background:${color}" aria-hidden="true"></span>` : ''}${escHtml(ev.type === 'job' && stage ? stage : tag)}${time ? ' · ' + escHtml(time) : ''}</span>${job ? `<span class="cal-card-type">${escHtml(job.jobType || 'Type not specified')}</span>` : ''}</button>`;
+  return `<button type="button" class="cal-full-event cal-compact-card ev-${ev.type}${job ? ' cal-type-' + calendarJobType(job) : ''}" data-ev-id="${escHtml(ev.id)}" data-ev-type="${ev.type}" data-ev-date-field="${escHtml(ev.dateField || '')}" title="${escHtml(ev.label)}${stage ? ' · ' + escHtml(stage) : ''}${(job && job.jobType) ? ' · ' + escHtml(job.jobType) : ''}"><span class="cal-card-title">${job ? jobDepartmentBadge(job, true) : ''}<span>${escHtml(job ? job.company : ev.label)}</span></span>${job ? `<span class="cal-card-role">${escHtml(job.role)}</span>` : ''}<span class="cal-card-meta">${job ? `<span class="cal-status-dot" style="background:${color}" aria-hidden="true"></span>` : ''}${escHtml(ev.type === 'job' && stage ? stage : tag)}${time ? ' · ' + escHtml(time) : ''}</span>${job ? `<span class="cal-card-type">${escHtml(job.jobType || 'Type not specified')}</span>` : ''}</button>`;
 }
 
 function calendarJobType(job) {
@@ -377,9 +459,11 @@ function wireCalendarControls() {
   // Wire cell clicks to open day modal
   const body = document.getElementById('cal-view-body');
   if (!body) return;
+  wireCalendarDragging(body);
   body.querySelectorAll('.cal-full-event').forEach(button => {
     button.addEventListener('click', e => {
       e.stopPropagation();
+      if (Date.now() < calSuppressClickUntil) return;
       if (button.dataset.evType === 'contact') {
         openContactModal(button.dataset.evId);
       } else if (button.dataset.evType === 'event') {
@@ -390,6 +474,7 @@ function wireCalendarControls() {
   });
   body.querySelectorAll('[data-cell-date]').forEach(cell => {
     cell.addEventListener('click', e => {
+      if (Date.now() < calSuppressClickUntil) return;
       const eventEl = e.target.closest('.cal-full-event');
       if (eventEl) {
         const evType = eventEl.dataset.evType;

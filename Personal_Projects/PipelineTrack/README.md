@@ -17,9 +17,9 @@ A personal job search companion built to take the chaos out of hunting for work.
 | Feature | What it does |
 |---|---|
 | ◈ Dashboard | Stats, clickable streak timeline, pipeline health, conversion funnel, weekly velocity, upcoming deadlines, skill gaps, and weekly summary |
-| 📋 Job Board | 9-stage kanban with columns, priority matrix, table, timeline, and map views — search and filter built in |
-| 📅 Calendar & Activity | Month/week/year view of job events, deadlines, follow-ups, and job fairs |
-| 🤝 Network | Track recruiters, hiring managers, and referrals with follow-up reminders |
+| 📋 Job Board | 9-stage kanban with columns, action queue, table, timeline, and map views — search and filter built in |
+| 📅 Calendar & Activity | Month/week/year and Agenda views, draggable dates, detailed day views, upcoming agenda, and five recent jobs |
+| 🤝 Network | Contact cards, due follow-ups, and quick actions to record conversations |
 | 🎯 Goals | Weekly/monthly targets with live progress, calendar-based pace, action buttons, recorded history, and a 28-day activity heatmap |
 | 📊 Analytics | KPIs, pipeline and ranking bars, an activity area chart, and donut charts with clickable legends |
 | 👤 My Profile | Skills, credential progress, email templates, skill coverage chart, and data backup |
@@ -72,11 +72,12 @@ PipelineTrack/
 ├── css/
 │   ├── base.css            # variables, reset, layout, buttons, forms
 │   ├── dashboard.css       # stat cards, velocity chart, deadlines, pipeline health
-│   ├── board.css           # kanban columns, priority matrix, table, timeline views, job cards
+│   ├── board.css           # kanban columns, action queue, table, timeline views, job cards
 │   ├── modals.css          # modals, profile, learning hub, resume hub
 │   ├── features.css        # deadline banner, notes timeline
 │   ├── animations.css      # view, modal, card, calendar, compare, and theme transition effects
 │   ├── views.css           # calendar, contacts, analytics, goals views
+│   ├── calendar-details.css # calendar dragging, job type colors, shared department badges, recent jobs, day details
 │   ├── fun.css             # extra themes (Midnight, Sunset, Ocean), confetti, streak, card flair
 │   ├── onboarding.css      # first-run onboarding modal styles
 │   └── ux-enhancements.css # command palette, hover cards, tooltips, motion toggle, color-blind mode, print, empty states
@@ -85,11 +86,12 @@ PipelineTrack/
     ├── data-industries.js  # extends KNOWN_SKILLS & LEARNING for Business, Finance, PM, Banking, CX
     ├── state.js            # app state, localStorage save/load, export/import
     ├── utils.js            # shared helpers, fit analysis, navigation
+    ├── job-departments.js  # shared department icons, theme-aware accents, and role classification
     ├── views-dashboard.js  # dashboard stats, funnel, velocity, deadlines, time-in-stage
     ├── views-board.js      # kanban board, table, timeline views, job detail & add/edit modals
     ├── views-profile.js    # profile, skills, credential tracker, coverage chart
     ├── views-resume.js     # learning hub and resume hub
-    ├── views-calendar.js   # calendar view (month/week/year)
+    ├── views-calendar.js   # month/week/year/agenda views, date dragging, day details, recent jobs
     ├── views-contacts.js   # network & contacts view
     ├── views-analytics.js  # analytics view (KPIs, funnel, charts)
     ├── views-goals.js      # goals view (live-counted progress)
@@ -133,7 +135,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 - **Declined** — you chose not to pursue; **Ghosted** — never heard back
 - **Five layout modes:**
   - **Columns** — classic kanban with collapsible columns (state persists across refreshes); drag cards onto collapsed columns to move them — the column highlights with a dashed outline on hover to confirm the drop
-  - **Priority Matrix** — 2×2 grid by fit score vs. urgency (Act Now 🔥, Plan Ahead ⭐, Quick Apply ⚡, Low Priority 📋); Act Now quadrant has a subtle green glow; long role names truncate cleanly
+  - **Action Queue** — Apply next, Follow up, Prepare for interviews, and Review offers; closest dates first until you save a custom order by dragging. Pinned jobs stay first. Drag between groups to update the stage, with Undo; entering Prepare sets Screening, and entering Completed & on hold sets Archived. Existing screening/interview stages are preserved when reordering within Prepare. Applications without a follow-up date use a seven-day reminder.
   - **Table** — sortable spreadsheet with sticky header, per-stage colored left-border accents, and color-coded stage dropdowns
   - **Timeline** — Gantt-style bars color-coded by stage with a stage legend and color dot per row label
   - **Map** — interactive map (OpenStreetMap + Nominatim, no API key) with color-coded pins per stage; jobs with multiple locations separated by `;` or `,` get a pin for each city; coords cached after first geocode so future loads are instant; click any pin to open the job detail
@@ -142,6 +144,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 - **Deadline urgency glow** — cards with imminent deadlines get a color-coded border (yellow ≤7d, orange ≤2d, red = today/overdue)
 - **Sticky filter bar** — search and filter controls stay fixed at the top while you scroll
 - **☐ Select (Bulk Actions)** — toggle select mode to pick multiple cards (or hit **Select All** to grab every visible card at once), then move stage, assign a Resume Vault resume, export a CSV, or delete in one shot; deletions include a 5-second undo toast
+- **Action Queue selection** — in Select mode, click cards or use Enter/Space to toggle checkmarks. Dragging is disabled until you exit selection; Move to stage applies to the selected jobs.
 - Filter by period · search by role/company/location · filter dropdowns for stage, work type (Remote / Hybrid / On-site / Remote–Hybrid / Hybrid–On-site / Flexible), seniority
 - **⊜ Compare Jobs** — select 2–3 jobs to compare fit, salary, stage, skills, and benefits side by side
 
@@ -177,11 +180,15 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 <details>
 <summary><strong>📅 Calendar & Activity</strong></summary>
 
-- Toggle **Month / Week / Year** layouts with prev/next navigation
-- Four event types: job added (teal), deadline (red), contact follow-up (yellow), job fair (purple)
+- Toggle **Month / Week / Year / Agenda** layouts with prev/next navigation
+- Five event categories: jobs, deadlines, interviews/screenings, contact follow-ups, and custom events. Filter by category; job-related card colors identify employment type, with department icons and text labels for context.
 - **+ Add Event** — log job fairs with format, venue, meeting link, time, and notes; Join button appears on events with a link
 - **Upcoming strip** — next 7 days of events at a glance
-- **Job Activity** — counts for Today, This Week, This Month, This Year, All Time
+- **Agenda view** — every matching item in the selected month, grouped by date; switching between Month and Agenda preserves the month and event filter.
+- **Compact cards** — company, role, status, and employment type; month cells show two cards and a **+ more** button for the full day. Employment-type colors and department icons follow the active theme.
+- **Drag dates** — in Month or Week, drag cards to another day to update the displayed date: application date (or date added if no application date), deadline, screening, interview, contact follow-up, or custom event. Times and stages stay unchanged; Undo restores the previous date.
+- **Day details** — click a day to see its items, available times, job status/type/work arrangement/location, and contact or event notes. Open jobs, edit contacts, join linked events, or add an event with the day prefilled; empty days work too.
+- **Recent Jobs sidebar** — the five most recently added jobs beside Upcoming Agenda; click to open details. On narrow screens the sidebar stacks below the calendar.
 
 </details>
 
@@ -192,6 +199,9 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 - Stat strip showing totals, follow-ups due, and count by type
 - Search, filter by type, sort by name/company/most recent
 - Overdue follow-ups highlighted; dates appear in Calendar
+- **Needs attention** — due and overdue follow-ups appear together above the contact cards.
+- **Mark contacted** — records today's local date and clears a follow-up if it is due; future follow-ups remain. Use Edit to set the next reminder.
+- Initial avatars, improved contact cards, keyboard focus, and separate empty states for an empty network and searches with no matches
 - Linked contacts appear inside the job's detail modal
 
 </details>
@@ -277,7 +287,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 
 **Seniority** — inferred from title keywords (`Senior`, `Lead`, `Jr.`), level codes (`L3–L7`, `SDE I/II/III`), years-of-experience phrases, and responsibility language. Never overwrites a value you set manually.
 
-**Department** — detected across 13 departments (Engineering, Data, Design, Product, Marketing, Sales, Finance, HR, Legal, Operations, Customer Success, Security, Research) from the job title and description.
+**Department** — detected across 14 departments (Engineering, Data, Design, Product, Marketing, Sales, Finance, HR / People, Legal, IT Operations, Operations, Customer Success, Security, Research) from the job title and description.
 
 **Work Type** — Remote / Hybrid / On-site / Remote–Hybrid / Hybrid–On-site / Flexible detected from the description. Hybrid wins if the word appears anywhere.
 
@@ -289,6 +299,7 @@ All three show an amber **✦ Auto-filled** badge so you always know the app set
 <summary><strong>🎨 Other Features</strong></summary>
 
 - **Job Card Hover Preview** — float preview with salary, stage, work type, deadline, and skill counts after ~0.5s hover
+- **Department icons** — shared colored SVG badges across board cards/tables, dashboard job lists, calendar, job details, comparisons, map results, job pickers, and hover previews. Software roles get a code icon; Data and Security take precedence over broad Engineering inference. Manually entered departments are respected; unknown departments keep their label with a general icon. Accents adapt to theme and color-blind palette changes.
 - **Fit Score Tooltip** — hover any fit badge to see matched count and gap count
 - **Keyword Highlight** — matched skills highlighted green, gaps red, directly in the job description; × on any tag to dismiss false positives
 - **Undo Deletion** — 5-second undo toast after deleting a job or skill; bulk deletions also undoable
