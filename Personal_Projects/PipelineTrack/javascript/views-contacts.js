@@ -6,6 +6,33 @@
 let contactFilter = 'all';
 let contactSort = 'recent';
 
+function contactToday() {
+  const now = new Date();
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+}
+
+function markContacted(id) {
+  const contact = state.contacts.find(c => c.id === id);
+  if (!contact) return;
+  contact.lastContact = contactToday();
+  if (contact.nextFollowUp && contact.nextFollowUp <= contact.lastContact) contact.nextFollowUp = '';
+  save();
+  renderContacts();
+  toast('Contact recorded. Set your next follow-up with Edit.', 'success');
+}
+
+function renderNetworkAttention() {
+  const panel = document.getElementById('network-attention');
+  if (!panel) return;
+  const today = contactToday();
+  const due = state.contacts.filter(c => c.nextFollowUp && c.nextFollowUp <= today)
+    .sort((a, b) => a.nextFollowUp.localeCompare(b.nextFollowUp));
+  panel.hidden = state.contacts.length === 0;
+  panel.innerHTML = `<div class="network-attention-heading"><div><span class="network-eyebrow">YOUR NEXT CONVERSATION</span><h2>${due.length ? 'Needs attention' : 'You’re all caught up'}</h2><p>${due.length ? `${due.length} follow-up${due.length === 1 ? '' : 's'} due. Keep the conversation moving.` : 'No follow-ups due today. A small check-in can open a new door.'}</p></div><button class="btn-secondary network-add-btn">+ Add Contact</button></div>${due.length ? `<div class="network-followups">${due.map(c => `<div class="network-followup"><div><strong>${escHtml(c.name)}</strong><span>${escHtml(c.company || 'Connection')} · <span class="${c.nextFollowUp < today ? 'network-overdue' : ''}">${c.nextFollowUp === today ? 'Due today' : `Overdue · ${formatDate(c.nextFollowUp)}`}</span></span></div><button class="btn-secondary contact-done-btn" data-id="${escHtml(c.id)}">Mark contacted</button></div>`).join('')}</div>` : ''}`;
+  panel.querySelector('.network-add-btn').onclick = () => openContactModal();
+  panel.querySelectorAll('.contact-done-btn').forEach(btn => btn.onclick = () => markContacted(btn.dataset.id));
+}
+
 function openContactModal(id) {
   const isEdit = !!id;
   document.getElementById('modal-contact-title').textContent = isEdit ? 'Edit Contact' : 'Add Contact';
@@ -130,28 +157,36 @@ function contactCardHTML(c) {
     Referral: 'type-referral',
     Other: 'type-other'
   } [c.type] || 'type-other';
-  const typeLabel = c.type === 'HM' ? 'Hiring Mgr' : c.type;
+  const typeLabel = c.type === 'HM' ? 'Hiring manager' : (c.type || 'Other');
+  const initials = c.name.trim().split(/\s+/).map(part => part[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
+  let profileUrl = '';
+  try {
+    const url = new URL(/^https?:\/\//i.test(c.linkedin) ? c.linkedin : `https://${c.linkedin}`);
+    if (['http:', 'https:'].includes(url.protocol) && c.linkedin) profileUrl = url.href;
+  } catch (_) { /* Invalid profile links are omitted. */ }
   const linkedJob = c.jobId ? state.jobs.find(j => j.id === c.jobId) : null;
   return `<div class="contact-card">
     <div class="contact-card-header">
-      <div>
+      <span class="contact-avatar" aria-hidden="true">${escHtml(initials)}</span>
+      <div class="contact-identity">
         <div class="contact-name">${escHtml(c.name)}</div>
         ${c.company || c.role ? `<div style="font-size:12px;color:var(--text-muted);margin-top:2px">${escHtml([c.role, c.company].filter(Boolean).join(' · '))}</div>` : ''}
       </div>
-      <span class="contact-type-badge ${typeCls}">${typeLabel}</span>
+      <span class="contact-type-badge ${typeCls}">${escHtml(typeLabel)}</span>
     </div>
     <div class="contact-meta">
       ${c.email ? `<div class="contact-meta-row"><span class="contact-meta-icon">✉</span><a href="mailto:${escHtml(c.email)}" style="color:var(--text-muted);text-decoration:none">${escHtml(c.email)}</a></div>` : ''}
       ${c.phone ? `<div class="contact-meta-row"><span class="contact-meta-icon">☎</span>${escHtml(c.phone)}</div>` : ''}
-      ${c.linkedin ? `<div class="contact-meta-row"><span class="contact-meta-icon">in</span><a href="${escHtml(c.linkedin)}" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;font-size:12px">LinkedIn ↗</a></div>` : ''}
+      ${profileUrl ? `<div class="contact-meta-row"><span class="contact-meta-icon">in</span><a href="${escHtml(profileUrl)}" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;font-size:12px">LinkedIn ↗</a></div>` : ''}
     </div>
     <div class="contact-dates">
       ${c.lastContact ? `<div class="contact-date-item"><span class="contact-date-label">Last Contact</span><span class="contact-date-value">${formatDate(c.lastContact)}</span></div>` : ''}
       ${c.nextFollowUp ? `<div class="contact-date-item"><span class="contact-date-label">Follow-up</span><span class="contact-date-value${isOverdue ? ' overdue' : ''}">${isOverdue ? '⚠ ' : ''}${formatDate(c.nextFollowUp)}</span></div>` : ''}
     </div>
-    ${linkedJob ? `<div><span class="contact-linked-job" data-job-id="${linkedJob.id}">📋 ${escHtml(linkedJob.role + ' @ ' + linkedJob.company)}</span></div>` : ''}
-    ${c.notes ? `<div style="font-size:12px;color:var(--text-muted);line-height:1.5;margin-top:2px">${escHtml(c.notes)}</div>` : ''}
+    ${linkedJob ? `<div><button class="contact-linked-job" data-job-id="${escHtml(linkedJob.id)}">${escHtml(linkedJob.role + ' @ ' + linkedJob.company)}</button></div>` : ''}
+    ${c.notes ? `<div class="contact-note">${escHtml(c.notes)}</div>` : ''}
     <div class="contact-card-footer">
+      <button class="btn-secondary contact-done-btn" data-id="${escHtml(c.id)}">Mark contacted</button>
       <button class="btn-secondary contact-edit-btn" data-id="${c.id}" style="font-size:11px;padding:4px 10px">Edit</button>
       <button class="btn-ghost contact-delete-btn" data-id="${c.id}" style="font-size:11px">Delete</button>
     </div>
@@ -160,6 +195,7 @@ function contactCardHTML(c) {
 
 function renderContacts() {
   renderContactStats();
+  renderNetworkAttention();
   const search = (document.getElementById('contacts-search') || {}).value || '';
   const sort = (document.getElementById('contacts-sort') || {}).value || 'recent';
   let contacts = [...state.contacts];
@@ -188,11 +224,20 @@ function renderContacts() {
   const grid = document.getElementById('contacts-grid');
   if (!grid) return;
   if (contacts.length === 0) {
-    grid.innerHTML = emptyStateHTML('🤝', 'No contacts yet', 'Add recruiters, hiring managers, and connections');
+    grid.innerHTML = state.contacts.length
+      ? emptyStateHTML('⌕', 'No matching connections', 'Try another search or contact type.')
+      : emptyStateHTML('🤝', 'Your next opportunity starts with a conversation', 'Add a recruiter, hiring manager, or someone who can make an introduction.');
+    if (!state.contacts.length) {
+      grid.insertAdjacentHTML('beforeend', '<button class="btn-secondary network-empty-add">+ Add your first contact</button>');
+      grid.querySelector('.network-empty-add').onclick = () => openContactModal();
+    }
   } else {
     grid.innerHTML = contacts.map(c => contactCardHTML(c)).join('');
     grid.querySelectorAll('.contact-edit-btn').forEach(btn => {
       btn.addEventListener('click', () => openContactModal(btn.dataset.id));
+    });
+    grid.querySelectorAll('.contact-done-btn').forEach(btn => {
+      btn.onclick = () => markContacted(btn.dataset.id);
     });
     grid.querySelectorAll('.contact-delete-btn').forEach(btn => {
       btn.addEventListener('click', () => deleteContact(btn.dataset.id));
