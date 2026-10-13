@@ -331,12 +331,26 @@ function splitSalaryAndPayPeriod(raw) {
   };
   if (!raw || typeof raw !== 'string') return fallback;
 
-  const periodPatterns = [
-    { value: 'hour', regex: /(?:\/\s*|\bper\s+|\b)(?:hour|hourly|hr|hrs)\b/i },
-    { value: 'day', regex: /(?:\/\s*|\bper\s+|\b)(?:day|daily)\b/i },
-    { value: 'week', regex: /(?:\/\s*|\bper\s+|\b)(?:week|weekly|wk)\b/i },
-    { value: 'month', regex: /(?:\/\s*|\bper\s+|\b)(?:month|monthly|mo)\b/i },
-    { value: 'year', regex: /(?:\/\s*|\bper\s+|\b)(?:year|yearly|annual|annually|yr)\b/i }
+  const periodPatterns = [{
+      value: 'hour',
+      regex: /(?:\/\s*|\bper\s+|\b)(?:hour|hourly|hr|hrs)\b/i
+    },
+    {
+      value: 'day',
+      regex: /(?:\/\s*|\bper\s+|\b)(?:day|daily)\b/i
+    },
+    {
+      value: 'week',
+      regex: /(?:\/\s*|\bper\s+|\b)(?:week|weekly|wk)\b/i
+    },
+    {
+      value: 'month',
+      regex: /(?:\/\s*|\bper\s+|\b)(?:month|monthly|mo)\b/i
+    },
+    {
+      value: 'year',
+      regex: /(?:\/\s*|\bper\s+|\b)(?:year|yearly|annual|annually|yr)\b/i
+    }
   ];
   const match = periodPatterns.find(period => period.regex.test(raw));
   if (!match) return fallback;
@@ -496,7 +510,7 @@ function openDayModal(label, ids) {
     return `
       <div class="day-modal-job" data-job-id="${job.id}">
         <div class="day-modal-job-info">
-          <div class="day-modal-job-role">${escHtml(job.role)}</div>
+          <div class="day-modal-job-role">${jobDepartmentBadge(job, true)} ${escHtml(job.role)}</div>
           <div class="day-modal-job-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
         </div>
         <div class="day-modal-job-badges">

@@ -7,6 +7,16 @@ let calMode = 'month';
 let calOffset = 0;
 let calEventFilter = 'all';
 let calAnimDir = 'fade'; // 'fade' | 'left' | 'right'
+const CAL_STAGE_COLORS = {
+  saved: 'var(--text-muted)',
+  applied: 'var(--accent)',
+  screening: 'var(--yellow)',
+  interview: '#a78bfa',
+  offer: 'var(--green)',
+  declined: 'var(--red)',
+  ghosted: 'var(--text-muted)',
+  archived: 'var(--text-muted)'
+};
 
 function calendarDate(value) {
   if (!value) return null;
@@ -86,7 +96,7 @@ function buildCalendarEvents() {
 
 function getCalPeriodWindow(mode, offset) {
   const now = new Date();
-  if (mode === 'month') {
+  if (mode === 'month' || mode === 'agenda') {
     const y = now.getFullYear();
     const m = now.getMonth() + offset;
     const start = new Date(y, m, 1);
@@ -150,6 +160,37 @@ function buildEventsMap(events) {
   return map;
 }
 
+function calendarEventTime(ev) {
+  return ev.time || (ev.eventData && ev.eventData.time) || '';
+}
+
+function calendarCardHTML(ev) {
+  const job = ['job', 'deadline', 'interview'].includes(ev.type) ? state.jobs.find(j => j.id === ev.id) : null;
+  const tag = {
+    job: 'Job added',
+    deadline: 'Deadline',
+    interview: 'Interview / screening',
+    contact: 'Follow-up',
+    event: 'Event'
+  } [ev.type];
+  const stage = job ? (STAGE_LABELS[job.stage] || job.stage || '') : '';
+  const color = job ? (CAL_STAGE_COLORS[job.stage] || 'var(--accent)') : '';
+  const time = calendarEventTime(ev);
+  return `<button type="button" class="cal-full-event cal-compact-card ev-${ev.type}${job ? ' cal-type-' + calendarJobType(job) : ''}" data-ev-id="${escHtml(ev.id)}" data-ev-type="${ev.type}" title="${escHtml(ev.label)}${stage ? ' · ' + escHtml(stage) : ''}${(job && job.jobType) ? ' · ' + escHtml(job.jobType) : ''}"><span class="cal-card-title">${job ? jobDepartmentBadge(job, true) : ''}<span>${escHtml(job ? job.company : ev.label)}</span></span>${job ? `<span class="cal-card-role">${escHtml(job.role)}</span>` : ''}<span class="cal-card-meta">${job ? `<span class="cal-status-dot" style="background:${color}" aria-hidden="true"></span>` : ''}${escHtml(ev.type === 'job' && stage ? stage : tag)}${time ? ' · ' + escHtml(time) : ''}</span>${job ? `<span class="cal-card-type">${escHtml(job.jobType || 'Type not specified')}</span>` : ''}</button>`;
+}
+
+function calendarJobType(job) {
+  const key = String(job.jobType || '').toLowerCase().replace(/\s+/g, '-');
+  return ['full-time', 'part-time', 'contract', 'freelance', 'temporary', 'internship'].includes(key) ? key : 'unspecified';
+}
+
+function buildCalendarAgenda(events) {
+  if (!events.length) return '<p class="empty-msg">No events this month. Try another month or event filter.</p>';
+  const sorted = [...events].sort((a, b) => a.date - b.date || (calendarEventTime(a)).localeCompare(calendarEventTime(b)));
+  const map = buildEventsMap(sorted);
+  return `<div class="cal-agenda">${Object.entries(map).map(([key, items]) => `<section class="cal-agenda-day"><h3>${items[0].date.toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric'})}<span>${items.length} item${items.length === 1 ? '' : 's'}</span></h3><div class="cal-agenda-events">${items.map(calendarCardHTML).join('')}</div></section>`).join('')}</div>`;
+}
+
 function buildFullMonthGrid(periodStart, events) {
   const map = buildEventsMap(events);
   const today = new Date();
@@ -173,11 +214,11 @@ function buildFullMonthGrid(periodStart, events) {
     const isWeekend = dow === 0 || dow === 6;
     html += `<div class="cal-full-cell${isTodayCell ? ' cal-today' : ''}${isWeekend ? ' cal-weekend' : ''}" data-cell-date="${k}">`;
     html += `<div class="cal-cell-day-num"><span class="cal-day-num-inner">${day}</span></div>`;
-    const shown = dayEvents.slice(0, 3);
+    const shown = dayEvents.slice(0, 2);
     shown.forEach(ev => {
-      html += `<span class="cal-full-event ev-${ev.type}" data-ev-id="${ev.id}" data-ev-type="${ev.type}" title="${escHtml(ev.label)}"><span class="cal-ev-dot"></span>${escHtml(ev.label)}</span>`;
+      html += calendarCardHTML(ev);
     });
-    if (dayEvents.length > 3) html += `<div class="cal-more-events">+${dayEvents.length - 3} more</div>`;
+    if (dayEvents.length > 2) html += `<button type="button" class="cal-more-events" aria-label="View all ${dayEvents.length} events on ${k}">+${dayEvents.length - 2} more</button>`;
     html += '</div>';
   }
   html += '</div>';
@@ -200,7 +241,7 @@ function buildCalWeekStrip(periodStart, events) {
     html += `<div class="cal-week-dow">${dows[d.getDay()]}</div>`;
     html += `<div class="cal-week-date"><span class="cal-day-num-inner">${d.getDate()}</span></div>`;
     dayEvents.forEach(ev => {
-      html += `<span class="cal-full-event ev-${ev.type}" data-ev-id="${ev.id}" data-ev-type="${ev.type}" title="${escHtml(ev.label)}"><span class="cal-ev-dot"></span>${escHtml(ev.label)}</span>`;
+      html += calendarCardHTML(ev);
     });
     html += '</div>';
   }
@@ -247,7 +288,7 @@ function renderCalendarUpcoming(allEvents) {
   cutoff.setHours(23, 59, 59, 999);
   const upcoming = allEvents
     .filter(ev => ev.type !== 'job' && calendarEventMatchesFilter(ev) && ev.date >= now && ev.date <= cutoff)
-    .sort((a, b) => a.date - b.date || (a.time || a.eventData ?.time || '').localeCompare(b.time || b.eventData ?.time || ''));
+    .sort((a, b) => a.date - b.date || (calendarEventTime(a)).localeCompare(calendarEventTime(b)));
   const list = document.getElementById('cal-upcoming-list');
   if (!list) return;
   if (upcoming.length === 0) {
@@ -266,7 +307,7 @@ function renderCalendarUpcoming(allEvents) {
       <span class="cal-upcoming-dot ${dotCls}"></span>
       <span class="cal-upcoming-date">${ev.date.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
       <span class="cal-upcoming-label">${escHtml(ev.label)}</span>
-      ${ev.time || evData?.time ? `<span class="cal-upcoming-time">${escHtml(ev.time || evData.time)}</span>` : ''}
+      ${calendarEventTime(ev) ? `<span class="cal-upcoming-time">${escHtml(calendarEventTime(ev))}</span>` : ''}
       ${formatBadge}
       <span class="cal-upcoming-tag">${tag}</span>
       ${linkBtn}
@@ -300,8 +341,9 @@ function wireCalendarControls() {
     btn.onclick = () => {
       document.querySelectorAll('.cal-tab').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      calMode = btn.dataset.calMode;
-      calOffset = 0;
+      const nextMode = btn.dataset.calMode;
+      if (!['month', 'agenda'].includes(calMode) || !['month', 'agenda'].includes(nextMode)) calOffset = 0;
+      calMode = nextMode;
       calAnimDir = 'fade';
       renderCalendarView();
     };
@@ -335,6 +377,17 @@ function wireCalendarControls() {
   // Wire cell clicks to open day modal
   const body = document.getElementById('cal-view-body');
   if (!body) return;
+  body.querySelectorAll('.cal-full-event').forEach(button => {
+    button.addEventListener('click', e => {
+      e.stopPropagation();
+      if (button.dataset.evType === 'contact') {
+        openContactModal(button.dataset.evId);
+      } else if (button.dataset.evType === 'event') {
+        const ev = (state.events || []).find(ev => ev.id === button.dataset.evId);
+        if (ev) openEventModal(ev);
+      } else openJobDetail(button.dataset.evId);
+    });
+  });
   body.querySelectorAll('[data-cell-date]').forEach(cell => {
     cell.addEventListener('click', e => {
       const eventEl = e.target.closest('.cal-full-event');
@@ -351,8 +404,7 @@ function wireCalendarControls() {
       }
       const k = cell.dataset.cellDate;
       const allEvs = buildCalendarEvents();
-      const dayEvs = allEvs.filter(ev => dateKey(ev.date) === k);
-      if (dayEvs.length === 0) return;
+      const dayEvs = allEvs.filter(ev => dateKey(ev.date) === k && calendarEventMatchesFilter(ev));
       openDayModal(k, dayEvs);
     });
   });
@@ -380,10 +432,13 @@ function openDayModal(dateKey, events) {
   });
   document.getElementById('day-modal-title').textContent = label;
   const body = document.getElementById('day-modal-jobs');
-  body.innerHTML = events.map(ev => {
+  const ordered = [...events].sort((a, b) => (calendarEventTime(a)).localeCompare(calendarEventTime(b)));
+  body.innerHTML = `<div class="cal-day-summary"><strong>${events.length} item${events.length === 1 ? '' : 's'} planned</strong><span>${events.filter(ev => ev.type === 'job').length} jobs · ${events.filter(ev => ev.type === 'interview').length} interviews · ${events.filter(ev => ev.type === 'contact').length} follow-ups</span></div>` + (events.length ? ordered.map(ev => {
     const dotCls = ev.type === 'interview' ? 'cal-legend-interview' : ev.type === 'job' ? 'cal-legend-job' : ev.type === 'deadline' ? 'cal-legend-deadline' : ev.type === 'event' ? 'cal-legend-event' : 'cal-legend-contact';
     const tag = ev.type === 'interview' ? 'Interview / screening' : ev.type === 'deadline' ? 'Deadline' : ev.type === 'contact' ? 'Follow-up' : ev.type === 'event' ? 'Event' : 'Job Added';
     const evData = ev.eventData;
+    const job = ['job', 'deadline', 'interview'].includes(ev.type) ? state.jobs.find(j => j.id === ev.id) : null;
+    const contact = ev.type === 'contact' ? (state.contacts || []).find(c => c.id === ev.id) : null;
     const extraInfo = evData ? [
       evData.format ? `<span class="cal-event-format-badge cal-event-format-${evData.format}">${evData.format}</span>` : '',
       evData.time ? `<span style="font-size:11px;color:var(--text-muted)">${escHtml(evData.time)}</span>` : '',
@@ -392,20 +447,28 @@ function openDayModal(dateKey, events) {
     const linkBtn = evData && evData.link ?
       `<a class="cal-event-join-btn" href="${escHtml(evData.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Join</a>` :
       '';
-    const isClickable = ev.type !== 'contact';
-    return `<div class="day-modal-job" data-job-id="${ev.id}" data-ev-type="${ev.type}" style="display:flex;align-items:center;gap:10px;padding:10px;cursor:${isClickable ? 'pointer' : 'default'};border-radius:var(--radius-sm);transition:background .15s;" onmouseenter="this.style.background='var(--card)'" onmouseleave="this.style.background=''">
+    const details = job ? [STAGE_LABELS[job.stage] || job.stage, job.jobType, job.workType, job.location] : contact ? [contact.company, contact.role] : [];
+    return `<article class="day-modal-job cal-day-detail${job ? ' cal-type-' + calendarJobType(job) : ''}">
       <span class="cal-legend-dot ${dotCls}" style="flex-shrink:0"></span>
       <div style="flex:1;min-width:0">
         <div style="font-weight:600;font-size:13px">${escHtml(ev.label)}</div>
         <div style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:2px">${tag}${extraInfo ? ' · ' + extraInfo : ''}</div>
+        ${ev.time ? `<div class="cal-day-time">Scheduled for ${escHtml(ev.time)}</div>` : ''}
+        ${job ? jobDepartmentBadge(job) : ''}
+        ${details.filter(Boolean).length ? `<div class="cal-day-tags">${details.filter(Boolean).map(value => `<span>${escHtml(value)}</span>`).join('')}</div>` : ''}
+        ${((contact && contact.notes) || (evData && evData.notes)) ? `<p class="cal-day-note">${escHtml((contact && contact.notes) || (evData && evData.notes))}</p>` : ''}
+        <div class="cal-day-actions"><button type="button" class="btn-secondary cal-day-open" data-job-id="${escHtml(ev.id)}" data-ev-type="${ev.type}">${job ? 'View job' : contact ? 'Edit contact' : 'View event'}</button>${linkBtn}</div>
       </div>
-      ${linkBtn}
-    </div>`;
-  }).join('');
-  body.querySelectorAll('.day-modal-job').forEach(item => {
+    </article>`;
+  }).join('') : '<p class="empty-msg">Nothing scheduled in this view. Add an event to plan your day.</p>');
+  body.querySelectorAll('.cal-day-open').forEach(item => {
     item.addEventListener('click', () => {
       const evType = item.dataset.evType;
-      if (evType === 'contact') return;
+      if (evType === 'contact') {
+        closeModal('modal-day');
+        openContactModal(item.dataset.jobId);
+        return;
+      }
       if (evType === 'event') {
         const ev = (state.events || []).find(e => e.id === item.dataset.jobId);
         if (ev) {
@@ -418,6 +481,12 @@ function openDayModal(dateKey, events) {
       openJobDetail(item.dataset.jobId);
     });
   });
+  const addButton = document.getElementById('cal-day-add-event');
+  if (addButton) addButton.onclick = () => {
+    closeModal('modal-day');
+    openEventModal(null);
+    document.getElementById('event-date').value = dateKey;
+  };
   openModal('modal-day');
 }
 
@@ -451,6 +520,7 @@ function renderCalendarView() {
   if (calMode === 'month') body.innerHTML = buildFullMonthGrid(periodStart, visibleEvents);
   else if (calMode === 'week') body.innerHTML = buildCalWeekStrip(periodStart, visibleEvents);
   else if (calMode === 'year') body.innerHTML = buildCalYearGrid(periodStart.getFullYear(), visibleEvents);
+  else if (calMode === 'agenda') body.innerHTML = buildCalendarAgenda(visibleEvents);
 
   // Animate the incoming content
   body.classList.remove('cal-anim-fade', 'cal-anim-from-left', 'cal-anim-from-right');
@@ -462,83 +532,32 @@ function renderCalendarView() {
 
   wireCalendarControls();
   renderCalendarUpcoming(allEvents);
-  renderActivity();
+  renderCalendarRecentJobs();
 
   const addBtn = document.getElementById('cal-add-event-btn');
   if (addBtn) addBtn.onclick = () => openEventModal(null);
 }
 
-/* ══════════════════════════════════════════════════════════
-   JOB ACTIVITY COUNTS
-   ══════════════════════════════════════════════════════════ */
-function renderActivity() {
-  const el = document.getElementById('cal-activity');
+/* Five most recently added jobs, independent of the selected calendar period. */
+function renderCalendarRecentJobs() {
+  const el = document.getElementById('cal-recent-jobs');
   if (!el) return;
-  const now = new Date();
-  const jobs = state.jobs;
+  const jobs = state.jobs.map((job, index) => ({
+      job,
+      index
+    }))
+    .sort((a, b) => {
+      const aDate = calendarDate(a.job.dateAdded);
+      const bDate = calendarDate(b.job.dateAdded);
+      return (bDate ? bDate.getTime() : 0) - (aDate ? aDate.getTime() : 0) || b.index - a.index;
+    }).slice(0, 5).map(entry => entry.job);
+  el.innerHTML = jobs.length ? jobs.map(job => {
+    const added = calendarDate(job.dateAdded);
 
-  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const startOfWeek = new Date(startOfDay);
-  startOfWeek.setDate(startOfDay.getDate() - startOfDay.getDay());
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  const startOfYear = new Date(now.getFullYear(), 0, 1);
-
-  const count = (from) => jobs.filter(j => calendarDate(j.dateAdded) >= from).length;
-
-  const periods = [{
-      label: 'Today',
-      value: count(startOfDay)
-    },
-    {
-      label: 'This Week',
-      value: count(startOfWeek)
-    },
-    {
-      label: 'This Month',
-      value: count(startOfMonth)
-    },
-    {
-      label: 'This Year',
-      value: count(startOfYear)
-    },
-    {
-      label: 'All Time',
-      value: jobs.length
-    },
-  ];
-
-  el.innerHTML = `<div class="act-counts">${
-    periods.map(p => `<div class="act-count-card">
-      <div class="act-count-value">${p.value}</div>
-      <div class="act-count-label">${p.label}</div>
-    </div>`).join('')
-  }</div>`;
-  const records = [];
-  jobs.forEach(job => {
-    const add = (value, label) => {
-      const date = calendarDate(value);
-      if (date && date <= startOfDay) records.push({
-        job,
-        date,
-        label
-      });
-    };
-    add(job.dateAdded, 'Opportunity added');
-    add(job.dateApplied, 'Application recorded');
-    add(job.declinedAt, 'Not selected');
-    add(job.ghostedAt, 'Marked as ghosted');
-  });
-  records.sort((a, b) => b.date - a.date);
-  const grouped = new Map();
-  records.slice(0, 30).forEach(record => {
-    const key = dateKey(record.date);
-    if (!grouped.has(key)) grouped.set(key, []);
-    grouped.get(key).push(record);
-  });
-  el.innerHTML += `<div class="cal-activity-feed">${[...grouped].map(([key, items]) => `<section><h3>${sameDay(items[0].date, startOfDay) ? 'Today' : items[0].date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</h3>${items.map(record => `<button class="cal-activity-record" data-activity-job="${escHtml(record.job.id)}"><span class="cal-activity-dot"></span><span><span class="cal-activity-action">${record.label}</span><strong>${escHtml(record.job.role)}</strong><span>${escHtml(record.job.company)}</span></span><span aria-hidden="true">↗</span></button>`).join('')}</section>`).join('') || '<p class="empty-msg">Add an opportunity to start your activity feed.</p>'}</div>`;
-  el.querySelectorAll('[data-activity-job]').forEach(button => button.addEventListener('click', () => openJobDetail(button.dataset.activityJob)));
+    return `<button type="button" class="cal-recent-job cal-type-${calendarJobType(job)}" data-recent-job="${escHtml(job.id)}">${jobDepartmentBadge(job, true)}<span class="cal-recent-copy"><strong>${escHtml(job.company || 'Company not specified')}</strong><span>${escHtml(job.role || 'Untitled role')}</span><small>${escHtml(STAGE_LABELS[job.stage] || job.stage || 'Saved')}${added ? ' · Added ' + added.toLocaleDateString('en-US', {month: 'short', day: 'numeric'}) : ''}</small></span><span class="cal-recent-arrow" aria-hidden="true">↗</span></button>`;
+  }).join('') : '<p class="empty-msg">Your recently added jobs will appear here.</p>';
+  el.querySelectorAll('[data-recent-job]').forEach(button => button.onclick = () => openJobDetail(button.dataset.recentJob));
 }
-
 /* ══════════════════════════════════════════════════════════
    EVENT MODAL (JOB FAIRS & EVENTS)
    ══════════════════════════════════════════════════════════ */

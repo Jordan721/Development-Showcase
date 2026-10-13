@@ -227,7 +227,7 @@ function pmCardHTML(job) {
       <button class="card-pin-btn${job.pinned ? ' pinned' : ''}" data-pin-id="${job.id}" title="${job.pinned ? 'Unpin' : 'Pin'} job" aria-label="${job.pinned ? 'Unpin' : 'Pin'} job" aria-pressed="${!!job.pinned}" draggable="false">&#128204;</button>
       <button class="card-delete-btn" data-delete-id="${job.id}" title="Delete job" draggable="false">&times;</button>
       <div class="pm-card-stage"><span class="pm-stage-dot stripe-${job.stage}"></span>${STAGE_LABELS[job.stage]}</div>
-      <div class="job-card-role pm-card-role">${escHtml(job.role)}</div>
+      <div class="job-card-role pm-card-role">${jobDepartmentBadge(job, true)} ${escHtml(job.role)}</div>
       <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
       <div class="job-card-footer">
         <span class="job-card-date">${timeInfo}</span>
@@ -809,7 +809,7 @@ function renderBoardTable(jobs) {
       const date = job.deadline ? new Date(job.deadline + 'T00:00:00') : null;
       const deadlineLabel = !date ? 'No deadline' : date < today ? 'Overdue' : date.getTime() === today.getTime() ? 'Due today' : formatDate(job.deadline);
       return `<tr class="table-row-clickable${job.pinned ? ' table-row-pinned' : ''}" data-stage="${job.stage}" data-job-id="${escHtml(job.id)}" style="animation-delay:${Math.min(i,12)*20}ms">
-        <td class="table-td table-td-role" data-label="Opportunity"><button class="table-open-btn" aria-label="Open ${escHtml(job.role)}">${escHtml(job.role)}</button><span class="table-company">${escHtml(job.company)}</span><span class="table-location">${escHtml(job.location || 'Location not specified')}</span></td>
+        <td class="table-td table-td-role" data-label="Opportunity"><button class="table-open-btn" aria-label="Open ${escHtml(job.role)}">${jobDepartmentBadge(job, true)} ${escHtml(job.role)}</button><span class="table-company">${escHtml(job.company)}</span><span class="table-location">${escHtml(job.location || 'Location not specified')}</span></td>
         <td class="table-td" data-label="Stage"><select aria-label="Stage for ${escHtml(job.role)}" class="table-stage-select stage-select-${job.stage}" data-job-id="${escHtml(job.id)}">${STAGES.map(s=>`<option value="${s}"${s===job.stage?' selected':''}>${STAGE_LABELS[s]}</option>`).join('')}</select></td>
         <td class="table-td" data-label="Work arrangement"><span class="table-tag">${escHtml(job.workType || 'Not specified')}</span>${hybridDaysLabel(job) ? `<span class="table-location">${escHtml(hybridDaysLabel(job))}</span>` : ''}${jobDurationLabel(job) ? `<span class="table-location">${escHtml(jobDurationLabel(job))}</span>` : ''}</td>
         <td class="table-td table-muted" data-label="Salary">${escHtml(formatSalary(job.salary) || 'Not listed')}</td>
@@ -978,7 +978,7 @@ function jobCardHTML(job) {
       ${bulkSelectMode ? '' : `<button class="card-delete-btn" data-delete-id="${job.id}" title="Delete job" draggable="false">&times;</button>`}
       ${pinBtn}
       ${checkOverlay}
-      <div class="job-card-role"><span class="drag-handle" title="Drag to move stage" draggable="false">&#8942;</span>${escHtml(job.role)}</div>
+      <div class="job-card-role"><span class="drag-handle" title="Drag to move stage" draggable="false">&#8942;</span>${jobDepartmentBadge(job, true)} ${escHtml(job.role)}</div>
       <div class="job-card-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
       ${inOfficeDays ? `<div class="job-card-hybrid-days">In office: ${escHtml(inOfficeDays)}</div>` : ''}
       ${duration ? `<div class="job-card-duration">Duration: ${escHtml(duration)}</div>` : ''}
@@ -1063,7 +1063,7 @@ function renderBoardTimeline(jobs) {
       const entries = filtered.filter(group.match);
       if (!entries.length) return '';
       if (group.kind==='history') entries.reverse();
-      return `<section class="agenda-group agenda-${group.kind}"><h3>${group.title}<span>${entries.length}</span></h3><div>${entries.map((entry,i)=>`<button class="tl-row agenda-entry" data-job-id="${escHtml(entry.job.id)}" style="--agenda-delay:${Math.min(i,10)*25}ms"><span class="agenda-date"><strong>${entry.date.toLocaleDateString('en-US',{day:'2-digit'})}</strong><span>${entry.date.toLocaleDateString('en-US',{month:'short',year:'numeric'})}</span></span><span class="agenda-entry-content"><span class="agenda-type">${entry.label}${entry.time?' · '+escHtml(entry.time):''}</span><strong>${escHtml(entry.job.role)}</strong><span>${escHtml(entry.job.company)}</span></span><span class="stage-badge stage-${entry.job.stage}">${STAGE_LABELS[entry.job.stage] || escHtml(entry.job.stage)}</span><span class="agenda-arrow" aria-hidden="true">↗</span></button>`).join('')}</div></section>`;
+      return `<section class="agenda-group agenda-${group.kind}"><h3>${group.title}<span>${entries.length}</span></h3><div>${entries.map((entry,i)=>`<button class="tl-row agenda-entry" data-job-id="${escHtml(entry.job.id)}" style="--agenda-delay:${Math.min(i,10)*25}ms"><span class="agenda-date"><strong>${entry.date.toLocaleDateString('en-US',{day:'2-digit'})}</strong><span>${entry.date.toLocaleDateString('en-US',{month:'short',year:'numeric'})}</span></span><span class="agenda-entry-content"><span class="agenda-type">${entry.label}${entry.time?' · '+escHtml(entry.time):''}</span><strong>${jobDepartmentBadge(entry.job, true)} ${escHtml(entry.job.role)}</strong><span>${escHtml(entry.job.company)}</span></span><span class="stage-badge stage-${entry.job.stage}">${STAGE_LABELS[entry.job.stage] || escHtml(entry.job.stage)}</span><span class="agenda-arrow" aria-hidden="true">↗</span></button>`).join('')}</div></section>`;
     }).join('') || `<div class="agenda-notice">No ${timelineEventFilter === 'all' ? 'dated entries' : labels[timelineEventFilter].toLowerCase()} match these jobs. Adjust your filters or add dates to an opportunity.</div>`}</div>`;
 }
 const MILESTONE_STAGES = ['screening', 'interview', 'offer'];
@@ -1309,6 +1309,7 @@ function openJobDetail(id) {
     save();
   }
   document.getElementById('detail-title').textContent = `${job.role} @ ${job.company}`;
+  document.getElementById('detail-department-badge').innerHTML = jobDepartmentBadge(job);
   document.getElementById('detail-meta').textContent = [job.location, formatDate(job.dateAdded)].filter(Boolean).join(' · ');
 
   // Salary
@@ -2314,7 +2315,7 @@ function renderComparePicker(search) {
           <div class="compare-picker-check">${isChecked ? '✓' : ''}</div>
           <div class="compare-picker-info">
             <div class="compare-picker-role">${escHtml(j.role)}</div>
-            <div class="compare-picker-company">${escHtml(j.company)}${j.location ? ' · ' + escHtml(j.location) : ''}</div>
+            ${jobDepartmentBadge(j)}<div class="compare-picker-company">${escHtml(j.company)}${j.location ? ' · ' + escHtml(j.location) : ''}</div>
           </div>
           <span class="fit-badge ${fitBadgeClass(j.fitScore)}">${fitLabel}</span>
           <span class="stage-badge stage-${j.stage}" style="font-size:10px">${STAGE_LABELS[j.stage]}</span>
@@ -2417,7 +2418,7 @@ function renderComparisonGrid(jobs) {
       <div class="compare-col-header">
         ${isWinner ? '<div class="compare-col-winner-badge" title="Best fit score">👑</div>' : ''}
         <div class="compare-col-role">${escHtml(j.role)}</div>
-        <div class="compare-col-company">${escHtml(j.company)}${j.location ? ' · ' + escHtml(j.location) : ''}</div>
+        ${jobDepartmentBadge(j)}<div class="compare-col-company">${escHtml(j.company)}${j.location ? ' · ' + escHtml(j.location) : ''}</div>
       </div>
       <div class="compare-col-body">
         <div class="compare-row">

@@ -436,7 +436,7 @@ function openFilterModal(title, subtitle, matchedJobs) {
         return `<button type="button" class="filter-modal-job" data-job-id="${escHtml(job.id)}">
           <span class="filter-modal-avatar" aria-hidden="true">${escHtml((job.company || '?').trim().slice(0, 2).toUpperCase())}</span>
           <span class="day-modal-job-info">
-            <span class="day-modal-job-role">${escHtml(job.role)}</span>
+            <span class="day-modal-job-role">${jobDepartmentBadge(job, true)} ${escHtml(job.role)}</span>
             <span class="day-modal-job-company">${escHtml(job.company)}${job.location ? ' &middot; ' + escHtml(job.location) : ''}</span>
           </span>
           <span class="day-modal-job-badges">

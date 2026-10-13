@@ -1,0 +1,280 @@
+/* Job type colors derive from the active theme; labels also identify each type. */
+.job-department-badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; margin-top: 10px; border-radius: 7px; background: color-mix(in srgb, var(--department-color) 12%, var(--surface)); border: 1px solid color-mix(in srgb, var(--department-color) 30%, var(--border)); color: var(--text); font-size: 11px; font-weight: 500; }
+.job-department-badge svg { width: 16px; height: 16px; flex-shrink: 0; fill: none; stroke: var(--department-color); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.job-department-badge--icon { flex-shrink: 0; margin: 0; padding: 3px; border-radius: 5px; }
+.job-department-badge--icon { vertical-align: middle; }
+.job-card-role .job-department-badge, .table-open-btn .job-department-badge, .recent-role .job-department-badge { margin-right: 3px; }
+.job-card-role .job-department-badge { pointer-events: none; }
+.table-open-btn .job-department-badge { pointer-events: none; }
+#detail-department-badge .job-department-badge { margin-top: 6px; }
+#view-calendar .cal-card-title { display: flex; align-items: center; gap: 5px; }
+.cal-card-title > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cal-card-title .job-department-badge svg { width: 12px; height: 12px; }
+.cal-recent-job > .job-department-badge { width: 34px; height: 34px; justify-content: center; border-radius: 10px; }
+.cal-recent-job > .job-department-badge svg { width: 18px; height: 18px; }
+.cal-type-full-time {
+  --job-type-color: var(--accent);
+}
+
+.cal-type-part-time {
+  --job-type-color: var(--green);
+}
+
+.cal-type-contract {
+  --job-type-color: var(--yellow);
+}
+
+.cal-type-freelance {
+  --job-type-color: color-mix(in srgb, var(--accent) 45%, var(--red));
+}
+
+.cal-type-temporary {
+  --job-type-color: var(--red);
+}
+
+.cal-type-internship {
+  --job-type-color: color-mix(in srgb, var(--accent) 50%, var(--yellow));
+}
+
+.cal-type-unspecified {
+  --job-type-color: var(--text-muted);
+}
+
+#view-calendar .cal-compact-card[class*="cal-type-"] {
+  color: var(--text);
+  border-left-color: var(--job-type-color);
+  background: color-mix(in srgb, var(--job-type-color) 13%, var(--surface));
+}
+
+.cal-card-type {
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cal-type-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.cal-type-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cal-type-legend span::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 3px;
+  background: var(--job-type-color);
+}
+
+.cal-day-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  margin-bottom: 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+}
+
+.cal-day-summary strong {
+  font-size: 18px;
+}
+
+.cal-day-summary>span {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.cal-day-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--job-type-color, var(--accent));
+  border-radius: 12px;
+  background: var(--card);
+  overflow-wrap: anywhere;
+}
+
+.cal-day-detail>.cal-legend-dot {
+  margin-top: 5px;
+}
+
+.cal-day-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.cal-day-tags span {
+  font-size: 11px;
+  color: var(--text);
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.cal-day-time {
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.cal-day-note {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-muted);
+  white-space: pre-wrap;
+}
+
+.cal-day-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.cal-day-actions button {
+  font-size: 12px;
+}
+
+.cal-day-actions button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+#modal-day .modal-footer {
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cal-sidebar {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+}
+
+.cal-recent-panel {
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.cal-recent-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.cal-recent-heading h2 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.cal-recent-heading>span {
+  color: var(--text-muted);
+  font-size: 9px;
+  letter-spacing: 1.2px;
+}
+
+.cal-recent-job {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 0;
+  border: 0;
+  border-top: 1px solid var(--border);
+  color: var(--text);
+  background: none;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.cal-recent-avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--job-type-color) 14%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--job-type-color) 35%, var(--border));
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.cal-recent-copy {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cal-recent-copy strong {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.cal-recent-copy>span {
+  font-size: 11px;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+.cal-recent-copy small {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.cal-recent-arrow {
+  color: var(--text-muted);
+}
+
+.cal-recent-job:hover strong,
+.cal-recent-job:hover .cal-recent-arrow {
+  color: var(--accent);
+}
+
+.cal-recent-job:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.cal-sidebar #cal-upcoming-list {
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+@media (max-width: 600px) {
+  .cal-card-type {
+    font-size: 8px;
+  }
+
+  .cal-day-detail {
+    padding: 12px;
+  }
+}

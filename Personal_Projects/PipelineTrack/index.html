@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="css/polish.css" />
     <link rel="stylesheet" href="css/sidebar.css" />
     <link rel="stylesheet" href="css/career-flow.css" />
+    <link rel="stylesheet" href="css/calendar-details.css" />
 </head>
 
 <body>
@@ -903,6 +904,7 @@
                     <button class="cal-tab active" data-cal-mode="month">Month</button>
                     <button class="cal-tab" data-cal-mode="week">Week</button>
                     <button class="cal-tab" data-cal-mode="year">Year</button>
+                    <button class="cal-tab" data-cal-mode="agenda">Agenda</button>
                 </div>
                 <div class="cal-view-nav">
                     <button class="cal-nav-btn" id="cal-nav-prev">&#8592;</button>
@@ -927,18 +929,26 @@
                 <button class="cal-event-filter" data-event-type="followups">Follow-ups</button>
                 <button class="cal-event-filter" data-event-type="events">Job Fairs &amp; Events</button>
             </div>
+            <div class="cal-type-legend" aria-label="Job type colors">
+                <span class="cal-type-full-time">Full-time</span><span class="cal-type-part-time">Part-time</span>
+                <span class="cal-type-contract">Contract</span><span class="cal-type-freelance">Freelance</span>
+                <span class="cal-type-temporary">Temporary</span><span class="cal-type-internship">Internship</span>
+                <span class="cal-type-unspecified">Not specified</span>
+            </div>
             <div class="cal-workspace">
                 <div class="cal-calendar-panel">
                     <div id="cal-view-body"></div>
                 </div>
-                <div class="cal-upcoming-strip">
-                    <div class="cal-upcoming-title">Your Upcoming Agenda</div>
-                    <div id="cal-upcoming-list"></div>
-                </div>
-            </div>
-            <div class="cal-activity-section">
-                <div class="cal-activity-header">Job Activity</div>
-                <div id="cal-activity"></div>
+                <aside class="cal-sidebar" aria-label="Upcoming agenda and recent jobs">
+                    <section class="cal-upcoming-strip">
+                        <div class="cal-upcoming-title">Your Upcoming Agenda</div>
+                        <div id="cal-upcoming-list"></div>
+                    </section>
+                    <section class="cal-recent-panel">
+                        <div class="cal-recent-heading"><h2>Recent Jobs</h2><span>LAST 5 ADDED</span></div>
+                        <div id="cal-recent-jobs"></div>
+                    </section>
+                </aside>
             </div>
         </section>
 
@@ -1377,6 +1387,7 @@
                     <button class="detail-back-btn" id="detail-back-btn" style="display:none">← Back</button>
                     <div>
                         <h2 class="modal-title" id="detail-title">Job Title</h2>
+                        <div id="detail-department-badge"></div>
                         <div class="detail-meta" id="detail-meta">Company · Location</div>
                     </div>
                 </div>
@@ -1685,7 +1696,7 @@
 
     <!-- ── MODAL: DAY DETAIL ─────────────────────────────── -->
     <div class="modal-overlay" id="modal-day" aria-hidden="true">
-        <div class="modal">
+        <div class="modal modal-lg">
             <div class="modal-header">
                 <h2 class="modal-title" id="day-modal-title">Jobs</h2>
                 <button class="modal-close" data-close="modal-day">✕</button>
@@ -1695,6 +1706,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-ghost" data-close="modal-day">← Back</button>
+                <button class="btn-secondary" id="cal-day-add-event">+ Add event for this day</button>
             </div>
         </div>
     </div>
@@ -2168,6 +2180,7 @@
     <script src="javascript/utils.js"></script>
     <script src="javascript/state.js"></script>
     <!-- View renderers -->
+    <script src="javascript/job-departments.js"></script>
     <script src="javascript/views-dashboard.js"></script>
     <script src="javascript/views-board.js"></script>
     <script src="javascript/views-profile.js"></script>

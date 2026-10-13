@@ -140,7 +140,7 @@ function renderBoardMap(jobs) {
   const card = job => `<article class="map-job" data-map-job="${escHtml(job.id)}">
     <div class="map-job-meta"><span class="map-legend-dot" style="background:${MAP_STAGE_COLORS[job.stage] || '#6b7280'}"></span>${escHtml(STAGE_LABELS[job.stage] || job.stage)}<span class="fit-badge ${fitBadgeClass(job.fitScore)}">${fitBadgeLabel(job.fitScore)}</span></div>
     <button class="map-job-focus" data-map-focus="${escHtml(job.id)}">${escHtml(job.role || 'Untitled role')}</button>
-    <p>${escHtml(job.company || 'Company not specified')}</p>
+    ${jobDepartmentBadge(job)}<p>${escHtml(job.company || 'Company not specified')}</p>
     <div class="map-job-location">${escHtml(job.location || 'Location not specified')}</div>
     <div class="map-job-actions"><span data-map-state="${escHtml(job.id)}">${mapIsRemote(job) ? 'Remote opportunity' : !job.location ? 'No location provided' : Array.isArray(job.coords) ? job.coords.length ? 'Select to explore location' : 'Location unavailable' : 'Locating opportunity…'}</span><button class="btn-ghost" data-map-open="${escHtml(job.id)}">Open job ↗</button></div>
   </article>`;
@@ -206,9 +206,12 @@ function wireMap(jobs) {
     });
   };
   root.querySelector('#map-fit-all').addEventListener('click', fitAll);
-  root.querySelector('.leaflet-control-zoom') ?.addEventListener('click', () => {
-    userExploring = true;
-  });
+  const zoomControl = root.querySelector('.leaflet-control-zoom');
+  if (zoomControl) {
+    zoomControl.addEventListener('click', () => {
+      userExploring = true;
+    });
+  }
   const selectJob = (id, focusMap) => {
     selected = id;
     root.querySelectorAll('[data-map-job]').forEach(card => {
@@ -246,7 +249,7 @@ function wireMap(jobs) {
       const pin = makePin(job, coord).addTo(map);
       const popup = document.createElement('div');
       popup.className = 'map-popup';
-      popup.innerHTML = `<div class="map-popup-role">${escHtml(job.role || 'Untitled role')}</div><div class="map-popup-company">${escHtml(job.company || '')}<br>${escHtml(coord.label || job.location || '')}</div><div class="map-popup-details">${escHtml(STAGE_LABELS[job.stage] || job.stage)} · ${fitBadgeLabel(job.fitScore)}</div><button class="btn-secondary">Open job ↗</button>`;
+      popup.innerHTML = `<div class="map-popup-role">${jobDepartmentBadge(job, true)} ${escHtml(job.role || 'Untitled role')}</div><div class="map-popup-company">${escHtml(job.company || '')}<br>${escHtml(coord.label || job.location || '')}</div><div class="map-popup-details">${escHtml(STAGE_LABELS[job.stage] || job.stage)} · ${fitBadgeLabel(job.fitScore)}</div><button class="btn-secondary">Open job ↗</button>`;
       popup.querySelector('button').addEventListener('click', () => openJobDetail(job.id));
       pin.bindPopup(popup, {
         maxWidth: 280

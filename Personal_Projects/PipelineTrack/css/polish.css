@@ -259,6 +259,42 @@
     line-height: 1.5;
   }
 
+  #view-calendar .cal-compact-card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    width: 100%;
+    min-width: 0;
+    padding: 7px 8px;
+    margin-bottom: 5px;
+    border: 0;
+    border-left: 3px solid currentColor;
+    border-radius: 7px;
+    text-align: left;
+    font-family: inherit;
+  }
+
+  .cal-card-title, .cal-card-role, .cal-card-meta {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .cal-card-title { font-weight: 700; color: var(--text); }
+  .cal-card-role { font-weight: 400; color: var(--text-muted); }
+  .cal-card-meta { font-size: 9px; font-weight: 500; }
+  .cal-status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 4px; }
+  #view-calendar button.cal-more-events { background: none; border: 0; color: var(--text-muted); cursor: pointer; padding: 4px; font-family: inherit; font-size: 10px; font-weight: 600; }
+  #view-calendar button.cal-more-events:hover { color: var(--accent); }
+  #view-calendar .cal-compact-card:focus-visible, #view-calendar .cal-more-events:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .cal-agenda { display: grid; gap: 20px; }
+  .cal-agenda-day h3 { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 10px; color: var(--text); font-size: 13px; }
+  .cal-agenda-day h3 span { color: var(--text-muted); font-size: 11px; font-weight: 400; }
+  .cal-agenda-events { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 8px; }
+  #view-calendar .cal-agenda .cal-compact-card { padding: 12px 14px; font-size: 12px; }
+  .cal-agenda .cal-card-meta { font-size: 10px; }
+
   .cal-full-event.ev-interview {
     color: #a78bfa;
     background: rgb(167 139 250 / 12%);
@@ -419,6 +455,9 @@
     font-size: 9px;
     padding: 2px;
   }
+
+  #view-calendar .cal-compact-card { padding: 4px 3px; gap: 1px; border-left-width: 2px; }
+  #view-calendar .cal-compact-card .cal-card-meta { font-size: 8px; }
 
   #view-calendar .cal-week-strip {
     display: grid;

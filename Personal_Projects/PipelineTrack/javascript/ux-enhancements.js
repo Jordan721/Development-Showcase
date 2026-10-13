@@ -71,15 +71,51 @@ function initKeyboardShortcuts() {
    JOB PICKER MODAL (E shortcut)
    ══════════════════════════════════════════════════════════ */
 const PICKER_STAGE_COLORS = {
-  saved: { bg: 'rgba(100,116,139,0.12)', color: '#94a3b8', border: 'rgba(100,116,139,0.2)' },
-  applied: { bg: 'rgba(0,212,170,0.1)', color: 'var(--accent)', border: 'rgba(0,212,170,0.2)' },
-  screening: { bg: 'rgba(167,139,250,0.12)', color: '#a78bfa', border: 'rgba(167,139,250,0.22)' },
-  interview: { bg: 'rgba(251,191,36,0.12)', color: '#fbbf24', border: 'rgba(251,191,36,0.22)' },
-  offer: { bg: 'rgba(52,211,153,0.12)', color: '#34d399', border: 'rgba(52,211,153,0.22)' },
-  declined: { bg: 'rgba(239,68,68,0.1)', color: '#ef4444', border: 'rgba(239,68,68,0.2)' },
-  withdrew: { bg: 'rgba(249,115,22,0.1)', color: '#f97316', border: 'rgba(249,115,22,0.2)' },
-  ghosted: { bg: 'rgba(148,163,184,0.1)', color: '#94a3b8', border: 'rgba(148,163,184,0.18)' },
-  archived: { bg: 'rgba(100,116,139,0.08)', color: '#64748b', border: 'rgba(100,116,139,0.15)' }
+  saved: {
+    bg: 'rgba(100,116,139,0.12)',
+    color: '#94a3b8',
+    border: 'rgba(100,116,139,0.2)'
+  },
+  applied: {
+    bg: 'rgba(0,212,170,0.1)',
+    color: 'var(--accent)',
+    border: 'rgba(0,212,170,0.2)'
+  },
+  screening: {
+    bg: 'rgba(167,139,250,0.12)',
+    color: '#a78bfa',
+    border: 'rgba(167,139,250,0.22)'
+  },
+  interview: {
+    bg: 'rgba(251,191,36,0.12)',
+    color: '#fbbf24',
+    border: 'rgba(251,191,36,0.22)'
+  },
+  offer: {
+    bg: 'rgba(52,211,153,0.12)',
+    color: '#34d399',
+    border: 'rgba(52,211,153,0.22)'
+  },
+  declined: {
+    bg: 'rgba(239,68,68,0.1)',
+    color: '#ef4444',
+    border: 'rgba(239,68,68,0.2)'
+  },
+  withdrew: {
+    bg: 'rgba(249,115,22,0.1)',
+    color: '#f97316',
+    border: 'rgba(249,115,22,0.2)'
+  },
+  ghosted: {
+    bg: 'rgba(148,163,184,0.1)',
+    color: '#94a3b8',
+    border: 'rgba(148,163,184,0.18)'
+  },
+  archived: {
+    bg: 'rgba(100,116,139,0.08)',
+    color: '#64748b',
+    border: 'rgba(100,116,139,0.15)'
+  }
 };
 
 function renderJobPickerList(query) {
@@ -112,16 +148,16 @@ function renderJobPickerList(query) {
   list.innerHTML = jobs.map((j, i) => {
     const sc = PICKER_STAGE_COLORS[j.stage] || PICKER_STAGE_COLORS.saved;
     const stageLabel = j.stage ? j.stage.charAt(0).toUpperCase() + j.stage.slice(1) : '';
-    const stageBadge = stageLabel
-      ? `<span class="job-picker-stage-badge" style="background:${sc.bg};color:${sc.color};border-color:${sc.border}">${stageLabel}</span>` : '';
+    const stageBadge = stageLabel ?
+      `<span class="job-picker-stage-badge" style="background:${sc.bg};color:${sc.color};border-color:${sc.border}">${stageLabel}</span>` : '';
     const chips = [j.seniority, j.jobType, j.workType, j.salary].filter(Boolean);
     const fitCls = j.fitScore != null ? (j.fitScore >= 70 ? 'green' : j.fitScore >= 40 ? 'yellow' : 'red') : '';
-    const fitPill = j.fitScore != null
-      ? `<span class="fit-badge ${fitCls} job-picker-fit">${j.fitScore}%</span>` : '';
+    const fitPill = j.fitScore != null ?
+      `<span class="fit-badge ${fitCls} job-picker-fit">${j.fitScore}%</span>` : '';
     return `
     <div class="job-picker-row" data-edit-id="${j.id}" style="animation-delay:${i * 25}ms">
       <div class="job-picker-row-body">
-        <div class="job-picker-role">${escHtml(j.role)}</div>
+        <div class="job-picker-role">${jobDepartmentBadge(j, true)} ${escHtml(j.role)}</div>
         <div class="job-picker-meta">${escHtml(j.company)}${j.location ? ' · ' + escHtml(j.location) : ''}</div>
         ${chips.length || stageLabel ? `<div class="job-picker-chips">${stageBadge}${chips.map(c => `<span class="job-picker-chip">${escHtml(c)}</span>`).join('')}</div>` : ''}
       </div>
@@ -463,7 +499,7 @@ function initCardPreview() {
       const lbl = typeof fitBadgeLabel === 'function' ? fitBadgeLabel(job.fitScore) : '';
       const stage = (typeof STAGE_LABELS !== 'undefined' && STAGE_LABELS[job.stage]) || job.stage;
       pv.innerHTML = `
-        <div class="cpv-role">${escHtml(job.role)}</div>
+        <div class="cpv-role">${jobDepartmentBadge(job, true)} ${escHtml(job.role)}</div>
         <div class="cpv-company">${escHtml(job.company)}${job.location ? ' · ' + escHtml(job.location) : ''}</div>
         <div class="cpv-row">
           <span class="stage-badge stage-${job.stage}">${stage}</span>
