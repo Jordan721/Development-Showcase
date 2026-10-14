@@ -22,11 +22,12 @@ The homepage is a **creative playground** with floating category portals, neon c
 
 ## Features
 
+- **Start Here** — Three featured projects: PipelineTrack, Algorithm Arena, and AnimateLab, with build details and direct links to their demos and GitHub source. Their previews are CSS illustrations, not screenshots.
 - **Floating Portals** — Animated shapes in the hero jump to personal projects, professional work, coursework, games, and art.
 - **Five Creative Worlds** — An experiment lab with tilted cards, a control room with window-style panels, a launchpad with curved cards, an arcade, and an abstract art space.
 - **Project Search** — Search project names, descriptions, platform labels, and technologies without reloading the page.
 - **Technology Filters** — Choose one technology at a time. Search and the selected technology work together to narrow the collection.
-- **Live Result Counts** — Project counts update with filtering, and sections without matches are hidden.
+- **Live Result Counts** — The hero total is calculated from the project directory on page load. Result and section counts update with filtering, and sections without matches are hidden. Featured projects also appear in the directory and are not counted twice.
 - **No Results State** — Reset search and filters with “Show everything.”
 - **Surprise Me** — Highlights and focuses a random project from the current results. If there are no results, it resets the filters before choosing a project.
 - **Motion Controls** — Pause or resume the floating portals, orbit rings, and scrolling banner. The homepage respects the browser's reduced-motion preference; the manual toggle applies to the current page session.

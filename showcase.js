@@ -1,6 +1,7 @@
 (() => {
     'use strict';
     const cards = [...document.querySelectorAll('.project-card')];
+    document.querySelector('.hero-caption span').textContent = `${cards.length} projects & collections`;
     const search = document.getElementById('projectSearch');
     const filters = document.getElementById('techFilters');
     let selectedTech = 'all';
@@ -41,6 +42,7 @@
         });
     }
     search.addEventListener('input', updateResults);
+    updateResults();
     filters.addEventListener('click', event => {
         const button = event.target.closest('button[data-tech]');
         if (!button) return;
