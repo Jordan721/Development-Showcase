@@ -5038,6 +5038,59 @@
   margin-left: auto;
 }
 
+#modal-detail .detail-header-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 3px;
+}
+
+#modal-detail #detail-department-badge {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+}
+
+#modal-detail #detail-department-badge .job-department-badge {
+  gap: 7px;
+  margin-top: 0;
+  min-height: 28px;
+  max-width: 100%;
+  padding: 3px 10px 3px 4px;
+  border-radius: 99px;
+  border-color: color-mix(in srgb, var(--department-color) 25%, var(--border));
+  background: color-mix(in srgb, var(--department-color) 8%, var(--card));
+  font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+#modal-detail #detail-department-badge .job-department-badge svg {
+  width: 22px;
+  height: 22px;
+  padding: 3px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--department-color) 16%, var(--surface));
+}
+
+#modal-detail .detail-header-badges .detail-meta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  max-width: 100%;
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  background: var(--card);
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  color: var(--text-muted);
+}
+
 #modal-detail .detail-link {
   display: inline-flex;
   align-items: center;

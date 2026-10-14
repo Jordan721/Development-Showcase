@@ -280,7 +280,7 @@
                     </div>
                 </div>
                 <div class="dash-card" data-card="time-in-stage">
-                    <div class="dash-card-header">Application Age by Stage</div>
+                    <div class="dash-card-header">Time in Current Stage</div>
                     <div class="dash-card-body" id="dash-time-in-stage">
                         <p class="empty-msg">No active applications yet.</p>
                     </div>
@@ -1102,7 +1102,7 @@
                     <button class="goal-period-tab" data-goal-period="month">This Month</button>
                     <button class="goal-period-tab" data-goal-period="all">All Goals</button>
                 </div>
-                <div class="goals-hint">Goals automatically count activity from your job board.</div>
+                <div class="goals-hint">Stage goals count each job once per period when that stage is recorded, even if it moves on later. Responses count screenings, interviews, offers, or not-selected outcomes. Existing stages with unknown dates are excluded. Jobs researched and contacts use their date added.</div>
             </div>
             <div class="goals-summary-strip" id="goals-summary-strip"></div>
             <div class="goals-grid" id="goals-grid"></div>
@@ -1389,8 +1389,10 @@
                     <button class="detail-back-btn" id="detail-back-btn" style="display:none">← Back</button>
                     <div>
                         <h2 class="modal-title" id="detail-title">Job Title</h2>
-                        <div id="detail-department-badge"></div>
-                        <div class="detail-meta" id="detail-meta">Company · Location</div>
+                        <div class="detail-header-badges">
+                            <div id="detail-department-badge"></div>
+                            <span class="detail-meta" id="detail-meta"></span>
+                        </div>
                     </div>
                 </div>
                 <button class="modal-close" data-close="modal-detail">✕</button>
@@ -1513,6 +1515,10 @@
                             <textarea class="text-area" id="detail-notes" rows="4" placeholder="Your notes…"></textarea>
                         </div>
                     </div>
+                    <section class="stage-history-section" aria-labelledby="stage-history-title">
+                        <h3 id="stage-history-title">Stage history</h3>
+                        <div id="detail-stage-history"></div>
+                    </section>
                     <div class="detail-actions">
                         <select class="select-input" id="detail-stage-select"></select>
                         <button class="btn-secondary" id="detail-edit-btn">Edit</button>

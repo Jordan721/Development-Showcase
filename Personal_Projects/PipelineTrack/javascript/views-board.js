@@ -327,7 +327,7 @@ function moveActionQueueJob(id, targetStage, beforeId) {
   const previousStage = job.stage;
   const nextStage = stages.includes(job.stage) ? job.stage : targetStage;
   const items = state.jobs.filter(item => item.id !== id && stages.includes(item.stage)).sort(compareActionQueueJobs);
-  const snapshot = [job, ...items].map(item => ({id: item.id, stage: item.stage, rank: item.actionQueueRank, hadRank: Object.prototype.hasOwnProperty.call(item, 'actionQueueRank')}));
+  const snapshot = [job, ...items].map(item => ({id: item.id, stage: item.stage, stageHistory: (item.stageHistory || []).map(entry => ({...entry})), rank: item.actionQueueRank, hadRank: Object.prototype.hasOwnProperty.call(item, 'actionQueueRank')}));
   const index = before ? items.findIndex(item => item.id === beforeId) : items.length;
   items.splice(index, 0, job);
   job.stage = nextStage;
@@ -339,7 +339,10 @@ function moveActionQueueJob(id, targetStage, beforeId) {
       snapshot.forEach(entry => {
         const current = state.jobs.find(item => item.id === entry.id);
         if (!current) return;
-        if (entry.id === id && current.stage === nextStage) current.stage = entry.stage;
+        if (entry.id === id && current.stage === nextStage && current.stageHistory.length === entry.stageHistory.length + (previousStage === nextStage ? 0 : 1)) {
+          current.stage = entry.stage;
+          current.stageHistory = entry.stageHistory;
+        }
         if (entry.hadRank) current.actionQueueRank = entry.rank;
         else delete current.actionQueueRank;
       });
@@ -1309,6 +1312,19 @@ function refreshJobFitAfterSkillEdit(job) {
 /* ══════════════════════════════════════════════════════════
    JOB DETAIL MODAL
    ══════════════════════════════════════════════════════════ */
+function renderStageHistory(job) {
+  const container = document.getElementById('detail-stage-history');
+  if (!container) return;
+  const entries = job.stageHistory || [];
+  const started = currentStageStartedAt(job);
+  const days = started ? Math.max(0, Math.floor((Date.now() - Date.parse(started)) / 86400000)) : null;
+  container.innerHTML = `<p class="stage-history-note">${days === null ? 'Current stage start is unknown. New stage changes will be recorded.' : `${days} day${days === 1 ? '' : 's'} in ${STAGE_LABELS[job.stage]}. Dates show when stages were recorded, not scheduled interview dates.`}</p><ol class="stage-history-list">${entries.map((entry, index) => {
+    const previous = entries[index - 1];
+    const label = entry.observed ? `${STAGE_LABELS[entry.stage]} — existing stage; start unknown` : previous ? `${STAGE_LABELS[previous.stage]} → ${STAGE_LABELS[entry.stage]}` : `Tracking started in ${STAGE_LABELS[entry.stage]}`;
+    return `<li><span>${escHtml(label)}</span><time datetime="${escHtml(entry.at)}">${escHtml(new Date(entry.at).toLocaleString())}</time></li>`;
+  }).join('')}</ol>`;
+}
+
 function openJobDetail(id) {
   const job = state.jobs.find(j => j.id === id);
   if (!job) return;
@@ -1330,6 +1346,7 @@ function openJobDetail(id) {
   document.getElementById('detail-title').textContent = `${job.role} @ ${job.company}`;
   document.getElementById('detail-department-badge').innerHTML = jobDepartmentBadge(job);
   document.getElementById('detail-meta').textContent = [job.location, formatDate(job.dateAdded)].filter(Boolean).join(' · ');
+  renderStageHistory(job);
 
   // Salary
   const salaryRow = document.getElementById('detail-salary-row');

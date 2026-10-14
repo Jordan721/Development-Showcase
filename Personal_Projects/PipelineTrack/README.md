@@ -115,11 +115,11 @@ PipelineTrack/
 <summary><strong>◈ Dashboard</strong></summary>
 
 - **Stat cards** — Total Tracked (with `avg. X/wk · X/mo · X/yr` pace), Applied, In Progress, Offers, Not Selected, Avg Fit Score
-- **Streak & nudge bar** — daily application streak pill; click it to open an animated timeline of every job you've applied to, grouped by date and color-coded by stage, that pans to your most recent application; a clickable **⚠ Pipeline Health** warning appears if any Applied/Screening/Interview jobs haven't moved in 14+ days
+- **Streak & nudge bar** — daily application streak pill; click it to open an animated timeline of every job you've applied to, grouped by date and color-coded by stage, that pans to your most recent application; a clickable **⚠ Pipeline Health** warning appears if any Applied/Screening/Interview jobs have a recorded current stage lasting 14+ days. Unknown stage start dates are excluded.
 - **Conversion Funnel** — Applied → Screening → Interview → Offer with counts and % conversion from each previous stage
 - **Weekly Velocity** — animated 6-week bar chart showing jobs added per week
 - **Upcoming Deadlines** — jobs with deadlines in the next 7 days, color-coded by urgency (yellow ≤2 days, red = today); overdue banner if any have passed; click to open the job
-- **Avg. Time in Stage** — average days since added per active stage, color-coded green/yellow/red
+- **Time in Current Stage** — average days since the current stage was recorded, color-coded green/yellow/red. Existing jobs with unknown stage start dates are excluded; pipeline health uses the same recorded stage dates for its 14-day warning.
 - **This Week summary** — jobs added, in-progress count, overdue follow-ups, and weekly goal progress
 - **Top Skill Gaps** — click any tag to see jobs missing that skill
 - **Top Skills** — matched skills show ✓ job count and are clickable
@@ -151,6 +151,9 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 - **⊜ Compare Jobs** — select 2–3 jobs to compare fit, salary, stage, skills, and benefits side by side
 
 **Each job stores:** role, company, department, location, URL, job source, salary (auto-formatted), seniority, job type, work type, date posted, date applied, application deadline, stage, resume used (linked to Resume Vault), benefits (parsed into chips), company notes, job description, cover letter, personal notes.
+
+- **Stage history** — job details show a timestamped list of stages, recorded automatically when adding jobs or changing stages through the board, table, bulk actions, action queue, or edit form. Unchanged saves and queue reordering do not add entries; undoing a queue move restores its previous history. Existing jobs and CSV imports receive a baseline labeled “start unknown,” rather than invented past dates. History is retained in JSON backups; CSV does not include it.
+- **Benefits parsing** — recognizes common retirement spellings such as `401(k)`, bundled medical/dental/vision coverage, and paid holidays. Specific PTO and bonus matches suppress overlapping generic badges. Explicit exclusions are filtered out, and equity compensation is distinguished from common DEI/accounting wording. Parsing is rule-based; the original benefits text remains available through View all.
 
 **Add/Edit form tabs:** Details · Job Info · Application
 
@@ -218,7 +221,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 - **Next actions** — add an application, research a saved job, add a contact, or review the pipeline directly from a goal card
 - **Goal History** — completed periods show their last recorded progress and target. Recording starts with the updated app; earlier periods are not reconstructed. Up to 24 snapshots are retained per goal, with the 12 most recent completed entries shown for the selected goals
 - **Activity heatmap** — 28 days of jobs and contacts added, with daily counts on hover; this measures additions, not stage changes
-- Progress uses each job's date added and current stage, or each contact's date added. History captures progress when data is saved or Goals is opened; it is not a log of the dates interviews or offers happened
+- Stage goals use recorded stage dates and count each job once per period for the selected stage, even after it moves on. Response goals count recorded screenings, interviews, offers, or not-selected outcomes. Unknown baseline stages are excluded, and later stages do not imply that an earlier stage occurred. Jobs Researched counts opportunities added during the period, regardless of current stage; Contacts Added uses the contact's date added. Goal history captures progress when data is saved or Goals is opened; scheduled milestone dates are separate from recorded stage dates.
 
 </details>
 
@@ -326,6 +329,22 @@ All three show an amber **✦ Auto-filled** badge so you always know the app set
 ## 🗺️ Roadmap Ideas
 
 - Support for additional industries beyond current coverage
+
+## Stage History Checks
+
+Run from the repository root with Node.js:
+
+```bash
+node --test Personal_Projects/PipelineTrack/tests/stage-history.test.cjs
+```
+
+These checks cover stage recording, persistence, legacy baselines, import handling, period-based goals, action queue undo, and rendered history/dashboard content.
+
+Benefits parsing checks:
+
+```bash
+node --test Personal_Projects/PipelineTrack/tests/benefits.test.cjs
+```
 
 ---
 

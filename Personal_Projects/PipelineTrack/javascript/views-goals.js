@@ -86,13 +86,15 @@ function filterJobsByGoalPeriod(jobs, period) {
 }
 
 function computeGoalCurrent(goal) {
-  const j = filterJobsByGoalPeriod(state.jobs, goal.period);
-  if (goal.type === 'applications') return j.filter(x => x.stage !== 'saved').length;
-  if (goal.type === 'interviews') return j.filter(x => ['interview', 'offer'].includes(x.stage)).length;
-  if (goal.type === 'offers') return j.filter(x => x.stage === 'offer').length;
-  if (goal.type === 'responses') return j.filter(x => ['screening', 'interview', 'offer'].includes(x.stage)).length;
-  if (goal.type === 'screenings') return j.filter(x => ['screening', 'interview', 'offer'].includes(x.stage)).length;
-  if (goal.type === 'saved') return j.filter(x => x.stage === 'saved').length;
+  const stagesByType = {applications: ['applied'], interviews: ['interview'], offers: ['offer'], responses: ['screening', 'interview', 'offer', 'declined'], screenings: ['screening']};
+  if (stagesByType[goal.type]) {
+    const {start, end} = goalPeriodBounds(goal.period);
+    return state.jobs.filter(job => (job.stageHistory || []).some(entry => {
+      const date = goalLocalDate(entry.at);
+      return !entry.observed && stagesByType[goal.type].includes(entry.stage) && date >= start && date < end;
+    })).length;
+  }
+  if (goal.type === 'saved') return filterJobsByGoalPeriod(state.jobs, goal.period).length;
   if (goal.type === 'networking') {
     return filterJobsByGoalPeriod(state.contacts || [], goal.period).length;
   }

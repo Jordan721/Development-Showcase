@@ -65,7 +65,34 @@ let state = {
 /* ══════════════════════════════════════════════════════════
    LOCALSTORAGE
    ══════════════════════════════════════════════════════════ */
+// Baselines describe an existing stage; only recorded entries have a known start.
+function normalizeStageHistory(value) {
+  return (Array.isArray(value) ? value : []).filter(entry =>
+    entry && STAGES.includes(entry.stage) && typeof entry.at === 'string' &&
+    Number.isFinite(Date.parse(entry.at)) && Date.parse(entry.at) <= Date.now()
+  ).map(entry => ({stage: entry.stage, at: new Date(entry.at).toISOString(), observed: entry.observed === true}))
+    .sort((a, b) => Date.parse(a.at) - Date.parse(b.at));
+}
+
+function initializeStageHistory(job, observed = false) {
+  job.stageHistory = normalizeStageHistory(job.stageHistory);
+  const last = job.stageHistory[job.stageHistory.length - 1];
+  if (!last || last.stage !== job.stage) {
+    job.stageHistory.push({stage: job.stage, at: new Date().toISOString(), observed});
+  }
+}
+
+function recordStageChanges() {
+  state.jobs.forEach(job => initializeStageHistory(job));
+}
+
+function currentStageStartedAt(job) {
+  const last = (job.stageHistory || []).slice(-1)[0];
+  return last && last.stage === job.stage && !last.observed ? last.at : null;
+}
+
 function save() {
+  recordStageChanges();
   if (typeof recordGoalProgress === 'function') recordGoalProgress(false);
   localStorage.setItem('pt_jobs', JSON.stringify(state.jobs));
   localStorage.setItem('pt_profile', JSON.stringify(state.profile));
@@ -208,7 +235,9 @@ function load() {
     state.coverLetters = [];
   }
 
+  const previousStageHistories = JSON.stringify((Array.isArray(state.jobs) ? state.jobs : []).map(job => job && job.stageHistory));
   state.jobs = (Array.isArray(state.jobs) ? state.jobs : []).map(_normalizeJob);
+  const stageHistoryChanged = previousStageHistories !== JSON.stringify(state.jobs.map(job => job.stageHistory));
   const migratedSalaryPayPeriods = migrateJobSalaryPayPeriods();
   const migratedJobSources = migrateJobSources();
   state.profile = _normalizeProfile(state.profile);
@@ -219,7 +248,7 @@ function load() {
   state.resumes = _normalizeEntityArray(state.resumes);
   state.coverLetters = _normalizeEntityArray(state.coverLetters);
   state.savedCourses = Array.isArray(state.savedCourses) ? state.savedCourses : [];
-  if (migratedSalaryPayPeriods || migratedJobSources) save();
+  if (migratedSalaryPayPeriods || migratedJobSources || stageHistoryChanged) save();
 }
 
 /* ══════════════════════════════════════════════════════════
@@ -465,12 +494,14 @@ function _importFromCSV(text) {
         ...state.jobs[existingIdx],
         ...jobData
       };
+      initializeStageHistory(state.jobs[existingIdx], true);
       updated++;
     } else {
       state.jobs.push({
         id: 'j' + Date.now() + Math.random().toString(36).slice(2, 6),
         ...jobData
       });
+      initializeStageHistory(state.jobs[state.jobs.length - 1], true);
       added++;
     }
   }
@@ -582,7 +613,7 @@ function _normalizeFitScore(value) {
 
 function _normalizeJob(job) {
   const source = _isPlainObject(job) ? job : {};
-  return {
+  const normalized = {
     ...source,
     id: _stringValue(source.id).trim() || uid(),
     role: _stringValue(source.role).trim() || 'Untitled Role',
@@ -617,6 +648,8 @@ function _normalizeJob(job) {
     jobFitScore: _normalizeFitScore(source.jobFitScore),
     redFlags: _normalizeStringArray(source.redFlags),
   };
+  initializeStageHistory(normalized, true);
+  return normalized;
 }
 
 function _normalizeEntityArray(value) {

@@ -668,23 +668,25 @@ function highlightJobDescription(text, matched, missing) {
 }
 
 function parseBenefits(text) {
-  // Scan the full text for each pattern — works with bullet lists, paragraphs, or plain sentences.
-  // Order matters: more specific patterns (e.g. Signing Bonus, Unlimited PTO) must come before
-  // broader ones (Bonus, PTO) so they aren't swallowed by a generic match.
+  if (typeof text !== 'string' || !text.trim()) return [];
+  // Keep negation within a sentence/bullet or contrast clause. Specific matches
+  // claim their text spans before generic patterns, without hiding separate perks.
+  const clauses = text.replace(/[\u2010-\u2015]/g, '-').split(/[\n\r;.!?•]+|\b(?:but|however|yet)\b/i).filter(Boolean);
   const MAP = [
-    [/signing\s*bonus/i, 'Signing Bonus'],
-    [/unlimited\s*pto|unlimited\s*paid\s*time\s*off|unlimited\s*vacation/i, 'Unlimited PTO'],
-    [/pto\b|paid\s*time\s*off|paid\s*vacation/i, 'PTO'],
-    [/performance\s*bonus|annual\s*bonus|quarterly\s*bonus/i, 'Performance Bonus'],
+    [/\b(?:signing|sign[-\s]?on)\s*bonus\b/i, 'Signing Bonus'],
+    [/\bunlimited\s*(?:pto|paid\s*time\s*off|vacation)\b/i, 'Unlimited PTO'],
+    [/\bpto\b|\bpaid\s*time\s*off\b|\bpaid\s*vacation\b/i, 'PTO'],
+    [/\b(?:performance|annual|quarterly)\s*bonus\b/i, 'Performance Bonus'],
     [/\bbonus\b/i, 'Bonus'],
-    [/health\s*insurance|medical\s*(insurance|coverage|benefits)/i, 'Health Insurance'],
-    [/dental\s*(insurance|coverage|plan|care)/i, 'Dental'],
-    [/vision\s*(insurance|coverage|plan|care)/i, 'Vision'],
-    [/401\s*k|403\s*b|\bretirement\s*(plan|savings|benefits)\b|\bpension\b/i, '401k / Retirement'],
-    [/equity|stock\s*(options?|grants?|awards?)|rsu|espp/i, 'Equity'],
+    [/\bhealth\s*(?:insurance|coverage|benefits|plans?)\b|\bmedical(?:\s*(?:insurance|coverage|benefits|plans?))?\b/i, 'Health Insurance'],
+    [/\bdental(?:\s*(?:insurance|coverage|plans?|care|benefits))?\b/i, 'Dental'],
+    [/\bvision(?:\s*(?:insurance|coverage|plans?|care|benefits))?\b/i, 'Vision'],
+    [/\b(?:401\s*\(?\s*k\s*\)?|403\s*\(?\s*b\s*\)?)(?!\w)|\bretirement\s*(?:plans?|savings|benefits)\b|\bpension\b/i, '401k / Retirement'],
+    [/\bequity(?:\s*(?:compensation|grants?|awards?|package|incentives?))?\b|\bstock\s*(?:options?|grants?|awards?)\b|\brsus?\b|\bespp\b/i, 'Equity'],
+    [/\bpaid\s*holidays?\b/i, 'Paid Holidays'],
     [/sick\s*(days?|leave|time)/i, 'Sick Leave'],
     [/parental\s*(leave|benefits)|maternity\s*leave|paternity\s*leave/i, 'Parental Leave'],
-    [/work\s*from\s*home|remote\s*work|fully\s*remote|wfh/i, 'Remote Work'],
+    [/\bwork\s*from\s*home\b|\bremote\s*work\b|\bfully\s*remote\b|\bwfh\b/i, 'Remote Work'],
     [/flexible\s*(hours?|schedule|work(ing)?\s*hours?)/i, 'Flexible Hours'],
     [/life\s*insurance/i, 'Life Insurance'],
     [/disability\s*(insurance|coverage|benefits)/i, 'Disability Insurance'],
@@ -692,7 +694,7 @@ function parseBenefits(text) {
     [/tuition\s*(reimbursement|assistance|benefit)|education\s*(reimbursement|stipend|assistance)|learning\s*stipend/i, 'Education Stipend'],
     [/professional\s*development|career\s*development|training\s*(budget|allowance)/i, 'Prof. Development'],
     [/gym\s*(membership|subsidy|reimbursement)|fitness\s*(benefit|allowance|stipend)|wellness\s*(benefit|program|stipend)/i, 'Wellness / Gym'],
-    [/commuter\s*(benefits?|allowance)|transit\s*(benefits?|pass|allowance)|\bparking\b/i, 'Commuter Benefits'],
+    [/\bcommuter\s*(?:benefits?|allowance)\b|\btransit\s*(?:benefits?|pass|allowance)\b|\b(?:free|paid|subsidized)\s*parking\b|\bparking\s*(?:allowance|reimbursement|provided)\b/i, 'Commuter Benefits'],
     [/relocation\s*(assistance|package|reimbursement)/i, 'Relocation'],
     [/free\s*(lunch|meals?|snacks?|food|breakfast)|catered\s*(lunch|meals?)|meal\s*(allowance|stipend)/i, 'Free Food'],
     [/home\s*office\s*(stipend|allowance|setup|reimbursement)|equipment\s*(stipend|allowance|provided)/i, 'Home Office Stipend'],
@@ -701,11 +703,39 @@ function parseBenefits(text) {
     [/volunteer\s*(time|days?|hours?|opportunities)/i, 'Volunteer Time'],
   ];
 
-  const results = [];
+  const found = new Set();
+  const occupied = clauses.map(() => []);
   for (const [pattern, label] of MAP) {
-    if (pattern.test(text)) results.push(label);
+    clauses.forEach((clause, clauseIndex) => {
+      for (const match of clause.matchAll(new RegExp(pattern.source, 'gi'))) {
+        const start = match.index;
+        const end = start + match[0].length;
+        if (occupied[clauseIndex].some(span => start >= span.start && end <= span.end)) continue;
+        const before = clause.slice(0, start);
+        const after = clause.slice(end);
+        // A fresh explicit offer starts a positive clause after an earlier exclusion.
+        const prefix = before.split(/\b(?:we\s+(?:offer|provide|include)|you\s+(?:receive|get))\b/i).pop();
+        const negativePrefix = /\b(?:no(?![-\s]+(?:cost|charge|waiting\s*period|deductible|co-?pay|experience|limit|cap)\b)|without|not(?!\s+only\b)|never)\b/i.test(prefix);
+        const negativeSuffix = /^(?:\s*[,/&]?\s*(?:and\s+|or\s+)?(?:medical|dental|vision)(?:\s+(?:insurance|coverage|benefits|plans?))?)*\s*[,(:-]?\s*(?:(?:is|are|will\s*be)\s+)?(?:not\s+(?:offered|provided|available|included|covered|eligible)|unavailable|excluded)\b/i.test(after);
+        if (negativePrefix || negativeSuffix) continue;
+        // Standalone medical/dental/vision needs a coverage context or a short list.
+        if (/^(?:medical|dental|vision)$/i.test(match[0])) {
+          const coverageContext = /\b(?:insurance|coverage|benefits?|plans?|package|offer|provide)\b/i.test(clause);
+          const bundledCoverage = /\b(?:medical(?:\s*[,/&]\s*|\s+(?:and\s+)?)dental|dental(?:\s*[,/&]\s*|\s+(?:and\s+)?)vision)\b/i.test(clause);
+          const standalone = /^\s*(?:[-*]\s*)?(?:medical|dental|vision)\s*$/i.test(clause);
+          if (!coverageContext && !bundledCoverage && !standalone) continue;
+        }
+        if (label === 'Equity' && /^equity$/i.test(match[0])) {
+          // Compensation equity is distinct from pay equity, DEI, or accounting.
+          if (/\b(?:diversity|inclusion|equality|pay\s+equity|equity\s+research|equity\s+markets?|private\s+equity|shareholders?['’]?\s+equity)\b/i.test(clause)) continue;
+          if (!/\b(?:benefits?|compensation|stock|salary|offer|package)\b/i.test(clause) && !/^\s*(?:[-*]\s*)?equity\s*$/i.test(clause)) continue;
+        }
+        found.add(label);
+        occupied[clauseIndex].push({start, end});
+      }
+    });
   }
-  return results;
+  return [...found];
 }
 /* ── SKILL NAME NORMALIZER ────────────────────────────────── */
 const SKILL_CANONICAL = {

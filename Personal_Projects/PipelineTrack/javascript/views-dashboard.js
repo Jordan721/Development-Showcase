@@ -332,10 +332,10 @@ function renderDashboard() {
   // Pipeline health warning
   const now = new Date();
   const stale = jobs.filter(j => ['applied', 'screening', 'interview'].includes(j.stage) &&
-    (now - dashboardDate(j.dateApplied || j.dateAdded)) / 86400000 > 14
+    currentStageStartedAt(j) && (now - new Date(currentStageStartedAt(j))) / 86400000 > 14
   );
   const healthHtml = stale.length > 0 ?
-    `<span class="dash-health-warn dash-health-warn--clickable">⚠ ${stale.length} application${stale.length !== 1 ? 's' : ''} aged 14+ days</span>` :
+    `<span class="dash-health-warn dash-health-warn--clickable">⚠ ${stale.length} application${stale.length !== 1 ? 's' : ''} in the same stage for 14+ days</span>` :
     '';
   if (vibeRow) {
     const streak = computeStreak(jobs);
@@ -343,7 +343,7 @@ function renderDashboard() {
     vibeRow.innerHTML = streakHtml + healthHtml + `<span class="dash-nudge">${getDashboardNudge(jobs)}</span>`;
     if (stale.length > 0) {
       vibeRow.querySelector('.dash-health-warn--clickable').addEventListener('click', () => {
-        openFilterModal('Applications Aged 14+ Days', `${stale.length} job${stale.length !== 1 ? 's' : ''}`, stale);
+        openFilterModal('Same Stage for 14+ Days', `${stale.length} job${stale.length !== 1 ? 's' : ''}`, stale);
       });
     }
     if (streak >= 2) {
@@ -695,9 +695,9 @@ function renderDashTimeInStage() {
     },
   ];
   const rows = stages.map(s => {
-    const sJobs = jobs.filter(j => j.stage === s.key && Number.isFinite(dashboardDate(j.dateAdded).getTime()));
+    const sJobs = jobs.filter(j => j.stage === s.key && currentStageStartedAt(j));
     if (sJobs.length === 0) return null;
-    const avgDays = Math.round(sJobs.reduce((sum, j) => sum + Math.max(0, (now - dashboardDate(j.dateAdded)) / 86400000), 0) / sJobs.length);
+    const avgDays = Math.round(sJobs.reduce((sum, j) => sum + Math.max(0, (now - new Date(currentStageStartedAt(j))) / 86400000), 0) / sJobs.length);
     return {
       key: s.key,
       jobs: sJobs,
@@ -707,16 +707,16 @@ function renderDashTimeInStage() {
     };
   }).filter(Boolean);
   if (rows.length === 0) {
-    el.innerHTML = '<div class="dash-clear-state"><span class="dash-insight-label">YOUR SEARCH TIMELINE</span><strong>Every application starts somewhere.</strong><p>Once you apply, compare your opportunities across stages here.</p></div>';
+    el.innerHTML = '<div class="dash-clear-state"><span class="dash-insight-label">YOUR SEARCH TIMELINE</span><strong>Start measuring your next move.</strong><p>New applications and stage changes will appear here. Existing stages with unknown start dates are excluded.</p></div>';
     return;
   }
   const maxDays = Math.max(...rows.map(r => r.avgDays), 1);
   const count = rows.reduce((sum, r) => sum + r.count, 0);
   const average = Math.round(rows.reduce((sum, r) => sum + r.avgDays * r.count, 0) / count);
-  el.innerHTML = `<div class="dash-age-summary"><div><span class="dash-insight-label">AVERAGE AGE</span><strong>${average}<small> days</small></strong></div><span>${count} active application${count === 1 ? '' : 's'}<br>across ${rows.length} stages</span></div><div class="dash-age-rows">` + rows.map(r => {
+  el.innerHTML = `<div class="dash-age-summary"><div><span class="dash-insight-label">AVERAGE TIME IN STAGE</span><strong>${average}<small> days</small></strong></div><span>${count} tracked application${count === 1 ? '' : 's'}<br>across ${rows.length} stages</span></div><div class="dash-age-rows">` + rows.map(r => {
     const pct = Math.round((r.avgDays / maxDays) * 100);
-    return `<button type="button" class="dash-age-row" data-stage="${r.key}" aria-label="${r.label}: ${r.count} applications, average age ${r.avgDays} days. View applications."><span class="dash-age-label"><strong>${r.label}</strong><span>${r.count} application${r.count === 1 ? '' : 's'}</span></span><span class="dash-age-track"><span style="width:${Math.max(pct, 3)}%"></span></span><span class="dash-age-value">${r.avgDays}<small> days</small></span></button>`;
-  }).join('') + '</div><p class="dash-card-note">Average days since added, grouped by current stage. Hiring timelines vary; age alone does not measure progress. Select a stage to view applications.</p>';
+    return `<button type="button" class="dash-age-row" data-stage="${r.key}" aria-label="${r.label}: ${r.count} applications, average time in stage ${r.avgDays} days. View applications."><span class="dash-age-label"><strong>${r.label}</strong><span>${r.count} application${r.count === 1 ? '' : 's'}</span></span><span class="dash-age-track"><span style="width:${Math.max(pct, 3)}%"></span></span><span class="dash-age-value">${r.avgDays}<small> days</small></span></button>`;
+  }).join('') + '</div><p class="dash-card-note">Average days since the current stage was recorded. Existing stages with unknown start dates are excluded. Select a stage to view applications.</p>';
   el.querySelectorAll('[data-stage]').forEach(button => button.addEventListener('click', () => {
     const row = rows.find(r => r.key === button.dataset.stage);
     openFilterModal(`${row.label} Applications`, `${row.count} applications`, row.jobs);

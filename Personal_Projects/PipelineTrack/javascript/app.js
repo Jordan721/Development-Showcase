@@ -389,6 +389,7 @@ function wireEvents() {
       const badge = document.getElementById('detail-stage-badge');
       badge.textContent = STAGE_LABELS[job.stage];
       badge.className = `stage-badge stage-${job.stage}`;
+      renderStageHistory(job);
       toast('Stage updated.', 'success');
       if (job.stage === 'offer') setTimeout(launchConfetti, 200);
       renderView(state.activeView);

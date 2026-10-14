@@ -802,3 +802,14 @@
 .tpl-load-select:focus {
   border-color: var(--accent);
 }
+/* Recorded stage changes in the job detail panel. */
+.stage-history-section {
+  margin: 20px 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.stage-history-section h3 { margin: 0 0 8px; font-size: 14px; }
+.stage-history-note { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+.stage-history-list { list-style: none; padding: 0; margin: 12px 0 0; max-height: 240px; overflow-y: auto; }
+.stage-history-list li { display: flex; flex-direction: column; gap: 5px; border-left: 2px solid var(--accent); padding: 8px 12px; margin: 0 0 10px; font-size: 12px; overflow-wrap: anywhere; }
+.stage-history-list time { color: var(--text-muted); font-size: 11px; }
