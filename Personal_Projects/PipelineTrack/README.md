@@ -21,7 +21,7 @@ A personal job search companion built to take the chaos out of hunting for work.
 | 📅 Calendar & Activity | Month/week/year and Agenda views, draggable dates, detailed day views, upcoming agenda, and five recent jobs |
 | 🤝 Network | Contact cards, due follow-ups, and quick actions to record conversations |
 | 🎯 Goals | Weekly/monthly targets with live progress, calendar-based pace, action buttons, recorded history, and a 28-day activity heatmap |
-| 📊 Analytics | KPIs, pipeline and ranking bars, an activity area chart, and donut charts with clickable legends |
+| 📊 Analytics | KPIs, pipeline and ranking bars, an activity area chart, and category bars and fit score columns with clickable drill-downs |
 | 👤 My Profile | Skills, credential progress, email templates, skill coverage chart, and data backup |
 | 📄 Resume Hub | Parse your resume, scan GitHub, polish your writing, and store resume versions in the vault |
 | 🧠 Learning Hub | Course recommendations matched to your skill gaps |
@@ -43,7 +43,7 @@ I built PipelineTrack to solve that. One tool to track every job, score your ski
 3. Go to **My Profile** and add your skills, plus any certifications, degrees, licenses, diplomas, or bootcamps you have finished or are working toward
 4. Go to **Job Board → + Add Job** — click **⚡ Paste full listing** to auto-fill fields from the raw posting, or fill in manually; paste the description in Job Info for an instant fit score
 5. Click any job card to see your fit score and skill breakdown
-6. Check **Learning Hub** to see what to learn next and **Analytics** to explore trends; click time periods or donut legends to see matching jobs
+6. Check **Learning Hub** to see what to learn next and **Analytics** to explore trends; click time periods or category bars or fit score columns to see matching jobs
 7. In **Goals**, set a weekly or monthly target, check days remaining and the suggested daily pace, and use the action button to add a job/contact or review your pipeline. History starts recording when you use the updated app; the activity heatmap shows jobs and contacts added over the last 28 days
 
 All data is saved to your browser's localStorage — nothing is sent anywhere. Use the ☀️ / 🌙 toggle to switch light/dark themes, **M / S / O** for Midnight, Sunset, or Ocean color themes, **✦** to turn the theme-change animation on/off, and **◑** for color-blind mode. Press `Ctrl+Shift+K` to open the command palette at any time.

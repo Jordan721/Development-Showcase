@@ -138,17 +138,15 @@ function renderAnalyticsKPIs(jobs) {
   });
 }
 
-// A shared composition chart with keyboard-accessible drill-down legends.
-function renderAnalyticsDonut(el, segments, total, caption, onSelect) {
+// Shared category charts with keyboard-accessible drill-down buttons.
+function renderAnalyticsComposition(el, segments, total, caption, onSelect, columns = false) {
   const palette = ['var(--accent)', 'var(--purple, #a78bfa)', 'var(--yellow)', 'var(--green)', 'var(--red)', 'var(--orange, #fb923c)'];
-  let offset = 0;
-  const arcs = segments.map((segment, i) => {
-    const share = total ? segment.count / total * 100 : 0;
-    const arc = `<circle cx="60" cy="60" r="46" fill="none" stroke="${segment.color || palette[i % palette.length]}" stroke-width="13" pathLength="100" stroke-dasharray="${share} ${100 - share}" stroke-dashoffset="${-offset}" transform="rotate(-90 60 60)"><title>${escHtml(segment.label)}: ${segment.count} (${Math.round(share)}%)</title></circle>`;
-    offset += share;
-    return arc;
-  }).join('');
-  el.innerHTML = `<div class="an-composition"><div class="an-ring"><svg viewBox="0 0 120 120" role="img" aria-label="${escHtml(caption)}: ${total} jobs"><circle cx="60" cy="60" r="46" fill="none" stroke="var(--border)" stroke-width="13"/>${arcs}</svg><div class="an-ring-center"><strong>${total}</strong><span>${escHtml(caption)}</span></div></div><div class="an-chart-legend">${segments.map((segment, i) => `<button type="button" class="an-legend-item" data-segment="${i}" style="--segment-color:${segment.color || palette[i % palette.length]}"><span class="an-legend-dot" aria-hidden="true"></span><span class="an-legend-label">${escHtml(segment.label)}</span><strong>${segment.count}</strong><span class="an-legend-percent">${total ? Math.round(segment.count / total * 100) : 0}%</span></button>`).join('')}</div></div>`;
+  const max = Math.max(1, ...segments.map(segment => segment.count));
+  el.innerHTML = `<div class="an-distribution-summary">${total} ${escHtml(caption)}</div><div class="${columns ? 'an-distribution-columns' : 'an-distribution-bars'}">${segments.map((segment, i) => {
+    const percent = total ? Math.round(segment.count / total * 100) : 0;
+    const size = columns ? segment.count / max * 100 : total ? segment.count / total * 100 : 0;
+    return `<button type="button" class="an-distribution-item" data-segment="${i}" style="--segment-color:${segment.color || palette[i % palette.length]};--segment-size:${size}%" aria-label="${escHtml(segment.label)}: ${segment.count} jobs (${percent}%). Show matching jobs."><span class="an-distribution-label">${escHtml(segment.label)}</span><span class="an-distribution-value"><strong>${segment.count}</strong><span>${percent}%</span></span><span class="an-distribution-track" aria-hidden="true"><span class="an-distribution-fill"></span></span></button>`;
+  }).join('')}</div>`;
   el.querySelectorAll('[data-segment]').forEach(button => {
     button.onclick = () => onSelect(segments[Number(button.dataset.segment)]);
   });
@@ -377,16 +375,17 @@ function renderAnalyticsFitDistribution(jobs) {
       cls: 'fill-red'
     },
   ];
+  buckets.reverse();
   const counts = buckets.map(b => scored.filter(j => j.fitScore >= b.min && j.fitScore <= b.max).length);
-  const colors = ['var(--green)', 'var(--accent)', 'var(--yellow)', 'var(--red)'];
-  renderAnalyticsDonut(el, buckets.map((b, i) => ({
+  const colors = ['var(--red)', 'var(--yellow)', 'var(--accent)', 'var(--green)'];
+  renderAnalyticsComposition(el, buckets.map((b, i) => ({
     ...b,
     count: counts[i],
     color: colors[i]
   })), counts.reduce((sum, count) => sum + count, 0), 'scored jobs', segment => {
     const matched = scored.filter(j => j.fitScore >= segment.min && j.fitScore <= segment.max);
     openFilterModal(`Fit Score: ${segment.label}`, `${matched.length} jobs`, matched);
-  });
+  }, true);
 }
 
 function renderAnalyticsBreakdown(elId, jobs, field) {
@@ -402,7 +401,7 @@ function renderAnalyticsBreakdown(elId, jobs, field) {
     el.innerHTML = '<p class="empty-msg">No data yet.</p>';
     return;
   }
-  renderAnalyticsDonut(el, sorted.map(([label, count]) => ({
+  renderAnalyticsComposition(el, sorted.map(([label, count]) => ({
     label,
     count
   })), jobs.length, 'tracked jobs', segment => {
