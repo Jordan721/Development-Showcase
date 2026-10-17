@@ -1312,23 +1312,77 @@ function refreshJobFitAfterSkillEdit(job) {
 /* ══════════════════════════════════════════════════════════
    JOB DETAIL MODAL
    ══════════════════════════════════════════════════════════ */
+function selectJobDetailTab(name, focus = false) {
+  const modal = document.getElementById('modal-detail');
+  const body = modal.querySelector('.detail-body');
+  const right = modal.querySelector('.detail-right');
+  const changed = document.getElementById(`detail-tab-${name}`).getAttribute('aria-selected') !== 'true';
+  const animate = changed && modal.getAttribute('aria-hidden') === 'false' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Cancel unfinished transitions before measuring so rapid switches stay responsive.
+  [body, right].forEach(element => element.getAnimations().forEach(animation => animation.cancel()));
+  const previousHeight = body.getBoundingClientRect().height;
+  modal.classList.toggle('showing-history', name === 'history');
+  ['details', 'history'].forEach(tabName => {
+    const selected = tabName === name;
+    const tab = document.getElementById(`detail-tab-${tabName}`);
+    tab.setAttribute('aria-selected', String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+    document.getElementById(`detail-panel-${tabName}`).hidden = !selected;
+    if (selected && focus) tab.focus();
+  });
+  if (animate) {
+    const options = {duration: 220, easing: 'cubic-bezier(0.22, 1, 0.36, 1)'};
+    const nextHeight = body.getBoundingClientRect().height;
+    if (previousHeight !== nextHeight) {
+      body.animate([
+        {height: `${previousHeight}px`, overflow: 'hidden'},
+        {height: `${nextHeight}px`, overflow: 'hidden'}
+      ], options);
+    }
+    right.animate([{opacity: 0, transform: 'translateY(5px)'}, {opacity: 1, transform: 'translateY(0)'}], options);
+  }
+}
+
 function renderStageHistory(job) {
   const container = document.getElementById('detail-stage-history');
   if (!container) return;
   const entries = job.stageHistory || [];
   const started = currentStageStartedAt(job);
-  const days = started ? Math.max(0, Math.floor((Date.now() - Date.parse(started)) / 86400000)) : null;
-  container.innerHTML = `<p class="stage-history-note">${days === null ? 'Current stage start is unknown. New stage changes will be recorded.' : `${days} day${days === 1 ? '' : 's'} in ${STAGE_LABELS[job.stage]}. Dates show when stages were recorded, not scheduled interview dates.`}</p><ol class="stage-history-list">${entries.map((entry, index) => {
+  const now = Date.now();
+  const duration = (from, to) => {
+    const days = Math.max(0, Math.floor((to - Date.parse(from)) / 86400000));
+    return days === 0 ? 'Less than a day' : `${days} day${days === 1 ? '' : 's'}`;
+  };
+  const currentLabel = escHtml(STAGE_LABELS[job.stage]);
+  const indicator = document.getElementById('detail-stage-age');
+  if (indicator) indicator.textContent = started ? `${duration(started, now)} here` : 'Start unknown';
+  container.innerHTML = `<div class="stage-history-summary"><span class="stage-history-eyebrow">Current stage</span><strong>${currentLabel}</strong><span>${started ? `${duration(started, now)} here` : 'Start date unknown'}</span></div><p class="stage-history-note">Newest first · Dates reflect recorded stage changes.</p><ol class="stage-history-list">${entries.map((entry, index) => {
     const previous = entries[index - 1];
-    const label = entry.observed ? `${STAGE_LABELS[entry.stage]} — existing stage; start unknown` : previous ? `${STAGE_LABELS[previous.stage]} → ${STAGE_LABELS[entry.stage]}` : `Tracking started in ${STAGE_LABELS[entry.stage]}`;
-    return `<li><span>${escHtml(label)}</span><time datetime="${escHtml(entry.at)}">${escHtml(new Date(entry.at).toLocaleString())}</time></li>`;
-  }).join('')}</ol>`;
+    const next = entries[index + 1];
+    const isCurrent = index === entries.length - 1 && entry.stage === job.stage;
+    const label = entry.observed ? `${STAGE_LABELS[entry.stage]} — start unknown` : previous ? `${STAGE_LABELS[previous.stage]} → ${STAGE_LABELS[entry.stage]}` : `Tracking started in ${STAGE_LABELS[entry.stage]}`;
+    const timeInStage = entry.observed ? 'Time in stage unknown' : `${duration(entry.at, next ? Date.parse(next.at) : now)}${isCurrent ? ' here so far' : ` in ${STAGE_LABELS[entry.stage]}`}`;
+    const date = new Date(entry.at);
+    return `<li data-stage="${escHtml(entry.stage)}"${isCurrent ? ' class="is-current"' : ''}><div class="stage-history-entry-heading"><strong>${escHtml(label)}</strong>${isCurrent ? '<span class="stage-history-current">Current</span>' : ''}</div><time datetime="${escHtml(entry.at)}" title="${escHtml(date.toLocaleString())}">${entry.observed ? 'First tracked ' : ''}${escHtml(date.toLocaleDateString(undefined, {month: 'short', day: 'numeric', year: 'numeric'}))}</time><span class="stage-history-duration">${escHtml(timeInStage)}</span></li>`;
+  }).reverse().join('')}</ol>`;
 }
 
 function openJobDetail(id) {
   const job = state.jobs.find(j => j.id === id);
   if (!job) return;
   state.activeJobId = id;
+  selectJobDetailTab('details');
+  ['details', 'history'].forEach(name => {
+    const tab = document.getElementById(`detail-tab-${name}`);
+    tab.onclick = () => selectJobDetailTab(name);
+    tab.onkeydown = event => {
+      if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const next = event.key === 'Home' ? 'details' : event.key === 'End' ? 'history' : name === 'details' ? 'history' : 'details';
+      selectJobDetailTab(next, true);
+    };
+  });
+  document.getElementById('detail-view-history').onclick = () => selectJobDetailTab('history', true);
 
   if (typeof analyzeJobForRole === 'function' && (job.jobQualityScore === undefined || job.jobFitScore === undefined || !Array.isArray(job.redFlags) || !job.roleProfile)) {
     const analysis = analyzeJobForRole(job);

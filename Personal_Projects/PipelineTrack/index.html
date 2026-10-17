@@ -1440,6 +1440,11 @@
                 </div>
                 <!-- Right: info + notes -->
                 <div class="detail-right">
+                    <div class="detail-tabs" role="tablist" aria-label="Job information">
+                        <button type="button" id="detail-tab-details" role="tab" aria-selected="true" aria-controls="detail-panel-details" aria-keyshortcuts="D" title="Details (D)">Details <kbd>D</kbd></button>
+                        <button type="button" id="detail-tab-history" role="tab" aria-selected="false" aria-controls="detail-panel-history" aria-keyshortcuts="H" title="History (H)" tabindex="-1">History <kbd>H</kbd></button>
+                    </div>
+                    <div id="detail-panel-details" role="tabpanel" aria-labelledby="detail-tab-details">
                     <div class="detail-info-row">
                         <span class="stage-badge" id="detail-stage-badge">Saved</span>
                         <span class="seniority-badge" id="detail-seniority" style="display:none"></span>
@@ -1515,12 +1520,14 @@
                             <textarea class="text-area" id="detail-notes" rows="4" placeholder="Your notes…"></textarea>
                         </div>
                     </div>
-                    <section class="stage-history-section" aria-labelledby="stage-history-title">
+                    </div>
+                    <section id="detail-panel-history" class="stage-history-section" role="tabpanel" aria-labelledby="detail-tab-history" hidden>
                         <h3 id="stage-history-title">Stage history</h3>
                         <div id="detail-stage-history"></div>
                     </section>
                     <div class="detail-actions">
                         <select class="select-input" id="detail-stage-select"></select>
+                        <span class="detail-stage-indicator"><span id="detail-stage-age"></span> · <button type="button" id="detail-view-history" class="detail-history-link">View history</button></span>
                         <button class="btn-secondary" id="detail-edit-btn">Edit</button>
                         <button class="btn-danger" id="detail-delete-btn">Delete</button>
                     </div>
@@ -2073,10 +2080,16 @@
                             <div class="ob-shortcut"><kbd>E</kbd> Search &amp; edit a job</div>
                             <div class="ob-shortcut"><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> Switch tabs in job modal
                             </div>
+                            <div class="ob-shortcut"><kbd>D</kbd> / <kbd>H</kbd> Details / History in an open job
+                            </div>
                             <div class="ob-shortcut"><kbd>/</kbd> Focus search</div>
                             <div class="ob-shortcut"><kbd>Esc</kbd> Close modal</div>
                         </div>
                         <div class="ob-features">
+                            <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Stage history</strong>
+                                    — open a job and choose History for a full-width timeline, newest changes first,
+                                    and time in each stage. Details keeps a short time-in-stage indicator with
+                                    a View history link. Older stages may show an unknown start.</span></div>
                             <div class="ob-feature"><span class="ob-feature-dot"></span><span><strong>Pin jobs</strong>
                                     — 📍 pin any card to keep it at the top; deadline urgency glows
                                     red/orange/yellow</span></div>

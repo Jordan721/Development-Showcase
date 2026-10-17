@@ -152,7 +152,7 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 
 **Each job stores:** role, company, department, location, URL, job source, salary (auto-formatted), seniority, job type, work type, date posted, date applied, application deadline, stage, resume used (linked to Resume Vault), benefits (parsed into chips), company notes, job description, cover letter, personal notes.
 
-- **Stage history** — job details show a timestamped list of stages, recorded automatically when adding jobs or changing stages through the board, table, bulk actions, action queue, or edit form. Unchanged saves and queue reordering do not add entries; undoing a queue move restores its previous history. Existing jobs and CSV imports receive a baseline labeled “start unknown,” rather than invented past dates. History is retained in JSON backups; CSV does not include it.
+- **Stage history** — open a job and choose **History**, or use **View history** beside the stage selector. The full-width timeline shows newest changes first, colored stage markers, time spent in each stage, and a current-stage summary. Hover a date for its exact timestamp. **Details** keeps a compact time-in-stage indicator; matched skills and skill gaps appear only on Details. Tab changes use a short fade and height transition that respects reduced-motion preferences. Stages are recorded automatically when adding jobs or changing stages through the board, table, bulk actions, action queue, or edit form. Unchanged saves and queue reordering do not add entries; undoing a queue move restores its previous history. Existing jobs and CSV imports receive a baseline labeled “start unknown,” with unknown durations rather than invented past dates. History is retained in JSON backups; CSV does not include it.
 - **Benefits parsing** — recognizes common retirement spellings such as `401(k)`, bundled medical/dental/vision coverage, and paid holidays. Specific PTO and bonus matches suppress overlapping generic badges. Explicit exclusions are filtered out, and equity compensation is distinguished from common DEI/accounting wording. Parsing is rule-based; the original benefits text remains available through View all.
 
 **Add/Edit form tabs:** Details · Job Info · Application
@@ -283,6 +283,8 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 | `/` | Focus the board search bar |
 | `Escape` | Close any open modal |
 | `1` / `2` / `3` | Switch tabs in Add / Edit Job modal |
+| `D` / `H` | Switch to Details / History in an open job detail panel; inactive while typing or when another modal is open |
+| `←` / `→`, `Home` / `End` | With a job detail tab focused, switch tabs or go to the first / last tab |
 | `←` / `→` | Navigate onboarding steps (while guide is open) |
 
 **Command palette** — search views, trigger actions, or jump to any job by name or company. Navigate with `↑ ↓`, confirm with `Enter`.

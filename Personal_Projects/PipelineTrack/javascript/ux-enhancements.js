@@ -26,6 +26,17 @@ function initKeyboardShortcuts() {
     const typing = ['input', 'textarea', 'select'].includes(tag) || (document.activeElement && document.activeElement.isContentEditable);
     if (typing) return;
 
+    // D / H → job details / history, only when no other modal covers it.
+    const detailShortcut = e.key.toLowerCase();
+    if (['d', 'h'].includes(detailShortcut) && !e.defaultPrevented && !e.ctrlKey && !e.metaKey && !e.altKey && !e.isComposing && !e.repeat) {
+      const detailModal = document.getElementById('modal-detail');
+      if (detailModal && detailModal.classList.contains('open') && !document.querySelector('.modal-overlay.open:not(#modal-detail)')) {
+        e.preventDefault();
+        selectJobDetailTab(detailShortcut === 'd' ? 'details' : 'history', true);
+        return;
+      }
+    }
+
     // 1 / 2 / 3 → switch job modal tabs when modal is open
     if (['1', '2', '3'].includes(e.key)) {
       const jobModal = document.getElementById('modal-job');
