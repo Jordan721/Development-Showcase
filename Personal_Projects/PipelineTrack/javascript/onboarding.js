@@ -37,10 +37,6 @@
     const fill = document.getElementById('onboarding-progress-fill');
     if (fill) fill.style.width = (currentStep / TOTAL_STEPS * 100) + '%';
 
-    // Widen modal on step 4 to fit 2-col features grid
-    const modal = document.querySelector('.onboarding-modal');
-    if (modal) modal.classList.toggle('ob-step4-active', currentStep === TOTAL_STEPS);
-
     // Animate kbd keys on step 4
     if (currentStep === TOTAL_STEPS) {
       const keys = document.querySelectorAll('.onboarding-step[data-step="4"] kbd');
