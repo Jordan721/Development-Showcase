@@ -1414,7 +1414,7 @@ function openJobDetail(id) {
   // Date posted
   const datePostedRow = document.getElementById('detail-date-posted-row');
   if (job.datePosted) {
-    document.getElementById('detail-date-posted').textContent = formatDate(job.datePosted + 'T12:00:00');
+    document.getElementById('detail-date-posted').textContent = `${job.datePostedApproximate ? 'On or before ' : ''}${formatDate(job.datePosted + 'T12:00:00')}${job.datePostedApproximate ? ' (posting age was approximate)' : ''}`;
     datePostedRow.style.display = '';
   } else {
     datePostedRow.style.display = 'none';
@@ -1814,9 +1814,8 @@ function parseJobListing(text) {
   }
 
   // Salary
-  const salaryMatch = text.match(/(?:salary|pay|compensation|rate|package)\s*[:\-]?\s*([\$£€][\d,. ]+(?:k|K)?(?:\s*[-–—to]+\s*[\$£€]?[\d,. ]+(?:k|K)?)?(?:\s*(?:USD|GBP|EUR|per\s*year|\/yr|annually))?)/i) ||
-    text.match(/([\$£€][\d,.]+\s*(?:k|K)?\s*[-–—]\s*[\$£€]?[\d,.]+\s*(?:k|K)?)/);
-  if (salaryMatch) result.salary = salaryMatch[1].trim();
+  const extractedSalary = extractSalaryFromPosting(text);
+  if (extractedSalary) result.salary = extractedSalary;
 
   // Work Type
   if (/\b(fully\s+remote|100%\s+remote|work\s+from\s+home|wfh)\b/i.test(text)) result.workType = 'Remote';
@@ -2228,10 +2227,45 @@ function updateJobDuplicateNotice() {
   });
 }
 
+function updateSalaryPreview(detectPeriod = false) {
+  const input = document.getElementById('job-salary');
+  const select = document.getElementById('job-pay-period');
+  const split = splitSalaryAndPayPeriod(input.value.trim());
+  if (detectPeriod && input.value.trim() && (!split.payPeriodInferred || select.dataset.manual !== 'true')) select.value = split.payPeriod;
+  document.getElementById('job-salary-preview').textContent = input.value.trim()
+    ? `Preview: ${formatSalaryWithPayPeriod(input.value.trim(), select.value)}${split.payPeriodInferred && select.dataset.manual !== 'true' ? ' · Pay period estimated; confirm above.' : ''}`
+    : 'Enter an amount or range. Add /hr or per year to set the pay period.';
+}
+
+function updateJobFormSteps() {
+  const tabs = [...document.querySelectorAll('#job-modal-tabs .modal-tab-btn')];
+  const index = tabs.findIndex(tab => tab.classList.contains('active'));
+  document.getElementById('job-form-prev').hidden = index <= 0;
+  document.getElementById('job-form-next').hidden = index === tabs.length - 1;
+  document.getElementById('job-form-next').textContent = index === 0 ? 'Next: description' : 'Next: application';
+}
+
+function previewJobDate(id) {
+  const input = document.getElementById(id);
+  const result = parseJobDate(input.value);
+  const future = result && result.date > jobDateISO(new Date());
+  const invalid = !result || (id !== 'job-deadline' && future) || (id !== 'job-date-posted' && result.approximate);
+  input.setAttribute('aria-invalid', String(invalid));
+  document.getElementById(`${id}-hint`).textContent = invalid
+    ? 'Use YYYY-MM-DD, today, or 28 days ago.' + (id === 'job-deadline' ? ' You can also use in 7 days.' : ' Future dates are not allowed.') + (id !== 'job-date-posted' ? ' Use a specific day, without +.' : '')
+    : !result.date ? 'Optional — leave blank if unknown.'
+    : `${result.approximate ? 'On or before ' : 'Date: '}${formatDate(result.date + 'T12:00:00')}${result.approximate ? ' (exact posting date unknown)' : ''}`;
+  const picker = document.querySelector(`.job-date-picker[data-date-target="${id}"]`);
+  if (picker) picker.value = result && !invalid ? result.date : '';
+  return invalid ? null : result;
+}
+
 function openAddJobModal(editId = null, defaults = {}) {
   const job = editId ? state.jobs.find(j => j.id === editId) : null;
 
   document.getElementById('modal-job-title').textContent = job ? 'Edit Job' : 'Add New Job';
+  document.getElementById('job-form-subtitle').textContent = job ? 'Update the details you know. Your saved information is ready below.' : 'Start with role and company. Everything else can wait.';
+  document.getElementById('save-job-btn').textContent = job ? 'Save changes' : 'Add job';
   document.getElementById('job-modal-back-btn').style.display = editId ? '' : 'none';
   document.getElementById('job-edit-id').value = editId || '';
   document.getElementById('job-role').value = job ? job.role || '' : '';
@@ -2267,6 +2301,8 @@ function openAddJobModal(editId = null, defaults = {}) {
   const salaryPeriodSelect = document.getElementById('job-pay-period');
   salaryInput.value = salaryParts.salary;
   salaryPeriodSelect.value = salaryParts.payPeriod;
+  salaryPeriodSelect.dataset.manual = job ? 'true' : 'false';
+  updateSalaryPreview();
 
   const salaryLabel = salaryInput.closest('.form-group').querySelector('.form-label');
   const existingSalaryTag = salaryLabel ? salaryLabel.querySelector('.inferred-tag') : null;
@@ -2285,9 +2321,11 @@ function openAddJobModal(editId = null, defaults = {}) {
       once: true
     });
   }
-  document.getElementById('job-date-posted').value = job ? job.datePosted || '' : '';
+  document.getElementById('job-date-posted').value = job && job.datePosted ? `${job.datePostedApproximate ? 'On or before ' : ''}${job.datePosted}` : '';
   document.getElementById('job-date-applied').value = job ? job.dateApplied || '' : '';
   document.getElementById('job-deadline').value = job ? job.deadline || '' : '';
+  ['job-date-posted', 'job-date-applied', 'job-deadline'].forEach(previewJobDate);
+  document.querySelector('.job-benefits-source').open = false;
   document.getElementById('job-stage').value = job ? job.stage || 'saved' : defaults.stage || 'saved';
   document.getElementById('job-seniority').value = job ? job.seniority || '' : '';
   document.getElementById('job-type').value = job ? job.jobType || '' : '';
@@ -2356,6 +2394,7 @@ function openAddJobModal(editId = null, defaults = {}) {
   // Reset to first tab
   document.querySelectorAll('#job-modal-tabs .modal-tab-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
   document.querySelectorAll('#modal-job .modal-tab-panel').forEach((p, i) => p.classList.toggle('active', i === 0));
+  updateJobFormSteps();
 
   updateJobDuplicateNotice();
   document.querySelector('#modal-job .modal-body').scrollTop = 0;
@@ -2375,6 +2414,16 @@ function saveJob() {
 
   const editId = document.getElementById('job-edit-id').value;
   const description = document.getElementById('job-description').value;
+  const dates = {};
+  for (const id of ['job-date-posted', 'job-date-applied', 'job-deadline']) {
+    dates[id] = previewJobDate(id);
+    if (!dates[id]) {
+      document.querySelector('#job-modal-tabs [data-tab="application"]').click();
+      document.getElementById(id).focus();
+      toast('Review the highlighted date before saving.', 'error');
+      return;
+    }
+  }
 
   const typedDept = document.getElementById('job-department').value.trim();
   const inferredDept = !typedDept ? inferDepartment(role, description) : null;
@@ -2392,9 +2441,10 @@ function saveJob() {
     url: document.getElementById('job-url').value.trim(),
     salary: formatSalaryWithPayPeriod(document.getElementById('job-salary').value.trim(), document.getElementById('job-pay-period').value),
     salaryPayPeriodInferred: false,
-    datePosted: document.getElementById('job-date-posted').value,
-    dateApplied: document.getElementById('job-date-applied').value,
-    deadline: document.getElementById('job-deadline').value,
+    datePosted: dates['job-date-posted'].date,
+    datePostedApproximate: dates['job-date-posted'].approximate,
+    dateApplied: dates['job-date-applied'].date,
+    deadline: dates['job-deadline'].date,
     seniority: document.getElementById('job-seniority').value,
     jobType: document.getElementById('job-type').value,
     duration: isDurationJobType(document.getElementById('job-type').value) ? document.getElementById('job-duration').value.trim() : '',

@@ -295,6 +295,7 @@ function inferPayPeriodFromSalary(raw) {
     };
   }
 
+  raw = formatSalary(raw);
   const values = [];
   raw.replace(/(?:[$£€]\s*)?(\d+(?:,\d{3})*(?:\.\d+)?)\s*([kK])?/g, (_, amount, suffix) => {
     const n = Number(amount.replace(/,/g, ''));
@@ -333,15 +334,15 @@ function splitSalaryAndPayPeriod(raw) {
 
   const periodPatterns = [{
       value: 'hour',
-      regex: /(?:\/\s*|\bper\s+|\b)(?:hour|hourly|hr|hrs)\b/i
+      regex: /(?:\/\s*(?:h|hr|hrs|hour)|\b(?:per\s+)?(?:hours?|hourly|hrs?))\b/i
     },
     {
       value: 'day',
-      regex: /(?:\/\s*|\bper\s+|\b)(?:day|daily)\b/i
+      regex: /(?:\/\s*d|\b(?:per\s+)?(?:day|daily))\b/i
     },
     {
       value: 'week',
-      regex: /(?:\/\s*|\bper\s+|\b)(?:week|weekly|wk)\b/i
+      regex: /(?:\/\s*w|\b(?:per\s+)?(?:week|weekly|wk))\b/i
     },
     {
       value: 'month',
@@ -349,14 +350,15 @@ function splitSalaryAndPayPeriod(raw) {
     },
     {
       value: 'year',
-      regex: /(?:\/\s*|\bper\s+|\b)(?:year|yearly|annual|annually|yr)\b/i
+      regex: /(?:\/\s*y|\bp\.?a\.?|\b(?:per\s+)?(?:year|yearly|annual|annually|yr))\b/i
     }
   ];
   const match = periodPatterns.find(period => period.regex.test(raw));
   if (!match) return fallback;
 
   const salary = raw
-    .replace(/\s*(?:\/\s*|per\s+)?(?:hour|hourly|hr|hrs|day|daily|week|weekly|wk|month|monthly|mo|year|yearly|annual|annually|yr)\b\.?/ig, '')
+    .replace(match.regex, '')
+    .replace(/\s*\/\s*$/, '')
     .replace(/\s{2,}/g, ' ')
     .trim();
 
@@ -368,47 +370,64 @@ function splitSalaryAndPayPeriod(raw) {
 }
 
 function formatSalaryWithPayPeriod(raw, period) {
+  if (typeof raw === 'string' && !/\d/.test(raw)) return raw.trim();
   const split = splitSalaryAndPayPeriod(raw);
   const formattedSalary = formatSalary(split.salary).trim();
   if (!formattedSalary) return '';
-  const selectedPeriod = period || split.payPeriod;
+  const selectedPeriod = !split.payPeriodInferred && split.salary !== raw ? split.payPeriod : period || split.payPeriod;
   const label = getPayPeriodLabel(selectedPeriod);
   return label ? `${formattedSalary} / ${label}` : formattedSalary;
 }
 // Converts salary input like "80k", "10k-100k", "150000" → "$80,000", "$10,000 – $100,000"
 function formatSalary(raw) {
   if (!raw || typeof raw !== 'string') return raw;
+  const text = raw.trim().replace(/[\u2010-\u2015\u2212]/g, '-').replace(/\u00a0/g, ' ')
+    .replace(/^(?:(?:base\s+)?(?:salary|pay|compensation)(?:\s+range)?|rate)\s*:\s*/i, '');
+  const amount = '(?:(USD|CAD|AUD|GBP|EUR)\\s*|([$£€])\\s*)?((?:\\d{1,3}(?:,\\d{3})+|\\d+)(?:\\.\\d{1,2})?)\\s*([km]\\b)?';
+  const expression = new RegExp('^(?:(up to|from|starting at|at least|about|approximately)\\s+)?' + amount + '(?:\\s*(?:-|to)\\s*' + amount + ')?([\\s\\S]*)$', 'i');
+  const match = text.match(expression);
+  if (!match) return raw.trim();
+  const [, qualifier, codeA, symbolA, numberA, scaleA, codeB, symbolB, numberB, scaleB, tail] = match;
+  // Do not convert malformed numbers, mixed currencies, or partial ranges.
+  if (/^[\d,.]|^\s*(?:-|to\b)/i.test(tail) || (codeA && codeB && codeA.toUpperCase() !== codeB.toUpperCase()) || (symbolA && symbolB && symbolA !== symbolB)) return raw.trim();
+  const trailingCurrency = tail.match(/^\s*(USD|CAD|AUD|GBP|EUR)\b/i);
+  const currency = (codeA || codeB || (trailingCurrency && trailingCurrency[1]) || '').toUpperCase();
+  if (trailingCurrency && (codeA || codeB) && trailingCurrency[1].toUpperCase() !== currency) return raw.trim();
+  const suffix = trailingCurrency ? tail.slice(trailingCurrency[0].length) : tail;
+  const symbol = symbolA || symbolB;
+  if (symbol && currency && ({ USD: '$', CAD: '$', AUD: '$', GBP: '£', EUR: '€' })[currency] !== symbol) return raw.trim();
+  const prefix = currency ? `${currency} ` : symbol || '$';
+  let a = Number(numberA.replace(/,/g, ''));
+  let b = numberB ? Number(numberB.replace(/,/g, '')) : null;
+  // A shared suffix belongs to both endpoints in shorthand like 80-100k.
+  const sharedA = scaleA || (a < 1000 && scaleB ? scaleB : '');
+  const sharedB = scaleB || (b !== null && b < 1000 && scaleA ? scaleA : '');
+  const multiplier = scale => /k/i.test(scale) ? 1000 : /m/i.test(scale) ? 1000000 : 1;
+  a *= multiplier(sharedA);
+  if (b !== null) b *= multiplier(sharedB);
+  if (!(a > 0) || (b !== null && (!(b > 0) || b < a))) return raw.trim();
+  const fmt = value => prefix + value.toLocaleString('en-US', { minimumFractionDigits: Number.isInteger(value) ? 0 : 2, maximumFractionDigits: 2 });
+  return `${qualifier ? qualifier + ' ' : ''}${fmt(a)}${b !== null ? ' – ' + fmt(b) : ''}${suffix.trim() ? ' ' + suffix.trim() : ''}`;
+}
 
-  function parseAmt(s) {
-    s = s.trim().replace(/^\$/, '').replace(/,/g, '');
-    const kMatch = s.match(/^([\d.]+)\s*[kK]$/);
-    if (kMatch) return Math.round(parseFloat(kMatch[1]) * 1000);
-    const n = parseFloat(s);
-    return (!isNaN(n) && n > 0) ? Math.round(n) : null;
+function extractSalaryFromPosting(text) {
+  const money = '(?:(?:USD|CAD|AUD|GBP|EUR)\\s*|[$£€]\\s*)?\\d[\\d,]*(?:\\.\\d{1,2})?\\s*[km]?\\b';
+  const period = '(?:(?:/|per\\s+)\\s*(?:hours?|hrs?|h|days?|d|weeks?|wk|w|months?|mo|years?|yrs?|y)|hourly|daily|weekly|monthly|annually|annual|yearly)\\b';
+  const candidate = new RegExp('(?:(?:up to|from|starting at|at least)\\s+)?' + money + '(?:\\s*(?:[-–—]|to)\\s*' + money + ')?(?:\\s*(?:USD|CAD|AUD|GBP|EUR))?(?:\\s*' + period + ')?', 'gi');
+  const lines = String(text || '').split('\n');
+  const labeled = lines.filter(line => /\b(?:base\s+salary|salary|pay\s+range|compensation|hourly\s+rate|pay\s+rate)\b/i.test(line));
+  for (const original of [...labeled, ...lines.filter(line => /[$£€]|\b(?:USD|CAD|AUD|GBP|EUR)\b/i.test(line))]) {
+    const line = labeled.includes(original) ? original.replace(/^[\s\S]*?\b(?:base\s+salary|salary|pay\s+range|compensation|hourly\s+rate|pay\s+rate)\b/i, '') : original;
+    for (const match of line.matchAll(candidate)) {
+    if (!/[$£€]|\d\s*[km]\b|\b(?:USD|CAD|AUD|GBP|EUR)\b/i.test(match[0]) && !labeled.includes(original)) continue;
+    // Keep compensation extras without pulling the remainder of the listing into the field.
+    const after = line.slice(match.index + match[0].length);
+    if (/^\s*(?:%|years?\b|months?\s+(?:of\s+)?experience\b)/i.test(after)) continue;
+    const extra = after.match(/^\s*(\+\s*(?:[\d$£€.,k%]+\s*)?(?:bonus|equity|commission)(?:\s*(?:and|\+)\s*(?:bonus|equity|commission))?)/i);
+    return match[0].trim() + (extra ? ' ' + extra[1].trim() : '');
+    }
   }
-
-  function fmt(n) {
-    return '$' + n.toLocaleString('en-US');
-  }
-
-  // Range: two monetary values separated by -, –, or "to"
-  const rangeMatch = raw.match(/^(\$?[\d,]+(?:\.\d+)?\s*[kK]?)\s*(?:[-–—]|to)\s*(\$?[\d,]+(?:\.\d+)?\s*[kK]?)([\s\S]*)$/i);
-  if (rangeMatch) {
-    const a = parseAmt(rangeMatch[1]);
-    const b = parseAmt(rangeMatch[2]);
-    const suffix = rangeMatch[3].trim();
-    if (a && b) return fmt(a) + ' – ' + fmt(b) + (suffix ? ' ' + suffix : '');
-  }
-
-  // Single value with optional suffix (e.g. "80k/yr", "95000 per year")
-  const singleMatch = raw.match(/^(\$?[\d,]+(?:\.\d+)?\s*[kK]?)([\s\S]*)$/i);
-  if (singleMatch) {
-    const n = parseAmt(singleMatch[1]);
-    const suffix = singleMatch[2].trim();
-    if (n) return fmt(n) + (suffix ? ' ' + suffix : '');
-  }
-
-  return raw;
+  return '';
 }
 
 function formatDate(iso) {
@@ -482,6 +501,38 @@ function toast(msg, type = '', opts = {}) {
   el._t = setTimeout(() => {
     el.className = 'toast';
   }, opts && opts.undo ? 5000 : 3000);
+}
+
+function jobDateISO(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function parseJobDate(value, reference = new Date()) {
+  const text = String(value || '').trim().toLowerCase();
+  if (!text) return { date: '', approximate: false };
+  const base = new Date(reference.getFullYear(), reference.getMonth(), reference.getDate(), 12);
+  const exact = text.match(/^(on or before\s+)?(\d{4})-(\d{2})-(\d{2})$/);
+  if (exact) {
+    const date = new Date(Number(exact[2]), Number(exact[3]) - 1, Number(exact[4]), 12);
+    if (date.getFullYear() !== Number(exact[2]) || date.getMonth() !== Number(exact[3]) - 1 || date.getDate() !== Number(exact[4])) return null;
+    return { date: jobDateISO(date), approximate: !!exact[1] };
+  }
+  if (['today', 'yesterday', 'tomorrow'].includes(text)) {
+    base.setDate(base.getDate() + (text === 'yesterday' ? -1 : text === 'tomorrow' ? 1 : 0));
+    return { date: jobDateISO(base), approximate: false };
+  }
+  const relative = text.match(/^(?:posted\s+)?(in\s+)?(\d{1,4})\s*(\+)?\s*(days?|d|weeks?|w|months?|mo)(?:\s+(ago))?$/);
+  if (!relative || (relative[1] && (relative[3] || relative[5]))) return null;
+  const count = Number(relative[2]);
+  const direction = relative[1] ? 1 : -1;
+  if (/^(?:months?|mo)$/.test(relative[4])) {
+    const day = base.getDate();
+    base.setDate(1);
+    base.setMonth(base.getMonth() + direction * count);
+    const last = new Date(base.getFullYear(), base.getMonth() + 1, 0).getDate();
+    base.setDate(Math.min(day, last));
+  } else base.setDate(base.getDate() + direction * count * (/^(?:weeks?|w)$/.test(relative[4]) ? 7 : 1));
+  return { date: jobDateISO(base), approximate: !!relative[3] };
 }
 
 function openModal(id) {

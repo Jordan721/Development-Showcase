@@ -2291,6 +2291,99 @@
   color: var(--accent);
 }
 
+.job-section-intro {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+.job-dates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  padding: 18px;
+  margin: 8px 0 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.job-dates-grid .form-group {
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.job-dates-grid .label-hint {
+  display: block;
+  min-height: 38px;
+  line-height: 1.5;
+  margin: 8px 0;
+}
+
+.job-calendar-label {
+  display: grid;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.job-date-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+#modal-job .job-flex-date[aria-invalid="true"] {
+  border-color: var(--danger, #df6666);
+}
+
+#modal-job .job-flex-date[aria-invalid="true"]+.label-hint {
+  color: var(--danger, #df6666);
+}
+
+.job-benefits-layout {
+  display: grid;
+  gap: 16px;
+}
+
+.job-benefits-source {
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.job-benefits-source summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.job-benefits-source[open] summary {
+  margin-bottom: 16px;
+}
+
+.job-benefits-source .form-label {
+  margin-top: 12px;
+}
+
+#benefits-scan-status {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+#modal-job .modal-footer {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#modal-job .modal-footer [hidden] {
+  display: none;
+}
+
 .modal-body {
   padding: 20px 24px;
   overflow-y: auto;
@@ -5711,6 +5804,204 @@
 .job-optional-section>.form-group {
   margin-left: 16px;
   margin-right: 16px;
+}
+
+#job-company-extras {
+  overflow: hidden;
+}
+
+#job-company-extras>.job-extras-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px;
+  list-style: none;
+}
+
+#job-company-extras>.job-extras-summary::-webkit-details-marker {
+  display: none;
+}
+
+#job-company-extras>.job-extras-summary span {
+  float: none;
+}
+
+#job-company-extras>.job-extras-summary:hover {
+  background: var(--hover);
+}
+
+#job-company-extras[open]>.job-extras-summary {
+  margin-bottom: 0;
+}
+
+.job-extras-icon {
+  flex-shrink: 0;
+  box-sizing: content-box;
+  padding: 10px;
+  border-radius: 12px;
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+#job-company-extras .job-extras-heading {
+  display: grid;
+  gap: 5px;
+  flex: 1;
+  min-width: 0;
+}
+
+.job-extras-heading strong {
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.job-extras-heading small {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+#job-company-extras .job-extras-optional {
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 10px;
+}
+
+.job-extras-chevron {
+  flex-shrink: 0;
+  color: var(--text-muted);
+}
+
+#job-company-extras[open] .job-extras-chevron {
+  transform: rotate(180deg);
+}
+
+#job-company-extras .job-benefits-layout {
+  gap: 14px;
+  padding: 18px;
+}
+
+#job-company-extras .job-extras-card {
+  margin: 0;
+  min-width: 0;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.job-extras-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+#job-company-extras .job-extras-card>.form-label,
+#job-company-extras .job-extras-card-heading .form-label {
+  margin: 0;
+  color: var(--text);
+}
+
+.job-extras-help {
+  margin: 8px 0 14px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+#job-company-extras .text-area {
+  display: block;
+  resize: vertical;
+  min-height: 100px;
+}
+
+#job-company-extras #benefits-scan-status {
+  margin: 10px 0 0;
+  padding-left: 10px;
+  border-left: 2px solid var(--accent);
+}
+
+#job-company-extras .job-benefits-source {
+  margin-top: 18px;
+  background: var(--card);
+}
+
+#job-company-extras .job-benefits-source summary {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.job-benefits-link-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.job-benefits-link-row .text-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.job-benefits-link-row button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.job-benefits-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 6px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.job-benefits-divider::before,
+.job-benefits-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.job-benefits-source-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+#job-company-extras .job-benefits-source summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+  border-radius: 3px;
+}
+
+@media (max-width: 560px) {
+  #job-company-extras>.job-extras-summary {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  #job-company-extras .job-extras-optional {
+    display: none;
+  }
+
+  #job-company-extras .job-benefits-layout {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  #job-company-extras .job-extras-card {
+    padding: 14px;
+  }
+
+  .job-benefits-link-row {
+    flex-direction: column;
+  }
 }
 
 .job-duplicate-heading {

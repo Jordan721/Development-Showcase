@@ -87,7 +87,7 @@
             <a href="#" class="nav-link" data-view="resume">
                 <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24">
                         <path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6M8 13h8M8 17h5" />
-                        </svg></span> Resume Hub
+                    </svg></span> Resume Hub
             </a>
             <a href="#" class="nav-link" data-view="learning">
                 <span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24">
@@ -105,14 +105,17 @@
                 <p>Big moves start with small steps.</p>
             </div>
             <a href="../../index.html" class="back-link">
-                <span class="footer-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 5-7 7 7 7M5 12h14" /></svg></span>
+                <span class="footer-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24">
+                        <path d="m12 5-7 7 7 7M5 12h14" /></svg></span>
                 <span>Back to Showcase</span>
             </a>
             <a href="https://github.com/jordan721/Development-Showcase/blob/main/Personal_Projects/PipelineTrack/README.md"
                 class="back-link" target="_blank" rel="noopener">
-                <span class="footer-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v15M12 5C9 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-6-1-9 1Z" /></svg></span>
+                <span class="footer-link-icon" aria-hidden="true"><svg viewBox="0 0 24 24">
+                        <path d="M12 5v15M12 5C9 3 5 3 3 4v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-2-1-6-1-9 1Z" /></svg></span>
                 <span>Documentation</span>
-                <svg class="footer-link-external" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10" /></svg>
+                <svg class="footer-link-external" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M7 17 17 7M7 7h10v10" /></svg>
             </a>
         </div>
     </aside>
@@ -318,8 +321,8 @@
                 <div class="layout-toggle">
                     <button class="layout-btn" id="layout-btn-columns" data-layout="columns"
                         title="Column view">⊞</button>
-                    <button class="layout-btn" id="layout-btn-actions" data-layout="actions"
-                        title="Action Queue" aria-label="Action Queue">☑</button>
+                    <button class="layout-btn" id="layout-btn-actions" data-layout="actions" title="Action Queue"
+                        aria-label="Action Queue">☑</button>
                     <button class="layout-btn" id="layout-btn-table" data-layout="table" title="Table view">≡</button>
                     <button class="layout-btn" id="layout-btn-timeline" data-layout="timeline" title="Timeline view">
                         <svg width="15" height="12" viewBox="0 0 15 12" fill="currentColor" aria-hidden="true">
@@ -470,7 +473,7 @@
                             placeholder="Paste skills separated by commas or new lines&#10;e.g. React, TypeScript, Node.js, PostgreSQL"></textarea>
                         <div class="bulk-skill-actions">
                             <button class="btn-ghost" id="bulk-skill-cancel">Cancel</button>
-                        <button class="btn-primary" id="bulk-skill-add">Review skills</button>
+                            <button class="btn-primary" id="bulk-skill-add">Review skills</button>
                         </div>
                     </div>
                     <div class="skill-filter-row">
@@ -729,7 +732,8 @@
                 </div>
                 <div class="view-hero-content">
                     <div class="view-hero-title">Learning Hub</div>
-                    <div class="view-hero-sub">Turn skill gaps in your active job search into a focused learning plan.</div>
+                    <div class="view-hero-sub">Turn skill gaps in your active job search into a focused learning plan.
+                    </div>
                 </div>
             </div>
             <br>
@@ -773,7 +777,12 @@
                 <div class="resume-section-title">Resume Parser</div>
                 <p class="resume-section-desc">Upload or paste your resume, review the detected skills and sections,
                     then compare it with a tracked job and plan what to learn next.</p>
-                <ol class="career-steps" aria-label="Resume to learning workflow"><li>01 <span>Scan your resume</span></li><li>02 <span>Review your skills</span></li><li>03 <span>Compare a job</span></li><li>04 <span>Plan your learning</span></li></ol>
+                <ol class="career-steps" aria-label="Resume to learning workflow">
+                    <li>01 <span>Scan your resume</span></li>
+                    <li>02 <span>Review your skills</span></li>
+                    <li>03 <span>Compare a job</span></li>
+                    <li>04 <span>Plan your learning</span></li>
+                </ol>
                 <div class="resume-parser-layout">
                     <div class="resume-input-col">
                         <div class="file-drop-zone" id="resume-drop-zone">
@@ -786,7 +795,8 @@
                                 style="font-size:12px;padding:6px 16px;margin-top:8px">Browse Files</button>
                         </div>
                         <div class="resume-divider"><span>or paste text below</span></div>
-                        <label class="form-label" for="resume-text">Resume text · review and edit the extracted text</label>
+                        <label class="form-label" for="resume-text">Resume text · review and edit the extracted
+                            text</label>
                         <textarea class="text-area" id="resume-text" rows="12"
                             placeholder="Paste your resume text here — skills section, experience, everything…"></textarea>
                         <button class="btn-primary" id="parse-resume-btn" style="margin-top:10px">Scan for
@@ -938,7 +948,8 @@
             </div>
             <div class="cal-workspace">
                 <div class="cal-calendar-panel">
-                    <p class="cal-drag-hint">In Month or Week, drag a card to another day to change its date. Undo is available after moving.</p>
+                    <p class="cal-drag-hint">In Month or Week, drag a card to another day to change its date. Undo is
+                        available after moving.</p>
                     <div id="cal-view-body"></div>
                 </div>
                 <aside class="cal-sidebar" aria-label="Upcoming agenda and recent jobs">
@@ -947,7 +958,9 @@
                         <div id="cal-upcoming-list"></div>
                     </section>
                     <section class="cal-recent-panel">
-                        <div class="cal-recent-heading"><h2>Recent Jobs</h2><span>LAST 5 ADDED</span></div>
+                        <div class="cal-recent-heading">
+                            <h2>Recent Jobs</h2><span>LAST 5 ADDED</span>
+                        </div>
                         <div id="cal-recent-jobs"></div>
                     </section>
                 </aside>
@@ -994,7 +1007,8 @@
                 </div>
             </div>
             <div class="contacts-stat-strip" id="contacts-stat-strip"></div>
-            <section class="network-attention" id="network-attention" aria-label="Follow-ups needing attention"></section>
+            <section class="network-attention" id="network-attention" aria-label="Follow-ups needing attention">
+            </section>
             <div class="contacts-grid" id="contacts-grid">
                 <p class="empty-msg">No contacts yet. Click <strong>+ Add Contact</strong> to get started.</p>
             </div>
@@ -1102,7 +1116,10 @@
                     <button class="goal-period-tab" data-goal-period="month">This Month</button>
                     <button class="goal-period-tab" data-goal-period="all">All Goals</button>
                 </div>
-                <div class="goals-hint">Stage goals count each job once per period when that stage is recorded, even if it moves on later. Responses count screenings, interviews, offers, or not-selected outcomes. Existing stages with unknown dates are excluded. Jobs researched and contacts use their date added.</div>
+                <div class="goals-hint">Stage goals count each job once per period when that stage is recorded, even if
+                    it moves on later. Responses count screenings, interviews, offers, or not-selected outcomes.
+                    Existing stages with unknown dates are excluded. Jobs researched and contacts use their date added.
+                </div>
             </div>
             <div class="goals-summary-strip" id="goals-summary-strip"></div>
             <div class="goals-grid" id="goals-grid"></div>
@@ -1130,15 +1147,19 @@
                     <button class="detail-back-btn" id="job-modal-back-btn" style="display:none">← Back</button>
                     <div>
                         <h2 class="modal-title" id="modal-job-title">Add New Job</h2>
-                        <p class="job-modal-subtitle">Start with the position. Add the details you have as you go.</p>
+                        <p class="job-modal-subtitle" id="job-form-subtitle">Start with role and company. Everything
+                            else can wait.</p>
                     </div>
                 </div>
                 <button class="modal-close" data-close="modal-job">✕</button>
             </div>
             <div class="modal-tabs" id="job-modal-tabs">
-                <button class="modal-tab-btn active" data-tab="details"><span class="tab-step">1</span>Details</button>
-                <button class="modal-tab-btn" data-tab="job-info"><span class="tab-step">2</span>Job Info</button>
-                <button class="modal-tab-btn" data-tab="application"><span class="tab-step">3</span>Application</button>
+                <button type="button" class="modal-tab-btn active" data-tab="details"><span
+                        class="tab-step">1</span>Position &amp; pay</button>
+                <button type="button" class="modal-tab-btn" data-tab="job-info"><span
+                        class="tab-step">2</span>Description &amp; benefits</button>
+                <button type="button" class="modal-tab-btn" data-tab="application"><span
+                        class="tab-step">3</span>Application &amp; dates</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="job-edit-id" />
@@ -1181,6 +1202,12 @@
                     </div>
                     <div id="job-duplicate-notice" class="job-duplicate-notice" role="status" aria-live="polite" hidden>
                     </div>
+                    <div class="form-group">
+                        <label class="form-label" for="job-url">Job posting link</label>
+                        <input type="url" class="text-input" id="job-url" placeholder="https://…" autocomplete="off" />
+                        <span class="label-hint">Keep the original listing handy. The source is detected from this
+                            link.</span>
+                    </div>
                     <div class="form-section-label">Work &amp; Pay</div>
                     <div class="form-row two-col">
                         <div class="form-group">
@@ -1189,10 +1216,11 @@
                                 autocomplete="off" />
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Salary / Pay Range</label>
+                            <label class="form-label" for="job-salary">Salary / Pay Range</label>
                             <div class="salary-input-row">
-                                <input type="text" class="text-input" id="job-salary" placeholder="e.g. $80k–$100k"
-                                    autocomplete="off" />
+                                <input type="text" class="text-input" id="job-salary"
+                                    placeholder="80–100k or $25.50–$32/hr" autocomplete="off"
+                                    aria-describedby="job-salary-preview" />
                                 <select class="select-input" id="job-pay-period" aria-label="Pay period">
                                     <option value="hour">Hourly</option>
                                     <option value="day">Daily</option>
@@ -1201,6 +1229,8 @@
                                     <option value="year" selected>Yearly</option>
                                 </select>
                             </div>
+                            <span class="label-hint" id="job-salary-preview" role="status" aria-live="polite">Enter an
+                                amount or range. Add /hr or per year to set the pay period.</span>
                         </div>
                     </div>
                     <div class="form-row three-col">
@@ -1270,25 +1300,59 @@
                             placeholder="Paste the full job description here…"></textarea>
                     </div>
                     <details class="job-optional-section" id="job-company-extras">
-                        <summary>Benefits &amp; company notes <span>Optional</span></summary>
-                        <div class="form-row two-col">
-                            <div class="form-group">
-                                <label class="form-label">Benefits</label>
+                        <summary class="job-extras-summary">
+                            <svg class="job-extras-icon" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="1.7" aria-hidden="true">
+                                <rect x="3" y="7" width="18" height="14" rx="3" />
+                                <path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 12h18M12 10v4" /></svg>
+                            <span class="job-extras-heading"><strong>Benefits &amp; company notes</strong><small>The
+                                    package, the perks, and your impressions.</small></span>
+                            <span class="job-extras-optional">Optional</span>
+                            <svg class="job-extras-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path d="m6 9 6 6 6-6" /></svg>
+                        </summary>
+                        <div class="job-benefits-layout">
+                            <div class="form-group job-extras-card">
+                                <div class="job-extras-card-heading">
+                                    <label class="form-label" for="job-benefits">Benefits &amp; perks</label>
+                                    <button type="button" class="btn-ghost btn-sm" id="scan-benefits-btn">Scan
+                                        description</button>
+                                </div>
+                                <p class="job-extras-help" id="job-benefits-help">Keep the details that matter:
+                                    coverage, time off, retirement, and more.</p>
                                 <textarea class="text-area" id="job-benefits" rows="4"
-                                    placeholder="e.g. Health insurance, 401k match, unlimited PTO, equity…"></textarea>
-                                <button type="button" class="btn-ghost" id="scan-benefits-btn">Scan description for benefits</button>
-                                <label class="form-label" for="benefits-source-url">Benefits page link</label>
-                                <input class="text-input" id="benefits-source-url" type="url" placeholder="https://company.com/benefits" />
-                                <button type="button" class="btn-ghost" id="scan-benefits-page-btn">Read benefits page</button>
-                                <label class="form-label" for="benefits-source-text">Or paste the benefits page text</label>
-                                <textarea class="text-area" id="benefits-source-text" rows="3" placeholder="If the website blocks access, copy its benefits text here."></textarea>
-                                <button type="button" class="btn-ghost" id="scan-benefits-text-btn">Scan page text</button>
-                                <p id="benefits-scan-status" role="status" aria-live="polite">Only listed benefits are extracted. Review before saving.</p>
+                                    aria-describedby="job-benefits-help benefits-scan-status"
+                                    placeholder="Health insurance, 401(k) match, 20 days PTO…"></textarea>
+                                <p id="benefits-scan-status" role="status" aria-live="polite">Only listed benefits are
+                                    extracted. Review before saving.</p>
+                                <details class="job-benefits-source">
+                                    <summary>Have a company benefits page?</summary>
+                                    <p class="job-extras-help">Read a link or paste the page text to add benefits with a
+                                        source.</p>
+                                    <label class="form-label" for="benefits-source-url">Benefits page link</label>
+                                    <div class="job-benefits-link-row">
+                                        <input class="text-input" id="benefits-source-url" type="url"
+                                            placeholder="https://company.com/benefits" />
+                                        <button type="button" class="btn-ghost" id="scan-benefits-page-btn">Read
+                                            page</button>
+                                    </div>
+                                    <div class="job-benefits-divider">or paste the text</div>
+                                    <label class="form-label" for="benefits-source-text">Benefits page text</label>
+                                    <textarea class="text-area" id="benefits-source-text" rows="3"
+                                        placeholder="Copy the benefits section here if the page cannot be read."></textarea>
+                                    <div class="job-benefits-source-actions"><button type="button"
+                                            class="btn-ghost btn-sm" id="scan-benefits-text-btn">Extract
+                                            benefits</button></div>
+                                </details>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Company Notes</label>
+                            <div class="form-group job-extras-card job-company-notes-card">
+                                <label class="form-label" for="job-company-notes">Company notes</label>
+                                <p class="job-extras-help" id="job-company-notes-help">A little context for when you
+                                    come back to this role.</p>
                                 <textarea class="text-area" id="job-company-notes" rows="4"
-                                    placeholder="Culture, size, funding, tech stack…"></textarea>
+                                    aria-describedby="job-company-notes-help"
+                                    placeholder="What stood out about the team? Culture, company size, funding, or questions to ask…"></textarea>
                             </div>
                         </div>
                     </details>
@@ -1296,11 +1360,9 @@
 
                 <!-- ── Tab: Application ── -->
                 <div class="modal-tab-panel" data-tab="application">
+                    <p class="job-section-intro">Track where you are in the process. Leave dates blank when you do not
+                        know them.</p>
                     <div class="form-section-label">Application Tracking</div>
-                    <div class="form-group">
-                        <label class="form-label" for="job-url">Job URL</label>
-                        <input type="url" class="text-input" id="job-url" placeholder="https://…" autocomplete="off" />
-                    </div>
                     <div class="form-row two-col">
                         <div class="form-group">
                             <label class="form-label" for="job-stage">Stage</label>
@@ -1338,18 +1400,49 @@
                             <span class="label-hint">Detected from the posting link. You can change it.</span>
                         </div>
                     </div>
-                    <div class="form-row three-col">
+                    <div class="job-dates-grid">
                         <div class="form-group">
                             <label class="form-label" for="job-date-posted">Date Posted</label>
-                            <input type="date" class="text-input" id="job-date-posted" />
+                            <input type="text" class="text-input job-flex-date" id="job-date-posted"
+                                placeholder="28 days ago or 30+ days" aria-describedby="job-date-posted-hint"
+                                autocomplete="off" />
+                            <span class="label-hint" id="job-date-posted-hint" aria-live="polite">Exact date or age of
+                                the listing. 30+ stays approximate.</span>
+                            <label class="job-calendar-label">Or pick a date <input type="date"
+                                    class="text-input job-date-picker" data-date-target="job-date-posted"
+                                    aria-label="Pick date posted" /></label>
+                            <div class="job-date-shortcuts"><button type="button" class="btn-ghost btn-sm"
+                                    data-date-value="today" data-date-target="job-date-posted">Today</button><button
+                                    type="button" class="btn-ghost btn-sm" data-date-value="7 days ago"
+                                    data-date-target="job-date-posted">7 days</button><button type="button"
+                                    class="btn-ghost btn-sm" data-date-value="30+ days ago"
+                                    data-date-target="job-date-posted">30+ days</button></div>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="job-date-applied">Date Applied</label>
-                            <input type="date" class="text-input" id="job-date-applied" />
+                            <input type="text" class="text-input job-flex-date" id="job-date-applied"
+                                placeholder="Today, 28 days ago, or YYYY-MM-DD" aria-describedby="job-date-applied-hint"
+                                autocomplete="off" />
+                            <span class="label-hint" id="job-date-applied-hint" aria-live="polite">When you submitted
+                                your application.</span>
+                            <label class="job-calendar-label">Or pick a date <input type="date"
+                                    class="text-input job-date-picker" data-date-target="job-date-applied"
+                                    aria-label="Pick date applied" /></label>
+                            <div class="job-date-shortcuts"><button type="button" class="btn-ghost btn-sm"
+                                    data-date-value="today" data-date-target="job-date-applied">Today</button><button
+                                    type="button" class="btn-ghost btn-sm" data-date-value="yesterday"
+                                    data-date-target="job-date-applied">Yesterday</button></div>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="job-deadline">Application Deadline</label>
-                            <input type="date" class="text-input" id="job-deadline" />
+                            <input type="text" class="text-input job-flex-date" id="job-deadline"
+                                placeholder="In 7 days or YYYY-MM-DD" aria-describedby="job-deadline-hint"
+                                autocomplete="off" />
+                            <span class="label-hint" id="job-deadline-hint" aria-live="polite">An exact date or time
+                                remaining, like in 2 weeks.</span>
+                            <label class="job-calendar-label">Or pick a date <input type="date"
+                                    class="text-input job-date-picker" data-date-target="job-deadline"
+                                    aria-label="Pick application deadline" /></label>
                         </div>
                     </div>
                     <div class="form-group">
@@ -1384,6 +1477,8 @@
             <div class="modal-footer">
                 <span class="job-footer-hint">Only role and company are required</span>
                 <button class="btn-ghost" data-close="modal-job">Cancel</button>
+                <button type="button" class="btn-ghost" id="job-form-prev" hidden>Back</button>
+                <button type="button" class="btn-ghost" id="job-form-next">Next: description</button>
                 <button class="btn-primary" id="save-job-btn">Save Job</button>
             </div>
         </div>
@@ -1449,93 +1544,100 @@
                 <!-- Right: info + notes -->
                 <div class="detail-right">
                     <div class="detail-tabs" role="tablist" aria-label="Job information">
-                        <button type="button" id="detail-tab-details" role="tab" aria-selected="true" aria-controls="detail-panel-details" aria-keyshortcuts="D" title="Details (D)">Details <kbd>D</kbd></button>
-                        <button type="button" id="detail-tab-history" role="tab" aria-selected="false" aria-controls="detail-panel-history" aria-keyshortcuts="H" title="History (H)" tabindex="-1">History <kbd>H</kbd></button>
+                        <button type="button" id="detail-tab-details" role="tab" aria-selected="true"
+                            aria-controls="detail-panel-details" aria-keyshortcuts="D" title="Details (D)">Details
+                            <kbd>D</kbd></button>
+                        <button type="button" id="detail-tab-history" role="tab" aria-selected="false"
+                            aria-controls="detail-panel-history" aria-keyshortcuts="H" title="History (H)"
+                            tabindex="-1">History <kbd>H</kbd></button>
                     </div>
                     <div id="detail-panel-details" role="tabpanel" aria-labelledby="detail-tab-details">
-                    <div class="detail-info-row">
-                        <span class="stage-badge" id="detail-stage-badge">Saved</span>
-                        <span class="seniority-badge" id="detail-seniority" style="display:none"></span>
-                        <span class="job-type-badge" id="detail-job-type" style="display:none"></span>
-                        <span class="work-type-badge" id="detail-work-type" style="display:none"></span>
-                        <a class="detail-link" id="detail-url" href="#" target="_blank" rel="noopener">View Posting
-                            ↗</a>
-                    </div>
-                    <div class="detail-meta-row" id="detail-department-row" style="display:none">
-                        <span class="detail-meta-label">Department</span>
-                        <span class="detail-meta-value" id="detail-department"></span>
-                    </div>
-                    <div class="detail-meta-row" id="detail-salary-row" style="display:none">
-                        <span class="detail-meta-label">Salary</span>
-                        <span class="detail-meta-value" id="detail-salary"></span>
-                    </div>
-                    <div class="detail-meta-row" id="detail-date-posted-row" style="display:none">
-                        <span class="detail-meta-label">Date Posted</span>
-                        <span class="detail-meta-value" id="detail-date-posted"></span>
-                    </div>
-                    <div class="detail-meta-row" id="detail-date-applied-row" style="display:none">
-                        <span class="detail-meta-label">Date Applied</span>
-                        <span class="detail-meta-value" id="detail-date-applied"></span>
-                    </div>
-                    <div class="detail-meta-row" id="detail-source-row" style="display:none">
-                        <span class="detail-meta-label">Job Source</span>
-                        <span class="detail-meta-value" id="detail-source"></span>
-                    </div>
-                    <div class="detail-meta-row" id="detail-deadline-row" style="display:none">
-                        <span class="detail-meta-label">Deadline</span>
-                        <span class="detail-meta-value" id="detail-deadline"></span>
-                    </div>
-                    <div class="detail-meta-row" id="detail-hybrid-days-row" style="display:none">
-                        <span class="detail-meta-label">In-office Days</span>
-                        <span class="detail-meta-value" id="detail-hybrid-days"></span>
-                    </div>
-                    <div class="detail-meta-row" id="detail-duration-row" style="display:none">
-                        <span class="detail-meta-label">Expected Duration</span>
-                        <span class="detail-meta-value" id="detail-duration"></span>
-                    </div>
-                    <div class="detail-meta-row" id="detail-date-declined-row" style="display:none">
-                        <span class="detail-meta-label" id="detail-date-declined-label">Not Selected On</span>
-                        <span class="detail-meta-value" id="detail-date-declined"></span>
-                    </div>
-                    <div class="detail-meta-row" id="detail-benefits-row" style="display:none">
-                        <span class="detail-meta-label">Benefits</span>
-                        <span class="detail-meta-value" id="detail-benefits"></span>
-                    </div>
-                    <div class="detail-meta-row">
-                        <span class="detail-meta-label">Budget</span>
-                        <a class="detail-link"
-                            href="https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html"
-                            target="_blank" rel="noopener">Track finances in Cash Compass ↗</a>
-                    </div>
-                    <div id="detail-milestone-strip" style="display:none"></div>
-                    <div class="detail-desc-label">Job Description</div>
-                    <div class="detail-desc-legend" id="detail-desc-legend" style="display:none">
-                        <span class="detail-desc-legend-dot"><span style="background:rgba(63,185,80,.35)"></span>
-                            Matched</span>
-                        <span class="detail-desc-legend-dot"><span style="background:rgba(255,77,109,.3)"></span>
-                            Gap</span>
-                    </div>
-                    <div class="detail-desc" id="detail-desc"></div>
-                    <div id="detail-linked-contacts" style="display:none;margin-top:10px"></div>
-                    <div class="detail-notes-section">
-                        <div class="form-group" id="detail-company-notes-row">
-                            <label class="form-label">Company Notes</label>
-                            <textarea class="text-area" id="detail-company-notes" rows="3"
-                                placeholder="About this company…"></textarea>
+                        <div class="detail-info-row">
+                            <span class="stage-badge" id="detail-stage-badge">Saved</span>
+                            <span class="seniority-badge" id="detail-seniority" style="display:none"></span>
+                            <span class="job-type-badge" id="detail-job-type" style="display:none"></span>
+                            <span class="work-type-badge" id="detail-work-type" style="display:none"></span>
+                            <a class="detail-link" id="detail-url" href="#" target="_blank" rel="noopener">View Posting
+                                ↗</a>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">Notes</label>
-                            <textarea class="text-area" id="detail-notes" rows="4" placeholder="Your notes…"></textarea>
+                        <div class="detail-meta-row" id="detail-department-row" style="display:none">
+                            <span class="detail-meta-label">Department</span>
+                            <span class="detail-meta-value" id="detail-department"></span>
+                        </div>
+                        <div class="detail-meta-row" id="detail-salary-row" style="display:none">
+                            <span class="detail-meta-label">Salary</span>
+                            <span class="detail-meta-value" id="detail-salary"></span>
+                        </div>
+                        <div class="detail-meta-row" id="detail-date-posted-row" style="display:none">
+                            <span class="detail-meta-label">Date Posted</span>
+                            <span class="detail-meta-value" id="detail-date-posted"></span>
+                        </div>
+                        <div class="detail-meta-row" id="detail-date-applied-row" style="display:none">
+                            <span class="detail-meta-label">Date Applied</span>
+                            <span class="detail-meta-value" id="detail-date-applied"></span>
+                        </div>
+                        <div class="detail-meta-row" id="detail-source-row" style="display:none">
+                            <span class="detail-meta-label">Job Source</span>
+                            <span class="detail-meta-value" id="detail-source"></span>
+                        </div>
+                        <div class="detail-meta-row" id="detail-deadline-row" style="display:none">
+                            <span class="detail-meta-label">Deadline</span>
+                            <span class="detail-meta-value" id="detail-deadline"></span>
+                        </div>
+                        <div class="detail-meta-row" id="detail-hybrid-days-row" style="display:none">
+                            <span class="detail-meta-label">In-office Days</span>
+                            <span class="detail-meta-value" id="detail-hybrid-days"></span>
+                        </div>
+                        <div class="detail-meta-row" id="detail-duration-row" style="display:none">
+                            <span class="detail-meta-label">Expected Duration</span>
+                            <span class="detail-meta-value" id="detail-duration"></span>
+                        </div>
+                        <div class="detail-meta-row" id="detail-date-declined-row" style="display:none">
+                            <span class="detail-meta-label" id="detail-date-declined-label">Not Selected On</span>
+                            <span class="detail-meta-value" id="detail-date-declined"></span>
+                        </div>
+                        <div class="detail-meta-row" id="detail-benefits-row" style="display:none">
+                            <span class="detail-meta-label">Benefits</span>
+                            <span class="detail-meta-value" id="detail-benefits"></span>
+                        </div>
+                        <div class="detail-meta-row">
+                            <span class="detail-meta-label">Budget</span>
+                            <a class="detail-link"
+                                href="https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html"
+                                target="_blank" rel="noopener">Track finances in Cash Compass ↗</a>
+                        </div>
+                        <div id="detail-milestone-strip" style="display:none"></div>
+                        <div class="detail-desc-label">Job Description</div>
+                        <div class="detail-desc-legend" id="detail-desc-legend" style="display:none">
+                            <span class="detail-desc-legend-dot"><span style="background:rgba(63,185,80,.35)"></span>
+                                Matched</span>
+                            <span class="detail-desc-legend-dot"><span style="background:rgba(255,77,109,.3)"></span>
+                                Gap</span>
+                        </div>
+                        <div class="detail-desc" id="detail-desc"></div>
+                        <div id="detail-linked-contacts" style="display:none;margin-top:10px"></div>
+                        <div class="detail-notes-section">
+                            <div class="form-group" id="detail-company-notes-row">
+                                <label class="form-label">Company Notes</label>
+                                <textarea class="text-area" id="detail-company-notes" rows="3"
+                                    placeholder="About this company…"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Notes</label>
+                                <textarea class="text-area" id="detail-notes" rows="4"
+                                    placeholder="Your notes…"></textarea>
+                            </div>
                         </div>
                     </div>
-                    </div>
-                    <section id="detail-panel-history" class="stage-history-section" role="tabpanel" aria-labelledby="detail-tab-history" hidden>
+                    <section id="detail-panel-history" class="stage-history-section" role="tabpanel"
+                        aria-labelledby="detail-tab-history" hidden>
                         <h3 id="stage-history-title">Stage history</h3>
                         <div id="detail-stage-history"></div>
                     </section>
                     <div class="detail-actions">
                         <select class="select-input" id="detail-stage-select"></select>
-                        <span class="detail-stage-indicator"><span id="detail-stage-age"></span> · <button type="button" id="detail-view-history" class="detail-history-link">View history</button></span>
+                        <span class="detail-stage-indicator"><span id="detail-stage-age"></span> · <button type="button"
+                                id="detail-view-history" class="detail-history-link">View history</button></span>
                         <button class="btn-secondary" id="detail-edit-btn">Edit</button>
                         <button class="btn-danger" id="detail-delete-btn">Delete</button>
                     </div>
@@ -1989,13 +2091,18 @@
 
     <div class="modal-overlay" id="modal-bulk-skills" aria-hidden="true">
         <div class="modal modal-lg">
-            <div class="modal-header"><h2 class="modal-title">Review your skills</h2><button class="modal-close" data-close="modal-bulk-skills" aria-label="Close skill review">✕</button></div>
+            <div class="modal-header">
+                <h2 class="modal-title">Review your skills</h2><button class="modal-close"
+                    data-close="modal-bulk-skills" aria-label="Close skill review">✕</button>
+            </div>
             <div class="modal-body">
-                <p class="bulk-review-intro">Spacing and capitalization are cleaned up. Edit names or accept suggested spelling before adding. Suggestions use the skill library; custom skills are welcome.</p>
+                <p class="bulk-review-intro">Spacing and capitalization are cleaned up. Edit names or accept suggested
+                    spelling before adding. Suggestions use the skill library; custom skills are welcome.</p>
                 <p id="bulk-review-summary" aria-live="polite"></p>
                 <div id="bulk-review-list"></div>
             </div>
-            <div class="modal-footer"><button class="btn-ghost" data-close="modal-bulk-skills">Back to editing</button><button class="btn-primary" id="bulk-review-confirm">Add skills</button></div>
+            <div class="modal-footer"><button class="btn-ghost" data-close="modal-bulk-skills">Back to
+                    editing</button><button class="btn-primary" id="bulk-review-confirm">Add skills</button></div>
         </div>
     </div>
 
@@ -2080,8 +2187,10 @@
                             <div class="ob-shortcut"><kbd>E</kbd> Search &amp; edit a job</div>
                             <div class="ob-shortcut"><kbd>D</kbd> / <kbd>H</kbd> Details / History in an open job</div>
                         </div>
-                        <p class="onboarding-tip">Shortcuts pause while you type. Reopen this guide with <strong>?</strong>.
-                            Find more features and shortcuts in the <a href="README.md" target="_blank" rel="noopener">README</a>.</p>
+                        <p class="onboarding-tip">Shortcuts pause while you type. Reopen this guide with
+                            <strong>?</strong>.
+                            Find more features and shortcuts in the <a href="README.md" target="_blank"
+                                rel="noopener">README</a>.</p>
                     </div>
 
                 </div>

@@ -83,9 +83,39 @@ function wireEvents() {
     document.querySelectorAll('#job-modal-tabs .modal-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
     document.querySelectorAll('#modal-job .modal-tab-panel').forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
     document.querySelector('#modal-job .modal-body').scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    updateJobFormSteps();
+  });
+  ['job-form-prev', 'job-form-next'].forEach(id => {
+    document.getElementById(id).addEventListener('click', () => {
+      const tabs = [...document.querySelectorAll('#job-modal-tabs .modal-tab-btn')];
+      const index = tabs.findIndex(tab => tab.classList.contains('active'));
+      tabs[index + (id === 'job-form-next' ? 1 : -1)]?.click();
+    });
+  });
+  document.querySelectorAll('.job-flex-date').forEach(input => {
+    input.addEventListener('input', () => previewJobDate(input.id));
+  });
+  document.querySelectorAll('.job-date-picker').forEach(picker => {
+    picker.addEventListener('change', () => {
+      document.getElementById(picker.dataset.dateTarget).value = picker.value;
+      previewJobDate(picker.dataset.dateTarget);
+    });
+  });
+  document.querySelectorAll('[data-date-value]').forEach(button => {
+    button.addEventListener('click', () => {
+      document.getElementById(button.dataset.dateTarget).value = button.dataset.dateValue;
+      previewJobDate(button.dataset.dateTarget);
+    });
   });
 
   // Save job
+  document.getElementById('job-salary').addEventListener('input', () => updateSalaryPreview(true));
+  document.getElementById('job-pay-period').addEventListener('change', () => {
+    const input = document.getElementById('job-salary');
+    input.value = splitSalaryAndPayPeriod(input.value).salary;
+    document.getElementById('job-pay-period').dataset.manual = 'true';
+    updateSalaryPreview();
+  });
   document.getElementById('save-job-btn').addEventListener('click', saveJob);
   document.getElementById('job-url').addEventListener('input', updateJobSourceFromUrl);
   document.getElementById('job-source').addEventListener('input', e => {
@@ -213,6 +243,8 @@ function wireEvents() {
           document.getElementById(id).value = salaryParts.salary;
           const periodSelect = document.getElementById('job-pay-period');
           if (periodSelect) periodSelect.value = salaryParts.payPeriod;
+          if (periodSelect) periodSelect.dataset.manual = 'false';
+          updateSalaryPreview();
         } else document.getElementById(id).value = parsed[key];
         flashField(id);
         addAutoTag(id);
@@ -235,6 +267,13 @@ function wireEvents() {
     updateJobDuplicateNotice();
     // Move cleaned description to Job Info tab (metadata header stripped)
     document.getElementById('job-description').value = parsed.description || text;
+    const postingAge = text.match(/\bposted\s+(\d+\s*\+?\s*(?:days?|weeks?|months?)\s*(?:ago)?|today|yesterday)\b/i)
+      || text.match(/^\s*(\d+\s*\+?\s*(?:days?|weeks?|months?)\s+ago)\s*$/im);
+    if (postingAge && !document.getElementById('job-date-posted').value) {
+      document.getElementById('job-date-posted').value = postingAge[1];
+      previewJobDate('job-date-posted');
+      addAutoTag('job-date-posted');
+    }
     scanDescriptionBenefits();
     if (document.getElementById('job-benefits').value || document.getElementById('benefits-source-url').value) {
       document.getElementById('job-company-extras').open = true;

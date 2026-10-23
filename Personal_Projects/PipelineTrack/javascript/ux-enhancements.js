@@ -46,8 +46,7 @@ function initKeyboardShortcuts() {
         const panels = document.querySelectorAll('#modal-job .modal-tab-panel');
         if (tabs[idx]) {
           e.preventDefault();
-          tabs.forEach((b, i) => b.classList.toggle('active', i === idx));
-          panels.forEach((p, i) => p.classList.toggle('active', i === idx));
+          tabs[idx].click();
         }
         return;
       }

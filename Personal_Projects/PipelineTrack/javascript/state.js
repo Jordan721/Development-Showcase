@@ -295,7 +295,7 @@ function exportCSV() {
 
   const headers = [
     'Role', 'Company', 'Job Source', 'Location', 'Stage', 'Seniority', 'Job Type', 'Duration', 'Work Type', 'In-office Days',
-    'Department', 'Salary', 'Date Posted', 'Date Applied', 'Date Added', 'Deadline', 'Fit Score (%)',
+    'Department', 'Salary', 'Date Posted', 'Date Posted Approximate', 'Date Applied', 'Date Added', 'Deadline', 'Fit Score (%)',
     'Role Profile', 'Job Fit Score (%)', 'Posting Quality Score (%)', 'Red Flags', 'Matched Skills', 'Skill Gaps', 'URL', 'Notes', 'Company Notes', 'Benefits', 'Cover Letter', 'Job Description'
   ];
 
@@ -313,6 +313,7 @@ function exportCSV() {
     j.department,
     j.salary,
     j.datePosted,
+    j.datePostedApproximate === true,
     j.dateApplied || '',
     j.dateAdded ? j.dateAdded.slice(0, 10) : '',
     j.deadline || '',
@@ -461,6 +462,8 @@ function _importFromCSV(text) {
       departmentInferred: !csvDept && !!inferredDept,
       salary: get(f, 'salary'),
       datePosted: get(f, 'date posted'),
+      datePostedApproximate: get(f, 'date posted approximate').toLowerCase() === 'true',
+      dateApplied: get(f, 'date applied'),
       dateAdded: get(f, 'date added') || new Date().toISOString().slice(0, 10),
       fitScore,
       matched: get(f, 'matched skills') ? get(f, 'matched skills').split(';').map(s => s.trim()).filter(Boolean) : [],
@@ -625,6 +628,7 @@ function _normalizeJob(job) {
     url: _stringValue(source.url),
     salary: _stringValue(source.salary),
     datePosted: _stringValue(source.datePosted),
+    datePostedApproximate: source.datePostedApproximate === true,
     dateApplied: _stringValue(source.dateApplied),
     dateAdded: _stringValue(source.dateAdded) || new Date().toISOString(),
     deadline: _stringValue(source.deadline),
