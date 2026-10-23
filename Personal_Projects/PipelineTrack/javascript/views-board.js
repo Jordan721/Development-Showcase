@@ -1486,6 +1486,16 @@ function openJobDetail(id) {
       document.getElementById('benefits-modal-chips').innerHTML =
         chips.length ? chips.map(b => `<span class="benefit-chip">${escHtml(b)}</span>`).join('') : '';
       document.getElementById('benefits-modal-raw').textContent = job.benefits;
+      const raw = document.getElementById('benefits-modal-raw');
+      for (const url of findBenefitsPageLinks(job.benefits.replace(/^Source:/gm, 'Benefits source:'))) {
+        const link = document.createElement('a');
+        link.href = url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = url;
+        raw.appendChild(document.createElement('br'));
+        raw.appendChild(link);
+      }
       openModal('modal-benefits');
     };
     if (chips.length) {
@@ -1499,7 +1509,8 @@ function openJobDetail(id) {
     });
     benefitsRow.style.display = '';
   } else {
-    benefitsRow.style.display = 'none';
+    document.getElementById('detail-benefits').textContent = 'Benefits not listed';
+    benefitsRow.style.display = '';
   }
 
   // Department
@@ -2088,6 +2099,73 @@ function flashField(id) {
 /* ══════════════════════════════════════════════════════════
    ADD / EDIT JOB
    ══════════════════════════════════════════════════════════ */
+function scanDescriptionBenefits() {
+  const description = document.getElementById('job-description').value;
+  const field = document.getElementById('job-benefits');
+  const evidence = extractBenefitsEvidence(description);
+  const links = findBenefitsPageLinks(description);
+  if (evidence && !field.value.trim()) field.value = evidence;
+  if (links.length && !document.getElementById('benefits-source-url').value) {
+    document.getElementById('benefits-source-url').value = links[0];
+  }
+  document.getElementById('benefits-scan-status').textContent = evidence
+    ? (field.value === evidence ? 'Benefits extracted from the description. Review before saving.' : 'Benefits detected. Your existing benefits text was kept.')
+    : links.length ? 'Benefits page link found. Choose Read benefits page, or paste its text below.' : 'Benefits not listed. Add a company benefits link or paste its text to check.';
+  return evidence;
+}
+
+function addCompanyBenefits(text, sourceUrl) {
+  const evidence = extractBenefitsEvidence(text);
+  const status = document.getElementById('benefits-scan-status');
+  if (!evidence) {
+    status.textContent = 'No listed benefits detected in this page text. Review the page manually.';
+    return;
+  }
+  const field = document.getElementById('job-benefits');
+  const entry = `Company-wide benefits — confirm for this role\n${evidence}\nSource: ${sourceUrl || 'Pasted company page text (link not supplied)'}`;
+  if (!field.value.includes(entry)) field.value = [field.value.trim(), entry].filter(Boolean).join('\n\n');
+  status.textContent = 'Company benefits added with source information. Confirm eligibility for this role.';
+}
+
+async function scanBenefitsPage() {
+  const input = document.getElementById('benefits-source-url');
+  const status = document.getElementById('benefits-scan-status');
+  let url;
+  try {
+    url = new URL(input.value.trim());
+    if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) throw new Error('Invalid URL');
+  } catch {
+    status.textContent = 'Enter a valid http or https benefits page link.';
+    return;
+  }
+  const button = document.getElementById('scan-benefits-page-btn');
+  const editId = document.getElementById('job-edit-id').value;
+  const controller = new AbortController();
+  // Closing/reopening the form invalidates an in-flight response.
+  const requestId = Symbol();
+  button.benefitsRequest = requestId;
+  button.disabled = true;
+  status.textContent = 'Reading benefits page…';
+  const timeout = setTimeout(() => controller.abort(), 12000);
+  const isCurrent = () => button.benefitsRequest === requestId && input.value.trim() === url.href && document.getElementById('job-edit-id').value === editId;
+  input.value = url.href;
+  try {
+    const response = await fetch(url.href, { signal: controller.signal, credentials: 'omit', referrerPolicy: 'no-referrer' });
+    if (!response.ok) throw new Error('Page unavailable');
+    const html = await response.text();
+    if (!isCurrent()) return;
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    doc.querySelectorAll('script, style, noscript, nav, footer, header').forEach(node => node.remove());
+    doc.querySelectorAll('p, li, div, section, h1, h2, h3, br').forEach(node => node.appendChild(doc.createTextNode('\n')));
+    addCompanyBenefits(doc.body.textContent, response.url || url.href);
+  } catch {
+    if (isCurrent()) status.textContent = 'This page could not be read automatically. Open the link and paste its benefits text below.';
+  } finally {
+    clearTimeout(timeout);
+    if (button.benefitsRequest === requestId) button.disabled = false;
+  }
+}
+
 function updateJobSourceFromUrl() {
   const source = document.getElementById('job-source');
   if (source.value.trim() && source.dataset.inferred !== 'true') return;
@@ -2240,6 +2318,11 @@ function openAddJobModal(editId = null, defaults = {}) {
 
   document.getElementById('job-description').value = job ? job.description || '' : '';
   document.getElementById('job-benefits').value = job ? job.benefits || '' : '';
+  document.getElementById('benefits-source-url').value = '';
+  document.getElementById('benefits-source-text').value = '';
+  document.getElementById('benefits-scan-status').textContent = 'Only listed benefits are extracted. Review before saving.';
+  document.getElementById('scan-benefits-page-btn').benefitsRequest = null;
+  document.getElementById('scan-benefits-page-btn').disabled = false;
   document.getElementById('job-company-notes').value = job ? job.companyNotes || '' : '';
   document.getElementById('job-notes').value = job ? job.notes || '' : '';
   document.getElementById('job-cover-letter').value = job ? job.coverLetter || '' : '';
@@ -2326,7 +2409,7 @@ function saveJob() {
     })(),
     stage: document.getElementById('job-stage').value,
     description,
-    benefits: document.getElementById('job-benefits').value.trim(),
+    benefits: document.getElementById('job-benefits').value.trim() || extractBenefitsEvidence(description),
     companyNotes: document.getElementById('job-company-notes').value.trim(),
     notes: document.getElementById('job-notes').value.trim(),
     coverLetter: document.getElementById('job-cover-letter').value.trim(),

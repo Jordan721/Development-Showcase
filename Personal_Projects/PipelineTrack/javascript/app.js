@@ -82,6 +82,7 @@ function wireEvents() {
     const tab = btn.dataset.tab;
     document.querySelectorAll('#job-modal-tabs .modal-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
     document.querySelectorAll('#modal-job .modal-tab-panel').forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
+    document.querySelector('#modal-job .modal-body').scrollTo({ top: 0, left: 0, behavior: 'instant' });
   });
 
   // Save job
@@ -144,6 +145,23 @@ function wireEvents() {
       analysisEl.style.display = 'none';
       analysisEl.innerHTML = '';
     }
+  });
+  document.getElementById('scan-benefits-btn').addEventListener('click', scanDescriptionBenefits);
+  document.getElementById('scan-benefits-page-btn').addEventListener('click', scanBenefitsPage);
+  document.getElementById('scan-benefits-text-btn').addEventListener('click', () => {
+    const source = document.getElementById('benefits-source-url').value.trim();
+    if (source) {
+      try {
+        if (!['http:', 'https:'].includes(new URL(source).protocol)) throw new Error();
+      } catch {
+        document.getElementById('benefits-scan-status').textContent = 'Enter a valid http or https source link, or leave it blank.';
+        return;
+      }
+    }
+    addCompanyBenefits(document.getElementById('benefits-source-text').value, source);
+  });
+  document.getElementById('job-description').addEventListener('change', () => {
+    scanDescriptionBenefits();
   });
   document.getElementById('smart-paste-btn').addEventListener('click', () => {
     const text = document.getElementById('smart-paste-input').value.trim();
@@ -217,6 +235,10 @@ function wireEvents() {
     updateJobDuplicateNotice();
     // Move cleaned description to Job Info tab (metadata header stripped)
     document.getElementById('job-description').value = parsed.description || text;
+    scanDescriptionBenefits();
+    if (document.getElementById('job-benefits').value || document.getElementById('benefits-source-url').value) {
+      document.getElementById('job-company-extras').open = true;
+    }
     if (typeof renderSmartPasteAnalysis === 'function') renderSmartPasteAnalysis(analysis);
     // Collapse the paste panel, but keep the analyzer visible below it.
     document.getElementById('smart-paste-panel').classList.remove('open');

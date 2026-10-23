@@ -487,6 +487,9 @@ function toast(msg, type = '', opts = {}) {
 function openModal(id) {
   document.getElementById(id).classList.add('open');
   document.getElementById(id).setAttribute('aria-hidden', 'false');
+  document.getElementById(id).querySelectorAll('.modal-body').forEach(body => {
+    body.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  });
 }
 
 function closeModal(id) {
@@ -598,6 +601,8 @@ function navigate(view) {
   });
   renderView(view);
   if (typeof updateGettingStarted === 'function') updateGettingStarted();
+  // Views share the document scroller, so reset after the new content renders.
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 }
 
 function renderView(view) {
@@ -665,6 +670,25 @@ function highlightJobDescription(text, matched, missing) {
   }
   if (pos < text.length) html += escHtml(text.slice(pos));
   return html;
+}
+
+function extractBenefitsEvidence(text) {
+  // Keep the original wording (amounts, eligibility, and exclusions), not guesses.
+  return String(text || '').split(/\n|(?<=[.!?])\s+/)
+    .map(line => line.trim()).filter(line => line && !/^https?:\/\/\S+$/i.test(line) && parseBenefits(line.replace(/https?:\/\/\S+/gi, '')).length)
+    .filter((line, index, lines) => lines.indexOf(line) === index).join('\n');
+}
+
+function findBenefitsPageLinks(text) {
+  const links = [];
+  for (const line of String(text || '').split('\n')) {
+    if (!/benefits|perks|total.rewards/i.test(line)) continue;
+    for (const match of line.matchAll(/https?:\/\/[^\s<>"']+/gi)) {
+      const url = match[0].replace(/[),.;\]]+$/, '');
+      if (!links.includes(url)) links.push(url);
+    }
+  }
+  return links;
 }
 
 function parseBenefits(text) {
