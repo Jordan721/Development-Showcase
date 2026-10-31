@@ -339,6 +339,19 @@ All three show an amber **✦ Auto-filled** badge so you always know the app set
 
 ---
 
+## Job preparation and decisions
+
+- **Interview preparation:** open a job's Details and expand Interview preparation. Add multiple rounds with interviewer names, dates, questions, and reflections; track the shared preparation checklist and choose Save preparation.
+- **Original posting archive:** the first nonempty description saved after this update is captured with its source URL and capture timestamp. Later description edits preserve that copy. Existing jobs can also use Capture current posting; this records the current text, not a reconstructed historical listing. Download the copy as plain text.
+- **Duplicate warnings:** the job form checks both company/title and matching posting URLs, ignoring common tracking parameters. Warnings allow you to keep separate openings.
+- **Calendar export:** in job Details, expand Calendar export & follow-up. Save a follow-up date or download saved interview rounds, milestone dates, follow-ups, and offer response deadlines as `.ics`. Times use the receiving calendar's local time; dates without times create all-day events. Save preparation and offer edits before downloading.
+- **Backup health:** My Profile shows the most recent JSON export requested from this browser. The dashboard prompts for a backup when none exists or the last export was over seven days ago. Keep downloaded files somewhere safe.
+- **Offer decision worksheet:** record actual compensation, benefits, response deadline, personal priorities, negotiation, and decision notes in job Details. Saved details appear in the existing Compare Jobs view.
+
+These job details are included in JSON backups; CSV remains a summary format and does not preserve the new worksheets or posting archive. Demo mode keeps changes temporary.
+
+Run the focused checks with `node --test Personal_Projects/PipelineTrack/tests/job-workspace.test.cjs`.
+
 ## 🗺️ Roadmap Ideas
 
 - Support for additional industries beyond current coverage

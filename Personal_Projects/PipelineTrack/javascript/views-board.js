@@ -2172,13 +2172,26 @@ function updateJobSourceFromUrl() {
   source.dataset.inferred = source.value ? 'true' : 'false';
 }
 
-function findMatchingJobs(role, company, excludeId = '') {
+function findMatchingJobs(role, company, excludeId = '', url = '') {
   const normalize = value => String(value || '').normalize('NFKC').trim().replace(/\s+/g, ' ').toLowerCase();
   const roleKey = normalize(role);
   const companyKey = normalize(company);
-  if (!roleKey || !companyKey) return [];
+  const urlKey = duplicatePostingKey(url);
   return state.jobs.filter(job => job.id !== excludeId &&
-    normalize(job.role) === roleKey && normalize(job.company) === companyKey);
+    ((roleKey && companyKey && normalize(job.role) === roleKey && normalize(job.company) === companyKey) ||
+      (urlKey && duplicatePostingKey(job.url) === urlKey)));
+}
+
+function duplicatePostingKey(value) {
+  try {
+    const url = new URL(value);
+    if (!['http:', 'https:'].includes(url.protocol)) return '';
+    for (const key of [...url.searchParams.keys()]) {
+      if (/^(utm_|trk$|trackingId$|ref$|refId$)/i.test(key)) url.searchParams.delete(key);
+    }
+    url.searchParams.sort();
+    return url.hostname.toLowerCase().replace(/^www\./, '') + url.pathname.replace(/\/$/, '') + url.search;
+  } catch { return ''; }
 }
 
 function updateJobDuplicateNotice() {
@@ -2187,7 +2200,8 @@ function updateJobDuplicateNotice() {
   const matches = findMatchingJobs(
     document.getElementById('job-role').value,
     document.getElementById('job-company').value,
-    document.getElementById('job-edit-id').value
+    document.getElementById('job-edit-id').value,
+    document.getElementById('job-url').value
   );
   notice.hidden = !matches.length;
   notice.replaceChildren();
@@ -2204,7 +2218,7 @@ function updateJobDuplicateNotice() {
   header.className = 'job-duplicate-heading';
   header.append(icon, heading);
   const description = document.createElement('p');
-  description.textContent = `The same company and title already appear in your tracker. You can still save another entry if this is a new opening.`;
+  description.textContent = `A matching company and title or posting URL already appears in your tracker. You can still save another entry if this is a new opening.`;
   notice.append(header, description);
   matches.forEach(job => {
     const row = document.createElement('div');
@@ -2467,6 +2481,10 @@ function saveJob() {
   };
 
   const analysis = analyzeJobForRole(jobData);
+  const priorJob = state.jobs.find(job => job.id === editId);
+  if (description.trim() && !priorJob?.postingSnapshot) {
+    jobData.postingSnapshot = { text: description, url: jobData.url, capturedAt: new Date().toISOString() };
+  }
   Object.assign(jobData, {
     fitScore: analysis.score,
     matched: analysis.matched,

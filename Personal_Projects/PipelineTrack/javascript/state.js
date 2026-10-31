@@ -278,6 +278,8 @@ function exportData() {
   a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
+  localStorage.setItem('pt_last_backup', new Date().toISOString());
+  if (typeof renderBackupHealth === 'function') renderBackupHealth();
   toast('Backup downloaded.', 'success');
   const statusEl = document.getElementById('backup-status');
   if (statusEl) {
