@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PipelineTrack</title>
+    <script src="javascript/demo.js"></script>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -27,6 +28,7 @@
     <link rel="stylesheet" href="css/career-flow.css" />
     <link rel="stylesheet" href="css/calendar-details.css" />
     <link rel="stylesheet" href="css/profile-skills.css" />
+    <link rel="stylesheet" href="css/workspace-polish.css" />
 </head>
 
 <body>
@@ -126,25 +128,15 @@
         <!-- TOPBAR -->
         <header class="topbar">
             <div class="topbar-title" id="topbar-title">Dashboard</div>
-            <div style="display:flex;align-items:center;gap:10px">
-                <div class="theme-swatches" id="theme-swatches">
-                    <button class="theme-swatch theme-swatch--midnight" data-theme="midnight"
-                        title="Midnight theme">M</button>
-                    <button class="theme-swatch theme-swatch--sunset" data-theme="sunset"
-                        title="Sunset theme">S</button>
-                    <button class="theme-swatch theme-swatch--ocean" data-theme="ocean" title="Ocean theme">O</button>
-                </div>
-                <button class="theme-toggle" id="theme-toggle-btn" title="Toggle light/dark mode"><span
-                        id="theme-icon"></span></button>
-                <button id="btn-theme-motion" title="Toggle theme animation" aria-label="Toggle theme animation"
-                    aria-pressed="true">✦</button>
+            <div class="topbar-controls">
+                <button type="button" id="workspace-settings-open" class="btn-secondary" aria-haspopup="dialog" aria-controls="workspace-settings-dialog" aria-keyshortcuts="S" title="Open settings (S)">Settings <kbd>S</kbd></button>
                 <button class="onboarding-help-btn" id="onboarding-help-btn"
                     title="Open getting started guide">?</button>
-                <button id="btn-colorblind" title="Toggle color-blind mode"
-                    aria-label="Toggle color-blind mode">◑</button>
                 <button class="btn-primary" id="topbar-action" data-action="add-job">+ Add Job</button>
             </div>
         </header>
+
+        <aside class="workspace-preview" id="workspace-preview" aria-label="Workspace demo"><div><strong>Take a quick look around</strong><p>Try a temporary workspace with fictional applications and skills.</p></div><a class="btn-secondary" href="index.html?demo=1">Explore sample workspace ↗</a></aside>
 
         <!-- ── GETTING STARTED BAR ──────────────────────────── -->
         <div id="getting-started-bar" style="display:none;padding:0 24px;"></div>
@@ -179,6 +171,23 @@
             <div id="streak-timeline-panel" class="streak-timeline-panel" hidden></div>
             <div id="dash-overview" class="dash-overview" aria-live="polite"></div>
             <div class="dash-section-heading">
+                <h2>Your next moves</h2><span>Priorities and opportunities from your tracked jobs</span>
+            </div>
+            <div class="dash-priority-grid">
+                <div class="dash-card" data-card="next-actions">
+                    <div class="dash-card-header">Needs Your Attention</div>
+                    <p class="dash-card-description">Application deadlines, older applications, and jobs ready for
+                        analysis.</p>
+                    <div class="dash-card-body" id="dash-next-actions"></div>
+                </div>
+                <div class="dash-card" data-card="best-fits">
+                    <div class="dash-card-header">Strongest Opportunities</div>
+                    <p class="dash-card-description">Your top four active jobs by skill fit. Select one to plan your
+                        next step.</p>
+                    <div class="dash-card-body" id="dash-best-fits"></div>
+                </div>
+            </div>
+            <div class="dash-section-heading">
                 <h2>At a glance</h2><span>Your current pipeline totals</span>
             </div>
             <div class="stat-grid">
@@ -209,23 +218,6 @@
                 </div>
             </div>
 
-            <div class="dash-section-heading">
-                <h2>Your next moves</h2><span>Priorities and opportunities from your tracked jobs</span>
-            </div>
-            <div class="dash-priority-grid">
-                <div class="dash-card" data-card="next-actions">
-                    <div class="dash-card-header">Needs Your Attention</div>
-                    <p class="dash-card-description">Application deadlines, older applications, and jobs ready for
-                        analysis.</p>
-                    <div class="dash-card-body" id="dash-next-actions"></div>
-                </div>
-                <div class="dash-card" data-card="best-fits">
-                    <div class="dash-card-header">Strongest Opportunities</div>
-                    <p class="dash-card-description">Your top four active jobs by skill fit. Select one to plan your
-                        next step.</p>
-                    <div class="dash-card-body" id="dash-best-fits"></div>
-                </div>
-            </div>
             <div class="dash-section-heading">
                 <h2>Explore your search</h2><span>Skill priorities, pipeline movement, and recent activity</span>
             </div>
@@ -2255,6 +2247,29 @@
             </div>
         </div>
     </div>
+
+    <dialog id="workspace-settings-dialog" class="workspace-settings-dialog" aria-labelledby="workspace-settings-title" aria-describedby="workspace-settings-description">
+        <div class="workspace-settings-heading"><div><h2 id="workspace-settings-title">Settings</h2><p id="workspace-settings-description">Make this workspace comfortable for you.</p></div><button type="button" id="workspace-settings-close" class="btn-secondary" aria-label="Close settings" autofocus>✕</button></div>
+        <h3>Appearance &amp; accessibility</h3>
+        <div class="workspace-settings-options">
+                <div class="theme-swatches" id="theme-swatches">
+                    <button class="theme-swatch theme-swatch--midnight" data-theme="midnight"
+                        title="Midnight theme">M</button>
+                    <button class="theme-swatch theme-swatch--sunset" data-theme="sunset"
+                        title="Sunset theme">S</button>
+                    <button class="theme-swatch theme-swatch--ocean" data-theme="ocean" title="Ocean theme">O</button>
+                </div>
+                <button class="theme-toggle" id="theme-toggle-btn" title="Toggle light/dark mode"><span
+                        id="theme-icon"></span></button>
+                <button id="btn-theme-motion" title="Toggle theme animation" aria-label="Toggle theme animation"
+                    aria-pressed="true">✦</button>
+                <button id="btn-colorblind" title="Toggle color-blind mode"
+                    aria-label="Toggle color-blind mode">◑</button>
+        </div>
+        <p class="workspace-settings-hint">Theme: M = Midnight, S = Sunset, O = Ocean. Use the sun or moon to switch light and dark, ✦ for theme motion, and ◑ for color-blind mode.</p>
+        <p class="workspace-settings-hint">Click outside or press Escape to close.</p>
+    </dialog>
+    <script src="javascript/workspace-settings.js"></script>
 
     <!-- PDF parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>

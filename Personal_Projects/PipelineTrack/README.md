@@ -38,6 +38,10 @@ I built PipelineTrack to solve that. One tool to track every job, score your ski
 
 ## 🚀 Getting Started
 
+Choose **Explore sample workspace** to try eight fictional applications and a sample skills profile. You can also open `index.html?demo=1`. Demo changes stay in memory and never replace your saved workspace. Reload to reset the sample data; choose **Exit demo** to return to your records. Use the regular workspace for anything you want to keep.
+
+Appearance controls open in a separate **Settings** dialog (button or **S** shortcut; close with Escape, the close button, or an outside click), and **Your next moves** appears before dashboard statistics.
+
 1. Clone or download this folder and open `index.html` in any modern browser
 2. Follow the **getting started guide** that opens automatically — navigate steps with `←` / `→` arrow keys or the `‹ ›` buttons beside the dots, or reopen it anytime with the **?** button
 3. Go to **My Profile** and add your skills, plus any certifications, degrees, licenses, diplomas, or bootcamps you have finished or are working toward
