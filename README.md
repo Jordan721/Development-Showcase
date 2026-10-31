@@ -22,10 +22,12 @@ The homepage is a **creative playground** with floating category portals, neon c
 
 ## Features
 
-- **Start Here** — Three featured projects: PipelineTrack, Algorithm Arena, and AnimateLab, with build details and direct links to their demos and GitHub source. Their previews are CSS illustrations, not screenshots.
+- **Start Here** — Three featured projects: PipelineTrack, Algorithm Arena, and AnimateLab, with build details and direct links to their demos and GitHub source. Real application screenshots, quick demo challenges, and linked case studies help visitors explore each build.
 - **Floating Portals** — Animated shapes in the hero jump to personal projects, professional work, coursework, games, and art.
 - **Five Creative Worlds** — An experiment lab with tilted cards, a control room with window-style panels, a launchpad with curved cards, an arcade, and an abstract art space.
 - **Project Search** — Search project names, descriptions, platform labels, and technologies without reloading the page.
+- **Behind the Build** — Shareable case studies for PipelineTrack, Algorithm Arena, and AnimateLab explain the problem, implementation, tradeoffs, source evidence, and a hands-on walkthrough.
+- **Skill Filters** — Browse by demonstrated skills, including data visualization, API integration, animation, and game development. Skill and technology filters combine with search; clear all filters to reset.
 - **Technology Filters** — Choose one technology at a time. Search and the selected technology work together to narrow the collection.
 - **Live Result Counts** — The hero total is calculated from the project directory on page load. Result and section counts update with filtering, and sections without matches are hidden. Featured projects also appear in the directory and are not counted twice.
 - **No Results State** — Reset search and filters with “Show everything.”

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PipelineTrack — Behind the build | Jordan Alexis</title>
+    <meta name="description"
+        content="Applications, skills, resumes, and learning resources come together in one browser-based tool.">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../showcase.css">
+    <link rel="stylesheet" href="case-studies.css">
+</head>
+
+<body><a class="skip-link" href="#case-content">Skip to case study</a>
+    <header class="site-header"><a class="wordmark" href="../index.html"><span class="brand-mark">ja.</span> Jordan
+            Alexis</a>
+        <nav aria-label="Main navigation"><a href="../index.html#featured">All featured projects ↗</a></nav>
+    </header>
+    <main class="case-page" id="case-content">
+        <div class="case-heading"><span class="eyebrow">BEHIND THE BUILD / PipelineTrack</span>
+            <h1>A connected workspace for the job search.</h1>
+            <p class="case-intro">Applications, skills, resumes, and learning resources come together in one
+                browser-based tool.</p>
+            <p class="project-context">Personal project / Browser application</p>
+            <div class="case-actions"><a class="primary-link" href="../Personal_Projects/PipelineTrack/index.html">Open
+                    the demo ↗</a><a
+                    href="https://github.com/Jordan721/Development-Showcase/tree/main/Personal_Projects/PipelineTrack"
+                    target="_blank" rel="noopener noreferrer">Explore the source ↗</a></div>
+        </div>
+        <figure class="case-figure"><img src="../assets/showcase/pipelinetrack.png"
+                alt="PipelineTrack first-run welcome screen" width="1440" height="960">
+            <figcaption>PipelineTrack’s first-run welcome screen. Follow the walkthrough below to explore the working
+                project.</figcaption>
+        </figure>
+        <div class="case-grid">
+            <section>
+                <h2>The problem</h2>
+                <p>A job search spreads information across listings, notes, spreadsheets, and resume files.
+                    PipelineTrack brings that workflow into one workspace so an application can be considered alongside
+                    the skills it needs.</p>
+            </section>
+            <section>
+                <h2>How it works</h2>
+                <p>Separate JavaScript modules handle the board, profile, calendar, analytics, and resume views. Shared
+                    state connects those views, while localStorage persists jobs, profile data, contacts, and other
+                    records between visits.</p>
+            </section>
+            <section>
+                <h2>A design tradeoff</h2>
+                <p>Browser storage keeps the main workflow account-free and avoids requiring a server for saved
+                    application data. The tradeoff is that records stay with that browser rather than automatically
+                    syncing across devices. Backup export and import provide a way to move or preserve them.</p>
+            </section>
+            <section>
+                <h2>Look inside the code</h2>
+                <p>The state module includes save/load routines, data normalization, backup export/import, and handling
+                    for an import that cannot be saved because storage is full.</p><a class="case-study-link"
+                    href="https://github.com/Jordan721/Development-Showcase/blob/main/Personal_Projects/PipelineTrack/javascript/state.js"
+                    target="_blank" rel="noopener noreferrer">Read javascript/state.js ↗</a>
+            </section>
+        </div>
+        <section class="case-walkthrough"><span class="eyebrow">YOUR TURN / A QUICK WALKTHROUGH</span>
+            <h2>See it working.</h2>
+            <ol>
+                <li>Open My Profile and add a few skills, such as JavaScript and SQL.</li>
+                <li>Open Job Board, choose + Add Job, and create a fictional application with a description mentioning
+                    those skills.</li>
+                <li>Open the job card to inspect the fit breakdown, then visit Analytics to see how the application
+                    appears in the wider pipeline.</li>
+            </ol><a class="primary-link" href="../Personal_Projects/PipelineTrack/index.html">Try PipelineTrack ↗</a>
+        </section>
+        <section class="case-takeaway">
+            <h2>What this demonstrates</h2>
+            <p>This build demonstrates shared application state, browser persistence, and the interface work needed to
+                connect several workflows.</p>
+            <p class="case-limit">Fit scores reflect the tool’s matching rules; they are a guide for exploring a
+                listing, rather than a prediction of hiring outcomes.</p>
+        </section>
+        <nav class="case-next" aria-label="More case studies"><a href="algorithm-arena.html">Inside Algorithm Arena
+                ↗</a><a href="animatelab.html">Inside AnimateLab ↗</a><a href="../index.html#explore">Explore the full
+                collection ↗</a></nav>
+    </main>
+    <footer>
+        <p>Jordan Alexis / Development Showcase</p><a href="https://jordan721.github.io/Jordan_Alexis/">Meet the
+            developer ↗</a>
+    </footer>
+</body>
+
+</html>

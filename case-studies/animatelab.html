@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AnimateLab — Behind the build | Jordan Alexis</title>
+    <meta name="description" content="CSS, Canvas, SVG, and browser animation APIs share one hands-on playground.">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../showcase.css">
+    <link rel="stylesheet" href="case-studies.css">
+</head>
+
+<body><a class="skip-link" href="#case-content">Skip to case study</a>
+    <header class="site-header"><a class="wordmark" href="../index.html"><span class="brand-mark">ja.</span> Jordan
+            Alexis</a>
+        <nav aria-label="Main navigation"><a href="../index.html#featured">All featured projects ↗</a></nav>
+    </header>
+    <main class="case-page" id="case-content">
+        <div class="case-heading"><span class="eyebrow">BEHIND THE BUILD / AnimateLab</span>
+            <h1>Explore motion through controls and code.</h1>
+            <p class="case-intro">CSS, Canvas, SVG, and browser animation APIs share one hands-on playground.</p>
+            <p class="project-context">Personal project / Creative learning tool</p>
+            <div class="case-actions"><a class="primary-link" href="../Personal_Projects/AnimateLab/index.html">Open the
+                    demo ↗</a><a
+                    href="https://github.com/Jordan721/Development-Showcase/tree/main/Personal_Projects/AnimateLab"
+                    target="_blank" rel="noopener noreferrer">Explore the source ↗</a></div>
+        </div>
+        <figure class="case-figure"><img src="../assets/showcase/animatelab.png" alt="AnimateLab application interface"
+                width="1440" height="960">
+            <figcaption>Inside AnimateLab. Follow the walkthrough below to explore the working project.</figcaption>
+        </figure>
+        <div class="case-grid">
+            <section>
+                <h2>The problem</h2>
+                <p>Animation techniques are often taught in isolation. AnimateLab puts multiple approaches together so
+                    visitors can change a parameter, see the motion respond, and inspect the code behind it.</p>
+            </section>
+            <section>
+                <h2>How it works</h2>
+                <p>Each section pairs a preview with controls and a code panel. Code generators reflect current
+                    settings; Canvas examples use animation frames, while other sections explore CSS transitions,
+                    keyframes, transforms, and SVG shapes.</p>
+            </section>
+            <section>
+                <h2>A design tradeoff</h2>
+                <p>Each technique has its own sandbox and controls. This makes focused experiments easy to reset and
+                    compare, while keeping the examples understandable. The tradeoff is that these are technique
+                    demonstrations rather than a complete motion editor with a shared timeline.</p>
+            </section>
+            <section>
+                <h2>Look inside the code</h2>
+                <p>The script contains per-section code generators, Show Code controls, Apply/Reset actions, and
+                    requestAnimationFrame loops for Canvas demonstrations.</p><a class="case-study-link"
+                    href="https://github.com/Jordan721/Development-Showcase/blob/main/Personal_Projects/AnimateLab/script.js"
+                    target="_blank" rel="noopener noreferrer">Read script.js ↗</a>
+            </section>
+        </div>
+        <section class="case-walkthrough"><span class="eyebrow">YOUR TURN / A QUICK WALKTHROUGH</span>
+            <h2>See it working.</h2>
+            <ol>
+                <li>Find CSS Transitions and change the duration or easing, then hover over the preview.</li>
+                <li>Choose Show Code and compare the generated values with the controls you changed.</li>
+                <li>Try Spring Physics: drag and release the ball, then adjust stiffness or damping to compare the
+                    response.</li>
+            </ol><a class="primary-link" href="../Personal_Projects/AnimateLab/index.html">Try AnimateLab ↗</a>
+        </section>
+        <section class="case-takeaway">
+            <h2>What this demonstrates</h2>
+            <p>This build demonstrates animation APIs, real-time interface feedback, and connecting visible output to
+                editable code.</p>
+            <p class="case-limit">The examples focus on individual techniques; performance depends on the effect
+                settings, browser, and device.</p>
+        </section>
+        <nav class="case-next" aria-label="More case studies"><a href="pipelinetrack.html">Inside PipelineTrack ↗</a><a
+                href="algorithm-arena.html">Inside Algorithm Arena ↗</a><a href="../index.html#explore">Explore the full
+                collection ↗</a></nav>
+    </main>
+    <footer>
+        <p>Jordan Alexis / Development Showcase</p><a href="https://jordan721.github.io/Jordan_Alexis/">Meet the
+            developer ↗</a>
+    </footer>
+</body>
+
+</html>

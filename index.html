@@ -81,22 +81,21 @@
             <div class="featured-grid">
                 <article class="featured-card">
                     <a class="featured-preview preview-pipeline" href="./Personal_Projects/PipelineTrack/index.html"
-                        aria-label="Explore PipelineTrack">
-                        <div aria-hidden="true"><span class="preview-title">PipelineTrack</span>
-                            <div class="preview-board">
-                                <div><b>Applied</b><i></i><i></i></div>
-                                <div><b>Interview</b><i></i></div>
-                                <div><b>Offer</b><i></i></div>
-                            </div>
-                        </div>
-                        <span class="preview-caption">Illustrated preview / job search workspace</span>
-                    </a>
+                        aria-label="Explore PipelineTrack"><img class="project-screenshot"
+                            src="./assets/showcase/pipelinetrack.png" alt="PipelineTrack first-run welcome screen"
+                            width="1440" height="960" loading="lazy"><span class="preview-caption">Actual app /
+                            first-run welcome</span></a>
                     <div class="featured-copy"><span class="eyebrow">01 / ORGANIZE</span>
                         <h3>PipelineTrack</h3>
                         <p>Keep applications, resume fit, and skill gaps together in one job search workspace.</p>
+                        <p class="project-context">Personal project / Browser application</p>
+                        <p class="demo-prompt">Try it: add a fictional application, then inspect its skill-fit
+                            breakdown.</p>
                         <p class="featured-detail"><strong>Inside the build</strong> Application tracking and profile
                             skills connect the job search workflow, with localStorage for browser-based persistence.</p>
                         <div class="card-tech"><span>JavaScript</span><span>localStorage</span></div>
+                        <a class="case-study-link" href="./case-studies/pipelinetrack.html">Behind the build <span
+                                aria-hidden="true">↗</span><span class="sr-only">: PipelineTrack</span></a>
                         <div class="featured-links"><a href="./Personal_Projects/PipelineTrack/index.html">Try the tool
                                 ↗</a><a
                                 href="https://github.com/Jordan721/Development-Showcase/tree/main/Personal_Projects/PipelineTrack"
@@ -106,18 +105,21 @@
                 </article>
                 <article class="featured-card">
                     <a class="featured-preview preview-algorithm" href="./Personal_Projects/Algorithm_Arena/index.html"
-                        aria-label="Explore Algorithm Arena">
-                        <div aria-hidden="true"><span class="preview-title">Algorithm Arena</span>
-                            <div class="preview-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-                        </div>
-                        <span class="preview-caption">Illustrated preview / sorting visualizer</span>
-                    </a>
+                        aria-label="Explore Algorithm Arena"><img class="project-screenshot"
+                            src="./assets/showcase/algorithm-arena.png"
+                            alt="Algorithm Arena sorting controls and visualization" width="1440" height="960"
+                            loading="lazy"><span class="preview-caption">Actual app / interactive demo</span></a>
                     <div class="featured-copy"><span class="eyebrow">02 / UNDERSTAND</span>
                         <h3>Algorithm Arena</h3>
                         <p>Make sorting and searching easier to understand by watching algorithms work through data.</p>
+                        <p class="project-context">Personal project / Learning tool</p>
+                        <p class="demo-prompt">Try it: step through a sort, then compare two algorithms in Race mode.
+                        </p>
                         <p class="featured-detail"><strong>Inside the build</strong> Adjustable visualizations and
                             side-by-side sorting races turn algorithm behavior into something you can explore.</p>
                         <div class="card-tech"><span>JavaScript</span><span>Chart.js</span></div>
+                        <a class="case-study-link" href="./case-studies/algorithm-arena.html">Behind the build <span
+                                aria-hidden="true">↗</span><span class="sr-only">: Algorithm Arena</span></a>
                         <div class="featured-links"><a href="./Personal_Projects/Algorithm_Arena/index.html">Run an
                                 algorithm ↗</a><a
                                 href="https://github.com/Jordan721/Development-Showcase/tree/main/Personal_Projects/Algorithm_Arena"
@@ -127,19 +129,21 @@
                 </article>
                 <article class="featured-card">
                     <a class="featured-preview preview-animation" href="./Personal_Projects/AnimateLab/index.html"
-                        aria-label="Explore AnimateLab">
-                        <div aria-hidden="true"><span class="preview-title">AnimateLab</span>
-                            <div class="preview-shapes"><i></i><i></i><i></i></div>
-                            <div class="preview-slider"><i></i></div>
-                        </div>
-                        <span class="preview-caption">Illustrated preview / motion playground</span>
-                    </a>
+                        aria-label="Explore AnimateLab"><img class="project-screenshot"
+                            src="./assets/showcase/animatelab.png" alt="AnimateLab animation playground and controls"
+                            width="1440" height="960" loading="lazy"><span class="preview-caption">Actual app /
+                            interactive demo</span></a>
                     <div class="featured-copy"><span class="eyebrow">03 / EXPERIMENT</span>
                         <h3>AnimateLab</h3>
                         <p>Explore animation by tweaking controls and seeing the corresponding code update live.</p>
+                        <p class="project-context">Personal project / Creative learning tool</p>
+                        <p class="demo-prompt">Try it: change easing, inspect the code, then experiment with spring
+                            physics.</p>
                         <p class="featured-detail"><strong>Inside the build</strong> CSS, Canvas, and SVG examples bring
                             different animation techniques into one hands-on playground.</p>
                         <div class="card-tech"><span>CSS</span><span>Canvas</span><span>SVG</span></div>
+                        <a class="case-study-link" href="./case-studies/animatelab.html">Behind the build <span
+                                aria-hidden="true">↗</span><span class="sr-only">: AnimateLab</span></a>
                         <div class="featured-links"><a href="./Personal_Projects/AnimateLab/index.html">Explore
                                 animation ↗</a><a
                                 href="https://github.com/Jordan721/Development-Showcase/tree/main/Personal_Projects/AnimateLab"
@@ -161,10 +165,18 @@
                     href="#academic"><span>03</span>launchpad<span>↗</span></a><a
                     href="#games"><span>04</span>arcade<span>↗</span></a><a href="#art"><span>05</span>creative
                     studio<span>↗</span></a></nav>
+            <div class="filter-row skill-filter-row"><span class="eyebrow" id="skill-filter-label">BROWSE BY
+                    SKILL</span>
+                <div id="skillFilters" class="filter-chips" role="group" aria-labelledby="skill-filter-label"><button
+                        class="filter-chip active" data-skill="all" aria-pressed="true">All skills</button></div>
+            </div>
+            <p class="filter-help">Find examples of what I build. Skill, technology, and search filters work together.
+            </p>
             <div class="filter-row"><span class="eyebrow">FILTER BY TECH</span>
                 <div id="techFilters" class="filter-chips"><button class="filter-chip active" data-tech="all"
                         aria-pressed="true">All</button></div>
-                <p id="resultCount" aria-live="polite">25 projects & collections</p>
+                <p id="resultCount" aria-live="polite">25 projects & collections</p><button id="clearFilters"
+                    class="filter-chip" hidden>Clear all filters</button>
             </div>
         </section>
         <div id="emptyState" class="empty-state" hidden>
@@ -178,7 +190,8 @@
                 <div class="chapter-symbol" aria-hidden="true">✳</div><span class="chapter-count">9 projects to
                     explore</span>
             </div>
-            <div class="card-grid"><a href="./Personal_Projects/Cash-Compass/index.html" class="project-card">
+            <div class="card-grid"><a href="./Personal_Projects/Cash-Compass/index.html" class="project-card"
+                    data-skills="Data visualization">
                     <div class="card-top"><span class="card-number">01</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -195,7 +208,8 @@
                         <span>Chart.js</span>
                     </div>
                 </a>
-                <a href="./Personal_Projects/Console_Chronicles/index.html" class="project-card">
+                <a href="./Personal_Projects/Console_Chronicles/index.html" class="project-card"
+                    data-skills="Data visualization">
                     <div class="card-top"><span class="card-number">02</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -210,7 +224,8 @@
                         <span>JavaScript</span>
                     </div>
                 </a>
-                <a href="./Personal_Projects/Bagel_Byte_Academy/index.html" class="project-card">
+                <a href="./Personal_Projects/Bagel_Byte_Academy/index.html" class="project-card"
+                    data-skills="Interactive learning">
                     <div class="card-top"><span class="card-number">03</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -226,7 +241,8 @@
                         <span>Three.js</span>
                     </div>
                 </a>
-                <a href="./Personal_Projects/Bagely_Bytes_Programming/index.html" class="project-card">
+                <a href="./Personal_Projects/Bagely_Bytes_Programming/index.html" class="project-card"
+                    data-skills="Interactive learning">
                     <div class="card-top"><span class="card-number">04</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -242,7 +258,8 @@
                         <span>JavaScript</span>
                     </div>
                 </a>
-                <a href="./Personal_Projects/Threat_Aware/index.html" class="project-card">
+                <a href="./Personal_Projects/Threat_Aware/index.html" class="project-card"
+                    data-skills="Interactive learning">
                     <div class="card-top"><span class="card-number">05</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -258,7 +275,8 @@
                         <span>JavaScript</span>
                     </div>
                 </a>
-                <a href="./Personal_Projects/Algorithm_Arena/index.html" class="project-card">
+                <a href="./Personal_Projects/Algorithm_Arena/index.html" class="project-card"
+                    data-skills="Data visualization|Interactive learning">
                     <div class="card-top"><span class="card-number">06</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -275,7 +293,8 @@
                         <span>Chart.js</span>
                     </div>
                 </a>
-                <a href="./Personal_Projects/AnimateLab/index.html" class="project-card">
+                <a href="./Personal_Projects/AnimateLab/index.html" class="project-card"
+                    data-skills="Animation|Interactive learning">
                     <div class="card-top"><span class="card-number">07</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -293,7 +312,8 @@
                         <span>SVG</span>
                     </div>
                 </a>
-                <a href="./Personal_Projects/Endpoint_Explorer/index.html" class="project-card">
+                <a href="./Personal_Projects/Endpoint_Explorer/index.html" class="project-card"
+                    data-skills="API integration">
                     <div class="card-top"><span class="card-number">08</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -309,7 +329,8 @@
                         <span>Fetch API</span>
                     </div>
                 </a>
-                <a href="./Personal_Projects/PipelineTrack/index.html" class="project-card">
+                <a href="./Personal_Projects/PipelineTrack/index.html" class="project-card"
+                    data-skills="Browser storage|Data visualization">
                     <div class="card-top"><span class="card-number">09</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -333,7 +354,8 @@
                 <div class="chapter-symbol" aria-hidden="true">⌘</div><span class="chapter-count">5 projects to
                     explore</span>
             </div>
-            <div class="card-grid"><a href="./Professional_Projects/DarkModes/" class="project-card">
+            <div class="card-grid"><a href="./Professional_Projects/DarkModes/" class="project-card"
+                    data-skills="Interface design">
                     <div class="card-top"><span class="card-number">01</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -348,7 +370,8 @@
                         <span>JavaScript</span>
                     </div>
                 </a>
-                <a href="./Professional_Projects/One_Heck_Of_A_Sandwich_Web_Edition/index.html" class="project-card">
+                <a href="./Professional_Projects/One_Heck_Of_A_Sandwich_Web_Edition/index.html" class="project-card"
+                    data-skills="Interface design">
                     <div class="card-top"><span class="card-number">02</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -363,7 +386,8 @@
                         <span>JavaScript</span>
                     </div>
                 </a>
-                <a href="./Professional_Projects/Neighborhood-Library/index.html" class="project-card">
+                <a href="./Professional_Projects/Neighborhood-Library/index.html" class="project-card"
+                    data-skills="Interface design">
                     <div class="card-top"><span class="card-number">03</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -378,7 +402,8 @@
                         <span>JavaScript</span>
                     </div>
                 </a>
-                <a href="./Professional_Projects/Data_Pipeline/index.html" class="project-card">
+                <a href="./Professional_Projects/Data_Pipeline/index.html" class="project-card"
+                    data-skills="Data visualization">
                     <div class="card-top"><span class="card-number">04</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -393,7 +418,7 @@
                     </div>
                 </a>
                 <a href="https://github.com/Year-Up-United-SPR-2025" target="_blank" rel="noopener noreferrer"
-                    class="project-card">
+                    class="project-card" data-skills="Full-stack development">
                     <div class="card-top"><span class="card-number">05</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -415,7 +440,8 @@
                 <div class="chapter-symbol" aria-hidden="true">↗</div><span class="chapter-count">6 projects to
                     explore</span>
             </div>
-            <div class="card-grid"><a href="./Academic_Projects/RunLikeAG.U.R.L/index.html" class="project-card">
+            <div class="card-grid"><a href="./Academic_Projects/RunLikeAG.U.R.L/index.html" class="project-card"
+                    data-skills="Interface design">
                     <div class="card-top"><span class="card-number">01</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -431,7 +457,8 @@
                         <span>JavaScript</span>
                     </div>
                 </a>
-                <a href="./Academic_Projects/Social_Com's_Final/index.html" class="project-card">
+                <a href="./Academic_Projects/Social_Com's_Final/index.html" class="project-card"
+                    data-skills="Visual storytelling">
                     <div class="card-top"><span class="card-number">02</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -446,7 +473,8 @@
                         <span>JavaScript</span>
                     </div>
                 </a>
-                <a href="./Academic_Projects/Orbit_Control/index.html" class="project-card">
+                <a href="./Academic_Projects/Orbit_Control/index.html" class="project-card"
+                    data-skills="Physical computing">
                     <div class="card-top"><span class="card-number">03</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -460,7 +488,8 @@
                         <span>JavaScript</span>
                     </div>
                 </a>
-                <a href="./Academic_Projects/Dimensional_Playground/index.html" class="project-card">
+                <a href="./Academic_Projects/Dimensional_Playground/index.html" class="project-card"
+                    data-skills="3D experiences">
                     <div class="card-top"><span class="card-number">04</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -477,7 +506,8 @@
                         <span>Web Audio</span>
                     </div>
                 </a>
-                <a href="./Academic_Projects/One_Day_Triathlon_Website/index.html" class="project-card">
+                <a href="./Academic_Projects/One_Day_Triathlon_Website/index.html" class="project-card"
+                    data-skills="Interface design">
                     <div class="card-top"><span class="card-number">05</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -494,7 +524,7 @@
                     </div>
                 </a>
                 <a href="https://prospectpark23.wixsite.com/prospect-park" target="_blank" rel="noopener noreferrer"
-                    class="project-card">
+                    class="project-card" data-skills="Interface design">
                     <div class="card-top"><span class="card-number">06</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -517,7 +547,7 @@
                 <div class="chapter-symbol" aria-hidden="true">✦</div><span class="chapter-count">1 collection to
                     explore</span>
             </div>
-            <div class="card-grid"><a href="Game_Vault/index.html" class="project-card">
+            <div class="card-grid"><a href="Game_Vault/index.html" class="project-card" data-skills="Game development">
                     <div class="card-top"><span class="card-number">01</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -541,7 +571,7 @@
                 <div class="chapter-symbol" aria-hidden="true">◒</div><span class="chapter-count">4 projects to
                     explore</span>
             </div>
-            <div class="card-grid"><a href="./Art/index.html" class="project-card">
+            <div class="card-grid"><a href="./Art/index.html" class="project-card" data-skills="Visual storytelling">
                     <div class="card-top"><span class="card-number">01</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -558,7 +588,7 @@
                         <span>Graphic Design</span>
                     </div>
                 </a>
-                <a href="./Art/art-history.html" class="project-card">
+                <a href="./Art/art-history.html" class="project-card" data-skills="Visual storytelling">
                     <div class="card-top"><span class="card-number">02</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -574,7 +604,7 @@
                         <span>JavaScript</span>
                     </div>
                 </a>
-                <a href="./Art/human-rights.html" class="project-card">
+                <a href="./Art/human-rights.html" class="project-card" data-skills="Visual storytelling">
                     <div class="card-top"><span class="card-number">03</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>
@@ -590,7 +620,7 @@
                         <span>JavaScript</span>
                     </div>
                 </a>
-                <a href="./Art/brand-guide.html" class="project-card">
+                <a href="./Art/brand-guide.html" class="project-card" data-skills="Visual storytelling">
                     <div class="card-top"><span class="card-number">04</span>
                         <div class="card-platforms">
                             <span class="platform desktop"><i class="fas fa-desktop"></i> Desktop</span>

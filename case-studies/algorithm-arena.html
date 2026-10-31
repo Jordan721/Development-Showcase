@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Algorithm Arena — Behind the build | Jordan Alexis</title>
+    <meta name="description"
+        content="Animated sorting, searching, and side-by-side races turn abstract operations into something visitors can inspect.">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../showcase.css">
+    <link rel="stylesheet" href="case-studies.css">
+</head>
+
+<body><a class="skip-link" href="#case-content">Skip to case study</a>
+    <header class="site-header"><a class="wordmark" href="../index.html"><span class="brand-mark">ja.</span> Jordan
+            Alexis</a>
+        <nav aria-label="Main navigation"><a href="../index.html#featured">All featured projects ↗</a></nav>
+    </header>
+    <main class="case-page" id="case-content">
+        <div class="case-heading"><span class="eyebrow">BEHIND THE BUILD / Algorithm Arena</span>
+            <h1>Make algorithm behavior visible.</h1>
+            <p class="case-intro">Animated sorting, searching, and side-by-side races turn abstract operations into
+                something visitors can inspect.</p>
+            <p class="project-context">Personal project / Learning tool</p>
+            <div class="case-actions"><a class="primary-link"
+                    href="../Personal_Projects/Algorithm_Arena/index.html">Open the demo ↗</a><a
+                    href="https://github.com/Jordan721/Development-Showcase/tree/main/Personal_Projects/Algorithm_Arena"
+                    target="_blank" rel="noopener noreferrer">Explore the source ↗</a></div>
+        </div>
+        <figure class="case-figure"><img src="../assets/showcase/algorithm-arena.png"
+                alt="Algorithm Arena application interface" width="1440" height="960">
+            <figcaption>Inside Algorithm Arena. Follow the walkthrough below to explore the working project.
+            </figcaption>
+        </figure>
+        <div class="case-grid">
+            <section>
+                <h2>The problem</h2>
+                <p>A final sorted array hides the work an algorithm performed. Algorithm Arena exposes intermediate
+                    steps, comparisons, and swaps so people can explore how different approaches reach an answer.</p>
+            </section>
+            <section>
+                <h2>How it works</h2>
+                <p>Asynchronous sorting functions update the visualization between operations. Controls adjust data size
+                    and animation speed, step mode advances operations individually, and race mode compares two
+                    algorithms using the same dataset.</p>
+            </section>
+            <section>
+                <h2>A design tradeoff</h2>
+                <p>Slowing execution makes operations easier to follow. That also means displayed elapsed time is
+                    affected by animation delays and browser rendering. Comparison and swap counts offer another way to
+                    inspect behavior without treating the animated race as a rigorous benchmark.</p>
+            </section>
+            <section>
+                <h2>Look inside the code</h2>
+                <p>The sorting functions increment comparison counters and await animation delays. The interface exposes
+                    step mode, custom input, a race view, and persistent run analytics.</p><a class="case-study-link"
+                    href="https://github.com/Jordan721/Development-Showcase/blob/main/Personal_Projects/Algorithm_Arena/script.js"
+                    target="_blank" rel="noopener noreferrer">Read script.js ↗</a>
+            </section>
+        </div>
+        <section class="case-walkthrough"><span class="eyebrow">YOUR TURN / A QUICK WALKTHROUGH</span>
+            <h2>See it working.</h2>
+            <ol>
+                <li>In Sorting, select Bubble Sort and enable step mode.</li>
+                <li>Choose Sort, then use Next Step to inspect individual operations and the changing counters.</li>
+                <li>Open Algorithm Race, choose two sorting algorithms, and compare their behavior on the shared
+                    dataset.</li>
+            </ol><a class="primary-link" href="../Personal_Projects/Algorithm_Arena/index.html">Try Algorithm Arena
+                ↗</a>
+        </section>
+        <section class="case-takeaway">
+            <h2>What this demonstrates</h2>
+            <p>This build demonstrates asynchronous control flow, interactive data visualization, and presenting
+                technical concepts through direct manipulation.</p>
+            <p class="case-limit">Animated race times include visualization overhead and should not be read as
+                production performance benchmarks.</p>
+        </section>
+        <nav class="case-next" aria-label="More case studies"><a href="pipelinetrack.html">Inside PipelineTrack ↗</a><a
+                href="animatelab.html">Inside AnimateLab ↗</a><a href="../index.html#explore">Explore the full
+                collection ↗</a></nav>
+    </main>
+    <footer>
+        <p>Jordan Alexis / Development Showcase</p><a href="https://jordan721.github.io/Jordan_Alexis/">Meet the
+            developer ↗</a>
+    </footer>
+</body>
+
+</html>
