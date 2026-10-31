@@ -1,21 +1,133 @@
-.workspace-preview { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 16px 20px; margin: 20px 24px 0; border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 12px; background: var(--surface); }
-.workspace-preview strong { font-size: 14px; }
-.workspace-preview p { font-size: 13px; line-height: 1.65; color: var(--text-muted); margin-top: 4px; }
-.workspace-preview a { white-space: nowrap; }
-.topbar-controls { display: flex; align-items: center; gap: 10px; }
-.workspace-settings-options { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
-.stat-context, .dash-card-note, .dash-card-description, .stat-pace, .dash-opportunity-note, .dash-insight-label { font-size: 12px; line-height: 1.65; }
-.dash-section-heading>span { font-size: 12px; }
-@media(max-width: 640px) { .workspace-preview { flex-direction: column; align-items: flex-start; margin: 14px 16px 0; } }
+.workspace-preview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 20px;
+    margin: 20px 24px 0;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    background: var(--surface);
+}
 
-@media print { .workspace-settings-dialog, #workspace-settings-open, .workspace-preview { display: none; } }
+.workspace-preview strong {
+    font-size: 14px;
+}
 
-.workspace-settings-dialog { color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 18px; width: min(480px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); overflow: auto; padding: 26px; margin: auto; box-shadow: 0 24px 80px #0008; }
-.workspace-settings-dialog::backdrop { background: #0009; }
-.workspace-settings-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
-.workspace-settings-heading h2 { margin: 0 0 8px; font-size: 22px; }
-.workspace-settings-heading p, .workspace-settings-hint { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
-.workspace-settings-dialog h3 { font-size: 14px; margin-bottom: 18px; }
-.workspace-settings-hint { margin-top: 20px; }
-.workspace-settings-dialog button:focus-visible, #workspace-settings-open:focus-visible, .workspace-preview a:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
-#workspace-settings-open kbd { margin-left: 6px; font-size: 11px; color: var(--text-muted); border: 1px solid var(--border); padding: 1px 5px; border-radius: 4px; }
+.workspace-preview p {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.workspace-preview a {
+    white-space: nowrap;
+}
+
+.topbar-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.workspace-settings-options {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+}
+
+.stat-context,
+.dash-card-note,
+.dash-card-description,
+.stat-pace,
+.dash-opportunity-note,
+.dash-insight-label {
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+.dash-section-heading>span {
+    font-size: 12px;
+}
+
+@media(max-width: 640px) {
+    .workspace-preview {
+        flex-direction: column;
+        align-items: flex-start;
+        margin: 14px 16px 0;
+    }
+}
+
+@media print {
+
+    .workspace-settings-dialog,
+    #workspace-settings-open,
+    .workspace-preview {
+        display: none;
+    }
+}
+
+.workspace-settings-dialog {
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    width: min(480px, calc(100vw - 32px));
+    max-height: calc(100dvh - 48px);
+    overflow: auto;
+    padding: 26px;
+    margin: auto;
+    box-shadow: 0 24px 80px #0008;
+}
+
+.workspace-settings-dialog::backdrop {
+    background: #0009;
+}
+
+.workspace-settings-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+.workspace-settings-heading h2 {
+    margin: 0 0 8px;
+    font-size: 22px;
+}
+
+.workspace-settings-heading p,
+.workspace-settings-hint {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.workspace-settings-dialog h3 {
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+.workspace-settings-hint {
+    margin-top: 20px;
+}
+
+.workspace-settings-dialog button:focus-visible,
+#workspace-settings-open:focus-visible,
+.workspace-preview a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+}
+
+#workspace-settings-open kbd {
+    margin-left: 6px;
+    font-size: 11px;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 4px;
+}
