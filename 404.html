@@ -4,87 +4,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Page Not Found | Jordan Alexis</title>
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#10101a">
+    <title>404 — Page Not Found | Jordan Alexis</title>
     <link rel="icon" type="image/svg+xml" href="/Development-Showcase/favicon.svg">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
     <style>
+        :root {
+            color-scheme: dark;
+            --ink: #f3f1ff;
+            --muted: #b4b0c8;
+            --green: #c5ff62;
+            --line: #ffffff20;
+        }
+
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: #0a0a0a;
-            color: #fafafa;
+            margin: 0;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 2rem;
+            background: #10101a;
+            background-image: radial-gradient(ellipse at 10% 10%, #6834a530, transparent 55%);
+            color: var(--ink);
+            font-family: 'DM Sans', sans-serif;
         }
 
-        .container {
-            max-width: 500px;
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        a:focus-visible {
+            outline: 3px solid var(--green);
+            outline-offset: 5px;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            font-weight: 700;
+        }
+
+        .brand-mark {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            background: var(--green);
+            color: #10101a;
+            transform: rotate(-8deg);
+            font: 700 24px 'Space Grotesk', sans-serif;
+            letter-spacing: -2px;
+        }
+
+        header {
+            padding: 24px max(24px, calc((100% - 1040px) / 2));
+            border-bottom: 1px solid var(--line);
+        }
+
+        main {
+            max-width: 1040px;
+            margin: auto;
+            padding: 48px 24px 32px;
+        }
+
+        .eyebrow {
+            color: var(--green);
+            font: 600 11px 'Space Grotesk', sans-serif;
+            letter-spacing: 2px;
         }
 
         .error-code {
-            font-size: clamp(5rem, 15vw, 8rem);
-            font-weight: 800;
-            line-height: 1;
-            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
+            margin: 20px 0 12px;
+            color: var(--green);
+            font: 700 clamp(80px, 16vw, 136px)/1 'Space Grotesk', sans-serif;
+            letter-spacing: -6px;
         }
 
         h1 {
-            font-size: 1.5rem;
+            margin: 0 0 18px;
+            font: 600 clamp(30px, 5vw, 48px)/1.15 'Space Grotesk', sans-serif;
+            letter-spacing: -1px;
+        }
+
+        .intro {
+            max-width: 570px;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin: 28px 0 40px;
+        }
+
+        .button {
+            padding: 14px 20px;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            font-size: 14px;
             font-weight: 600;
-            margin-bottom: 1rem;
-            color: #e4e4e7;
         }
 
-        p {
-            color: #a1a1aa;
+        .button.primary {
+            background: var(--green);
+            color: #10101a;
+            border-color: var(--green);
+        }
+
+        .button:hover,
+        .project:hover {
+            border-color: var(--green);
+        }
+
+        h2 {
+            font: 500 23px 'Space Grotesk', sans-serif;
+            margin: 0 0 18px;
+        }
+
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .project {
+            padding: 22px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: #1c1c2a;
+        }
+
+        .project strong {
+            display: block;
+            font: 600 19px 'Space Grotesk', sans-serif;
+            margin-bottom: 10px;
+        }
+
+        .project p {
+            color: var(--muted);
+            font-size: 14px;
             line-height: 1.7;
-            margin-bottom: 2rem;
+            margin: 0;
         }
 
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #a855f7;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.75rem 1.5rem;
-            border: 1px solid #a855f7;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+        .project .cta {
+            display: block;
+            color: var(--green);
+            font-size: 13px;
+            margin-top: 18px;
         }
 
-        .back-link:hover {
-            background: #a855f7;
-            color: #0a0a0a;
+        footer {
+            max-width: 1040px;
+            margin: auto;
+            padding: 16px 24px 40px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.8;
         }
+
+        footer a {
+            color: var(--ink);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        @media(max-width: 640px) { main { padding-top: 32px; } .projects { grid-template-columns: 1fr; } }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="error-code">404</div>
-        <h1>Page Not Found</h1>
-        <p>The page you're looking for doesn't exist or may have been moved. Head back to the showcase to explore all
-            projects.</p>
-        <a href="https://jordan721.github.io/Development-Showcase/" class="back-link">
-            <i class="fas fa-arrow-left"></i> Back to Showcase
-        </a>
-    </div>
+    <header><a class="brand" href="/Development-Showcase/"><span class="brand-mark">ja.</span> Jordan Alexis</a>
+    </header>
+    <main>
+        <span class="eyebrow">A SMALL DETOUR</span>
+        <div class="error-code" aria-hidden="true">404</div>
+        <h1>Page not found. More doors ahead.</h1>
+        <p class="intro">This page may have moved, or the link might have a typo. You can still explore the collection
+            or start with one of these projects.</p>
+        <nav class="actions" aria-label="Find your way back">
+            <a class="button primary" href="/Development-Showcase/#explore">Explore projects <span
+                    aria-hidden="true">↗</span></a>
+            <a class="button" href="/Development-Showcase/#featured">Featured projects <span
+                    aria-hidden="true">↗</span></a>
+        </nav>
+        <section aria-labelledby="projects-title">
+            <h2 id="projects-title">A few doors worth opening.</h2>
+            <div class="projects">
+                <a class="project"
+                    href="/Development-Showcase/Personal_Projects/PipelineTrack/index.html"><strong>PipelineTrack</strong>
+                    <p>Explore a workspace for applications, resume fit, and skill gaps.</p><span class="cta">Try the
+                        tool <span aria-hidden="true">↗</span></span>
+                </a>
+                <a class="project"
+                    href="/Development-Showcase/Personal_Projects/Algorithm_Arena/index.html"><strong>Algorithm
+                        Arena</strong>
+                    <p>Watch sorting and searching algorithms work through data.</p><span class="cta">Run an algorithm
+                        <span aria-hidden="true">↗</span></span>
+                </a>
+                <a class="project"
+                    href="/Development-Showcase/Personal_Projects/AnimateLab/index.html"><strong>AnimateLab</strong>
+                    <p>Experiment with animation controls and inspect the code.</p><span class="cta">Explore animation
+                        <span aria-hidden="true">↗</span></span>
+                </a>
+            </div>
+        </section>
+    </main>
+    <footer>Found a broken link? <a
+            href="https://github.com/Jordan721/Development-Showcase/issues/new?title=Broken%20link%20in%20showcase&amp;body=Broken%20URL%3A%20%0A%0APage%20where%20I%20found%20the%20link%3A%20%0A%0AWhat%20I%20expected%3A%20">Report
+            it on GitHub</a>.</footer>
 </body>
 
 </html>
