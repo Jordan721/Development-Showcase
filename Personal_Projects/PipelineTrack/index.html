@@ -5,31 +5,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PipelineTrack</title>
-    <script src="javascript/demo.js"></script>
+    <script src="javascript/core/demo.js"></script>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
         rel="stylesheet" />
-    <link rel="stylesheet" href="css/base.css" />
-    <link rel="stylesheet" href="css/dashboard.css" />
-    <link rel="stylesheet" href="css/board.css" />
-    <link rel="stylesheet" href="css/modals.css" />
-    <link rel="stylesheet" href="css/features.css" />
-    <link rel="stylesheet" href="css/animations.css" />
-    <link rel="stylesheet" href="css/views.css" />
-    <link rel="stylesheet" href="css/fun.css" />
-    <link rel="stylesheet" href="css/onboarding.css" />
-    <link rel="stylesheet" href="css/ux-enhancements.css" />
+    <link rel="stylesheet" href="css/core/base.css" />
+    <link rel="stylesheet" href="css/views/dashboard.css" />
+    <link rel="stylesheet" href="css/views/board.css" />
+    <link rel="stylesheet" href="css/ui/modals.css" />
+    <link rel="stylesheet" href="css/features/features.css" />
+    <link rel="stylesheet" href="css/ui/animations.css" />
+    <link rel="stylesheet" href="css/views/secondary-views.css" />
+    <link rel="stylesheet" href="css/ui/fun.css" />
+    <link rel="stylesheet" href="css/ui/onboarding.css" />
+    <link rel="stylesheet" href="css/ui/ux-enhancements.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="css/map.css" />
-    <link rel="stylesheet" href="css/polish.css" />
-    <link rel="stylesheet" href="css/sidebar.css" />
-    <link rel="stylesheet" href="css/career-flow.css" />
-    <link rel="stylesheet" href="css/calendar-details.css" />
-    <link rel="stylesheet" href="css/profile-skills.css" />
-    <link rel="stylesheet" href="css/workspace-polish.css" />
-    <link rel="stylesheet" href="css/job-workspace.css" />
+    <link rel="stylesheet" href="css/views/map.css" />
+    <link rel="stylesheet" href="css/core/polish.css" />
+    <link rel="stylesheet" href="css/ui/sidebar.css" />
+    <link rel="stylesheet" href="css/features/career-flow.css" />
+    <link rel="stylesheet" href="css/views/calendar-details.css" />
+    <link rel="stylesheet" href="css/views/profile-skills.css" />
+    <link rel="stylesheet" href="css/ui/workspace.css" />
 </head>
 
 <body>
@@ -130,14 +129,20 @@
         <header class="topbar">
             <div class="topbar-title" id="topbar-title">Dashboard</div>
             <div class="topbar-controls">
-                <button type="button" id="workspace-settings-open" class="btn-secondary" aria-haspopup="dialog" aria-controls="workspace-settings-dialog" aria-keyshortcuts="S" title="Open settings (S)">Settings <kbd>S</kbd></button>
+                <button type="button" id="workspace-settings-open" class="btn-secondary" aria-haspopup="dialog"
+                    aria-controls="workspace-settings-dialog" aria-keyshortcuts="S" title="Open settings (S)">Settings
+                    <kbd>S</kbd></button>
                 <button class="onboarding-help-btn" id="onboarding-help-btn"
                     title="Open getting started guide">?</button>
                 <button class="btn-primary" id="topbar-action" data-action="add-job">+ Add Job</button>
             </div>
         </header>
 
-        <aside class="workspace-preview" id="workspace-preview" aria-label="Workspace demo"><div><strong>Take a quick look around</strong><p>Try a temporary workspace with fictional applications and skills.</p></div><a class="btn-secondary" href="index.html?demo=1">Explore sample workspace ↗</a></aside>
+        <aside class="workspace-preview" id="workspace-preview" aria-label="Workspace demo">
+            <div><strong>Take a quick look around</strong>
+                <p>Try a temporary workspace with fictional applications and skills.</p>
+            </div><a class="btn-secondary" href="index.html?demo=1">Explore sample workspace ↗</a>
+        </aside>
 
         <!-- ── GETTING STARTED BAR ──────────────────────────── -->
         <div id="getting-started-bar" style="display:none;padding:0 24px;"></div>
@@ -2250,60 +2255,95 @@
         </div>
     </div>
 
-    <dialog id="workspace-settings-dialog" class="workspace-settings-dialog" aria-labelledby="workspace-settings-title" aria-describedby="workspace-settings-description">
-        <div class="workspace-settings-heading"><div><h2 id="workspace-settings-title">Settings</h2><p id="workspace-settings-description">Make this workspace comfortable for you.</p></div><button type="button" id="workspace-settings-close" class="btn-secondary" aria-label="Close settings" autofocus>✕</button></div>
+    <dialog id="workspace-settings-dialog" class="workspace-settings-dialog" aria-labelledby="workspace-settings-title"
+        aria-describedby="workspace-settings-description">
+        <div class="workspace-settings-heading">
+            <div>
+                <h2 id="workspace-settings-title">Settings</h2>
+                <p id="workspace-settings-description">Make this workspace comfortable for you.</p>
+            </div><button type="button" id="workspace-settings-close" class="btn-secondary" aria-label="Close settings"
+                autofocus>✕</button>
+        </div>
         <h3>Appearance &amp; accessibility</h3>
         <div class="workspace-settings-options">
-                <div class="theme-swatches" id="theme-swatches">
-                    <button class="theme-swatch theme-swatch--midnight" data-theme="midnight"
-                        title="Midnight theme">M</button>
-                    <button class="theme-swatch theme-swatch--sunset" data-theme="sunset"
-                        title="Sunset theme">S</button>
-                    <button class="theme-swatch theme-swatch--ocean" data-theme="ocean" title="Ocean theme">O</button>
-                </div>
-                <button class="theme-toggle" id="theme-toggle-btn" title="Toggle light/dark mode"><span
-                        id="theme-icon"></span></button>
-                <button id="btn-theme-motion" title="Toggle theme animation" aria-label="Toggle theme animation"
-                    aria-pressed="true">✦</button>
-                <button id="btn-colorblind" title="Toggle color-blind mode"
-                    aria-label="Toggle color-blind mode">◑</button>
+            <div class="theme-swatches" id="theme-swatches">
+                <button class="theme-swatch theme-swatch--midnight" data-theme="midnight"
+                    title="Midnight theme">M</button>
+                <button class="theme-swatch theme-swatch--sunset" data-theme="sunset" title="Sunset theme">S</button>
+                <button class="theme-swatch theme-swatch--ocean" data-theme="ocean" title="Ocean theme">O</button>
+            </div>
+            <button class="theme-toggle" id="theme-toggle-btn" title="Toggle light/dark mode"><span
+                    id="theme-icon"></span></button>
+            <button id="btn-theme-motion" title="Toggle theme animation" aria-label="Toggle theme animation"
+                aria-pressed="true">✦</button>
+            <button id="btn-colorblind" title="Toggle color-blind mode" aria-label="Toggle color-blind mode">◑</button>
         </div>
-        <p class="workspace-settings-hint">Theme: M = Midnight, S = Sunset, O = Ocean. Use the sun or moon to switch light and dark, ✦ for theme motion, and ◑ for color-blind mode.</p>
+        <p class="workspace-settings-hint">Theme: M = Midnight, S = Sunset, O = Ocean. Use the sun or moon to switch
+            light and dark, ✦ for theme motion, and ◑ for color-blind mode.</p>
+        <div class="workspace-reading-settings">
+            <label for="workspace-system-theme">Follow system theme</label>
+            <select id="workspace-system-theme" class="select-input"><option value="off">Off</option><option value="on">On</option></select>
+            <label for="workspace-contrast">Higher contrast</label>
+            <select id="workspace-contrast" class="select-input"><option value="off">Off</option><option value="on">On</option></select>
+            <label for="workspace-motion">Animations</label>
+            <select id="workspace-motion" class="select-input"><option value="system">Follow device</option><option value="reduce">Reduce</option></select>
+            <label for="workspace-text-size">Text size</label>
+            <select id="workspace-text-size" class="select-input">
+                <option value="small">Small</option>
+                <option value="default">Default</option>
+                <option value="large">Large</option>
+            </select>
+            <label for="workspace-spacing">Spacing</label>
+            <select id="workspace-spacing" class="select-input">
+                <option value="compact">Compact</option>
+                <option value="comfortable">Comfortable</option>
+                <option value="spacious">Spacious</option>
+            </select>
+        </div>
+        <h3 class="workspace-preferences-heading">Workspace preferences</h3>
+        <div class="workspace-reading-settings">
+            <label for="workspace-start-page">Starting page</label>
+            <select id="workspace-start-page" class="select-input"><option value="dashboard">Dashboard</option><option value="board">Job Board</option><option value="calendar">Calendar</option></select>
+            <label for="workspace-date-format">Date format</label>
+            <select id="workspace-date-format" class="select-input"><option value="default">Short month (Nov 1)</option><option value="mdy">MM/DD/YYYY</option><option value="dmy">DD/MM/YYYY</option></select>
+        </div>
+        <button type="button" id="workspace-reset-appearance" class="btn-secondary">Reset appearance</button>
+        <p class="workspace-settings-hint" id="workspace-settings-status" role="status" aria-live="polite"></p>
+        <p class="workspace-settings-hint">Changes apply immediately and are saved on this browser.</p>
         <p class="workspace-settings-hint">Click outside or press Escape to close.</p>
     </dialog>
-    <script src="javascript/workspace-settings.js"></script>
+    <script src="javascript/ui/workspace-settings.js"></script>
 
     <!-- PDF parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <!-- Word .docx parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="javascript/animations.js"></script>
+    <script src="javascript/ui/animations.js"></script>
     <!-- Core data & state -->
-    <script src="javascript/data.js"></script>
-    <script src="javascript/data-industries.js"></script>
-    <script src="javascript/utils.js"></script>
-    <script src="javascript/state.js"></script>
+    <script src="javascript/data/catalog.js"></script>
+    <script src="javascript/core/utils.js"></script>
+    <script src="javascript/core/state.js"></script>
     <!-- View renderers -->
-    <script src="javascript/job-departments.js"></script>
-    <script src="javascript/views-dashboard.js"></script>
-    <script src="javascript/views-board.js"></script>
-    <script src="javascript/views-profile.js"></script>
-    <script src="javascript/bulk-skills.js"></script>
-    <script src="javascript/views-resume.js"></script>
-    <script src="javascript/career-flow.js"></script>
-    <script src="javascript/views-calendar.js"></script>
-    <script src="javascript/views-contacts.js"></script>
-    <script src="javascript/views-analytics.js"></script>
-    <script src="javascript/views-goals.js"></script>
-    <script src="javascript/fun.js"></script>
+    <script src="javascript/features/job-departments.js"></script>
+    <script src="javascript/views/dashboard.js"></script>
+    <script src="javascript/views/board.js"></script>
+    <script src="javascript/views/profile.js"></script>
+    <script src="javascript/features/bulk-skills.js"></script>
+    <script src="javascript/views/resume.js"></script>
+    <script src="javascript/features/career-flow.js"></script>
+    <script src="javascript/views/calendar.js"></script>
+    <script src="javascript/views/contacts.js"></script>
+    <script src="javascript/views/analytics.js"></script>
+    <script src="javascript/views/goals.js"></script>
+    <script src="javascript/ui/fun.js"></script>
     <!-- Entry point & extensions -->
-    <script src="javascript/app.js"></script>
-    <script src="javascript/features.js"></script>
-    <script src="javascript/onboarding.js"></script>
-    <script src="javascript/ux-enhancements.js"></script>
-    <script src="javascript/views-map.js"></script>
-    <script src="javascript/job-workspace.js"></script>
+    <script src="javascript/core/app.js"></script>
+    <script src="javascript/features/features.js"></script>
+    <script src="javascript/ui/onboarding.js"></script>
+    <script src="javascript/ui/ux-enhancements.js"></script>
+    <script src="javascript/views/map.js"></script>
+    <script src="javascript/features/job-workspace.js"></script>
 </body>
 
 </html>

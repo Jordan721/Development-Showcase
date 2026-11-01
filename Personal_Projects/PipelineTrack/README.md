@@ -42,6 +42,18 @@ Choose **Explore sample workspace** to try eight fictional applications and a sa
 
 Appearance controls open in a separate **Settings** dialog (button or **S** shortcut; close with Escape, the close button, or an outside click), and **Your next moves** appears before dashboard statistics.
 
+Settings are saved in this browser and include:
+
+- **Text size:** Small, Default, or Large; **Spacing:** Compact, Comfortable, or Spacious.
+- **Follow system theme:** Switch between light and dark as your device changes. Selecting a theme manually turns this off.
+- **Higher contrast:** Stronger text, borders, and keyboard focus indicators, available with every theme.
+- **Animations:** Follow device preferences or Reduce motion throughout the app, including animated counters. The separate theme animation toggle remains available.
+- **Starting page:** Open Dashboard, Job Board, or Calendar on the next load.
+- **Date format:** Keep short month labels or use MM/DD/YYYY or DD/MM/YYYY for formatted job dates. Calendar headings, activity timestamps, and native date inputs retain their own formats.
+- **Reset appearance:** Restore the dark theme, default text size, comfortable spacing, standard contrast, device motion preference, and default theme animation and color-blind settings. Records, starting page, and date format are preserved.
+
+Job detail descriptions show section headings and spaced paragraphs and lists while retaining skill highlights. Company notes and the activity log use full-width reading panels.
+
 1. Clone or download this folder and open `index.html` in any modern browser
 2. Follow the **getting started guide** that opens automatically — navigate steps with `←` / `→` arrow keys or the `‹ ›` buttons beside the dots, or reopen it anytime with the **?** button
 3. Go to **My Profile** and add your skills, plus any certifications, degrees, licenses, diplomas, or bootcamps you have finished or are working toward
@@ -67,47 +79,36 @@ All data is saved to your browser's localStorage — nothing is sent anywhere. U
 
 No frameworks, no build tools, no server. Open `index.html` in any modern browser and it works.
 
+With Node.js, run these checks from this folder:
+
+- `node tests/settings.test.cjs` checks saved preferences, system theme changes and manual overrides, date formats, and appearance reset without changing stored records.
+- `node tests/assets.test.cjs` checks local asset references, JavaScript syntax, duplicate script declarations, and the combined skills catalog.
+
 <details>
 <summary>File structure</summary>
 
-```
+```text
 PipelineTrack/
 ├── index.html
 ├── css/
-│   ├── base.css            # variables, reset, layout, buttons, forms
-│   ├── dashboard.css       # stat cards, velocity chart, deadlines, pipeline health
-│   ├── board.css           # kanban columns, action queue, table, timeline views, job cards
-│   ├── modals.css          # modals, profile, learning hub, resume hub
-│   ├── features.css        # deadline banner, notes timeline
-│   ├── animations.css      # view, modal, card, calendar, compare, and theme transition effects
-│   ├── views.css           # calendar, contacts, analytics, goals views
-│   ├── calendar-details.css # calendar dragging, job type colors, shared department badges, recent jobs, day details
-│   ├── profile-skills.css  # responsive skill rows and proficiency indicators
-│   ├── fun.css             # extra themes (Midnight, Sunset, Ocean), confetti, streak, card flair
-│   ├── onboarding.css      # first-run onboarding modal styles
-│   └── ux-enhancements.css # command palette, hover cards, tooltips, motion toggle, color-blind mode, print, empty states
-└── javascript/
-    ├── data.js             # static data: KNOWN_SKILLS, LEARNING, RESOURCES, WRITING_RULES (tech)
-    ├── data-industries.js  # extends KNOWN_SKILLS & LEARNING for Business, Finance, PM, Banking, CX
-    ├── state.js            # app state, localStorage save/load, export/import
-    ├── utils.js            # shared helpers, fit analysis, navigation
-    ├── job-departments.js  # shared department icons, theme-aware accents, and role classification
-    ├── views-dashboard.js  # dashboard stats, funnel, velocity, deadlines, time-in-stage
-    ├── views-board.js      # kanban board, table, timeline views, job detail & add/edit modals
-    ├── views-profile.js    # profile, skills, credential tracker, coverage chart
-    ├── bulk-skills.js      # skill import review, spacing/case cleanup, spelling suggestions, duplicate checks
-    ├── views-resume.js     # learning hub and resume hub
-    ├── views-calendar.js   # month/week/year/agenda views, date dragging, day details, recent jobs
-    ├── views-contacts.js   # network & contacts view
-    ├── views-analytics.js  # analytics view (KPIs, funnel, charts)
-    ├── views-goals.js      # goals view (live-counted progress)
-    ├── app.js              # event wiring and app init
-    ├── features.js         # deadline reminders, notes timeline, resume versioning
-    ├── animations.js       # UI animations and transitions
-    ├── fun.js              # confetti, milestone toasts, streak counter, dashboard nudge
-    ├── onboarding.js       # first-run guide, step navigation, reopen via ? button
-    └── ux-enhancements.js  # command palette, keyboard shortcuts, hover preview, tooltips, color-blind mode, getting started checklist
+│   ├── core/       # base variables, shared controls, global polish
+│   ├── views/      # dashboard, board, calendar, profile, map, secondary views
+│   ├── features/   # shared feature panels and career tools
+│   └── ui/         # modals, sidebar, themes, motion, onboarding, workspace settings
+├── javascript/
+│   ├── core/       # app startup, state/storage, shared helpers, demo mode
+│   ├── data/       # combined skills, learning, resources, and industry catalog
+│   ├── views/      # dashboard, board, profile, resume, calendar, contacts, analytics, goals, map
+│   ├── features/   # skills import, career tools, departments, job toolkit, extensions
+│   └── ui/         # settings dialog, animations, themes, onboarding, accessibility
+└── tests/          # Node.js checks; no package installation required
 ```
+
+For changes to a screen, start with the matching JavaScript file in `javascript/views/` and its styles in `css/views/`. Shared data belongs in `javascript/data/catalog.js`; shared storage and helpers belong in `javascript/core/`. Feature extensions belong in `features/`, while settings, accessibility, and other shared interface behavior belong in `ui/`.
+
+The technology and industry catalogs are combined in `javascript/data/catalog.js`. Workspace layout, job toolkit, and appearance styles are combined in `css/ui/workspace.css`, with labeled sections. Other view and feature files remain separate so each area is easy to find.
+
+Scripts remain classic browser scripts with shared globals. `index.html` defines their dependency order: demo setup first, settings and animation helpers, catalog and shared code, view renderers, then app startup and extensions. Styles retain their existing cascade order. Keep this order when adding files; no bundler or server is required.
 
 </details>
 

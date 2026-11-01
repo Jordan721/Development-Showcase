@@ -354,6 +354,7 @@ html.theme-motion-off.theme-shift .sidebar,
 html.theme-motion-off .theme-shift-pop {
   animation: none !important;
 }
+
 @keyframes themeSweep {
   0% {
     opacity: 0;
@@ -395,6 +396,7 @@ html.theme-motion-off .theme-shift-pop {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   body,
   .sidebar,
   .topbar,

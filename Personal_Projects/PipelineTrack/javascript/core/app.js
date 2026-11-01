@@ -613,7 +613,7 @@ function toggleThemeMotion() {
 }
 
 function playThemeTransition(sourceEl) {
-  if (!isThemeMotionEnabled() || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!isThemeMotionEnabled() || document.documentElement.getAttribute('data-motion') === 'reduce' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const root = document.documentElement;
   root.classList.remove('theme-shift');
@@ -637,6 +637,11 @@ function playThemeTransition(sourceEl) {
 }
 
 function setTheme(theme, options = {}) {
+  if (!options.system && document.documentElement.getAttribute('data-system-theme') === 'on') {
+    document.documentElement.setAttribute('data-system-theme', 'off');
+    document.getElementById('workspace-system-theme').value = 'off';
+    localStorage.setItem('pt-system-theme', 'off');
+  }
   const previousTheme = document.documentElement.getAttribute('data-theme') || 'dark';
   const shouldAnimate = options.animate !== false && previousTheme !== theme;
   document.documentElement.setAttribute('data-theme', theme);
@@ -649,9 +654,10 @@ function setTheme(theme, options = {}) {
 }
 
 function initTheme() {
-  const saved = localStorage.getItem('pt-theme') || 'dark';
+  const system = document.documentElement.getAttribute('data-system-theme') === 'on';
+  const saved = system ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : localStorage.getItem('pt-theme') || 'dark';
   setTheme(saved, {
-    animate: false
+    animate: false, system
   });
 }
 
@@ -791,7 +797,8 @@ function init() {
   reanalyzeAllJobs();
   wireEvents();
   wirePasteCleaners();
-  navigate('dashboard');
+  const startPage = document.documentElement.getAttribute('data-start-page');
+  navigate(['dashboard', 'board', 'calendar'].includes(startPage) ? startPage : 'dashboard');
   setTimeout(maybePromptForGhostedJobs, 350);
   if (typeof initUXEnhancements === 'function') initUXEnhancements();
   if (typeof initBulkActions === 'function') initBulkActions();

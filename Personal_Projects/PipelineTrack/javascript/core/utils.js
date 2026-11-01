@@ -431,7 +431,14 @@ function extractSalaryFromPosting(text) {
 }
 
 function formatDate(iso) {
-  const d = new Date(iso);
+  // Date-only values describe a local calendar day, not midnight UTC.
+  const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(iso) ? iso + 'T00:00:00' : iso);
+  const preference = document.documentElement.getAttribute('data-date-format');
+  if (preference === 'mdy' || preference === 'dmy') {
+    return d.toLocaleDateString(preference === 'dmy' ? 'en-GB' : 'en-US', {
+      year: 'numeric', month: '2-digit', day: '2-digit'
+    });
+  }
   return d.toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric'

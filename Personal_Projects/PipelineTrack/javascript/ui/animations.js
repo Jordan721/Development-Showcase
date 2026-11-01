@@ -16,7 +16,7 @@ function animateCountUp(el, target, suffix, duration) {
   suffix = suffix || '';
   duration = duration || 700;
   if (target === null || isNaN(target)) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (document.documentElement.getAttribute('data-motion') === 'reduce' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     el.textContent = Math.round(target) + suffix;
     return;
   }
@@ -24,6 +24,10 @@ function animateCountUp(el, target, suffix, duration) {
   const start = performance.now();
 
   function tick(now) {
+    if (document.documentElement.getAttribute('data-motion') === 'reduce' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.textContent = Math.round(target) + suffix;
+      return;
+    }
     const t = Math.min((now - start) / duration, 1);
     const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
     el.textContent = Math.round(eased * target) + suffix;
