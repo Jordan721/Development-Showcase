@@ -1663,10 +1663,10 @@ function openJobDetail(id) {
         const descEl = document.getElementById('detail-desc');
         const legendEl = document.getElementById('detail-desc-legend');
         if (job.description && (job.matched || []).length + (job.missing || []).length > 0) {
-          descEl.innerHTML = highlightJobDescription(job.description, job.matched || [], job.missing || []);
+          descEl.innerHTML = formatJobDescription(job.description, job.matched || [], job.missing || []);
           if (legendEl) legendEl.style.display = '';
         } else {
-          descEl.textContent = job.description || '';
+          descEl.innerHTML = formatJobDescription(job.description);
           if (legendEl) legendEl.style.display = 'none';
         }
         // Refresh fit ring
@@ -1700,10 +1700,10 @@ function openJobDetail(id) {
   const descEl = document.getElementById('detail-desc');
   const legendEl = document.getElementById('detail-desc-legend');
   if (job.description && (job.matched || []).length + (job.missing || []).length > 0) {
-    descEl.innerHTML = highlightJobDescription(job.description, job.matched || [], job.missing || []);
+    descEl.innerHTML = formatJobDescription(job.description, job.matched || [], job.missing || []);
     if (legendEl) legendEl.style.display = '';
   } else {
-    descEl.textContent = job.description || 'No description provided.';
+    descEl.innerHTML = formatJobDescription(job.description);
     if (legendEl) legendEl.style.display = 'none';
   }
 

@@ -673,6 +673,56 @@ function escHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+function formatJobDescription(text, matched = [], missing = []) {
+  const lines = String(text || 'No description provided.').replace(/\r\n?/g, '\n').split('\n');
+  const blocks = [];
+  let paragraph = [];
+  let items = [];
+  let listType = '';
+  const highlight = value => highlightJobDescription(value, matched, missing);
+  const flushParagraph = () => {
+    if (paragraph.length) blocks.push(`<p>${paragraph.map(highlight).join('<br>')}</p>`);
+    paragraph = [];
+  };
+  const flushList = () => {
+    if (items.length) blocks.push(`<${listType}>${items.map(item => `<li>${highlight(item)}</li>`).join('')}</${listType}>`);
+    items = [];
+    listType = '';
+  };
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) {
+      flushParagraph();
+      flushList();
+      continue;
+    }
+    const bullet = line.match(/^(?:[-*•●▪◦]\s+|\d+[.)]\s+)(.+)$/);
+    if (bullet) {
+      flushParagraph();
+      const type = /^\d/.test(line) ? 'ol' : 'ul';
+      if (listType && listType !== type) flushList();
+      listType = type;
+      items.push(bullet[1]);
+      continue;
+    }
+    flushList();
+    const heading = line.length <= 90 && (
+      /:$/.test(line) ||
+      /^(?:about (?:us|you|the (?:role|company|job|team))|(?:key |your )?responsibilities|(?:required |preferred |minimum |basic )?qualifications|requirements|benefits|(?:compensation|salary)(?: and benefits)?|what (?:you(?:'ll| will) do|we offer|we(?:'re| are) looking for)|job (?:summary|description)|overview)$/i.test(line) ||
+      (/[A-Z]/.test(line) && line === line.toUpperCase() && !/[.!?]$/.test(line))
+    );
+    if (heading) {
+      flushParagraph();
+      blocks.push(`<h4>${highlight(line)}</h4>`);
+    } else {
+      paragraph.push(line);
+    }
+  }
+  flushParagraph();
+  flushList();
+  return blocks.join('');
+}
+
 function highlightJobDescription(text, matched, missing) {
   if (!text) return '';
   if (!matched.length && !missing.length) return escHtml(text);

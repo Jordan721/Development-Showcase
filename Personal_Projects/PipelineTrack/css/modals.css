@@ -5269,12 +5269,46 @@
 }
 
 #modal-detail .detail-desc {
-  max-height: 210px;
-  padding: 13px 14px;
+  max-height: min(460px, 55vh);
+  padding: clamp(16px, 3vw, 26px);
   border-color: rgba(255, 255, 255, .08);
   background: rgba(13, 17, 23, .48);
-  color: rgba(201, 209, 217, .78);
-  line-height: 1.75;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.85;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+#modal-detail .detail-desc p {
+  margin: 0 0 1.1em;
+}
+
+#modal-detail .detail-desc h4 {
+  margin: 1.6em 0 .65em;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+#modal-detail .detail-desc ul,
+#modal-detail .detail-desc ol {
+  margin: .5em 0 1.25em;
+  padding-left: 1.6em;
+}
+
+#modal-detail .detail-desc li {
+  padding-left: .25em;
+  margin-bottom: .55em;
+}
+
+#modal-detail .detail-desc > :first-child {
+  margin-top: 0;
+}
+
+#modal-detail .detail-desc > :last-child {
+  margin-bottom: 0;
 }
 
 #modal-detail .detail-notes-section {
@@ -5475,8 +5509,9 @@
 
 /* Polished notes and activity panels in the job detail modal. */
 #modal-detail .detail-notes-section {
-  gap: 12px;
-  padding-top: 16px;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  padding-top: 20px;
 }
 
 #modal-detail .detail-notes-section .form-group,
@@ -5491,7 +5526,7 @@
   display: flex;
   flex-direction: column;
   min-height: 204px;
-  padding: 13px;
+  padding: clamp(16px, 3vw, 26px);
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, .075);
   border-radius: 12px;
@@ -5550,15 +5585,20 @@
 
 #modal-detail .detail-notes-section .text-area {
   flex: 1;
-  min-height: 144px;
+  min-height: 220px;
+  padding: 16px 18px;
+  font-size: 14px;
+  color: var(--text);
   resize: vertical;
-  line-height: 1.6;
+  line-height: 1.85;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 #modal-detail .notes-timeline {
   flex: 1;
-  max-height: 190px;
-  margin: 0 0 10px;
+  max-height: min(460px, 55vh);
+  margin: 0 0 16px;
   overflow: auto;
   border-color: rgba(255, 255, 255, .075);
   border-radius: 10px;
@@ -5567,8 +5607,9 @@
 
 #modal-detail .note-entry {
   position: relative;
+  flex-direction: column;
   gap: 12px;
-  padding: 11px 36px 11px 14px;
+  padding: 18px 42px 20px 22px;
   background: transparent;
   border-bottom-color: rgba(255, 255, 255, .065);
 }
@@ -5576,8 +5617,8 @@
 #modal-detail .note-entry::before {
   content: '';
   position: absolute;
-  left: 92px;
-  top: 18px;
+  left: 8px;
+  top: 24px;
   width: 7px;
   height: 7px;
   border-radius: 50%;
@@ -5586,18 +5627,23 @@
 }
 
 #modal-detail .note-ts {
-  width: 66px;
-  min-width: 66px;
+  width: auto;
+  min-width: 0;
   color: rgba(201, 209, 217, .58);
   font-size: 11px;
   font-weight: 700;
 }
 
 #modal-detail .note-text {
+  min-width: 0;
+  max-width: 100%;
   padding-left: 14px;
   border-left: 1px solid rgba(0, 212, 170, .22);
-  color: rgba(201, 209, 217, .86);
-  font-size: 13px;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.85;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 #modal-detail .note-entry-delete {
@@ -5633,7 +5679,9 @@
 }
 
 #modal-detail .note-add-input {
-  min-height: 38px;
+  min-height: 44px;
+  padding: 10px 14px;
+  font-size: 14px;
   border-color: rgba(255, 255, 255, .08);
   background: rgba(13, 17, 23, .58);
 }
@@ -5644,7 +5692,7 @@
 }
 
 #modal-detail .note-add-btn {
-  min-height: 38px;
+  min-height: 44px;
   white-space: nowrap;
 }
 
