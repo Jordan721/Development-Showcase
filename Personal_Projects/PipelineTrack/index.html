@@ -2282,11 +2282,20 @@
             light and dark, ✦ for theme motion, and ◑ for color-blind mode.</p>
         <div class="workspace-reading-settings">
             <label for="workspace-system-theme">Follow system theme</label>
-            <select id="workspace-system-theme" class="select-input"><option value="off">Off</option><option value="on">On</option></select>
+            <select id="workspace-system-theme" class="select-input">
+                <option value="off">Off</option>
+                <option value="on">On</option>
+            </select>
             <label for="workspace-contrast">Higher contrast</label>
-            <select id="workspace-contrast" class="select-input"><option value="off">Off</option><option value="on">On</option></select>
+            <select id="workspace-contrast" class="select-input">
+                <option value="off">Off</option>
+                <option value="on">On</option>
+            </select>
             <label for="workspace-motion">Animations</label>
-            <select id="workspace-motion" class="select-input"><option value="system">Follow device</option><option value="reduce">Reduce</option></select>
+            <select id="workspace-motion" class="select-input">
+                <option value="system">Follow device</option>
+                <option value="reduce">Reduce</option>
+            </select>
             <label for="workspace-text-size">Text size</label>
             <select id="workspace-text-size" class="select-input">
                 <option value="small">Small</option>
@@ -2303,14 +2312,22 @@
         <h3 class="workspace-preferences-heading">Workspace preferences</h3>
         <div class="workspace-reading-settings">
             <label for="workspace-start-page">Starting page</label>
-            <select id="workspace-start-page" class="select-input"><option value="dashboard">Dashboard</option><option value="board">Job Board</option><option value="calendar">Calendar</option></select>
+            <select id="workspace-start-page" class="select-input">
+                <option value="dashboard">Dashboard</option>
+                <option value="board">Job Board</option>
+                <option value="calendar">Calendar</option>
+            </select>
             <label for="workspace-date-format">Date format</label>
-            <select id="workspace-date-format" class="select-input"><option value="default">Short month (Nov 1)</option><option value="mdy">MM/DD/YYYY</option><option value="dmy">DD/MM/YYYY</option></select>
+            <select id="workspace-date-format" class="select-input">
+                <option value="default">Short month (Nov 1)</option>
+                <option value="mdy">MM/DD/YYYY</option>
+                <option value="dmy">DD/MM/YYYY</option>
+            </select>
         </div>
         <button type="button" id="workspace-reset-appearance" class="btn-secondary">Reset appearance</button>
         <p class="workspace-settings-hint" id="workspace-settings-status" role="status" aria-live="polite"></p>
-        <p class="workspace-settings-hint">Changes apply immediately and are saved on this browser.</p>
-        <p class="workspace-settings-hint">Click outside or press Escape to close.</p>
+        <p class="workspace-settings-hint">Saved automatically in this browser. Press Escape or click outside to close.
+        </p>
     </dialog>
     <script src="javascript/ui/workspace-settings.js"></script>
 
