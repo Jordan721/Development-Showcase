@@ -248,7 +248,19 @@ function load() {
   state.resumes = _normalizeEntityArray(state.resumes);
   state.coverLetters = _normalizeEntityArray(state.coverLetters);
   state.savedCourses = Array.isArray(state.savedCourses) ? state.savedCourses : [];
-  if (migratedSalaryPayPeriods || migratedJobSources || stageHistoryChanged) save();
+  if (migratedSalaryPayPeriods || migratedJobSources || stageHistoryChanged) {
+    try {
+      save();
+    } catch (error) {
+      // Keep the loaded workspace usable so the user can export a backup.
+      console.warn('Could not persist startup migrations; loaded data remains available.', error);
+      const notice = document.createElement('p');
+      notice.className = 'job-tool-hint';
+      notice.setAttribute('role', 'status');
+      notice.textContent = 'Your workspace is open, but browser storage could not save updates. Export a JSON backup before making changes.';
+      document.getElementById('view-dashboard')?.prepend(notice);
+    }
+  }
 }
 
 /* ══════════════════════════════════════════════════════════

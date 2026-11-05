@@ -646,7 +646,7 @@ function setTheme(theme, options = {}) {
   const shouldAnimate = options.animate !== false && previousTheme !== theme;
   document.documentElement.setAttribute('data-theme', theme);
   setThemeIcon(theme);
-  localStorage.setItem('pt-theme', theme);
+  if (options.persist !== false) localStorage.setItem('pt-theme', theme);
   document.querySelectorAll('.theme-swatch').forEach(s => {
     s.classList.toggle('theme-swatch--active', s.dataset.theme === theme);
   });
@@ -657,7 +657,7 @@ function initTheme() {
   const system = document.documentElement.getAttribute('data-system-theme') === 'on';
   const saved = system ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : localStorage.getItem('pt-theme') || 'dark';
   setTheme(saved, {
-    animate: false, system
+    animate: false, system, persist: false
   });
 }
 
@@ -794,7 +794,8 @@ function init() {
   syncThemeMotionButton();
   initTheme();
   load();
-  reanalyzeAllJobs();
+  // Opening the workspace must work even when browser storage is full.
+  reanalyzeAllJobs(false);
   wireEvents();
   wirePasteCleaners();
   const startPage = document.documentElement.getAttribute('data-start-page');

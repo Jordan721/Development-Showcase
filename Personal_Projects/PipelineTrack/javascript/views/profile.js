@@ -663,7 +663,7 @@ function bulkAddSkills() {
   openBulkSkillReview(raw, document.getElementById('skill-level').value);
 }
 
-function reanalyzeAllJobs() {
+function reanalyzeAllJobs(persist = true) {
   state.jobs = state.jobs.map(j => {
     const analysis = analyzeJobForRole(j);
     return {
@@ -680,7 +680,7 @@ function reanalyzeAllJobs() {
       redFlags: analysis.redFlags,
     };
   });
-  save();
+  if (persist) save();
 }
 
 /* ══════════════════════════════════════════════════════════
