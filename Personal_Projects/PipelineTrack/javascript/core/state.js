@@ -485,6 +485,9 @@ function _importFromCSV(text) {
 
     if (typeof analyzeJobForRole === 'function' && (!jobData.roleProfile || jobData.jobFitScore === null || jobData.jobQualityScore === null)) {
       const analysis = analyzeJobForRole(jobData);
+      jobData.requirements = analysis.requirements;
+      jobData.experience = analysis.experience;
+      jobData.parserVersion = analysis.parserVersion;
       jobData.fitScore = fitScore !== null ? fitScore : analysis.score;
       jobData.matched = jobData.matched.length ? jobData.matched : analysis.matched;
       jobData.missing = jobData.missing.length ? jobData.missing : analysis.missing;

@@ -13,8 +13,7 @@ function careerJobLabel(job) {
 
 function careerRequirements(job) {
   const description = job.description || '';
-  const detected = [...KNOWN_SKILLS].filter(skill => _skillRegex(skill).test(description));
-  return [...new Set([...detected, ...(job.matched || []), ...(job.missing || [])])];
+  return parseJobRequirements(description, job.excludedSkills || []).requirements.map(r => r.skill);
 }
 
 function careerJobOptions(includeAll = false) {
@@ -103,7 +102,7 @@ function renderCareerComparison() {
     return;
   }
   const requirements = careerRequirements(job);
-  const matched = requirements.filter(skill => _skillRegex(skill).test(careerResumeText));
+  const matched = requirements.filter(skill => hasSkill(careerResumeText, skill));
   const missing = requirements.filter(skill => !matched.includes(skill));
   container.innerHTML = requirements.length ? `
     <div class="career-fit"><strong>${Math.round(matched.length / requirements.length * 100)}%</strong><span>of detected job skills mentioned<br>${matched.length} of ${requirements.length} skills · keyword comparison</span></div>

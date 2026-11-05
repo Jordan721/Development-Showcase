@@ -86,8 +86,145 @@ function inferDepartment(role, description) {
 // Returns a regex that matches a skill as a whole word/token,
 // not as a substring of another word (e.g. "r" won't match "requirements").
 function _skillRegex(skill) {
-  const esc = skill.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp('(?<![a-zA-Z0-9])' + esc + '(?![a-zA-Z0-9])', 'i');
+  const canonical = canonicalSkill(skill);
+  const names = [canonical, ...Object.keys(SKILL_ALIASES).filter(name => SKILL_ALIASES[name] === canonical)];
+  const esc = names.sort((a, b) => b.length - a.length).map(name => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+  return new RegExp('(?<![a-zA-Z0-9])(?:' + esc + ')(?![a-zA-Z0-9])', 'i');
+}
+
+const SKILL_ALIASES = {
+  golang: 'go', 'go language': 'go', 'node.js': 'nodejs', 'node js': 'nodejs',
+  'react.js': 'react', reactjs: 'react', 'vue.js': 'vue', 'next.js': 'nextjs',
+  'amazon web services': 'aws', 'google cloud platform': 'gcp', 'google cloud': 'gcp',
+  'postgres': 'postgresql', 'k8s': 'kubernetes', 'scikit learn': 'scikit-learn',
+  sklearn: 'scikit-learn', 'microsoft excel': 'excel', 'ms excel': 'excel',
+  'powerbi': 'power bi', 'restapi': 'rest', 'rest api': 'rest', restful: 'rest',
+};
+const JOB_PARSER_VERSION = 2;
+
+function canonicalSkill(skill) {
+  const name = String(skill || '').trim().toLowerCase();
+  return SKILL_ALIASES[name] || name;
+}
+
+// Common words need evidence at the occurrence, not elsewhere in the posting.
+const AMBIGUOUS_SKILL_CONTEXT = {
+  go: 'golang|goroutines?',
+  rust: 'cargo|rustc',
+  swift: 'swiftui|ios|xcode',
+  react: 'reactjs|jsx|tsx',
+  express: 'expressjs|nodejs|node\\.js',
+  spring: 'spring boot|java',
+  flask: 'python',
+  ruby: 'rails',
+  dart: 'flutter',
+  elixir: 'phoenix|erlang',
+  spark: 'apache|pyspark',
+  sketch: 'design tool|design software',
+  excel: 'microsoft|spreadsheets?',
+  windows: 'microsoft|operating system',
+  r: 'rstudio|statistics|statistical',
+  rest: 'restful|http',
+};
+
+function isSkillOccurrence(text, skill, index, length) {
+  if (canonicalSkill(text.slice(index, index + length)) !== text.slice(index, index + length).toLowerCase()) return true;
+  const context = AMBIGUOUS_SKILL_CONTEXT[skill.toLowerCase()];
+  if (context === undefined) return true;
+  const before = text.slice(0, index).split(/[\n.!?;]/).pop();
+  const after = text.slice(index + length).split(/[\n.!?;]/)[0];
+  // A standalone entry or an explicitly labeled skills list is intentional.
+  if (/^\s*(?:[-*•]\s*)?$/.test(before) && !after.trim()) return true;
+  if (/\b(?:skills|technologies|tech stack|languages|frameworks|tools)\s*:\s*[^:]*$/i.test(before)) return true;
+  // Adjacent catalog entries distinguish "Python, Go, SQL" from ordinary prose.
+  const neighbors = before.match(/([a-z0-9+#.]+)\s*[,/|]\s*$/i)
+    || after.match(/^\s*[,/|]\s*([a-z0-9+#.]+)/i);
+  if (neighbors && KNOWN_SKILLS.has(neighbors[1].toLowerCase())) return true;
+  if (/\b(?:programming (?:in|with)|coded? in|written in|developed in|experience (?:in|with)|knowledge of|proficien(?:cy|t) in|expertise in)\s*$/i.test(before)) return true;
+  if (/^\s*(?:programming|language|framework|developer|development|libraries|library|sdk|api|applications?|services?|code|required|preferred|experience|expertise)\b/i.test(after)) return true;
+  // Product qualifiers must be close to the name to avoid document-wide guesses.
+  return new RegExp('\\b(?:' + context + ')\\b', 'i').test(before.slice(-32) + ' ' + after.slice(0, 32));
+}
+
+function hasSkill(text, skill) {
+  const re = new RegExp(_skillRegex(skill).source, 'gi');
+  let match;
+  while ((match = re.exec(text)) !== null) {
+    if (isSkillOccurrence(text, skill, match.index, match[0].length)) return true;
+  }
+  return false;
+}
+
+// Keep source evidence and qualifiers together so scoring and review agree.
+function parseJobRequirements(description, excludedSkills = []) {
+  const excluded = new Set(excludedSkills.map(canonicalSkill));
+  const skills = new Map();
+  const experience = [];
+  let section = 'unspecified';
+  const headings = [
+    ['preferred', /^(?:preferred|desired|bonus|nice[- ]to[- ]have)(?: qualifications| skills| requirements)?$/i],
+    ['required', /^(?:(?:minimum|required|basic)(?: (?:qualifications|skills|requirements))?|requirements|qualifications|skills (?:and|&) experience|what you bring|what we.re looking for)$/i],
+    ['responsibilities', /^(?:responsibilities|duties|what you.ll do|the role|your impact)$/i],
+    ['company', /^(?:about(?: us| the company)?|who we are|our company|company overview)$/i],
+    ['benefits', /^(?:benefits(?: and perks)?|perks|what we offer|compensation(?: and benefits)?|equal opportunity(?: employer)?)$/i],
+  ];
+  for (const raw of String(description || '').split(/\r?\n/)) {
+    const line = raw.replace(/^\s*[-*•#]+\s*/, '').trim();
+    if (!line) continue;
+    const colon = line.indexOf(':');
+    const heading = (colon >= 0 ? line.slice(0, colon) : line).trim();
+    const found = headings.find(([, pattern]) => pattern.test(heading));
+    if (found) section = found[0];
+    if (['company', 'benefits'].includes(section)) continue;
+    const body = found ? (colon >= 0 ? line.slice(colon + 1).trim() : '') : line;
+    if (!body) continue;
+    // Split clauses, but retain dots in product names and decimal experience.
+    const clauses = body.replace(/\b(required|preferred|optional|bonus)(?:\s*,\s*|\s+and\s+)/gi, '$1;')
+      .split(/;|[.!?](?:\s+|$)|\bbut\b/i).map(s => s.trim()).filter(Boolean);
+    for (const clause of clauses) {
+      const priority = /\b(?:required|must|mandatory|essential)\b/i.test(clause) ? 'required'
+        : /\b(?:preferred|bonus|nice[- ]to[- ]have|a plus|desirable|optional)\b/i.test(clause) ? 'preferred'
+        : section === 'required' || section === 'preferred' ? section : 'unspecified';
+      const clauseSkills = [];
+      for (const skill of new Set([...KNOWN_SKILLS].map(canonicalSkill))) {
+        if (excluded.has(skill)) continue;
+        const re = new RegExp(_skillRegex(skill).source, 'gi');
+        let match;
+        while ((match = re.exec(clause)) !== null) {
+          if (!isSkillOccurrence(clause, skill, match.index, match[0].length)) continue;
+          const before = clause.slice(0, match.index);
+          const after = clause.slice(match.index + match[0].length);
+          const negated = isNegatedSkillOccurrence(before, after);
+          if (negated) continue;
+          const evidence = { skill, priority, section, evidence: clause };
+          clauseSkills.push(skill);
+          const existing = skills.get(skill);
+          const rank = { preferred: 0, unspecified: 1, required: 2 };
+          if (!existing || rank[priority] > rank[existing.priority]) skills.set(skill, evidence);
+          break;
+        }
+      }
+      const years = /\b(\d+(?:\.\d+)?)\s*(?:[-–]\s*(\d+(?:\.\d+)?))?\s*(\+|or more|or above)?\s*years?\b/gi;
+      let match;
+      while ((match = years.exec(clause)) !== null) {
+        const after = clause.slice(match.index + match[0].length).split(/\b\d+(?:\.\d+)?\s*(?:\+\s*)?years?\b/i)[0];
+        if (/\b(?:not required|not necessary)\b/i.test(after)) continue;
+        const overall = /\b(?:overall|total|professional|industry|work)\b/i.test(after) && !/\b(?:in|with|using)\s+/i.test(after);
+        const before = clause.slice(0, match.index);
+        const linked = overall ? [] : clauseSkills.filter(skill => _skillRegex(skill).test(after)
+          || new RegExp(_skillRegex(skill).source + '\\s*[:(]?\\s*$', 'i').test(before));
+        experience.push({ minimum: Number(match[1]), maximum: match[2] ? Number(match[2]) : null,
+          skills: linked, scope: linked.length ? 'skill' : 'overall', priority, evidence: clause });
+      }
+    }
+  }
+  return { requirements: [...skills.values()], experience };
+}
+
+function isNegatedSkillOccurrence(before, after) {
+  return /\b(?:no|without)\s+(?:(?:prior|previous|professional|experience|knowledge|of|in|with|any)\s+)*$/i.test(before)
+    || /^\s*(?:(?:experience|knowledge|expertise)\s+)?(?:is\s+)?(?:not (?:required|necessary|a requirement)|unnecessary|isn.t required)\b/i.test(after)
+    || /\b(?:not required|not necessary)\s*:?\s*$/i.test(before);
 }
 
 const ROLE_FIT_PROFILES = [{
@@ -191,6 +328,9 @@ function analyzeJobForRole(jobLike) {
     score: null,
     matched: [],
     missing: [],
+    requirements: [],
+    experience: [],
+    parserVersion: JOB_PARSER_VERSION,
     roleProfile: 'General',
     jobQualityScore: calculateJobQualityScore(jobLike, 0),
     redFlags: detectJobRedFlags(jobLike),
@@ -198,11 +338,12 @@ function analyzeJobForRole(jobLike) {
   };
 
   const profile = inferRoleFitProfile(jobLike.role, description, jobLike.department);
-  const base = analyzeJob(description, profile);
+  const base = analyzeJob(description, profile, jobLike.excludedSkills || []);
   const jobQualityScore = calculateJobQualityScore(jobLike, base.matched.length + base.missing.length);
   const redFlags = detectJobRedFlags(jobLike);
   return {
     ...base,
+    parserVersion: JOB_PARSER_VERSION,
     roleProfile: profile.label,
     jobQualityScore,
     redFlags,
@@ -214,47 +355,52 @@ function profileByLabel(label) {
   return ROLE_FIT_PROFILES.find(profile => profile.label === label) || null;
 }
 
-function calculateRoleWeightedSkillScore(matched, missing, roleProfileLabel) {
+function calculateRoleWeightedSkillScore(matched, missing, roleProfileLabel, requirements = []) {
   const profile = profileByLabel(roleProfileLabel);
   const matchedList = Array.isArray(matched) ? matched : [];
   const missingList = Array.isArray(missing) ? missing : [];
   const total = matchedList.length + missingList.length;
   if (total === 0) return null;
-  const weightedMatched = matchedList.reduce((sum, skill) => sum + skillWeightForProfile(skill, profile), 0);
-  const weightedMissing = missingList.reduce((sum, skill) => sum + skillWeightForProfile(skill, profile), 0);
+  const weight = skill => skillWeightForProfile(skill, profile) * ({ required: 2, preferred: 0.5 }[requirements.find(r => r.skill === skill)?.priority] || 1);
+  const weightedMatched = matchedList.reduce((sum, skill) => sum + weight(skill), 0);
+  const weightedMissing = missingList.reduce((sum, skill) => sum + weight(skill), 0);
   return Math.round((weightedMatched / (weightedMatched + weightedMissing)) * 100);
 }
 
-function analyzeJob(description, roleProfile = null) {
+function analyzeJob(description, roleProfile = null, excludedSkills = []) {
   if (!description || !description.trim()) return {
     score: null,
     matched: [],
     missing: []
   };
 
-  const userSkills = state.profile.skills.map(s => s.name.toLowerCase());
+  const userSkills = state.profile.skills.map(s => canonicalSkill(s.name));
 
   // Extract known skills mentioned in cert/license/degree descriptions
   const certText = (state.profile.certifications || [])
     .map(c => c.description || '').join(' ').toLowerCase();
-  const certSkills = certText ? [...KNOWN_SKILLS].filter(skill => _skillRegex(skill).test(certText)) : [];
-  const allUserSkills = [...new Set([...userSkills, ...certSkills])];
+  const certSkills = certText ? [...KNOWN_SKILLS].filter(skill => hasSkill(certText, skill)) : [];
+  const allUserSkills = [...new Set([...userSkills, ...certSkills.map(canonicalSkill)])];
 
   // Check known skills by looking for them as whole words in the job description
-  const foundInJob = [...KNOWN_SKILLS].filter(skill => _skillRegex(skill).test(description));
-  const matched = foundInJob.filter(skill => allUserSkills.some(us => us.includes(skill) || skill.includes(us)));
+  const { requirements, experience } = parseJobRequirements(description, excludedSkills);
+  const foundInJob = requirements.map(r => r.skill);
+  const matched = foundInJob.filter(skill => allUserSkills.includes(skill));
   const missing = foundInJob.filter(skill => !matched.includes(skill));
 
   const total = matched.length + missing.length;
-  const weightedMatched = matched.reduce((sum, skill) => sum + skillWeightForProfile(skill, roleProfile), 0);
-  const weightedMissing = missing.reduce((sum, skill) => sum + skillWeightForProfile(skill, roleProfile), 0);
+  const weight = skill => skillWeightForProfile(skill, roleProfile) * ({ required: 2, preferred: 0.5 }[requirements.find(r => r.skill === skill).priority] || 1);
+  const weightedMatched = matched.reduce((sum, skill) => sum + weight(skill), 0);
+  const weightedMissing = missing.reduce((sum, skill) => sum + weight(skill), 0);
   const weightedTotal = weightedMatched + weightedMissing;
   const score = total === 0 ? 0 : Math.round((weightedMatched / weightedTotal) * 100);
 
   return {
     score,
     matched,
-    missing
+    missing,
+    requirements,
+    experience
   };
 }
 
@@ -753,9 +899,11 @@ function highlightJobDescription(text, matched, missing) {
       s,
       cls
     } of allSkills) {
-    const re = new RegExp('(?<![a-zA-Z0-9])' + s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![a-zA-Z0-9])', 'gi');
+    const re = new RegExp(_skillRegex(s).source, 'gi');
     let m;
     while ((m = re.exec(text)) !== null) {
+      if (!isSkillOccurrence(text, s, m.index, m[0].length)) continue;
+      if (isNegatedSkillOccurrence(text.slice(0, m.index), text.slice(m.index + m[0].length))) continue;
       const start = m.index;
       const end = start + m[0].length;
       const overlap = marks.some(mk => mk.start < end && mk.end > start);

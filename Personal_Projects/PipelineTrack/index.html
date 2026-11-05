@@ -1501,9 +1501,10 @@
             <div class="modal-body detail-body">
 
                 <!-- Left: fit analysis -->
-                <div class="detail-left">
-                    <div class="fit-ring-wrapper">
-                        <svg class="fit-ring" viewBox="0 0 120 120">
+                <div class="detail-left" tabindex="0" role="region" aria-label="Skill fit and matching skills">
+                    <div class="fit-ring-wrapper" role="img" aria-label="Skill fit score">
+                        <svg class="fit-ring" viewBox="0 0 120 120" aria-hidden="true">
+                            <circle class="fit-ring-ticks" cx="60" cy="60" r="58" />
                             <circle class="fit-ring-bg" cx="60" cy="60" r="52" />
                             <circle class="fit-ring-fill" id="fit-ring-fill" cx="60" cy="60" r="52"
                                 stroke-dasharray="326.7" stroke-dashoffset="326.7" />
@@ -1511,6 +1512,7 @@
                         <div class="fit-ring-label">
                             <div class="fit-ring-pct" id="detail-fit-pct">—</div>
                             <div class="fit-ring-sub">Skill Fit</div>
+                            <div class="fit-ring-coverage" id="detail-fit-coverage"></div>
                         </div>
                     </div>
 
@@ -1548,6 +1550,9 @@
                         <button type="button" id="detail-tab-history" role="tab" aria-selected="false"
                             aria-controls="detail-panel-history" aria-keyshortcuts="H" title="History (H)"
                             tabindex="-1">History <kbd>H</kbd></button>
+                        <button type="button" id="detail-tab-requirements" role="tab" aria-selected="false"
+                            aria-controls="detail-panel-requirements" aria-keyshortcuts="R" title="Requirements (R)"
+                            tabindex="-1">Requirements <kbd>R</kbd></button>
                     </div>
                     <div id="detail-panel-details" role="tabpanel" aria-labelledby="detail-tab-details">
                         <div class="detail-info-row">
@@ -1632,6 +1637,10 @@
                         aria-labelledby="detail-tab-history" hidden>
                         <h3 id="stage-history-title">Stage history</h3>
                         <div id="detail-stage-history"></div>
+                    </section>
+                    <section id="detail-panel-requirements" role="tabpanel"
+                        aria-labelledby="detail-tab-requirements" hidden>
+                        <div id="detail-parsing-review"></div>
                     </section>
                     <div class="detail-actions">
                         <select class="select-input" id="detail-stage-select"></select>

@@ -501,8 +501,7 @@ function scanResumeSkills() {
     return;
   }
 
-  const lower = text.toLowerCase();
-  const found = [...KNOWN_SKILLS].filter(skill => _skillRegex(skill).test(text));
+  const found = [...new Set([...KNOWN_SKILLS].filter(skill => hasSkill(text, skill)).map(canonicalSkill))];
   const container = document.getElementById('resume-parse-results');
 
   if (found.length === 0) {
@@ -510,9 +509,9 @@ function scanResumeSkills() {
     return;
   }
 
-  const alreadyHave = state.profile.skills.map(s => s.name.toLowerCase());
-  const newSkills = found.filter(s => !alreadyHave.some(a => a.includes(s) || s.includes(a)));
-  const existing = found.filter(s => alreadyHave.some(a => a.includes(s) || s.includes(a)));
+  const alreadyHave = state.profile.skills.map(s => canonicalSkill(s.name));
+  const newSkills = found.filter(s => !alreadyHave.includes(s));
+  const existing = found.filter(s => alreadyHave.includes(s));
 
   container.innerHTML = `
     <div style="margin-bottom:10px;font-size:12px;color:var(--text-muted)">
@@ -521,7 +520,7 @@ function scanResumeSkills() {
       <span style="color:var(--accent)">${newSkills.length} new</span>
     </div>
     ${found.map(skill => {
-      const has = alreadyHave.some(a => a.includes(skill) || skill.includes(a));
+      const has = alreadyHave.includes(skill);
       return `
         <div class="parsed-skill-row">
           <label style="display:flex;align-items:center;gap:8px;cursor:${has ? 'default' : 'pointer'}">

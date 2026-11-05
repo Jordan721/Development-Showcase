@@ -14,6 +14,10 @@ A personal job search companion built to take the chaos out of hunting for work.
 
 ## ⚡ At a Glance
 
+Job parsing distinguishes required, preferred, and unspecified skill mentions, groups equivalent names (such as Go/Golang and AWS/Amazon Web Services), and filters negated requirements and company/benefits sections. Required skills receive twice the normal weight; preferred skills receive half. Experience requirements are shown separately for review and do not affect fit scores.
+
+Open a job's **Requirements** tab beside Details and History to inspect source wording, priority counts, and experience requirements. Dismiss incorrect skills from their review cards or with the skill badges' × buttons; dismissals persist through reanalysis and can be restored in Requirements. Use D/H/R or the arrow keys on the tabs to navigate. The fit panel scrolls independently for long skill lists. These rules use wording and section headings, so review unusual postings. Parser regression tests run with `node --test tests/job-parsing.test.cjs` from this directory.
+
 | Feature | What it does |
 |---|---|
 | ◈ Dashboard | Stats, clickable streak timeline, pipeline health, conversion funnel, weekly velocity, upcoming deadlines, skill gaps, and weekly summary |

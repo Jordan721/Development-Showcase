@@ -1302,7 +1302,7 @@ function updateDetailFitRing(job) {
 function refreshJobFitAfterSkillEdit(job) {
   if (typeof calculateJobFitScore === 'function') {
     if (typeof calculateRoleWeightedSkillScore === 'function') {
-      job.fitScore = calculateRoleWeightedSkillScore(job.matched || [], job.missing || [], job.roleProfile);
+      job.fitScore = calculateRoleWeightedSkillScore(job.matched || [], job.missing || [], job.roleProfile, job.requirements || []);
     }
     job.jobFitScore = calculateJobFitScore(job.fitScore, job.jobQualityScore, job.redFlags || []);
   }
@@ -1312,7 +1312,10 @@ function refreshJobFitAfterSkillEdit(job) {
 /* ══════════════════════════════════════════════════════════
    JOB DETAIL MODAL
    ══════════════════════════════════════════════════════════ */
+const JOB_DETAIL_TABS = ['details', 'history', 'requirements'];
+
 function selectJobDetailTab(name, focus = false) {
+  if (!JOB_DETAIL_TABS.includes(name)) return;
   const modal = document.getElementById('modal-detail');
   const body = modal.querySelector('.detail-body');
   const right = modal.querySelector('.detail-right');
@@ -1322,7 +1325,8 @@ function selectJobDetailTab(name, focus = false) {
   [body, right].forEach(element => element.getAnimations().forEach(animation => animation.cancel()));
   const previousHeight = body.getBoundingClientRect().height;
   modal.classList.toggle('showing-history', name === 'history');
-  ['details', 'history'].forEach(tabName => {
+  modal.classList.toggle('showing-requirements', name === 'requirements');
+  JOB_DETAIL_TABS.forEach(tabName => {
     const selected = tabName === name;
     const tab = document.getElementById(`detail-tab-${tabName}`);
     tab.setAttribute('aria-selected', String(selected));
@@ -1372,23 +1376,27 @@ function openJobDetail(id) {
   if (!job) return;
   state.activeJobId = id;
   selectJobDetailTab('details');
-  ['details', 'history'].forEach(name => {
+  JOB_DETAIL_TABS.forEach((name, index) => {
     const tab = document.getElementById(`detail-tab-${name}`);
     tab.onclick = () => selectJobDetailTab(name);
     tab.onkeydown = event => {
       if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
       event.preventDefault();
-      const next = event.key === 'Home' ? 'details' : event.key === 'End' ? 'history' : name === 'details' ? 'history' : 'details';
+      const next = event.key === 'Home' ? JOB_DETAIL_TABS[0] : event.key === 'End' ? JOB_DETAIL_TABS.at(-1)
+        : JOB_DETAIL_TABS[(index + (event.key === 'ArrowRight' ? 1 : JOB_DETAIL_TABS.length - 1)) % JOB_DETAIL_TABS.length];
       selectJobDetailTab(next, true);
     };
   });
   document.getElementById('detail-view-history').onclick = () => selectJobDetailTab('history', true);
 
-  if (typeof analyzeJobForRole === 'function' && (job.jobQualityScore === undefined || job.jobFitScore === undefined || !Array.isArray(job.redFlags) || !job.roleProfile)) {
+  if (typeof analyzeJobForRole === 'function' && (job.parserVersion !== JOB_PARSER_VERSION || job.jobQualityScore === undefined || job.jobFitScore === undefined || !Array.isArray(job.redFlags) || !job.roleProfile)) {
     const analysis = analyzeJobForRole(job);
     Object.assign(job, {
       fitScore: analysis.score,
       matched: analysis.matched,
+      requirements: analysis.requirements,
+      parserVersion: analysis.parserVersion,
+      experience: analysis.experience,
       missing: analysis.missing,
       roleProfile: analysis.roleProfile,
       jobQualityScore: analysis.jobQualityScore,
@@ -1593,8 +1601,50 @@ function openJobDetail(id) {
   renderDetailRoleFitSummary(job);
 
   // Matched / missing — with dismiss buttons to remove false positives
+  const parsedRequirements = parseJobRequirements(job.description || '', job.excludedSkills || []);
+  job.requirements = parsedRequirements.requirements;
+  job.experience = parsedRequirements.experience;
+  const review = document.getElementById('detail-parsing-review');
+  const renderParsingReview = () => {
+    const parsed = parseJobRequirements(job.description || '', job.excludedSkills || []);
+    const counts = priority => parsed.requirements.filter(r => r.priority === priority).length;
+    review.innerHTML = `<header class="requirements-header"><span class="requirements-eyebrow">POSTING BREAKDOWN</span>
+      <h3>Detected requirements</h3><p>Check each skill against the original wording. Required skills carry more weight than preferred skills.</p></header>
+      <div class="requirements-stats"><span><strong>${counts('required')}</strong> Required</span><span><strong>${counts('preferred')}</strong> Preferred</span><span><strong>${counts('unspecified')}</strong> Other mentions</span></div>
+      <div class="requirements-grid">${parsed.requirements.map(r => `<article class="requirement-card"><div class="requirement-card-heading"><strong>${escHtml(normalizeSkillName(r.skill))}</strong><span class="requirement-priority ${r.priority}">${r.priority === 'unspecified' ? 'Mentioned' : escHtml(r.priority)}</span></div><blockquote>${escHtml(r.evidence)}</blockquote><button type="button" class="detail-history-link" data-dismiss-requirement="${escHtml(r.skill)}">Dismiss skill</button></article>`).join('') || '<p class="requirements-empty">No skill requirements detected. Add or edit the job description to analyze it.</p>'}</div>
+      <h4 class="requirements-section-title">Experience</h4><p class="requirements-note">Experience is shown for review and does not change your score.</p>
+      <div class="requirements-grid">${parsed.experience.map(r => `<article class="requirement-card"><div class="requirement-card-heading"><strong>${r.minimum}${r.maximum !== null ? '–' + r.maximum : '+'} years</strong><span class="requirement-priority ${r.priority}">${r.priority === 'unspecified' ? 'Mentioned' : escHtml(r.priority)}</span></div><p>${escHtml(r.skills.map(normalizeSkillName).join(', ') || 'Overall experience')}</p><blockquote>${escHtml(r.evidence)}</blockquote></article>`).join('') || '<p class="requirements-empty">No experience duration detected.</p>'}</div>
+      ${(job.excludedSkills || []).length ? '<h4 class="requirements-section-title">Dismissed skills</h4><div class="requirements-dismissed">' + job.excludedSkills.map(s => `<button type="button" class="btn-secondary" data-restore-skill="${escHtml(s)}">Restore ${escHtml(normalizeSkillName(s))}</button>`).join(' ') + '</div>' : ''}`;
+    review.querySelectorAll('[data-dismiss-requirement]').forEach(button => button.addEventListener('click', () => {
+      const skill = button.dataset.dismissRequirement;
+      const badge = [...document.querySelectorAll('#detail-matched .skill-badge-dismiss, #detail-missing .skill-badge-dismiss')].find(button => button.dataset.skill === skill);
+      if (badge) badge.click();
+      else {
+        job.excludedSkills = [...new Set([...(job.excludedSkills || []), skill])];
+        save();
+        renderParsingReview();
+      }
+      review.querySelector('[data-dismiss-requirement], [data-restore-skill]')?.focus();
+    }));
+    review.querySelectorAll('[data-restore-skill]').forEach(button => button.addEventListener('click', () => {
+      job.excludedSkills = job.excludedSkills.filter(s => s !== button.dataset.restoreSkill);
+      const analysis = analyzeJobForRole(job);
+      Object.assign(job, analysis, { fitScore: analysis.score });
+      save();
+      renderSkillBadges('detail-matched', job.matched, 'matched', 'green');
+      renderSkillBadges('detail-missing', job.missing, 'missing', 'red');
+      refreshJobFitAfterSkillEdit(job);
+      renderParsingReview();
+      document.getElementById('detail-desc').innerHTML = formatJobDescription(job.description, job.matched, job.missing);
+      review.querySelector('[data-restore-skill], [data-dismiss-requirement]')?.focus();
+    }));
+  };
+  renderParsingReview();
   function renderSkillBadges(listId, arr, field, colorClass) {
     const el = document.getElementById(listId);
+    const skillTotal = (job.matched || []).length + (job.missing || []).length;
+    document.getElementById('detail-fit-coverage').textContent = skillTotal ? `${(job.matched || []).length} of ${skillTotal} skills` : 'No skills detected';
+    document.querySelector('#modal-detail .fit-ring-wrapper').setAttribute('aria-label', job.fitScore == null ? 'Skill fit score unavailable' : `Skill fit ${job.fitScore} percent. ${(job.matched || []).length} of ${skillTotal} skills matched.`);
     if (!arr.length) {
       el.innerHTML = field === 'matched' ?
         '<span style="font-size:12px;color:var(--text-muted)">None detected</span>' :
@@ -1603,7 +1653,7 @@ function openJobDetail(id) {
     }
     el.innerHTML = arr.map(s =>
       `<span class="skill-badge ${colorClass}" style="padding-right:4px">
-        ${escHtml(s)}
+        <span title="${escHtml(job.requirements.find(r => r.skill === s)?.evidence || '')}">${escHtml(s)}${job.requirements.find(r => r.skill === s)?.priority === 'preferred' ? ' (preferred)' : ''}</span>
         ${field === 'missing' ? `<button class="skill-badge-add" data-skill="${escHtml(s)}" title="Add to My Skills">+</button>` : ''}
         ${field === 'matched' ? `<button class="skill-badge-remove" data-skill="${escHtml(s)}" title="Move to Skill Gaps">−</button>` : ''}
         <button class="skill-badge-dismiss" data-skill="${escHtml(s)}" title="Remove — not relevant to this job">×</button>
@@ -1653,6 +1703,8 @@ function openJobDetail(id) {
         e.stopPropagation();
         const skill = btn.dataset.skill;
         job[field] = job[field].filter(x => x !== skill);
+        job.excludedSkills = [...new Set([...(job.excludedSkills || []), canonicalSkill(skill)])];
+        renderParsingReview();
         // Recalculate fit score
         const total = (job.matched || []).length + (job.missing || []).length;
         job.fitScore = total === 0 ? null : Math.round(((job.matched || []).length / total) * 100);
@@ -1963,10 +2015,7 @@ function extractPostingSection(text, headers, stopHeaders) {
 }
 
 function findKnownSkills(text) {
-  const lower = text.toLowerCase();
-  return [...KNOWN_SKILLS]
-    .filter(skill => lower.includes(skill))
-    .sort((a, b) => a.localeCompare(b));
+  return parseJobRequirements(text).requirements.map(r => r.skill).sort((a, b) => a.localeCompare(b));
 }
 
 function analyzeJobPosting(rawText, parsed) {
@@ -1986,12 +2035,13 @@ function analyzeJobPosting(rawText, parsed) {
   const benefitsText = extractPostingSection(text, [headers[3]], headers.filter(h => h !== headers[3]));
   const cultureText = extractPostingSection(text, [headers[4]], headers.filter(h => h !== headers[4]));
 
-  const requiredSkills = findKnownSkills(requiredText || description).slice(0, 14);
-  const preferredSkills = findKnownSkills(preferredText).filter(s => !requiredSkills.includes(s)).slice(0, 10);
+  const parsedRequirements = parseJobRequirements(description);
+  const requiredSkills = parsedRequirements.requirements.filter(r => r.priority === 'required').map(r => r.skill);
+  const preferredSkills = parsedRequirements.requirements.filter(r => r.priority === 'preferred').map(r => r.skill);
+  const otherSkills = parsedRequirements.requirements.filter(r => r.priority === 'unspecified').map(r => r.skill);
   const benefits = parseBenefits(benefitsText || text).slice(0, 8);
 
-  const yearsMatch = text.match(/(\d+)\+?\s*(?:-|to\s*)?(\d+)?\+?\s+years?\s+(?:of\s+)?(?:professional\s+)?experience/i);
-  const years = yearsMatch ? (yearsMatch[2] ? `${yearsMatch[1]}-${yearsMatch[2]} years` : `${yearsMatch[1]}+ years`) : '';
+  const years = parsedRequirements.experience.map(r => `${r.minimum}${r.maximum !== null ? '-' + r.maximum : '+'} years ${r.skills.join(', ') || 'overall'} (${r.priority})`).join('; ');
 
   const logistics = uniqueMatches(lower, [
     [/\b(?:no\s+)?(?:visa\s+)?sponsorship\b|\bmust\s+be\s+authorized\b|\bus\s+citizen\b|\bgreen\s+card\b/, 'Work authorization called out'],
@@ -2023,7 +2073,7 @@ function analyzeJobPosting(rawText, parsed) {
   if (!parsed.workType) qualityScore -= 10;
   if (!parsed.location) qualityScore -= 8;
   if (!parsed.jobType) qualityScore -= 6;
-  if (!requiredSkills.length) qualityScore -= 10;
+  if (!parsedRequirements.requirements.length) qualityScore -= 10;
   if (!benefits.length) qualityScore -= 8;
   qualityScore -= Math.min(redFlags.length * 7, 28);
   qualityScore = Math.max(0, Math.min(100, qualityScore));
@@ -2043,6 +2093,9 @@ function analyzeJobPosting(rawText, parsed) {
     years,
     requiredSkills,
     preferredSkills,
+    otherSkills,
+    requirements: parsedRequirements.requirements,
+    experience: parsedRequirements.experience,
     benefits,
     logistics,
     redFlags,
@@ -2075,6 +2128,7 @@ function renderSmartPasteAnalysis(analysis) {
     <div class="jpa-grid">
       <div class="jpa-block"><div class="jpa-label">Required Skills</div><div class="jpa-chips">${chips(analysis.requiredSkills)}</div></div>
       <div class="jpa-block"><div class="jpa-label">Preferred Skills</div><div class="jpa-chips">${chips(analysis.preferredSkills)}</div></div>
+      <div class="jpa-block"><div class="jpa-label">Other Mentioned Skills</div><div class="jpa-chips">${chips(analysis.otherSkills || [])}</div></div>
       <div class="jpa-block"><div class="jpa-label">Logistics</div><div class="jpa-chips">${chips([analysis.years, ...analysis.logistics].filter(Boolean))}</div></div>
       <div class="jpa-block"><div class="jpa-label">Benefits</div><div class="jpa-chips">${chips(analysis.benefits)}</div></div>
       <div class="jpa-block"><div class="jpa-label">Culture Signals</div><div class="jpa-chips">${chips(analysis.cultureSignals)}</div></div>
@@ -2480,14 +2534,18 @@ function saveJob() {
     resumeVaultId: document.getElementById('job-resume-vault-select') ?.value || '',
   };
 
-  const analysis = analyzeJobForRole(jobData);
   const priorJob = state.jobs.find(job => job.id === editId);
+  jobData.excludedSkills = priorJob?.excludedSkills || [];
+  const analysis = analyzeJobForRole(jobData);
   if (description.trim() && !priorJob?.postingSnapshot) {
     jobData.postingSnapshot = { text: description, url: jobData.url, capturedAt: new Date().toISOString() };
   }
   Object.assign(jobData, {
     fitScore: analysis.score,
     matched: analysis.matched,
+    requirements: analysis.requirements,
+    parserVersion: analysis.parserVersion,
+    experience: analysis.experience,
     missing: analysis.missing,
     roleProfile: analysis.roleProfile,
     jobQualityScore: analysis.jobQualityScore,
