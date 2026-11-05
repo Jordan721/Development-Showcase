@@ -798,8 +798,6 @@ function init() {
   wirePasteCleaners();
   const startPage = document.documentElement.getAttribute('data-start-page');
   navigate(['dashboard', 'board', 'calendar'].includes(startPage) ? startPage : 'dashboard');
-  // Render saved scores first; analysis yields between jobs to keep controls usable.
-  scheduleStartupJobAnalysis();
   setTimeout(maybePromptForGhostedJobs, 350);
   if (typeof initUXEnhancements === 'function') initUXEnhancements();
   if (typeof initBulkActions === 'function') initBulkActions();

@@ -685,33 +685,6 @@ function refreshJobAnalysis(j) {
     };
 }
 
-function scheduleStartupJobAnalysis() {
-  const ids = state.jobs.map(job => job.id);
-  if (!ids.length) return;
-  let index = 0;
-  const schedule = callback => {
-    if (typeof window.requestIdleCallback === 'function') {
-      window.requestIdleCallback(callback, { timeout: 1000 });
-    } else {
-      setTimeout(callback, 16);
-    }
-  };
-  const next = () => {
-    const id = ids[index++];
-    const jobIndex = state.jobs.findIndex(job => job.id === id);
-    if (jobIndex !== -1) {
-      try {
-        state.jobs[jobIndex] = refreshJobAnalysis(state.jobs[jobIndex]);
-      } catch (error) {
-        console.warn('Could not refresh job analysis; keeping saved scores.', error);
-      }
-    }
-    if (index < ids.length) schedule(next);
-    else if (['dashboard', 'board', 'analytics'].includes(state.activeView)) renderView(state.activeView);
-  };
-  schedule(next);
-}
-
 /* ══════════════════════════════════════════════════════════
    EMAIL TEMPLATES
    ══════════════════════════════════════════════════════════ */
