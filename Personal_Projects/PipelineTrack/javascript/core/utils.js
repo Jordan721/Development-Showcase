@@ -87,10 +87,15 @@ function inferDepartment(role, description) {
 // not as a substring of another word (e.g. "r" won't match "requirements").
 function _skillRegex(skill) {
   const canonical = canonicalSkill(skill);
+  if (skillRegexCache.has(canonical)) return skillRegexCache.get(canonical);
   const names = [canonical, ...Object.keys(SKILL_ALIASES).filter(name => SKILL_ALIASES[name] === canonical)];
   const esc = names.sort((a, b) => b.length - a.length).map(name => name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
-  return new RegExp('(?<![a-zA-Z0-9])(?:' + esc + ')(?![a-zA-Z0-9])', 'i');
+  const regex = new RegExp('(?<![a-zA-Z0-9])(?:' + esc + ')(?![a-zA-Z0-9])', 'i');
+  skillRegexCache.set(canonical, regex);
+  return regex;
 }
+
+const skillRegexCache = new Map();
 
 const SKILL_ALIASES = {
   golang: 'go', 'go language': 'go', 'node.js': 'nodejs', 'node js': 'nodejs',
