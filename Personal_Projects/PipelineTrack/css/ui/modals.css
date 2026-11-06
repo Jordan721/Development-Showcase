@@ -5810,6 +5810,13 @@
   line-height: 1.5;
 }
 
+.job-save-error {
+  margin: 0;
+  padding: 12px 24px;
+  flex-shrink: 0;
+  color: var(--danger, #dc2626);
+}
+
 .job-footer-hint {
   margin-right: auto;
   color: var(--text-muted);

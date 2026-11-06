@@ -2330,6 +2330,7 @@ function previewJobDate(id) {
 
 function openAddJobModal(editId = null, defaults = {}) {
   const job = editId ? state.jobs.find(j => j.id === editId) : null;
+  document.getElementById('job-save-error').hidden = true;
 
   document.getElementById('modal-job-title').textContent = job ? 'Edit Job' : 'Add New Job';
   document.getElementById('job-form-subtitle').textContent = job ? 'Update the details you know. Your saved information is ready below.' : 'Start with role and company. Everything else can wait.';
@@ -2470,6 +2471,22 @@ function openAddJobModal(editId = null, defaults = {}) {
 }
 
 function saveJob() {
+  const errorMessage = document.getElementById('job-save-error');
+  errorMessage.hidden = true;
+  try {
+    submitJob();
+  } catch (error) {
+    console.error('PipelineTrack could not save the job:', error);
+    errorMessage.textContent = _isStorageQuotaError(error)
+      ? 'Browser storage is full. Your form is still here. Export a backup, free space in the Resume Vault, then try again.'
+      : error.name === 'SecurityError'
+        ? 'Your browser is blocking storage for this site. Allow site storage, then try again. Your form has been kept.'
+        : 'Could not save this job. Your form has been kept. Please check the browser console for the error details.';
+    errorMessage.hidden = false;
+  }
+}
+
+function submitJob() {
   updateJobSourceFromUrl();
   const role = document.getElementById('job-role').value.trim();
   const company = document.getElementById('job-company').value.trim();
@@ -2553,6 +2570,8 @@ function saveJob() {
     redFlags: analysis.redFlags,
   });
 
+  const previousJobs = JSON.parse(JSON.stringify(state.jobs));
+  const previousGoals = JSON.parse(JSON.stringify(state.goals));
   if (editId) {
     const idx = state.jobs.findIndex(j => j.id === editId);
     if (idx !== -1) {
@@ -2569,9 +2588,26 @@ function saveJob() {
     });
   }
 
-  save();
+  let saveWarning = '';
+  try {
+    save();
+  } catch (error) {
+    // Jobs are written first. A later workspace write must not make a saved
+    // job look unsuccessful or allow another click to add it a second time.
+    let jobPersisted = false;
+    try {
+      jobPersisted = localStorage.getItem('pt_jobs') === JSON.stringify(state.jobs);
+    } catch { /* Storage may be blocked entirely. */ }
+    if (!jobPersisted) {
+      state.jobs = previousJobs;
+      state.goals = previousGoals;
+      throw error;
+    }
+    console.error('Job saved, but other workspace data could not be saved:', error);
+    saveWarning = 'Job saved, but other workspace data could not be saved. Export a backup and check browser storage.';
+  }
   closeModal('modal-job');
-  toast(editId ? 'Job updated.' : 'Job added!', 'success');
+  toast(saveWarning || (editId ? 'Job updated.' : 'Job added!'), saveWarning ? 'error' : 'success');
   if (!editId) checkMilestoneToast(state.jobs.length);
   if (!editId && jobData.stage === 'offer') setTimeout(launchConfetti, 300);
   renderView(state.activeView);
