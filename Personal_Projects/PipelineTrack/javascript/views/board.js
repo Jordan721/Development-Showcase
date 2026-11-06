@@ -2549,6 +2549,7 @@ function submitJob() {
     notes: document.getElementById('job-notes').value.trim(),
     coverLetter: document.getElementById('job-cover-letter').value.trim(),
     resumeVaultId: document.getElementById('job-resume-vault-select') ?.value || '',
+    resumeVersion: (document.getElementById('job-resume-version')?.value || '').trim(),
   };
 
   const priorJob = state.jobs.find(job => job.id === editId);
@@ -2596,7 +2597,7 @@ function submitJob() {
     // job look unsuccessful or allow another click to add it a second time.
     let jobPersisted = false;
     try {
-      jobPersisted = localStorage.getItem('pt_jobs') === JSON.stringify(state.jobs);
+      jobPersisted = unpackStorageValue(localStorage.getItem('pt_jobs')) === JSON.stringify(state.jobs);
     } catch { /* Storage may be blocked entirely. */ }
     if (!jobPersisted) {
       state.jobs = previousJobs;

@@ -194,37 +194,7 @@ function renderNotesTimeline(jobId) {
 }
 
 
-/* ══════════════════════════════════════════════════════════
-   SAVE JOB HOOK
-   Wraps saveJob() to capture deadline and resumeVersion from
-   the form before the modal closes, then persists them onto
-   the saved job object.
-   ══════════════════════════════════════════════════════════ */
-
-(function patchSaveJob() {
-  const _orig = window.saveJob;
-
-  window.saveJob = function () {
-    /* Capture before _orig closes and clears the modal */
-    const editId = document.getElementById('job-edit-id').value;
-    const deadline = (document.getElementById('job-deadline') || {}).value || '';
-    const resumeVersion = ((document.getElementById('job-resume-version') || {}).value || '').trim();
-
-    _orig(); /* saves job, closes modal, re-renders view */
-
-    /* Attach extra fields to the job that was just saved */
-    const targetId = editId || (state.jobs.length ? state.jobs[state.jobs.length - 1].id : null);
-    if (targetId) {
-      const job = state.jobs.find(j => j.id === targetId);
-      if (job) {
-        job.deadline = deadline;
-        job.resumeVersion = resumeVersion;
-        save();
-        renderView(state.activeView);
-      }
-    }
-  };
-}());
+// Job fields are persisted together by submitJob() in board.js.
 
 
 /* ══════════════════════════════════════════════════════════
@@ -281,7 +251,7 @@ function renderNotesTimeline(jobId) {
 
 /* ══════════════════════════════════════════════════════════
    OPEN ADD / EDIT HOOK
-   Wraps openAddJobModal() to pre-fill deadline and
+   Wraps openAddJobModal() to pre-fill the
    resumeVersion when editing an existing job.
    ══════════════════════════════════════════════════════════ */
 
@@ -292,10 +262,8 @@ function renderNotesTimeline(jobId) {
     _orig(editId, defaults);
 
     const job = editId ? state.jobs.find(j => j.id === editId) : null;
-    const dlEl = document.getElementById('job-deadline');
     const rvEl = document.getElementById('job-resume-version');
 
-    if (dlEl) dlEl.value = job ? (job.deadline || '') : '';
     if (rvEl) rvEl.value = job ? (job.resumeVersion || '') : '';
   };
 }());
@@ -335,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
     dashView.insertBefore(banner, dashView.querySelector('.stat-grid'));
   }
 
-  /* ── Apply-by + Resume Used fields in Add / Edit Job modal ── */
+  /* ── Resume Used field in Add / Edit Job modal ── */
   /* Placed after the Stage/Seniority/JobType/WorkType row, before the description */
   const stageRow = document.getElementById('job-stage') &&
     document.getElementById('job-stage').closest('.form-row');
@@ -343,10 +311,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const row = document.createElement('div');
     row.className = 'form-row two-col';
     row.innerHTML =
-      '<div class="form-group">' +
-      '<label class="form-label">Apply by <span class="label-hint">(deadline)</span></label>' +
-      '<input type="date" class="text-input" id="job-deadline" />' +
-      '</div>' +
       '<div class="form-group">' +
       '<label class="form-label">Resume Used <span class="label-hint">(version / label)</span></label>' +
       '<input type="text" class="text-input" id="job-resume-version" placeholder="e.g. SWE focus v2" />' +

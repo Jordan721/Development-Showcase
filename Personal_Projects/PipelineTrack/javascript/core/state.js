@@ -91,18 +91,102 @@ function currentStageStartedAt(job) {
   return last && last.stage === job.stage && !last.observed ? last.at : null;
 }
 
+// Lossless storage fallback. Backups remain ordinary JSON; only local storage
+// uses this format when the browser cannot fit the uncompressed workspace.
+const WORKSPACE_STORAGE_KEYS = ['pt_jobs', 'pt_profile', 'pt_saved_courses',
+  'pt_contacts', 'pt_goals', 'pt_events', 'pt_templates', 'pt_resumes', 'pt_cover_letters'];
+const STORAGE_PACK_PREFIX = 'PTLZ1:';
+// Retain only the latest successfully stored value for each workspace section.
+const workspaceStorageCache = new Map();
+
+function packStorageValue(text) {
+  if (text.startsWith(STORAGE_PACK_PREFIX)) return text;
+  const positions = new Map();
+  const output = [];
+  for (let i = 0; i < text.length;) {
+    const key = text.slice(i, i + 4);
+    const prior = positions.get(key);
+    let length = 0;
+    if (prior !== undefined && i - prior <= 32768) {
+      while (length < 1024 && i + length < text.length && text[prior + length] === text[i + length]) length++;
+    }
+    const consumed = length >= 4 ? length : 1;
+    if (length >= 4) output.push('\x01', String.fromCharCode(i - prior + 32), String.fromCharCode(length + 32));
+    else output.push(text[i] === '\x01' ? '\x01\x01' : text[i]);
+    for (let j = 0; j < consumed; j++) {
+      positions.set(text.slice(i + j, i + j + 4), i + j);
+      // Bound memory even for large uploaded files.
+      const expired = i + j - 32768;
+      if (expired >= 0) {
+        const expiredKey = text.slice(expired, expired + 4);
+        if (positions.get(expiredKey) === expired) positions.delete(expiredKey);
+      }
+    }
+    i += consumed;
+  }
+  const packed = STORAGE_PACK_PREFIX + output.join('');
+  return packed.length < text.length ? packed : text;
+}
+
+function unpackStorageValue(text) {
+  if (text === null || !text.startsWith(STORAGE_PACK_PREFIX)) return text;
+  const output = [];
+  for (let i = STORAGE_PACK_PREFIX.length; i < text.length; i++) {
+    if (text[i] !== '\x01') { output.push(text[i]); continue; }
+    if (text[i + 1] === '\x01') { output.push('\x01'); i++; continue; }
+    const distance = text.charCodeAt(i + 1) - 32;
+    const length = text.charCodeAt(i + 2) - 32;
+    if (!(distance >= 1 && distance <= output.length && length >= 4 && length <= 1024)) {
+      throw new Error('Invalid compressed workspace data');
+    }
+    for (let j = 0; j < length; j++) output.push(output[output.length - distance]);
+    i += 2;
+  }
+  return output.join('');
+}
+
+function writeWorkspaceStorage(key, value) {
+  // Skip unchanged sections, including large vault files, before compression.
+  // Verify the stored value as another tab may have changed it.
+  const existing = localStorage.getItem(key);
+  const cached = workspaceStorageCache.get(key);
+  if (cached?.stored === existing && cached.value === value) return;
+  if (existing !== null && (!cached || cached.stored !== existing) && unpackStorageValue(existing) === value) {
+    workspaceStorageCache.set(key, { value, stored: existing });
+    return;
+  }
+  // Keep compressed records compressed on subsequent saves.
+  const encoded = existing?.startsWith(STORAGE_PACK_PREFIX) ? packStorageValue(value) : value;
+  try {
+    localStorage.setItem(key, encoded);
+    workspaceStorageCache.set(key, { value, stored: encoded });
+  } catch (error) {
+    if (!_isStorageQuotaError(error)) throw error;
+    // Shrink existing records first, without deleting files or changing data.
+    for (const storedKey of WORKSPACE_STORAGE_KEYS) {
+      const current = localStorage.getItem(storedKey);
+      if (!current) continue;
+      const packed = packStorageValue(current);
+      if (packed.length < current.length) localStorage.setItem(storedKey, packed);
+    }
+    const packed = packStorageValue(value);
+    localStorage.setItem(key, packed);
+    workspaceStorageCache.set(key, { value, stored: packed });
+  }
+}
+
 function save() {
   recordStageChanges();
   if (typeof recordGoalProgress === 'function') recordGoalProgress(false);
-  localStorage.setItem('pt_jobs', JSON.stringify(state.jobs));
-  localStorage.setItem('pt_profile', JSON.stringify(state.profile));
-  localStorage.setItem('pt_saved_courses', JSON.stringify(state.savedCourses));
-  localStorage.setItem('pt_contacts', JSON.stringify(state.contacts));
-  localStorage.setItem('pt_goals', JSON.stringify(state.goals));
-  localStorage.setItem('pt_events', JSON.stringify(state.events));
-  localStorage.setItem('pt_templates', JSON.stringify(state.templates));
-  localStorage.setItem('pt_resumes', JSON.stringify(state.resumes));
-  localStorage.setItem('pt_cover_letters', JSON.stringify(state.coverLetters));
+  writeWorkspaceStorage('pt_jobs', JSON.stringify(state.jobs));
+  writeWorkspaceStorage('pt_profile', JSON.stringify(state.profile));
+  writeWorkspaceStorage('pt_saved_courses', JSON.stringify(state.savedCourses));
+  writeWorkspaceStorage('pt_contacts', JSON.stringify(state.contacts));
+  writeWorkspaceStorage('pt_goals', JSON.stringify(state.goals));
+  writeWorkspaceStorage('pt_events', JSON.stringify(state.events));
+  writeWorkspaceStorage('pt_templates', JSON.stringify(state.templates));
+  writeWorkspaceStorage('pt_resumes', JSON.stringify(state.resumes));
+  writeWorkspaceStorage('pt_cover_letters', JSON.stringify(state.coverLetters));
 }
 
 function inferJobSource(url) {
@@ -169,12 +253,12 @@ function migrateJobSalaryPayPeriods() {
 
 function load() {
   try {
-    state.jobs = JSON.parse(localStorage.getItem('pt_jobs')) || [];
+    state.jobs = JSON.parse(unpackStorageValue(localStorage.getItem('pt_jobs'))) || [];
   } catch {
     state.jobs = [];
   }
   try {
-    state.profile = JSON.parse(localStorage.getItem('pt_profile')) || {
+    state.profile = JSON.parse(unpackStorageValue(localStorage.getItem('pt_profile'))) || {
       skills: [],
       certifications: [],
       summary: ''
@@ -200,37 +284,37 @@ function load() {
     };
   }
   try {
-    state.savedCourses = JSON.parse(localStorage.getItem('pt_saved_courses')) || [];
+    state.savedCourses = JSON.parse(unpackStorageValue(localStorage.getItem('pt_saved_courses'))) || [];
   } catch {
     state.savedCourses = [];
   }
   try {
-    state.contacts = JSON.parse(localStorage.getItem('pt_contacts')) || [];
+    state.contacts = JSON.parse(unpackStorageValue(localStorage.getItem('pt_contacts'))) || [];
   } catch {
     state.contacts = [];
   }
   try {
-    state.goals = JSON.parse(localStorage.getItem('pt_goals')) || [];
+    state.goals = JSON.parse(unpackStorageValue(localStorage.getItem('pt_goals'))) || [];
   } catch {
     state.goals = [];
   }
   try {
-    state.events = JSON.parse(localStorage.getItem('pt_events')) || [];
+    state.events = JSON.parse(unpackStorageValue(localStorage.getItem('pt_events'))) || [];
   } catch {
     state.events = [];
   }
   try {
-    state.templates = JSON.parse(localStorage.getItem('pt_templates')) || [];
+    state.templates = JSON.parse(unpackStorageValue(localStorage.getItem('pt_templates'))) || [];
   } catch {
     state.templates = [];
   }
   try {
-    state.resumes = JSON.parse(localStorage.getItem('pt_resumes')) || [];
+    state.resumes = JSON.parse(unpackStorageValue(localStorage.getItem('pt_resumes'))) || [];
   } catch {
     state.resumes = [];
   }
   try {
-    state.coverLetters = JSON.parse(localStorage.getItem('pt_cover_letters')) || [];
+    state.coverLetters = JSON.parse(unpackStorageValue(localStorage.getItem('pt_cover_letters'))) || [];
   } catch {
     state.coverLetters = [];
   }
