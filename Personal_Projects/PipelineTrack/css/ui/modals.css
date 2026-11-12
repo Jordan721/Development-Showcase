@@ -4210,6 +4210,81 @@
   margin-top: 10px;
 }
 
+.smart-paste-review {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.smart-paste-review h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.smart-paste-review .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.smart-paste-review p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.smart-review-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 16px 0;
+}
+
+.smart-review-field {
+  min-width: 0;
+}
+
+.smart-review-label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.smart-review-label span {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.smart-review-field input:not([type="checkbox"]),
+.smart-review-field select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.smart-review-field small {
+  display: block;
+  margin-top: 6px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .smart-review-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
 .job-posting-analysis {
   margin: 0 0 16px;
   padding: 14px;
@@ -5303,11 +5378,11 @@
   margin-bottom: .55em;
 }
 
-#modal-detail .detail-desc > :first-child {
+#modal-detail .detail-desc> :first-child {
   margin-top: 0;
 }
 
-#modal-detail .detail-desc > :last-child {
+#modal-detail .detail-desc> :last-child {
   margin-bottom: 0;
 }
 

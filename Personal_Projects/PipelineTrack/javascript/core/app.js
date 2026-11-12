@@ -170,6 +170,7 @@ function wireEvents() {
   document.getElementById('smart-paste-cancel').addEventListener('click', () => {
     document.getElementById('smart-paste-panel').classList.remove('open');
     document.getElementById('smart-paste-input').value = '';
+    resetSmartPasteReview();
     const analysisEl = document.getElementById('smart-paste-analysis');
     if (analysisEl) {
       analysisEl.style.display = 'none';
@@ -193,98 +194,8 @@ function wireEvents() {
   document.getElementById('job-description').addEventListener('change', () => {
     scanDescriptionBenefits();
   });
-  document.getElementById('smart-paste-btn').addEventListener('click', () => {
-    const text = document.getElementById('smart-paste-input').value.trim();
-    if (!text) return;
-    const parsed = parseJobListing(text);
-    const analysis = typeof analyzeJobPosting === 'function' ? analyzeJobPosting(text, parsed) : null;
-
-    function addAutoTag(id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const group = el.closest('.form-group');
-      if (!group) return;
-      const label = group.querySelector('.form-label');
-      if (!label) return;
-      // Remove existing auto tag
-      const existing = label.querySelector('.inferred-tag');
-      if (existing) existing.remove();
-      const tag = document.createElement('span');
-      tag.className = 'inferred-tag';
-      tag.title = 'Auto-filled from pasted listing';
-      tag.textContent = '✦ Auto-filled';
-      label.appendChild(tag);
-      // Clear tag when user edits
-      el.addEventListener(el.tagName === 'SELECT' ? 'change' : 'input', () => tag.remove(), {
-        once: true
-      });
-    }
-
-    const fieldMap = {
-      role: 'job-role',
-      company: 'job-company',
-      location: 'job-location',
-      salary: 'job-salary',
-      hybridDays: 'job-hybrid-days',
-      duration: 'job-duration'
-    };
-    const selectMap = {
-      workType: 'job-work-type',
-      jobType: 'job-type',
-      seniority: 'job-seniority'
-    };
-
-    Object.entries(fieldMap).forEach(([key, id]) => {
-      if (parsed[key]) {
-        if (key === 'hybridDays' && typeof setHybridDaysValue === 'function') setHybridDaysValue(parsed[key]);
-        else if (key === 'duration' && typeof setJobDurationValue === 'function') setJobDurationValue(parsed[key]);
-        else if (key === 'salary' && typeof splitSalaryAndPayPeriod === 'function') {
-          const salaryParts = splitSalaryAndPayPeriod(parsed[key]);
-          document.getElementById(id).value = salaryParts.salary;
-          const periodSelect = document.getElementById('job-pay-period');
-          if (periodSelect) periodSelect.value = salaryParts.payPeriod;
-          if (periodSelect) periodSelect.dataset.manual = 'false';
-          updateSalaryPreview();
-        } else document.getElementById(id).value = parsed[key];
-        flashField(id);
-        addAutoTag(id);
-      }
-    });
-    Object.entries(selectMap).forEach(([key, id]) => {
-      if (parsed[key]) {
-        document.getElementById(id).value = parsed[key];
-        flashField(id);
-        addAutoTag(id);
-      }
-    });
-    if (typeof updateHybridDaysVisibility === 'function') {
-      updateHybridDaysVisibility(false);
-    }
-    if (typeof updateJobDurationVisibility === 'function') {
-      updateJobDurationVisibility(false);
-    }
-
-    updateJobDuplicateNotice();
-    // Move cleaned description to Job Info tab (metadata header stripped)
-    document.getElementById('job-description').value = parsed.description || text;
-    const postingAge = text.match(/\bposted\s+(\d+\s*\+?\s*(?:days?|weeks?|months?)\s*(?:ago)?|today|yesterday)\b/i)
-      || text.match(/^\s*(\d+\s*\+?\s*(?:days?|weeks?|months?)\s+ago)\s*$/im);
-    if (postingAge && !document.getElementById('job-date-posted').value) {
-      document.getElementById('job-date-posted').value = postingAge[1];
-      previewJobDate('job-date-posted');
-      addAutoTag('job-date-posted');
-    }
-    scanDescriptionBenefits();
-    if (document.getElementById('job-benefits').value || document.getElementById('benefits-source-url').value) {
-      document.getElementById('job-company-extras').open = true;
-    }
-    if (typeof renderSmartPasteAnalysis === 'function') renderSmartPasteAnalysis(analysis);
-    // Collapse the paste panel, but keep the analyzer visible below it.
-    document.getElementById('smart-paste-panel').classList.remove('open');
-    document.getElementById('smart-paste-input').value = '';
-    const filled = Object.entries(parsed).filter(([key, value]) => key !== 'analysis' && value).length;
-    toast(`Auto-filled ${filled} field${filled !== 1 ? 's' : ''} — review and add the rest.`, 'success');
-  });
+  document.getElementById('smart-paste-btn').addEventListener('click', reviewSmartPaste);
+  document.getElementById('smart-paste-input').addEventListener('input', resetSmartPasteReview);
 
   // Add skill
   document.getElementById('add-skill-btn').addEventListener('click', addSkill);

@@ -1162,19 +1162,21 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" id="job-edit-id" />
+                <input type="hidden" id="job-smart-paste-original" />
 
                 <!-- ── Tab: Details ── -->
                 <div class="modal-tab-panel active" data-tab="details">
                     <!-- Smart Paste -->
                     <div class="smart-paste-panel" id="smart-paste-panel">
                         <div class="smart-paste-hint">Paste the entire job posting — title, company, salary, location,
-                            description… We'll extract what we can, fill the form, and analyze the opportunity.</div>
+                            description… Review the suggested details before adding them. Existing fields are kept.</div>
                         <textarea class="text-area smart-paste-input" id="smart-paste-input" rows="6"
                             placeholder="Paste job listing here…"></textarea>
                         <div class="smart-paste-actions">
                             <button class="btn-ghost btn-sm" id="smart-paste-cancel">Cancel</button>
-                            <button class="btn-primary" id="smart-paste-btn">Analyze &amp; Fill →</button>
+                            <button type="button" class="btn-primary" id="smart-paste-btn">Review details →</button>
                         </div>
+                        <div id="smart-paste-review" class="smart-paste-review" hidden></div>
                     </div>
                     <div class="job-posting-analysis" id="smart-paste-analysis" style="display:none"></div>
                     <div class="form-section-label-row" id="smart-paste-trigger">
@@ -2370,6 +2372,7 @@
     <script src="javascript/views/goals.js"></script>
     <script src="javascript/ui/fun.js"></script>
     <!-- Entry point & extensions -->
+    <script src="javascript/features/smart-paste.js"></script>
     <script src="javascript/core/app.js"></script>
     <script src="javascript/features/features.js"></script>
     <script src="javascript/ui/onboarding.js"></script>

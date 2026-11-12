@@ -2330,6 +2330,8 @@ function previewJobDate(id) {
 
 function openAddJobModal(editId = null, defaults = {}) {
   const job = editId ? state.jobs.find(j => j.id === editId) : null;
+  document.getElementById('job-smart-paste-original').value = '';
+  resetSmartPasteReview();
   document.getElementById('job-save-error').hidden = true;
 
   document.getElementById('modal-job-title').textContent = job ? 'Edit Job' : 'Add New Job';
@@ -2555,8 +2557,9 @@ function submitJob() {
   const priorJob = state.jobs.find(job => job.id === editId);
   jobData.excludedSkills = priorJob?.excludedSkills || [];
   const analysis = analyzeJobForRole(jobData);
-  if (description.trim() && !priorJob?.postingSnapshot) {
-    jobData.postingSnapshot = { text: description, url: jobData.url, capturedAt: new Date().toISOString() };
+  const pastedPosting = document.getElementById('job-smart-paste-original').value;
+  if (pastedPosting || (description.trim() && !priorJob?.postingSnapshot)) {
+    jobData.postingSnapshot = { text: pastedPosting || description, url: jobData.url, capturedAt: new Date().toISOString() };
   }
   Object.assign(jobData, {
     fitScore: analysis.score,

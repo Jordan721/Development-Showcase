@@ -1,9 +1,12 @@
 /* Job preparation, posting archive, offer decisions, and calendar downloads. */
 const PREP_CHECKS = ['Research the company', 'Review the role requirements', 'Prepare examples of your work', 'Practice your introduction', 'Check meeting link or travel plans'];
 const OFFER_FIELDS = [
-  ['compensation', 'Total compensation', 'text'], ['benefits', 'Offer benefits', 'textarea'],
-  ['responseDeadline', 'Response deadline', 'date'], ['priorities', 'Personal priorities', 'textarea'],
-  ['negotiation', 'Negotiation notes', 'textarea'], ['decision', 'Decision notes', 'textarea']
+  ['compensation', 'Total compensation', 'text'],
+  ['benefits', 'Offer benefits', 'textarea'],
+  ['responseDeadline', 'Response deadline', 'date'],
+  ['priorities', 'Personal priorities', 'textarea'],
+  ['negotiation', 'Negotiation notes', 'textarea'],
+  ['decision', 'Decision notes', 'textarea']
 ];
 
 function normalizeJobWorkspace(job) {
@@ -12,13 +15,18 @@ function normalizeJobWorkspace(job) {
   const prep = object(job.interviewPrep);
   return {
     rounds: (Array.isArray(prep.rounds) ? prep.rounds : []).filter(r => r && typeof r === 'object').map(r => ({
-      id: /^[a-z0-9_-]+$/i.test(string(r.id)) ? r.id : uid(), title: string(r.title), interviewer: string(r.interviewer),
-      date: string(r.date), time: string(r.time), questions: string(r.questions), reflection: string(r.reflection)
+      id: /^[a-z0-9_-]+$/i.test(string(r.id)) ? r.id : uid(),
+      title: string(r.title),
+      interviewer: string(r.interviewer),
+      date: string(r.date),
+      time: string(r.time),
+      questions: string(r.questions),
+      reflection: string(r.reflection)
     })),
-    checks: PREP_CHECKS.map((_, i) => prep.checks?.[i] === true),
+    checks: PREP_CHECKS.map((_, i) => prep.checks ?.[i] === true),
     offer: Object.fromEntries(OFFER_FIELDS.map(([key]) => {
       const worksheet = object(job.offerWorksheet);
-      const fallback = key === 'compensation' ? job.offerMilestone?.salaryOffered : key === 'responseDeadline' ? job.offerMilestone?.responseDeadline : '';
+      const fallback = key === 'compensation' ? job.offerMilestone ?.salaryOffered : key === 'responseDeadline' ? job.offerMilestone ?.responseDeadline : '';
       return [key, string(Object.hasOwn(worksheet, key) ? worksheet[key] : fallback)];
     }))
   };
@@ -65,7 +73,9 @@ function updateJobPrepOverview(root) {
   progress.value = count;
   root.querySelector('#prep-progress-label').textContent = `${count} of ${PREP_CHECKS.length} ready`;
   const rounds = root.querySelectorAll('.prep-round');
-  rounds.forEach((card, i) => { card.querySelector('legend').textContent = `Round ${i + 1}`; });
+  rounds.forEach((card, i) => {
+    card.querySelector('legend').textContent = `Round ${i + 1}`;
+  });
   root.querySelector('#prep-empty').hidden = rounds.length > 0;
   root.querySelector('#prep-round-count').textContent = `${rounds.length} ${rounds.length === 1 ? 'round' : 'rounds'}`;
 }
@@ -97,7 +107,9 @@ function renderJobWorkspace(job) {
   updateJobPrepOverview(root);
   root.querySelectorAll('[data-prep-check]').forEach(input => input.addEventListener('change', () => updateJobPrepOverview(root)));
   root.querySelector('#prep-add').onclick = () => {
-    const card = renderPrepRound({ id: uid() });
+    const card = renderPrepRound({
+      id: uid()
+    });
     rounds.append(card);
     updateJobPrepOverview(root);
     card.querySelector('input').focus();
@@ -108,7 +120,9 @@ function renderJobWorkspace(job) {
     job.interviewPrep = {
       checks: [...root.querySelectorAll('[data-prep-check]')].map(input => input.checked),
       rounds: cards.map(card => {
-        const round = { id: card.dataset.roundId };
+        const round = {
+          id: card.dataset.roundId
+        };
         ['title', 'interviewer', 'date', 'time', 'questions', 'reflection'].forEach(key => {
           round[key] = document.getElementById(`prep-${round.id}-${key}`).value.trim();
         });
@@ -152,23 +166,29 @@ function renderPostingArchive(job) {
   const root = document.getElementById('posting-archive-content');
   const snapshot = job.postingSnapshot;
   const hasSnapshot = snapshot && typeof snapshot.text === 'string';
-  root.innerHTML = hasSnapshot
-    ? `<p class="job-tool-hint">Captured ${escHtml(new Date(snapshot.capturedAt).toLocaleString())}. This copy stays unchanged when you edit the description.</p><p class="posting-source"></p><pre class="posting-archive"></pre><button type="button" class="btn-secondary" id="posting-download">Download original posting</button>`
-    : '<p class="job-tool-hint">No original copy has been captured. Save the current description as a dated reference.</p><button type="button" class="btn-secondary" id="posting-capture">Capture current posting</button>';
+  root.innerHTML = hasSnapshot ?
+    `<p class="job-tool-hint">Captured ${escHtml(new Date(snapshot.capturedAt).toLocaleString())}. This copy stays unchanged when you edit the description.</p><p class="posting-source"></p><pre class="posting-archive"></pre><button type="button" class="btn-secondary" id="posting-download">Download original posting</button>` :
+    '<p class="job-tool-hint">No original copy has been captured. Save the current description as a dated reference.</p><button type="button" class="btn-secondary" id="posting-capture">Capture current posting</button>';
   if (hasSnapshot) {
     root.querySelector('.posting-source').textContent = snapshot.url || 'No source URL recorded';
     root.querySelector('pre').textContent = snapshot.text;
     root.querySelector('#posting-download').onclick = () => downloadWorkspaceFile(`${job.role} @ ${job.company}\nCaptured: ${snapshot.capturedAt}\nSource: ${snapshot.url || ''}\n\n${snapshot.text}`, 'original-posting.txt', 'text/plain;charset=utf-8');
   } else root.querySelector('#posting-capture').onclick = () => {
-    if (!job.description?.trim()) return toast('Add a job description before capturing a copy.', 'error');
-    job.postingSnapshot = { text: job.description, url: job.url || '', capturedAt: new Date().toISOString() };
+    if (!job.description ?.trim()) return toast('Add a job description before capturing a copy.', 'error');
+    job.postingSnapshot = {
+      text: job.description,
+      url: job.url || '',
+      capturedAt: new Date().toISOString()
+    };
     save();
     renderPostingArchive(job);
   };
 }
 
 function downloadWorkspaceFile(content, filename, type) {
-  const url = URL.createObjectURL(new Blob([content], { type }));
+  const url = URL.createObjectURL(new Blob([content], {
+    type
+  }));
   const link = document.createElement('a');
   link.href = url;
   link.download = filename;
@@ -188,10 +208,14 @@ function icsEscape(value) {
 
 function foldCalendarLine(line) {
   const encoder = new TextEncoder();
-  let result = '', count = 0;
+  let result = '',
+    count = 0;
   for (const char of line) {
     const size = encoder.encode(char).length;
-    if (count + size > 75) { result += '\r\n '; count = 1; }
+    if (count + size > 75) {
+      result += '\r\n ';
+      count = 1;
+    }
     result += char;
     count += size;
   }
@@ -200,15 +224,31 @@ function foldCalendarLine(line) {
 
 function buildJobCalendar(job) {
   const data = normalizeJobWorkspace(job);
-  const entries = data.rounds.map(round => ({ ...round, label: round.title || 'Interview', notes: [round.interviewer, round.questions].filter(Boolean).join('\n') }));
+  const entries = data.rounds.map(round => ({
+    ...round,
+    label: round.title || 'Interview',
+    notes: [round.interviewer, round.questions].filter(Boolean).join('\n')
+  }));
   ['screening', 'interview'].forEach(stage => {
     const milestone = job[stage + 'Milestone'];
     if (milestone && !entries.some(e => e.date === milestone.date && e.time === (milestone.time || ''))) {
-      entries.push({ ...milestone, id: stage, label: stage === 'screening' ? 'Screening' : 'Interview' });
+      entries.push({
+        ...milestone,
+        id: stage,
+        label: stage === 'screening' ? 'Screening' : 'Interview'
+      });
     }
   });
-  entries.push({ id: 'followup', label: 'Follow-up', date: job.nextFollowUp || job.followUpDate });
-  entries.push({ id: 'offer', label: 'Offer response due', date: data.offer.responseDeadline });
+  entries.push({
+    id: 'followup',
+    label: 'Follow-up',
+    date: job.nextFollowUp || job.followUpDate
+  });
+  entries.push({
+    id: 'offer',
+    label: 'Offer response due',
+    date: data.offer.responseDeadline
+  });
   const valid = entries.filter(entry => icsDateValue(entry.date));
   if (!valid.length) return '';
   const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//PipelineTrack//Job Calendar//EN', 'CALSCALE:GREGORIAN'];
@@ -247,7 +287,7 @@ function renderBackupHealth() {
     reminder = document.createElement('div');
     reminder.id = 'workspace-backup-reminder';
     reminder.className = 'job-tool job-tool-actions';
-    document.getElementById('view-dashboard')?.append(reminder);
+    document.getElementById('view-dashboard') ?.append(reminder);
   }
   reminder.hidden = !overdue || !state.jobs.length;
   reminder.replaceChildren();
@@ -291,7 +331,7 @@ window.renderDashboard = function () {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('job-url')?.addEventListener('input', updateJobDuplicateNotice);
-  ['job-role', 'job-company'].forEach(id => document.getElementById(id)?.addEventListener('input', updateJobDuplicateNotice));
+  document.getElementById('job-url') ?.addEventListener('input', updateJobDuplicateNotice);
+  ['job-role', 'job-company'].forEach(id => document.getElementById(id) ?.addEventListener('input', updateJobDuplicateNotice));
   renderBackupHealth();
 });

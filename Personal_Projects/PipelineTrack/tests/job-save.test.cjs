@@ -61,6 +61,14 @@ test('a complete job is analyzed and persisted', () => {
   assert.equal(app.closed, true);
 });
 
+test('the original smart-pasted posting is saved separately from an edited description', () => {
+  const app = workspace();
+  app.elements['job-smart-paste-original'].value = 'Original posting with title, company, metadata and footer.';
+  app.save();
+  assert.equal(app.jobs()[0].postingSnapshot.text, app.elements['job-smart-paste-original'].value);
+  assert.match(app.jobs()[0].description, /JavaScript/);
+});
+
 test('failed storage preserves the form and retry adds only one job', () => {
   const app = workspace();
   app.failAt('pt_jobs');
