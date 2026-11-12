@@ -199,13 +199,37 @@ function inferJobSource(url) {
     const sources = [
       ['LinkedIn', ['linkedin.com', 'lnkd.in']],
       ['ZipRecruiter', ['ziprecruiter.com']],
+      ['Jobright', ['jobright.ai']],
       ['Indeed', ['indeed.com', 'indeed.ca', 'indeed.co.uk', 'indeed.com.au']],
       ['Glassdoor', ['glassdoor.com', 'glassdoor.ca', 'glassdoor.co.uk']],
       ['Monster', ['monster.com', 'monster.ca', 'monster.co.uk']],
       ['Dice', ['dice.com']],
       ['Wellfound', ['wellfound.com']],
       ['Handshake', ['joinhandshake.com']],
-      ['USAJOBS', ['usajobs.gov']]
+      ['USAJOBS', ['usajobs.gov']],
+      ['FlexJobs', ['flexjobs.com']],
+      ['We Work Remotely', ['weworkremotely.com']],
+      ['Remote OK', ['remoteok.com', 'remoteok.io']],
+      ['Remotive', ['remotive.com', 'remotive.io']],
+      ['Built In', ['builtin.com']],
+      ['Idealist', ['idealist.org']],
+      ['HigherEdJobs', ['higheredjobs.com']],
+      ['Welcome to the Jungle', ['welcometothejungle.com', 'otta.com']],
+      ['Greenhouse', ['greenhouse.io']],
+      ['Lever', ['lever.co']],
+      ['Ashby', ['ashbyhq.com']],
+      ['Workday', ['myworkdayjobs.com']],
+      ['SmartRecruiters', ['smartrecruiters.com']],
+      ['SimplyHired', ['simplyhired.com']],
+      ['CareerBuilder', ['careerbuilder.com']],
+      ['Talent.com', ['talent.com']],
+      ['Snagajob', ['snagajob.com']],
+      ['LinkUp', ['linkup.com']],
+      ['Himalayas', ['himalayas.app']],
+      ['Working Nomads', ['workingnomads.com', 'workingnomads.co']],
+      ['Remote.co', ['remote.co']],
+      ['GovernmentJobs', ['governmentjobs.com']],
+      ['Robert Half', ['roberthalf.com']]
     ];
     const match = sources.find(([, domains]) => domains.some(domain => host === domain || host.endsWith('.' + domain)));
     return match ? match[0] : 'Other';
