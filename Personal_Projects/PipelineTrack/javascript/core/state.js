@@ -199,6 +199,7 @@ function inferJobSource(url) {
     const sources = [
       ['LinkedIn', ['linkedin.com', 'lnkd.in']],
       ['ZipRecruiter', ['ziprecruiter.com']],
+      ['Bandana', ['bandana.com']],
       ['Jobright', ['jobright.ai']],
       ['Indeed', ['indeed.com', 'indeed.ca', 'indeed.co.uk', 'indeed.com.au']],
       ['Glassdoor', ['glassdoor.com', 'glassdoor.ca', 'glassdoor.co.uk']],
