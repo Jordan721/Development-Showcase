@@ -175,13 +175,13 @@ function renderLearning() {
     const saved = state.savedCourses.includes(skill);
     return `<article class="learning-card ${saved ? 'bookmarked' : ''}">
       <div class="learning-card-top"><h3 class="learning-skill">${escHtml(skill)}</h3><button type="button" class="learning-bookmark" data-bookmark="${escHtml(skill)}" aria-label="${saved ? 'Unsave' : 'Save'} ${escHtml(skill)}" aria-pressed="${saved}">${saved ? '★' : '☆'}</button></div>
-      <div class="learning-course">${resource ? escHtml(resource.course) : 'Build your own practice plan'}</div>
-      <div class="learning-provider">${resource ? escHtml(resource.provider) : 'No curated course for this skill yet'}</div>
+      <div class="learning-course">${resource ? escHtml(resource.course) : 'Find learning resources for ' + escHtml(skill)}</div>
+      <div class="learning-provider">${resource ? escHtml(resource.provider) : 'Course search · choose a resource that fits your goals'}</div>
       ${resource ? `<div class="learning-meta"><span class="learning-tag">${escHtml(resource.time)} · catalog estimate</span></div>` : ''}
       <p class="career-muted">${jobs.length ? `Needed by ${jobs.length} active job${jobs.length !== 1 ? 's' : ''}` : 'Saved in your plan · no current gap in this selection'}</p>
       ${jobs.length ? `<details class="career-job-details"><summary>See related opportunities</summary><ul>${jobs.map(job => `<li>${escHtml(careerJobLabel(job))}</li>`).join('')}</ul></details>` : ''}
       <label class="form-label" for="learn-${escHtml(skill)}">Learning progress</label><select class="select-input" id="learn-${escHtml(skill)}" data-learning-progress="${escHtml(skill)}">${[['not-started', 'Not started'], ['in-progress', 'In progress'], ['completed', 'Completed']].map(([value, label]) => `<option value="${value}" ${value === progress ? 'selected' : ''}>${label}</option>`).join('')}</select>
-      ${resource ? `<a class="btn-primary" href="${escHtml(resource.url)}" target="_blank" rel="noopener">Open course ↗</a><p class="career-muted career-catalog-note">Check current pricing, level, and duration with the provider.</p>` : '<p class="career-muted">Choose a resource, practice this skill, and record your progress here.</p>'}
+      ${resource ? `<a class="btn-primary" href="${escHtml(resource.url)}" target="_blank" rel="noopener">Open course ↗</a><p class="career-muted career-catalog-note">Check current pricing, level, and duration with the provider.</p>` : `<a class="btn-primary" href="${escHtml(learningSearchUrl(skill))}" target="_blank" rel="noopener">Search courses ↗</a><p class="career-muted">Search results are not curated recommendations. Check relevance and prerequisites with the provider.</p>`}
     </article>`;
   }).join('');
   grid.querySelectorAll('[data-bookmark]').forEach(button => button.addEventListener('click', () => {

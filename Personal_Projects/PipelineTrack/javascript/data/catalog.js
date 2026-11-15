@@ -757,3 +757,17 @@ Object.assign(LEARNING, {
     url: 'https://www.linkedin.com/learning/customer-experience-measurement'
   },
 });
+
+// Broader field coverage; custom profile skills can extend this catalog.
+[
+'patient care', 'clinical documentation', 'electronic health records', 'ehr', 'hipaa', 'medical terminology', 'medical billing', 'medical coding', 'triage', 'infection control', 'vital signs', 'phlebotomy', 'medication administration', 'nursing', 'care coordination', 'cpr', 'basic life support',
+'curriculum development', 'lesson planning', 'classroom management', 'instructional design', 'student assessment', 'special education', 'individualized education program', 'differentiated instruction', 'learning management systems', 'canvas lms', 'moodle', 'tutoring',
+'legal research', 'legal writing', 'litigation', 'contract review', 'contract drafting', 'e-discovery', 'case management', 'legal compliance', 'westlaw', 'lexisnexis', 'paralegal', 'document review',
+'construction management', 'blueprint reading', 'cost estimation', 'building codes', 'site safety', 'osha', 'autocad', 'revit', 'building information modeling', 'carpentry', 'plumbing', 'electrical wiring', 'hvac', 'welding', 'masonry', 'preventive maintenance', 'equipment operation',
+'user research', 'wireframing', 'prototyping', 'usability testing', 'product strategy', 'product discovery', 'inventory management', 'demand planning'
+].forEach(skill => KNOWN_SKILLS.add(skill));
+
+// Search results are distinguished from curated course recommendations.
+function learningSearchUrl(skill) {
+  return 'https://www.coursera.org/search?query=' + encodeURIComponent(skill);
+}

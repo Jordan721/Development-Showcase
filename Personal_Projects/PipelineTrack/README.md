@@ -8,7 +8,7 @@ A personal job search companion built to take the chaos out of hunting for work.
 ![100% Private](https://img.shields.io/badge/100%25-Private-a78bfa?style=for-the-badge)
 ![Themes](https://img.shields.io/badge/5%20Themes-Dark%20%7C%20Light%20%7C%20Midnight%20%7C%20Sunset%20%7C%20Ocean-f59e0b?style=for-the-badge)
 
-> **Supported industries:** Tech (Software Engineering, Data, IT) · Business (Business Operations, Financial Operations, Project Management) · Customer Experience (Banking, Customer Success)
+> **Field coverage:** Track applications in any field. Built-in skills cover Tech, Business, Customer Experience, Healthcare, Education, Legal, Construction, Skilled Trades, Design, Product, and Supply Chain. Custom profile skills also participate in matching. Learning resources include curated courses where available and course searches for other skill gaps.
 
 ---
 

@@ -105,7 +105,7 @@ const SKILL_ALIASES = {
   sklearn: 'scikit-learn', 'microsoft excel': 'excel', 'ms excel': 'excel',
   'powerbi': 'power bi', 'restapi': 'rest', 'rest api': 'rest', restful: 'rest',
 };
-const JOB_PARSER_VERSION = 2;
+const JOB_PARSER_VERSION = 3;
 
 function canonicalSkill(skill) {
   const name = String(skill || '').trim().toLowerCase();
@@ -164,6 +164,8 @@ function hasSkill(text, skill) {
 function parseJobRequirements(description, excludedSkills = []) {
   const excluded = new Set(excludedSkills.map(canonicalSkill));
   const skills = new Map();
+  const profileSkills = typeof state !== "undefined" ? (state.profile?.skills || []).map(skill => skill.name) : [];
+  const candidates = new Set([...KNOWN_SKILLS, ...profileSkills].map(canonicalSkill).filter(Boolean));
   const experience = [];
   let section = 'unspecified';
   const headings = [
@@ -191,7 +193,7 @@ function parseJobRequirements(description, excludedSkills = []) {
         : /\b(?:preferred|bonus|nice[- ]to[- ]have|a plus|desirable|optional)\b/i.test(clause) ? 'preferred'
         : section === 'required' || section === 'preferred' ? section : 'unspecified';
       const clauseSkills = [];
-      for (const skill of new Set([...KNOWN_SKILLS].map(canonicalSkill))) {
+      for (const skill of candidates) {
         if (excluded.has(skill)) continue;
         const re = new RegExp(_skillRegex(skill).source, 'gi');
         let match;
