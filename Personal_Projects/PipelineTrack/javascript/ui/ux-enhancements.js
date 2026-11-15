@@ -779,6 +779,8 @@ function _inferFromYears(description) {
 }
 
 function inferSeniority(role, description) {
+  const titleSeniority = parseRoleMetadata(role).seniority;
+  if (titleSeniority) return titleSeniority;
   // 1. Title keywords — most reliable
   for (const rule of _titleRules) {
     if (rule.patterns.some(p => p.test(role))) return rule.value;
@@ -843,8 +845,21 @@ function _wireSeniorityFields() {
   roleInput._senWired = true;
 
   const tryInfer = () => {
-    if (senSelect.value) return; // user already picked one — don't override
+    const metadata = parseRoleMetadata(roleInput.value);
+    for (const [key, id] of [['jobType', 'job-type'], ['workType', 'job-work-type']]) {
+      const select = document.getElementById(id);
+      if (!select || (select.value && !select.classList.contains('inferred'))) continue;
+      select.value = metadata[key];
+      select.classList.toggle('inferred', !!metadata[key]);
+      select.title = metadata[key] ? 'Auto-inferred from job title — change if needed' : '';
+    }
+    if (typeof updateHybridDaysVisibility === 'function') updateHybridDaysVisibility();
+    if (typeof updateJobDurationVisibility === 'function') updateJobDurationVisibility();
+    if (senSelect.value && !senSelect.classList.contains('inferred')) return;
     const inferred = inferSeniority(roleInput.value, descInput ? descInput.value : '');
+    senSelect.value = inferred || '';
+    senSelect.classList.toggle('inferred', !!inferred);
+    senSelect.title = '';
     if (inferred) {
       senSelect.value = inferred;
       senSelect.title = `Auto-inferred from job title/description — change if needed`;
@@ -853,13 +868,16 @@ function _wireSeniorityFields() {
   };
 
   roleInput.addEventListener('blur', tryInfer);
+  roleInput.addEventListener('input', tryInfer);
   if (descInput) descInput.addEventListener('blur', tryInfer);
 
   // Clear the inferred flag when user manually changes the select
-  senSelect.addEventListener('change', () => {
-    senSelect.classList.remove('inferred');
-    senSelect.title = '';
-  });
+  for (const select of [senSelect, document.getElementById('job-type'), document.getElementById('job-work-type')]) {
+    if (select) select.addEventListener('change', () => {
+      select.classList.remove('inferred');
+      select.title = '';
+    });
+  }
 }
 
 /* ══════════════════════════════════════════════════════════

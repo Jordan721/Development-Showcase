@@ -1323,3 +1323,35 @@ function normalizeSkillName(raw) {
   // Title-case: capitalize first letter of each word
   return trimmed.replace(/\b\w/g, c => c.toUpperCase());
 }
+// Title metadata is deliberately conservative: numbers must follow a role or a level label.
+function parseRoleMetadata(role) {
+  const text = String(role || '').replace(/[–—]/g, '-');
+  const result = { seniority: '', jobType: '', workType: '' };
+  const ranks = [
+    ['Staff', /\b(?:staff|principal|distinguished)\b/i],
+    ['Lead', /\blead\b/i],
+    ['Senior', /\b(?:senior|sr)\b/i],
+    ['Junior', /\b(?:junior|jr)\b/i],
+    ['Entry Level', /\b(?:entry[ -]?level|new[ -]?grad|graduate)\b/i],
+    ['Mid-Level', /\b(?:mid[ -]?level|intermediate)\b/i],
+    ['Internship', /\bintern(?:ship)?\b/i]
+  ];
+  result.seniority = ranks.find(([, pattern]) => pattern.test(text))?.[0] || '';
+  if (!result.seniority) {
+    const level = text.match(/\b(?:level|engineer|developer|analyst|designer|technician|specialist|swe|sde)\s*[-:]?\s*(?:\(\s*)?(IV|III|II|I|[1-4])\b(?!\s*(?:days?|years?|months?|hours?|weeks?)\b)/i);
+    if (level) result.seniority = { I: 'Entry Level', 1: 'Entry Level', II: 'Mid-Level', 2: 'Mid-Level', III: 'Senior', 3: 'Senior', IV: 'Lead', 4: 'Lead' }[level[1].toUpperCase()];
+  }
+  const types = [
+    ['Contract', /\bcontract(?:or|ual)?\b/i], ['Temporary', /\btemp(?:orary)?\b/i],
+    ['Internship', /\bintern(?:ship)?\b/i], ['Freelance', /\bfreelanc(?:e|er)\b/i],
+    ['Part-time', /\bpart[ -]?time\b/i], ['Full-time', /\bfull[ -]?time\b/i]
+  ];
+  result.jobType = types.find(([, pattern]) => pattern.test(text))?.[0] || '';
+  const work = [
+    ['Hybrid', /\bhybrid\b/i], ['Remote', /\b(?:remote|wfh|work[ -]from[ -]home)\b/i],
+    ['On-site', /\b(?:on[ -]?site|in[ -]office|in[ -]person)\b/i]
+  ].filter(([, pattern]) => pattern.test(text));
+  if (work.length === 1 && !/\b(?:not|no|non)[ -]+(?:remote|hybrid|wfh|on[ -]?site)\b/i.test(text)) result.workType = work[0][0];
+  return result;
+}
+

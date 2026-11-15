@@ -2399,6 +2399,11 @@ function openAddJobModal(editId = null, defaults = {}) {
   document.querySelector('.job-benefits-source').open = false;
   document.getElementById('job-stage').value = job ? job.stage || 'saved' : defaults.stage || 'saved';
   document.getElementById('job-seniority').value = job ? job.seniority || '' : '';
+  ['job-seniority', 'job-type', 'job-work-type'].forEach(id => {
+    const field = document.getElementById(id);
+    field.classList.remove('inferred');
+    field.title = '';
+  });
   document.getElementById('job-type').value = job ? job.jobType || '' : '';
   document.getElementById('job-work-type').value = job ? job.workType || '' : '';
   setJobDurationValue(job ? job.duration || '' : '');
@@ -2517,6 +2522,7 @@ function submitJob() {
   const department = typedDept || inferredDept || '';
   const departmentInferred = !typedDept && !!inferredDept;
 
+  const titleMetadata = parseRoleMetadata(role);
   const jobData = {
     role,
     company,
@@ -2532,12 +2538,12 @@ function submitJob() {
     datePostedApproximate: dates['job-date-posted'].approximate,
     dateApplied: dates['job-date-applied'].date,
     deadline: dates['job-deadline'].date,
-    seniority: document.getElementById('job-seniority').value,
-    jobType: document.getElementById('job-type').value,
-    duration: isDurationJobType(document.getElementById('job-type').value) ? document.getElementById('job-duration').value.trim() : '',
+    seniority: document.getElementById('job-seniority').value || titleMetadata.seniority,
+    jobType: document.getElementById('job-type').value || titleMetadata.jobType,
+    duration: isDurationJobType(document.getElementById('job-type').value || titleMetadata.jobType) ? document.getElementById('job-duration').value.trim() : '',
     ...(() => {
       const typed = document.getElementById('job-work-type').value;
-      const inferred = !typed ? inferWorkType(description) : null;
+      const inferred = !typed ? (titleMetadata.workType || inferWorkType(description)) : null;
       return {
         workType: typed || inferred || '',
         workTypeInferred: !typed && !!inferred,
