@@ -30,6 +30,7 @@
     <link rel="stylesheet" href="css/views/calendar-details.css" />
     <link rel="stylesheet" href="css/views/profile-skills.css" />
     <link rel="stylesheet" href="css/ui/workspace.css" />
+    <link rel="stylesheet" href="css/cash-compass-export.css">
 </head>
 
 <body>
@@ -588,6 +589,7 @@
                                     excluded.</div>
                             </div>
                         </button>
+                        <button class="backup-tile" id="cash-compass-export-btn"><div class="backup-tile-text"><div class="backup-tile-title">Export to Cash Compass ↗</div><div class="backup-tile-desc">Choose jobs to compare potential pay with your monthly costs.</div></div></button>
                         <button class="backup-tile" id="import-btn">
                             <div class="backup-tile-icon backup-tile-icon--import">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -2380,6 +2382,9 @@
     <script src="javascript/ui/ux-enhancements.js"></script>
     <script src="javascript/views/map.js"></script>
     <script src="javascript/features/job-workspace.js"></script>
+<dialog id="cash-compass-export-dialog" class="cash-export-dialog" aria-labelledby="cash-compass-export-title"><h2 id="cash-compass-export-title">Plan your job income in Cash Compass</h2><p>Select the jobs to export. Only company, role, application stage, advertised pay, offer pay, and total compensation are included. Notes, resumes, contacts, and profile details stay in PipelineTrack.</p><p>Applications and offers are potential income. Importing them will not create paycheck transactions.</p><label class="cash-export-search-label" for="cash-compass-export-search">Find jobs to export</label><input class="cash-export-search" type="search" id="cash-compass-export-search" placeholder="Company, role, location, stage, or pay…"><p>Search, then select the jobs you want. Selections stay checked when you change the search.</p><div class="cash-export-actions"><button type="button" class="btn-secondary" id="cash-compass-select-all">Select search results</button><button type="button" class="btn-secondary" id="cash-compass-select-none">Clear all selections</button></div><div id="cash-compass-export-list" class="cash-export-list"></div><p id="cash-compass-no-matches" hidden>No matching jobs. Try another company, role, stage, or pay amount.</p><p id="cash-compass-export-status" role="status" aria-live="polite"></p><div class="cash-export-actions"><button type="button" class="btn-primary" id="cash-compass-download">Download pay-planning export</button><button type="button" class="btn-secondary" id="cash-compass-export-close">Close</button><a class="btn-secondary" href="../Cash-Compass/index.html#career" target="_blank" rel="noopener">Open Cash Compass ↗</a></div></dialog>
+<script src="../Cash-Compass/pay-transfer.js"></script>
+<script src="javascript/features/cash-compass-export.js"></script>
 </body>
 
 </html>

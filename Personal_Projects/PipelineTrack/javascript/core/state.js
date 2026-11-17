@@ -793,6 +793,8 @@ function _normalizeEntityArray(value) {
 
 function _normalizeBackupData(data) {
   if (!_isPlainObject(data)) return null;
+  // Pay-planning transfers are not restorable workspace backups.
+  if (data.kind === 'pipelinetrack-cash-compass') return null;
 
   const knownKeys = [
     'jobs',

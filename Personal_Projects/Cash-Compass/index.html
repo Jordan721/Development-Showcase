@@ -4,567 +4,346 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cash Compass - Navigate Your Finances</title>
+    <meta name="description"
+        content="A personal finance workspace for spending, budgets, bills, savings goals, and career pay planning.">
+    <meta name="color-scheme" content="light dark">
+    <title>Cash Compass · Your money, in focus</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles.css">
-    <!-- Chart.js for data visualization -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
 </head>
 
 <body>
-    <!-- Animated Background -->
-    <div class="animated-bg">
-        <div class="bg-gradient"></div>
-        <div class="bg-orbs">
-            <div class="orb orb-1"></div>
-            <div class="orb orb-2"></div>
-            <div class="orb orb-3"></div>
+    <svg xmlns="http://www.w3.org/2000/svg" class="icon-sprite" aria-hidden="true">
+        <symbol id="i-compass" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <path d="m16 8-2.5 5.5L8 16l2.5-5.5L16 8Z" />
+        </symbol>
+        <symbol id="i-overview" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7" rx="2" />
+            <rect x="14" y="3" width="7" height="7" rx="2" />
+            <rect x="3" y="14" width="7" height="7" rx="2" />
+            <rect x="14" y="14" width="7" height="7" rx="2" />
+        </symbol>
+        <symbol id="i-wallet" viewBox="0 0 24 24">
+            <path d="M20 8H5a2 2 0 0 1 0-4h13v4M4 7v12a1 1 0 0 0 1 1h15V8M20 12h-5v4h5" />
+        </symbol>
+        <symbol id="i-budget" viewBox="0 0 24 24">
+            <path d="M12 3v9h9A9 9 0 0 0 12 3Z" />
+            <path d="M8 4a9 9 0 1 0 12 12" />
+        </symbol>
+        <symbol id="i-calendar" viewBox="0 0 24 24">
+            <rect x="3" y="5" width="18" height="16" rx="3" />
+            <path d="M7 3v4m10-4v4M3 11h18m-13 5h2m4 0h2" />
+        </symbol>
+        <symbol id="i-target" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <circle cx="12" cy="12" r="5" />
+            <circle cx="12" cy="12" r="1" />
+        </symbol>
+        <symbol id="i-briefcase" viewBox="0 0 24 24">
+            <rect x="3" y="7" width="18" height="14" rx="3" />
+            <path d="M8 7V3h8v4M3 12c6 4 12 4 18 0m-9 1v3" />
+        </symbol>
+        <symbol id="i-settings" viewBox="0 0 24 24">
+            <path d="m9 4 1-2h4l1 2 3 2 2 1v4l-2 1v3l-1 2-3 1-1 2h-3l-2-2-3-1-2-2v-3l-1-1V7l2-1 2-2Z" />
+            <circle cx="12" cy="11" r="3" />
+        </symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24">
+            <path d="M12 5v14M5 12h14" />
+        </symbol>
+        <symbol id="i-up" viewBox="0 0 24 24">
+            <path d="M12 19V5m-6 6 6-6 6 6" />
+        </symbol>
+        <symbol id="i-down" viewBox="0 0 24 24">
+            <path d="M12 5v14m-6-6 6 6 6-6" />
+        </symbol>
+        <symbol id="i-arrow" viewBox="0 0 24 24">
+            <path d="M5 12h14m-6-6 6 6-6 6" />
+        </symbol>
+        <symbol id="i-search" viewBox="0 0 24 24">
+            <circle cx="10.5" cy="10.5" r="6.5" />
+            <path d="m16 16 5 5" />
+        </symbol>
+        <symbol id="i-download" viewBox="0 0 24 24">
+            <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5" />
+        </symbol>
+        <symbol id="i-upload" viewBox="0 0 24 24">
+            <path d="M12 16V4m-5 5 5-5 5 5M4 16v5h16v-5" />
+        </symbol>
+        <symbol id="i-trash" viewBox="0 0 24 24">
+            <path d="M3 6h18M8 6V3h8v3M5 6l1 15h12l1-15M10 10v7m4-7v7" />
+        </symbol>
+        <symbol id="i-edit" viewBox="0 0 24 24">
+            <path d="m15 4 5 5M4 20l5-1L21 7l-5-5L4 14v6Z" />
+        </symbol>
+        <symbol id="i-check" viewBox="0 0 24 24">
+            <path d="m5 12 4 4L19 6" />
+        </symbol>
+        <symbol id="i-close" viewBox="0 0 24 24">
+            <path d="m6 6 12 12M6 18 18 6" />
+        </symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2" />
+        </symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24">
+            <path d="M20 15A9 9 0 0 1 9 4a9 9 0 1 0 11 11Z" />
+        </symbol>
+        <symbol id="i-menu" viewBox="0 0 24 24">
+            <path d="M4 6h16M4 12h16M4 18h16" />
+        </symbol>
+        <symbol id="i-lock" viewBox="0 0 24 24">
+            <rect x="5" y="10" width="14" height="11" rx="2" />
+            <path d="M8 10V6a4 4 0 0 1 8 0v4" />
+        </symbol>
+        <symbol id="i-info" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 11v6m0-10v1" />
+        </symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+        </symbol>
+    </svg>
+    <a class="skip-link" href="#mainContent">Skip to content</a>
+    <aside class="sidebar" id="sidebar">
+        <a class="brand" href="#overview"> <span class="brand-logo"><svg class="icon" aria-hidden="true">
+                    <use href="#i-compass"></use>
+                </svg></span><span>Cash<span class="brand-accent">Compass</span><small>GIVE YOUR MONEY
+                    DIRECTION</small></span></a>
+        <div class="workspace-label"><span class="workspace-avatar"><svg class="icon" aria-hidden="true">
+                    <use href="#i-wallet"></use>
+                </svg></span>
+            <div><strong>Personal workspace</strong><small>USD · Manual tracking</small></div><span class="status-dot"
+                title="Browser-local workspace"></span>
         </div>
-    </div>
-
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-compass"></i>
-                </div>
-                <span class="logo-text">Cash Compass</span>
-            </div>
-        </div>
-
-        <nav class="sidebar-nav">
-            <a href="#overview" class="nav-item active" data-section="overview">
-                <i class="fas fa-th-large"></i>
-                <span>Overview</span>
-            </a>
-            <a href="#transactions" class="nav-item" data-section="transactions">
-                <i class="fas fa-exchange-alt"></i>
-                <span>Transactions</span>
-            </a>
-            <a href="#analytics" class="nav-item" data-section="analytics">
-                <i class="fas fa-chart-pie"></i>
-                <span>Analytics</span>
-            </a>
-            <a href="#budget" class="nav-item" data-section="budget">
-                <i class="fas fa-bullseye"></i>
-                <span>Budget</span>
-            </a>
+        <nav aria-label="Main navigation">
+            <p class="nav-label">YOUR MONEY</p><a href="#overview" data-route="overview"><svg class="icon"
+                    aria-hidden="true">
+                    <use href="#i-overview"></use>
+                </svg><span>Overview</span></a><a href="#transactions" data-route="transactions"><svg class="icon"
+                    aria-hidden="true">
+                    <use href="#i-wallet"></use>
+                </svg><span>Transactions</span></a><a href="#budgets" data-route="budgets"><svg class="icon"
+                    aria-hidden="true">
+                    <use href="#i-budget"></use>
+                </svg><span>Budgets</span></a><a href="#bills" data-route="bills"><svg class="icon" aria-hidden="true">
+                    <use href="#i-calendar"></use>
+                </svg><span>Bills & Goals</span></a>
+            <p class="nav-label">LOOKING AHEAD</p><a href="#career" data-route="career"><svg class="icon"
+                    aria-hidden="true">
+                    <use href="#i-briefcase"></use>
+                </svg><span>Career & Pay</span><span class="nav-tag">PT</span></a><a href="#settings"
+                data-route="settings"><svg class="icon" aria-hidden="true">
+                    <use href="#i-settings"></use>
+                </svg><span>Data Settings</span></a>
         </nav>
-
-        <div class="sidebar-footer">
-            <button class="sidebar-btn" id="sampleDataBtn" title="Load Sample Data">
-                <i class="fas fa-database"></i>
-                <span>Sample Data</span>
-            </button>
-            <button class="sidebar-btn" id="aboutBtn" title="About">
-                <i class="fas fa-info-circle"></i>
-                <span>About</span>
-            </button>
-            <a href="https://jordan721.github.io/Development-Showcase/Personal_Projects/PipelineTrack/index.html"
-                class="sidebar-btn" target="_blank" rel="noopener"
-                title="Track jobs, skill fit, and offers — pairs with Cash Compass to keep your finances in check during your search">
-                <i class="fas fa-route"></i>
-                <span>PipelineTrack</span>
-            </a>
-            <a href="../../index.html" class="sidebar-btn" title="Back to Showcase">
-                <i class="fas fa-arrow-left"></i>
-                <span>Back</span>
-            </a>
+        <div class="sidebar-bottom">
+            <div class="career-promo"><span class="promo-icon"><svg class="icon" aria-hidden="true">
+                        <use href="#i-briefcase"></use>
+                    </svg></span><strong>Your next move,<br>in perspective.</strong>
+                <p>Bring your PipelineTrack jobs into your money plan.</p><a href="#career">Explore pay planning <svg
+                        class="icon" aria-hidden="true">
+                        <use href="#i-arrow"></use>
+                    </svg></a>
+            </div><button class="sidebar-demo" data-action="demo"><svg class="icon" aria-hidden="true">
+                    <use href="#i-overview"></use>
+                </svg> Explore demo workspace</button><a class="showcase-link" href="../../index.html">← Back to
+                showcase</a>
         </div>
     </aside>
-
-    <!-- Main Content Area -->
-    <div class="main-wrapper">
-        <!-- Top Bar -->
+    <button class="sidebar-scrim" id="sidebarScrim" aria-label="Close navigation" hidden></button>
+    <div class="app-shell">
         <header class="topbar">
-            <div class="topbar-left">
-                <button class="mobile-menu-btn" id="mobileMenuBtn">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="page-title">
-                    <h1>Financial Overview</h1>
-                    <p class="page-subtitle">Track your money, achieve your goals</p>
-                </div>
-            </div>
-            <div class="topbar-right">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search transactions..." id="searchInput">
-                </div>
-                <button class="topbar-btn" id="darkModeToggle" title="Toggle dark mode">
-                    <i class="fas fa-moon"></i>
-                </button>
-                <button class="topbar-btn primary" id="exportBtn" title="Export Data">
-                    <i class="fas fa-download"></i>
-                </button>
-                <button class="add-btn" id="quickAddBtn">
-                    <i class="fas fa-plus"></i>
-                    <span>Add Transaction</span>
-                </button>
-            </div>
+            <div class="topbar-start"><button class="icon-button menu-toggle" id="menuToggle"
+                    aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false"><svg class="icon"
+                        aria-hidden="true">
+                        <use href="#i-menu"></use>
+                    </svg></button><span class="breadcrumb">Workspace <span>/</span> <strong
+                        id="pageName">Overview</strong></span></div>
+            <div class="topbar-actions"><span class="saved-label" id="savedLabel"><svg class="icon" aria-hidden="true">
+                        <use href="#i-lock"></use>
+                    </svg> Browser-local data</span><button class="icon-button" id="themeToggle"
+                    aria-label="Switch color theme"><svg class="icon" aria-hidden="true">
+                        <use href="#i-moon"></use>
+                    </svg></button><button class="button secondary compact" data-action="backup"><svg class="icon"
+                        aria-hidden="true">
+                        <use href="#i-download"></use>
+                    </svg><span>Backup</span></button><button class="button primary" data-action="add-transaction"><svg
+                        class="icon" aria-hidden="true">
+                        <use href="#i-plus"></use>
+                    </svg><span>Add transaction</span></button></div>
         </header>
-
-        <!-- Main Dashboard -->
-        <main class="dashboard">
-            <!-- Summary Cards Row -->
-            <section class="summary-section" id="overview">
-                <div class="summary-card income-card">
-                    <div class="card-glow"></div>
-                    <div class="card-header">
-                        <div class="card-icon income">
-                            <i class="fas fa-arrow-trend-up"></i>
-                        </div>
-                        <div class="card-badge positive">
-                            <i class="fas fa-arrow-up"></i>
-                            <span id="incomeChange">0%</span>
-                        </div>
+        <div class="demo-banner" id="demoBanner" hidden><span><strong>Demo workspace</strong> · Fictional data. Changes
+                here are temporary; your records stay untouched.</span><button class="button compact"
+                data-action="exit-demo">Return to my data <svg class="icon" aria-hidden="true">
+                    <use href="#i-arrow"></use>
+                </svg></button></div>
+        <div class="recovery-banner" id="recoveryBanner" role="alert" hidden></div>
+        <main id="mainContent" tabindex="-1">
+            <div class="page-heading">
+                <div><span class="eyebrow" id="pageEyebrow">YOUR FINANCIAL PULSE</span>
+                    <h1 id="pageTitle">Your money, in focus<span>.</span></h1>
+                    <p id="pageDescription">A clear view of today. A confident plan for what’s next.</p>
+                </div><label class="month-control" id="periodControl"><svg class="icon" aria-hidden="true">
+                        <use href="#i-calendar"></use>
+                    </svg><span>Reporting month<input type="month" id="reportMonth" min="1900-01" max="2200-12"
+                            required></span></label>
+            </div>
+            <section id="view-overview" class="view" data-page="overview" aria-label="Financial overview">
+                <div id="overviewContent"></div>
+            </section>
+            <section id="view-transactions" class="view" data-page="transactions" aria-label="Transactions" hidden>
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Your activity</h2>
+                            <p>Track money actually received or spent.</p>
+                        </div><button class="button secondary compact" data-action="csv"><svg class="icon"
+                                aria-hidden="true">
+                                <use href="#i-download"></use>
+                            </svg> Export results</button>
                     </div>
-                    <div class="card-content">
-                        <p class="card-label">Total Income</p>
-                        <h2 class="card-value" id="totalIncome">$0.00</h2>
+                    <div class="filter-bar"><label class="search-control"><svg class="icon" aria-hidden="true">
+                                <use href="#i-search"></use>
+                            </svg><input id="transactionSearch" type="search" aria-label="Search transactions"
+                                placeholder="Search description, category, amount…"></label><select
+                            id="transactionTypeFilter" aria-label="Filter transaction type">
+                            <option value="all">All types</option>
+                            <option value="income">Income</option>
+                            <option value="expense">Expenses</option>
+                        </select><select id="transactionCategoryFilter"
+                            aria-label="Filter transaction category"></select><label class="check-label"><input
+                                type="checkbox" id="allDates"> All dates</label></div>
+                    <div class="selection-bar"><span id="transactionCount" role="status"></span>
+                        <div><button class="text-button" data-action="select-transactions">Select
+                                results</button><button class="text-button"
+                                data-action="clear-transaction-selection">Clear selection</button><button
+                                class="button danger compact" id="deleteSelectedTransactions"
+                                data-action="delete-transactions" disabled><svg class="icon" aria-hidden="true">
+                                    <use href="#i-trash"></use>
+                                </svg> Delete selected</button></div>
                     </div>
-                    <div class="card-footer">
-                        <span>vs last month</span>
-                    </div>
-                </div>
-
-                <div class="summary-card expense-card">
-                    <div class="card-glow"></div>
-                    <div class="card-header">
-                        <div class="card-icon expense">
-                            <i class="fas fa-arrow-trend-down"></i>
-                        </div>
-                        <div class="card-badge negative">
-                            <i class="fas fa-arrow-down"></i>
-                            <span id="expenseChange">0%</span>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <p class="card-label">Total Expenses</p>
-                        <h2 class="card-value" id="totalExpenses">$0.00</h2>
-                    </div>
-                    <div class="card-footer">
-                        <span>vs last month</span>
-                    </div>
-                </div>
-
-                <div class="summary-card balance-card">
-                    <div class="card-glow"></div>
-                    <div class="card-header">
-                        <div class="card-icon balance">
-                            <i class="fas fa-wallet"></i>
-                        </div>
-                        <div class="card-badge" id="balanceChange">
-                            <i class="fas fa-minus"></i>
-                            <span>0%</span>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <p class="card-label">Net Balance</p>
-                        <h2 class="card-value" id="netBalance">$0.00</h2>
-                    </div>
-                    <div class="card-footer">
-                        <span>current period</span>
-                    </div>
-                </div>
-
-                <div class="summary-card savings-card">
-                    <div class="card-glow"></div>
-                    <div class="card-header">
-                        <div class="card-icon savings">
-                            <i class="fas fa-piggy-bank"></i>
-                        </div>
-                        <div class="card-badge neutral">
-                            <i class="fas fa-percentage"></i>
-                        </div>
-                    </div>
-                    <div class="card-content">
-                        <p class="card-label">Savings Rate</p>
-                        <h2 class="card-value" id="savingsRate">0%</h2>
-                    </div>
-                    <div class="card-footer">
-                        <span>of income saved</span>
-                    </div>
+                    <div id="transactionTable"></div>
+                    <div class="pagination" id="transactionPagination"></div>
                 </div>
             </section>
-
-            <!-- Main Grid Layout -->
-            <div class="dashboard-grid">
-                <!-- Left Column -->
-                <div class="dashboard-col-main">
-                    <!-- Charts Section -->
-                    <section class="charts-section" id="analytics">
-                        <div class="card chart-card">
-                            <h3 class="section-title">
-                                <i class="fas fa-chart-pie"></i>
-                                Expense Breakdown
-                            </h3>
-                            <div class="chart-container">
-                                <canvas id="expenseChart"></canvas>
-                            </div>
-                            <div class="chart-legend" id="expenseLegend"></div>
-                        </div>
-
-                        <div class="card chart-card">
-                            <h3 class="section-title">
-                                <i class="fas fa-chart-area"></i>
-                                Monthly Trends
-                            </h3>
-                            <div class="chart-container">
-                                <canvas id="trendChart"></canvas>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Budget Section -->
-                    <section class="budget-section" id="budget">
-                        <div class="card">
-                            <div class="card-header-row">
-                                <h3 class="section-title">
-                                    <i class="fas fa-bullseye"></i>
-                                    Budget vs Actual
-                                </h3>
-                                <button class="btn-secondary" id="setBudgetBtn">
-                                    <i class="fas fa-sliders"></i>
-                                    Set Budgets
-                                </button>
-                            </div>
-                            <div class="budget-list" id="budgetList">
-                                <!-- Populated dynamically -->
-                            </div>
-                        </div>
-                    </section>
+            <section id="view-budgets" class="view" data-page="budgets" aria-label="Category budgets" hidden>
+                <div id="budgetContent"></div>
+            </section>
+            <section id="view-bills" class="view" data-page="bills" aria-label="Recurring bills and savings goals"
+                hidden>
+                <div id="billsContent"></div>
+            </section>
+            <section id="view-career" class="view" data-page="career" aria-label="Career and pay planning" hidden>
+                <div class="connection-banner"><span class="connection-icon"><svg class="icon" aria-hidden="true">
+                            <use href="#i-briefcase"></use>
+                        </svg></span>
+                    <div><strong>Your job search meets your real life.</strong>
+                        <p>Compare potential job pay with your living costs. Applications and offers never become income
+                            transactions.</p>
+                    </div><a class="button secondary compact" href="../PipelineTrack/index.html" target="_blank"
+                        rel="noopener">Open PipelineTrack <svg class="icon" aria-hidden="true">
+                            <use href="#i-arrow"></use>
+                        </svg></a>
                 </div>
-
-                <!-- Right Column -->
-                <div class="dashboard-col-side">
-                    <!-- Quick Add Transaction -->
-                    <section class="add-transaction-section">
-                        <div class="card glass-card">
-                            <h3 class="section-title">
-                                <i class="fas fa-plus-circle"></i>
-                                Quick Add
-                            </h3>
-                            <form id="transactionForm" class="transaction-form">
-                                <div class="form-group">
-                                    <label for="transactionType">Type</label>
-                                    <div class="toggle-group">
-                                        <input type="radio" id="typeIncome" name="transactionType" value="income"
-                                            checked>
-                                        <label for="typeIncome" class="toggle-btn income">
-                                            <i class="fas fa-arrow-up"></i> Income
-                                        </label>
-                                        <input type="radio" id="typeExpense" name="transactionType" value="expense">
-                                        <label for="typeExpense" class="toggle-btn expense">
-                                            <i class="fas fa-arrow-down"></i> Expense
-                                        </label>
-                                    </div>
-                                    <!-- Hidden select for JS compatibility -->
-                                    <select id="transactionType" style="display:none;">
-                                        <option value="income">Income</option>
-                                        <option value="expense">Expense</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="transactionAmount">Amount</label>
-                                    <div class="amount-input">
-                                        <span class="currency">$</span>
-                                        <input type="number" id="transactionAmount" step="0.01" min="0"
-                                            placeholder="0.00" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="transactionCategory">Category</label>
-                                    <select id="transactionCategory" required>
-                                        <!-- Populated dynamically -->
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="transactionDate">Date</label>
-                                    <input type="date" id="transactionDate" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="transactionDescription">Description</label>
-                                    <input type="text" id="transactionDescription" placeholder="What's this for?"
-                                        required>
-                                </div>
-                                <button type="submit" class="btn-primary">
-                                    <i class="fas fa-plus"></i>
-                                    Add Transaction
-                                </button>
-                            </form>
+                <div class="career-layout">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <div>
+                                <h2>Build your pay plan</h2>
+                                <p>USD estimates using your own deductions.</p>
+                            </div><svg class="icon" aria-hidden="true">
+                                <use href="#i-wallet"></use>
+                            </svg>
                         </div>
-                    </section>
-
-                    <!-- Recent Transactions -->
-                    <section class="transactions-section" id="transactions">
-                        <div class="card">
-                            <div class="card-header-row">
-                                <h3 class="section-title">
-                                    <i class="fas fa-clock-rotate-left"></i>
-                                    Recent Activity
-                                </h3>
-                                <button class="action-btn danger" id="clearAllBtn" title="Clear All">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </div>
-                            <div class="transaction-filters">
-                                <select id="filterType" class="filter-select">
-                                    <option value="all">All Types</option>
-                                    <option value="income">Income</option>
-                                    <option value="expense">Expense</option>
-                                </select>
-                                <select id="filterCategory" class="filter-select">
-                                    <option value="all">All Categories</option>
-                                </select>
-                            </div>
-                            <div class="transactions-list" id="transactionsList">
-                                <div class="empty-state">
-                                    <div class="empty-icon">
-                                        <i class="fas fa-receipt"></i>
-                                    </div>
-                                    <p>No transactions yet</p>
-                                    <span>Add your first transaction to get started!</span>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+                        <form id="payPlanForm" class="form-grid"><label>Available savings ($)<input type="number"
+                                    name="savings" min="0" max="1000000000" step="0.01" required></label><label>Monthly
+                                living costs ($)<input type="number" name="costs" min="0" max="1000000000" step="0.01"
+                                    required></label><label>Gross pay ($)<input type="number" name="pay" min="0"
+                                    max="1000000000" step="0.01" required></label><label>Pay period<select
+                                    name="period"></select></label><label>Estimated deductions (%)<input type="number"
+                                    name="deductions" min="0" max="100" step="0.1" required></label>
+                            <div class="form-buttons"><button class="button primary" type="submit"><svg class="icon"
+                                        aria-hidden="true">
+                                        <use href="#i-check"></use>
+                                    </svg> Save plan</button><button class="text-button" type="button"
+                                    data-action="use-expenses">Use this month’s spending as costs</button></div>
+                        </form>
+                        <p class="fine-print">Deductions are your estimate, not a tax calculation. Hourly: 40h/week;
+                            daily: 5 days/week; both assume 52 weeks/year. Saving a plan never records a paycheck.</p>
+                        <p id="planStatus" class="inline-status" role="status"></p>
+                    </div>
+                    <div id="planResults" class="plan-results" aria-live="polite"></div>
                 </div>
-            </div>
+                <div class="panel">
+                    <div class="panel-heading">
+                        <div><span class="eyebrow">PIPELINETRACK CONNECTION</span>
+                            <h2>Your opportunities</h2>
+                            <p>Import → review base pay → compare → use an estimate in your plan.</p>
+                        </div><button class="button primary compact" data-action="import-jobs"><svg class="icon"
+                                aria-hidden="true">
+                                <use href="#i-upload"></use>
+                            </svg> Import jobs</button>
+                    </div>
+                    <details class="help-details">
+                        <summary>How does the connection work?</summary>
+                        <p>In PipelineTrack, open <strong>My Profile → Data Backup → Export to Cash Compass</strong>.
+                            Search and select jobs, then download the pay-planning JSON file. Import that file here.
+                            Review USD base pay and period before using estimates. Reimporting updates jobs by ID;
+                            absent jobs stay. This is a manual transfer, not automatic sync. Total compensation is
+                            reference only.</p>
+                    </details>
+                    <div class="filter-bar"><label class="search-control"><svg class="icon" aria-hidden="true">
+                                <use href="#i-search"></use>
+                            </svg><input type="search" id="jobSearch" placeholder="Search company, role, stage, or pay…"
+                                aria-label="Search imported jobs"></label><select id="jobStageFilter"
+                            aria-label="Filter job stage"></select></div>
+                    <div class="selection-bar"><span id="jobCount" role="status"></span>
+                        <div><button class="text-button" data-action="select-jobs">Select results</button><button
+                                class="text-button" data-action="clear-job-selection">Clear selection</button><button
+                                class="button danger compact" id="deleteSelectedJobs" data-action="delete-jobs"
+                                disabled><svg class="icon" aria-hidden="true">
+                                    <use href="#i-trash"></use>
+                                </svg> Remove selected</button></div>
+                    </div>
+                    <div id="jobCards" class="job-grid"></div>
+                    <div id="jobPagination" class="pagination"></div>
+                </div>
+            </section>
+            <section id="view-settings" class="view" data-page="settings" aria-label="Data settings" hidden>
+                <div id="settingsContent"></div>
+            </section>
+            <footer class="app-footer"><span><svg class="icon" aria-hidden="true">
+                        <use href="#i-compass"></use>
+                    </svg> Cash Compass <span class="footer-dot">•</span> A little direction goes a long
+                    way.</span><span>Manual tracking · USD · Stored in your browser</span></footer>
         </main>
     </div>
-
-    <!-- Budget Modal -->
-    <div class="modal" id="budgetModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Set Monthly Budgets</h3>
-                <button class="modal-close" id="closeBudgetModal">
-                    <i class="fas fa-times"></i>
-                </button>
+    <dialog id="editor" aria-labelledby="dialogTitle">
+        <form id="dialogForm">
+            <div class="dialog-heading">
+                <div><span class="eyebrow">CASH COMPASS</span>
+                    <h2 id="dialogTitle"></h2>
+                </div><button type="button" class="icon-button" data-action="close-dialog"
+                    aria-label="Close dialog"><svg class="icon" aria-hidden="true">
+                        <use href="#i-close"></use>
+                    </svg></button>
             </div>
-            <div class="modal-body">
-                <form id="budgetForm">
-                    <div id="budgetInputs">
-                        <!-- Populated dynamically with expense categories -->
-                    </div>
-                    <button type="submit" class="btn-primary">
-                        <i class="fas fa-save"></i>
-                        Save Budgets
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Export Modal -->
-    <div class="modal" id="exportModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Export Data</h3>
-                <button class="modal-close" id="closeExportModal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="modal-description">Choose a format to export your financial data:</p>
-                <div class="export-options">
-                    <button class="export-option" id="exportCSV">
-                        <i class="fas fa-file-csv"></i>
-                        <span>Export as CSV</span>
-                        <small>For Excel & Google Sheets</small>
-                    </button>
-                    <button class="export-option" id="exportJSON">
-                        <i class="fas fa-file-code"></i>
-                        <span>Export as JSON</span>
-                        <small>For developers & backup</small>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- About Modal -->
-    <div class="modal" id="aboutModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>🧭 About Cash Compass</h3>
-                <button class="modal-close" id="closeAboutModal">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="about-content">
-                    <p class="about-intro">
-                        A web application demonstrating data analytics and visualization techniques using HTML, CSS,
-                        JavaScript, and Chart.js. This project showcases interactive data management, real-time
-                        calculations, and dynamic chart rendering in a practical finance tracking context.
-                    </p>
-
-                    <div class="about-section">
-                        <h4>✨ Key Features</h4>
-                        <ul class="about-list">
-                            <li><i class="fas fa-check-circle"></i> Real-time transaction tracking</li>
-                            <li><i class="fas fa-check-circle"></i> Interactive budget management</li>
-                            <li><i class="fas fa-check-circle"></i> Beautiful data visualizations with Chart.js</li>
-                            <li><i class="fas fa-check-circle"></i> Dark mode support</li>
-                            <li><i class="fas fa-check-circle"></i> Export data as CSV or JSON</li>
-                            <li><i class="fas fa-check-circle"></i> 100% local storage - your data never leaves your
-                                browser</li>
-                        </ul>
-                    </div>
-
-                    <div class="about-section">
-                        <h4>🛠️ Built With</h4>
-                        <div class="tech-badges">
-                            <span class="tech-badge">HTML5</span>
-                            <span class="tech-badge">CSS3</span>
-                            <span class="tech-badge">JavaScript</span>
-                            <span class="tech-badge">Chart.js</span>
-                        </div>
-                    </div>
-
-                    <div class="about-section">
-                        <h4>🔒 Privacy</h4>
-                        <p class="about-text">
-                            All your financial data is stored locally in your browser. No data is sent to any server.
-                            You have complete control and can export or delete your data anytime.
-                        </p>
-                    </div>
-
-                    <div class="about-footer">
-                        <p>Made with 💙 for data-driven financial tracking</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+            <div id="dialogBody"></div>
+            <p class="form-error" id="dialogError" role="alert" hidden></p>
+            <div class="dialog-footer"><button type="button" class="button secondary"
+                    data-action="close-dialog">Cancel</button><button type="submit" class="button primary"
+                    id="dialogSubmit">Save</button></div>
+        </form>
+    </dialog>
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+    <noscript>
+        <p class="noscript">Enable JavaScript to use Cash Compass. Your data stays in your browser.</p>
+    </noscript>
+    <script src="pay-transfer.js"></script>
+    <script src="model.js"></script>
     <script src="script.js"></script>
-    <script>
-        // New UI enhancements
-        document.addEventListener('DOMContentLoaded', function () {
-            // Toggle buttons sync with hidden select
-            const typeIncome = document.getElementById('typeIncome');
-            const typeExpense = document.getElementById('typeExpense');
-            const typeSelect = document.getElementById('transactionType');
-
-            if (typeIncome && typeExpense && typeSelect) {
-                typeIncome.addEventListener('change', function () {
-                    if (this.checked) {
-                        typeSelect.value = 'income';
-                        typeSelect.dispatchEvent(new Event('change'));
-                    }
-                });
-
-                typeExpense.addEventListener('change', function () {
-                    if (this.checked) {
-                        typeSelect.value = 'expense';
-                        typeSelect.dispatchEvent(new Event('change'));
-                    }
-                });
-            }
-
-            // Mobile menu toggle
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const sidebar = document.querySelector('.sidebar');
-
-            if (mobileMenuBtn && sidebar) {
-                mobileMenuBtn.addEventListener('click', function () {
-                    sidebar.classList.toggle('open');
-                });
-
-                // Close sidebar when clicking outside
-                document.addEventListener('click', function (e) {
-                    if (!sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-                        sidebar.classList.remove('open');
-                    }
-                });
-            }
-
-            // Smooth scroll navigation
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', function (e) {
-                    const section = this.getAttribute('data-section');
-                    if (section) {
-                        e.preventDefault();
-                        const target = document.getElementById(section);
-                        if (target) {
-                            target.scrollIntoView({
-                                behavior: 'smooth',
-                                block: 'start'
-                            });
-                        }
-                        // Update active state
-                        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove(
-                            'active'));
-                        this.classList.add('active');
-                        // Close mobile sidebar
-                        if (sidebar) sidebar.classList.remove('open');
-                    }
-                });
-            });
-
-            // Quick add button scroll
-            const quickAddBtn = document.getElementById('quickAddBtn');
-            if (quickAddBtn) {
-                quickAddBtn.addEventListener('click', function () {
-                    const form = document.getElementById('transactionForm');
-                    if (form) {
-                        form.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center'
-                        });
-                        const amountInput = document.getElementById('transactionAmount');
-                        if (amountInput) amountInput.focus();
-                    }
-                });
-            }
-
-            // Dark mode uses light-mode class now (dark is default)
-            const darkToggle = document.getElementById('darkModeToggle');
-            if (darkToggle) {
-                // Check existing preference
-                if (localStorage.getItem('darkMode') === 'false') {
-                    document.body.classList.add('light-mode');
-                    darkToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
-                }
-
-                darkToggle.addEventListener('click', function () {
-                    document.body.classList.toggle('light-mode');
-                    const isLight = document.body.classList.contains('light-mode');
-                    localStorage.setItem('darkMode', !isLight);
-                    const icon = this.querySelector('i');
-                    if (isLight) {
-                        icon.classList.replace('fa-moon', 'fa-sun');
-                    } else {
-                        icon.classList.replace('fa-sun', 'fa-moon');
-                    }
-                });
-            }
-
-            // Search functionality
-            const searchInput = document.getElementById('searchInput');
-            if (searchInput) {
-                searchInput.addEventListener('input', function () {
-                    const query = this.value.toLowerCase();
-                    document.querySelectorAll('.transaction-item').forEach(item => {
-                        const desc = item.querySelector('.transaction-description');
-                        if (desc) {
-                            const text = desc.textContent.toLowerCase();
-                            item.style.display = text.includes(query) ? '' : 'none';
-                        }
-                    });
-                });
-            }
-        });
-    </script>
 </body>
 
 </html>

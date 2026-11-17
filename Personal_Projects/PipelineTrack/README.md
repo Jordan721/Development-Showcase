@@ -40,6 +40,14 @@ I built PipelineTrack to solve that. One tool to track every job, score your ski
 
 ---
 
+## Cash Compass pay planning
+
+Open **My Profile → Data Backup → Export to Cash Compass**, select up to 500 jobs, and download the pay-planning JSON. In [Cash Compass](../Cash-Compass/index.html#career), open **Career & Pay**, choose **Import jobs**, review the preview, and import. Review USD base pay and pay periods before comparing monthly estimates with living costs and deductions.
+
+This selected-job export contains company, role, stage, and pay details; it excludes resumes, profiles, contacts, and notes. It is separate from a full workspace backup. Repeat imports update jobs by ID. Applications and offers remain potential income and never create paycheck transactions. See the [Cash Compass workflow](../Cash-Compass/README.md#pipelinetrack-connection) for assumptions and limits.
+
+Use the export dialog's search to find companies, roles, locations, stages, or pay amounts. Start with no selected jobs; **Select search results** checks only matching rows. Selections persist across searches, with hidden selections counted in the status. **Clear all selections** deselects every job.
+
 ## 🚀 Getting Started
 
 Choose **Explore sample workspace** to try eight fictional applications and a sample skills profile. You can also open `index.html?demo=1`. Demo changes stay in memory and never replace your saved workspace. Reload to reset the sample data; choose **Exit demo** to return to your records. Use the regular workspace for anything you want to keep.
