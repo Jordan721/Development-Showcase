@@ -4,6 +4,7 @@
    BOARD (KANBAN)
    ══════════════════════════════════════════════════════════ */
 const collapsedColumns = new Set(JSON.parse(localStorage.getItem('pt-collapsed-cols') || '[]'));
+let compactWorkspace;
 
 /* ── BULK SELECTION ────────────────────────────────────── */
 let bulkSelectMode = false;
@@ -189,11 +190,12 @@ function updateBoardFilterUI() {
   const clearBtn = document.getElementById('board-clear-filters');
   if (clearBtn) clearBtn.style.display = hasFilters ? '' : 'none';
   const sortSel = document.getElementById('board-sort-table');
-  if (sortSel) sortSel.style.display = boardLayout === 'table' ? '' : 'none';
+  const showSort = compactWorkspace?.matches || boardLayout === 'table';
+  if (sortSel) sortSel.style.display = showSort ? '' : 'none';
   const sortField = sortSel ? sortSel.closest('.board-sort-field') : null;
-  if (sortField) sortField.style.display = boardLayout === 'table' ? '' : 'none';
+  if (sortField) sortField.style.display = showSort ? '' : 'none';
   const filterChips = document.getElementById('board-filter-chips');
-  if (filterChips) filterChips.classList.toggle('has-board-sort', boardLayout === 'table');
+  if (filterChips) filterChips.classList.toggle('has-board-sort', showSort);
   const dragHint = document.getElementById('board-drag-hint');
   if (dragHint) dragHint.style.display = (boardLayout === 'table' || boardLayout === 'timeline' || boardLayout === 'actions' || boardLayout === 'map') ? 'none' : '';
 }
@@ -419,7 +421,7 @@ function renderBoard() {
   if (searchEl && searchEl.value !== boardSearch) searchEl.value = boardSearch;
 
   // Apply layout class
-  board.className = `kanban kanban--${boardLayout}`;
+  board.className = `kanban kanban--${compactWorkspace?.matches ? 'list' : boardLayout}`;
 
   // Update layout toggle buttons
   document.querySelectorAll('.layout-btn').forEach(b => {
@@ -444,6 +446,28 @@ function renderBoard() {
       renderBoard();
     };
   });
+
+  if (compactWorkspace?.matches) {
+    const jobs = sortTableJobs(periodJobs.filter(job => boardFilterStage || visibleStages.includes(job.stage)));
+    board.innerHTML = jobs.length ? jobs.map(job => {
+      const selected = bulkSelectMode && bulkSelected.has(job.id);
+      const selection = bulkSelectMode ? `role="checkbox" aria-checked="${selected}"` : '';
+      return `<button type="button" class="job-card mobile-job-card${selected ? ' bulk-selected' : ''}"
+        data-job-id="${escHtml(job.id)}" ${selection}>
+        <strong>${escHtml(job.role)}</strong>
+        <span>${escHtml(job.company)}</span>
+        <span class="mobile-job-meta">${STAGE_LABELS[job.stage] || ''}${job.fitScore == null ? '' : ` · ${escHtml(job.fitScore)}% fit`}</span>
+      </button>`;
+    }).join('') : '<p class="empty-msg">No jobs match this view.</p>';
+    board.querySelectorAll('.mobile-job-card').forEach(card => {
+      card.addEventListener('click', () => {
+        if (bulkSelectMode) toggleBulkCard(card);
+        else openJobDetail(card.dataset.jobId);
+      });
+    });
+    wireSearchAndFilters();
+    return;
+  }
 
   if (boardLayout === 'table') {
     const visibleJobs = sortTableJobs(

@@ -4,11 +4,32 @@
    EVENT WIRING
    ══════════════════════════════════════════════════════════ */
 function wireEvents() {
+  const mobileMore = document.getElementById('mobile-more');
+  const mobileMoreToggle = mobileMore.querySelector('summary');
+  document.addEventListener('click', e => {
+    if (!mobileMore.contains(e.target)) mobileMore.open = false;
+  });
+  mobileMore.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && mobileMore.open) {
+      e.stopPropagation();
+      mobileMore.open = false;
+      mobileMoreToggle.focus();
+    }
+  });
+  compactWorkspace = window.matchMedia('(max-width: 700px)');
+  compactWorkspace.addEventListener('change', () => {
+    mobileMore.open = false;
+    if (state.activeView === 'board') renderBoard();
+  });
+  if (compactWorkspace.matches) calMode = 'agenda';
+
   // Nav links
   document.querySelectorAll('.nav-link').forEach(a => {
     a.addEventListener('click', e => {
       e.preventDefault();
+      const fromMore = mobileMore.contains(a);
       navigate(a.dataset.view);
+      if (fromMore) mobileMoreToggle.focus();
     });
   });
 

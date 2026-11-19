@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="css/views/profile-skills.css" />
     <link rel="stylesheet" href="css/ui/workspace.css" />
     <link rel="stylesheet" href="css/cash-compass-export.css">
+    <link rel="stylesheet" href="css/ui/mobile.css" />
 </head>
 
 <body>
@@ -589,7 +590,13 @@
                                     excluded.</div>
                             </div>
                         </button>
-                        <button class="backup-tile" id="cash-compass-export-btn"><div class="backup-tile-text"><div class="backup-tile-title">Export to Cash Compass ↗</div><div class="backup-tile-desc">Choose jobs to compare potential pay with your monthly costs.</div></div></button>
+                        <button class="backup-tile" id="cash-compass-export-btn">
+                            <div class="backup-tile-text">
+                                <div class="backup-tile-title">Export to Cash Compass ↗</div>
+                                <div class="backup-tile-desc">Choose jobs to compare potential pay with your monthly
+                                    costs.</div>
+                            </div>
+                        </button>
                         <button class="backup-tile" id="import-btn">
                             <div class="backup-tile-icon backup-tile-icon--import">
                                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -1139,6 +1146,24 @@
         </section>
 
     </main>
+
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+        <a href="#view-dashboard" class="nav-link active" data-view="dashboard" aria-current="page">Today</a>
+        <a href="#view-board" class="nav-link" data-view="board">Jobs</a>
+        <a href="#view-calendar" class="nav-link" data-view="calendar">Agenda</a>
+        <details class="mobile-more" id="mobile-more">
+            <summary>More</summary>
+            <div class="mobile-more-links">
+                <a href="#view-contacts" class="nav-link" data-view="contacts">Network</a>
+                <a href="#view-goals" class="nav-link" data-view="goals">Goals</a>
+                <a href="#view-analytics" class="nav-link" data-view="analytics">Analytics</a>
+                <a href="#view-profile" class="nav-link" data-view="profile">My Profile</a>
+                <a href="#view-resume" class="nav-link" data-view="resume">Resume Hub</a>
+                <a href="#view-learning" class="nav-link" data-view="learning">Learning Hub</a>
+                <a href="../../index.html">Back to Showcase</a>
+            </div>
+        </details>
+    </nav>
 
     <!-- ── MODAL: ADD / EDIT JOB ──────────────────────────── -->
     <div class="modal-overlay" id="modal-job" aria-hidden="true">
@@ -2144,6 +2169,8 @@
                         </div>
                         <p>Your personal job search companion. Track every application, score your skill fit, and close
                             your gaps — all in your browser, no account needed.</p>
+                        <p class="ob-mobile-only">Use <strong>Today</strong>, <strong>Jobs</strong>,
+                            <strong>Agenda</strong>, and <strong>More</strong> in the bottom navigation.</p>
                         <p>Supports <strong>Tech</strong>, <strong>Business</strong>, and <strong>Customer
                                 Experience</strong> roles.</p>
                     </div>
@@ -2157,8 +2184,8 @@
                                 <h2>Build your profile</h2>
                             </div>
                         </div>
-                        <p>Head to <strong>My Profile</strong> and add your skills. This is what powers fit scoring —
-                            without it, all fit scores will show 0%.</p>
+                        <p>Open <strong><span class="ob-mobile-only">More → </span>My Profile</strong> and add your
+                            skills so PipelineTrack can score your fit for a job.</p>
                         <p>Add certifications, degrees, diplomas, bootcamps, or licenses too. You can mark each one as
                             <strong>Planned</strong>, <strong>In Progress</strong>, or <strong>Completed</strong>, then
                             track the school or issuer, target date, progress, and notes.</p>
@@ -2176,10 +2203,11 @@
                                 <h2>Add your first job</h2>
                             </div>
                         </div>
-                        <p>Click <strong>+ Add Job</strong> on the Job Board. Only <strong>role and company</strong>
-                            are required.</p>
+                        <p>Open <strong><span class="ob-desktop-only">Job Board</span><span
+                                    class="ob-mobile-only">Jobs</span></strong> and choose <strong>+ Add Job</strong>.
+                            Only <strong>role and company</strong> are required.</p>
                         <p>Use <strong>⚡ Paste full listing</strong> to fill in the rest from a job posting.
-                            Review the auto-filled fields, then click <strong>Save Job</strong>.</p>
+                            Review the auto-filled fields, then choose <strong>Save Job</strong>.</p>
                     </div>
 
                     <!-- Step 4 — Explore -->
@@ -2193,20 +2221,27 @@
                         </div>
                         <p>Open a saved job to explore <strong>Details</strong> and <strong>History</strong>.
                             History shows your latest stage changes and time spent in each stage.</p>
-                        <ul>
+                        <ul class="ob-desktop-only">
                             <li><strong>Job Board:</strong> Move jobs through stages as you progress.</li>
                             <li><strong>Calendar:</strong> Keep track of interviews and deadlines.</li>
                             <li><strong>Profile:</strong> Add your skills to see matches and gaps.</li>
                             <li><strong>Settings:</strong> Adjust text size, spacing, themes, contrast, and animations.
                                 Your choices are saved in this browser.</li>
                         </ul>
-                        <div class="ob-shortcuts">
+                        <ul class="ob-mobile-only">
+                            <li><strong>Jobs</strong> lets you search, sort, and filter your list. Open a job and use
+                                the <strong>Stage</strong> picker to move it.</li>
+                            <li><strong>Agenda</strong> lists your upcoming interviews and deadlines.</li>
+                            <li>To move your records to another device, use <strong>More → My Profile → Data Backup</strong>
+                                to export a JSON backup, then import it in the other browser.</li>
+                        </ul>
+                        <div class="ob-shortcuts ob-desktop-only">
                             <div class="ob-shortcut"><kbd>N</kbd> Add a job</div>
                             <div class="ob-shortcut"><kbd>E</kbd> Search &amp; edit a job</div>
                             <div class="ob-shortcut"><kbd>S</kbd> Open settings after closing this guide</div>
                             <div class="ob-shortcut"><kbd>D</kbd> / <kbd>H</kbd> Details / History in an open job</div>
                         </div>
-                        <p class="onboarding-tip">Shortcuts pause while you type. Reopen this guide with
+                        <p class="onboarding-tip"><span class="ob-desktop-only">Shortcuts pause while you type. </span>Reopen this guide with
                             <strong>?</strong>.
                             Find more features and shortcuts in the <a href="README.md" target="_blank"
                                 rel="noopener">README</a>.</p>
@@ -2382,9 +2417,28 @@
     <script src="javascript/ui/ux-enhancements.js"></script>
     <script src="javascript/views/map.js"></script>
     <script src="javascript/features/job-workspace.js"></script>
-<dialog id="cash-compass-export-dialog" class="cash-export-dialog" aria-labelledby="cash-compass-export-title"><h2 id="cash-compass-export-title">Plan your job income in Cash Compass</h2><p>Select the jobs to export. Only company, role, application stage, advertised pay, offer pay, and total compensation are included. Notes, resumes, contacts, and profile details stay in PipelineTrack.</p><p>Applications and offers are potential income. Importing them will not create paycheck transactions.</p><label class="cash-export-search-label" for="cash-compass-export-search">Find jobs to export</label><input class="cash-export-search" type="search" id="cash-compass-export-search" placeholder="Company, role, location, stage, or pay…"><p>Search, then select the jobs you want. Selections stay checked when you change the search.</p><div class="cash-export-actions"><button type="button" class="btn-secondary" id="cash-compass-select-all">Select search results</button><button type="button" class="btn-secondary" id="cash-compass-select-none">Clear all selections</button></div><div id="cash-compass-export-list" class="cash-export-list"></div><p id="cash-compass-no-matches" hidden>No matching jobs. Try another company, role, stage, or pay amount.</p><p id="cash-compass-export-status" role="status" aria-live="polite"></p><div class="cash-export-actions"><button type="button" class="btn-primary" id="cash-compass-download">Download pay-planning export</button><button type="button" class="btn-secondary" id="cash-compass-export-close">Close</button><a class="btn-secondary" href="../Cash-Compass/index.html#career" target="_blank" rel="noopener">Open Cash Compass ↗</a></div></dialog>
-<script src="../Cash-Compass/pay-transfer.js"></script>
-<script src="javascript/features/cash-compass-export.js"></script>
+    <dialog id="cash-compass-export-dialog" class="cash-export-dialog" aria-labelledby="cash-compass-export-title">
+        <h2 id="cash-compass-export-title">Plan your job income in Cash Compass</h2>
+        <p>Select the jobs to export. Only company, role, application stage, advertised pay, offer pay, and total
+            compensation are included. Notes, resumes, contacts, and profile details stay in PipelineTrack.</p>
+        <p>Applications and offers are potential income. Importing them will not create paycheck transactions.</p><label
+            class="cash-export-search-label" for="cash-compass-export-search">Find jobs to export</label><input
+            class="cash-export-search" type="search" id="cash-compass-export-search"
+            placeholder="Company, role, location, stage, or pay…">
+        <p>Search, then select the jobs you want. Selections stay checked when you change the search.</p>
+        <div class="cash-export-actions"><button type="button" class="btn-secondary" id="cash-compass-select-all">Select
+                search results</button><button type="button" class="btn-secondary" id="cash-compass-select-none">Clear
+                all selections</button></div>
+        <div id="cash-compass-export-list" class="cash-export-list"></div>
+        <p id="cash-compass-no-matches" hidden>No matching jobs. Try another company, role, stage, or pay amount.</p>
+        <p id="cash-compass-export-status" role="status" aria-live="polite"></p>
+        <div class="cash-export-actions"><button type="button" class="btn-primary" id="cash-compass-download">Download
+                pay-planning export</button><button type="button" class="btn-secondary"
+                id="cash-compass-export-close">Close</button><a class="btn-secondary"
+                href="../Cash-Compass/index.html#career" target="_blank" rel="noopener">Open Cash Compass ↗</a></div>
+    </dialog>
+    <script src="../Cash-Compass/pay-transfer.js"></script>
+    <script src="javascript/features/cash-compass-export.js"></script>
 </body>
 
 </html>

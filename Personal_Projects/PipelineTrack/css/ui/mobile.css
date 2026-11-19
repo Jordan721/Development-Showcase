@@ -1,0 +1,189 @@
+.mobile-nav,
+.onboarding-step .ob-mobile-only {
+  display: none;
+}
+
+@media screen and (max-width: 700px) {
+  :root {
+    --mobile-nav-space: calc(68px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .onboarding-step .ob-desktop-only {
+    display: none;
+  }
+
+  .onboarding-step .ob-mobile-only {
+    display: revert;
+  }
+
+  .main {
+    margin-left: 0;
+    width: 100%;
+    padding-bottom: var(--mobile-nav-space);
+  }
+
+  .view {
+    padding: 16px;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    padding: 8px 12px;
+  }
+
+  .topbar-controls {
+    flex-wrap: wrap;
+  }
+
+  .topbar-controls>button {
+    min-height: 44px;
+  }
+
+  #workspace-settings-open kbd {
+    display: none;
+  }
+
+  .mobile-nav {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 90;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+    padding: 8px max(8px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px));
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+  }
+
+  .mobile-nav a,
+  .mobile-more summary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    color: var(--text);
+    font-size: .875rem;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .mobile-more summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-nav a.active,
+  .mobile-more[open] summary,
+  .mobile-more:has(a.active) summary {
+    background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+    color: var(--accent);
+  }
+
+  .mobile-more-links {
+    position: absolute;
+    right: 8px;
+    bottom: 100%;
+    display: grid;
+    width: min(240px, calc(100vw - 16px));
+    max-height: calc(100dvh - var(--mobile-nav-space));
+    overflow-y: auto;
+    padding: 6px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .25);
+  }
+
+  .mobile-more-links a {
+    justify-content: flex-start;
+  }
+
+  #view-board .layout-toggle,
+  #board-drag-hint {
+    display: none;
+  }
+
+  #view-board :is(.board-controls, .board-period-filters, .bulk-bar),
+  #view-calendar :is(.cal-view-controls, .cal-view-tabs) {
+    flex-wrap: wrap;
+  }
+
+  #view-board .board-controls {
+    position: static;
+    justify-content: flex-start;
+  }
+
+  #view-board .board-controls>.toggle-label {
+    flex-basis: 100%;
+  }
+
+  .toast {
+    right: 12px;
+    bottom: var(--mobile-nav-space);
+    max-width: calc(100vw - 24px);
+  }
+
+  #view-board .kanban--list {
+    display: grid;
+    gap: 8px;
+    width: 100%;
+    padding: 0 0 12px;
+  }
+
+  .kanban--list .mobile-job-card {
+    display: grid;
+    gap: 4px;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 12px;
+    color: var(--text);
+    font: inherit;
+    text-align: left;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+  }
+
+  .mobile-job-meta {
+    color: var(--text-muted);
+    font-size: .875rem;
+  }
+
+  #view-board :is(input[type="text"], select),
+  #modal-job :is(input:not([type="checkbox"], [type="radio"]), select, textarea),
+  #modal-detail :is(input:not([type="checkbox"], [type="radio"]), select, textarea) {
+    font-size: 1rem;
+  }
+
+  #view-board :is(.board-filter, .board-filter-select, #board-search),
+  #view-calendar .cal-tab,
+  #modal-detail #detail-stage-select,
+  :is(#modal-job, #modal-detail) .modal-close {
+    min-height: 44px;
+  }
+
+  :is(#modal-job, #modal-detail) .modal-close {
+    min-width: 44px;
+  }
+
+  :is(#modal-job, #modal-detail).modal-overlay {
+    padding: 0;
+  }
+
+  :is(#modal-job, #modal-detail)>.modal {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border: 0;
+    border-radius: 0;
+  }
+}

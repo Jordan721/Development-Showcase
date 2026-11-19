@@ -21,7 +21,7 @@ Open a job's **Requirements** tab beside Details and History to inspect source w
 | Feature | What it does |
 |---|---|
 | ◈ Dashboard | Stats, clickable streak timeline, pipeline health, conversion funnel, weekly velocity, upcoming deadlines, skill gaps, and weekly summary |
-| 📋 Job Board | 9-stage kanban with columns, action queue, table, timeline, and map views — search and filter built in |
+| 📋 Job Board | Searchable job list on phones and a 9-stage board with columns, action queue, table, timeline, and map views on wider screens |
 | 📅 Calendar & Activity | Month/week/year and Agenda views, draggable dates, detailed day views, upcoming agenda, and five recent jobs |
 | 🤝 Network | Contact cards, due follow-ups, and quick actions to record conversations |
 | 🎯 Goals | Weekly/monthly targets with live progress, calendar-based pace, action buttons, recorded history, and a 28-day activity heatmap |
@@ -49,6 +49,15 @@ This selected-job export contains company, role, stage, and pay details; it excl
 Use the export dialog's search to find companies, roles, locations, stages, or pay amounts. Start with no selected jobs; **Select search results** checks only matching rows. Selections persist across searches, with hidden selections counted in the status. **Clear all selections** deselects every job.
 
 ## 🚀 Getting Started
+
+### Using PipelineTrack on a phone
+
+Open the same PipelineTrack page on your phone. At screen widths of 700 px or less, the app switches to bottom navigation.
+
+- **Today** shows your next moves and dashboard. **Agenda** opens Calendar & Activity in Agenda view on a phone, where you can review interviews and deadlines or switch calendar views.
+- **Jobs** opens a searchable, sortable list with stage, work type, and seniority filters. Tap a job to open its full-screen details. Use the **Stage** picker to update your progress.
+- Tap **+ Add Job**, then **⚡ Paste full listing** to fill in fields from a posting. Review the suggested values before choosing **Save Job**.
+- **More → My Profile** is where you add skills and access **Data Backup**. Records are saved in the browser you use. To move a workspace between phone and desktop, export a full JSON backup on one device and import it on the other.
 
 Choose **Explore sample workspace** to try eight fictional applications and a sample skills profile. You can also open `index.html?demo=1`. Demo changes stay in memory and never replace your saved workspace. Reload to reset the sample data; choose **Exit demo** to return to your records. Use the regular workspace for anything you want to keep.
 
@@ -152,7 +161,8 @@ Nine stages: **Saved → Applied → Screening → Interview → Offer → Not S
 
 - **Not Selected** — company didn't pick you; date auto-stamped on the card and detail view
 - **Declined** — you chose not to pursue; **Ghosted** — never heard back
-- **Five layout modes:**
+- **Phone layout** — search, sort, and filter the job list. Open a job to change its stage or review details, requirements, and history.
+- **Five layouts on wider screens:**
   - **Columns** — classic kanban with collapsible columns (state persists across refreshes); drag cards onto collapsed columns to move them — the column highlights with a dashed outline on hover to confirm the drop
   - **Action Queue** — Apply next, Follow up, Prepare for interviews, and Review offers; closest dates first until you save a custom order by dragging. Pinned jobs stay first. Drag between groups to update the stage, with Undo; entering Prepare sets Screening, and entering Completed & on hold sets Archived. Existing screening/interview stages are preserved when reordering within Prepare. Applications without a follow-up date use a seven-day reminder.
   - **Table** — sortable spreadsheet with sticky header, per-stage colored left-border accents, and color-coded stage dropdowns

@@ -770,6 +770,7 @@ const TOPBAR_ACTIONS = {
 
 function navigate(view) {
   state.activeView = view;
+  document.getElementById('mobile-more').open = false;
 
   document.querySelectorAll('.view').forEach(v => {
     v.classList.remove('active');

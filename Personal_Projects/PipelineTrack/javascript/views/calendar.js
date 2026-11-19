@@ -420,9 +420,10 @@ function renderCalendarUpcoming(allEvents) {
 
 function wireCalendarControls() {
   document.querySelectorAll('.cal-tab').forEach(btn => {
+    const active = btn.dataset.calMode === calMode;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
     btn.onclick = () => {
-      document.querySelectorAll('.cal-tab').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
       const nextMode = btn.dataset.calMode;
       if (!['month', 'agenda'].includes(calMode) || !['month', 'agenda'].includes(nextMode)) calOffset = 0;
       calMode = nextMode;
