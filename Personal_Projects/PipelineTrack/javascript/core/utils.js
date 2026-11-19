@@ -695,6 +695,31 @@ function parseJobDate(value, reference = new Date()) {
   return { date: jobDateISO(base), approximate: !!relative[3] };
 }
 
+const optionalAssets = new Map();
+
+function loadOptionalAsset(url) {
+  if (optionalAssets.has(url)) return optionalAssets.get(url);
+  const loaded = new Promise((resolve, reject) => {
+    const stylesheet = url.endsWith('.css');
+    const asset = document.createElement(stylesheet ? 'link' : 'script');
+    if (stylesheet) {
+      asset.rel = 'stylesheet';
+      asset.href = url;
+    } else {
+      asset.src = url;
+    }
+    asset.onload = resolve;
+    asset.onerror = () => {
+      optionalAssets.delete(url);
+      asset.remove();
+      reject(new Error(`Could not load ${url}`));
+    };
+    document.head.append(asset);
+  });
+  optionalAssets.set(url, loaded);
+  return loaded;
+}
+
 function openModal(id) {
   document.getElementById(id).classList.add('open');
   document.getElementById(id).setAttribute('aria-hidden', 'false');

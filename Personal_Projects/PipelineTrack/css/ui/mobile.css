@@ -13,6 +13,7 @@
   }
 
   .view.view-enter,
+  .deadline-banner.deadline-banner--urgent,
   #cal-view-body:is(.cal-anim-fade, .cal-anim-from-right, .cal-anim-from-left),
   .modal-overlay.open .modal,
   #modal-job .modal-tab-panel.active,

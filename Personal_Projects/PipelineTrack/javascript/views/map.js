@@ -158,7 +158,7 @@ function renderBoardMap(jobs) {
     </div>`;
 }
 
-function wireMap(jobs) {
+async function wireMap(jobs) {
   if (_mapInstance) {
     _mapInstance.remove();
     _mapInstance = null;
@@ -169,12 +169,24 @@ function wireMap(jobs) {
   root.querySelectorAll('[data-map-open]').forEach(button => {
     button.addEventListener('click', () => openJobDetail(button.dataset.mapOpen));
   });
-  if (typeof L === 'undefined') {
+  const fitButton = root.querySelector('#map-fit-all');
+  fitButton.disabled = true;
+  container.innerHTML = '<div class="map-empty" role="status">Loading map…</div>';
+  try {
+    await Promise.all([
+      loadOptionalAsset('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'),
+      loadOptionalAsset('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js')
+    ]);
+    if (typeof L === 'undefined') throw new Error('Leaflet did not initialize');
+  } catch {
+    if (!container.isConnected) return;
     container.innerHTML = '<div class="map-empty">The map could not load. You can still explore your jobs in the list.</div>';
     root.querySelectorAll('[data-map-focus]').forEach(button => button.addEventListener('click', () => openJobDetail(button.dataset.mapFocus)));
-    root.querySelector('#map-fit-all').disabled = true;
     return;
   }
+  if (!container.isConnected || state.activeView !== 'board') return;
+  container.replaceChildren();
+  fitButton.disabled = false;
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const map = L.map(container, {
     zoomControl: true,

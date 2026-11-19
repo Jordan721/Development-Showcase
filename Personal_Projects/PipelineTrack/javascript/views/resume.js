@@ -442,6 +442,7 @@ function readFileAsText(file) {
 }
 
 async function readFilePDF(file) {
+  await loadOptionalAsset('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
   if (typeof pdfjsLib === 'undefined') throw new Error('PDF.js not loaded');
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -459,6 +460,7 @@ async function readFilePDF(file) {
 }
 
 async function readFileDOCX(file) {
+  await loadOptionalAsset('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');
   if (typeof mammoth === 'undefined') throw new Error('Mammoth not loaded');
   const buffer = await file.arrayBuffer();
   const result = await mammoth.extractRawText({
