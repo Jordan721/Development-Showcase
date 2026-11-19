@@ -1,4 +1,3 @@
-// ===== Brand Standards Guide Page Viewer =====
 const bsgPages = 16;
 let currentPage = 1;
 
@@ -7,115 +6,84 @@ const bsgCurrent = document.getElementById('bsg-current');
 const bsgPrev = document.getElementById('bsg-prev');
 const bsgNext = document.getElementById('bsg-next');
 const bsgThumbnails = document.getElementById('bsg-thumbnails');
+const bsgViewer = document.querySelector('.bsg-viewer');
 
 function getBsgSrc(page) {
-    const num = String(page).padStart(2, '0');
-    return "Pics/BSG_Folder/Watt's Gaming Brand Guide font outline-" + num + ".jpg";
+    const number = String(page).padStart(2, '0');
+    return "Pics/BSG_Folder/Watt's Gaming Brand Guide font outline-" + number + ".jpg";
 }
 
 function updateBsg(page) {
+    if (page < 1 || page > bsgPages) return;
+
+    bsgThumbnails.children[currentPage - 1].removeAttribute('aria-current');
     currentPage = page;
+    bsgThumbnails.children[page - 1].setAttribute('aria-current', 'page');
     bsgImage.src = getBsgSrc(page);
     bsgImage.alt = 'Brand Standards Guide Page ' + page;
     bsgCurrent.textContent = page;
     bsgPrev.disabled = page === 1;
     bsgNext.disabled = page === bsgPages;
 
-    document.querySelectorAll('.bsg-thumb').forEach(function (thumb, i) {
-        thumb.classList.toggle('active', i + 1 === page);
-    });
+    if (document.activeElement === bsgPrev && bsgPrev.disabled) bsgNext.focus();
+    if (document.activeElement === bsgNext && bsgNext.disabled) bsgPrev.focus();
 }
 
-// Build thumbnails
-for (var i = 1; i <= bsgPages; i++) {
-    var thumb = document.createElement('div');
-    thumb.className = 'bsg-thumb' + (i === 1 ? ' active' : '');
-    thumb.dataset.page = i;
+for (let page = 1; page <= bsgPages; page++) {
+    const thumb = document.createElement('button');
+    thumb.type = 'button';
+    thumb.className = 'bsg-thumb';
+    thumb.setAttribute('aria-label', 'Show page ' + page);
+    if (page === 1) thumb.setAttribute('aria-current', 'page');
 
-    var img = document.createElement('img');
-    img.src = getBsgSrc(i);
-    img.alt = 'Page ' + i;
+    const img = document.createElement('img');
+    img.src = getBsgSrc(page);
+    img.alt = '';
     img.loading = 'lazy';
 
     thumb.appendChild(img);
-    thumb.addEventListener('click', function () {
-        updateBsg(parseInt(this.dataset.page));
-    });
+    thumb.addEventListener('click', () => updateBsg(page));
     bsgThumbnails.appendChild(thumb);
 }
 
-bsgPrev.addEventListener('click', function () {
-    if (currentPage > 1) updateBsg(currentPage - 1);
-});
+bsgPrev.addEventListener('click', () => updateBsg(currentPage - 1));
+bsgNext.addEventListener('click', () => updateBsg(currentPage + 1));
 
-bsgNext.addEventListener('click', function () {
-    if (currentPage < bsgPages) updateBsg(currentPage + 1);
-});
-
-// Keyboard navigation for BSG
-document.addEventListener('keydown', function (e) {
-    if (document.getElementById('lightbox').classList.contains('active')) return;
-    if (e.key === 'ArrowLeft' && currentPage > 1) updateBsg(currentPage - 1);
-    if (e.key === 'ArrowRight' && currentPage < bsgPages) updateBsg(currentPage + 1);
-});
-
-// ===== Lightbox =====
-var lightbox = document.getElementById('lightbox');
-var lightboxImg = document.getElementById('lightbox-img');
-
-function openLightbox(imgElement) {
-    lightboxImg.src = imgElement.src;
-    lightboxImg.alt = imgElement.alt;
-    lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeLightbox() {
-    lightbox.classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-lightbox.addEventListener('click', function (e) {
-    if (e.target === lightbox) closeLightbox();
-});
-
-document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') closeLightbox();
-});
-
-// ===== Back to Top Button =====
-var backToTop = document.getElementById('backToTop');
-
-window.addEventListener('scroll', function () {
-    if (window.scrollY > 300) {
-        backToTop.classList.add('visible');
-    } else {
-        backToTop.classList.remove('visible');
+bsgViewer.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        event.preventDefault();
+        updateBsg(currentPage + (event.key === 'ArrowLeft' ? -1 : 1));
     }
 });
 
-backToTop.addEventListener('click', function () {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+
+function openLightbox(image) {
+    lightboxImg.src = image.currentSrc || image.src;
+    lightboxImg.alt = image.alt;
+    lightbox.showModal();
+}
+
+function closeLightbox() {
+    lightbox.close();
+}
+
+lightbox.addEventListener('click', (event) => {
+    if (event.target !== lightbox) return;
+
+    const bounds = lightbox.getBoundingClientRect();
+    if (event.clientX < bounds.left || event.clientX > bounds.right ||
+        event.clientY < bounds.top || event.clientY > bounds.bottom) {
+        closeLightbox();
+    }
 });
 
-// ===== Smooth reveal on scroll =====
-var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, {
-    threshold: 0.1
-});
+const backToTop = document.getElementById('backToTop');
 
-document.querySelectorAll('.project-card, .gallery-item, .project-subsection').forEach(function (el) {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(el);
-});
+function updateBackToTop() {
+    backToTop.hidden = window.scrollY <= 300;
+}
+
+window.addEventListener('scroll', updateBackToTop, { passive: true });
+updateBackToTop();
