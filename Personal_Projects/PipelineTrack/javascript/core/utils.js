@@ -779,8 +779,6 @@ function navigate(view) {
 
   const target = document.getElementById(`view-${view}`);
   target.classList.add('active');
-  void target.offsetWidth; // reflow so animation restarts
-  target.classList.add('view-enter');
 
   document.querySelectorAll('.nav-link').forEach(a => {
     a.classList.toggle('active', a.dataset.view === view);
@@ -804,13 +802,10 @@ function navigate(view) {
     actionBtn.textContent = '+ Add Job';
   }
 
-  // skeleton flash — add class, force reflow so animation starts, render content, let animationend clean up
-  target.classList.remove('view-skeleton');
-  void target.offsetWidth;
-  target.classList.add('view-skeleton');
-  target.addEventListener('animationend', () => target.classList.remove('view-skeleton'), {
-    once: true
-  });
+  if (!compactWorkspace?.matches) {
+    void target.offsetWidth;
+    target.classList.add('view-enter');
+  }
   renderView(view);
   if (typeof updateGettingStarted === 'function') updateGettingStarted();
   // Views share the document scroller, so reset after the new content renders.

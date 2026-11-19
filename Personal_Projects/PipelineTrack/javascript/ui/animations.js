@@ -43,6 +43,7 @@ function animateCountUp(el, target, suffix, duration) {
    function, then plays the reveal animation + count-up.
    ──────────────────────────────────────────────────────────── */
 function animateDashboardStats() {
+  if (compactWorkspace.matches) return;
   document.querySelectorAll('.stat-value[data-count]').forEach(function (el, i) {
     var target = parseFloat(el.dataset.count);
     var suffix = el.dataset.suffix || '';
@@ -79,6 +80,7 @@ function animateBoardCards() {
    zero. Works for both pipeline bars and coverage bars.
    ──────────────────────────────────────────────────────────── */
 function animateBars(selector) {
+  if (compactWorkspace.matches) return;
   requestAnimationFrame(function () {
     document.querySelectorAll(selector).forEach(function (bar) {
       var target = bar.style.width;

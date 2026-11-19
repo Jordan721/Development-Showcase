@@ -610,10 +610,12 @@ function renderCalendarView() {
 
   // Animate the incoming content
   body.classList.remove('cal-anim-fade', 'cal-anim-from-left', 'cal-anim-from-right');
-  void body.offsetWidth; // force reflow to restart animation
-  if (calAnimDir === 'left') body.classList.add('cal-anim-from-right');
-  else if (calAnimDir === 'right') body.classList.add('cal-anim-from-left');
-  else body.classList.add('cal-anim-fade');
+  if (!compactWorkspace.matches) {
+    void body.offsetWidth;
+    if (calAnimDir === 'left') body.classList.add('cal-anim-from-right');
+    else if (calAnimDir === 'right') body.classList.add('cal-anim-from-left');
+    else body.classList.add('cal-anim-fade');
+  }
   calAnimDir = 'fade'; // reset
 
   wireCalendarControls();

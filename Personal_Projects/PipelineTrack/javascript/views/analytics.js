@@ -26,7 +26,7 @@ function getJobsForPeriod(period) {
 
 // Animate bar widths from 0 → data-aw and heights from 2px → data-ah
 function _animateBars(container) {
-  requestAnimationFrame(() => requestAnimationFrame(() => {
+  const applySizes = () => {
     container.querySelectorAll('[data-aw]').forEach(el => {
       el.style.width = el.dataset.aw + '%';
     });
@@ -36,13 +36,15 @@ function _animateBars(container) {
     container.querySelectorAll('[data-chart-ratio]').forEach(el => {
       el.style.height = `max(3px, calc((100% - 42px) * ${el.dataset.chartRatio}))`;
     });
-  }));
+  };
+  if (compactWorkspace.matches) applySizes();
+  else requestAnimationFrame(() => requestAnimationFrame(applySizes));
 }
 
 // Count a numeric value up from 0 inside an element
 function _countUp(el, target, suffix) {
   if (!el || isNaN(target)) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (compactWorkspace.matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     el.textContent = Math.round(target) + (suffix || '');
     return;
   }

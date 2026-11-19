@@ -12,6 +12,20 @@
     display: none;
   }
 
+  .view.view-enter,
+  #cal-view-body:is(.cal-anim-fade, .cal-anim-from-right, .cal-anim-from-left),
+  .modal-overlay.open .modal,
+  #modal-job .modal-tab-panel.active,
+  #skill-tags-container :is(.skill-tag, .skill-group-label) {
+    animation: none;
+  }
+
+  .modal-overlay {
+    transition: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
   .onboarding-step .ob-desktop-only {
     display: none;
   }

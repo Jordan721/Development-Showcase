@@ -249,22 +249,6 @@ textarea {
 }
 
 /* ── SKELETON LOADING ──────────────────────────────────── */
-@keyframes view-fade-in {
-  0% {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.view-skeleton {
-  animation: view-fade-in .22s ease-out forwards;
-}
-
 /* ── BUTTON PRESS ANIMATION ────────────────────────────── */
 @keyframes btn-press {
   0% {

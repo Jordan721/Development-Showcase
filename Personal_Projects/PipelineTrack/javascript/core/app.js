@@ -242,7 +242,7 @@ function wireEvents() {
       window._skillFilter = btn.dataset.filter;
       window._skillsExpanded = false;
       const container = document.getElementById('skill-tags-container');
-      if (container) {
+      if (container && !compactWorkspace.matches) {
         container.classList.add('skill-filter-exit');
         setTimeout(() => renderSkillTags(), 110);
       } else {
