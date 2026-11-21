@@ -102,6 +102,22 @@
         updateMotion();
     });
     updateMotion();
+    // Decorative motion only needs to run while it can be seen.
+    if ('IntersectionObserver' in window) {
+        const motionObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                entry.target.classList.toggle('motion-offscreen', !entry.isIntersecting);
+            });
+        });
+        document.querySelectorAll('.hero-art, .ticker').forEach(element => {
+            motionObserver.observe(element);
+        });
+    }
+    function updatePageVisibility() {
+        document.documentElement.classList.toggle('motion-inactive', document.hidden);
+    }
+    document.addEventListener('visibilitychange', updatePageVisibility);
+    updatePageVisibility();
     let discoveryTimer;
     document.getElementById('surpriseProject').addEventListener('click', () => {
         let available = cards.filter(card => !card.hidden);
