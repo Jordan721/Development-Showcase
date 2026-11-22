@@ -98,14 +98,29 @@ function _skillRegex(skill) {
 const skillRegexCache = new Map();
 
 const SKILL_ALIASES = {
-  golang: 'go', 'go language': 'go', 'node.js': 'nodejs', 'node js': 'nodejs',
-  'react.js': 'react', reactjs: 'react', 'vue.js': 'vue', 'next.js': 'nextjs',
-  'amazon web services': 'aws', 'google cloud platform': 'gcp', 'google cloud': 'gcp',
-  'postgres': 'postgresql', 'k8s': 'kubernetes', 'scikit learn': 'scikit-learn',
-  sklearn: 'scikit-learn', 'microsoft excel': 'excel', 'ms excel': 'excel',
-  'powerbi': 'power bi', 'restapi': 'rest', 'rest api': 'rest', restful: 'rest',
+  golang: 'go',
+  'go language': 'go',
+  'node.js': 'nodejs',
+  'node js': 'nodejs',
+  'react.js': 'react',
+  reactjs: 'react',
+  'vue.js': 'vue',
+  'next.js': 'nextjs',
+  'amazon web services': 'aws',
+  'google cloud platform': 'gcp',
+  'google cloud': 'gcp',
+  'postgres': 'postgresql',
+  'k8s': 'kubernetes',
+  'scikit learn': 'scikit-learn',
+  sklearn: 'scikit-learn',
+  'microsoft excel': 'excel',
+  'ms excel': 'excel',
+  'powerbi': 'power bi',
+  'restapi': 'rest',
+  'rest api': 'rest',
+  restful: 'rest',
 };
-const JOB_PARSER_VERSION = 3;
+const JOB_PARSER_VERSION = 4;
 
 function canonicalSkill(skill) {
   const name = String(skill || '').trim().toLowerCase();
@@ -142,8 +157,8 @@ function isSkillOccurrence(text, skill, index, length) {
   if (/^\s*(?:[-*•]\s*)?$/.test(before) && !after.trim()) return true;
   if (/\b(?:skills|technologies|tech stack|languages|frameworks|tools)\s*:\s*[^:]*$/i.test(before)) return true;
   // Adjacent catalog entries distinguish "Python, Go, SQL" from ordinary prose.
-  const neighbors = before.match(/([a-z0-9+#.]+)\s*[,/|]\s*$/i)
-    || after.match(/^\s*[,/|]\s*([a-z0-9+#.]+)/i);
+  const neighbors = before.match(/([a-z0-9+#.]+)\s*[,/|]\s*$/i) ||
+    after.match(/^\s*[,/|]\s*([a-z0-9+#.]+)/i);
   if (neighbors && KNOWN_SKILLS.has(neighbors[1].toLowerCase())) return true;
   if (/\b(?:programming (?:in|with)|coded? in|written in|developed in|experience (?:in|with)|knowledge of|proficien(?:cy|t) in|expertise in)\s*$/i.test(before)) return true;
   if (/^\s*(?:programming|language|framework|developer|development|libraries|library|sdk|api|applications?|services?|code|required|preferred|experience|expertise)\b/i.test(after)) return true;
@@ -164,22 +179,22 @@ function hasSkill(text, skill) {
 function parseJobRequirements(description, excludedSkills = []) {
   const excluded = new Set(excludedSkills.map(canonicalSkill));
   const skills = new Map();
-  const profileSkills = typeof state !== "undefined" ? (state.profile?.skills || []).map(skill => skill.name) : [];
+  const profileSkills = typeof state !== "undefined" ? (state.profile ?.skills || []).map(skill => skill.name) : [];
   const candidates = new Set([...KNOWN_SKILLS, ...profileSkills].map(canonicalSkill).filter(Boolean));
   const experience = [];
   let section = 'unspecified';
   const headings = [
     ['preferred', /^(?:preferred|desired|bonus|nice[- ]to[- ]have)(?: qualifications| skills| requirements)?$/i],
-    ['required', /^(?:(?:minimum|required|basic)(?: (?:qualifications|skills|requirements))?|requirements|qualifications|skills (?:and|&) experience|what you bring|what we.re looking for)$/i],
+    ['required', /^(?:(?:minimum|required|basic)(?: (?:qualifications|skills|requirements))?|requirements|qualifications|skills (?:and|&) experience|what you(?:.ll)? bring|what we.re looking for|must[- ]haves?|you(?:.ll)? need)$/i],
     ['responsibilities', /^(?:responsibilities|duties|what you.ll do|the role|your impact)$/i],
     ['company', /^(?:about(?: us| the company)?|who we are|our company|company overview)$/i],
     ['benefits', /^(?:benefits(?: and perks)?|perks|what we offer|compensation(?: and benefits)?|equal opportunity(?: employer)?)$/i],
   ];
   for (const raw of String(description || '').split(/\r?\n/)) {
-    const line = raw.replace(/^\s*[-*•#]+\s*/, '').trim();
+    const line = raw.replace(/^\s*(?:[-*•#▪◦–—]+|\d+[.)])\s*/, '').trim();
     if (!line) continue;
     const colon = line.indexOf(':');
-    const heading = (colon >= 0 ? line.slice(0, colon) : line).trim();
+    const heading = (colon >= 0 ? line.slice(0, colon) : line).replace(/[*_:]+$/g, '').trim();
     const found = headings.find(([, pattern]) => pattern.test(heading));
     if (found) section = found[0];
     if (['company', 'benefits'].includes(section)) continue;
@@ -187,11 +202,12 @@ function parseJobRequirements(description, excludedSkills = []) {
     if (!body) continue;
     // Split clauses, but retain dots in product names and decimal experience.
     const clauses = body.replace(/\b(required|preferred|optional|bonus)(?:\s*,\s*|\s+and\s+)/gi, '$1;')
+      .replace(/,\s*(?=[^,;]+\b(?:required|preferred|optional|bonus)\b)/gi, ';')
       .split(/;|[.!?](?:\s+|$)|\bbut\b/i).map(s => s.trim()).filter(Boolean);
     for (const clause of clauses) {
-      const priority = /\b(?:required|must|mandatory|essential)\b/i.test(clause) ? 'required'
-        : /\b(?:preferred|bonus|nice[- ]to[- ]have|a plus|desirable|optional)\b/i.test(clause) ? 'preferred'
-        : section === 'required' || section === 'preferred' ? section : 'unspecified';
+      const priority = /\b(?:required|must|mandatory|essential)\b/i.test(clause) ? 'required' :
+        /\b(?:preferred|bonus|nice[- ]to[- ]have|a plus|desirable|optional)\b/i.test(clause) ? 'preferred' :
+        section === 'required' || section === 'preferred' ? section : 'unspecified';
       const clauseSkills = [];
       for (const skill of candidates) {
         if (excluded.has(skill)) continue;
@@ -203,35 +219,73 @@ function parseJobRequirements(description, excludedSkills = []) {
           const after = clause.slice(match.index + match[0].length);
           const negated = isNegatedSkillOccurrence(before, after);
           if (negated) continue;
-          const evidence = { skill, priority, section, evidence: clause };
+          const evidence = {
+            skill,
+            priority,
+            section,
+            evidence: clause
+          };
           clauseSkills.push(skill);
           const existing = skills.get(skill);
-          const rank = { preferred: 0, unspecified: 1, required: 2 };
-          if (!existing || rank[priority] > rank[existing.priority]) skills.set(skill, evidence);
+          const rank = {
+            preferred: 0,
+            unspecified: 1,
+            required: 2
+          };
+          if (!existing || rank[priority] > rank[existing.priority] ||
+            (rank[priority] === rank[existing.priority] && existing.alternatives && !/\bor\b/i.test(clause))) skills.set(skill, evidence);
           break;
         }
+      }
+      // Only connect adjacent recognized skills joined explicitly by “or”.
+      const occurrences = clauseSkills.map(skill => {
+        const match = new RegExp(_skillRegex(skill).source, 'i').exec(clause);
+        return {
+          skill,
+          start: match.index,
+          end: match.index + match[0].length
+        };
+      }).sort((a, b) => a.start - b.start);
+      for (let i = 1; i < occurrences.length; i++) {
+        const left = occurrences[i - 1],
+          right = occurrences[i];
+        if (!/^\s*(?:,\s*)?or\s+$/i.test(clause.slice(left.end, right.start))) continue;
+        const group = [...new Set([...(skills.get(left.skill) ?.alternatives || [left.skill]), right.skill])];
+        group.forEach(skill => {
+          const requirement = skills.get(skill);
+          if (requirement ?.evidence === clause) requirement.alternatives = group;
+        });
       }
       const years = /\b(\d+(?:\.\d+)?)\s*(?:[-–]\s*(\d+(?:\.\d+)?))?\s*(\+|or more|or above)?\s*years?\b/gi;
       let match;
       while ((match = years.exec(clause)) !== null) {
-        const after = clause.slice(match.index + match[0].length).split(/\b\d+(?:\.\d+)?\s*(?:\+\s*)?years?\b/i)[0];
+        const after = clause.slice(match.index + match[0].length).split(/(?:,?\s+and\s+)?\b\d+(?:\.\d+)?\s*(?:\+\s*)?years?\b/i)[0];
         if (/\b(?:not required|not necessary)\b/i.test(after)) continue;
         const overall = /\b(?:overall|total|professional|industry|work)\b/i.test(after) && !/\b(?:in|with|using)\s+/i.test(after);
         const before = clause.slice(0, match.index);
-        const linked = overall ? [] : clauseSkills.filter(skill => _skillRegex(skill).test(after)
-          || new RegExp(_skillRegex(skill).source + '\\s*[:(]?\\s*$', 'i').test(before));
-        experience.push({ minimum: Number(match[1]), maximum: match[2] ? Number(match[2]) : null,
-          skills: linked, scope: linked.length ? 'skill' : 'overall', priority, evidence: clause });
+        const linked = overall ? [] : clauseSkills.filter(skill => _skillRegex(skill).test(after) ||
+          new RegExp(_skillRegex(skill).source + '\\s*[:(]?\\s*$', 'i').test(before));
+        experience.push({
+          minimum: Number(match[1]),
+          maximum: match[2] ? Number(match[2]) : null,
+          skills: linked,
+          scope: linked.length ? 'skill' : 'overall',
+          priority,
+          evidence: clause
+        });
       }
     }
   }
-  return { requirements: [...skills.values()], experience };
+  return {
+    requirements: [...skills.values()],
+    experience
+  };
 }
 
 function isNegatedSkillOccurrence(before, after) {
-  return /\b(?:no|without)\s+(?:(?:prior|previous|professional|experience|knowledge|of|in|with|any)\s+)*$/i.test(before)
-    || /^\s*(?:(?:experience|knowledge|expertise)\s+)?(?:is\s+)?(?:not (?:required|necessary|a requirement)|unnecessary|isn.t required)\b/i.test(after)
-    || /\b(?:not required|not necessary)\s*:?\s*$/i.test(before);
+  return /\b(?:no|without)\s+(?:(?:prior|previous|professional|experience|knowledge|of|in|with|any)\s+)*$/i.test(before) ||
+    /^\s*(?:(?:experience|knowledge|expertise)\s+)?(?:is\s+)?(?:not (?:required|necessary|a requirement)|unnecessary|isn.t required)\b/i.test(after) ||
+    /\b(?:not required|not necessary)\s*:?\s*$/i.test(before);
 }
 
 const ROLE_FIT_PROFILES = [{
@@ -368,10 +422,38 @@ function calculateRoleWeightedSkillScore(matched, missing, roleProfileLabel, req
   const missingList = Array.isArray(missing) ? missing : [];
   const total = matchedList.length + missingList.length;
   if (total === 0) return null;
-  const weight = skill => skillWeightForProfile(skill, profile) * ({ required: 2, preferred: 0.5 }[requirements.find(r => r.skill === skill)?.priority] || 1);
-  const weightedMatched = matchedList.reduce((sum, skill) => sum + weight(skill), 0);
-  const weightedMissing = missingList.reduce((sum, skill) => sum + weight(skill), 0);
+  const weight = skill => skillWeightForProfile(skill, profile) * ({
+    required: 2,
+    preferred: 0.5
+  } [requirements.find(r => r.skill === skill) ?.priority] || 1);
+  const {
+    weightedMatched,
+    weightedMissing
+  } = requirementScoreWeights(matchedList, missingList, requirements, weight);
   return Math.round((weightedMatched / (weightedMatched + weightedMissing)) * 100);
+}
+
+function requirementScoreWeights(matched, missing, requirements, weight) {
+  const seen = new Set();
+  let weightedMatched = 0,
+    weightedMissing = 0;
+  for (const skill of [...matched, ...missing]) {
+    if (seen.has(skill)) continue;
+    const requirement = requirements.find(r => r.skill === skill);
+    const alternatives = requirement ?.alternatives || [skill];
+    // A separate, stronger mention of a skill must still count independently.
+    const group = alternatives.filter(candidate => [...matched, ...missing].includes(candidate) &&
+      (candidate === skill || (requirements.find(r => r.skill === candidate) ?.evidence === requirement ?.evidence &&
+        requirements.find(r => r.skill === candidate) ?.alternatives ?.join('|') === alternatives.join('|'))));
+    group.forEach(candidate => seen.add(candidate));
+    const groupWeight = Math.max(...group.map(weight));
+    if (group.some(candidate => matched.includes(candidate))) weightedMatched += groupWeight;
+    else weightedMissing += groupWeight;
+  }
+  return {
+    weightedMatched,
+    weightedMissing
+  };
 }
 
 function analyzeJob(description, roleProfile = null, excludedSkills = []) {
@@ -390,15 +472,23 @@ function analyzeJob(description, roleProfile = null, excludedSkills = []) {
   const allUserSkills = [...new Set([...userSkills, ...certSkills.map(canonicalSkill)])];
 
   // Check known skills by looking for them as whole words in the job description
-  const { requirements, experience } = parseJobRequirements(description, excludedSkills);
+  const {
+    requirements,
+    experience
+  } = parseJobRequirements(description, excludedSkills);
   const foundInJob = requirements.map(r => r.skill);
   const matched = foundInJob.filter(skill => allUserSkills.includes(skill));
   const missing = foundInJob.filter(skill => !matched.includes(skill));
 
   const total = matched.length + missing.length;
-  const weight = skill => skillWeightForProfile(skill, roleProfile) * ({ required: 2, preferred: 0.5 }[requirements.find(r => r.skill === skill).priority] || 1);
-  const weightedMatched = matched.reduce((sum, skill) => sum + weight(skill), 0);
-  const weightedMissing = missing.reduce((sum, skill) => sum + weight(skill), 0);
+  const weight = skill => skillWeightForProfile(skill, roleProfile) * ({
+    required: 2,
+    preferred: 0.5
+  } [requirements.find(r => r.skill === skill).priority] || 1);
+  const {
+    weightedMatched,
+    weightedMissing
+  } = requirementScoreWeights(matched, missing, requirements, weight);
   const weightedTotal = weightedMatched + weightedMissing;
   const score = total === 0 ? 0 : Math.round((weightedMatched / weightedTotal) * 100);
 
@@ -548,7 +638,13 @@ function formatSalary(raw) {
   if (trailingCurrency && (codeA || codeB) && trailingCurrency[1].toUpperCase() !== currency) return raw.trim();
   const suffix = trailingCurrency ? tail.slice(trailingCurrency[0].length) : tail;
   const symbol = symbolA || symbolB;
-  if (symbol && currency && ({ USD: '$', CAD: '$', AUD: '$', GBP: '£', EUR: '€' })[currency] !== symbol) return raw.trim();
+  if (symbol && currency && ({
+      USD: '$',
+      CAD: '$',
+      AUD: '$',
+      GBP: '£',
+      EUR: '€'
+    })[currency] !== symbol) return raw.trim();
   const prefix = currency ? `${currency} ` : symbol || '$';
   let a = Number(numberA.replace(/,/g, ''));
   let b = numberB ? Number(numberB.replace(/,/g, '')) : null;
@@ -559,7 +655,10 @@ function formatSalary(raw) {
   a *= multiplier(sharedA);
   if (b !== null) b *= multiplier(sharedB);
   if (!(a > 0) || (b !== null && (!(b > 0) || b < a))) return raw.trim();
-  const fmt = value => prefix + value.toLocaleString('en-US', { minimumFractionDigits: Number.isInteger(value) ? 0 : 2, maximumFractionDigits: 2 });
+  const fmt = value => prefix + value.toLocaleString('en-US', {
+    minimumFractionDigits: Number.isInteger(value) ? 0 : 2,
+    maximumFractionDigits: 2
+  });
   return `${qualifier ? qualifier + ' ' : ''}${fmt(a)}${b !== null ? ' – ' + fmt(b) : ''}${suffix.trim() ? ' ' + suffix.trim() : ''}`;
 }
 
@@ -572,12 +671,12 @@ function extractSalaryFromPosting(text) {
   for (const original of [...labeled, ...lines.filter(line => /[$£€]|\b(?:USD|CAD|AUD|GBP|EUR)\b/i.test(line))]) {
     const line = labeled.includes(original) ? original.replace(/^[\s\S]*?\b(?:base\s+salary|salary|pay\s+range|compensation|hourly\s+rate|pay\s+rate)\b/i, '') : original;
     for (const match of line.matchAll(candidate)) {
-    if (!/[$£€]|\d\s*[km]\b|\b(?:USD|CAD|AUD|GBP|EUR)\b/i.test(match[0]) && !labeled.includes(original)) continue;
-    // Keep compensation extras without pulling the remainder of the listing into the field.
-    const after = line.slice(match.index + match[0].length);
-    if (/^\s*(?:%|years?\b|months?\s+(?:of\s+)?experience\b)/i.test(after)) continue;
-    const extra = after.match(/^\s*(\+\s*(?:[\d$£€.,k%]+\s*)?(?:bonus|equity|commission)(?:\s*(?:and|\+)\s*(?:bonus|equity|commission))?)/i);
-    return match[0].trim() + (extra ? ' ' + extra[1].trim() : '');
+      if (!/[$£€]|\d\s*[km]\b|\b(?:USD|CAD|AUD|GBP|EUR)\b/i.test(match[0]) && !labeled.includes(original)) continue;
+      // Keep compensation extras without pulling the remainder of the listing into the field.
+      const after = line.slice(match.index + match[0].length);
+      if (/^\s*(?:%|years?\b|months?\s+(?:of\s+)?experience\b)/i.test(after)) continue;
+      const extra = after.match(/^\s*(\+\s*(?:[\d$£€.,k%]+\s*)?(?:bonus|equity|commission)(?:\s*(?:and|\+)\s*(?:bonus|equity|commission))?)/i);
+      return match[0].trim() + (extra ? ' ' + extra[1].trim() : '');
     }
   }
   return '';
@@ -589,7 +688,9 @@ function formatDate(iso) {
   const preference = document.documentElement.getAttribute('data-date-format');
   if (preference === 'mdy' || preference === 'dmy') {
     return d.toLocaleDateString(preference === 'dmy' ? 'en-GB' : 'en-US', {
-      year: 'numeric', month: '2-digit', day: '2-digit'
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
     });
   }
   return d.toLocaleDateString('en-US', {
@@ -669,17 +770,26 @@ function jobDateISO(date) {
 
 function parseJobDate(value, reference = new Date()) {
   const text = String(value || '').trim().toLowerCase();
-  if (!text) return { date: '', approximate: false };
+  if (!text) return {
+    date: '',
+    approximate: false
+  };
   const base = new Date(reference.getFullYear(), reference.getMonth(), reference.getDate(), 12);
   const exact = text.match(/^(on or before\s+)?(\d{4})-(\d{2})-(\d{2})$/);
   if (exact) {
     const date = new Date(Number(exact[2]), Number(exact[3]) - 1, Number(exact[4]), 12);
     if (date.getFullYear() !== Number(exact[2]) || date.getMonth() !== Number(exact[3]) - 1 || date.getDate() !== Number(exact[4])) return null;
-    return { date: jobDateISO(date), approximate: !!exact[1] };
+    return {
+      date: jobDateISO(date),
+      approximate: !!exact[1]
+    };
   }
   if (['today', 'yesterday', 'tomorrow'].includes(text)) {
     base.setDate(base.getDate() + (text === 'yesterday' ? -1 : text === 'tomorrow' ? 1 : 0));
-    return { date: jobDateISO(base), approximate: false };
+    return {
+      date: jobDateISO(base),
+      approximate: false
+    };
   }
   const relative = text.match(/^(?:posted\s+)?(in\s+)?(\d{1,4})\s*(\+)?\s*(days?|d|weeks?|w|months?|mo)(?:\s+(ago))?$/);
   if (!relative || (relative[1] && (relative[3] || relative[5]))) return null;
@@ -692,7 +802,10 @@ function parseJobDate(value, reference = new Date()) {
     const last = new Date(base.getFullYear(), base.getMonth() + 1, 0).getDate();
     base.setDate(Math.min(day, last));
   } else base.setDate(base.getDate() + direction * count * (/^(?:weeks?|w)$/.test(relative[4]) ? 7 : 1));
-  return { date: jobDateISO(base), approximate: !!relative[3] };
+  return {
+    date: jobDateISO(base),
+    approximate: !!relative[3]
+  };
 }
 
 const optionalAssets = new Map();
@@ -724,7 +837,11 @@ function openModal(id) {
   document.getElementById(id).classList.add('open');
   document.getElementById(id).setAttribute('aria-hidden', 'false');
   document.getElementById(id).querySelectorAll('.modal-body').forEach(body => {
-    body.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    body.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
   });
 }
 
@@ -827,14 +944,18 @@ function navigate(view) {
     actionBtn.textContent = '+ Add Job';
   }
 
-  if (!compactWorkspace?.matches) {
+  if (!compactWorkspace ?.matches) {
     void target.offsetWidth;
     target.classList.add('view-enter');
   }
   renderView(view);
   if (typeof updateGettingStarted === 'function') updateGettingStarted();
   // Views share the document scroller, so reset after the new content renders.
-  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'instant'
+  });
 }
 
 function renderView(view) {
@@ -1039,7 +1160,10 @@ function parseBenefits(text) {
           if (!/\b(?:benefits?|compensation|stock|salary|offer|package)\b/i.test(clause) && !/^\s*(?:[-*]\s*)?equity\s*$/i.test(clause)) continue;
         }
         found.add(label);
-        occupied[clauseIndex].push({start, end});
+        occupied[clauseIndex].push({
+          start,
+          end
+        });
       }
     });
   }
@@ -1347,7 +1471,11 @@ function normalizeSkillName(raw) {
 // Title metadata is deliberately conservative: numbers must follow a role or a level label.
 function parseRoleMetadata(role) {
   const text = String(role || '').replace(/[–—]/g, '-');
-  const result = { seniority: '', jobType: '', workType: '' };
+  const result = {
+    seniority: '',
+    jobType: '',
+    workType: ''
+  };
   const ranks = [
     ['Staff', /\b(?:staff|principal|distinguished)\b/i],
     ['Lead', /\blead\b/i],
@@ -1357,22 +1485,34 @@ function parseRoleMetadata(role) {
     ['Mid-Level', /\b(?:mid[ -]?level|intermediate)\b/i],
     ['Internship', /\bintern(?:ship)?\b/i]
   ];
-  result.seniority = ranks.find(([, pattern]) => pattern.test(text))?.[0] || '';
+  result.seniority = ranks.find(([, pattern]) => pattern.test(text)) ?.[0] || '';
   if (!result.seniority) {
     const level = text.match(/\b(?:level|engineer|developer|analyst|designer|technician|specialist|swe|sde)\s*[-:]?\s*(?:\(\s*)?(IV|III|II|I|[1-4])\b(?!\s*(?:days?|years?|months?|hours?|weeks?)\b)/i);
-    if (level) result.seniority = { I: 'Entry Level', 1: 'Entry Level', II: 'Mid-Level', 2: 'Mid-Level', III: 'Senior', 3: 'Senior', IV: 'Lead', 4: 'Lead' }[level[1].toUpperCase()];
+    if (level) result.seniority = {
+      I: 'Entry Level',
+      1: 'Entry Level',
+      II: 'Mid-Level',
+      2: 'Mid-Level',
+      III: 'Senior',
+      3: 'Senior',
+      IV: 'Lead',
+      4: 'Lead'
+    } [level[1].toUpperCase()];
   }
   const types = [
-    ['Contract', /\bcontract(?:or|ual)?\b/i], ['Temporary', /\btemp(?:orary)?\b/i],
-    ['Internship', /\bintern(?:ship)?\b/i], ['Freelance', /\bfreelanc(?:e|er)\b/i],
-    ['Part-time', /\bpart[ -]?time\b/i], ['Full-time', /\bfull[ -]?time\b/i]
+    ['Contract', /\bcontract(?:or|ual)?\b/i],
+    ['Temporary', /\btemp(?:orary)?\b/i],
+    ['Internship', /\bintern(?:ship)?\b/i],
+    ['Freelance', /\bfreelanc(?:e|er)\b/i],
+    ['Part-time', /\bpart[ -]?time\b/i],
+    ['Full-time', /\bfull[ -]?time\b/i]
   ];
-  result.jobType = types.find(([, pattern]) => pattern.test(text))?.[0] || '';
+  result.jobType = types.find(([, pattern]) => pattern.test(text)) ?.[0] || '';
   const work = [
-    ['Hybrid', /\bhybrid\b/i], ['Remote', /\b(?:remote|wfh|work[ -]from[ -]home)\b/i],
+    ['Hybrid', /\bhybrid\b/i],
+    ['Remote', /\b(?:remote|wfh|work[ -]from[ -]home)\b/i],
     ['On-site', /\b(?:on[ -]?site|in[ -]office|in[ -]person)\b/i]
   ].filter(([, pattern]) => pattern.test(text));
   if (work.length === 1 && !/\b(?:not|no|non)[ -]+(?:remote|hybrid|wfh|on[ -]?site)\b/i.test(text)) result.workType = work[0][0];
   return result;
 }
-

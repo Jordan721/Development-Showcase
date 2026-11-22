@@ -1632,13 +1632,25 @@ function openJobDetail(id) {
   const renderParsingReview = () => {
     const parsed = parseJobRequirements(job.description || '', job.excludedSkills || []);
     const counts = priority => parsed.requirements.filter(r => r.priority === priority).length;
+    const matched = new Set((job.matched || []).map(canonicalSkill));
+    const source = evidence => `<details class="requirement-source"><summary>View source</summary><blockquote>${escHtml(evidence)}</blockquote></details>`;
+    const groups = [['required', 'Required'], ['preferred', 'Preferred'], ['unspecified', 'Other mentions']];
+    const skillGroups = groups.map(([priority, label]) => {
+      const items = parsed.requirements.filter(r => r.priority === priority).sort((a, b) => Number(matched.has(a.skill)) - Number(matched.has(b.skill)) || a.skill.localeCompare(b.skill));
+      if (!items.length) return '';
+      return `<section><h4 class="requirements-section-title">${label} <span class="requirement-priority ${priority}">${items.length}</span></h4><div class="requirements-list">${items.map(r => {
+        const alternatives = (r.alternatives || []).filter(skill => parsed.requirements.some(item => item.skill === skill));
+        const covered = matched.has(r.skill) || alternatives.some(skill => matched.has(skill));
+        return `<article class="requirement-card requirement-row"><div class="requirement-card-heading"><strong>${escHtml(normalizeSkillName(r.skill))}</strong><span class="requirement-match ${covered ? 'covered' : ''}">${matched.has(r.skill) ? 'In your profile' : covered ? 'Alternative covered' : 'Not in your profile'}</span></div>${alternatives.length > 1 ? `<p class="requirement-alternative">One of: ${escHtml(alternatives.map(normalizeSkillName).join(' or '))}</p>` : ''}<div class="requirement-row-actions">${source(r.evidence)}<button type="button" class="detail-history-link" data-dismiss-requirement="${escHtml(r.skill)}" aria-label="Dismiss ${escHtml(normalizeSkillName(r.skill))}">Dismiss</button></div></article>`;
+      }).join('')}</div></section>`;
+    }).join('');
     review.innerHTML = `<header class="requirements-header"><span class="requirements-eyebrow">POSTING BREAKDOWN</span>
-      <h3>Detected requirements</h3><p>Check each skill against the original wording. Required skills carry more weight than preferred skills.</p></header>
+      <h3>Requirements at a glance</h3><p>Compare skills with your profile. Expand a row to check the original wording. Required skills carry more weight than preferred skills.</p></header>
       <div class="requirements-stats"><span><strong>${counts('required')}</strong> Required</span><span><strong>${counts('preferred')}</strong> Preferred</span><span><strong>${counts('unspecified')}</strong> Other mentions</span></div>
-      <div class="requirements-grid">${parsed.requirements.map(r => `<article class="requirement-card"><div class="requirement-card-heading"><strong>${escHtml(normalizeSkillName(r.skill))}</strong><span class="requirement-priority ${r.priority}">${r.priority === 'unspecified' ? 'Mentioned' : escHtml(r.priority)}</span></div><blockquote>${escHtml(r.evidence)}</blockquote><button type="button" class="detail-history-link" data-dismiss-requirement="${escHtml(r.skill)}">Dismiss skill</button></article>`).join('') || '<p class="requirements-empty">No skill requirements detected. Add or edit the job description to analyze it.</p>'}</div>
+      ${skillGroups || '<p class="requirements-empty">No skill requirements detected. Add or edit the job description to analyze it.</p>'}
       <h4 class="requirements-section-title">Experience</h4><p class="requirements-note">Experience is shown for review and does not change your score.</p>
-      <div class="requirements-grid">${parsed.experience.map(r => `<article class="requirement-card"><div class="requirement-card-heading"><strong>${r.minimum}${r.maximum !== null ? '–' + r.maximum : '+'} years</strong><span class="requirement-priority ${r.priority}">${r.priority === 'unspecified' ? 'Mentioned' : escHtml(r.priority)}</span></div><p>${escHtml(r.skills.map(normalizeSkillName).join(', ') || 'Overall experience')}</p><blockquote>${escHtml(r.evidence)}</blockquote></article>`).join('') || '<p class="requirements-empty">No experience duration detected.</p>'}</div>
-      ${(job.excludedSkills || []).length ? '<h4 class="requirements-section-title">Dismissed skills</h4><div class="requirements-dismissed">' + job.excludedSkills.map(s => `<button type="button" class="btn-secondary" data-restore-skill="${escHtml(s)}">Restore ${escHtml(normalizeSkillName(s))}</button>`).join(' ') + '</div>' : ''}`;
+      <div class="requirements-list">${parsed.experience.map(r => `<article class="requirement-card requirement-row"><div class="requirement-card-heading"><strong>${r.minimum}${r.maximum !== null ? '–' + r.maximum : '+'} years · ${escHtml(r.skills.map(normalizeSkillName).join(', ') || 'Overall experience')}</strong><span class="requirement-priority ${r.priority}">${r.priority === 'unspecified' ? 'Mentioned' : escHtml(r.priority)}</span></div>${source(r.evidence)}</article>`).join('') || '<p class="requirements-empty">No experience duration detected.</p>'}</div>
+      ${(job.excludedSkills || []).length ? '<details class="requirements-dismissed-section"><summary>Dismissed skills</summary><div class="requirements-dismissed">' + job.excludedSkills.map(s => `<button type="button" class="btn-secondary" data-restore-skill="${escHtml(s)}">Restore ${escHtml(normalizeSkillName(s))}</button>`).join(' ') + '</div>' : ''}`;
     review.querySelectorAll('[data-dismiss-requirement]').forEach(button => button.addEventListener('click', () => {
       const skill = button.dataset.dismissRequirement;
       const badge = [...document.querySelectorAll('#detail-matched .skill-badge-dismiss, #detail-missing .skill-badge-dismiss')].find(button => button.dataset.skill === skill);
