@@ -6201,3 +6201,415 @@
     min-width: 0;
   }
 }
+
+/* Skill review in job details: readable rows and explicit, keyboard-friendly actions. */
+#modal-detail .skill-review-panel {
+  --skill-tone: var(--green);
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--skill-tone);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 4px 16px #00000008;
+}
+
+#modal-detail .skill-review-panel--gaps {
+  --skill-tone: var(--yellow);
+}
+
+[data-theme="light"] #modal-detail .skill-review-panel {
+  border-top-color: var(--skill-tone);
+  background: var(--surface);
+}
+
+#modal-detail .skill-review-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+#modal-detail .skill-review-eyebrow {
+  display: block;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: var(--skill-tone);
+  margin-bottom: 5px;
+}
+
+#modal-detail .skill-review-heading h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -.25px;
+}
+
+#modal-detail .skill-review-count {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  min-width: 31px;
+  height: 31px;
+  padding: 0 7px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--skill-tone);
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+#modal-detail .skill-review-description {
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.7;
+  margin: 0 0 14px;
+}
+
+#modal-detail .skill-review-panel .skill-badge-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 7px;
+}
+
+#modal-detail .skill-review-row.skill-badge {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 9px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--card);
+  color: var(--text);
+  font-weight: 500;
+  box-shadow: none;
+  transform: none;
+  transition: border-color .15s, background .15s;
+}
+
+#modal-detail .skill-review-row.skill-badge:hover,
+#modal-detail .skill-review-row.skill-badge:focus-within {
+  border-color: var(--skill-tone);
+  background: var(--surface);
+  box-shadow: none;
+  transform: none;
+}
+
+#modal-detail .skill-review-status {
+  color: var(--skill-tone);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+
+#modal-detail .skill-review-copy {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px 7px;
+}
+
+#modal-detail .skill-review-name {
+  font-size: 11px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+#modal-detail .skill-review-priority {
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 8px;
+  font-weight: 500;
+}
+
+#modal-detail .skill-review-priority.required {
+  color: var(--text);
+}
+
+#modal-detail .skill-review-actions {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+#modal-detail .skill-review-actions button {
+  display: grid;
+  place-items: center;
+  min-width: 26px;
+  min-height: 28px;
+  padding: 0;
+  opacity: 1;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+#modal-detail .skill-review-actions .skill-badge-add {
+  color: var(--green);
+}
+
+#modal-detail .skill-review-actions button:hover {
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+#modal-detail .skill-review-actions button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+#modal-detail .skill-review-help {
+  margin: 12px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+  font-size: 9px;
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+#modal-detail .skill-review-empty {
+  margin: 0;
+  padding: 14px;
+  color: var(--text-muted);
+  background: var(--card);
+  border: 1px dashed var(--border);
+  border-radius: 9px;
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+@media(pointer:coarse) {
+  #modal-detail .skill-review-actions button {
+    min-width: 32px;
+    min-height: 34px;
+  }
+}
+
+/* One coherent fit snapshot above the skill-review panels. */
+#modal-detail .skill-fit-overview {
+  grid-column: 1/-1;
+  padding: 18px 16px 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 16px;
+  background: linear-gradient(155deg, rgba(0, 212, 170, .065), transparent 60%), var(--surface);
+  overflow: hidden;
+}
+
+#modal-detail .skill-fit-heading h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -.35px;
+}
+
+#modal-detail .skill-fit-heading p {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.8;
+}
+
+#modal-detail .skill-fit-heading .skill-review-eyebrow {
+  color: var(--accent);
+  font-size: 8px;
+  letter-spacing: .14em;
+}
+
+#modal-detail .skill-fit-score-area {
+  padding: 20px 0 16px;
+  text-align: center;
+}
+
+#modal-detail .skill-fit-overview .fit-ring-wrapper {
+  grid-row: auto;
+  width: 152px;
+  height: 152px;
+  margin: 0 auto;
+  background: radial-gradient(circle, rgba(0, 212, 170, .06), transparent 65%);
+}
+
+#modal-detail .skill-fit-overview .fit-ring {
+  width: 100%;
+  height: 100%;
+}
+
+#modal-detail .skill-fit-overview .fit-ring-bg {
+  stroke: var(--border);
+  stroke-width: 7;
+}
+
+#modal-detail .skill-fit-overview .fit-ring-fill {
+  stroke-width: 7;
+  filter: none;
+}
+
+#modal-detail .skill-fit-overview .fit-ring-ticks {
+  opacity: .22;
+}
+
+#modal-detail .skill-fit-overview .fit-ring-label {
+  gap: 5px;
+}
+
+#modal-detail .skill-fit-overview .fit-ring-pct {
+  font-size: 34px;
+  letter-spacing: -1.5px;
+  line-height: 1.15;
+  font-weight: 750;
+}
+
+#modal-detail .skill-fit-overview .fit-ring-sub {
+  font-size: 8px;
+  letter-spacing: .14em;
+  font-weight: 600;
+}
+
+#modal-detail .skill-fit-overview .fit-ring-coverage {
+  margin-top: 12px;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+#modal-detail .skill-fit-counts {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+#modal-detail .skill-fit-counts>span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text-muted);
+  background: var(--card);
+  font-size: 9px;
+}
+
+#modal-detail .skill-fit-counts strong {
+  color: var(--text);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+#modal-detail .skill-fit-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+#modal-detail .skill-fit-dot.gap {
+  background: var(--yellow);
+}
+
+#modal-detail .skill-fit-overview .role-fit-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background: none;
+}
+
+#modal-detail .skill-fit-overview .role-fit-row {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  padding: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  min-width: 0;
+}
+
+#modal-detail .skill-fit-overview .role-fit-row:first-child {
+  grid-column: 1/-1;
+  flex-direction: row;
+  align-items: center;
+}
+
+#modal-detail .skill-fit-overview .role-fit-label {
+  color: var(--text-muted);
+  font-size: 9px;
+  font-weight: 500;
+}
+
+#modal-detail .skill-fit-overview .role-fit-value {
+  font-size: 21px;
+  line-height: 1.3;
+  letter-spacing: -.5px;
+  text-align: left;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+#modal-detail .skill-fit-overview .role-fit-row:first-child .role-fit-value {
+  font-size: 11px;
+  text-align: right;
+  letter-spacing: 0;
+  max-width: 65%;
+  overflow-wrap: anywhere;
+}
+
+#modal-detail .skill-fit-overview .role-red-flags {
+  grid-column: 1/-1;
+  border-top: 0;
+  padding: 3px 0 0;
+  gap: 6px;
+}
+
+#modal-detail .skill-fit-overview .role-no-flags {
+  color: var(--text-muted);
+  font-size: 9px;
+  line-height: 1.8;
+}
+
+#modal-detail .skill-fit-overview .role-red-flag {
+  border-radius: 6px;
+  font-size: 9px;
+  line-height: 1.7;
+}
+
+#modal-detail .skill-fit-note {
+  margin: 12px 0 0;
+  border-top: 1px solid var(--border);
+  padding-top: 11px;
+  color: var(--text-muted);
+  font-size: 9px;
+  line-height: 1.8;
+}
+
+@media(max-width:860px) and (min-width:561px) {
+  #modal-detail .detail-left {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #modal-detail .skill-fit-overview {
+    margin-bottom: 0;
+  }
+}

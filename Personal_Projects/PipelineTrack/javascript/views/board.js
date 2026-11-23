@@ -190,7 +190,7 @@ function updateBoardFilterUI() {
   const clearBtn = document.getElementById('board-clear-filters');
   if (clearBtn) clearBtn.style.display = hasFilters ? '' : 'none';
   const sortSel = document.getElementById('board-sort-table');
-  const showSort = compactWorkspace?.matches || boardLayout === 'table';
+  const showSort = compactWorkspace ?.matches || boardLayout === 'table';
   if (sortSel) sortSel.style.display = showSort ? '' : 'none';
   const sortField = sortSel ? sortSel.closest('.board-sort-field') : null;
   if (sortField) sortField.style.display = showSort ? '' : 'none';
@@ -268,7 +268,7 @@ function stageSummaryHTML(jobs) {
 }
 
 function actionDate(job) {
-  let value = job.stage === 'saved' ? job.deadline : job.stage === 'applied' ? job.nextFollowUp || job.followUpDate : job[job.stage + 'Milestone']?.date;
+  let value = job.stage === 'saved' ? job.deadline : job.stage === 'applied' ? job.nextFollowUp || job.followUpDate : job[job.stage + 'Milestone'] ?.date;
   if (!value && job.stage === 'applied') {
     const applied = job.dateApplied || job.dateAdded;
     const date = new Date(/^\d{4}-\d{2}-\d{2}$/.test(applied || '') ? applied + 'T00:00:00' : applied);
@@ -284,24 +284,58 @@ function actionDate(job) {
 
 function actionTimingHTML(job) {
   const date = actionDate(job);
-  if (!date) return '<span class="action-timing">' + ({saved: 'No application deadline', applied: 'Set a follow-up date', screening: 'Schedule your screening', interview: 'Schedule your interview', offer: 'Review your offer'}[job.stage] || 'No next action') + '</span>';
-  const today = new Date(); today.setHours(0, 0, 0, 0);
+  if (!date) return '<span class="action-timing">' + ({
+    saved: 'No application deadline',
+    applied: 'Set a follow-up date',
+    screening: 'Schedule your screening',
+    interview: 'Schedule your interview',
+    offer: 'Review your offer'
+  } [job.stage] || 'No next action') + '</span>';
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const days = Math.round((date - today) / 86400000);
   const label = job.stage === 'saved' ? 'Apply' : job.stage === 'applied' ? 'Follow up' : job.stage === 'screening' ? 'Screening' : 'Interview';
   const when = days < 0 ? Math.abs(days) + 'd overdue' : days === 0 ? 'today' : days === 1 ? 'tomorrow' : 'in ' + days + 'd';
-  return '<span class="action-timing' + (days <= 0 ? ' action-timing--due' : '') + '">' + label + ': ' + when + ' · ' + escHtml(date.toLocaleDateString(undefined, {month: 'short', day: 'numeric'})) + '</span>';
+  return '<span class="action-timing' + (days <= 0 ? ' action-timing--due' : '') + '">' + label + ': ' + when + ' · ' + escHtml(date.toLocaleDateString(undefined, {
+    month: 'short',
+    day: 'numeric'
+  })) + '</span>';
 }
 
 function renderBoardActions(jobs) {
   if (!jobs.length) return emptyStateHTML('🔍', 'No results', 'Try adjusting your search or filters');
-  const groups = [
-    {title: 'Apply next', icon: '📨', stages: ['saved'], guidance: 'Tailor your resume and submit your application before the deadline.'},
-    {title: 'Follow up', icon: '💬', stages: ['applied'], guidance: 'Check in on applications. Without a follow-up date, we suggest seven days after applying.'},
-    {title: 'Prepare for interviews', icon: '🤝', stages: ['screening', 'interview'], guidance: 'Research the company and prepare for your next conversation.'},
-    {title: 'Review offers', icon: '🎉', stages: ['offer'], guidance: 'Compare the details and decide on your next step.'},
+  const groups = [{
+      title: 'Apply next',
+      icon: '📨',
+      stages: ['saved'],
+      guidance: 'Tailor your resume and submit your application before the deadline.'
+    },
+    {
+      title: 'Follow up',
+      icon: '💬',
+      stages: ['applied'],
+      guidance: 'Check in on applications. Without a follow-up date, we suggest seven days after applying.'
+    },
+    {
+      title: 'Prepare for interviews',
+      icon: '🤝',
+      stages: ['screening', 'interview'],
+      guidance: 'Research the company and prepare for your next conversation.'
+    },
+    {
+      title: 'Review offers',
+      icon: '🎉',
+      stages: ['offer'],
+      guidance: 'Compare the details and decide on your next step.'
+    },
   ];
   const closed = jobs.filter(j => ['declined', 'withdrew', 'ghosted', 'archived'].includes(j.stage));
-  if (closed.length) groups.push({title: 'Completed & on hold', icon: '📦', stages: ['declined', 'withdrew', 'ghosted', 'archived'], guidance: 'These jobs have no active next step. Open a job to revisit its status.'});
+  if (closed.length) groups.push({
+    title: 'Completed & on hold',
+    icon: '📦',
+    stages: ['declined', 'withdrew', 'ghosted', 'archived'],
+    guidance: 'These jobs have no active next step. Open a job to revisit its status.'
+  });
   return '<div class="pm-wrapper action-queue"><div class="pm-workspace-intro"><div><span class="workspace-eyebrow">ACTION QUEUE</span><h2>Your next move, made clear.</h2><p>Drag cards to reorder or move between groups. Moving groups updates the job stage; Prepare uses Screening and Completed uses Archived. Pinned jobs stay first.</p></div><div class="pm-workspace-total"><strong>' + (jobs.length - closed.length) + '</strong><span>active opportunities</span></div></div><div class="action-grid">' + groups.map(group => {
     const items = jobs.filter(j => group.stages.includes(j.stage)).sort(compareActionQueueJobs);
     return '<section class="pm-quadrant action-group" data-action-stage="' + (group.stages.includes('archived') ? 'archived' : group.stages[0]) + '"><div class="pm-quadrant-header"><div class="pm-q-icon-wrap">' + group.icon + '</div><div class="pm-q-meta"><h3 class="pm-q-title">' + group.title + '</h3></div><span class="pm-q-count">' + items.length + '</span></div><p class="pm-q-guidance">' + group.guidance + '</p><div class="pm-cards">' + (items.length ? items.map(job => pmCardHTML(job).replace('<div class="job-card-footer">', actionTimingHTML(job) + '<div class="job-card-footer">')).join('') : '<div class="pm-empty-q"><strong>All clear here</strong><span>Jobs appear here as you update their stage.</span></div>') + '</div></section>';
@@ -309,7 +343,13 @@ function renderBoardActions(jobs) {
 }
 
 function actionQueueStages(stage) {
-  return [['saved'], ['applied'], ['screening', 'interview'], ['offer'], ['declined', 'withdrew', 'ghosted', 'archived']].find(stages => stages.includes(stage));
+  return [
+    ['saved'],
+    ['applied'],
+    ['screening', 'interview'],
+    ['offer'],
+    ['declined', 'withdrew', 'ghosted', 'archived']
+  ].find(stages => stages.includes(stage));
 }
 
 function compareActionQueueJobs(a, b) {
@@ -329,7 +369,15 @@ function moveActionQueueJob(id, targetStage, beforeId) {
   const previousStage = job.stage;
   const nextStage = stages.includes(job.stage) ? job.stage : targetStage;
   const items = state.jobs.filter(item => item.id !== id && stages.includes(item.stage)).sort(compareActionQueueJobs);
-  const snapshot = [job, ...items].map(item => ({id: item.id, stage: item.stage, stageHistory: (item.stageHistory || []).map(entry => ({...entry})), rank: item.actionQueueRank, hadRank: Object.prototype.hasOwnProperty.call(item, 'actionQueueRank')}));
+  const snapshot = [job, ...items].map(item => ({
+    id: item.id,
+    stage: item.stage,
+    stageHistory: (item.stageHistory || []).map(entry => ({
+      ...entry
+    })),
+    rank: item.actionQueueRank,
+    hadRank: Object.prototype.hasOwnProperty.call(item, 'actionQueueRank')
+  }));
   const index = before ? items.findIndex(item => item.id === beforeId) : items.length;
   items.splice(index, 0, job);
   job.stage = nextStage;
@@ -368,10 +416,16 @@ function wireActionQueueDragging(board) {
   board.querySelectorAll('.job-card').forEach(card => {
     card.draggable = true;
     card.addEventListener('click', e => {
-      if (Date.now() < suppressUntil) { e.preventDefault(); e.stopImmediatePropagation(); }
+      if (Date.now() < suppressUntil) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
     }, true);
     card.addEventListener('dragstart', e => {
-      if (e.target.closest('button')) { e.preventDefault(); return; }
+      if (e.target.closest('button')) {
+        e.preventDefault();
+        return;
+      }
       draggedId = card.dataset.jobId;
       card.classList.add('dragging');
       e.dataTransfer.effectAllowed = 'move';
@@ -447,7 +501,7 @@ function renderBoard() {
     };
   });
 
-  if (compactWorkspace?.matches) {
+  if (compactWorkspace ?.matches) {
     const jobs = sortTableJobs(periodJobs.filter(job => boardFilterStage || visibleStages.includes(job.stage)));
     board.innerHTML = jobs.length ? jobs.map(job => {
       const selected = bulkSelectMode && bulkSelected.has(job.id);
@@ -1110,7 +1164,10 @@ function renderBoardTimeline(jobs) {
       if (!entries.length) return '';
       if (group.kind==='history') entries.reverse();
       return `<section class="agenda-group agenda-${group.kind}"><h3>${group.title}<span>${entries.length}</span></h3><div>${entries.map((entry,i)=>`<button class="tl-row agenda-entry" data-job-id="${escHtml(entry.job.id)}" style="--agenda-delay:${Math.min(i,10)*25}ms"><span class="agenda-date"><strong>${entry.date.toLocaleDateString('en-US',{day:'2-digit'})}</strong><span>${entry.date.toLocaleDateString('en-US',{month:'short',year:'numeric'})}</span></span><span class="agenda-entry-content"><span class="agenda-type">${entry.label}${entry.time?' · '+escHtml(entry.time):''}</span><strong>${jobDepartmentBadge(entry.job, true)} ${escHtml(entry.job.role)}</strong><span>${escHtml(entry.job.company)}</span></span><span class="stage-badge stage-${entry.job.stage}">${STAGE_LABELS[entry.job.stage] || escHtml(entry.job.stage)}</span><span class="agenda-arrow" aria-hidden="true">↗</span></button>`).join('')}</div></section>`;
-    }).join('') || `<div class="agenda-notice">No ${timelineEventFilter === 'all' ? 'dated entries' : labels[timelineEventFilter].toLowerCase()} match these jobs. Adjust your filters or add dates to an opportunity.</div>`}</div>`;
+    }).join('') || ` < div class = "agenda-notice" > No $ {
+    timelineEventFilter === 'all' ? 'dated entries' : labels[timelineEventFilter].toLowerCase()
+  }
+  match these jobs.Adjust your filters or add dates to an opportunity. < /div>`}</div > `;
 }
 const MILESTONE_STAGES = ['screening', 'interview', 'offer'];
 
@@ -1124,13 +1181,35 @@ function openStageMilestoneModal(job, stage) {
     offer: '🎉 Log Offer Details',
   };
   const subtitles = {
-    screening: `${escHtml(job.role)} @ ${escHtml(job.company)} moved to screening — log the call details.`,
-    interview: `${escHtml(job.role)} @ ${escHtml(job.company)} has an interview — log the details.`,
-    offer: `You received an offer from ${escHtml(job.company)}! Log the details here.`,
+    screening: `
+  $ {
+    escHtml(job.role)
+  }
+  @ $ {
+    escHtml(job.company)
+  }
+  moved to screening— log the call details.
+  `,
+    interview: `
+  $ {
+    escHtml(job.role)
+  }
+  @ $ {
+    escHtml(job.company)
+  }
+  has an interview— log the details.
+  `,
+    offer: `
+  You received an offer from $ {
+    escHtml(job.company)
+  }!Log the details here.
+  `,
   };
 
   document.getElementById('milestone-modal-title').textContent = titles[stage];
-  let bodyHTML = `<p class="milestone-subtitle">${subtitles[stage]}</p>`;
+  let bodyHTML = ` < p class = "milestone-subtitle" > $ {
+    subtitles[stage]
+  } < /p>`;
   if (stage === 'screening' || stage === 'interview') {
     const typeOpts = stage === 'screening' ? ['Phone', 'Video', 'In-person'] : ['Phone', 'Video', 'In-person', 'Panel', 'Technical'];
     const defaultType = existing.type || (stage === 'screening' ? 'Phone' : 'Video');
@@ -1359,15 +1438,29 @@ function selectJobDetailTab(name, focus = false) {
     if (selected && focus) tab.focus();
   });
   if (animate) {
-    const options = {duration: 220, easing: 'cubic-bezier(0.22, 1, 0.36, 1)'};
+    const options = {
+      duration: 220,
+      easing: 'cubic-bezier(0.22, 1, 0.36, 1)'
+    };
     const nextHeight = body.getBoundingClientRect().height;
     if (previousHeight !== nextHeight) {
-      body.animate([
-        {height: `${previousHeight}px`, overflow: 'hidden'},
-        {height: `${nextHeight}px`, overflow: 'hidden'}
+      body.animate([{
+          height: `${previousHeight}px`,
+          overflow: 'hidden'
+        },
+        {
+          height: `${nextHeight}px`,
+          overflow: 'hidden'
+        }
       ], options);
     }
-    right.animate([{opacity: 0, transform: 'translateY(5px)'}, {opacity: 1, transform: 'translateY(0)'}], options);
+    right.animate([{
+      opacity: 0,
+      transform: 'translateY(5px)'
+    }, {
+      opacity: 1,
+      transform: 'translateY(0)'
+    }], options);
   }
 }
 
@@ -1406,8 +1499,8 @@ function openJobDetail(id) {
     tab.onkeydown = event => {
       if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
       event.preventDefault();
-      const next = event.key === 'Home' ? JOB_DETAIL_TABS[0] : event.key === 'End' ? JOB_DETAIL_TABS.at(-1)
-        : JOB_DETAIL_TABS[(index + (event.key === 'ArrowRight' ? 1 : JOB_DETAIL_TABS.length - 1)) % JOB_DETAIL_TABS.length];
+      const next = event.key === 'Home' ? JOB_DETAIL_TABS[0] : event.key === 'End' ? JOB_DETAIL_TABS.at(-1) :
+        JOB_DETAIL_TABS[(index + (event.key === 'ArrowRight' ? 1 : JOB_DETAIL_TABS.length - 1)) % JOB_DETAIL_TABS.length];
       selectJobDetailTab(next, true);
     };
   });
@@ -1634,7 +1727,11 @@ function openJobDetail(id) {
     const counts = priority => parsed.requirements.filter(r => r.priority === priority).length;
     const matched = new Set((job.matched || []).map(canonicalSkill));
     const source = evidence => `<details class="requirement-source"><summary>View source</summary><blockquote>${escHtml(evidence)}</blockquote></details>`;
-    const groups = [['required', 'Required'], ['preferred', 'Preferred'], ['unspecified', 'Other mentions']];
+    const groups = [
+      ['required', 'Required'],
+      ['preferred', 'Preferred'],
+      ['unspecified', 'Other mentions']
+    ];
     const skillGroups = groups.map(([priority, label]) => {
       const items = parsed.requirements.filter(r => r.priority === priority).sort((a, b) => Number(matched.has(a.skill)) - Number(matched.has(b.skill)) || a.skill.localeCompare(b.skill));
       if (!items.length) return '';
@@ -1660,41 +1757,59 @@ function openJobDetail(id) {
         save();
         renderParsingReview();
       }
-      review.querySelector('[data-dismiss-requirement], [data-restore-skill]')?.focus();
+      review.querySelector('[data-dismiss-requirement], [data-restore-skill]') ?.focus();
     }));
     review.querySelectorAll('[data-restore-skill]').forEach(button => button.addEventListener('click', () => {
       job.excludedSkills = job.excludedSkills.filter(s => s !== button.dataset.restoreSkill);
       const analysis = analyzeJobForRole(job);
-      Object.assign(job, analysis, { fitScore: analysis.score });
+      Object.assign(job, analysis, {
+        fitScore: analysis.score
+      });
       save();
       renderSkillBadges('detail-matched', job.matched, 'matched', 'green');
       renderSkillBadges('detail-missing', job.missing, 'missing', 'red');
       refreshJobFitAfterSkillEdit(job);
       renderParsingReview();
       document.getElementById('detail-desc').innerHTML = formatJobDescription(job.description, job.matched, job.missing);
-      review.querySelector('[data-restore-skill], [data-dismiss-requirement]')?.focus();
+      review.querySelector('[data-restore-skill], [data-dismiss-requirement]') ?.focus();
     }));
   };
   renderParsingReview();
+
   function renderSkillBadges(listId, arr, field, colorClass) {
     const el = document.getElementById(listId);
     const skillTotal = (job.matched || []).length + (job.missing || []).length;
+    for (const [id, skills] of [
+        ['detail-matched-count', job.matched || []],
+        ['detail-missing-count', job.missing || []],
+        ['detail-fit-matched-count', job.matched || []],
+        ['detail-fit-gap-count', job.missing || []]
+      ]) {
+      const count = document.getElementById(id);
+      if (count) count.textContent = skills.length;
+    }
     document.getElementById('detail-fit-coverage').textContent = skillTotal ? `${(job.matched || []).length} of ${skillTotal} skills` : 'No skills detected';
     document.querySelector('#modal-detail .fit-ring-wrapper').setAttribute('aria-label', job.fitScore == null ? 'Skill fit score unavailable' : `Skill fit ${job.fitScore} percent. ${(job.matched || []).length} of ${skillTotal} skills matched.`);
     if (!arr.length) {
       el.innerHTML = field === 'matched' ?
-        '<span style="font-size:12px;color:var(--text-muted)">None detected</span>' :
-        '<span style="font-size:12px;color:var(--text-muted)">None — great fit!</span>';
+        '<p class="skill-review-empty">No profile matches detected yet. Review your skills and the job description.</p>' :
+        `<p class="skill-review-empty">${skillTotal ? 'No skill gaps detected in this analysis.' : 'Add a job description to detect skill requirements.'}</p>`;
       return;
     }
-    el.innerHTML = arr.map(s =>
-      `<span class="skill-badge ${colorClass}" style="padding-right:4px">
-        <span title="${escHtml(job.requirements.find(r => r.skill === s)?.evidence || '')}">${escHtml(s)}${job.requirements.find(r => r.skill === s)?.priority === 'preferred' ? ' (preferred)' : ''}</span>
-        ${field === 'missing' ? `<button class="skill-badge-add" data-skill="${escHtml(s)}" title="Add to My Skills">+</button>` : ''}
-        ${field === 'matched' ? `<button class="skill-badge-remove" data-skill="${escHtml(s)}" title="Move to Skill Gaps">−</button>` : ''}
-        <button class="skill-badge-dismiss" data-skill="${escHtml(s)}" title="Remove — not relevant to this job">×</button>
-      </span>`
-    ).join('');
+    el.innerHTML = arr.map(s => {
+      const requirement = (job.requirements || []).find(r => r.skill === s);
+      const name = typeof normalizeSkillName === 'function' ? normalizeSkillName(s) : s;
+      const priority = requirement ?.priority;
+      return `<div class="skill-badge ${colorClass} skill-review-row">
+        <span class="skill-review-status" aria-hidden="true">${field === 'matched' ? '✓' : '↗'}</span>
+        <span class="skill-review-copy" title="${escHtml(requirement?.evidence || '')}"><span class="skill-review-name">${escHtml(name)}</span>${['required', 'preferred'].includes(priority) ? `<span class="skill-review-priority ${priority}">${priority === 'required' ? 'Required' : 'Preferred'}</span>` : ''}</span>
+        <span class="skill-review-actions">
+        ${field === 'missing' ? `<button type="button" class="skill-badge-add" data-skill="${escHtml(s)}" title="Add to My Skills" aria-label="Add ${escHtml(name)} to My Skills">+</button>` : ''}
+        ${field === 'matched' ? `<button type="button" class="skill-badge-remove" data-skill="${escHtml(s)}" title="Move to Skill Gaps" aria-label="Move ${escHtml(name)} to Skill Gaps">−</button>` : ''}
+        <button type="button" class="skill-badge-dismiss" data-skill="${escHtml(s)}" title="Dismiss for this job" aria-label="Dismiss ${escHtml(name)} for this job">×</button>
+        </span>
+      </div>`;
+    }).join('');
     el.querySelectorAll('.skill-badge-add').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
@@ -2197,9 +2312,9 @@ function scanDescriptionBenefits() {
   if (links.length && !document.getElementById('benefits-source-url').value) {
     document.getElementById('benefits-source-url').value = links[0];
   }
-  document.getElementById('benefits-scan-status').textContent = evidence
-    ? (field.value === evidence ? 'Benefits extracted from the description. Review before saving.' : 'Benefits detected. Your existing benefits text was kept.')
-    : links.length ? 'Benefits page link found. Choose Read benefits page, or paste its text below.' : 'Benefits not listed. Add a company benefits link or paste its text to check.';
+  document.getElementById('benefits-scan-status').textContent = evidence ?
+    (field.value === evidence ? 'Benefits extracted from the description. Review before saving.' : 'Benefits detected. Your existing benefits text was kept.') :
+    links.length ? 'Benefits page link found. Choose Read benefits page, or paste its text below.' : 'Benefits not listed. Add a company benefits link or paste its text to check.';
   return evidence;
 }
 
@@ -2239,7 +2354,11 @@ async function scanBenefitsPage() {
   const isCurrent = () => button.benefitsRequest === requestId && input.value.trim() === url.href && document.getElementById('job-edit-id').value === editId;
   input.value = url.href;
   try {
-    const response = await fetch(url.href, { signal: controller.signal, credentials: 'omit', referrerPolicy: 'no-referrer' });
+    const response = await fetch(url.href, {
+      signal: controller.signal,
+      credentials: 'omit',
+      referrerPolicy: 'no-referrer'
+    });
     if (!response.ok) throw new Error('Page unavailable');
     const html = await response.text();
     if (!isCurrent()) return;
@@ -2281,7 +2400,9 @@ function duplicatePostingKey(value) {
     }
     url.searchParams.sort();
     return url.hostname.toLowerCase().replace(/^www\./, '') + url.pathname.replace(/\/$/, '') + url.search;
-  } catch { return ''; }
+  } catch {
+    return '';
+  }
 }
 
 function updateJobDuplicateNotice() {
@@ -2336,9 +2457,9 @@ function updateSalaryPreview(detectPeriod = false) {
   const select = document.getElementById('job-pay-period');
   const split = splitSalaryAndPayPeriod(input.value.trim());
   if (detectPeriod && input.value.trim() && (!split.payPeriodInferred || select.dataset.manual !== 'true')) select.value = split.payPeriod;
-  document.getElementById('job-salary-preview').textContent = input.value.trim()
-    ? `Preview: ${formatSalaryWithPayPeriod(input.value.trim(), select.value)}${split.payPeriodInferred && select.dataset.manual !== 'true' ? ' · Pay period estimated; confirm above.' : ''}`
-    : 'Enter an amount or range. Add /hr or per year to set the pay period.';
+  document.getElementById('job-salary-preview').textContent = input.value.trim() ?
+    `Preview: ${formatSalaryWithPayPeriod(input.value.trim(), select.value)}${split.payPeriodInferred && select.dataset.manual !== 'true' ? ' · Pay period estimated; confirm above.' : ''}` :
+    'Enter an amount or range. Add /hr or per year to set the pay period.';
 }
 
 function updateJobFormSteps() {
@@ -2355,10 +2476,10 @@ function previewJobDate(id) {
   const future = result && result.date > jobDateISO(new Date());
   const invalid = !result || (id !== 'job-deadline' && future) || (id !== 'job-date-posted' && result.approximate);
   input.setAttribute('aria-invalid', String(invalid));
-  document.getElementById(`${id}-hint`).textContent = invalid
-    ? 'Use YYYY-MM-DD, today, or 28 days ago.' + (id === 'job-deadline' ? ' You can also use in 7 days.' : ' Future dates are not allowed.') + (id !== 'job-date-posted' ? ' Use a specific day, without +.' : '')
-    : !result.date ? 'Optional — leave blank if unknown.'
-    : `${result.approximate ? 'On or before ' : 'Date: '}${formatDate(result.date + 'T12:00:00')}${result.approximate ? ' (exact posting date unknown)' : ''}`;
+  document.getElementById(`${id}-hint`).textContent = invalid ?
+    'Use YYYY-MM-DD, today, or 28 days ago.' + (id === 'job-deadline' ? ' You can also use in 7 days.' : ' Future dates are not allowed.') + (id !== 'job-date-posted' ? ' Use a specific day, without +.' : '') :
+    !result.date ? 'Optional — leave blank if unknown.' :
+    `${result.approximate ? 'On or before ' : 'Date: '}${formatDate(result.date + 'T12:00:00')}${result.approximate ? ' (exact posting date unknown)' : ''}`;
   const picker = document.querySelector(`.job-date-picker[data-date-target="${id}"]`);
   if (picker) picker.value = result && !invalid ? result.date : '';
   return invalid ? null : result;
@@ -2520,11 +2641,11 @@ function saveJob() {
     submitJob();
   } catch (error) {
     console.error('PipelineTrack could not save the job:', error);
-    errorMessage.textContent = _isStorageQuotaError(error)
-      ? 'Browser storage is full. Your form is still here. Export a backup, free space in the Resume Vault, then try again.'
-      : error.name === 'SecurityError'
-        ? 'Your browser is blocking storage for this site. Allow site storage, then try again. Your form has been kept.'
-        : 'Could not save this job. Your form has been kept. Please check the browser console for the error details.';
+    errorMessage.textContent = _isStorageQuotaError(error) ?
+      'Browser storage is full. Your form is still here. Export a backup, free space in the Resume Vault, then try again.' :
+      error.name === 'SecurityError' ?
+      'Your browser is blocking storage for this site. Allow site storage, then try again. Your form has been kept.' :
+      'Could not save this job. Your form has been kept. Please check the browser console for the error details.';
     errorMessage.hidden = false;
   }
 }
@@ -2593,15 +2714,19 @@ function submitJob() {
     notes: document.getElementById('job-notes').value.trim(),
     coverLetter: document.getElementById('job-cover-letter').value.trim(),
     resumeVaultId: document.getElementById('job-resume-vault-select') ?.value || '',
-    resumeVersion: (document.getElementById('job-resume-version')?.value || '').trim(),
+    resumeVersion: (document.getElementById('job-resume-version') ?.value || '').trim(),
   };
 
   const priorJob = state.jobs.find(job => job.id === editId);
-  jobData.excludedSkills = priorJob?.excludedSkills || [];
+  jobData.excludedSkills = priorJob ?.excludedSkills || [];
   const analysis = analyzeJobForRole(jobData);
   const pastedPosting = document.getElementById('job-smart-paste-original').value;
-  if (pastedPosting || (description.trim() && !priorJob?.postingSnapshot)) {
-    jobData.postingSnapshot = { text: pastedPosting || description, url: jobData.url, capturedAt: new Date().toISOString() };
+  if (pastedPosting || (description.trim() && !priorJob ?.postingSnapshot)) {
+    jobData.postingSnapshot = {
+      text: pastedPosting || description,
+      url: jobData.url,
+      capturedAt: new Date().toISOString()
+    };
   }
   Object.assign(jobData, {
     fitScore: analysis.score,
@@ -2643,7 +2768,8 @@ function submitJob() {
     let jobPersisted = false;
     try {
       jobPersisted = unpackStorageValue(localStorage.getItem('pt_jobs')) === JSON.stringify(state.jobs);
-    } catch { /* Storage may be blocked entirely. */ }
+    } catch {
+      /* Storage may be blocked entirely. */ }
     if (!jobPersisted) {
       state.jobs = previousJobs;
       state.goals = previousGoals;

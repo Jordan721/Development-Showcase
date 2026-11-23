@@ -1280,7 +1280,7 @@
                                 <option value="">— Select —</option>
                                 <option value="Full-time">Full-time</option>
                                 <option value="Part-time">Part-time</option>
-                                <option value="Contract">Contract</option>
+                                <option value="Contract">Contract / Temporary</option>
                                 <option value="Freelance">Freelance</option>
                                 <option value="Internship">Internship</option>
                                 <option value="Temporary">Temporary</option>
@@ -1533,44 +1533,73 @@
 
                 <!-- Left: fit analysis -->
                 <div class="detail-left" tabindex="0" role="region" aria-label="Skill fit and matching skills">
-                    <div class="fit-ring-wrapper" role="img" aria-label="Skill fit score">
-                        <svg class="fit-ring" viewBox="0 0 120 120" aria-hidden="true">
-                            <circle class="fit-ring-ticks" cx="60" cy="60" r="58" />
-                            <circle class="fit-ring-bg" cx="60" cy="60" r="52" />
-                            <circle class="fit-ring-fill" id="fit-ring-fill" cx="60" cy="60" r="52"
-                                stroke-dasharray="326.7" stroke-dashoffset="326.7" />
-                        </svg>
-                        <div class="fit-ring-label">
-                            <div class="fit-ring-pct" id="detail-fit-pct">—</div>
-                            <div class="fit-ring-sub">Skill Fit</div>
+                    <section class="skill-fit-overview" aria-labelledby="skill-fit-heading">
+                        <div class="skill-fit-heading"><span class="skill-review-eyebrow">YOUR FIT SNAPSHOT</span>
+                            <h3 id="skill-fit-heading">How your skills line up</h3>
+                            <p>A closer look at your alignment with this role.</p>
+                        </div>
+                        <div class="skill-fit-score-area">
+                            <div class="fit-ring-wrapper" role="img" aria-label="Skill fit score">
+                                <svg class="fit-ring" viewBox="0 0 120 120" aria-hidden="true">
+                                    <circle class="fit-ring-ticks" cx="60" cy="60" r="58" />
+                                    <circle class="fit-ring-bg" cx="60" cy="60" r="52" />
+                                    <circle class="fit-ring-fill" id="fit-ring-fill" cx="60" cy="60" r="52"
+                                        stroke-dasharray="326.7" stroke-dashoffset="326.7" />
+                                </svg>
+                                <div class="fit-ring-label">
+                                    <div class="fit-ring-pct" id="detail-fit-pct">—</div>
+                                    <div class="fit-ring-sub">Skill Fit</div>
+                                </div>
+                            </div>
                             <div class="fit-ring-coverage" id="detail-fit-coverage"></div>
+                            <div class="skill-fit-counts"><span><i class="skill-fit-dot matched"
+                                        aria-hidden="true"></i><strong id="detail-fit-matched-count">0</strong>
+                                    matched</span><span><i class="skill-fit-dot gap" aria-hidden="true"></i><strong
+                                        id="detail-fit-gap-count">0</strong> gaps</span></div>
                         </div>
-                    </div>
 
-                    <div class="role-fit-summary" id="detail-role-fit-summary" style="display:none">
-                        <div class="role-fit-row">
-                            <span class="role-fit-label">Role Profile</span>
-                            <span class="role-fit-value" id="detail-role-profile">General</span>
+                        <div class="role-fit-summary" id="detail-role-fit-summary" style="display:none">
+                            <div class="role-fit-row">
+                                <span class="role-fit-label">Role Profile</span>
+                                <span class="role-fit-value" id="detail-role-profile">General</span>
+                            </div>
+                            <div class="role-fit-row">
+                                <span class="role-fit-label">Job Fit</span>
+                                <span class="role-fit-value" id="detail-job-fit-score">—</span>
+                            </div>
+                            <div class="role-fit-row">
+                                <span class="role-fit-label">Posting Quality</span>
+                                <span class="role-fit-value" id="detail-quality-score">—</span>
+                            </div>
+                            <div class="role-red-flags" id="detail-red-flags"></div>
                         </div>
-                        <div class="role-fit-row">
-                            <span class="role-fit-label">Job Fit</span>
-                            <span class="role-fit-value" id="detail-job-fit-score">—</span>
-                        </div>
-                        <div class="role-fit-row">
-                            <span class="role-fit-label">Posting Quality</span>
-                            <span class="role-fit-value" id="detail-quality-score">—</span>
-                        </div>
-                        <div class="role-red-flags" id="detail-red-flags"></div>
-                    </div>
+                        <p class="skill-fit-note">Skill alignment is a guide, not a prediction of hiring outcomes.</p>
+                    </section>
 
-                    <div class="skill-match-section">
-                        <div class="skill-match-title green">Matched Skills</div>
+                    <section class="skill-match-section skill-review-panel skill-review-panel--matched"
+                        aria-labelledby="matched-skills-title">
+                        <div class="skill-review-heading">
+                            <div><span class="skill-review-eyebrow">YOUR STRENGTHS</span>
+                                <h3 id="matched-skills-title">Matched Skills</h3>
+                            </div><span class="skill-review-count" id="detail-matched-count"
+                                aria-label="Matched skill count">0</span>
+                        </div>
+                        <p class="skill-review-description">Detected skills covered by your profile.</p>
                         <div class="skill-badge-list" id="detail-matched"></div>
-                    </div>
-                    <div class="skill-match-section">
-                        <div class="skill-match-title red">Skill Gaps</div>
+                        <p class="skill-review-help">Move a skill to gaps or dismiss an incorrect match.</p>
+                    </section>
+                    <section class="skill-match-section skill-review-panel skill-review-panel--gaps"
+                        aria-labelledby="missing-skills-title">
+                        <div class="skill-review-heading">
+                            <div><span class="skill-review-eyebrow">ROOM TO GROW</span>
+                                <h3 id="missing-skills-title">Skill Gaps</h3>
+                            </div><span class="skill-review-count" id="detail-missing-count"
+                                aria-label="Skill gap count">0</span>
+                        </div>
+                        <p class="skill-review-description">Detected skills not currently in your profile.</p>
                         <div class="skill-badge-list" id="detail-missing"></div>
-                    </div>
+                        <p class="skill-review-help">Add skills you have. Dismiss anything irrelevant to this job.</p>
+                    </section>
                 </div>
                 <!-- Right: info + notes -->
                 <div class="detail-right">
@@ -2230,7 +2259,8 @@
                             <li><strong>Jobs</strong> lets you search, sort, and filter your list. Open a job and use
                                 the <strong>Stage</strong> picker to move it.</li>
                             <li><strong>Agenda</strong> lists your upcoming interviews and deadlines.</li>
-                            <li>To move your records to another device, use <strong>More → My Profile → Data Backup</strong>
+                            <li>To move your records to another device, use <strong>More → My Profile → Data
+                                    Backup</strong>
                                 to export a JSON backup, then import it in the other browser.</li>
                         </ul>
                         <div class="ob-shortcuts ob-desktop-only">
@@ -2239,7 +2269,8 @@
                             <div class="ob-shortcut"><kbd>S</kbd> Open settings after closing this guide</div>
                             <div class="ob-shortcut"><kbd>D</kbd> / <kbd>H</kbd> Details / History in an open job</div>
                         </div>
-                        <p class="onboarding-tip"><span class="ob-desktop-only">Shortcuts pause while you type. </span>Reopen this guide with
+                        <p class="onboarding-tip"><span class="ob-desktop-only">Shortcuts pause while you type.
+                            </span>Reopen this guide with
                             <strong>?</strong>.
                             Find more features and shortcuts in the <a href="README.md" target="_blank"
                                 rel="noopener">README</a>.</p>
