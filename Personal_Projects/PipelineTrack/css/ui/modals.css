@@ -5194,16 +5194,124 @@
   border-width: 1px;
 }
 
+#modal-detail .detail-overview {
+  margin-bottom: 22px;
+  padding: 22px;
+  border-radius: 20px;
+  background: radial-gradient(ellipse at 100% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 65%),
+    linear-gradient(145deg, color-mix(in srgb, var(--card) 80%, var(--surface)), var(--surface));
+}
+
+#modal-detail .detail-overview-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 12px;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+#modal-detail .detail-status-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  min-width: 0;
+  flex: 1;
+}
+
+#modal-detail .detail-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 20px 30px;
+}
+
+#modal-detail .detail-facts .detail-meta-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+#modal-detail .detail-facts .detail-meta-label {
+  color: var(--text-muted);
+  font-size: 10px;
+  letter-spacing: .08em;
+}
+
+#modal-detail .detail-facts .detail-meta-value {
+  max-width: 100%;
+  font-size: 13px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+#modal-detail .detail-facts #detail-salary-row {
+  flex-basis: 100%;
+  order: -1;
+}
+
+#modal-detail .detail-facts #detail-salary {
+  color: var(--accent);
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 700;
+  letter-spacing: -.04em;
+  line-height: 1.3;
+}
+
+#modal-detail .detail-facts #detail-benefits-row {
+  flex-basis: 100%;
+}
+
 #modal-detail .detail-info-row {
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 14px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, .07);
+  margin-bottom: 24px;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+#modal-detail .detail-overview .detail-link {
+  gap: 8px;
+  min-height: 32px;
+  padding: 4px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+#modal-detail .detail-overview .detail-link:hover {
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 
 #modal-detail .detail-info-row .detail-link {
   margin-left: auto;
+  flex-shrink: 0;
+  gap: 8px;
+  min-height: 38px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--surface);
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+#modal-detail .detail-info-row .detail-link:hover {
+  background: color-mix(in srgb, var(--accent) 85%, var(--text));
+  text-decoration: none;
 }
 
 #modal-detail .detail-header-badges {
@@ -5501,6 +5609,14 @@
 }
 
 @media (max-width: 560px) {
+  #modal-detail .detail-overview {
+    padding: 18px;
+  }
+
+  #modal-detail .detail-status-badges {
+    flex-basis: 100%;
+  }
+
   #modal-detail .modal {
     max-width: calc(100vw - 18px);
   }

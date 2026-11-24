@@ -1615,60 +1615,73 @@
                             tabindex="-1">Requirements <kbd>R</kbd></button>
                     </div>
                     <div id="detail-panel-details" role="tabpanel" aria-labelledby="detail-tab-details">
-                        <div class="detail-info-row">
-                            <span class="stage-badge" id="detail-stage-badge">Saved</span>
-                            <span class="seniority-badge" id="detail-seniority" style="display:none"></span>
-                            <span class="job-type-badge" id="detail-job-type" style="display:none"></span>
-                            <span class="work-type-badge" id="detail-work-type" style="display:none"></span>
-                            <a class="detail-link" id="detail-url" href="#" target="_blank" rel="noopener">View Posting
-                                ↗</a>
-                        </div>
-                        <div class="detail-meta-row" id="detail-department-row" style="display:none">
-                            <span class="detail-meta-label">Department</span>
-                            <span class="detail-meta-value" id="detail-department"></span>
-                        </div>
-                        <div class="detail-meta-row" id="detail-salary-row" style="display:none">
-                            <span class="detail-meta-label">Salary</span>
-                            <span class="detail-meta-value" id="detail-salary"></span>
-                        </div>
-                        <div class="detail-meta-row" id="detail-date-posted-row" style="display:none">
-                            <span class="detail-meta-label">Date Posted</span>
-                            <span class="detail-meta-value" id="detail-date-posted"></span>
-                        </div>
-                        <div class="detail-meta-row" id="detail-date-applied-row" style="display:none">
-                            <span class="detail-meta-label">Date Applied</span>
-                            <span class="detail-meta-value" id="detail-date-applied"></span>
-                        </div>
-                        <div class="detail-meta-row" id="detail-source-row" style="display:none">
-                            <span class="detail-meta-label">Job Source</span>
-                            <span class="detail-meta-value" id="detail-source"></span>
-                        </div>
-                        <div class="detail-meta-row" id="detail-deadline-row" style="display:none">
-                            <span class="detail-meta-label">Deadline</span>
-                            <span class="detail-meta-value" id="detail-deadline"></span>
-                        </div>
-                        <div class="detail-meta-row" id="detail-hybrid-days-row" style="display:none">
-                            <span class="detail-meta-label">In-office Days</span>
-                            <span class="detail-meta-value" id="detail-hybrid-days"></span>
-                        </div>
-                        <div class="detail-meta-row" id="detail-duration-row" style="display:none">
-                            <span class="detail-meta-label">Expected Duration</span>
-                            <span class="detail-meta-value" id="detail-duration"></span>
-                        </div>
-                        <div class="detail-meta-row" id="detail-date-declined-row" style="display:none">
-                            <span class="detail-meta-label" id="detail-date-declined-label">Not Selected On</span>
-                            <span class="detail-meta-value" id="detail-date-declined"></span>
-                        </div>
-                        <div class="detail-meta-row" id="detail-benefits-row" style="display:none">
-                            <span class="detail-meta-label">Benefits</span>
-                            <span class="detail-meta-value" id="detail-benefits"></span>
-                        </div>
-                        <div class="detail-meta-row">
-                            <span class="detail-meta-label">Budget</span>
-                            <a class="detail-link"
-                                href="https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html"
-                                target="_blank" rel="noopener">Track finances in Cash Compass ↗</a>
-                        </div>
+                        <section class="detail-overview" aria-label="Job overview">
+                            <div class="detail-overview-heading">Job overview</div>
+                            <div class="detail-info-row">
+                                <div class="detail-status-badges">
+                                    <span class="stage-badge" id="detail-stage-badge">Saved</span>
+                                    <span class="seniority-badge" id="detail-seniority" style="display:none"></span>
+                                    <span class="job-type-badge" id="detail-job-type" style="display:none"></span>
+                                    <span class="work-type-badge" id="detail-work-type" style="display:none"></span>
+                                </div>
+                                <a class="detail-link" id="detail-url" href="#" target="_blank" rel="noopener">View
+                                    posting
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.8" aria-hidden="true">
+                                        <path d="M14 3h7v7M21 3 10 14" />
+                                        <path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5" />
+                                        </svg></a>
+                            </div>
+                            <div class="detail-facts">
+                                <div class="detail-meta-row" id="detail-department-row" style="display:none">
+                                    <span class="detail-meta-label">Department</span>
+                                    <span class="detail-meta-value" id="detail-department"></span>
+                                </div>
+                                <div class="detail-meta-row" id="detail-salary-row" style="display:none">
+                                    <span class="detail-meta-label">Salary</span>
+                                    <span class="detail-meta-value" id="detail-salary"></span>
+                                </div>
+                                <div class="detail-meta-row" id="detail-date-posted-row" style="display:none">
+                                    <span class="detail-meta-label">Date Posted</span>
+                                    <span class="detail-meta-value" id="detail-date-posted"></span>
+                                </div>
+                                <div class="detail-meta-row" id="detail-date-applied-row" style="display:none">
+                                    <span class="detail-meta-label">Date Applied</span>
+                                    <span class="detail-meta-value" id="detail-date-applied"></span>
+                                </div>
+                                <div class="detail-meta-row" id="detail-source-row" style="display:none">
+                                    <span class="detail-meta-label">Job Source</span>
+                                    <span class="detail-meta-value" id="detail-source"></span>
+                                </div>
+                                <div class="detail-meta-row" id="detail-deadline-row" style="display:none">
+                                    <span class="detail-meta-label">Deadline</span>
+                                    <span class="detail-meta-value" id="detail-deadline"></span>
+                                </div>
+                                <div class="detail-meta-row" id="detail-hybrid-days-row" style="display:none">
+                                    <span class="detail-meta-label">In-office Days</span>
+                                    <span class="detail-meta-value" id="detail-hybrid-days"></span>
+                                </div>
+                                <div class="detail-meta-row" id="detail-duration-row" style="display:none">
+                                    <span class="detail-meta-label">Expected Duration</span>
+                                    <span class="detail-meta-value" id="detail-duration"></span>
+                                </div>
+                                <div class="detail-meta-row" id="detail-date-declined-row" style="display:none">
+                                    <span class="detail-meta-label" id="detail-date-declined-label">Not Selected
+                                        On</span>
+                                    <span class="detail-meta-value" id="detail-date-declined"></span>
+                                </div>
+                                <div class="detail-meta-row" id="detail-benefits-row" style="display:none">
+                                    <span class="detail-meta-label">Benefits</span>
+                                    <span class="detail-meta-value" id="detail-benefits"></span>
+                                </div>
+                                <div class="detail-meta-row">
+                                    <span class="detail-meta-label">Budget</span>
+                                    <a class="detail-link"
+                                        href="https://jordan721.github.io/Development-Showcase/Personal_Projects/Cash-Compass/index.html"
+                                        target="_blank" rel="noopener">Track finances in Cash Compass ↗</a>
+                                </div>
+                            </div>
+                        </section>
                         <div id="detail-milestone-strip" style="display:none"></div>
                         <div class="detail-desc-label">Job Description</div>
                         <div class="detail-desc-legend" id="detail-desc-legend" style="display:none">
