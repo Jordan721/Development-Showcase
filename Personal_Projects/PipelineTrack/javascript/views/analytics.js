@@ -51,6 +51,7 @@ function _countUp(el, target, suffix) {
   const duration = 650;
   const start = performance.now();
   const step = now => {
+    if (!el.isConnected) return;
     const p = Math.min((now - start) / duration, 1);
     const eased = 1 - Math.pow(1 - p, 3);
     el.textContent = Math.round(eased * target) + (suffix || '');
@@ -60,6 +61,52 @@ function _countUp(el, target, suffix) {
 }
 
 /* ── Renderers ─────────────────────────────────────────── */
+
+function animateAnalyticsCharts(container) {
+  if (!container) return;
+  const root = document.documentElement;
+  if (root.getAttribute('data-motion') === 'reduce' || root.classList.contains('theme-motion-off') || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const duration = 1800;
+  container.querySelectorAll('.an-trend polyline').forEach(line => {
+    line.animate([
+      { strokeDasharray: '1 1', strokeDashoffset: 1 },
+      { strokeDasharray: '1 1', strokeDashoffset: 0 }
+    ], { duration, easing: 'linear' });
+  });
+  const points = container.querySelectorAll('.an-trend svg circle');
+  points.forEach((point, i) => {
+    const delay = points.length > 1 ? i / (points.length - 1) * duration : 0;
+    point.animate([{ opacity: 0, r: '1px' }, { opacity: 1, r: '6px' }, { opacity: 1, r: '4px' }], {
+      duration: 350, delay, fill: 'backwards', easing: 'ease-out'
+    });
+  });
+  // Keep each arc at its final position and reveal it as the sweep reaches it.
+  const circumference = 2 * Math.PI * 70;
+  container.querySelectorAll('.an-pipeline-ring circle[stroke-dasharray]').forEach(arc => {
+    const length = parseFloat(arc.getAttribute('stroke-dasharray'));
+    const offset = Math.abs(parseFloat(arc.getAttribute('stroke-dashoffset')) || 0);
+    arc.animate([
+      { strokeDasharray: `0 ${circumference}` },
+      { strokeDasharray: `${length} ${circumference}` }
+    ], { duration: Math.max(1, length / circumference * duration), delay: offset / circumference * duration, fill: 'backwards', easing: 'linear' });
+  });
+}
+
+function animateAnalyticsEntrance(view) {
+  const root = document.documentElement;
+  if (root.getAttribute('data-motion') === 'reduce' || root.classList.contains('theme-motion-off') || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  view.querySelectorAll('[data-an-count]').forEach(el => {
+    _countUp(el, Number(el.dataset.anCount), el.dataset.anSuffix || '');
+  });
+  view.querySelectorAll('.an-spotlight, .an-metric, .dash-card').forEach((card, i) => {
+    card.style.setProperty('--an-delay', `${Math.min(i * 45, 270)}ms`);
+    card.classList.remove('an-reveal');
+  });
+  // Restart the group together when the selected date range changes.
+  void view.offsetWidth;
+  view.querySelectorAll('.an-spotlight, .an-metric, .dash-card').forEach(card => card.classList.add('an-reveal'));
+  animateAnalyticsCharts(view);
+}
 
 function renderAnalyticsKPIs(jobs) {
   const el = document.getElementById('an-kpi-strip');
@@ -76,7 +123,7 @@ function renderAnalyticsKPIs(jobs) {
     { label: 'Average fit', value: average, suffix: '%', detail: scored.length + ' scored opportunities', color: 'var(--an-lilac)', jobs: scored },
     { label: 'Not selected', value: jobs.filter(j => j.stage === 'declined').length, detail: 'Part of the process', color: 'var(--red)', jobs: jobs.filter(j => j.stage === 'declined') }
   ];
-  el.innerHTML = metrics.map((metric, i) => `<button type="button" class="an-metric" data-metric="${i}" style="--metric-color:${metric.color}" aria-label="${metric.label}: ${metric.value == null ? 'No data' : metric.value + (metric.suffix || '')}. Explore matching jobs."><span class="an-metric-label"><i aria-hidden="true"></i>${metric.label}</span><strong>${metric.value == null ? '—' : metric.value + (metric.suffix || '')}</strong><small>${metric.detail}</small></button>`).join('');
+  el.innerHTML = metrics.map((metric, i) => `<button type="button" class="an-metric" data-metric="${i}" style="--metric-color:${metric.color}" aria-label="${metric.label}: ${metric.value == null ? 'No data' : metric.value + (metric.suffix || '')}. Explore matching jobs."><span class="an-metric-label"><i aria-hidden="true"></i>${metric.label}</span><strong${metric.value == null ? '' : ` data-an-count="${metric.value}" data-an-suffix="${metric.suffix || ''}"`}>${metric.value == null ? '—' : metric.value + (metric.suffix || '')}</strong><small>${metric.detail}</small></button>`).join('');
   el.querySelectorAll('[data-metric]').forEach(button => {
     button.onclick = () => {
       const metric = metrics[Number(button.dataset.metric)];
@@ -215,7 +262,7 @@ function renderAnalyticsOverTime(jobs, granularity) {
   }));
   const line = points.map(p => `${p.x},${p.y}`).join(' ');
   const total = buckets.reduce((sum, b) => sum + b.count, 0);
-  el.innerHTML = `<div class="an-trend-summary"><strong>${total}<span> opportunities added</span></strong><span>Last ${buckets.length} ${granularity === 'weekly' ? 'weeks' : 'months'}</span></div><div class="an-trend"><svg viewBox="0 0 700 220" role="img" aria-label="Opportunities added over time"><defs><linearGradient id="an-trend-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--accent)" stop-opacity=".3"/><stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>${[0, 0.5, 1].map(f => `<line x1="32" x2="668" y1="${190 - f * 160}" y2="${190 - f * 160}" class="an-trend-grid"/><text x="4" y="${194 - f * 160}" class="an-trend-axis">${Math.round(maxCount * f)}</text>`).join('')}<polygon points="32,190 ${line} 668,190" fill="url(#an-trend-gradient)"/><polyline points="${line}" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>${points.map((p, i) => `<circle cx="${p.x}" cy="${p.y}" r="4" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"><title>${buckets[i].label}: ${buckets[i].count} jobs</title></circle>`).join('')}</svg><div class="an-trend-periods">${buckets.map(b => `<button type="button" class="an-col-click" data-start="${b.start}" data-end="${b.end}" data-label="${b.label}" aria-label="${b.label}: ${b.count} opportunities. View jobs."><strong>${b.count}</strong><span>${b.label}</span></button>`).join('')}</div></div>`;
+  el.innerHTML = `<div class="an-trend-summary"><strong>${total}<span> opportunities added</span></strong><span>Last ${buckets.length} ${granularity === 'weekly' ? 'weeks' : 'months'}</span></div><div class="an-trend"><svg viewBox="0 0 700 220" role="img" aria-label="Opportunities added over time"><defs><linearGradient id="an-trend-gradient" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--accent)" stop-opacity=".3"/><stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>${[0, 0.5, 1].map(f => `<line x1="32" x2="668" y1="${190 - f * 160}" y2="${190 - f * 160}" class="an-trend-grid"/><text x="4" y="${194 - f * 160}" class="an-trend-axis">${Math.round(maxCount * f)}</text>`).join('')}<polygon points="32,190 ${line} 668,190" fill="url(#an-trend-gradient)"/><polyline pathLength="1" points="${line}" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>${points.map((p, i) => `<circle cx="${p.x}" cy="${p.y}" r="4" fill="var(--surface)" stroke="var(--accent)" stroke-width="2"><title>${buckets[i].label}: ${buckets[i].count} jobs</title></circle>`).join('')}</svg><div class="an-trend-periods">${buckets.map(b => `<button type="button" class="an-col-click" data-start="${b.start}" data-end="${b.end}" data-label="${b.label}" aria-label="${b.label}: ${b.count} opportunities. View jobs."><strong>${b.count}</strong><span>${b.label}</span></button>`).join('')}</div></div>`;
 
   el.querySelectorAll('.an-col-click').forEach(col => {
     col.addEventListener('click', () => {
@@ -439,6 +486,7 @@ function wireAnalyticsControls() {
       anTimeGranularity = btn.dataset.time;
       document.querySelectorAll('.an-time-btn').forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
       renderAnalyticsOverTime(getJobsForPeriod(anPeriod), anTimeGranularity);
+      animateAnalyticsCharts(document.getElementById('an-over-time'));
     };
   });
 }
@@ -453,7 +501,7 @@ function renderAnalytics() {
   if (rangeNote) rangeNote.textContent = periodLabels[anPeriod];
   if (summary) {
     summary.innerHTML = jobs.length ?
-      `<div><span class="an-eyebrow">YOUR SEARCH IS TAKING SHAPE</span><div class="an-spotlight-value"><strong>${active.length}</strong><span>active application${active.length === 1 ? '' : 's'}</span></div></div><div><h2>${active.length ? 'Keep your next chapter moving.' : 'Make room for your next move.'}</h2><p>${strong.length} strong skill match${strong.length === 1 ? '' : 'es'} at 75%+ fit, across ${jobs.length} tracked opportunit${jobs.length === 1 ? 'y' : 'ies'}.</p></div><div class="an-spotlight-footer"><span>Applied · Screening · Interview</span><button type="button" class="an-spotlight-button" id="an-explore-active">View active</button></div>` :
+      `<div><span class="an-eyebrow">YOUR SEARCH IS TAKING SHAPE</span><div class="an-spotlight-value"><strong data-an-count="${active.length}">${active.length}</strong><span>active application${active.length === 1 ? '' : 's'}</span></div></div><div><h2>${active.length ? 'Keep your next chapter moving.' : 'Make room for your next move.'}</h2><p>${strong.length} strong skill match${strong.length === 1 ? '' : 'es'} at 75%+ fit, across ${jobs.length} tracked opportunit${jobs.length === 1 ? 'y' : 'ies'}.</p></div><div class="an-spotlight-footer"><span>Applied · Screening · Interview</span><button type="button" class="an-spotlight-button" id="an-explore-active">View active</button></div>` :
       `<div><span class="an-eyebrow">A FRESH PERSPECTIVE</span><div class="an-spotlight-value"><strong>0</strong><span>opportunities in this period</span></div></div><div><h2>${state.jobs.length ? 'A quieter corner of your search.' : 'Every search starts somewhere.'}</h2><p>${state.jobs.length ? 'Try another date range to see the bigger picture.' : 'Add your first opportunity. Your activity, skills, and progress will find their place here.'}</p></div>`;
     const explore = document.getElementById('an-explore-active');
     if (explore) explore.onclick = () => openFilterModal('Active applications', active.length + ' opportunities', active);
@@ -470,14 +518,6 @@ function renderAnalytics() {
   renderAnalyticsBreakdown('an-seniority', jobs, 'seniority');
   wireAnalyticsControls();
 
-  // Staggered entrance for section cards
   const view = document.getElementById('view-analytics');
-  if (view) {
-    view.querySelectorAll('.dash-card').forEach((card, i) => {
-      card.classList.remove('an-card-enter');
-      void card.offsetWidth; // force reflow to restart animation
-      card.style.setProperty('--ci', i);
-      card.classList.add('an-card-enter');
-    });
-  }
+  if (view) animateAnalyticsEntrance(view);
 }

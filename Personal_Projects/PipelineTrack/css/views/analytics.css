@@ -812,3 +812,48 @@
     transition: none !important;
   }
 }
+/* Motion is finite and stays behind the data and controls. */
+@keyframes an-studio-reveal {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+@keyframes an-chart-wash {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes an-chart-grow-x {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes an-chart-grow-y {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+@media screen and (prefers-reduced-motion: no-preference) {
+  html:not([data-motion="reduce"]):not(.theme-motion-off) #view-analytics .an-reveal {
+    animation: an-studio-reveal 480ms cubic-bezier(.22, 1, .36, 1) var(--an-delay, 0ms) backwards;
+  }
+
+  html:not([data-motion="reduce"]):not(.theme-motion-off) #view-analytics .an-trend polygon {
+    animation: an-chart-wash 650ms ease-out 1000ms backwards;
+  }
+
+
+  html:not([data-motion="reduce"]):not(.theme-motion-off) #view-analytics :is(.an-company-track i, .an-distribution-bars .an-distribution-fill) {
+    transform-origin: left center;
+    animation: an-chart-grow-x 850ms cubic-bezier(.22, 1, .36, 1) 220ms backwards;
+  }
+  html:not([data-motion="reduce"]):not(.theme-motion-off) #view-analytics .an-distribution-columns .an-distribution-fill {
+    transform-origin: center bottom;
+    animation: an-chart-grow-y 850ms cubic-bezier(.22, 1, .36, 1) 220ms backwards;
+  }
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  html:not([data-motion="reduce"]):not(.theme-motion-off) #view-analytics :is(.an-metric, .an-company, .an-stage-item, .an-spotlight-button) {
+    transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+  }
+  html:not([data-motion="reduce"]):not(.theme-motion-off) #view-analytics :is(.an-metric, .an-spotlight-button):hover { transform: translateY(-3px); }
+  html:not([data-motion="reduce"]):not(.theme-motion-off) #view-analytics :is(.an-company, .an-stage-item):hover { transform: translateX(3px); }
+}
