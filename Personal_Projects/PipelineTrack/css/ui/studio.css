@@ -1,0 +1,962 @@
+/* PipelineTrack studio: shared surfaces, typography, and controls. */
+:root {
+  --studio-lime: #d9f99d;
+  --studio-lilac: #c4b5fd;
+  --studio-ink: #1b291a;
+  --studio-on-accent: #142013;
+  --radius: 20px;
+  --radius-sm: 10px;
+  --polish-shadow: 0 8px 28px rgb(0 0 0 / 4%);
+}
+
+:root:not([data-contrast="on"]):not([data-theme]),
+:root[data-theme="dark"]:not([data-contrast="on"]) {
+  --bg: #111713;
+  --surface: #19211c;
+  --card: #202a23;
+  --border: #344138;
+  --accent: #c3ed92;
+  --accent-dim: #2b3b25;
+  --text: #ecf0e8;
+  --text-muted: #a3b1a6;
+  --hover: rgb(217 249 157 / 5%);
+}
+
+:root[data-theme="light"] {
+  --studio-on-accent: #fff;
+}
+
+:root[data-theme="light"]:not([data-contrast="on"]) {
+  --bg: #f3f6f3;
+  --surface: #ffffff;
+  --card: #edf2ed;
+  --border: #d6dfd5;
+  --accent: #386b37;
+  --accent-dim: #e6f0df;
+  --text: #203027;
+  --text-muted: #5d6e62;
+  --hover: rgb(56 107 55 / 5%);
+}
+
+@media screen {
+  .pipeline-studio {
+    font-size: 1rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .pipeline-studio .main {
+    min-width: 0;
+  }
+
+  .pipeline-studio .view {
+    padding: clamp(20px, 3vw, 44px);
+  }
+
+  .pipeline-studio .topbar {
+    padding: 16px clamp(20px, 3vw, 44px);
+    background: var(--bg);
+    gap: 16px;
+  }
+
+  .pipeline-studio .topbar-title {
+    font-size: .875rem;
+    font-weight: 550;
+    letter-spacing: -.02em;
+    color: var(--text-muted);
+  }
+
+  .pipeline-studio .topbar-controls {
+    gap: 10px;
+  }
+
+  .pipeline-studio .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+  }
+
+  .pipeline-studio .sidebar-logo {
+    padding: 28px 18px 30px;
+    gap: 10px;
+  }
+
+  .pipeline-studio .sidebar .logo-icon {
+    width: 36px;
+    height: 38px;
+    border: 0;
+    border-radius: 11px;
+    background: var(--studio-lime);
+    color: var(--studio-ink);
+    box-shadow: none;
+  }
+
+  .pipeline-studio .sidebar .logo-text {
+    font-size: 1rem;
+    letter-spacing: -.055em;
+  }
+
+  .pipeline-studio .sidebar-brand-caption {
+    font-size: .625rem;
+    letter-spacing: .06em;
+  }
+
+  .pipeline-studio .sidebar-nav {
+    padding: 0 12px 20px;
+    gap: 5px;
+  }
+
+  .pipeline-studio .sidebar-section-label {
+    font-size: .6875rem;
+    font-weight: 550;
+    letter-spacing: .12em;
+    padding: 12px 12px;
+  }
+
+  .pipeline-studio .sidebar-section-label--growth {
+    border: 0;
+    margin-top: 20px;
+    padding-top: 12px;
+  }
+
+  .pipeline-studio .sidebar .nav-link {
+    min-height: 46px;
+    gap: 10px;
+    padding: 10px;
+    font-size: .875rem;
+    font-weight: 450;
+    border-radius: 12px;
+  }
+
+  .pipeline-studio .sidebar .nav-icon {
+    background: transparent;
+  }
+
+  .pipeline-studio .sidebar .nav-link.active {
+    background: var(--studio-lime);
+    color: var(--studio-ink);
+    border-color: transparent;
+    box-shadow: none;
+    font-weight: 600;
+  }
+
+  .pipeline-studio .sidebar .nav-link.active::before {
+    display: none;
+  }
+
+  .pipeline-studio .sidebar .nav-link.active .nav-icon {
+    background: transparent;
+  }
+
+  .pipeline-studio .sidebar-pipeline-card {
+    padding: 18px 14px;
+    border-radius: 16px;
+    background: var(--card);
+    border-color: var(--border);
+  }
+
+  .pipeline-studio .sidebar-card-eyebrow {
+    font-size: .625rem;
+    letter-spacing: .12em;
+  }
+
+  .pipeline-studio .sidebar-tip {
+    font-size: .875rem;
+    line-height: 1.5;
+  }
+
+  .pipeline-studio .back-link {
+    font-size: .8125rem;
+  }
+
+  .pipeline-studio .workspace-preview {
+    margin: 20px clamp(20px, 3vw, 44px) 0;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 16px;
+  }
+
+  .pipeline-studio .workspace-preview strong {
+    font-size: .9375rem;
+    font-weight: 550;
+  }
+
+  .pipeline-studio .workspace-preview p {
+    font-size: .875rem;
+  }
+
+  /* Shared editorial page openings. */
+  .pipeline-studio :is(.view-hero, .resume-hero) {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 10px 0 28px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .pipeline-studio :is(.view-hero-content, .resume-hero-content) {
+    order: -1;
+    min-width: 0;
+  }
+
+  .pipeline-studio :is(.view-hero-icon, .resume-hero-icon) {
+    width: 82px;
+    height: 82px;
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border));
+    border-radius: 24px;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+    box-shadow: none;
+    transform: rotate(-7deg);
+    flex-shrink: 0;
+  }
+
+  .pipeline-studio :is(.view-hero-icon, .resume-hero-icon) svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .pipeline-studio :is(.view-hero-title, .resume-hero-title, .studio-profile-heading h1) {
+    font-size: clamp(2.4rem, 4vw, 4.25rem);
+    font-weight: 550;
+    letter-spacing: -.065em;
+    line-height: 1.04;
+    margin: 12px 0 18px;
+  }
+
+  .pipeline-studio :is(.view-hero-title, .resume-hero-title, .studio-profile-heading h1) em {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 400;
+    letter-spacing: -.055em;
+    color: var(--accent);
+  }
+
+  .pipeline-studio :is(.studio-eyebrow, .workspace-eyebrow) {
+    display: block;
+    font-size: .75rem;
+    font-weight: 550;
+    line-height: 1.5;
+    letter-spacing: .14em;
+    color: var(--text-muted);
+  }
+
+  .pipeline-studio :is(.view-hero-sub, .resume-hero-sub, .studio-profile-heading > p) {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 640px;
+    margin: 0;
+  }
+
+  .pipeline-studio .studio-profile-heading {
+    padding: 10px 0 32px;
+  }
+
+  .pipeline-studio .view-hero--dashboard {
+    margin-bottom: 4px;
+  }
+
+  .pipeline-studio .scope-notice {
+    border: 1px solid var(--border);
+    background: transparent;
+    border-radius: 14px;
+    color: var(--text-muted);
+    font-size: .8125rem;
+    line-height: 1.8;
+  }
+
+  /* Calm cards with a consistent shape and type hierarchy. */
+  .pipeline-studio :is(.dash-card, .stat-card, .profile-card, .resume-section, .contact-card, .goal-card, .learning-card, .career-panel) {
+    border-radius: 20px;
+    border-color: var(--border);
+    background-color: var(--surface);
+    box-shadow: none;
+  }
+
+  .pipeline-studio :is(.dash-card, .stat-card, .profile-card, .resume-section, .contact-card, .goal-card, .learning-card):hover {
+    box-shadow: none;
+  }
+
+  .pipeline-studio .dash-card-header {
+    background: transparent;
+    padding: 22px 24px 16px;
+    font-size: 1rem;
+    font-weight: 550;
+    letter-spacing: -.025em;
+  }
+
+  .pipeline-studio .dash-card-body {
+    padding: 20px 24px 24px;
+  }
+
+  .pipeline-studio :is(.dash-card-description, .dash-card-note, .stat-context, .profile-hint, .resume-section-desc, .career-muted) {
+    font-size: .875rem;
+    line-height: 1.75;
+  }
+
+  .pipeline-studio .dash-card-description {
+    padding: 0 24px;
+  }
+
+  .pipeline-studio :is(.dash-grid, .dash-priority-grid, .profile-grid, .contacts-grid, .goals-grid, .learning-grid) {
+    gap: 20px;
+  }
+
+  .pipeline-studio .dash-section-heading {
+    margin: 30px 0 16px;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .pipeline-studio .dash-section-heading h2 {
+    font-size: 1.375rem;
+    font-weight: 550;
+    letter-spacing: -.04em;
+  }
+
+  .pipeline-studio .dash-section-heading>span {
+    font-size: .8125rem;
+  }
+
+  .pipeline-studio .stat-grid {
+    gap: 14px;
+  }
+
+  .pipeline-studio .stat-card {
+    padding: 24px;
+  }
+
+  .pipeline-studio .stat-card::before {
+    display: none;
+  }
+
+  .pipeline-studio .stat-label {
+    font-size: .875rem;
+    font-weight: 450;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .pipeline-studio .stat-value {
+    font-size: 2.5rem;
+    font-weight: 550;
+    letter-spacing: -.06em;
+  }
+
+  .pipeline-studio .stat-pace {
+    font-size: .8125rem;
+  }
+
+  .pipeline-studio .dash-overview {
+    padding: 28px;
+    border-radius: 22px;
+    background: var(--studio-lime);
+    color: var(--studio-ink);
+    border-color: transparent;
+  }
+
+  .pipeline-studio .dash-overview h2 {
+    font-size: clamp(1.4rem, 2.4vw, 2rem);
+    font-weight: 550;
+    letter-spacing: -.045em;
+  }
+
+  .pipeline-studio .dash-overview :is(p, .workspace-eyebrow, .dash-coverage > span:last-child) {
+    color: #3b5133;
+  }
+
+  .pipeline-studio .dash-coverage {
+    border-color: #19261830;
+  }
+
+  .pipeline-studio .dash-coverage>strong {
+    color: var(--studio-ink);
+    font-weight: 550;
+  }
+
+  .pipeline-studio .dash-coverage-track {
+    background: #19261820;
+  }
+
+  .pipeline-studio .dash-coverage-track span {
+    background: #486b32;
+  }
+
+  /* Controls share a quieter, rounded treatment. */
+  .pipeline-studio :is(.btn-primary, .btn-secondary, .btn-ghost, .btn-danger) {
+    border-radius: 100px;
+    min-height: 40px;
+    padding: 10px 18px;
+    font-size: .875rem;
+    line-height: 1.4;
+  }
+
+  .pipeline-studio .btn-primary {
+    color: var(--studio-on-accent);
+    box-shadow: none;
+    font-weight: 600;
+  }
+
+  .pipeline-studio .btn-secondary {
+    background: var(--surface);
+    font-weight: 500;
+  }
+
+  .pipeline-studio .btn-primary:hover {
+    opacity: 1;
+    filter: brightness(1.07);
+  }
+
+  .pipeline-studio :is(.text-input, .select-input, .text-area) {
+    background: color-mix(in srgb, var(--bg) 55%, var(--surface));
+    border-radius: 12px;
+    padding: 11px 13px;
+    line-height: 1.5;
+    font-size: .9375rem;
+  }
+
+  .pipeline-studio :is(.text-input, .select-input, .text-area):focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent);
+  }
+
+  .pipeline-studio .select-input {
+    padding-right: 34px;
+  }
+
+  .pipeline-studio .form-label {
+    font-size: .875rem;
+    font-weight: 500;
+  }
+
+  .pipeline-studio :is(.layout-toggle, .board-period-filters, .cal-view-tabs, .goals-period-tabs, .contact-filters) {
+    padding: 4px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--surface);
+    gap: 4px;
+  }
+
+  .pipeline-studio :is(.layout-btn, .board-filter, .cal-tab, .goal-period-tab, .contact-filter-btn) {
+    border-radius: 10px;
+    font-size: .875rem;
+    min-height: 36px;
+  }
+
+  .pipeline-studio :is(.layout-btn, .board-filter, .cal-tab, .goal-period-tab, .contact-filter-btn).active {
+    background: var(--text);
+    color: var(--bg);
+    border-color: transparent;
+  }
+
+  .pipeline-studio :is(.board-controls, .contacts-toolbar, .cal-view-controls, .goals-controls) {
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .pipeline-studio .board-controls {
+    padding: 16px 0;
+    margin-top: 0;
+  }
+
+  .pipeline-studio .toggle-label {
+    font-size: .8125rem;
+  }
+
+  .pipeline-studio :is(input[type="checkbox"], input[type="radio"]) {
+    accent-color: var(--accent);
+  }
+
+  /* The board stays compact enough to compare opportunities. */
+  .pipeline-studio .kanban-col {
+    border-radius: 18px;
+    box-shadow: none;
+    background: color-mix(in srgb, var(--surface) 65%, var(--bg));
+  }
+
+  .pipeline-studio .kanban-col:hover {
+    box-shadow: none;
+  }
+
+  .pipeline-studio .kanban-col-header {
+    background: transparent;
+    padding: 18px 16px;
+    font-size: .8125rem;
+    font-weight: 550;
+    text-transform: none;
+    letter-spacing: -.01em;
+  }
+
+  .pipeline-studio .kanban-col-body {
+    padding: 12px;
+  }
+
+  .pipeline-studio .job-card {
+    background: var(--surface);
+    border-radius: 14px;
+    box-shadow: 0 2px 6px #00000008;
+  }
+
+  .pipeline-studio .kanban--columns .job-card {
+    background: var(--surface);
+    border-radius: 14px;
+  }
+
+  .pipeline-studio .job-card-role {
+    font-size: 1rem;
+    line-height: 1.45;
+    letter-spacing: -.02em;
+    font-weight: 600;
+  }
+
+  .pipeline-studio .job-card-company {
+    font-size: .875rem;
+  }
+
+  .pipeline-studio :is(.job-card-date, .job-card-location) {
+    font-size: .8125rem;
+  }
+
+  .pipeline-studio .job-card-footer {
+    border-color: color-mix(in srgb, var(--border) 70%, transparent);
+  }
+
+  .pipeline-studio :is(.stage-badge, .fit-badge, .tag) {
+    border-radius: 100px;
+  }
+
+  .pipeline-studio .board-table {
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .pipeline-studio .board-table th {
+    font-size: .8125rem;
+    font-weight: 550;
+    text-transform: none;
+    background: var(--card);
+  }
+
+  .pipeline-studio .board-table td {
+    font-size: .875rem;
+  }
+
+  .pipeline-studio .board-table tbody tr:hover {
+    background: var(--hover);
+  }
+
+  /* Profile, documents, people, planning, and learning. */
+  .pipeline-studio .profile-hero {
+    padding: 28px;
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--studio-lilac) 8%, var(--surface));
+  }
+
+  .pipeline-studio .profile-hero-avatar {
+    border-radius: 22px;
+    background: var(--studio-lilac);
+    color: #30254a;
+    box-shadow: none;
+  }
+
+  .pipeline-studio :is(.profile-section-title, .resume-section-title) {
+    font-size: 1.125rem;
+    font-weight: 550;
+    letter-spacing: -.025em;
+  }
+
+  .pipeline-studio .resume-section.resume-hero {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .pipeline-studio .resume-section[data-card] {
+    padding: 26px;
+    border-top: 1px solid var(--border);
+  }
+
+  .pipeline-studio .file-drop-zone {
+    border-radius: 18px;
+    background: color-mix(in srgb, var(--accent) 4%, var(--surface));
+    border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+    padding: 28px;
+  }
+
+  .pipeline-studio .contact-card {
+    padding: 24px;
+  }
+
+  .pipeline-studio .contact-name {
+    font-size: 1.125rem;
+    font-weight: 550;
+    letter-spacing: -.025em;
+  }
+
+  .pipeline-studio .contact-avatar {
+    border-radius: 14px;
+  }
+
+  .pipeline-studio :is(.contact-meta-row, .contact-date-value, .contact-note) {
+    font-size: .875rem;
+    line-height: 1.6;
+  }
+
+  .pipeline-studio .goal-card {
+    padding: 24px;
+  }
+
+  .pipeline-studio .goal-title {
+    font-size: 1rem;
+    font-weight: 550;
+  }
+
+  .pipeline-studio .goal-current {
+    font-weight: 550;
+    letter-spacing: -.05em;
+  }
+
+  .pipeline-studio :is(.goal-track, .dash-gap-track) {
+    border-radius: 100px;
+    overflow: hidden;
+  }
+
+  .pipeline-studio .learning-card {
+    padding: 24px;
+  }
+
+  .pipeline-studio :is(.cal-month-cell, .cal-week-day) {
+    border-color: var(--border);
+  }
+
+  .pipeline-studio .cal-month-cell.today {
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  }
+
+  .pipeline-studio .cal-view-period-label {
+    font-size: 1.125rem;
+    font-weight: 550;
+    letter-spacing: -.025em;
+  }
+
+  .pipeline-studio .empty-msg {
+    font-size: .875rem;
+    line-height: 1.75;
+    color: var(--text-muted);
+  }
+
+  .pipeline-studio .career-panel {
+    padding: 28px;
+  }
+
+  .pipeline-studio #view-dashboard .stat-card {
+    background: var(--surface);
+    padding: 24px;
+  }
+
+  .pipeline-studio #view-dashboard .stat-value {
+    font-size: 2.5rem;
+  }
+
+  .pipeline-studio .board-search-bar {
+    border-radius: 18px;
+    box-shadow: none;
+    padding: 16px;
+  }
+
+  .pipeline-studio .board-search-wrap .text-input {
+    background: var(--bg);
+    border-radius: 12px;
+  }
+
+  .pipeline-studio .pm-card {
+    border-radius: 16px;
+    box-shadow: none;
+    background: var(--surface);
+  }
+
+  .pipeline-studio .pm-card-role {
+    font-size: 1rem;
+    font-weight: 550;
+  }
+
+  .pipeline-studio #view-calendar .cal-full-month-grid {
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .pipeline-studio #view-calendar .cal-full-cell {
+    background: var(--surface);
+  }
+
+  .pipeline-studio #view-calendar .cal-full-cell.cal-today {
+    background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  }
+
+  .pipeline-studio #view-calendar .cal-compact-card {
+    border-radius: 16px;
+    box-shadow: none;
+  }
+
+  .pipeline-studio #view-calendar .cal-activity-section {
+    border-radius: 20px;
+    background: var(--surface);
+  }
+
+  .pipeline-studio .workspace-settings-dialog {
+    border-radius: 24px;
+    padding: 28px;
+  }
+
+  .pipeline-studio .workspace-settings-heading h2 {
+    font-size: 1.5rem;
+    font-weight: 550;
+    letter-spacing: -.04em;
+  }
+
+  .pipeline-studio .workspace-settings-heading p {
+    font-size: .875rem;
+  }
+
+  .pipeline-studio .workspace-settings-dialog h3 {
+    font-size: 1rem;
+    font-weight: 550;
+  }
+
+  .pipeline-studio .toast {
+    border-radius: 14px;
+    font-size: .875rem;
+  }
+
+  .pipeline-studio .empty-state {
+    border: 1px dashed var(--border);
+    border-radius: 22px;
+    background: color-mix(in srgb, var(--accent) 3%, var(--surface));
+  }
+
+  .pipeline-studio .empty-state-title {
+    font-weight: 550;
+    letter-spacing: -.04em;
+  }
+
+  .pipeline-studio .empty-state-sub {
+    font-size: .9375rem;
+    line-height: 1.7;
+  }
+
+  /* Dialogs belong to the same workspace. */
+  .pipeline-studio .modal {
+    border-radius: 24px;
+    border-color: var(--border);
+    box-shadow: 0 24px 100px #0005;
+  }
+
+  .pipeline-studio .modal::before {
+    display: none;
+  }
+
+  .pipeline-studio .modal-header {
+    padding: 26px 28px 22px;
+    background: transparent;
+  }
+
+  .pipeline-studio .modal-title {
+    font-size: 1.375rem;
+    letter-spacing: -.04em;
+    font-weight: 550;
+  }
+
+  .pipeline-studio .modal-close {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--card);
+  }
+
+  .pipeline-studio .modal-footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 18px 28px;
+  }
+
+  .pipeline-studio .modal-tab-btn {
+    font-size: .875rem;
+  }
+
+  .pipeline-studio :where(button, a, input, textarea, select, summary):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .pipeline-studio :is(.nav-link.active, .dash-overview) :focus-visible {
+    outline-color: var(--studio-ink);
+  }
+}
+
+@media screen and (min-width: 1100px) {
+  :root {
+    --sidebar-w: 238px;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .pipeline-studio :is(.view-hero, .resume-hero) {
+    gap: 20px;
+  }
+
+  .pipeline-studio :is(.view-hero-icon, .resume-hero-icon) {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .pipeline-studio .view {
+    padding: 22px 16px;
+  }
+
+  .pipeline-studio .topbar {
+    padding: 10px 16px;
+    gap: 10px;
+  }
+
+  .pipeline-studio .topbar-controls {
+    gap: 6px;
+  }
+
+  .pipeline-studio .topbar-controls>button {
+    min-height: 44px;
+  }
+
+  .pipeline-studio .topbar-controls .btn-secondary {
+    padding-inline: 12px;
+  }
+
+  .pipeline-studio .workspace-preview {
+    margin: 16px 16px 0;
+    padding: 16px;
+  }
+
+  .pipeline-studio :is(.view-hero, .resume-hero) {
+    padding: 8px 0 22px;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .pipeline-studio :is(.view-hero-icon, .resume-hero-icon) {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    margin-top: 30px;
+  }
+
+  .pipeline-studio :is(.view-hero-icon, .resume-hero-icon) svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .pipeline-studio :is(.view-hero-title, .resume-hero-title, .studio-profile-heading h1) {
+    font-size: clamp(2rem, 7vw, 3rem);
+  }
+
+  .pipeline-studio :is(.view-hero-sub, .resume-hero-sub, .studio-profile-heading > p) {
+    font-size: .9375rem;
+  }
+
+  .pipeline-studio :is(.studio-eyebrow, .workspace-eyebrow) {
+    font-size: .6875rem;
+    letter-spacing: .1em;
+  }
+
+  .pipeline-studio .dash-overview {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 22px;
+    gap: 20px;
+  }
+
+  .pipeline-studio .dash-coverage {
+    padding: 16px 0 0;
+    border-left: 0;
+    border-top: 1px solid #19261830;
+  }
+
+  .pipeline-studio #view-dashboard .stat-card {
+    padding: 18px;
+  }
+
+  .pipeline-studio :is(.dash-card-header, .dash-card-body) {
+    padding: 18px;
+  }
+
+  .pipeline-studio .dash-card-description {
+    padding: 0 18px;
+  }
+
+  .pipeline-studio :is(.profile-card, .contact-card, .goal-card, .learning-card, .resume-section[data-card], .career-panel) {
+    padding: 20px;
+  }
+
+  .pipeline-studio .resume-section.resume-hero {
+    padding: 8px 0 22px;
+  }
+
+  .pipeline-studio .modal {
+    border-radius: 20px;
+  }
+
+  .pipeline-studio :is(.modal-header, .modal-footer) {
+    padding: 20px;
+  }
+
+  .pipeline-studio .mobile-nav {
+    background: var(--surface);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -8px 32px #0000000c;
+  }
+
+  .pipeline-studio .mobile-nav a.active {
+    background: var(--studio-lime);
+    color: var(--studio-ink);
+    border-radius: 10px;
+  }
+}
+
+/* Respect explicit reading and density choices after the visual defaults. */
+html[data-spacing] .pipeline-studio :is(.dash-card-header, .dash-card-body, .profile-card, .contact-card, .goal-card, .learning-card) {
+  padding: var(--appearance-card-padding);
+}
+
+html:is([data-text-size="small"], [data-text-size="large"]) .pipeline-studio :is(p, .job-card-company, .job-card-location, td, .text-area, .text-input, .select-input, .note-add-input, .btn-primary, .btn-secondary, .btn-ghost) {
+  font-size: var(--reading-size);
+}
+
+html:is([data-text-size="small"], [data-text-size="large"]) .pipeline-studio :is(.form-label, .note-ts, .dash-card-description, .workspace-settings-hint, th) {
+  font-size: var(--reading-small-size);
+}
+
+html:is([data-text-size="small"], [data-text-size="large"]) .pipeline-studio .job-card-role {
+  font-size: var(--reading-title-size);
+}
+
+html[data-contrast="on"] .pipeline-studio :is(.dash-overview, .sidebar .nav-link.active, .mobile-nav a.active) {
+  background: var(--accent-dim);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+html[data-contrast="on"] .pipeline-studio .dash-overview :is(p, .workspace-eyebrow, .dash-coverage > strong, .dash-coverage > span:last-child) {
+  color: var(--text);
+}
+
+html[data-contrast="on"] .pipeline-studio .dash-coverage {
+  border-color: var(--border);
+}

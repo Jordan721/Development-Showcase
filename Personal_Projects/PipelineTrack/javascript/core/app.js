@@ -4,6 +4,8 @@
    EVENT WIRING
    ══════════════════════════════════════════════════════════ */
 function wireEvents() {
+  document.getElementById('sidebar-search').addEventListener('click', openCommandPalette);
+  document.getElementById('sidebar-overview').addEventListener('click', () => navigate('analytics'));
   const mobileMore = document.getElementById('mobile-more');
   const mobileMoreToggle = mobileMore.querySelector('summary');
   document.addEventListener('click', e => {

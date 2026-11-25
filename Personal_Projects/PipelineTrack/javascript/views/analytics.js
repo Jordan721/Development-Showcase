@@ -64,79 +64,24 @@ function _countUp(el, target, suffix) {
 function renderAnalyticsKPIs(jobs) {
   const el = document.getElementById('an-kpi-strip');
   if (!el) return;
-  const total = jobs.length;
-  const applied = jobs.filter(j => ['applied', 'screening', 'interview', 'offer'].includes(j.stage)).length;
-  const interviews = jobs.filter(j => ['interview', 'offer'].includes(j.stage)).length;
-  const offers = jobs.filter(j => j.stage === 'offer').length;
-  const declined = jobs.filter(j => j.stage === 'declined').length;
-  const scored = jobs.filter(j => j.fitScore !== null && j.fitScore !== undefined);
-  const avgFit = scored.length ? Math.round(scored.reduce((s, j) => s + Number(j.fitScore), 0) / scored.length) : null;
-  const responseCount = jobs.filter(j => ['screening', 'interview', 'offer'].includes(j.stage)).length;
-  const responseRate = applied > 0 ? Math.round((responseCount / applied) * 100) : null;
-
-  const kpis = [{
-      label: 'Tracked',
-      value: total,
-      raw: total,
-      suffix: '',
-      color: ''
-    },
-    {
-      label: 'Applied',
-      value: applied,
-      raw: applied,
-      suffix: '',
-      color: 'var(--accent)'
-    },
-    {
-      label: 'Interviews',
-      value: interviews,
-      raw: interviews,
-      suffix: '',
-      color: 'var(--yellow)'
-    },
-    {
-      label: 'Offers',
-      value: offers,
-      raw: offers,
-      suffix: '',
-      color: 'var(--green)'
-    },
-    {
-      label: 'Not Selected',
-      value: declined,
-      raw: declined,
-      suffix: '',
-      color: 'var(--red)'
-    },
-    {
-      label: 'Avg Fit',
-      value: avgFit !== null ? avgFit + '%' : '—',
-      raw: avgFit,
-      suffix: '%',
-      color: ''
-    },
-    {
-      label: 'Response Rate',
-      value: responseRate !== null ? responseRate + '%' : '—',
-      raw: responseRate,
-      suffix: '%',
-      color: responseRate >= 30 ? 'var(--green)' : responseRate >= 10 ? 'var(--yellow)' : responseRate !== null ? 'var(--red)' : ''
-    },
+  const submitted = jobs.filter(j => j.stage !== 'saved');
+  const progressed = jobs.filter(j => ['screening', 'interview', 'offer'].includes(j.stage));
+  const scored = jobs.filter(j => j.fitScore != null && Number.isFinite(Number(j.fitScore)));
+  const average = scored.length ? Math.round(scored.reduce((sum, j) => sum + Number(j.fitScore), 0) / scored.length) : null;
+  const metrics = [
+    { label: 'Submitted', value: submitted.length, detail: 'Beyond the saved stage', color: 'var(--accent)', jobs: submitted },
+    { label: 'Interviews', value: jobs.filter(j => ['interview', 'offer'].includes(j.stage)).length, detail: 'Interview or offer stage', color: 'var(--an-lilac)', jobs: jobs.filter(j => ['interview', 'offer'].includes(j.stage)) },
+    { label: 'Offers', value: jobs.filter(j => j.stage === 'offer').length, detail: 'Opportunities to celebrate', color: 'var(--an-lime)', jobs: jobs.filter(j => j.stage === 'offer') },
+    { label: 'Progress rate', value: submitted.length ? Math.round(progressed.length / submitted.length * 100) : null, suffix: '%', detail: 'Screening, interview, or offer', color: 'var(--an-blue)', jobs: progressed },
+    { label: 'Average fit', value: average, suffix: '%', detail: scored.length + ' scored opportunities', color: 'var(--an-lilac)', jobs: scored },
+    { label: 'Not selected', value: jobs.filter(j => j.stage === 'declined').length, detail: 'Part of the process', color: 'var(--red)', jobs: jobs.filter(j => j.stage === 'declined') }
   ];
-
-  el.innerHTML = kpis.map((k, i) => `<div class="an-kpi-card an-kpi-enter" style="--i:${i}">
-    <div class="an-kpi-label">${k.label}</div>
-    <div class="an-kpi-value" style="color:${k.color || 'var(--text)'}" data-raw="${k.raw !== null ? k.raw : ''}" data-suffix="${k.suffix}">${k.value}</div>
-  </div>`).join('');
-
-  // Count-up animation for numeric KPI values
-  el.querySelectorAll('.an-kpi-value[data-raw]').forEach(valEl => {
-    const raw = parseFloat(valEl.dataset.raw);
-    if (!isNaN(raw)) {
-      valEl.textContent = '0' + valEl.dataset.suffix;
-      _countUp(valEl, raw, valEl.dataset.suffix);
-    }
+  el.innerHTML = metrics.map((metric, i) => `<button type="button" class="an-metric" data-metric="${i}" style="--metric-color:${metric.color}" aria-label="${metric.label}: ${metric.value == null ? 'No data' : metric.value + (metric.suffix || '')}. Explore matching jobs."><span class="an-metric-label"><i aria-hidden="true"></i>${metric.label}</span><strong>${metric.value == null ? '—' : metric.value + (metric.suffix || '')}</strong><small>${metric.detail}</small></button>`).join('');
+  el.querySelectorAll('[data-metric]').forEach(button => {
+    button.onclick = () => {
+      const metric = metrics[Number(button.dataset.metric)];
+      openFilterModal(metric.label, metric.jobs.length + ' matching opportunities', metric.jobs);
+    };
   });
 }
 
@@ -157,35 +102,26 @@ function renderAnalyticsComposition(el, segments, total, caption, onSelect, colu
 function renderAnalyticsFunnel(jobs) {
   const el = document.getElementById('an-funnel');
   if (!el) return;
-  const stages = ['applied', 'screening', 'interview', 'offer'];
-  const counts = stages.map(s => jobs.filter(j => j.stage === s).length);
-  const max = Math.max(...counts, 1);
-  const colorClasses = {
-    applied: '',
-    screening: 'fill-purple',
-    interview: 'fill-yellow',
-    offer: 'fill-green'
-  };
-  el.innerHTML = stages.map((s, i) => {
-    const count = counts[i];
-    const pct = Math.round((count / max) * 100);
-    const convText = `<span class="an-conv-rate">${count} currently in stage</span>`;
-    return `<div class="an-funnel-row an-funnel-row-click" data-stage="${s}" title="View ${count} job${count !== 1 ? 's' : ''}">
-      <div class="an-funnel-label">${STAGE_LABELS[s]}</div>
-      <div class="an-funnel-bar-wrap">
-        <div class="an-funnel-bar ${colorClasses[s]}" style="width:0" data-aw="${Math.max(pct, 1)}">${count > 0 ? count : ''}</div>
-        ${convText}
-      </div>
-    </div>`;
+  const stages = ['saved', 'applied', 'screening', 'interview', 'offer', 'declined', 'withdrew'];
+  const colors = ['var(--text-muted)', 'var(--accent)', 'var(--an-lilac)', 'var(--an-blue)', 'var(--green)', 'var(--red)', 'var(--yellow)'];
+  const segments = stages.map((stage, i) => ({ stage, count: jobs.filter(j => j.stage === stage).length, color: colors[i] }));
+  // Preserve visibility of any imported stage not in the standard stage list.
+  const other = jobs.filter(j => !stages.includes(j.stage));
+  if (other.length) segments.push({ stage: 'other', count: other.length, color: 'var(--text-muted)' });
+  const circumference = 2 * Math.PI * 70;
+  let offset = 0;
+  const arcs = segments.filter(segment => segment.count).map(segment => {
+    const length = jobs.length ? segment.count / jobs.length * circumference : 0;
+    const arc = `<circle cx="90" cy="90" r="70" fill="none" stroke="${segment.color}" stroke-width="14" stroke-dasharray="${length} ${circumference}" stroke-dashoffset="${-offset}"><title>${escHtml(STAGE_LABELS[segment.stage] || 'Other')}: ${segment.count}</title></circle>`;
+    offset += length;
+    return arc;
   }).join('');
-  _animateBars(el);
-
-  el.querySelectorAll('.an-funnel-row-click').forEach(row => {
-    row.addEventListener('click', () => {
-      const stage = row.dataset.stage;
-      const matched = jobs.filter(j => j.stage === stage);
-      openFilterModal(`Stage: ${STAGE_LABELS[stage]}`, `${matched.length} job${matched.length !== 1 ? 's' : ''}`, matched);
-    });
+  el.innerHTML = `<div class="an-pipeline-visual"><div class="an-pipeline-ring"><svg viewBox="0 0 180 180" role="img" aria-label="Pipeline by current stage. ${jobs.length} tracked opportunities."><circle cx="90" cy="90" r="70" fill="none" stroke="var(--border)" stroke-width="14"/>${arcs}</svg><div class="an-pipeline-center"><strong>${jobs.length}</strong><span>opportunities</span></div></div></div><div class="an-stage-legend">${segments.map(segment => `<button type="button" class="an-stage-item" data-stage="${segment.stage}" style="--stage-color:${segment.color}"><i aria-hidden="true"></i><span>${escHtml(STAGE_LABELS[segment.stage] || 'Other')}</span><strong>${segment.count}</strong></button>`).join('')}</div>`;
+  el.querySelectorAll('[data-stage]').forEach(button => {
+    button.onclick = () => {
+      const matched = button.dataset.stage === 'other' ? other : jobs.filter(j => j.stage === button.dataset.stage);
+      openFilterModal('Stage: ' + (STAGE_LABELS[button.dataset.stage] || 'Other'), matched.length + ' opportunities', matched);
+    };
   });
 }
 
@@ -215,12 +151,12 @@ function renderAnalyticsResponseRate(jobs) {
   el.innerHTML = stages.map(s => {
     const count = jobs.filter(j => j.stage === s).length;
     const pct = Math.round((count / applied) * 100);
-    return `<div class="an-bar-row an-bar-row-clickable" data-stage="${s}" title="View ${count} job${count !== 1 ? 's' : ''}">
+    return `<button type="button" class="an-bar-row an-bar-row-clickable" data-stage="${s}" title="View ${count} job${count !== 1 ? 's' : ''}">
       <div class="an-bar-label">${labels[s]}</div>
       <div class="an-bar-track"><div class="an-bar-fill ${colorClasses[s]}" style="width:0" data-aw="${pct}"></div></div>
       <div class="an-bar-count">${pct}%<small>${count} jobs</small></div>
-    </div>`;
-  }).join('') + `<div style="font-size:11px;color:var(--text-muted);margin-top:8px">Based on ${applied} applications</div>`;
+    </button>`;
+  }).join('') + `<div class="an-chart-caption">Shares of ${applied} opportunities beyond the saved stage. These are current stages, not historical conversion rates.</div>`;
   _animateBars(el);
 
   el.querySelectorAll('.an-bar-row-clickable[data-stage]').forEach(row => {
@@ -297,23 +233,25 @@ function renderAnalyticsOverTime(jobs, granularity) {
 function renderAnalyticsTopCompanies(jobs) {
   const el = document.getElementById('an-top-companies');
   if (!el) return;
-  const counts = {};
-  jobs.forEach(j => {
-    const c = j.company || 'Unknown';
-    counts[c] = (counts[c] || 0) + 1;
+  const counts = new Map();
+  jobs.forEach(job => {
+    const company = job.company || 'Unknown';
+    counts.set(company, (counts.get(company) || 0) + 1);
   });
-  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 8);
-  if (sorted.length === 0) {
-    el.innerHTML = '<p class="empty-msg">No data yet.</p>';
+  const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5);
+  if (!sorted.length) {
+    el.innerHTML = '<p class="empty-msg">Your company shortlist starts here. Add an opportunity to see who is on your radar.</p>';
     return;
   }
-  const max = sorted[0][1];
-  el.innerHTML = sorted.map(([co, count]) => `<div class="an-bar-row">
-    <div class="an-bar-label">${escHtml(co)}</div>
-    <div class="an-bar-track"><div class="an-bar-fill" style="width:0" data-aw="${Math.round((count/max)*100)}"></div></div>
-    <div class="an-bar-count">${count}</div>
-  </div>`).join('');
-  _animateBars(el);
+  const colors = ['var(--accent)', 'var(--an-lilac)', 'var(--an-blue)', 'var(--yellow)', 'var(--green)'];
+  el.innerHTML = '<div class="an-company-list">' + sorted.map(([company, count], i) => `<button type="button" class="an-company" data-company="${i}" style="--company-color:${colors[i]};--company-width:${count / sorted[0][1] * 100}%" aria-label="${escHtml(company)}: ${count} opportunities. Show jobs."><span class="an-company-avatar" aria-hidden="true">${escHtml(company.slice(0, 2).toUpperCase())}</span><span class="an-company-name">${escHtml(company)}<span class="an-company-track" aria-hidden="true"><i></i></span></span><span class="an-company-count">${count}</span></button>`).join('') + '</div>';
+  el.querySelectorAll('[data-company]').forEach(button => {
+    button.onclick = () => {
+      const company = sorted[Number(button.dataset.company)][0];
+      const matched = jobs.filter(job => (job.company || 'Unknown') === company);
+      openFilterModal(company, matched.length + ' opportunities', matched);
+    };
+  });
 }
 
 function renderAnalyticsSkillGaps(jobs) {
@@ -329,11 +267,11 @@ function renderAnalyticsSkillGaps(jobs) {
     return;
   }
   const max = sorted[0][1];
-  el.innerHTML = sorted.map(([skill, count]) => `<div class="an-bar-row an-bar-row-clickable" data-skill="${escHtml(skill)}" title="View ${count} job${count !== 1 ? 's' : ''} missing ${escHtml(skill)}">
+  el.innerHTML = sorted.map(([skill, count]) => `<button type="button" class="an-bar-row an-bar-row-clickable" data-skill="${escHtml(skill)}" title="View ${count} job${count !== 1 ? 's' : ''} missing ${escHtml(skill)}">
     <div class="an-bar-label">${escHtml(skill)}</div>
     <div class="an-bar-track"><div class="an-bar-fill fill-red" style="width:0" data-aw="${Math.round((count/max)*100)}"></div></div>
     <div class="an-bar-count">${count}</div>
-  </div>`).join('');
+  </button>`).join('');
   el.querySelectorAll('.an-bar-row-clickable').forEach(row => {
     row.addEventListener('click', () => {
       const skill = row.dataset.skill;
@@ -388,6 +326,8 @@ function renderAnalyticsFitDistribution(jobs) {
     const matched = scored.filter(j => j.fitScore >= segment.min && j.fitScore <= segment.max);
     openFilterModal(`Fit Score: ${segment.label}`, `${matched.length} jobs`, matched);
   }, true);
+  const average = Math.round(scored.reduce((sum, job) => sum + Number(job.fitScore), 0) / scored.length);
+  el.insertAdjacentHTML('afterbegin', `<div class="an-fit-insight"><strong>${average}%</strong><span>average skill fit<br>across ${scored.length} scored opportunities</span></div>`);
 }
 
 function renderAnalyticsBreakdown(elId, jobs, field) {
@@ -483,6 +423,7 @@ function openAnalyticsFilterModal(field, val, jobs) {
 
 function wireAnalyticsControls() {
   document.querySelectorAll('.an-tab').forEach(btn => {
+    btn.setAttribute('aria-pressed', String(btn.dataset.anPeriod === anPeriod));
     btn.onclick = () => {
       document.querySelectorAll('.an-tab').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
@@ -491,10 +432,12 @@ function wireAnalyticsControls() {
     };
   });
   document.querySelectorAll('.an-time-btn').forEach(btn => {
+    btn.setAttribute('aria-pressed', String(btn.dataset.time === anTimeGranularity));
     btn.onclick = () => {
       document.querySelectorAll('.an-time-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       anTimeGranularity = btn.dataset.time;
+      document.querySelectorAll('.an-time-btn').forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
       renderAnalyticsOverTime(getJobsForPeriod(anPeriod), anTimeGranularity);
     };
   });
@@ -503,12 +446,17 @@ function wireAnalyticsControls() {
 function renderAnalytics() {
   const jobs = getJobsForPeriod(anPeriod);
   const summary = document.getElementById('an-summary');
+  const active = jobs.filter(j => ['applied', 'screening', 'interview'].includes(j.stage));
+  const strong = jobs.filter(j => j.fitScore != null && Number(j.fitScore) >= 75);
+  const periodLabels = { all: 'All tracked opportunities', year: 'Added this calendar year', month: 'Added this calendar month', week: 'Added since Sunday' };
+  const rangeNote = document.getElementById('an-range-note');
+  if (rangeNote) rangeNote.textContent = periodLabels[anPeriod];
   if (summary) {
-    const active = jobs.filter(j => ['applied', 'screening', 'interview'].includes(j.stage)).length;
-    const strong = jobs.filter(j => j.fitScore != null && Number(j.fitScore) >= 75).length;
     summary.innerHTML = jobs.length ?
-      `<div><span class="workspace-eyebrow">YOUR SEARCH SNAPSHOT</span><h2>${active} active application${active === 1 ? '' : 's'}. Every next step counts.</h2><p>${strong} strong skill match${strong === 1 ? '' : 'es'} (75%+ fit) across ${jobs.length} tracked opportunit${jobs.length === 1 ? 'y' : 'ies'} in this period.</p></div><span class="an-summary-tag">Select a chart to explore its jobs</span>` :
-      `<div><span class="workspace-eyebrow">BUILD YOUR SEARCH STORY</span><h2>${state.jobs.length ? 'No opportunities in this period yet.' : 'Your progress starts with one opportunity.'}</h2><p>${state.jobs.length ? 'Choose another period to explore your tracked jobs.' : 'Add jobs and update their stages to see your activity, skill matches, and pipeline here.'}</p></div>`;
+      `<div><span class="an-eyebrow">YOUR SEARCH IS TAKING SHAPE</span><div class="an-spotlight-value"><strong>${active.length}</strong><span>active application${active.length === 1 ? '' : 's'}</span></div></div><div><h2>${active.length ? 'Keep your next chapter moving.' : 'Make room for your next move.'}</h2><p>${strong.length} strong skill match${strong.length === 1 ? '' : 'es'} at 75%+ fit, across ${jobs.length} tracked opportunit${jobs.length === 1 ? 'y' : 'ies'}.</p></div><div class="an-spotlight-footer"><span>Applied · Screening · Interview</span><button type="button" class="an-spotlight-button" id="an-explore-active">View active</button></div>` :
+      `<div><span class="an-eyebrow">A FRESH PERSPECTIVE</span><div class="an-spotlight-value"><strong>0</strong><span>opportunities in this period</span></div></div><div><h2>${state.jobs.length ? 'A quieter corner of your search.' : 'Every search starts somewhere.'}</h2><p>${state.jobs.length ? 'Try another date range to see the bigger picture.' : 'Add your first opportunity. Your activity, skills, and progress will find their place here.'}</p></div>`;
+    const explore = document.getElementById('an-explore-active');
+    if (explore) explore.onclick = () => openFilterModal('Active applications', active.length + ' opportunities', active);
   }
   renderAnalyticsKPIs(jobs);
   renderAnalyticsFunnel(jobs);
